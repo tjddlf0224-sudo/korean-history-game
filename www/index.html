@@ -3,14 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>한국사 게임 - 조선 전기</title>
-<link rel="stylesheet" href="css/main.css">
+<title>한국사 게임 — 챕터 목록</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; padding:0; min-height:100%; background:#15110c; font-family: -apple-system, "Pretendard", "Malgun Gothic", sans-serif; color:#f5ecd8; }
+  #app { max-width: 880px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom)); }
+  h1 { font-size: 22px; margin: 0 0 4px; color:#f0c96b; }
+  .lede { font-size: 13px; opacity: .75; margin: 0 0 28px; line-height:1.6; }
+
+  .era { margin-bottom: 30px; }
+  .era-head { display:flex; align-items:baseline; gap:10px; margin-bottom: 10px; }
+  .era-title { font-size: 16px; font-weight: bold; }
+  .era-badge { font-size: 11px; padding: 3px 9px; border-radius: 999px; }
+  .badge-live { background:#2f5d3a; color:#c9f0d0; }
+  .badge-plan { background:#3a2c1a; color:#d8c9a3; border:1px solid #6a5636; }
+  .era-pct { margin-left:auto; font-size: 11px; opacity:.55; }
+
+  .cards { display:grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 10px; }
+  .card { display:block; text-decoration:none; color:inherit; background:#241b10; border:1px solid #4a3c26;
+    border-radius: 12px; padding: 12px 14px; transition: border-color .15s, transform .1s; }
+  .card:active { transform: scale(0.97); }
+  .card.live { border-color:#c9a24a; }
+  .card.disabled { opacity:.4; pointer-events:none; }
+  .card .num { font-size:11px; color:#f0c96b; opacity:.8; }
+  .card .name { font-size: 14px; margin-top: 3px; line-height:1.35; }
+  .card .who { font-size: 11px; opacity:.6; margin-top: 4px; }
+
+  .plan-note { font-size: 12px; opacity:.6; line-height:1.6; background:#1c150d; border:1px dashed #4a3c26; border-radius:10px; padding:10px 12px; }
+</style>
 </head>
 <body>
-  <div id="app">
-    <h1>한국사 게임 (개발 중)</h1>
-    <p>조선 전기 MVP — 챕터 데이터는 data/chapters_index.json 참고</p>
+<div id="app">
+  <h1>한국사 게임</h1>
+  <p class="lede">한능검(한국사능력검정시험) 1급 대비 탐험형 학습 게임. 시대를 넘나들며 NPC와 대화하고 실제 역사를 체험합니다.<br>진하게 표시된 챕터는 지금 플레이할 수 있고, 나머지는 기획서가 완성된 상태로 순차 구현 중입니다.</p>
+
+  <div class="era">
+    <div class="era-head">
+      <span class="era-title">조선 전기</span><span class="era-badge badge-live">플레이 가능 · 전 7화</span>
+      <span class="era-pct">1392~1592</span>
+    </div>
+    <div class="cards">
+      <a class="card live" href="ch0_phaser.html"><div class="num">0화 · 신버전</div><div class="name">새 나라의 설계자</div><div class="who">태조 · 정도전</div></a>
+      <a class="card live" href="ch0.html"><div class="num">0화</div><div class="name">새 나라의 설계자</div><div class="who">태조 · 정도전</div></a>
+      <a class="card live" href="ch1.html"><div class="num">1화</div><div class="name">왕권의 기틀</div><div class="who">태종</div></a>
+      <a class="card live" href="ch2.html"><div class="num">2화</div><div class="name">황금시대</div><div class="who">세종</div></a>
+      <a class="card live" href="ch3.html"><div class="num">3화</div><div class="name">피의 계승</div><div class="who">세조</div></a>
+      <a class="card live" href="ch4.html"><div class="num">4화</div><div class="name">법과 제도의 완성</div><div class="who">성종</div></a>
+      <a class="card live" href="ch5.html"><div class="num">5화</div><div class="name">사림과 피바람</div><div class="who">연산군~명종</div></a>
+      <a class="card live" href="ch6.html"><div class="num">6화 · 완결</div><div class="name">폭풍 전야</div><div class="who">선조</div></a>
+    </div>
   </div>
-  <script src="js/main.js"></script>
+
+  <div class="era" id="era-list"></div>
+
+  <p class="plan-note">기획 중인 시대는 실제 기출 750문항(15개 회차) 분석을 바탕으로 챕터 구조와 NPC 대사까지 미리 설계되어 있습니다. 완성되는 대로 이 목록에 순서대로 추가됩니다.</p>
+</div>
+<script>
+const ERAS = [
+  { title: '선사·초기국가', pct: '4.3%', range: '구석기 ~ 고조선·초기국가' },
+  { title: '고대', pct: '14.5%', range: '삼국시대 ~ 남북국시대' },
+  { title: '고려', pct: '16.5%', range: '918 ~ 1392' },
+  { title: '조선 후기', pct: '11.6%', range: '1592 ~ 1863' },
+  { title: '근대·개항기', pct: '13.7%', range: '1863 ~ 1910' },
+  { title: '일제강점기', pct: '16.5%', range: '1910 ~ 1945' },
+  { title: '현대', pct: '10.9%', range: '1945 ~ 현재' },
+];
+const wrap = document.getElementById('era-list');
+ERAS.forEach(e => {
+  const div = document.createElement('div');
+  div.className = 'era';
+  div.innerHTML = `<div class="era-head"><span class="era-title">${e.title}</span><span class="era-badge badge-plan">기획 완료 · 구현 예정</span><span class="era-pct">${e.range} · 기출 ${e.pct}</span></div>`;
+  wrap.appendChild(div);
+});
+</script>
 </body>
 </html>
