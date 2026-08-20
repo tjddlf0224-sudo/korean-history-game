@@ -152,6 +152,10 @@ function isBarrier(tx, ty){
   return SOLID.has(MAP[ty][tx]);
 }
 
+/* 좌우 스프라이트 소스가 실제 이동 방향과 반대로 나와서(에셋 라벨링 오차),
+   애니메이션/아이들 텍스처 둘 다 이 매핑으로 소스를 바꿔 재생한다. */
+const DIR_SRC = { down: 'down', up: 'up', left: 'right', right: 'left' };
+
 /* ============ NPC 데이터 ============ */
 const NPCS = [
   { id:'jeongdojeon', name:'정도전', tx:7.5, ty:6, portrait:'assets/portraits/jeongdojeon.png' },
@@ -377,9 +381,10 @@ class MainScene extends Phaser.Scene {
     // 플레이어: 4방향 걷기 사이클(마젠타 시트에서 추출, 오른쪽은 왼쪽 좌우반전)
     const PLAYER_TARGET_H = TS * 1.15;
     ['down','up','left','right'].forEach(dir => {
+      const src = DIR_SRC[dir];
       this.anims.create({
         key: 'walk_' + dir,
-        frames: [0,1,2,1].map(i => ({ key: `p_${dir}_${i}` })),
+        frames: [0,1,2,1].map(i => ({ key: `p_${src}_${i}` })),
         frameRate: 7,
         repeat: -1
       });
@@ -427,7 +432,7 @@ class MainScene extends Phaser.Scene {
       }
     } else if (this.player.anims.isPlaying){
       this.player.anims.stop();
-      this.player.setTexture('p_' + this.player.__dir + '_1');
+      this.player.setTexture('p_' + DIR_SRC[this.player.__dir] + '_1');
     }
     // 근접 NPC 판정
     let found = null, best = TS*1.7;
