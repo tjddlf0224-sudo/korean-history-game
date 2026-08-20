@@ -7,7 +7,11 @@
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; background: #000; font-family: -apple-system, "Pretendard", "Malgun Gothic", sans-serif; }
-  #wrap { position: fixed; inset: 0; touch-action: none; }
+  /* 가로모드 고정: 세로로 들면 #wrap 전체를 90도 회전시켜 강제로 가로 화면처럼 사용한다.
+     (전산회계오락실 stage1_cost.html과 동일한 트릭 — 회전 상태에서 vh 단위는 실제 뷰포트 기준으로
+     어긋나므로 절대 쓰지 않고, 크기는 항상 JS로 계산한 px 값을 쓴다.) */
+  #wrap { position: fixed; top: 0; left: 0; touch-action: none; transform-origin: top left; }
+  body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
   #game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
 
   #hud { position: absolute; top: calc(10px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left));
@@ -140,12 +144,23 @@ const TS = 40;
 const T = { WALL: 0, GROUND: 1, STONE: 2 };
 const WT = 22, HT = 16;
 
-function resize(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+/* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
+   #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
+const wrapEl = document.getElementById('wrap');
+function applyOrientation(){
+  const iw = window.innerWidth, ih = window.innerHeight;
+  const portrait = ih > iw;
+  document.body.classList.toggle('rot', portrait);
+  const w = portrait ? ih : iw;
+  const h = portrait ? iw : ih;
+  wrapEl.style.width = w + 'px';
+  wrapEl.style.height = h + 'px';
+  canvas.width = w;
+  canvas.height = h;
 }
-window.addEventListener('resize', resize);
-resize();
+window.addEventListener('resize', applyOrientation);
+window.addEventListener('orientationchange', applyOrientation);
+applyOrientation();
 
 /* ============ 맵: 궁궐 조정 (단일 구역, 어두운 톤) ============ */
 function buildMap(){
@@ -343,7 +358,7 @@ const World = {
   zone.addEventListener('pointerdown', e=>{
     if (activeId !== null) return;
     activeId = e.pointerId;
-    zone.setPointerCapture(activeId);
+    try { zone.setPointerCapture(activeId); } catch(err) {}
     const r = zone.getBoundingClientRect();
     cx = r.left + r.width/2; cy = r.top + r.height/2;
     World.stick.active = true;
@@ -358,7 +373,9 @@ const World = {
     const d = Math.hypot(dx, dy);
     if (d > R){ dx = dx/d*R; dy = dy/d*R; }
     knob.style.transform = `translate(${dx}px,${dy}px)`;
-    World.stick.dx = dx / R; World.stick.dy = dy / R;
+    let wx = dx, wy = dy;
+    if (document.body.classList.contains('rot')){ wx = dy; wy = -dx; }
+    World.stick.dx = wx / R; World.stick.dy = wy / R;
   }
   function end(e){
     if (e.pointerId !== activeId) return;
