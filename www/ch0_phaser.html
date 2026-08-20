@@ -388,7 +388,6 @@ class MainScene extends Phaser.Scene {
     const pScale = PLAYER_TARGET_H / this.player.height;
     this.player.setScale(pScale);
     this.player.setOrigin(0.5, 0.68);
-    this.player.y = 12*TS;
     this.player.__dir = 'down';
 
     this.cameras.main.startFollow(this.player, true, 0.15, 0.15);
