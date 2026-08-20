@@ -188,7 +188,72 @@ function isBarrier(x, y){
   return false;
 }
 
-const TILE_COLOR = { [T.GROUND]: '#4a3d3a', [T.WALL]: '#1a1210', [T.DARK]: '#2e2220', [T.DIRT]: '#4a3628', [T.FIELD]: '#3d4a34' };
+/* 국가유산청 3D 에셋 마켓 웹뷰어로 확인한 실제 색감 참고(아트/국가유산_비주얼_레퍼런스.md):
+   경복궁 화강암 판석(사초각, 핏빛 무드로 조정), 남한산성 성벽, 낙안읍성 초가마을 흙바닥/녹지(유배지·산림) */
+const TILE_COLOR = { [T.GROUND]: '#4a3d3a', [T.WALL]: '#211714', [T.DARK]: '#332420', [T.DIRT]: '#4a3628', [T.FIELD]: '#3d4a34' };
+function hash2(x, y, seed){
+  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
+  h = (h ^ (h >>> 13)) >>> 0;
+  h = Math.imul(h, 1274126177);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967295;
+}
+function shadeColor(hex, amt){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
+  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
+  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
+  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
+  return `rgb(${r|0},${g|0},${b|0})`;
+}
+function drawTile(t, tx, ty, px, py){
+  const base = TILE_COLOR[t];
+  ctx.fillStyle = base;
+  ctx.fillRect(px, py, TS+1, TS+1);
+  if (t === T.GROUND || t === T.DIRT){
+    for (let i=0;i<4;i++){
+      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
+      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.15)' : 'rgba(255,255,255,.05)';
+      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (t === T.DARK){
+    // 사초각 돌바닥: 핏빛이 은은히 도는 어두운 판석
+    const half = TS/2;
+    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
+      const n = hash2(tx*2+bx, ty*2+by, 5);
+      const tint = n > 0.75 ? 'rgba(90,20,20,.12)' : 'transparent';
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.22);
+      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
+      if (tint !== 'transparent'){ ctx.fillStyle = tint; ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2); }
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.35)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+  } else if (t === T.FIELD){
+    for (let i=0;i<5;i++){
+      const nx = hash2(tx*5+i, ty, 4), ny = hash2(tx*5+i, ty, 6), na = hash2(tx*5+i, ty, 8);
+      const bx = px + 3 + nx*(TS-6), by = py + 3 + ny*(TS-6);
+      const ang = (na-0.5) * 0.9;
+      ctx.strokeStyle = shadeColor(base, na>0.5 ? 0.22 : -0.15);
+      ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(bx, by+4); ctx.lineTo(bx + Math.sin(ang)*5, by-5); ctx.stroke();
+    }
+  } else if (t === T.WALL){
+    const rows = 3, rowH = TS/rows, cols = 2;
+    for (let r=0;r<rows;r++){
+      const offset = (r%2===0) ? 0 : TS/cols/2;
+      for (let c=-1;c<=cols;c++){
+        const n = hash2(tx*10+r*4+c+30, ty, 11);
+        const bx = px + c*(TS/cols) + offset;
+        ctx.fillStyle = shadeColor(base, (n-0.5)*0.22);
+        ctx.fillRect(Math.max(px,bx)+1, py+r*rowH+1, TS/cols-2, rowH-2);
+      }
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    ctx.fillRect(px, py, TS+1, 6);
+  }
+}
 function drawMap(camX, camY){
   const x0 = Math.max(0, Math.floor(camX / TS));
   const y0 = Math.max(0, Math.floor(camY / TS));
@@ -196,12 +261,7 @@ function drawMap(camX, camY){
   const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
   for (let y = y0; y < y1; y++){
     for (let x = x0; x < x1; x++){
-      ctx.fillStyle = TILE_COLOR[MAP[y][x]];
-      ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, TS+1);
-      if (MAP[y][x] === T.WALL){
-        ctx.fillStyle = 'rgba(0,0,0,.3)';
-        ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, 6);
-      }
+      drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
     }
   }
 }
@@ -356,6 +416,11 @@ const World = {
       }
     }
     drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
+    const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.22, canvas.width/2, canvas.height/2, canvas.height*0.8);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,.45)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 };
 
@@ -433,6 +498,21 @@ const NPC_DATA = {
     quiz: null,
     startsMini: 1
   },
+  kimilson_1: {
+    name: '김일손', icon: '📜',
+    beats: [
+      { who:'npc', t:'다시 왔군. 무오사화와 갑자사화, 두 사건이 자꾸 뒤섞이지 않는가? 하나씩 정리해보세.' }
+    ],
+    quizSeq: [
+      { q:'갑자사화는 어느 왕 때 일어났는가?', opts:['연산군','중종'], answer:0,
+        feedback:['중종 때는 기묘사화가 일어나요.','정답! 연산군입니다. 무오사화와 갑자사화, 둘 다 연산군 대의 일이었지.'] },
+      { q:'조의제문을 사초에 실어 무오사화의 빌미를 제공한 인물은?', opts:['김일손','조광조'], answer:0,
+        feedback:['조광조는 훗날 기묘사화의 중심 인물이에요.','정답! 바로 나, 김일손일세.'] },
+      { q:'갑자사화의 빌미가 된 사건은?', opts:['폐비 윤씨 사사 사건','소격서 폐지 주장'], answer:0,
+        feedback:['소격서 폐지 주장은 훗날 조광조 무렵의 일이에요.','정답! 연산군의 생모, 폐비 윤씨 사사 사건이었네.'] }
+    ],
+    finishesRevisit: 1
+  },
   kimilson_repeat: {
     name: '김일손', icon: '📜',
     beats: [ { who:'npc', t:'…이미 지나간 일이네. 다른 이들의 이야기도 들어보게.' } ],
@@ -449,6 +529,19 @@ const NPC_DATA = {
     quiz: null,
     startsMini: 2
   },
+  jogwangjo_1: {
+    name: '조광조', icon: '📖',
+    beats: [
+      { who:'npc', t:'다시 오셨군요. 제 이야기가 앞서 들으신 무오사화와 헷갈리실 법도 하지요.' }
+    ],
+    quizSeq: [
+      { q:'연산군을 몰아내고 중종을 세운 사건은?', opts:['중종반정','계유정난'], answer:0,
+        feedback:['계유정난은 훨씬 앞선 세조 즉위 관련 사건이에요.','정답! 중종반정입니다. 그 뒤에 제가 조정에 나섰지요.'] },
+      { q:'중종 때 조광조의 개혁이 실패로 끝난 사건은?', opts:['기묘사화','갑자사화'], answer:0,
+        feedback:['갑자사화는 앞서 연산군 대의 사건이에요.','정답! 기묘사화입니다. 제가 유배지에서 사약을 받은 그 사건이지요.'] }
+    ],
+    finishesRevisit: 2
+  },
   jogwangjo_repeat: {
     name: '조광조', icon: '📖',
     beats: [ { who:'npc', t:'…이미 지나간 일입니다. 다른 이들의 이야기도 들어보시지요.' } ],
@@ -463,6 +556,19 @@ const NPC_DATA = {
     ],
     quiz: null,
     startsMini: 3
+  },
+  commoner1_1: {
+    name: '떠도는 백성', icon: '🗣️',
+    beats: [
+      { who:'npc', t:'또 왔는가? 을사사화 이야기, 좀 더 짚어볼까.' }
+    ],
+    quizSeq: [
+      { q:'을사사화는 어느 왕 즉위 초에 일어났는가?', opts:['명종','선조'], answer:0,
+        feedback:['선조는 다음 왕이에요.','정답! 명종입니다.'] },
+      { q:'을사사화에서 밀려난 세력은?', opts:['대윤(윤임 일파)','소윤(윤원형 일파)'], answer:0,
+        feedback:['소윤이 승리한 쪽이었어요.','정답! 대윤(윤임 일파)이 밀려났다더군.'] }
+    ],
+    finishesRevisit: 3
   },
   commoner1_repeat: {
     name: '떠도는 백성', icon: '🗣️',
@@ -479,6 +585,17 @@ const NPC_DATA = {
     ],
     quiz: null,
     startsMini: 4
+  },
+  josik_1: {
+    name: '조식', icon: '⛰️',
+    beats: [
+      { who:'npc', t:'돌아왔군. 나와 이황, 우리 둘을 뭐라 부르는지 아나?' }
+    ],
+    quizSeq: [
+      { q:'조식과 이황처럼 사화의 시대에 벼슬 대신 학문과 향촌 교화를 택한 이들을 무엇이라 부르나?', opts:['산림(재야 학자)','훈구파'], answer:0,
+        feedback:['훈구파는 오히려 사림과 대립한 기존 공신 세력이에요.','정답! 산림입니다.'] }
+    ],
+    finishesRevisit: 4
   },
   josik_repeat: {
     name: '조식', icon: '⛰️',
@@ -520,31 +637,15 @@ const MINI_QUESTIONS = {
   ]
 };
 
-const FINAL_BOSS_QUESTIONS = [
+const FINAL_SYNTHESIS_QUESTIONS = [
   { q:'다음 중 가장 먼저 일어난 사화는?', opts:['무오사화','을사사화'], answer:0,
     feedback:['을사사화는 가장 나중에 일어났어요.','정답! 무오사화(1498)가 가장 먼저입니다.'] },
-  { q:'갑자사화는 어느 왕 때 일어났는가?', opts:['연산군','중종'], answer:0,
-    feedback:['중종 때는 기묘사화가 일어나요.','정답! 연산군입니다.'] },
-  { q:'연산군을 몰아내고 중종을 세운 사건은?', opts:['중종반정','계유정난'], answer:0,
-    feedback:['계유정난은 훨씬 앞선 세조 즉위 관련 사건이에요.','정답! 중종반정입니다.'] },
-  { q:'중종 때 조광조의 개혁이 실패로 끝난 사건은?', opts:['기묘사화','갑자사화'], answer:0,
-    feedback:['갑자사화는 연산군 대의 사건이에요.','정답! 기묘사화입니다.'] },
-  { q:'을사사화는 어느 왕 즉위 초에 일어났는가?', opts:['명종','선조'], answer:0,
-    feedback:['선조는 다음 왕이에요.','정답! 명종입니다.'] },
-  { q:'무오사화의 빌미가 된 것은?', opts:['조의제문','현량과 실시'], answer:0,
-    feedback:['현량과 실시는 기묘사화 이전 조광조의 개혁 정책이에요.','정답! 조의제문입니다.'] },
-  { q:'갑자사화의 빌미가 된 것은?', opts:['폐비 윤씨 사사 사건','소격서 폐지 주장'], answer:0,
-    feedback:['소격서 폐지 주장은 기묘사화 무렵의 일이에요.','정답! 폐비 윤씨 사사 사건입니다.'] },
-  { q:'을사사화에서 밀려난 세력은?', opts:['대윤(윤임 일파)','소윤(윤원형 일파)'], answer:0,
-    feedback:['소윤이 승리한 쪽이었어요.','정답! 대윤(윤임 일파)이 밀려났습니다.'] },
-  { q:'조식과 이황처럼 사화의 시대에 벼슬 대신 학문과 향촌 교화를 택한 이들을 무엇이라 부르나?', opts:['산림(재야 학자)','훈구파'], answer:0,
-    feedback:['훈구파는 오히려 사림과 대립한 기존 공신 세력이에요.','정답! 산림입니다.'] },
   { q:'네 차례의 사화를 겪으면서도 결국 조정의 중심 세력으로 자리 잡은 정치 세력은?', opts:['사림파','외척 세력'], answer:0,
     feedback:['외척 세력은 오히려 이후 힘을 잃어가요.','정답! 사림파입니다. 하지만 이제 사림은 스스로 편을 갈라 다투기 시작합니다…'] }
 ];
 
 const Stage = {
-  state: { mini: {1:false,2:false,3:false,4:false}, finalDone: false },
+  state: { mini: {1:false,2:false,3:false,4:false}, revisit: {1:false,2:false,3:false,4:false}, finalDone: false },
   interact(){
     if (overlayOpen()) return;
     const n = World.nearNpc;
@@ -552,10 +653,12 @@ const Stage = {
     const map = { kimilson:1, jogwangjo:2, commoner1:3, josik:4 };
     const idx = map[n.id];
     if (!idx) return;
-    if (Stage.state.mini[idx]){
-      Dialog.open(n.id + '_repeat', n);
-    } else {
+    if (!Stage.state.mini[idx]){
       Dialog.open(n.id + '_0', n);
+    } else if (!Stage.state.revisit[idx]){
+      Dialog.open(n.id + '_1', n);
+    } else {
+      Dialog.open(n.id + '_repeat', n);
     }
   }
 };
@@ -584,11 +687,20 @@ const Dialog = {
   },
   finish(){
     document.getElementById('dlg-overlay').classList.remove('show');
-    if (this.data.quiz){
+    if (this.data.quizSeq){
+      Quiz.openSequence(this.data.quizSeq, (score, total) => this.afterQuizSeq(score, total));
+    } else if (this.data.quiz){
       Quiz.open(this.data.quiz, () => this.afterQuiz());
     } else {
       this.afterQuiz();
     }
+  },
+  afterQuizSeq(score, total){
+    if (this.data.finishesRevisit){
+      Stage.finishRevisit(this.data.finishesRevisit, score, total);
+      return;
+    }
+    World.paused = false;
   },
   afterQuiz(){
     if (this.data.startsMini){
@@ -696,10 +808,16 @@ Stage.finishMini = function(id, score, total){
   Stage.state.mini[id] = true;
   Stage.state['miniScore' + id] = `${score}/${total}`;
   updateHudProgress();
-  const allDone = Object.values(Stage.state.mini).every(Boolean);
+  World.paused = false;
+};
+
+Stage.finishRevisit = function(id, score, total){
+  Stage.state.revisit[id] = true;
+  Stage.state['revisitScore' + id] = `${score}/${total}`;
+  const allDone = Object.values(Stage.state.revisit).every(Boolean);
   if (allDone){
-    // 4연전을 모두 마쳤다면 곧바로 최종보스로 이어진다(추가 대화 없이 자동 연결)
-    Quiz.openSequence(FINAL_BOSS_QUESTIONS, (fScore, fTotal) => Stage.finishFinal(fScore, fTotal), '사화 통합전');
+    // 네 인물을 모두 두 번씩 만나 정리까지 마쳤다면, 짧은 통합 퀴즈로 마무리한다(추가 대화 없이 자동 연결)
+    Quiz.openSequence(FINAL_SYNTHESIS_QUESTIONS, (fScore, fTotal) => Stage.finishFinal(fScore, fTotal), '사화 통합전');
   } else {
     World.paused = false;
   }
@@ -707,7 +825,7 @@ Stage.finishMini = function(id, score, total){
 
 Stage.finishFinal = function(score, total){
   Stage.state.finalDone = true;
-  const lines = [1,2,3,4].map(i => `연전${i}: ${Stage.state['miniScore'+i]}`).join(' · ');
+  const lines = [1,2,3,4].map(i => `연전${i}: ${Stage.state['miniScore'+i]} · 정리: ${Stage.state['revisitScore'+i]}`).join(' · ');
   document.getElementById('end-score').textContent = `${lines}\n사화 통합전: ${score}/${total} 정답`;
   World.paused = true;
   Stage.endChapter();

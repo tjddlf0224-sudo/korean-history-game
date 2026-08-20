@@ -181,7 +181,70 @@ function isBarrier(x, y){
   return false;
 }
 
-const TILE_COLOR = { [T.GROUND]: '#c9b489', [T.WALL]: '#4a3f2f', [T.WOOD]: '#a9835a', [T.STONE]: '#9c9284' };
+/* 국가유산청 3D 에셋 마켓 웹뷰어로 확인한 실제 색감 참고
+   (아트/국가유산_비주얼_레퍼런스.md): 경복궁 화강암 판석 마당, 남한산성 목책/성벽, 통나무 적치 */
+const TILE_COLOR = { [T.GROUND]: '#bfa374', [T.WALL]: '#3a2f22', [T.WOOD]: '#8a6d47', [T.STONE]: '#a89f8f' };
+
+/* 타일 좌표 기반 결정론적 의사난수 — 매 프레임 값이 바뀌면 텍스처가 깜빡이므로
+   Math.random() 대신 좌표를 해시해 항상 같은 값이 나오게 한다. */
+function hash2(x, y, seed){
+  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
+  h = (h ^ (h >>> 13)) >>> 0;
+  h = Math.imul(h, 1274126177);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967295;
+}
+function shadeColor(hex, amt){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
+  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
+  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
+  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
+  return `rgb(${r|0},${g|0},${b|0})`;
+}
+function drawTile(t, tx, ty, px, py){
+  const base = TILE_COLOR[t];
+  ctx.fillStyle = base;
+  ctx.fillRect(px, py, TS+1, TS+1);
+  if (t === T.GROUND){
+    for (let i=0;i<4;i++){
+      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
+      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
+      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (t === T.STONE){
+    // 화강암 판석: 낱장 블록 + 줄눈
+    const half = TS/2;
+    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
+      const n = hash2(tx*2+bx, ty*2+by, 5);
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.18);
+      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+  } else if (t === T.WOOD){
+    // 목재 적치장: 통나무 단면(위치도 해시로 흩뿌려 타일 반복이 벽지처럼 보이지 않게)
+    for (let i=0;i<3;i++){
+      const nx = hash2(tx*3+i, ty, 6), ny = hash2(tx*3+i, ty, 8), nr = hash2(tx*3+i, ty, 7);
+      const r = 7 + nr*4;
+      const lx = px + 0.15*TS + nx*0.7*TS, ly = py + 0.15*TS + ny*0.7*TS;
+      ctx.fillStyle = shadeColor(base, (nr-0.5)*0.3);
+      ctx.beginPath(); ctx.arc(lx, ly, r, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = 'rgba(60,40,20,.4)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(lx, ly, r*0.5, 0, Math.PI*2); ctx.stroke();
+    }
+  } else if (t === T.WALL){
+    // 공사현장 목책: 세로 판재
+    const planks = 3;
+    for (let i=0;i<planks;i++){
+      const n = hash2(tx*3+i, ty, 9);
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.25);
+      ctx.fillRect(px + i*(TS/planks), py, TS/planks - 1, TS+1);
+    }
+    ctx.fillStyle = 'rgba(0,0,0,.25)';
+    ctx.fillRect(px, py, TS+1, 6);
+  }
+}
 function drawMap(camX, camY){
   const x0 = Math.max(0, Math.floor(camX / TS));
   const y0 = Math.max(0, Math.floor(camY / TS));
@@ -189,12 +252,7 @@ function drawMap(camX, camY){
   const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
   for (let y = y0; y < y1; y++){
     for (let x = x0; x < x1; x++){
-      ctx.fillStyle = TILE_COLOR[MAP[y][x]];
-      ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, TS+1);
-      if (MAP[y][x] === T.WALL){
-        ctx.fillStyle = 'rgba(0,0,0,.15)';
-        ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, 6);
-      }
+      drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
     }
   }
 }
@@ -354,6 +412,12 @@ const World = {
     }
     // 플레이어
     drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
+    // 은은한 비네트로 화면에 입체감 부여
+    const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,.28)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 };
 

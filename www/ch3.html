@@ -180,7 +180,60 @@ function isBarrier(x, y){
 }
 
 /* 채도를 낮추고 붉은 기를 준 어두운 팔레트(챕터 톤에 맞춤) */
-const TILE_COLOR = { [T.GROUND]: '#5c4f4a', [T.WALL]: '#241a18', [T.STONE]: '#4a3e3d' };
+/* 국가유산청 3D 에셋 마켓 웹뷰어로 확인한 실제 색감 참고(아트/국가유산_비주얼_레퍼런스.md):
+   경복궁 화강암 판석(어두운 톤으로 조정), 남한산성 성벽 — 계유정난의 다크 팔레트 유지 */
+const TILE_COLOR = { [T.GROUND]: '#5c4f4a', [T.WALL]: '#2c211e', [T.STONE]: '#4d423f' };
+function hash2(x, y, seed){
+  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
+  h = (h ^ (h >>> 13)) >>> 0;
+  h = Math.imul(h, 1274126177);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967295;
+}
+function shadeColor(hex, amt){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
+  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
+  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
+  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
+  return `rgb(${r|0},${g|0},${b|0})`;
+}
+function drawTile(t, tx, ty, px, py){
+  const base = TILE_COLOR[t];
+  ctx.fillStyle = base;
+  ctx.fillRect(px, py, TS+1, TS+1);
+  if (t === T.GROUND){
+    for (let i=0;i<4;i++){
+      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
+      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.12)' : 'rgba(255,255,255,.05)';
+      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (t === T.STONE){
+    const half = TS/2;
+    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
+      const n = hash2(tx*2+bx, ty*2+by, 5);
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.2);
+      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+  } else if (t === T.WALL){
+    const rows = 3, rowH = TS/rows, cols = 2;
+    for (let r=0;r<rows;r++){
+      const offset = (r%2===0) ? 0 : TS/cols/2;
+      for (let c=-1;c<=cols;c++){
+        const n = hash2(tx*10+r*4+c+30, ty, 11);
+        const bx = px + c*(TS/cols) + offset;
+        ctx.fillStyle = shadeColor(base, (n-0.5)*0.22);
+        ctx.fillRect(Math.max(px,bx)+1, py+r*rowH+1, TS/cols-2, rowH-2);
+      }
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+    ctx.fillStyle = 'rgba(0,0,0,.3)';
+    ctx.fillRect(px, py, TS+1, 6);
+  }
+}
 function drawMap(camX, camY){
   const x0 = Math.max(0, Math.floor(camX / TS));
   const y0 = Math.max(0, Math.floor(camY / TS));
@@ -188,12 +241,7 @@ function drawMap(camX, camY){
   const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
   for (let y = y0; y < y1; y++){
     for (let x = x0; x < x1; x++){
-      ctx.fillStyle = TILE_COLOR[MAP[y][x]];
-      ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, TS+1);
-      if (MAP[y][x] === T.WALL){
-        ctx.fillStyle = 'rgba(0,0,0,.25)';
-        ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, 6);
-      }
+      drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
     }
   }
 }
@@ -346,6 +394,11 @@ const World = {
       }
     }
     drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
+    const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.25, canvas.width/2, canvas.height/2, canvas.height*0.8);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,.4)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 };
 

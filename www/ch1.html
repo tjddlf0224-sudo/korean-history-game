@@ -182,7 +182,72 @@ function isBarrier(x, y){
   return false;
 }
 
-const TILE_COLOR = { [T.GROUND]: '#b7a487', [T.WALL]: '#3d3428', [T.WOOD]: '#96774f', [T.STONE]: '#8f867a' };
+/* 국가유산청 3D 에셋 마켓 웹뷰어로 확인한 실제 색감 참고(아트/국가유산_비주얼_레퍼런스.md):
+   남한산성 성벽(자연석 쌓기), 경복궁 화강암 판석 */
+const TILE_COLOR = { [T.GROUND]: '#b7a487', [T.WALL]: '#443a2c', [T.WOOD]: '#8f7148', [T.STONE]: '#938a7d' };
+function hash2(x, y, seed){
+  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
+  h = (h ^ (h >>> 13)) >>> 0;
+  h = Math.imul(h, 1274126177);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967295;
+}
+function shadeColor(hex, amt){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
+  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
+  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
+  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
+  return `rgb(${r|0},${g|0},${b|0})`;
+}
+function drawTile(t, tx, ty, px, py){
+  const base = TILE_COLOR[t];
+  ctx.fillStyle = base;
+  ctx.fillRect(px, py, TS+1, TS+1);
+  if (t === T.GROUND){
+    for (let i=0;i<4;i++){
+      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
+      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
+      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (t === T.STONE){
+    // 화강암 판석: 낱장 블록 + 줄눈
+    const half = TS/2;
+    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
+      const n = hash2(tx*2+bx, ty*2+by, 5);
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.18);
+      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+  } else if (t === T.WOOD){
+    // 병장기고 마루: 널판 결
+    const planks = 4;
+    for (let i=0;i<planks;i++){
+      const n = hash2(tx, ty*planks+i, 6);
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.2);
+      ctx.fillRect(px, py + i*(TS/planks), TS+1, TS/planks - 1);
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.12)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py+TS); ctx.stroke();
+  } else if (t === T.WALL){
+    // 성벽: 자연석 부정형 쌓기(2줄 엇갈림)
+    const rows = 3, rowH = TS/rows, cols = 2;
+    for (let r=0;r<rows;r++){
+      const offset = (r%2===0) ? 0 : TS/cols/2;
+      for (let c=-1;c<=cols;c++){
+        const n = hash2(tx*10+r*4+c+30, ty, 11);
+        const bx = px + c*(TS/cols) + offset;
+        ctx.fillStyle = shadeColor(base, (n-0.5)*0.22);
+        ctx.fillRect(Math.max(px,bx)+1, py+r*rowH+1, TS/cols-2, rowH-2);
+      }
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.15)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+    ctx.fillStyle = 'rgba(0,0,0,.2)';
+    ctx.fillRect(px, py, TS+1, 5);
+  }
+}
 function drawMap(camX, camY){
   const x0 = Math.max(0, Math.floor(camX / TS));
   const y0 = Math.max(0, Math.floor(camY / TS));
@@ -190,12 +255,7 @@ function drawMap(camX, camY){
   const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
   for (let y = y0; y < y1; y++){
     for (let x = x0; x < x1; x++){
-      ctx.fillStyle = TILE_COLOR[MAP[y][x]];
-      ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, TS+1);
-      if (MAP[y][x] === T.WALL){
-        ctx.fillStyle = 'rgba(0,0,0,.15)';
-        ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, 6);
-      }
+      drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
     }
   }
 }
@@ -348,6 +408,11 @@ const World = {
       }
     }
     drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
+    const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,.3)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 };
 

@@ -184,7 +184,70 @@ function isBarrier(x, y){
   return false;
 }
 
-const TILE_COLOR = { [T.GROUND]: '#b7a98c', [T.WALL]: '#3d3428', [T.STONE]: '#9d9486', [T.FIELD]: '#7c8f5a' };
+/* 국가유산청 3D 에셋 마켓 웹뷰어로 확인한 실제 색감 참고(아트/국가유산_비주얼_레퍼런스.md):
+   경복궁 화강암 판석(집현전), 남한산성 성벽, 낙안읍성 초가마을 녹지(국경 진영) */
+const TILE_COLOR = { [T.GROUND]: '#b7a98c', [T.WALL]: '#443a2c', [T.STONE]: '#a89f8f', [T.FIELD]: '#748a52' };
+function hash2(x, y, seed){
+  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
+  h = (h ^ (h >>> 13)) >>> 0;
+  h = Math.imul(h, 1274126177);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967295;
+}
+function shadeColor(hex, amt){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
+  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
+  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
+  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
+  return `rgb(${r|0},${g|0},${b|0})`;
+}
+function drawTile(t, tx, ty, px, py){
+  const base = TILE_COLOR[t];
+  ctx.fillStyle = base;
+  ctx.fillRect(px, py, TS+1, TS+1);
+  if (t === T.GROUND){
+    for (let i=0;i<4;i++){
+      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
+      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
+      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (t === T.STONE){
+    const half = TS/2;
+    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
+      const n = hash2(tx*2+bx, ty*2+by, 5);
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.18);
+      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+  } else if (t === T.FIELD){
+    // 국경 진영 들풀: 작은 풀잎 다발
+    for (let i=0;i<5;i++){
+      const nx = hash2(tx*5+i, ty, 4), ny = hash2(tx*5+i, ty, 6), na = hash2(tx*5+i, ty, 8);
+      const bx = px + 3 + nx*(TS-6), by = py + 3 + ny*(TS-6);
+      const ang = (na-0.5) * 0.9;
+      ctx.strokeStyle = shadeColor(base, na>0.5 ? 0.22 : -0.15);
+      ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(bx, by+4); ctx.lineTo(bx + Math.sin(ang)*5, by-5); ctx.stroke();
+    }
+  } else if (t === T.WALL){
+    const rows = 3, rowH = TS/rows, cols = 2;
+    for (let r=0;r<rows;r++){
+      const offset = (r%2===0) ? 0 : TS/cols/2;
+      for (let c=-1;c<=cols;c++){
+        const n = hash2(tx*10+r*4+c+30, ty, 11);
+        const bx = px + c*(TS/cols) + offset;
+        ctx.fillStyle = shadeColor(base, (n-0.5)*0.22);
+        ctx.fillRect(Math.max(px,bx)+1, py+r*rowH+1, TS/cols-2, rowH-2);
+      }
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.15)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+    ctx.fillStyle = 'rgba(0,0,0,.2)';
+    ctx.fillRect(px, py, TS+1, 5);
+  }
+}
 function drawMap(camX, camY){
   const x0 = Math.max(0, Math.floor(camX / TS));
   const y0 = Math.max(0, Math.floor(camY / TS));
@@ -192,12 +255,7 @@ function drawMap(camX, camY){
   const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
   for (let y = y0; y < y1; y++){
     for (let x = x0; x < x1; x++){
-      ctx.fillStyle = TILE_COLOR[MAP[y][x]];
-      ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, TS+1);
-      if (MAP[y][x] === T.WALL){
-        ctx.fillStyle = 'rgba(0,0,0,.15)';
-        ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, 6);
-      }
+      drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
     }
   }
 }
@@ -365,6 +423,11 @@ const World = {
       }
     }
     drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
+    const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,.28)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 };
 
@@ -438,12 +501,15 @@ const NPC_DATA = {
       { who:'npc', t:'마침 잘 왔군. 최만리를 비롯한 신하들이 언문(훈민정음)에 반대하는 상소를 올렸다네. 자네도 함께 들어보겠나?' },
       { who:'npc', name:'최만리', icon:'📯', t:'전하, 언문이라는 것이 옛 글자와 다르니, 중국에라도 흘러 들어가면 우리가 오랑캐와 다를 바 없다는 비난을 받을까 두렵습니다.' },
     ],
-    quiz: {
-      q: '최만리의 상소에 대해 세종이 실제로 편 반박 논리는?',
-      opts: ['설총이 만든 이두도 결국 발음을 다르게 쓴 것인데, 그것이 백성을 편하게 하려는 뜻이었다면 이 글자도 다르지 않다', '중국과의 사대관계를 이번 기회에 완전히 끊어야 한다'],
-      answer: 0,
-      feedback: ['세종이 중국과의 사대외교 자체를 문제 삼은 건 아니었어요.', '정답! 세종은 이두를 만든 설총도 결국 백성을 위한 것이었다는 점을 들어 반박했습니다. 상소를 올린 신하들은 잠시 하옥됐다가 다음 날 풀려났습니다.']
-    }
+    quizSeq: [
+      { q:'최만리의 상소에 대해 세종이 실제로 편 반박 논리는?',
+        opts:['설총이 만든 이두도 결국 발음을 다르게 쓴 것인데, 그것이 백성을 편하게 하려는 뜻이었다면 이 글자도 다르지 않다', '중국과의 사대관계를 이번 기회에 완전히 끊어야 한다'], answer:0,
+        feedback:['세종이 중국과의 사대외교 자체를 문제 삼은 건 아니었어요.', '정답! 세종은 이두를 만든 설총도 결국 백성을 위한 것이었다는 점을 들어 반박했습니다. 상소를 올린 신하들은 잠시 하옥됐다가 다음 날 풀려났습니다.'] },
+      { q:'세종이 학문 연구와 인재 양성을 위해 설치했고, 훈민정음 창제의 산실이 된 기구는?', opts:['집현전','홍문관'], answer:0,
+        feedback:['홍문관은 훗날 성종 대에 옛 집현전의 기능을 이어받아 만들어져요.','정답! 지금 자네가 서 있는 이곳, 집현전입니다.'] },
+      { q:'세종이 젊은 문신들에게 휴가를 주어 학문에만 전념하게 한 제도는?', opts:['사가독서제','현량과'], answer:0,
+        feedback:['현량과는 훗날 중종 대 조광조가 건의한 인재 천거제예요.','정답! 사가독서제로 문신들에게 학문에 전념할 시간을 주었습니다.'] }
+    ]
   },
   sejong_1: {
     name: '세종', icon: '👑',
@@ -451,12 +517,14 @@ const NPC_DATA = {
       { who:'npc', t:'가뭄과 홍수를 미리 알 수 있다면 얼마나 많은 백성을 구할 수 있겠는가.' },
       { who:'npc', t:'이 그릇에 빗물을 받아 재는 것만으로 그게 가능하다니, 참으로 놀랍지 않은가. 이 기구의 이름을 아나?' },
     ],
-    quiz: {
-      q: '세종 대에 발명되어 전국의 강우량을 과학적으로 측정한 기구는?',
-      opts: ['측우기', '자격루'],
-      answer: 0,
-      feedback: ['자격루는 물의 흐름으로 시간을 알려주는 물시계예요.', '정답! 측우기로 전국 각지의 강우량을 숫자로 기록할 수 있게 됐습니다.']
-    }
+    quizSeq: [
+      { q:'세종 대에 발명되어 전국의 강우량을 과학적으로 측정한 기구는?', opts:['측우기','자격루'], answer:0,
+        feedback:['자격루는 물의 흐름으로 시간을 알려주는 물시계예요.','정답! 측우기로 전국 각지의 강우량을 숫자로 기록할 수 있게 됐습니다.'] },
+      { q:'세종 대에 만들어진 금속 활자로 옳은 것은?', opts:['갑인자','상평통보'], answer:0,
+        feedback:['상평통보는 조선 후기에 널리 쓰인 화폐예요.','정답! 경자자에 이어 더 정교하게 만든 갑인자입니다.'] },
+      { q:'세종이 전국 찬반 여론조사를 실시한 뒤 확정한 새 전세 제도는?', opts:['공법(전분6등·연분9등)','대동법'], answer:0,
+        feedback:['대동법은 훗날 광해군 대부터 시행되는 수취 제도예요.','정답! 토지 비옥도(전분6등)와 풍흉(연분9등)에 따라 세금을 매긴 공법입니다.'] }
+    ]
   },
   sejong_2: {
     name: '세종', icon: '👑',
@@ -464,12 +532,16 @@ const NPC_DATA = {
       { who:'npc', t:'언문은 이제 시작일 뿐이네. 이 글자로 수많은 책을 펴낼 걸세 — 역사서, 의학서, 음악까지.' },
       { who:'npc', name:'신숙주', icon:'🖋️', t:'박연 어른이 편경도 새로 만드셨다지요. 소리가 예전 것보다 훨씬 맑고 정확하다 들었습니다.' },
     ],
-    quiz: {
-      q: '세종이 박연에게 명해 새로 만들게 한 궁중 타악기는?',
-      opts: ['편경', '거문고'],
-      answer: 0,
-      feedback: ['거문고는 이미 오래전부터 있던 현악기예요.', '정답! 돌을 깎아 만든 편경으로 궁중 음악(아악)을 새로 정비했습니다.']
-    }
+    quizSeq: [
+      { q:'세종이 박연에게 명해 새로 만들게 한 궁중 타악기는?', opts:['편경','거문고'], answer:0,
+        feedback:['거문고는 이미 오래전부터 있던 현악기예요.','정답! 돌을 깎아 만든 편경으로 궁중 음악(아악)을 새로 정비했습니다.'] },
+      { q:'안평대군의 꿈 이야기를 듣고 안견이 그린, 현실과 이상 세계를 함께 담은 그림은?', opts:['몽유도원도','세한도'], answer:0,
+        feedback:['세한도는 훗날 조선 후기 김정희의 작품이에요.','정답! 안견이 그린 몽유도원도입니다.'] },
+      { q:'시·그림·글씨에 모두 능해 조선 전기를 대표하는 문인 화가로 꼽히는 인물은?', opts:['강희안','김홍도'], answer:0,
+        feedback:['김홍도는 훨씬 후대인 조선 후기 화가예요.','정답! 강희안입니다.'] },
+      { q:'세종이 왕비의 명복을 빌며 수양대군에게 짓게 한 산문을, 훗날 한글 노래로 옮긴 작품은?', opts:['월인천강지곡','관동별곡'], answer:0,
+        feedback:['관동별곡은 조선 중기 정철이 지은 가사예요.','정답! 석보상절의 내용을 한글 노래로 옮긴 월인천강지곡입니다.'] }
+    ]
   },
   sejong_3: {
     name: '세종', icon: '👑',
@@ -478,8 +550,15 @@ const NPC_DATA = {
       { who:'npc', t:'다음 왕위는 문종, 그리고 어린 세손에게 이어지겠지. 부디 이 아이가 무사히 왕좌를 지킬 수 있기를…' },
       { who:'npc', t:'가기 전에, 내가 이룬 것들을 자네가 정말 잘 알고 있는지 한번 보고 싶군.' },
     ],
-    quiz: null,
-    startsBossA: true
+    quizSeq: [
+      { q:'태조가 개경에 처음 세웠다가 한양 천도 후 지금 자리로 옮긴, 조선 왕실의 사당은?', opts:['종묘','사직단'], answer:0,
+        feedback:['사직단은 토지신과 곡식신에게 제사 지내는 곳이에요.','정답! 역대 왕과 왕비의 신위를 모신 종묘입니다.'] },
+      { q:'종묘에 대한 설명으로 옳은 것은?', opts:['역대 왕과 왕비의 신위를 모신 사당이다','국왕이 신하들과 정사를 논하던 편전이다'], answer:0,
+        feedback:['편전은 왕이 일상적으로 정무를 보던 공간이에요.','정답! 종묘는 조선 왕실의 신위를 모신 사당입니다.'] },
+      { q:'세종이 박연에게 명해 정비하게 한 궁중 음악은?', opts:['아악','판소리'], answer:0,
+        feedback:['판소리는 조선 후기에 성행한 서민 음악이에요.','정답! 편경 등을 새로 만들며 아악을 정비했습니다.'] }
+    ],
+    finishesBossA: true
   },
   sejong_repeat: {
     name: '세종', icon: '👑',
@@ -497,12 +576,10 @@ const NPC_DATA = {
       { who:'npc', t:'여기가 우리 국경의 끝일세. 압록강과 두만강까지 우리 땅으로 확실히 그어놓아야, 후손들이 다시는 이 땅을 두고 다투지 않을 것이야.' },
       { who:'npc', t:'내가 이곳에 무엇을 설치했는지 아나?' },
     ],
-    quiz: {
-      q: '김종서가 두만강 일대를 개척해 설치한 국경 방어 거점은?',
-      opts: ['6진', '4군'],
-      answer: 0,
-      feedback: ['4군은 압록강 방면에 최윤덕이 개척한 곳이에요.', '정답! 김종서는 두만강 일대에 6진을 설치했습니다.']
-    }
+    quizSeq: [
+      { q:'김종서가 두만강 일대를 개척해 설치한 국경 방어 거점은?', opts:['6진','4군'], answer:0,
+        feedback:['4군은 압록강 방면에 최윤덕이 개척한 곳이에요.','정답! 김종서는 두만강 일대에 6진을 설치했습니다.'] }
+    ]
   },
   kim_1: {
     name: '김종서', icon: '🗡️',
@@ -510,12 +587,14 @@ const NPC_DATA = {
       { who:'npc', t:'그저 땅만 넓힌다고 되는 일이 아닐세. 사람이 살아야 진짜 우리 땅이 되는 것이야.' },
       { who:'npc', t:'그래서 남쪽의 백성들을 이곳으로 옮겨 살게 하고 있네.' },
     ],
-    quiz: {
-      q: '조선이 새로 개척한 북방 지역에 남쪽 백성을 옮겨 살게 한 정책은?',
-      opts: ['사민정책', '호패법'],
-      answer: 0,
-      feedback: ['호패법은 신분증(호패)을 차게 해 인구를 파악하던 제도예요.', '정답! 사민정책으로 남쪽 백성들을 북방에 이주시켜 실질적인 영토로 만들었습니다.']
-    }
+    quizSeq: [
+      { q:'조선이 새로 개척한 북방 지역에 남쪽 백성을 옮겨 살게 한 정책은?', opts:['사민정책','호패법'], answer:0,
+        feedback:['호패법은 신분증(호패)을 차게 해 인구를 파악하던 제도예요.','정답! 사민정책으로 남쪽 백성들을 북방에 이주시켜 실질적인 영토로 만들었습니다.'] },
+      { q:'조선이 명나라에 사신을 보내 유지한 외교 형식은?', opts:['사대외교(하정사·천추사 파견)','책봉을 거부하는 독자 외교'], answer:0,
+        feedback:['조선은 건국 초부터 명과 사대 관계를 맺었어요.','정답! 정기적으로 사신을 보내는 사대외교를 유지했습니다.'] },
+      { q:'세종 대 여진과의 관계에서 조선이 취한 정책은?', opts:['회유책으로 국경에 무역소를 설치했다','전면적으로 교류를 단절했다'], answer:0,
+        feedback:['완전한 단절이 아니라 회유와 정벌을 병행했어요.','정답! 무역소를 설치해 회유하면서도 필요하면 정벌했습니다.'] }
+    ]
   },
   kim_2: {
     name: '김종서', icon: '🗡️',
@@ -523,8 +602,15 @@ const NPC_DATA = {
       { who:'npc', t:'왜구가 남쪽 바다를 계속 노략질한다더군. 전하께서 곧 큰 결단을 내리실 걸세.' },
       { who:'npc', t:'자, 그럼 내가 아는 걸 좀 시험해보겠나?' },
     ],
-    quiz: null,
-    startsBossB: true
+    quizSeq: [
+      { q:'이종무가 왜구의 근거지를 정벌한 사건은?', opts:['대마도 정벌','진주성 전투'], answer:0,
+        feedback:['진주성 전투는 훗날 임진왜란 때의 전투예요.','정답! 이종무가 이끈 대마도 정벌입니다.'] },
+      { q:'신숙주가 일본에 다녀와서 지은, 일본의 지리·풍속을 기록한 책은?', opts:['해동제국기','동국여지승람'], answer:0,
+        feedback:['동국여지승람은 조선 전체의 지리를 다룬 책이에요.','정답! 해동제국기입니다.'] },
+      { q:'두만강 유역에 6진을, 압록강 유역에 4군을 각각 개척한 인물의 조합으로 옳은 것은?', opts:['김종서(6진)·최윤덕(4군)','최윤덕(6진)·김종서(4군)'], answer:0,
+        feedback:['방향이 바뀌었어요 — 6진은 김종서, 4군은 최윤덕입니다.','정답! 나(김종서)는 두만강 쪽 6진을, 최윤덕 장군은 압록강 쪽 4군을 맡았지.'] }
+    ],
+    finishesBossB: true
   },
   kim_repeat: {
     name: '김종서', icon: '🗡️',
@@ -533,44 +619,9 @@ const NPC_DATA = {
   }
 };
 
-const BOSS_A_QUESTIONS = [
-  { q:'안평대군의 꿈 이야기를 듣고 안견이 그린, 현실과 이상 세계를 함께 담은 그림은?', opts:['몽유도원도','세한도'], answer:0,
-    feedback:['세한도는 훗날 조선 후기 김정희의 작품이에요.','정답! 안견이 그린 몽유도원도입니다.'] },
-  { q:'세종 대에 만들어진 금속 활자로 옳은 것은?', opts:['갑인자','상평통보'], answer:0,
-    feedback:['상평통보는 조선 후기에 널리 쓰인 화폐예요.','정답! 경자자에 이어 더 정교하게 만든 갑인자입니다.'] },
-  { q:'세종이 전국 찬반 여론조사를 실시한 뒤 확정한 새 전세 제도는?', opts:['공법(전분6등·연분9등)','대동법'], answer:0,
-    feedback:['대동법은 훗날 광해군 대부터 시행되는 수취 제도예요.','정답! 토지 비옥도(전분6등)와 풍흉(연분9등)에 따라 세금을 매긴 공법입니다.'] },
-  { q:'태조가 개경에 처음 세웠다가 한양 천도 후 지금 자리로 옮긴, 조선 왕실의 사당은?', opts:['종묘','사직단'], answer:0,
-    feedback:['사직단은 토지신과 곡식신에게 제사 지내는 곳이에요.','정답! 역대 왕과 왕비의 신위를 모신 종묘입니다.'] },
-  { q:'세종이 학문 연구와 인재 양성을 위해 설치했고, 훈민정음 창제의 산실이 된 기구는?', opts:['집현전','홍문관'], answer:0,
-    feedback:['홍문관은 훗날 성종 대에 옛 집현전의 기능을 이어받아 만들어져요.','정답! 집현전입니다.'] },
-  { q:'시·그림·글씨에 모두 능해 조선 전기를 대표하는 문인 화가로 꼽히는 인물은?', opts:['강희안','김홍도'], answer:0,
-    feedback:['김홍도는 훨씬 후대인 조선 후기 화가예요.','정답! 강희안입니다.'] },
-  { q:'세종이 왕비의 명복을 빌며 수양대군에게 짓게 한 산문을, 훗날 한글 노래로 옮긴 작품은?', opts:['월인천강지곡','관동별곡'], answer:0,
-    feedback:['관동별곡은 조선 중기 정철이 지은 가사예요.','정답! 석보상절의 내용을 한글 노래로 옮긴 월인천강지곡입니다.'] },
-  { q:'종묘에 대한 설명으로 옳은 것은?', opts:['역대 왕과 왕비의 신위를 모신 사당이다','국왕이 신하들과 정사를 논하던 편전이다'], answer:0,
-    feedback:['편전은 왕이 일상적으로 정무를 보던 공간이에요.','정답! 종묘는 조선 왕실의 신위를 모신 사당입니다.'] },
-  { q:'세종이 박연에게 명해 정비하게 한 궁중 음악은?', opts:['아악','판소리'], answer:0,
-    feedback:['판소리는 조선 후기에 성행한 서민 음악이에요.','정답! 편경 등을 새로 만들며 아악을 정비했습니다.'] },
-  { q:'세종이 젊은 문신들에게 휴가를 주어 학문에만 전념하게 한 제도는?', opts:['사가독서제','현량과'], answer:0,
-    feedback:['현량과는 훗날 중종 대 조광조가 건의한 인재 천거제예요.','정답! 사가독서제로 문신들에게 학문에 전념할 시간을 주었습니다.'] }
-];
-
-const BOSS_B_QUESTIONS = [
-  { q:'김종서가 두만강 일대를 개척해 설치한 것은?', opts:['6진','4군'], answer:0,
-    feedback:['4군은 압록강 방면, 최윤덕이 개척한 곳이에요.','정답! 6진입니다.'] },
-  { q:'조선이 명나라에 사신을 보내 유지한 외교 형식은?', opts:['사대외교(하정사·천추사 파견)','책봉을 거부하는 독자 외교'], answer:0,
-    feedback:['조선은 건국 초부터 명과 사대 관계를 맺었어요.','정답! 정기적으로 사신을 보내는 사대외교를 유지했습니다.'] },
-  { q:'세종 대 여진과의 관계에서 조선이 취한 정책은?', opts:['회유책으로 국경에 무역소를 설치했다','전면적으로 교류를 단절했다'], answer:0,
-    feedback:['완전한 단절이 아니라 회유와 정벌을 병행했어요.','정답! 무역소를 설치해 회유하면서도 필요하면 정벌했습니다.'] },
-  { q:'이종무가 왜구의 근거지를 정벌한 사건은?', opts:['대마도 정벌','진주성 전투'], answer:0,
-    feedback:['진주성 전투는 훗날 임진왜란 때의 전투예요.','정답! 이종무가 이끈 대마도 정벌입니다.'] },
-  { q:'신숙주가 일본에 다녀와서 지은, 일본의 지리·풍속을 기록한 책은?', opts:['해동제국기','동국여지승람'], answer:0,
-    feedback:['동국여지승람은 조선 전체의 지리를 다룬 책이에요.','정답! 해동제국기입니다.'] }
-];
-
 const Stage = {
-  state: { sejongStage: 0, kimStage: 0, bossADone: false, bossBDone: false },
+  state: { sejongStage: 0, kimStage: 0, bossADone: false, bossBDone: false,
+    sejongScore: 0, sejongTotal: 0, kimScore: 0, kimTotal: 0 },
   interact(){
     if (overlayOpen()) return;
     const n = World.nearNpc;
@@ -613,21 +664,23 @@ const Dialog = {
   },
   finish(){
     document.getElementById('dlg-overlay').classList.remove('show');
-    if (this.data.quiz){
-      Quiz.open(this.data.quiz, () => this.afterQuiz());
+    if (this.data.quizSeq){
+      Quiz.openSequence(this.data.quizSeq, (score, total) => this.afterQuizSeq(score, total));
     } else {
       this.afterQuiz();
     }
   },
+  afterQuizSeq(score, total){
+    if (this.npc.id === 'sejong'){
+      Stage.state.sejongScore += score; Stage.state.sejongTotal += total;
+    } else if (this.npc.id === 'kimjongseo'){
+      Stage.state.kimScore += score; Stage.state.kimTotal += total;
+    }
+    if (this.data.finishesBossA){ Stage.finishBoss('A', Stage.state.sejongScore, Stage.state.sejongTotal); return; }
+    if (this.data.finishesBossB){ Stage.finishBoss('B', Stage.state.kimScore, Stage.state.kimTotal); return; }
+    this.afterQuiz();
+  },
   afterQuiz(){
-    if (this.data.startsBossA){
-      Quiz.openSequence(BOSS_A_QUESTIONS, (score, total) => Stage.finishBoss('A', score, total));
-      return;
-    }
-    if (this.data.startsBossB){
-      Quiz.openSequence(BOSS_B_QUESTIONS, (score, total) => Stage.finishBoss('B', score, total));
-      return;
-    }
     World.paused = false;
     if (this.npc.id === 'sejong'){
       Stage.state.sejongStage = Math.min(Stage.state.sejongStage + 1, 3);

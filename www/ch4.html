@@ -184,7 +184,69 @@ function isBarrier(x, y){
   return false;
 }
 
-const TILE_COLOR = { [T.GROUND]: '#9faeb0', [T.WALL]: '#28323a', [T.STONE]: '#8b9ba2', [T.FIELD]: '#8a9a6e' };
+/* 국가유산청 3D 에셋 마켓 웹뷰어로 확인한 실제 색감 참고(아트/국가유산_비주얼_레퍼런스.md):
+   경복궁 화강암 판석(홍문관), 남한산성 성벽, 낙안읍성 초가마을 녹지(지방 고을) */
+const TILE_COLOR = { [T.GROUND]: '#9faeb0', [T.WALL]: '#2e3942', [T.STONE]: '#909fa6', [T.FIELD]: '#7f9165' };
+function hash2(x, y, seed){
+  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
+  h = (h ^ (h >>> 13)) >>> 0;
+  h = Math.imul(h, 1274126177);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967295;
+}
+function shadeColor(hex, amt){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
+  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
+  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
+  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
+  return `rgb(${r|0},${g|0},${b|0})`;
+}
+function drawTile(t, tx, ty, px, py){
+  const base = TILE_COLOR[t];
+  ctx.fillStyle = base;
+  ctx.fillRect(px, py, TS+1, TS+1);
+  if (t === T.GROUND){
+    for (let i=0;i<4;i++){
+      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
+      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
+      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (t === T.STONE){
+    const half = TS/2;
+    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
+      const n = hash2(tx*2+bx, ty*2+by, 5);
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.18);
+      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+  } else if (t === T.FIELD){
+    for (let i=0;i<5;i++){
+      const nx = hash2(tx*5+i, ty, 4), ny = hash2(tx*5+i, ty, 6), na = hash2(tx*5+i, ty, 8);
+      const bx = px + 3 + nx*(TS-6), by = py + 3 + ny*(TS-6);
+      const ang = (na-0.5) * 0.9;
+      ctx.strokeStyle = shadeColor(base, na>0.5 ? 0.22 : -0.15);
+      ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(bx, by+4); ctx.lineTo(bx + Math.sin(ang)*5, by-5); ctx.stroke();
+    }
+  } else if (t === T.WALL){
+    const rows = 3, rowH = TS/rows, cols = 2;
+    for (let r=0;r<rows;r++){
+      const offset = (r%2===0) ? 0 : TS/cols/2;
+      for (let c=-1;c<=cols;c++){
+        const n = hash2(tx*10+r*4+c+30, ty, 11);
+        const bx = px + c*(TS/cols) + offset;
+        ctx.fillStyle = shadeColor(base, (n-0.5)*0.22);
+        ctx.fillRect(Math.max(px,bx)+1, py+r*rowH+1, TS/cols-2, rowH-2);
+      }
+    }
+    ctx.strokeStyle = 'rgba(0,0,0,.15)'; ctx.lineWidth = 1;
+    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
+    ctx.fillStyle = 'rgba(0,0,0,.2)';
+    ctx.fillRect(px, py, TS+1, 5);
+  }
+}
 function drawMap(camX, camY){
   const x0 = Math.max(0, Math.floor(camX / TS));
   const y0 = Math.max(0, Math.floor(camY / TS));
@@ -192,12 +254,7 @@ function drawMap(camX, camY){
   const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
   for (let y = y0; y < y1; y++){
     for (let x = x0; x < x1; x++){
-      ctx.fillStyle = TILE_COLOR[MAP[y][x]];
-      ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, TS+1);
-      if (MAP[y][x] === T.WALL){
-        ctx.fillStyle = 'rgba(0,0,0,.15)';
-        ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, 6);
-      }
+      drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
     }
   }
 }
@@ -350,6 +407,11 @@ const World = {
       }
     }
     drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
+    const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,.28)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 };
 
@@ -423,22 +485,49 @@ const NPC_DATA = {
       { who:'npc', t:'세조 대에 시작한 걸, 지금 전하(성종)께서 마침내 완성하셨지. 이전·호전·예전·병전·형전·공전, 여섯 갈래로 나라의 모든 법을 정리했네.' },
       { who:'npc', t:'이제 이 나라는 사람이 아니라 법으로 다스려지는 걸세. 그래서 말인데 — 자네, 이 법전이 왜 중요한지 아나?' },
     ],
-    quiz: {
-      q: '경국대전에 대한 설명으로 옳은 것은?',
-      opts: ['세조 대에 편찬을 시작해 성종 대에 완성·반포된 조선의 기본 법전이다', '태조 대에 정도전이 혼자 저술을 마친 개인 문집이다'],
-      answer: 0,
-      feedback: ['정도전의 저술은 『조선경국전』이라는 별개의 책이에요.', '정답! 세조 때 시작해 예종을 거쳐 성종 대에 완성·반포됐습니다.']
-    }
+    quizSeq: [
+      { q:'경국대전에 대한 설명으로 옳은 것은?',
+        opts:['세조 대에 편찬을 시작해 성종 대에 완성·반포된 조선의 기본 법전이다', '태조 대에 정도전이 혼자 저술을 마친 개인 문집이다'], answer:0,
+        feedback:['정도전의 저술은 『조선경국전』이라는 별개의 책이에요.','정답! 세조 때 시작해 예종을 거쳐 성종 대에 완성·반포됐습니다.'] }
+    ]
   },
   seogeojeong_1: {
     name: '서거정', icon: '📚',
     beats: [
       { who:'npc', t:'이참에 궁궐의 여러 관청이 뭘 하는 곳인지 하나씩 짚어보세. 사헌부, 사간원, 홍문관, 의금부, 승정원, 유향소, 경재소까지 — 전부 헷갈리기 딱 좋지.' },
       { who:'npc', t:'사헌부, 사간원, 홍문관 — 이 셋을 합쳐 삼사(三司)라 부르네. 모두 임금에게 직언하는 자리이니, 아무리 왕이라도 이들 앞에서는 함부로 할 수 없다네.' },
-      { who:'npc', t:'하나씩 시험해볼 테니, 마음의 준비를 하게.' },
+      { who:'npc', t:'우선 이 셋부터 하나씩 시험해볼 테니, 마음의 준비를 하게.' },
     ],
-    quiz: null,
-    startsBossA: true
+    quizSeq: [
+      { q:'관리들을 감찰하고 탄핵하는 임무를 맡은 기구는?', opts:['사헌부','사간원'], answer:0,
+        feedback:['사간원은 왕에게 직언하는 임무를 맡아요.','정답! 사헌부입니다.'] },
+      { q:'왕에게 옳고 그름을 직언하는 임무를 맡은 기구는?', opts:['사간원','의금부'], answer:0,
+        feedback:['의금부는 국왕 직속 사법 기구예요.','정답! 사간원입니다.'] },
+      { q:'옛 집현전의 기능을 이어받아, 왕의 학문과 정치를 자문한 기구는?', opts:['홍문관','승정원'], answer:0,
+        feedback:['승정원은 왕명을 전달하는 기구예요.','정답! 홍문관입니다.'] },
+      { q:'사헌부·사간원·홍문관을 합쳐 부르는 이름은?', opts:['삼사','육조'], answer:0,
+        feedback:['육조는 이·호·예·병·형·공전을 담당하는 행정 기구예요.','정답! 삼사(언론삼사)입니다.'] }
+    ]
+  },
+  seogeojeong_2: {
+    name: '서거정', icon: '📚',
+    beats: [
+      { who:'npc', t:'좋아, 삼사는 잘 아는군. 아직 몇 군데 더 남았네 — 의금부, 승정원, 유향소, 경재소까지 마저 짚어보세.' },
+      { who:'npc', t:'이걸 다 알면, 경국대전이 왜 그렇게 방대한 책인지도 짐작이 갈 걸세.' },
+    ],
+    quizSeq: [
+      { q:'반역죄 등 중대한 죄를 왕의 명으로 직접 다스린 사법 기구는?', opts:['의금부','사헌부'], answer:0,
+        feedback:['사헌부는 일반 관리 감찰이 주 임무예요.','정답! 의금부입니다.'] },
+      { q:"왕의 명령을 신하들에게 전달하던 기구로, '은대'라고도 불린 곳은?", opts:['승정원','홍문관'], answer:0,
+        feedback:['홍문관은 학문 자문 기구예요.','정답! 승정원입니다.'] },
+      { q:'지방 향촌에서 향리의 불법을 감찰하던 기구는?', opts:['유향소','경재소'], answer:0,
+        feedback:['경재소는 서울에서 유향소를 관리하는 상급 기구예요.','정답! 유향소입니다.'] },
+      { q:'서울에 있으면서 지방의 유향소를 관리·감독하던 기구는?', opts:['경재소','유향소'], answer:0,
+        feedback:['유향소는 지방 현지에 있는 기구예요.','정답! 경재소입니다.'] },
+      { q:'경국대전은 나라의 법을 몇 갈래로 나누어 정리했는가?', opts:['6전(이전·호전·예전·병전·형전·공전)','8도 체제'], answer:0,
+        feedback:['8도는 조선의 지방 행정 구역이에요.','정답! 이전·호전·예전·병전·형전·공전, 6전 체제로 정리했습니다.'] }
+    ],
+    finishesBossA: true
   },
   seogeojeong_repeat: {
     name: '서거정', icon: '📚',
@@ -451,21 +540,28 @@ const NPC_DATA = {
       { who:'npc', t:'직전법을 시행한 지 오래됐지만, 문제가 생겼네. 관리들이 정해진 것보다 더 많은 곡식을 거둬가는 일이 잦아졌어.' },
       { who:'npc', t:'그래서 내가 새로운 방법을 궁리했지. 관청이 직접 세금을 걷어서 관리에게 나눠주도록 말일세. 이 제도의 이름을 아나?' },
     ],
-    quiz: {
-      q: '관리가 백성에게서 직접 세금을 거두지 못하게 막고, 관청이 대신 거둬 나눠주도록 한 제도는?',
-      opts: ['관수관급제', '호패법'],
-      answer: 0,
-      feedback: ['호패법은 신분증(호패)으로 인구를 파악하던 제도예요.', '정답! 관수관급제로 관리의 과도한 수취를 막았습니다.']
-    }
+    quizSeq: [
+      { q:'관리가 백성에게서 직접 세금을 거두지 못하게 막고, 관청이 대신 거둬 나눠주도록 한 제도는?',
+        opts:['관수관급제','호패법'], answer:0,
+        feedback:['호패법은 신분증(호패)으로 인구를 파악하던 제도예요.','정답! 관수관급제로 관리의 과도한 수취를 막았습니다.'] }
+    ]
   },
   seongjong_1: {
     name: '성종', icon: '👑',
     beats: [
       { who:'npc', t:'법전만으로는 부족하지. 음악도, 예법도 정비해야 나라의 격이 갖춰지는 법이네.' },
+      { who:'npc', t:'성현 등에게 명해 궁중 음악의 이론까지 책으로 정리하게 했지.' },
       { who:'npc', t:'가기 전에 내가 이룬 것들을 자네가 잘 알고 있는지 한번 보고 싶군.' },
     ],
-    quiz: null,
-    startsBossB: true
+    quizSeq: [
+      { q:'성종이 성현 등에게 명해 정비하게 한 궁중 음악 이론서는?', opts:['악학궤범','삼강행실도'], answer:0,
+        feedback:['삼강행실도는 유교 윤리를 그림으로 보급한 책이에요.','정답! 악학궤범입니다.'] },
+      { q:'경국대전이 완성되기까지의 과정에 대한 설명으로 옳은 것은?', opts:['세조 대에 시작해 예종을 거쳐 성종 대에 완성됐다','문종 한 대에 걸쳐 곧바로 완성됐다'], answer:0,
+        feedback:['한 왕의 재위 안에 뚝딱 끝난 일이 아니었어요.','정답! 세조에서 예종을 거쳐 성종 대까지, 세 왕에 걸쳐 완성됐습니다.'] },
+      { q:'관수관급제가 실시된 배경으로 옳은 것은?', opts:['관리들이 직전법에서 정해진 것보다 더 많은 곡식을 백성에게서 거둬가는 폐단이 심해졌다','토지가 남아돌아 나눠줄 곳이 없었다'], answer:0,
+        feedback:['문제는 땅이 남는 게 아니라 관리의 과도한 수취였어요.','정답! 그 폐단을 막기 위해 관청이 직접 거둬 나눠주도록 바꿨습니다.'] }
+    ],
+    finishesBossB: true
   },
   seongjong_repeat: {
     name: '성종', icon: '👑',
@@ -474,45 +570,16 @@ const NPC_DATA = {
   }
 };
 
-const BOSS_A_QUESTIONS = [
-  { q:'관리들을 감찰하고 탄핵하는 임무를 맡은 기구는?', opts:['사헌부','사간원'], answer:0,
-    feedback:['사간원은 왕에게 직언하는 임무를 맡아요.','정답! 사헌부입니다.'] },
-  { q:'왕에게 옳고 그름을 직언하는 임무를 맡은 기구는?', opts:['사간원','의금부'], answer:0,
-    feedback:['의금부는 국왕 직속 사법 기구예요.','정답! 사간원입니다.'] },
-  { q:'옛 집현전의 기능을 이어받아, 왕의 학문과 정치를 자문한 기구는?', opts:['홍문관','승정원'], answer:0,
-    feedback:['승정원은 왕명을 전달하는 기구예요.','정답! 홍문관입니다.'] },
-  { q:'반역죄 등 중대한 죄를 왕의 명으로 직접 다스린 사법 기구는?', opts:['의금부','사헌부'], answer:0,
-    feedback:['사헌부는 일반 관리 감찰이 주 임무예요.','정답! 의금부입니다.'] },
-  { q:"왕의 명령을 신하들에게 전달하던 기구로, '은대'라고도 불린 곳은?", opts:['승정원','홍문관'], answer:0,
-    feedback:['홍문관은 학문 자문 기구예요.','정답! 승정원입니다.'] },
-  { q:'지방 향촌에서 향리의 불법을 감찰하던 기구는?', opts:['유향소','경재소'], answer:0,
-    feedback:['경재소는 서울에서 유향소를 관리하는 상급 기구예요.','정답! 유향소입니다.'] },
-  { q:'서울에 있으면서 지방의 유향소를 관리·감독하던 기구는?', opts:['경재소','유향소'], answer:0,
-    feedback:['유향소는 지방 현지에 있는 기구예요.','정답! 경재소입니다.'] },
-  { q:'사헌부·사간원·홍문관을 합쳐 부르는 이름은?', opts:['삼사','육조'], answer:0,
-    feedback:['육조는 이·호·예·병·형·공전을 담당하는 행정 기구예요.','정답! 삼사(언론삼사)입니다.'] },
-  { q:'세조 대에 시작해 성종 대에 완성·반포된 조선의 기본 법전은?', opts:['경국대전','대전회통'], answer:0,
-    feedback:['대전회통은 훗날 고종 대에 편찬돼요.','정답! 경국대전입니다.'] }
-];
-
-const BOSS_B_QUESTIONS = [
-  { q:'성종 대에 완성되어 반포된 조선의 기본 법전은?', opts:['경국대전','속대전'], answer:0,
-    feedback:['속대전은 훗날 영조 대에 편찬돼요.','정답! 경국대전입니다.'] },
-  { q:'성종이 성현 등에게 명해 정비하게 한 궁중 음악 이론서는?', opts:['악학궤범','삼강행실도'], answer:0,
-    feedback:['삼강행실도는 유교 윤리를 그림으로 보급한 책이에요.','정답! 악학궤범입니다.'] },
-  { q:'직전법의 폐단(관리의 과도한 수취)을 해결하기 위해 성종 대 시행한 제도는?', opts:['관수관급제','대동법'], answer:0,
-    feedback:['대동법은 훗날 광해군 대부터 시행돼요.','정답! 관수관급제입니다.'] }
-];
-
 const Stage = {
-  state: { seogeojeongStage: 0, seongjongStage: 0, bossADone: false, bossBDone: false },
+  state: { seogeojeongStage: 0, seongjongStage: 0, bossADone: false, bossBDone: false,
+    seogeojeongScore: 0, seogeojeongTotal: 0, seongjongScore: 0, seongjongTotal: 0 },
   interact(){
     if (overlayOpen()) return;
     const n = World.nearNpc;
     if (!n) return;
     if (n.id === 'seogeojeong'){
       if (Stage.state.bossADone){ Dialog.open('seogeojeong_repeat', n); return; }
-      const key = 'seogeojeong_' + Math.min(Stage.state.seogeojeongStage, 1);
+      const key = 'seogeojeong_' + Math.min(Stage.state.seogeojeongStage, 2);
       Dialog.open(key, n);
     } else if (n.id === 'seongjong'){
       if (Stage.state.bossBDone){ Dialog.open('seongjong_repeat', n); return; }
@@ -546,24 +613,26 @@ const Dialog = {
   },
   finish(){
     document.getElementById('dlg-overlay').classList.remove('show');
-    if (this.data.quiz){
-      Quiz.open(this.data.quiz, () => this.afterQuiz());
+    if (this.data.quizSeq){
+      Quiz.openSequence(this.data.quizSeq, (score, total) => this.afterQuizSeq(score, total));
     } else {
       this.afterQuiz();
     }
   },
+  afterQuizSeq(score, total){
+    if (this.npc.id === 'seogeojeong'){
+      Stage.state.seogeojeongScore += score; Stage.state.seogeojeongTotal += total;
+    } else if (this.npc.id === 'seongjong'){
+      Stage.state.seongjongScore += score; Stage.state.seongjongTotal += total;
+    }
+    if (this.data.finishesBossA){ Stage.finishBoss('A', Stage.state.seogeojeongScore, Stage.state.seogeojeongTotal); return; }
+    if (this.data.finishesBossB){ Stage.finishBoss('B', Stage.state.seongjongScore, Stage.state.seongjongTotal); return; }
+    this.afterQuiz();
+  },
   afterQuiz(){
-    if (this.data.startsBossA){
-      Quiz.openSequence(BOSS_A_QUESTIONS, (score, total) => Stage.finishBoss('A', score, total));
-      return;
-    }
-    if (this.data.startsBossB){
-      Quiz.openSequence(BOSS_B_QUESTIONS, (score, total) => Stage.finishBoss('B', score, total));
-      return;
-    }
     World.paused = false;
     if (this.npc.id === 'seogeojeong'){
-      Stage.state.seogeojeongStage = Math.min(Stage.state.seogeojeongStage + 1, 1);
+      Stage.state.seogeojeongStage = Math.min(Stage.state.seogeojeongStage + 1, 2);
     } else if (this.npc.id === 'seongjong'){
       Stage.state.seongjongStage = Math.min(Stage.state.seongjongStage + 1, 1);
     }
