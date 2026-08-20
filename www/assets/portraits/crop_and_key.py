@@ -19,7 +19,13 @@ LABELS = [
 im = Image.open(SRC).convert('RGB')
 W, H = im.size
 cw, ch = W / COLS, H / ROWS
-LABEL_BAND = int(ch * 0.16)
+
+# 하단 크롭 y좌표: 라벨 텍스트가 시작하기 직전, 캐릭터(발까지) 바로 뒤.
+# 기존엔 ch*0.16(=약 36px)을 고정으로 잘랐는데 실제 라벨 밴드는 훨씬 얇아서
+# 발이 통째로 잘려나갔었다(사용자 피드백: "정도전 하반신 어디갔냐").
+# 행마다 라벨 시작 위치를 실측(각 행의 셀 내부 y, 폭>=110px로 최초 전환되는
+# 지점 바로 위)해서 검증한 값 — 같은 행의 5칸 모두 동일하게 나와 신뢰도 높음.
+ROW_BOTTOM_Y = {0: 216, 1: 203, 2: 193, 3: 187}
 
 MAGENTA = np.array([246, 26, 246])
 THRESH = 95  # 압축 노이즈로 경계부 색이 지저분해서 소프트 알파/디컨탐 대신 확실한 하드 컷 사용
@@ -29,7 +35,7 @@ for i, name in enumerate(LABELS):
     x0 = int(col * cw) + PAD_SIDE
     y0 = int(row * ch) + PAD_TOP
     x1 = int((col + 1) * cw) - PAD_SIDE
-    y1 = int((row + 1) * ch) - LABEL_BAND
+    y1 = int(row * ch) + ROW_BOTTOM_Y[row]
     crop = im.crop((x0, y0, x1, y1))
 
     arr = np.array(crop).astype(np.int16)
