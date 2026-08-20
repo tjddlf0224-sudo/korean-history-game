@@ -46,6 +46,16 @@ for i, name in enumerate(LABELS):
         eroded[:, :-1] &= is_fg[:, 1:]
         is_fg = eroded
 
+    # 마젠타 스필 억제: 살아남은 불투명 픽셀 중에도 R·B가 G보다 나란히
+    # 높은(마젠타가 살짝 섞인) 픽셀이 있다 — 그 초과분만큼 R·B를 깎아
+    # 색조를 중화한다(그린스크린 스필 서프레션과 동일한 원리, 마젠타용).
+    r, g, b = arr[..., 0], arr[..., 1], arr[..., 2]
+    excess = np.clip((r + b) / 2 - g, 0, None)
+    r2 = np.clip(r - excess, 0, 255)
+    b2 = np.clip(b - excess, 0, 255)
+    arr[..., 0] = r2
+    arr[..., 2] = b2
+
     rgba = np.dstack([arr.astype(np.uint8), np.full(arr.shape[:2], 255, np.uint8)])
     rgba[..., 3] = np.where(is_fg, 255, 0)
 
