@@ -1,0 +1,84 @@
+{
+  "chapterId": 0,
+  "title": "새 나라의 설계자",
+  "king": "태조",
+  "map": "한양 도성 공사장",
+  "companions": [],
+  "sourceRefs": ["hm_073_0010", "hm_073_0020", "hm_073_0030", "hm_073_0040", "hm_073_0050"],
+  "sceneFlow": [
+    {
+      "sceneId": "ch0_s1_meet",
+      "background": "construction_site",
+      "dialogue": [
+        { "speaker": "narration", "text": "흙먼지 날리는 한양 도성 공사 현장. 인부들이 성벽 돌을 나르고 있다. 관복을 입은 한 남자가 설계도를 들고 서 있다." },
+        { "speaker": "정도전", "text": "어이, 거기 자네. 처음 보는 얼굴인데 — 공사 감독하러 온 건 아니고… 그냥 구경하러 온 겐가?" },
+        {
+          "type": "choice",
+          "options": [
+            { "id": "a", "text": "이 나라가 어떻게 만들어지는지 보고 싶어서요." },
+            { "id": "b", "text": "당신이 정도전이십니까?" }
+          ]
+        },
+        { "speaker": "정도전", "text": "(씩 웃으며) 맞네, 삼봉 정도전일세. 이 새 궁궐 이름도 내가 지었지 — 경복궁(景福宮), '큰 복을 누리라'는 뜻으로. 그런데 자네, 궁궐 이름 짓는 것보다 더 중요한 게 뭔 줄 아나?" },
+        {
+          "type": "choice",
+          "flagKey": "political_view",
+          "options": [
+            { "value": "king_centered", "text": "왕이 모든 걸 결정하는 것 아닙니까?" },
+            { "value": "minister_centered", "text": "유능한 신하들이 나라를 이끄는 것 아닙니까?" }
+          ]
+        },
+        {
+          "speaker": "정도전",
+          "branchOn": "political_view",
+          "branches": {
+            "minister_centered": "옳지! 자네, 제법이군. 아무리 훌륭한 임금이라도 대를 이어 계속 훌륭할 순 없는 법이야. 하지만 재상은 다르지 — 능력으로 뽑으면 되니까. 나는 그런 나라를 만들고 싶네.",
+            "king_centered": "흠… 왕이 강해야 한다는 것도 틀린 말은 아니지. 하지만 왕 한 사람에게 모든 걸 맡기면, 그 왕이 어리석을 땐 나라 전체가 흔들리지 않겠나? 나는 그게 걱정일세."
+          },
+          "note": "이 선택은 챕터1에서 태종이 직접 반박하는 대사 분기로 회수됨"
+        }
+      ]
+    },
+    {
+      "sceneId": "ch0_s2_naming",
+      "background": "construction_site",
+      "questId": "ch0_q1",
+      "dialogue": [
+        { "speaker": "정도전", "text": "마침 잘 왔네. 지금 새 나라 이름을 두고 논의 중인데 — 자네도 한마디 거들어 보겠나?" },
+        {
+          "type": "choice",
+          "uiType": "vote_minigame",
+          "options": [
+            { "id": "hwaryeong", "text": "화령(和寧)" },
+            { "id": "joseon", "text": "조선(朝鮮)" }
+          ]
+        },
+        { "speaker": "정도전", "text": "화령은 전하(이성계)의 고향 이름이고, 조선은… 아주 오래전, 단군왕검이 세운 그 나라 이름에서 따온 걸세. 우리가 그 정통을 잇는다는 뜻이지." }
+      ]
+    },
+    {
+      "sceneId": "ch0_s3_capital",
+      "background": "muak_hill",
+      "questId": "ch0_q2",
+      "dialogue": [
+        { "speaker": "정도전", "text": "궁궐만 짓는다고 나라가 서는 게 아닐세. 도읍 자리부터 제대로 골라야지. 전하께서 몸소 무악(毋岳) 땅까지 살피러 다니셨다네. 자네도 한번 둘러보겠나?" },
+        { "type": "minigame", "uiType": "site_comparison", "criteria": ["풍수", "교통", "방어"], "sites": ["무악", "한양"] },
+        { "speaker": "정도전", "text": "결국 한양으로 정해졌지. 산이 사방을 둘러싸 방어에 유리하고, 한강이 가까워 물자를 옮기기도 좋으니까." }
+      ]
+    },
+    {
+      "sceneId": "ch0_s4_hook",
+      "background": "construction_site_dusk",
+      "dialogue": [
+        { "speaker": "정도전", "text": "(성벽 너머 어딘가를 바라보며) …그나저나, 요즘 이방원 나리가 부쩍 날 찾아오시더군. 무슨 생각을 하고 계신 건지." }
+      ],
+      "transitionTo": "chapter1"
+    }
+  ],
+  "quests": [
+    { "questId": "ch0_q1", "title": "나라 이름을 정하라", "type": "choice_event", "reward": { "currency": 50, "card": "국호론" } },
+    { "questId": "ch0_q2", "title": "도읍터를 살피다", "type": "comparison_minigame", "reward": { "currency": 50, "card": "한양 천도 논의" } }
+  ],
+  "bossBattle": null,
+  "nextChapterHook": "챕터1 오프닝(왕자의 난)과 직접 연결"
+}

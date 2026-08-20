@@ -1,0 +1,8 @@
+{
+  "appId": "com.yunsis.koreanhistorygame",
+  "appName": "한국사 게임",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

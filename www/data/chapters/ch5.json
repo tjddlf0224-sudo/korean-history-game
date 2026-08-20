@@ -1,0 +1,147 @@
+{
+  "chapterId": 5,
+  "title": "사림과 피바람",
+  "king": "연산군~명종",
+  "map": "궁궐 / 지리산 산천재 / 도산서원 / 사초 사고",
+  "companions": [],
+  "isClimax": true,
+  "sourceRefs": ["hm_077_0010", "hm_077_0020", "hm_077_0030", "hm_077_0040", "hm_077_0050"],
+  "arcs": [
+    {
+      "arcId": "arc1_musaboja",
+      "title": "무오사화·갑자사화",
+      "sceneFlow": [
+        {
+          "sceneId": "ch5_a1_s1",
+          "background": "royal_court",
+          "cutscene": true,
+          "dialogue": [
+            { "speaker": "연산군", "text": "김일손, 네놈이 쓴 사초에 무슨 내용이 있는지 내가 모를 줄 알았느냐. 세조 할아버님을 비방하는 글이라니!" },
+            { "speaker": "김일손", "text": "신은 역사를 있는 그대로 기록했을 뿐입니다…" },
+            { "speaker": "narration", "text": "김일손의 사초에 실린 「조의제문」이 빌미가 되어, 많은 사림 인사가 목숨을 잃었다 — 무오사화였다." }
+          ]
+        },
+        {
+          "sceneId": "ch5_a1_s2",
+          "background": "royal_court_red_filter",
+          "cutscene": true,
+          "dialogue": [
+            { "speaker": "narration", "text": "몇 년 뒤, 연산군은 자신의 생모 폐비 윤씨의 죽음에 관련된 이들을 찾아내 대규모로 숙청했다. 갑자사화 — 조선 전기 사화 중 가장 많은 희생자를 냈다." }
+          ]
+        }
+      ],
+      "miniBoss": {
+        "bossId": "ch5_boss1",
+        "title": "폭군의 그림자",
+        "questionRefs": [
+          { "round": "66", "number": 20 },
+          { "round": "73", "number": 23 },
+          { "round": "76", "number": 20 }
+        ]
+      }
+    },
+    {
+      "arcId": "arc2_gimyo",
+      "title": "기묘사화",
+      "sceneFlow": [
+        {
+          "sceneId": "ch5_a2_s1",
+          "background": "royal_court",
+          "dialogue": [
+            { "speaker": "조광조", "text": "반정으로 왕이 바뀌었어도, 이 나라엔 아직 고칠 게 산더미입니다. 소격서부터 없애야 합니다 — 도교 제사를 지내는 그런 곳에, 나라 살림을 쓸 이유가 없지요.", "companionIntro": "temporary" },
+            { "type": "minigame", "uiType": "reform_sequence", "target": "현량과 실시 → 소격서 폐지" }
+          ]
+        },
+        {
+          "sceneId": "ch5_a2_s2",
+          "background": "exile_land",
+          "cutscene": true,
+          "playerChoice": false,
+          "dialogue": [
+            { "speaker": "narration", "text": "조광조의 개혁은 너무 빨랐다. 오래된 공신들은 위기감을 느꼈고, 결국 조광조를 비롯한 사림들을 몰아냈다 — 기묘사화. 조광조는 유배지에서 사약을 받았다." }
+          ],
+          "note": "함께 퀘스트를 수행했던 동료(조광조)가 눈앞에서 사라지는 연출 — 챕터 내 가장 감정적으로 무거운 장면"
+        }
+      ],
+      "miniBoss": {
+        "bossId": "ch5_boss2",
+        "title": "개혁의 대가",
+        "questionRefs": [
+          { "round": "69", "number": 21 },
+          { "round": "70", "number": 20 },
+          { "round": "75", "number": 22 }
+        ]
+      }
+    },
+    {
+      "arcId": "arc3_eulsa",
+      "title": "을사사화",
+      "sceneFlow": [
+        {
+          "sceneId": "ch5_a3_s1",
+          "background": "palace_corridor",
+          "cutscene": true,
+          "playerChoice": false,
+          "dialogue": [
+            { "speaker": "narration", "text": "인종이 즉위 1년도 안 되어 세상을 떠나자, 어린 명종을 대신해 문정왕후가 수렴청정을 시작했다. 왕실 외척인 대윤과 소윤이 권력을 다투었고, 그 싸움에 또다시 많은 사림이 휘말렸다." },
+            { "speaker": "떠도는 백성", "text": "이번엔 윤임 대감 쪽 사람들이 쫓겨났다더군… 다음엔 또 누가 화를 입을지." }
+          ],
+          "note": "방관자 시점 — 지금까지와 달리 어느 편 NPC도 직접 등장하지 않음"
+        }
+      ],
+      "miniBoss": {
+        "bossId": "ch5_boss3",
+        "title": "외척의 그늘",
+        "questionRefs": [
+          { "round": "65", "number": 20 },
+          { "round": "71", "number": 21 },
+          { "round": "72", "number": 21 }
+        ]
+      }
+    },
+    {
+      "arcId": "arc4_scholars",
+      "title": "폭풍 속의 학자들",
+      "sceneFlow": [
+        {
+          "sceneId": "ch5_a4_s1",
+          "background": "jirisan_sancheonjae",
+          "dialogue": [
+            { "speaker": "조식", "text": "나는 벼슬길에 나가지 않았네. 이 어지러운 조정에 나가느니, 여기서 제자를 기르는 게 낫다 여겼지." }
+          ]
+        },
+        {
+          "sceneId": "ch5_a4_s2",
+          "background": "dosan_seowon",
+          "dialogue": [
+            { "speaker": "이황", "text": "저는 향약을 만들어 마을 사람들이 서로 돕고 잘못을 바로잡도록 했습니다. 조정이 흔들려도, 마을은 스스로 바로 설 수 있어야 하니까요." }
+          ],
+          "note": "챕터 내 유일한 평화로운 장면 — 앞선 비극들과 대비되는 회복의 정서"
+        }
+      ],
+      "miniBoss": {
+        "bossId": "ch5_boss4",
+        "title": "산림의 스승들",
+        "questionRefs": [
+          { "round": "68", "number": 21 },
+          { "round": "74", "number": 23 }
+        ]
+      }
+    }
+  ],
+  "finalBoss": {
+    "bossId": "ch5_final_boss",
+    "title": "사화 통합전",
+    "background": "sacho_archive",
+    "intro": "무오, 갑자, 기묘, 을사 — 네 번의 사화. 반세기에 걸쳐 반복된 이 참극의 흐름을 되짚어보라.",
+    "format": "4개 미니보스 문항을 재구성해 시간순 인과관계를 순서대로 묻는 통합 10문항",
+    "questionRefs": [
+      { "round": "66", "number": 20 }, { "round": "73", "number": 23 }, { "round": "76", "number": 20 },
+      { "round": "69", "number": 21 }, { "round": "70", "number": 20 }, { "round": "75", "number": 22 },
+      { "round": "65", "number": 20 }, { "round": "71", "number": 21 }, { "round": "72", "number": 21 },
+      { "round": "68", "number": 21 }
+    ],
+    "endingLine": "이 반복된 비극 속에서도, 조선은 무너지지 않았다. 오히려 이 시기를 거치며 사림은 조정의 중심 세력으로 자리 잡아갔다. 하지만 그 사림마저, 이제 스스로 편을 갈라 다투기 시작한다…"
+  },
+  "nextChapterHook": "챕터6(에필로그) — 붕당의 시작"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "korean-history-game",
+  "version": "0.1.0",
+  "description": "한국사능력검정시험 1급 대비 학습 게임 - 조선 전기 MVP",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/ios": "^8.4.1"
+  }
+}

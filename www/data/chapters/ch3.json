@@ -1,0 +1,87 @@
+{
+  "chapterId": 3,
+  "title": "피의 계승",
+  "king": "세조",
+  "map": "김종서의 집 / 처형장 / 궁궐 / 조정",
+  "companions": [],
+  "companionExit": "신숙주",
+  "sourceRefs": ["hm_074_0050", "hm_074_0060", "hm_080_0030"],
+  "sceneFlow": [
+    {
+      "sceneId": "ch3_s1_coup",
+      "background": "kim_jongseo_house_night",
+      "cutscene": true,
+      "playerChoice": false,
+      "dialogue": [
+        { "speaker": "narration", "text": "어린 단종이 즉위하자, 김종서를 비롯한 원로대신들이 정사를 이끌었다. 그러나 수양대군은 이 상황이 굳어지기 전에 움직이기로 한다." },
+        { "speaker": "수양대군", "text": "(냉랭하게) 김종서 대감, 청이 있어 왔소." },
+        { "type": "cutscene", "target": "암살 연출" },
+        { "speaker": "narration", "text": "김종서와 황보인 등 대신들이 하룻밤 사이에 제거되었다. 수양대군은 정권과 병권을 모두 손에 넣었다." }
+      ]
+    },
+    {
+      "sceneId": "ch3_s2_sayuksin",
+      "background": "execution_ground",
+      "cutscene": true,
+      "playerChoice": false,
+      "dialogue": [
+        { "speaker": "narration", "text": "2년 뒤, 처형장. 성삼문이 끌려 나온다." },
+        { "speaker": "성삼문", "text": "(담담하게) 나는 나으리(세조)를 왕으로 섬긴 적이 없소. 상왕(단종)이 계신데, 어찌 두 임금을 섬기겠소." },
+        { "speaker": "narration", "text": "성삼문을 비롯한 여섯 신하는 단종의 복위를 꾀하다 발각되어 처형당했다. 훗날 사람들은 이들을 사육신이라 불렀다." }
+      ]
+    },
+    {
+      "sceneId": "ch3_s3_confront",
+      "background": "royal_court",
+      "dialogue": [
+        { "speaker": "세조", "text": "자네도 날 원망하는 눈으로 보는가? …상관없네. 나는 이 나라를 지키기 위해 힘을 잡아야 했을 뿐이야." },
+        {
+          "type": "choice",
+          "flagKey": "attitude_to_sejo",
+          "options": [
+            { "value": "grief", "text": "많은 사람이 목숨을 잃었습니다." },
+            { "value": "pragmatic", "text": "이제 어떤 나라를 만드실 겁니까?" }
+          ],
+          "note": "결과는 바뀌지 않는 감정 플래그"
+        },
+        { "speaker": "세조", "text": "…그래, 나도 안다. 하지만 이왕 이렇게 된 이상, 나는 확실하게 다스릴 것이야. 흔들리는 나라보다는 낫지 않겠나." }
+      ]
+    },
+    {
+      "sceneId": "ch3_s4_jikjeon",
+      "background": "royal_council",
+      "questId": "ch3_q1",
+      "dialogue": [
+        { "speaker": "세조", "text": "지금까지는 관리가 죽어도 그 아내와 자식에게 수신전·휼양전이란 이름으로 계속 땅이 남았지. 그러다 보니 나눠줄 땅이 부족해졌네. 이제 현직 관리에게만 땅을 주는 직전법을 시행하겠네." },
+        { "speaker": "반대하는 신하", "text": "전하, 이러면 퇴직한 신하들의 살림이 곤궁해질 것입니다…" },
+        { "speaker": "세조", "text": "알고 있네. 하지만 나눠줄 땅에는 한계가 있어." },
+        { "type": "minigame", "uiType": "debate_observer", "target": "직전법 찬반 논쟁" }
+      ]
+    },
+    {
+      "sceneId": "ch3_s5_hook",
+      "background": "royal_court_night",
+      "dialogue": [
+        { "speaker": "세조", "text": "(혼잣말) …내가 만든 이 제도들이, 다음 왕들의 시대에 제대로 뿌리내리길 바랄 뿐이네." }
+      ],
+      "transitionTo": "chapter4"
+    }
+  ],
+  "quests": [
+    { "questId": "ch3_q1", "title": "직전법을 둘러싼 논쟁", "type": "debate_observer", "reward": { "currency": 60, "card": "직전법 시행과 반대" } }
+  ],
+  "bossBattle": {
+    "bossId": "ch3_boss",
+    "title": "정통성의 무게",
+    "hostNpc": "세조",
+    "questionRefs": [
+      { "round": "65", "number": 21 },
+      { "round": "68", "number": 19 },
+      { "round": "69", "number": 24 },
+      { "round": "74", "number": 20 },
+      { "round": "77", "number": 20 },
+      { "round": "78", "number": 19 }
+    ]
+  },
+  "nextChapterHook": "챕터4(성종) 서거정 등장, 세조가 다진 기틀이 경국대전으로 완성됨"
+}

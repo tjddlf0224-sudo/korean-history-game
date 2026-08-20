@@ -1,0 +1,122 @@
+{
+  "chapterId": 2,
+  "title": "황금시대",
+  "king": "세종",
+  "map": "집현전 / 관측소 / 함길도 국경 / 대마도",
+  "companions": ["신숙주"],
+  "sourceRefs": ["hm_075_0030", "hm_091_0040", "hm_092_0030", "hm_078_0030", "hm_078_0060"],
+  "sceneFlow": [
+    {
+      "sceneId": "ch2_s1_intro",
+      "background": "jiphyeonjeon_library",
+      "dialogue": [
+        { "speaker": "세종", "text": "(책에서 눈을 떼며) 왔는가. 아버님(태종)께 자네 이야기를 들었네. 여기가 집현전일세 — 내가 가장 아끼는 곳이지." },
+        { "speaker": "신숙주", "text": "저는 신숙주라 합니다. 앞으로 전하의 여러 사업을 함께 도울 테니, 잘 부탁드립니다.", "companionIntro": true },
+        {
+          "type": "choice",
+          "flagKey": "interest_route",
+          "options": [
+            { "value": "culture_first", "text": "학문과 문자에 관심이 많습니다." },
+            { "value": "diplomacy_first", "text": "나라 밖 사정이 궁금합니다." }
+          ],
+          "note": "이후 퀘스트 노출 순서에만 영향, 필수 콘텐츠는 동일"
+        }
+      ]
+    },
+    {
+      "sceneId": "ch2_s2_hangul_debate",
+      "background": "royal_council",
+      "questId": "ch2_q1",
+      "dialogue": [
+        { "speaker": "narration", "text": "편전. 최만리를 비롯한 집현전 부제학과 관료들이 상소를 올린 상태." },
+        { "speaker": "최만리", "text": "전하, 언문이라는 것이 옛 글자와 다르니, 중국에라도 흘러 들어가면 우리가 오랑캐와 다를 바 없다는 비난을 받을까 두렵습니다." },
+        {
+          "type": "choice",
+          "uiType": "dialogue_puzzle",
+          "options": [
+            { "id": "1", "text": "설총이 만든 이두도 결국 발음을 다르게 쓴 것 아니오? 그것이 백성을 편하게 하려 함이었다면, 이 글자도 다르지 않소.", "correct": true },
+            { "id": "2", "text": "이 글자를 만든 게 어찌 옛것을 싫어해서겠소. 그저 백성이 억울한 일을 당하지 않길 바라서요.", "correct": false }
+          ]
+        },
+        { "speaker": "세종", "text": "그렇지, 바로 그걸세! 이두를 만든 설총은 옳다 하면서, 어찌 지금 내가 하는 일은 그르다 하는가?", "condition": "choice==1" },
+        { "speaker": "narration", "text": "최만리 등은 결국 물러나지만, 세종은 그들을 잠시 하옥했다가 다음 날 풀어준다." },
+        { "speaker": "세종", "text": "…벌하려던 게 아니었네. 다만 저들도 나라를 걱정해 올린 상소였으니, 마음까지 꺾을 생각은 없었지." }
+      ]
+    },
+    {
+      "sceneId": "ch2_s3_raingauge",
+      "background": "observatory",
+      "questId": "ch2_q2",
+      "dialogue": [
+        { "speaker": "세종", "text": "가뭄과 홍수를 미리 알 수 있다면 얼마나 많은 백성을 구할 수 있겠는가. 이 그릇에 빗물을 받아 재는 것만으로 그게 가능하다니, 참으로 놀랍지 않은가." },
+        { "type": "minigame", "uiType": "placement_timing", "target": "측우기 전국 배치" }
+      ]
+    },
+    {
+      "sceneId": "ch2_s4_border",
+      "background": "hamgil_border",
+      "questId": "ch2_q3",
+      "dialogue": [
+        { "speaker": "김종서", "text": "여기가 우리 국경의 끝일세. 압록강과 두만강까지 우리 땅으로 확실히 그어놓아야, 후손들이 다시는 이 땅을 두고 다투지 않을 것이야." },
+        { "type": "minigame", "uiType": "settlement_sim", "target": "4군 6진 사민정책" },
+        { "speaker": "김종서", "text": "그저 땅만 넓힌다고 되는 일이 아닐세. 사람이 살아야 진짜 우리 땅이 되는 것이야." }
+      ]
+    },
+    {
+      "sceneId": "ch2_s5_tsushima",
+      "background": "tsushima_coast",
+      "questId": "ch2_q4",
+      "dialogue": [
+        { "speaker": "세종", "text": "왜구가 노략질을 멈추지 않으니, 그 소굴을 뿌리 뽑아야겠네. 이종무 장군에게 대마도를 치라 명하였네." },
+        { "type": "cutscene", "target": "대마도 정벌 전투" },
+        { "speaker": "신숙주", "text": "정벌만이 능사는 아닙니다. 이후 계해약조를 맺어 왜와의 교역을 정비하면, 오히려 저들이 함부로 움직이지 못할 것입니다." }
+      ]
+    },
+    {
+      "sceneId": "ch2_s6_hook",
+      "background": "jiphyeonjeon_library_dusk",
+      "dialogue": [
+        { "speaker": "세종", "text": "(늙고 지친 목소리로) …요즘 몸이 예전 같지 않네. 다음 왕위는 문종, 그리고 어린 세손(단종)에게 이어지겠지. 부디 이 아이가 무사히 왕좌를 지킬 수 있기를…" }
+      ],
+      "transitionTo": "chapter3"
+    }
+  ],
+  "quests": [
+    { "questId": "ch2_q1", "title": "훈민정음을 지켜라", "type": "dialogue_puzzle", "reward": { "currency": 80, "card": "훈민정음 반대 상소와 세종의 반박" } },
+    { "questId": "ch2_q2", "title": "측우기를 설치하라", "type": "placement_minigame", "reward": { "currency": 50, "card": "측우기 제작" } },
+    { "questId": "ch2_q3", "title": "북방을 개척하라", "type": "settlement_minigame", "reward": { "currency": 60, "card": "북방 사민 정책" } },
+    { "questId": "ch2_q4", "title": "대마도를 정벌하라", "type": "cutscene_battle", "reward": { "currency": 60, "card": "쓰시마 섬의 토벌" } }
+  ],
+  "bossBattle": [
+    {
+      "bossId": "ch2_boss_a",
+      "title": "집현전의 지혜 (문화·과학)",
+      "hostNpc": "신숙주",
+      "questionRefs": [
+        { "round": "65", "number": 22 },
+        { "round": "66", "number": 19 },
+        { "round": "68", "number": 22 },
+        { "round": "68", "number": 27 },
+        { "round": "72", "number": 19 },
+        { "round": "72", "number": 23 },
+        { "round": "73", "number": 21 },
+        { "round": "74", "number": 19 },
+        { "round": "76", "number": 19 },
+        { "round": "79", "number": 19 }
+      ]
+    },
+    {
+      "bossId": "ch2_boss_b",
+      "title": "국경의 방패 (대외관계)",
+      "hostNpc": "김종서",
+      "questionRefs": [
+        { "round": "67", "number": 22 },
+        { "round": "70", "number": 18 },
+        { "round": "73", "number": 22 },
+        { "round": "75", "number": 21 },
+        { "round": "78", "number": 21 }
+      ]
+    }
+  ],
+  "nextChapterHook": "챕터3(계유정난) 오프닝, 신숙주 컴패니언 이탈"
+}

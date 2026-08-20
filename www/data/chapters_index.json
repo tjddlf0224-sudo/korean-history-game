@@ -1,0 +1,16 @@
+{
+  "gameTitle": "조선 전기 MVP",
+  "chapters": [
+    { "chapterId": 0, "file": "chapters/ch0.json", "title": "새 나라의 설계자", "king": "태조", "hasBoss": false },
+    { "chapterId": 1, "file": "chapters/ch1.json", "title": "왕권의 기틀", "king": "태종", "hasBoss": true },
+    { "chapterId": 2, "file": "chapters/ch2.json", "title": "황금시대", "king": "세종", "hasBoss": true, "bossCount": 2 },
+    { "chapterId": 3, "file": "chapters/ch3.json", "title": "피의 계승", "king": "세조", "hasBoss": true },
+    { "chapterId": 4, "file": "chapters/ch4.json", "title": "법과 제도의 완성", "king": "성종", "hasBoss": true, "bossCount": 2 },
+    { "chapterId": 5, "file": "chapters/ch5.json", "title": "사림과 피바람", "king": "연산군~명종", "hasBoss": true, "bossCount": 5, "isClimax": true },
+    { "chapterId": 6, "file": "chapters/ch6.json", "title": "폭풍 전야", "king": "선조", "hasBoss": false, "isEpilogue": true }
+  ],
+  "totalBossQuestions": 51,
+  "questionSource": "분석/all_joseon_early.json (round + number로 원본 문항 상세 조회 가능)",
+  "currency": "엽전",
+  "collectible": "사료 카드"
+}

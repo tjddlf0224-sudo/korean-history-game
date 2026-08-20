@@ -1,0 +1,99 @@
+{
+  "chapterId": 4,
+  "title": "법과 제도의 완성",
+  "king": "성종",
+  "map": "홍문관 서고 / 지방 고을",
+  "companions": [],
+  "sourceRefs": ["hm_074_0070", "hm_075_0030", "hm_080_0040"],
+  "sceneFlow": [
+    {
+      "sceneId": "ch4_s1_intro",
+      "background": "hongmungwan_library",
+      "dialogue": [
+        { "speaker": "서거정", "text": "오, 자네가 그 여행자로군. 마침 잘 왔네 — 이게 뭔지 아나? 『경국대전』일세. 세조 대에 시작한 걸, 지금 전하(성종)께서 마침내 완성하셨지." },
+        { "speaker": "서거정", "text": "이전(吏)·호전(戶)·예전(禮)·병전(兵)·형전(刑)·공전(工), 여섯 갈래로 나라의 모든 법을 정리했네. 이제 이 나라는 사람이 아니라 법으로 다스려지는 걸세." },
+        {
+          "type": "choice",
+          "options": [
+            { "id": "a", "text": "법으로 다스린다는 게 어떤 뜻입니까?" },
+            { "id": "b", "text": "완성까지 왜 이렇게 오래 걸렸습니까?" }
+          ]
+        },
+        { "speaker": "서거정", "text": "(a) 왕이 바뀌어도, 신하가 바뀌어도 나라의 근본 규칙은 변치 않는다는 뜻일세. / (b) 세조, 예종, 그리고 지금 전하까지, 세 분의 치세에 걸쳐 계속 고치고 또 고쳤으니까. 그만큼 신중해야 할 일이었지." }
+      ]
+    },
+    {
+      "sceneId": "ch4_s2_offices",
+      "background": "palace_map_overview",
+      "questId": "ch4_q1",
+      "dialogue": [
+        { "speaker": "서거정", "text": "이참에 궁궐의 여러 관청이 뭘 하는 곳인지 정리해보세. 각 팻말을 옳은 자리에 걸어보게." },
+        {
+          "type": "minigame",
+          "uiType": "matching_puzzle",
+          "items": [
+            { "office": "사헌부", "function": "관리들을 감찰하고 탄핵한다" },
+            { "office": "사간원", "function": "왕에게 옳고 그름을 직언한다" },
+            { "office": "홍문관", "function": "왕의 학문을 돕고 자문한다 (옛 집현전의 기능을 이어받음)" },
+            { "office": "의금부", "function": "반역죄 등 중대한 죄를 왕의 명으로 직접 다스린다" },
+            { "office": "승정원", "function": "왕의 명령을 전달한다 (은대라고도 불림)" },
+            { "office": "유향소", "function": "지방 향촌에서 향리를 감찰한다" },
+            { "office": "경재소", "function": "서울에서 지방 유향소를 관리·감독한다" }
+          ]
+        },
+        { "speaker": "서거정", "text": "사헌부, 사간원, 홍문관 — 이 셋을 합쳐 '삼사'라 부르지. 모두 임금에게 직언하는 자리이니, 아무리 왕이라도 이들 앞에서는 함부로 할 수 없다네." }
+      ]
+    },
+    {
+      "sceneId": "ch4_s3_gwansu",
+      "background": "rural_village",
+      "questId": "ch4_q2",
+      "dialogue": [
+        { "speaker": "narration", "text": "지방 고을. 백성들이 관리에게 세금을 뜯기는 장면을 목격." },
+        { "speaker": "성종", "text": "직전법을 시행한 지 오래됐지만, 문제가 생겼네. 관리들이 정해진 것보다 더 많은 곡식을 거둬가는 일이 잦아졌어." },
+        { "type": "minigame", "uiType": "complaint_resolution", "target": "부당 징수 신고 처리" },
+        { "speaker": "성종", "text": "이제 관청이 직접 세금을 걷어서 관리에게 나눠주도록 하겠네. 관리가 백성에게서 직접 거두지 못하게 막는 것이지." }
+      ]
+    },
+    {
+      "sceneId": "ch4_s4_hook",
+      "background": "hongmungwan_library_dusk",
+      "dialogue": [
+        { "speaker": "서거정", "text": "(조용히) …전하께서 요즘 부쩍 학문하는 신하들을 가까이 두시네. 젊고 강직한 이들이지. 다만… 그런 이들이 너무 강직하면, 늘 있던 대신들과 부딪히기 마련이라 걱정이야." }
+      ],
+      "transitionTo": "chapter5"
+    }
+  ],
+  "quests": [
+    { "questId": "ch4_q1", "title": "관청을 배치하라", "type": "matching_puzzle", "reward": { "currency": 100, "card": "홍문관의 설치와 그 기능 외 7종" } },
+    { "questId": "ch4_q2", "title": "관수관급제", "type": "complaint_resolution", "reward": { "currency": 60, "card": "관수관급제" } }
+  ],
+  "bossBattle": [
+    {
+      "bossId": "ch4_boss_a",
+      "title": "관청을 지켜라 (3사·사법기구)",
+      "hostNpc": "서거정",
+      "questionRefs": [
+        { "round": "65", "number": 19 },
+        { "round": "67", "number": 21 },
+        { "round": "69", "number": 20 },
+        { "round": "70", "number": 19 },
+        { "round": "73", "number": 25 },
+        { "round": "75", "number": 20 },
+        { "round": "76", "number": 22 },
+        { "round": "78", "number": 20 },
+        { "round": "79", "number": 24 }
+      ]
+    },
+    {
+      "bossId": "ch4_boss_b",
+      "title": "성종의 치세",
+      "hostNpc": "성종",
+      "questionRefs": [
+        { "round": "72", "number": 20 },
+        { "round": "79", "number": 20 }
+      ]
+    }
+  ],
+  "nextChapterHook": "챕터5(사화) — '젊고 강직한 신하들'이 곧 사림파임이 밝혀짐"
+}

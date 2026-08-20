@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  font-family: -apple-system, "Pretendard", sans-serif;
+  background: #f5f0e6;
+  color: #2b2b2b;
+}
+
+#app {
+  padding: 24px;
+}

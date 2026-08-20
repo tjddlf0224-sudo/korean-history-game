@@ -1,0 +1,77 @@
+{
+  "chapterId": 1,
+  "title": "왕권의 기틀",
+  "king": "태종",
+  "map": "궁궐 내전 / 사병 훈련장",
+  "companions": [],
+  "sourceRefs": ["hm_074_0010", "hm_074_0020", "hm_074_0030"],
+  "sceneFlow": [
+    {
+      "sceneId": "ch1_s1_intro",
+      "background": "palace_wall_night",
+      "dialogue": [
+        { "speaker": "narration", "text": "정도전이 마지막으로 남긴 말이 귓가에 맴돈다. \"이방원 나리가 부쩍 날 찾아오시더군…\" — 그날 밤, 정도전은 목숨을 잃었다. 세자 자리를 두고 이복형제들과 대립하던 이방원이, 자신을 세자에서 밀어낸 이들을 먼저 친 것이다." }
+      ],
+      "cutscene": true,
+      "playerChoice": false
+    },
+    {
+      "sceneId": "ch1_s2_reunion",
+      "background": "palace_interior",
+      "dialogue": [
+        { "speaker": "narration", "text": "몇 년 뒤, 궁궐 내전. 이방원은 이제 왕이 되어 있다 — 태종." },
+        { "speaker": "태종", "text": "오랜만이군. 정도전 밑에서 얼쩡거리던 그자로군, 기억하네." },
+        {
+          "speaker": "태종",
+          "branchOn": "political_view",
+          "branches": {
+            "minister_centered": "자네, 정도전에게 재상이 나라를 이끌어야 한다고 배웠겠지? 틀렸네. 재상 몇이 짜고 왕을 허수아비로 세우면 그 나라가 어찌 되겠나. 내가 사병을 혁파하고 육조를 왕에게 직접 보고하게 만든 이유가 바로 그거야 — 힘은 반드시 한곳에 모여야 하네.",
+            "king_centered": "그래, 자네는 나와 생각이 비슷하군. 정도전은 훌륭한 학자였지만, 그의 구상대로 갔다면 이 나라는 진작 여러 갈래로 찢어졌을 걸세."
+          }
+        },
+        { "speaker": "태종", "text": "내가 왕자 시절 사병을 거느렸던 것도, 결국 그 힘이 얼마나 위험한지 몸소 겪었기 때문일세. 그래서 즉위하자마자 제일 먼저 한 일이 뭔지 아나? 나부터 포함해서, 모든 종친과 공신의 사병을 없앤 것이었네." }
+      ]
+    },
+    {
+      "sceneId": "ch1_s3_disarm",
+      "background": "military_camp",
+      "questId": "ch1_q1",
+      "dialogue": [
+        { "speaker": "태종", "text": "권근을 비롯한 신하들이 진작부터 사병 혁파를 건의해왔네. 이제 그걸 실행할 때야. 자네가 가서 각 부대에 왕명을 전하게." },
+        { "type": "minigame", "uiType": "collection", "target": "사병 부대", "count": 6 }
+      ]
+    },
+    {
+      "sceneId": "ch1_s4_yukjo",
+      "background": "royal_court",
+      "questId": "ch1_q2",
+      "dialogue": [
+        { "speaker": "태종", "text": "지금까지는 육조가 의정부를 거쳐야만 내게 보고할 수 있었네. 그러다 보니 결정이 늦고, 재상들 손에 권한이 몰렸지. 이제 육조가 나에게 직접 보고하도록 바꿀 것이야." },
+        { "type": "minigame", "uiType": "org_chart_puzzle", "target": "육조 직계제 재배치" }
+      ]
+    },
+    {
+      "sceneId": "ch1_s5_hook",
+      "background": "palace_interior_night",
+      "dialogue": [
+        { "speaker": "태종", "text": "(창밖을 보며) …내가 모진 일을 많이 했다는 걸 아네. 형제도 처형도 가리지 않았지. 하지만 다음 왕(세종)만큼은, 이런 험한 일을 하지 않고도 나라를 다스릴 수 있게 만들어주고 싶었네." }
+      ],
+      "transitionTo": "chapter2"
+    }
+  ],
+  "quests": [
+    { "questId": "ch1_q1", "title": "사병을 거두어라", "type": "collection_minigame", "reward": { "currency": 50, "card": "사병 혁파" } },
+    { "questId": "ch1_q2", "title": "육조의 권한을 강화하라", "type": "org_chart_puzzle", "reward": { "currency": 50, "card": "육조의 권한 강화" } }
+  ],
+  "bossBattle": {
+    "bossId": "ch1_boss",
+    "title": "왕권이란 무엇인가",
+    "questionRefs": [
+      { "round": "66", "number": 18 },
+      { "round": "70", "number": 17 },
+      { "round": "72", "number": 18 },
+      { "round": "77", "number": 19 }
+    ]
+  },
+  "nextChapterHook": "챕터2(세종) 오프닝 집현전 장면으로 연결"
+}
