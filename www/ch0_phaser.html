@@ -347,6 +347,9 @@ class MainScene extends Phaser.Scene {
   preload(){
     this.load.spritesheet('tiles', 'assets/tiles/tileset.png', { frameWidth: TS, frameHeight: TS });
     NPCS.forEach(n => { this.load.image('npc_' + n.id, n.portrait); });
+    ['down','up','left','right'].forEach(dir => {
+      for (let i = 0; i < 3; i++){ this.load.image(`p_${dir}_${i}`, `assets/player/${dir}_${i}.png`); }
+    });
   }
   create(){
     const map = this.make.tilemap({ data: MAP, tileWidth: TS, tileHeight: TS });
@@ -370,12 +373,22 @@ class MainScene extends Phaser.Scene {
       spr.__mark = mark;
     });
 
-    // 플레이어
-    const pg = this.add.graphics();
-    drawFigure(pg, 0xc94f4f, 'commoner');
-    pg.generateTexture('player', 40, 56);
-    pg.destroy();
-    this.player = this.add.image(9*TS, 12*TS, 'player');
+    // 플레이어: 4방향 걷기 사이클(마젠타 시트에서 추출, 오른쪽은 왼쪽 좌우반전)
+    const PLAYER_TARGET_H = TS * 1.15;
+    ['down','up','left','right'].forEach(dir => {
+      this.anims.create({
+        key: 'walk_' + dir,
+        frames: [0,1,2,1].map(i => ({ key: `p_${dir}_${i}` })),
+        frameRate: 7,
+        repeat: -1
+      });
+    });
+    this.player = this.add.sprite(9*TS, 12*TS, 'p_down_1');
+    const pScale = PLAYER_TARGET_H / this.player.height;
+    this.player.setScale(pScale);
+    this.player.setOrigin(0.5, 0.68);
+    this.player.y = 12*TS;
+    this.player.__dir = 'down';
 
     this.cameras.main.startFollow(this.player, true, 0.15, 0.15);
     this.cameras.main.setZoom(1);
@@ -405,6 +418,15 @@ class MainScene extends Phaser.Scene {
           !isBarrier(Math.floor((this.player.x+pad)/TS),Math.floor((ny-pad)/TS)) &&
           !isBarrier(Math.floor((this.player.x-pad)/TS),Math.floor((ny+pad)/TS)) &&
           !isBarrier(Math.floor((this.player.x+pad)/TS),Math.floor((ny+pad)/TS))) this.player.y = ny;
+      const dir = Math.abs(vx) > Math.abs(vy) ? (vx > 0 ? 'right' : 'left') : (vy > 0 ? 'down' : 'up');
+      this.player.__dir = dir;
+      const animKey = 'walk_' + dir;
+      if (!this.player.anims.isPlaying || this.player.anims.currentAnim.key !== animKey){
+        this.player.play(animKey);
+      }
+    } else if (this.player.anims.isPlaying){
+      this.player.anims.stop();
+      this.player.setTexture('p_' + this.player.__dir + '_1');
     }
     // 근접 NPC 판정
     let found = null, best = TS*1.7;
