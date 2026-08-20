@@ -24,7 +24,8 @@
 
   #act-btn { position: absolute; right: calc(22px + env(safe-area-inset-right)); bottom: calc(34px + env(safe-area-inset-bottom));
     width: 68px; height: 68px; border-radius: 50%; border: none; touch-action: none;
-    background: #d9a441; color: #2b1d0e; font-size: 26px; box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    background: #d9a441; color: #2b1d0e; box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 6; }
   #act-btn.show { opacity: 1; pointer-events: auto; }
 
@@ -73,7 +74,15 @@
   <div id="stick-zone">
     <div id="stick-base"><div id="stick-knob"></div></div>
   </div>
-  <button id="act-btn" onclick="Stage.interact()">💬</button>
+  <button id="act-btn" onclick="Stage.interact()">
+    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v9c0 .83-.67 1.5-1.5 1.5H9.8l-3.9 3.4c-.5.44-1.27.08-1.27-.58V16h-.13C3.67 16 3 15.33 3 14.5v-9C3 4.67 3.67 4 4.5 4"
+        stroke="#2b1d0e" stroke-width="1.6" stroke-linejoin="round" fill="#2b1d0e" fill-opacity="0.06"/>
+      <circle cx="8.3" cy="9.8" r="1.15" fill="#2b1d0e"/>
+      <circle cx="12" cy="9.8" r="1.15" fill="#2b1d0e"/>
+      <circle cx="15.7" cy="9.8" r="1.15" fill="#2b1d0e"/>
+    </svg>
+  </button>
 
   <div class="ov center show" id="intro-overlay">
     <div id="intro-panel">
@@ -135,8 +144,11 @@ applyOrientation();
 const TS = 64; // 캐릭터 스케일 기준 단위로만 사용(그리드 아님)
 const BG_W = 1376, BG_H = 768;
 const BARRIERS = [
-  { x0: 955, y0: 55, x1: 1360, y1: 390 },   // 상단 자재 적치장(돌담)
-  { x0: 955, y0: 445, x1: 1360, y1: 670 },  // 하단 자재 적치장(돌담)
+  // 배경 이미지의 실제 돌담 픽셀 경계를 직접 측정해서 반영(이전 값은 상단
+  // 마당 하단이 실제 담장보다 74px, 우측이 17px 더 넓게 잡혀 있어 그림상
+  // 걸어갈 수 있어야 할 흙길까지 막고 있었음).
+  { x0: 960, y0: 75, x1: 1345, y1: 318 },   // 상단 자재 적치장(돌담)
+  { x0: 960, y0: 459, x1: 1345, y1: 672 },  // 하단 자재 적치장(돌담)
 ];
 function isBarrierPx(x, y){
   if (x < 12 || y < 12 || x > BG_W-12 || y > BG_H-12) return true;
