@@ -127,64 +127,30 @@ window.addEventListener('resize', applyOrientation);
 window.addEventListener('orientationchange', applyOrientation);
 applyOrientation();
 
-/* ============ 맵 데이터 (국가유산 디지털 서비스 참고 타일셋 사용) ============
-   타일 인덱스: 0=흙바닥 1=화강암판석 2=기와지붕 3=처마파사드 4=목재마루
-   5=목재벽 6=자연석벽 7=들풀 8=초가 9=돌담 */
-const TS = 64;
-const WT = 24, HT = 18;
-function buildMap(){
-  const g = [];
-  for (let y=0;y<HT;y++){ g[y] = new Array(WT).fill(0); }
-  for (let x=0;x<WT;x++){ g[0][x]=6; g[HT-1][x]=6; }
-  for (let y=0;y<HT;y++){ g[y][0]=6; g[y][WT-1]=6; }
-  // 궁궐터 화강암 판석(공사 중인 기단) — 아직 다 안 깔려서 흙바닥이 군데군데 섞여 있다
-  const rnd = mulberry32(7);
-  for (let y=3;y<9;y++) for (let x=4;x<12;x++){ g[y][x] = rnd() < 0.78 ? 1 : 0; }
-  // 자재 적치장 구역 표시(돌담으로 구획, 남쪽에 출입구 하나)
-  for (let x=15;x<21;x++){ g[12][x]=9; }
-  for (let x=15;x<21;x++){ if (x!==17 && x!==18) g[16][x]=9; } // 17,18은 출입구로 비움
-  for (let y=12;y<17;y++){ g[y][15]=9; g[y][20]=9; }
-  return g;
-}
-function mulberry32(seed){
-  return function(){
-    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
-}
-const MAP = buildMap();
-const SOLID = new Set([2,3,5,6,9]); // 지붕/처마/목재벽/성벽/돌담은 통과 불가
-function isBarrier(tx, ty){
-  if (tx<0||ty<0||tx>=WT||ty>=HT) return true;
-  return SOLID.has(MAP[ty][tx]);
+/* ============ 맵 데이터: Gemini로 뽑은 배경 한 장 + 손으로 지정한 충돌 영역 ============
+   타일맵을 버리고 국가유산 레퍼런스 기반으로 그린 배경 이미지(ch0_bg.png,
+   1376x768) 하나를 그대로 깔고, 그 위에 자재 적치장 돌담 구역만 이동 불가
+   사각형으로 지정한다(그림에 이미 소품이 다 그려져 있어 타일/소품 시스템은
+   더 이상 필요 없음). */
+const TS = 64; // 캐릭터 스케일 기준 단위로만 사용(그리드 아님)
+const BG_W = 1376, BG_H = 768;
+const BARRIERS = [
+  { x0: 955, y0: 55, x1: 1360, y1: 390 },   // 상단 자재 적치장(돌담)
+  { x0: 955, y0: 445, x1: 1360, y1: 670 },  // 하단 자재 적치장(돌담)
+];
+function isBarrierPx(x, y){
+  if (x < 12 || y < 12 || x > BG_W-12 || y > BG_H-12) return true;
+  return BARRIERS.some(b => x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1);
 }
 
 /* 좌우 스프라이트 소스가 실제 이동 방향과 반대로 나와서(에셋 라벨링 오차),
    애니메이션/아이들 텍스처 둘 다 이 매핑으로 소스를 바꿔 재생한다. */
 const DIR_SRC = { down: 'down', up: 'up', left: 'right', right: 'left' };
 
-/* ============ NPC 데이터 ============ */
+/* ============ NPC 데이터 (배경 이미지 위 픽셀 좌표) ============ */
 const NPCS = [
-  { id:'jeongdojeon', name:'정도전', tx:7.5, ty:6, portrait:'assets/portraits/jeongdojeon.png' },
-  { id:'worker', name:'인부', tx:17, ty:14, portrait:'assets/portraits/commoner1.png' },
-];
-
-/* ============ 공사현장 소품 ============
-   화강암판석 구역이 그냥 예쁜 바닥으로만 보이던 문제(사용자 피드백:
-   "공사 현장이야 여기가? 전혀 그렇게 안보여") — 소품을 흩뿌려서
-   "짓고 있는 중"이라는 걸 시각적으로 알려준다. */
-const PROPS = [
-  { key:'stone_pile', tx:4.6, ty:3.8, h:1.05 },
-  { key:'stone_pile', tx:11.3, ty:8.3, h:0.9 },
-  { key:'wood_platform', tx:10.8, ty:4.0, h:1.0 },
-  { key:'dirt_mound', tx:13.2, ty:10.2, h:0.85 },
-  { key:'log_pile', tx:18.2, ty:12.6, h:1.0 },
-  { key:'tool_crate', tx:15.7, ty:15.6, h:0.75 },
-  { key:'rope_fence', tx:5.2, ty:9.4, h:0.95 },
-  { key:'rope_fence', tx:8.0, ty:9.4, h:0.95 },
-  { key:'rope_fence', tx:10.8, ty:9.4, h:0.95 },
+  { id:'jeongdojeon', name:'정도전', px:420, py:220, portrait:'assets/portraits/jeongdojeon.png' },
+  { id:'worker', name:'인부', px:880, py:420, portrait:'assets/portraits/commoner1.png' },
 ];
 
 const NPC_DATA = {
@@ -375,33 +341,21 @@ renderIntro();
 class MainScene extends Phaser.Scene {
   constructor(){ super('main'); }
   preload(){
-    this.load.spritesheet('tiles', 'assets/tiles/tileset.png', { frameWidth: TS, frameHeight: TS });
+    this.load.image('bg', 'assets/scenes/ch0_bg.png');
     NPCS.forEach(n => { this.load.image('npc_' + n.id, n.portrait); });
-    [...new Set(PROPS.map(p => p.key))].forEach(key => { this.load.image('prop_' + key, `assets/props/${key}.png`); });
     ['down','up','left','right'].forEach(dir => {
       for (let i = 0; i < 3; i++){ this.load.image(`p_${dir}_${i}`, `assets/player/${dir}_${i}.png`); }
     });
   }
   create(){
-    const map = this.make.tilemap({ data: MAP, tileWidth: TS, tileHeight: TS });
-    const tileset = map.addTilesetImage('tiles', 'tiles', TS, TS, 0, 0);
-    this.layer = map.createLayer(0, tileset, 0, 0);
-
-    // 공사현장 소품: 바닥 위에 놓인 정적 오브젝트(충돌 없음, 장식용)
-    PROPS.forEach(p => {
-      const px = p.tx*TS + TS/2, py = p.ty*TS + TS/2;
-      const spr = this.add.image(px, py, 'prop_' + p.key);
-      const targetH = TS * p.h;
-      spr.setScale(targetH / spr.height);
-      spr.setOrigin(0.5, 0.85);
-      spr.y = py;
-    });
+    this.add.image(0, 0, 'bg').setOrigin(0, 0);
+    this.cameras.main.setBounds(0, 0, BG_W, BG_H);
 
     // NPC: Gemini로 뽑은 배경 제거된 초상화를 그대로 서 있는 스프라이트로 사용
     const NPC_TARGET_H = TS * 1.15;
     this.npcSprites = {};
     NPCS.forEach(n => {
-      const px = n.tx*TS + TS/2, py = n.ty*TS + TS/2;
+      const px = n.px, py = n.py;
       const key = 'npc_' + n.id;
       const spr = this.add.image(px, py, key);
       const scale = NPC_TARGET_H / spr.height;
@@ -409,15 +363,14 @@ class MainScene extends Phaser.Scene {
       spr.setOrigin(0.5, 0.68);
       spr.y = py;
       this.npcSprites[n.id] = spr;
-      const mark = this.add.text(px, py - NPC_TARGET_H*0.9, '!', { fontSize: '22px', color: '#f0c96b', fontStyle: 'bold' });
-      mark.setOrigin(0.5); mark.setVisible(false);
-      spr.__mark = mark;
-      const nameLabel = this.add.text(px, py - NPC_TARGET_H*1.12, n.name, {
-        fontSize: '14px', color: '#fff5df', fontStyle: 'bold',
+      // 전산회계오락실 방식: 평소엔 "!"만 떠 있다가, 근접하면 이름으로 바뀐다
+      const mark = this.add.text(px, py - NPC_TARGET_H*0.95, '!', {
+        fontSize: '20px', color: '#f0c96b', fontStyle: 'bold',
         stroke: '#2b2015', strokeThickness: 3
       });
-      nameLabel.setOrigin(0.5); nameLabel.setVisible(false);
-      spr.__nameLabel = nameLabel;
+      mark.setOrigin(0.5); mark.setVisible(false);
+      mark.__npcName = n.name;
+      spr.__mark = mark;
     });
 
     // 플레이어: 4방향 걷기 사이클(마젠타 시트에서 추출, 오른쪽은 왼쪽 좌우반전)
@@ -431,7 +384,7 @@ class MainScene extends Phaser.Scene {
         repeat: -1
       });
     });
-    this.player = this.add.sprite(9*TS, 12*TS, 'p_down_1');
+    this.player = this.add.sprite(500, 470, 'p_down_1');
     const pScale = PLAYER_TARGET_H / this.player.height;
     this.player.setScale(pScale);
     this.player.setOrigin(0.5, 0.68);
@@ -439,7 +392,7 @@ class MainScene extends Phaser.Scene {
     this.player.__dir = 'down';
 
     this.cameras.main.startFollow(this.player, true, 0.15, 0.15);
-    this.cameras.main.setZoom(1);
+    this.cameras.main.setZoom(1.7);
 
     window.__nearNpc = null;
   }
@@ -458,14 +411,10 @@ class MainScene extends Phaser.Scene {
       const nx = this.player.x + vx*speed*dtS;
       const ny = this.player.y + vy*speed*dtS;
       const pad = 12;
-      if (!isBarrier(Math.floor((nx-pad)/TS),Math.floor((this.player.y-pad)/TS)) &&
-          !isBarrier(Math.floor((nx+pad)/TS),Math.floor((this.player.y-pad)/TS)) &&
-          !isBarrier(Math.floor((nx-pad)/TS),Math.floor((this.player.y+pad)/TS)) &&
-          !isBarrier(Math.floor((nx+pad)/TS),Math.floor((this.player.y+pad)/TS))) this.player.x = nx;
-      if (!isBarrier(Math.floor((this.player.x-pad)/TS),Math.floor((ny-pad)/TS)) &&
-          !isBarrier(Math.floor((this.player.x+pad)/TS),Math.floor((ny-pad)/TS)) &&
-          !isBarrier(Math.floor((this.player.x-pad)/TS),Math.floor((ny+pad)/TS)) &&
-          !isBarrier(Math.floor((this.player.x+pad)/TS),Math.floor((ny+pad)/TS))) this.player.y = ny;
+      if (!isBarrierPx(nx-pad, this.player.y-pad) && !isBarrierPx(nx+pad, this.player.y-pad) &&
+          !isBarrierPx(nx-pad, this.player.y+pad) && !isBarrierPx(nx+pad, this.player.y+pad)) this.player.x = nx;
+      if (!isBarrierPx(this.player.x-pad, ny-pad) && !isBarrierPx(this.player.x+pad, ny-pad) &&
+          !isBarrierPx(this.player.x-pad, ny+pad) && !isBarrierPx(this.player.x+pad, ny+pad)) this.player.y = ny;
       const dir = Math.abs(vx) > Math.abs(vy) ? (vx > 0 ? 'right' : 'left') : (vy > 0 ? 'down' : 'up');
       this.player.__dir = dir;
       const animKey = 'walk_' + dir;
@@ -476,18 +425,21 @@ class MainScene extends Phaser.Scene {
       this.player.anims.stop();
       this.player.setTexture('p_' + DIR_SRC[this.player.__dir] + '_1');
     }
-    // 근접 NPC 판정
-    let found = null, best = TS*1.7;
+    // 근접 NPC 판정 — 원거리는 "!", 상호작용 가능 거리에 들어오면 이름으로 전환
+    const SHOW_RANGE = TS*3, INTERACT_RANGE = TS*1.7;
+    let nearest = null, nearestD = Infinity;
     NPCS.forEach(n => {
       const spr = this.npcSprites[n.id];
       const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, spr.x, spr.y);
       spr.__mark.setVisible(false);
-      spr.__nameLabel.setVisible(false);
-      if (d < best){ best = d; found = n; }
+      if (d < nearestD){ nearestD = d; nearest = n; }
     });
-    if (found){
-      this.npcSprites[found.id].__mark.setVisible(true);
-      this.npcSprites[found.id].__nameLabel.setVisible(true);
+    let found = null;
+    if (nearest && nearestD < SHOW_RANGE){
+      const spr = this.npcSprites[nearest.id];
+      spr.__mark.setVisible(true);
+      spr.__mark.setText(nearestD < INTERACT_RANGE ? spr.__mark.__npcName : '!');
+      if (nearestD < INTERACT_RANGE) found = nearest;
     }
     if (found !== window.__nearNpc){
       window.__nearNpc = found;
