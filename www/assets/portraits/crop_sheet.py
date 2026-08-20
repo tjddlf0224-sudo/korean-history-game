@@ -18,8 +18,8 @@ LABELS = [
 ]
 
 # 셀 안쪽 여백(라벨 텍스트 바 제외하고 인물 일러스트만 크롭)
-PAD_TOP = 1
-PAD_SIDE = 4
+PAD_TOP = 20
+PAD_SIDE = 22
 LABEL_BAND = int(ch * 0.16)  # 각 칸 하단 라벨 바 높이만큼 제외
 
 for i, name in enumerate(LABELS):
