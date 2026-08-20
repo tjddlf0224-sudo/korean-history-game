@@ -505,7 +505,11 @@ const config = {
   height: VH,
   backgroundColor: '#bfa374',
   scene: MainScene,
-  scale: { mode: Phaser.Scale.RESIZE }
+  // Scale.RESIZE는 부모 크기를 getBoundingClientRect()(=화면상 시각적 박스)로 측정하는데,
+  // #wrap에 rotate(90deg) 변환이 걸려 있으면 이 박스가 가로/세로가 뒤바뀐 값으로 나와서
+  // applyOrientation()이 계산한 올바른 VW/VH를 Phaser가 매번 다시 뒤집어버린다.
+  // 그래서 자동 리사이즈를 끄고(NONE), applyOrientation()의 명시적 resize() 호출만 크기를 결정하게 한다.
+  scale: { mode: Phaser.Scale.NONE }
 };
 window.__phaserGame = new Phaser.Game(config);
 </script>
