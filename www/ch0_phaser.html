@@ -38,7 +38,7 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 15px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 15px; line-height: 1.5; min-height: 54px; white-space: pre-wrap; }
@@ -159,7 +159,7 @@ const NPCS = [
 
 const NPC_DATA = {
   jeongdojeon_0: {
-    name:'정도전', icon:'📜',
+    name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
     beats: [
       { t:'어이, 거기 자네. 처음 보는 얼굴인데 — 그냥 구경하러 온 겐가?' },
       { t:'(씩 웃으며) 맞네, 삼봉 정도전일세. 이 새 궁궐 이름도 내가 지었지 — 경복궁(景福宮), \'큰 복을 누리라\'는 뜻으로.' },
@@ -168,14 +168,14 @@ const NPC_DATA = {
     ]
   },
   jeongdojeon_1: {
-    name:'정도전', icon:'📜',
+    name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
     beats: [
       { t:'궁궐만 짓는다고 나라가 서는 게 아닐세. 도읍 자리부터 제대로 골라야지.' },
       { t:'전하께서 몸소 무악(毋岳) 땅까지 살피러 다니셨다네. 결국 산이 사방을 둘러싸 방어에 유리하고, 한강이 가까워 물자를 옮기기도 좋은 한양으로 정해졌지.' },
     ]
   },
   jeongdojeon_2: {
-    name:'정도전', icon:'📜',
+    name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
     beats: [
       { t:'(성벽 너머 어딘가를 바라보며) …그나저나, 요즘 이방원 나리가 부쩍 날 찾아오시더군.' },
       { t:'무슨 생각을 하고 계신 건지…' },
@@ -183,7 +183,7 @@ const NPC_DATA = {
     endsChapter: true
   },
   worker_0: {
-    name:'인부', icon:'🧱',
+    name:'인부', icon:'🧱', img:'assets/portraits/commoner1.png',
     beats: [
       { t:'허리 한번 못 펴고 돌을 나르는 중이네. 이 궁궐이 다 지어지면 장관이겠지.' },
     ]
@@ -282,7 +282,14 @@ const Dialog = {
     document.getElementById('dlg-overlay').classList.add('show');
     document.getElementById('dlg-name').textContent = this.data.name;
     document.getElementById('dlg-tag').textContent = '1392년 · 한양';
-    document.getElementById('dlg-portrait').textContent = this.data.icon;
+    const portraitEl = document.getElementById('dlg-portrait');
+    if (this.data.img){
+      portraitEl.textContent = '';
+      portraitEl.style.backgroundImage = `url('${this.data.img}')`;
+    } else {
+      portraitEl.style.backgroundImage = 'none';
+      portraitEl.textContent = this.data.icon;
+    }
     this.render();
   },
   render(){
