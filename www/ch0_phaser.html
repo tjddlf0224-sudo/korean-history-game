@@ -353,10 +353,14 @@ class MainScene extends Phaser.Scene {
 
     // NPC: Gemini로 뽑은 배경 제거된 초상화를 그대로 서 있는 스프라이트로 사용
     const NPC_TARGET_H = TS * 1.15;
+    const SHADOW_DY = Math.round(NPC_TARGET_H * 0.30);
+    this.SHADOW_DY = SHADOW_DY;
+    const addShadow = (x, y) => this.add.ellipse(x, y + SHADOW_DY, TS * 0.6, TS * 0.24, 0x000000, 0.35);
     this.npcSprites = {};
     NPCS.forEach(n => {
       const px = n.px, py = n.py;
       const key = 'npc_' + n.id;
+      addShadow(px, py);
       const spr = this.add.image(px, py, key);
       const scale = NPC_TARGET_H / spr.height;
       spr.setScale(scale);
@@ -384,6 +388,7 @@ class MainScene extends Phaser.Scene {
         repeat: -1
       });
     });
+    this.playerShadow = addShadow(500, 470);
     this.player = this.add.sprite(500, 470, 'p_down_1');
     const pScale = PLAYER_TARGET_H / this.player.height;
     this.player.setScale(pScale);
@@ -424,6 +429,8 @@ class MainScene extends Phaser.Scene {
       this.player.anims.stop();
       this.player.setTexture('p_' + DIR_SRC[this.player.__dir] + '_1');
     }
+    this.playerShadow.x = this.player.x;
+    this.playerShadow.y = this.player.y + this.SHADOW_DY;
     // 근접 NPC 판정 — 원거리는 "!", 상호작용 가능 거리에 들어오면 이름으로 전환
     const SHOW_RANGE = TS*3, INTERACT_RANGE = TS*1.7;
     let nearest = null, nearestD = Infinity;
