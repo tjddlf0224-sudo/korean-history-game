@@ -64,7 +64,9 @@ const ERAS = [
   { title: '고대', pct: '14.5%', range: '삼국시대 ~ 남북국시대' },
   { title: '고려', pct: '16.5%', range: '918 ~ 1392' },
   { title: '조선 후기', pct: '11.6%', range: '1592 ~ 1863' },
-  { title: '근대·개항기', pct: '13.7%', range: '1863 ~ 1910' },
+  { title: '근대·개항기', pct: '13.7%', range: '1863 ~ 1910', cards: [
+    { href: 'gaehang_ch3.html', num: '3화 · 체험판', name: '삼일천하의 꿈', who: '갑신정변 · 김옥균' },
+  ] },
   { title: '일제강점기', pct: '16.5%', range: '1910 ~ 1945' },
   { title: '현대', pct: '10.9%', range: '1945 ~ 현재' },
 ];
@@ -72,7 +74,14 @@ const wrap = document.getElementById('era-list');
 ERAS.forEach(e => {
   const div = document.createElement('div');
   div.className = 'era';
-  div.innerHTML = `<div class="era-head"><span class="era-title">${e.title}</span><span class="era-badge badge-plan">기획 완료 · 구현 예정</span><span class="era-pct">${e.range} · 기출 ${e.pct}</span></div>`;
+  const badge = e.cards ? '<span class="era-badge badge-live">일부 체험 가능</span>' : '<span class="era-badge badge-plan">기획 완료 · 구현 예정</span>';
+  let html = `<div class="era-head"><span class="era-title">${e.title}</span>${badge}<span class="era-pct">${e.range} · 기출 ${e.pct}</span></div>`;
+  if (e.cards){
+    html += '<div class="cards">' + e.cards.map(c =>
+      `<a class="card live" href="${c.href}"><div class="num">${c.num}</div><div class="name">${c.name}</div><div class="who">${c.who}</div></a>`
+    ).join('') + '</div>';
+  }
+  div.innerHTML = html;
   wrap.appendChild(div);
 });
 </script>
