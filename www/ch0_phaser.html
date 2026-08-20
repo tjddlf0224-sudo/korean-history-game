@@ -162,6 +162,22 @@ const NPCS = [
   { id:'worker', name:'인부', tx:17, ty:14, portrait:'assets/portraits/commoner1.png' },
 ];
 
+/* ============ 공사현장 소품 ============
+   화강암판석 구역이 그냥 예쁜 바닥으로만 보이던 문제(사용자 피드백:
+   "공사 현장이야 여기가? 전혀 그렇게 안보여") — 소품을 흩뿌려서
+   "짓고 있는 중"이라는 걸 시각적으로 알려준다. */
+const PROPS = [
+  { key:'stone_pile', tx:4.6, ty:3.8, h:1.05 },
+  { key:'stone_pile', tx:11.3, ty:8.3, h:0.9 },
+  { key:'wood_platform', tx:10.8, ty:4.0, h:1.0 },
+  { key:'dirt_mound', tx:13.2, ty:10.2, h:0.85 },
+  { key:'log_pile', tx:18.2, ty:12.6, h:1.0 },
+  { key:'tool_crate', tx:15.7, ty:15.6, h:0.75 },
+  { key:'rope_fence', tx:5.2, ty:9.4, h:0.95 },
+  { key:'rope_fence', tx:8.0, ty:9.4, h:0.95 },
+  { key:'rope_fence', tx:10.8, ty:9.4, h:0.95 },
+];
+
 const NPC_DATA = {
   jeongdojeon_0: {
     name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
@@ -352,6 +368,7 @@ class MainScene extends Phaser.Scene {
   preload(){
     this.load.spritesheet('tiles', 'assets/tiles/tileset.png', { frameWidth: TS, frameHeight: TS });
     NPCS.forEach(n => { this.load.image('npc_' + n.id, n.portrait); });
+    [...new Set(PROPS.map(p => p.key))].forEach(key => { this.load.image('prop_' + key, `assets/props/${key}.png`); });
     ['down','up','left','right'].forEach(dir => {
       for (let i = 0; i < 3; i++){ this.load.image(`p_${dir}_${i}`, `assets/player/${dir}_${i}.png`); }
     });
@@ -360,6 +377,16 @@ class MainScene extends Phaser.Scene {
     const map = this.make.tilemap({ data: MAP, tileWidth: TS, tileHeight: TS });
     const tileset = map.addTilesetImage('tiles', 'tiles', TS, TS, 0, 0);
     this.layer = map.createLayer(0, tileset, 0, 0);
+
+    // 공사현장 소품: 바닥 위에 놓인 정적 오브젝트(충돌 없음, 장식용)
+    PROPS.forEach(p => {
+      const px = p.tx*TS + TS/2, py = p.ty*TS + TS/2;
+      const spr = this.add.image(px, py, 'prop_' + p.key);
+      const targetH = TS * p.h;
+      spr.setScale(targetH / spr.height);
+      spr.setOrigin(0.5, 0.85);
+      spr.y = py;
+    });
 
     // NPC: Gemini로 뽑은 배경 제거된 초상화를 그대로 서 있는 스프라이트로 사용
     const NPC_TARGET_H = TS * 1.15;
