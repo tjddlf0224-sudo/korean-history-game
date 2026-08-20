@@ -34,11 +34,21 @@ for i, name in enumerate(LABELS):
 
     arr = np.array(crop).astype(np.int16)
     dist_m = np.sqrt(((arr - MAGENTA) ** 2).sum(axis=-1))
-    is_bg = dist_m < THRESH
+    is_fg = dist_m >= THRESH
+
+    # 경계부에 마젠타가 섞인 오염 픽셀 1겹을 깎아낸다(3x3 침식) —
+    # 압축 노이즈 때문에 하드 컷만으로는 테두리에 마젠타 기가 남는다.
+    for _ in range(2):
+        eroded = is_fg.copy()
+        eroded[1:, :] &= is_fg[:-1, :]
+        eroded[:-1, :] &= is_fg[1:, :]
+        eroded[:, 1:] &= is_fg[:, :-1]
+        eroded[:, :-1] &= is_fg[:, 1:]
+        is_fg = eroded
 
     rgba = np.dstack([arr.astype(np.uint8), np.full(arr.shape[:2], 255, np.uint8)])
-    rgba[..., 3] = np.where(is_bg, 0, 255)
+    rgba[..., 3] = np.where(is_fg, 255, 0)
 
     out = Image.fromarray(rgba, 'RGBA')
     out.save(f'{name}.png')
-    print(name, out.size, f'{is_bg.mean()*100:.1f}% removed')
+    print(name, out.size, f'{(~is_fg).mean()*100:.1f}% removed')
