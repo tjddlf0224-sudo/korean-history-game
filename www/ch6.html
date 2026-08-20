@@ -128,8 +128,15 @@ const T = { WALL: 0, GROUND: 1, WOOD: 2, STONE: 3 };
 const WT = 22, HT = 16;
 
 const wrapEl = document.getElementById('wrap');
+/* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
+   한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
+   그쪽이 실제 보이는 영역을 더 정확히 반영하므로 우선 사용한다. */
+function getViewportSize(){
+  if (window.visualViewport) return { w: window.visualViewport.width, h: window.visualViewport.height };
+  return { w: window.innerWidth, h: window.innerHeight };
+}
 function applyOrientation(){
-  const iw = window.innerWidth, ih = window.innerHeight;
+  const { w: iw, h: ih } = getViewportSize();
   const portrait = ih > iw;
   document.body.classList.toggle('rot', portrait);
   const w = portrait ? ih : iw;
@@ -140,7 +147,14 @@ function applyOrientation(){
   canvas.height = h;
 }
 window.addEventListener('resize', applyOrientation);
-window.addEventListener('orientationchange', applyOrientation);
+window.addEventListener('orientationchange', () => setTimeout(applyOrientation, 80));
+if (window.visualViewport){
+  window.visualViewport.addEventListener('resize', applyOrientation);
+  window.visualViewport.addEventListener('scroll', applyOrientation);
+}
+// 일부 모바일 브라우저는 주소창이 애니메이션으로 늦게 접혀서, 로드 직후 한 번 더 재확인한다.
+setTimeout(applyOrientation, 300);
+setTimeout(applyOrientation, 800);
 applyOrientation();
 
 /* ============ 맵: 조정 회의장 (붕당을 상징하듯 어둡고 차분한 톤) ============ */
