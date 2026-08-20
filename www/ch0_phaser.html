@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>한국사 게임 - 0화 새 나라의 설계자 (Phaser)</title>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; background: #000; font-family: -apple-system, "Pretendard", "Malgun Gothic", sans-serif; }
+  #wrap { position: fixed; top: 0; left: 0; touch-action: none; transform-origin: top left; }
+  body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
+  #game-holder { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #game-holder canvas { display: block; }
+
+  #hud { position: absolute; top: calc(10px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left));
+    color: #f5f0e6; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.8); z-index: 5; }
+  #hud .sub { font-size: 11px; opacity: .75; margin-top: 2px; }
+
+  #stick-zone { position: absolute; left: calc(18px + env(safe-area-inset-left)); bottom: calc(18px + env(safe-area-inset-bottom));
+    width: 130px; height: 130px; z-index: 6; touch-action: none; }
+  #stick-base { position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25); }
+  #stick-knob { position: absolute; width: 52px; height: 52px; left: 39px; top: 39px; border-radius: 50%; background: rgba(255,255,255,0.55); transition: transform .05s linear; }
+
+  #act-btn { position: absolute; right: calc(22px + env(safe-area-inset-right)); bottom: calc(34px + env(safe-area-inset-bottom));
+    width: 68px; height: 68px; border-radius: 50%; border: none; touch-action: none;
+    background: #d9a441; color: #2b1d0e; font-size: 26px; box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 6; }
+  #act-btn.show { opacity: 1; pointer-events: auto; }
+
+  .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
+  .ov.show { display: flex; }
+  .ov.center { align-items: center; }
+
+  #dlg-panel, #intro-panel {
+    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #2b2015ee; border: 2px solid #c9a24a;
+    border-radius: 14px; padding: 16px 18px; color: #f5ecd8; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    max-height: 80%; overflow-y: auto;
+  }
+  .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-name { font-weight: bold; font-size: 15px; color: #f0c96b; }
+  .dlg-tag { font-size: 11px; opacity: .7; }
+  .dlg-box { font-size: 15px; line-height: 1.5; min-height: 54px; white-space: pre-wrap; }
+  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
+  .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
+  @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+
+  #intro-panel { max-width: 560px; text-align: center; }
+  #intro-text { font-size: 15px; line-height: 1.8; min-height: 90px; white-space: pre-wrap; }
+  #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
+
+  #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
+  #fade.show { opacity: 1; pointer-events: auto; }
+
+  #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
+    background: #000; color: #f0c96b; text-align: center; padding: 24px; }
+  #end-screen.show { display: flex; }
+  #end-screen h2 { font-size: 20px; margin-bottom: 10px; }
+  #end-screen p { color: #d8c9a3; font-size: 14px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="game-holder"></div>
+
+  <div id="hud">
+    <div>0화 · 새 나라의 설계자</div>
+    <div class="sub">1392년, 한양 도성 공사 현장</div>
+  </div>
+
+  <div id="stick-zone">
+    <div id="stick-base"><div id="stick-knob"></div></div>
+  </div>
+  <button id="act-btn" onclick="Stage.interact()">💬</button>
+
+  <div class="ov center show" id="intro-overlay">
+    <div id="intro-panel">
+      <div id="intro-text"></div>
+      <div id="intro-next">탭하여 계속 ▶</div>
+    </div>
+  </div>
+
+  <div class="ov" id="dlg-overlay">
+    <div id="dlg-panel">
+      <div class="dlg-top">
+        <div class="dlg-portrait" id="dlg-portrait">👤</div>
+        <div>
+          <div class="dlg-tag" id="dlg-tag"></div>
+          <div class="dlg-name" id="dlg-name"></div>
+        </div>
+      </div>
+      <div class="dlg-box" id="dlg-text"></div>
+      <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+    </div>
+  </div>
+
+  <div id="fade"></div>
+
+  <div id="end-screen">
+    <div>
+      <h2>0화 · 끝</h2>
+      <p>정도전: (성벽 너머 어딘가를 바라보며)<br>"…그나저나, 요즘 이방원 나리가 부쩍 날 찾아오시더군.<br>무슨 생각을 하고 계신 건지."</p>
+      <p style="margin-top:18px; opacity:.7;">1화 「왕권의 기틀」에서 계속됩니다.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ 가로모드 고정 (기존 챕터와 동일 트릭) ============ */
+const wrapEl = document.getElementById('wrap');
+let VW = 800, VH = 600;
+function applyOrientation(){
+  const iw = window.innerWidth, ih = window.innerHeight;
+  const portrait = ih > iw;
+  document.body.classList.toggle('rot', portrait);
+  VW = portrait ? ih : iw;
+  VH = portrait ? iw : ih;
+  wrapEl.style.width = VW + 'px';
+  wrapEl.style.height = VH + 'px';
+  if (window.__phaserGame){
+    window.__phaserGame.scale.resize(VW, VH);
+  }
+}
+window.addEventListener('resize', applyOrientation);
+window.addEventListener('orientationchange', applyOrientation);
+applyOrientation();
+
+/* ============ 맵 데이터 (국가유산 디지털 서비스 참고 타일셋 사용) ============
+   타일 인덱스: 0=흙바닥 1=화강암판석 2=기와지붕 3=처마파사드 4=목재마루
+   5=목재벽 6=자연석벽 7=들풀 8=초가 9=돌담 */
+const TS = 64;
+const WT = 24, HT = 18;
+function buildMap(){
+  const g = [];
+  for (let y=0;y<HT;y++){ g[y] = new Array(WT).fill(0); }
+  for (let x=0;x<WT;x++){ g[0][x]=6; g[HT-1][x]=6; }
+  for (let y=0;y<HT;y++){ g[y][0]=6; g[y][WT-1]=6; }
+  // 궁궐터 화강암 판석(공사 중인 기단)
+  for (let y=3;y<9;y++) for (let x=4;x<12;x++) g[y][x]=1;
+  // 자재 적치장 구역 표시(돌담으로 구획)
+  for (let x=15;x<21;x++){ g[12][x]=9; }
+  for (let x=15;x<21;x++){ g[16][x]=9; }
+  for (let y=12;y<17;y++){ g[y][15]=9; g[y][20]=9; }
+  return g;
+}
+const MAP = buildMap();
+const SOLID = new Set([2,3,5,6]); // 지붕/처마/목재벽/성벽은 통과 불가 (돌담9은 낮아서 통과 가능하게 둠)
+function isBarrier(tx, ty){
+  if (tx<0||ty<0||tx>=WT||ty>=HT) return true;
+  return SOLID.has(MAP[ty][tx]);
+}
+
+/* ============ NPC 데이터 ============ */
+const NPCS = [
+  { id:'jeongdojeon', name:'정도전', tx:7.5, ty:6, color:0x38507a },
+  { id:'worker', name:'인부', tx:17, ty:14, color:0x8a6d3b },
+];
+
+const NPC_DATA = {
+  jeongdojeon_0: {
+    name:'정도전', icon:'📜',
+    beats: [
+      { t:'어이, 거기 자네. 처음 보는 얼굴인데 — 그냥 구경하러 온 겐가?' },
+      { t:'(씩 웃으며) 맞네, 삼봉 정도전일세. 이 새 궁궐 이름도 내가 지었지 — 경복궁(景福宮), \'큰 복을 누리라\'는 뜻으로.' },
+      { t:'아무리 훌륭한 임금이라도 대를 이어 계속 훌륭할 순 없는 법이야. 그래서 나는 유능한 신하들이 함께 다스리는 나라를 꿈꾸고 있네.' },
+      { t:'나라 이름도 새로 정했지. 아주 오래전 단군왕검이 세운 나라의 이름을 이어받아 — 조선(朝鮮)이라 하기로 했네.' },
+    ]
+  },
+  jeongdojeon_1: {
+    name:'정도전', icon:'📜',
+    beats: [
+      { t:'궁궐만 짓는다고 나라가 서는 게 아닐세. 도읍 자리부터 제대로 골라야지.' },
+      { t:'전하께서 몸소 무악(毋岳) 땅까지 살피러 다니셨다네. 결국 산이 사방을 둘러싸 방어에 유리하고, 한강이 가까워 물자를 옮기기도 좋은 한양으로 정해졌지.' },
+    ]
+  },
+  jeongdojeon_2: {
+    name:'정도전', icon:'📜',
+    beats: [
+      { t:'(성벽 너머 어딘가를 바라보며) …그나저나, 요즘 이방원 나리가 부쩍 날 찾아오시더군.' },
+      { t:'무슨 생각을 하고 계신 건지…' },
+    ],
+    endsChapter: true
+  },
+  worker_0: {
+    name:'인부', icon:'🧱',
+    beats: [
+      { t:'허리 한번 못 펴고 돌을 나르는 중이네. 이 궁궐이 다 지어지면 장관이겠지.' },
+    ]
+  }
+};
+
+/* ============ 오버레이 통합 체크 ============ */
+function overlayOpen(){
+  return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show');
+}
+
+/* ============ 조이스틱 (기존 코드 그대로 재사용) ============ */
+const Stick = { dx: 0, dy: 0 };
+(function bindStick(){
+  const zone = document.getElementById('stick-zone');
+  const knob = document.getElementById('stick-knob');
+  let activeId = null, cx = 0, cy = 0;
+  const R = 44;
+  zone.addEventListener('pointerdown', e=>{
+    if (activeId !== null) return;
+    activeId = e.pointerId;
+    try { zone.setPointerCapture(activeId); } catch(err) {}
+    const r = zone.getBoundingClientRect();
+    cx = r.left + r.width/2; cy = r.top + r.height/2;
+    move(e);
+  });
+  zone.addEventListener('pointermove', move);
+  zone.addEventListener('pointerup', end);
+  zone.addEventListener('pointercancel', end);
+  function move(e){
+    if (e.pointerId !== activeId) return;
+    let dx = e.clientX - cx, dy = e.clientY - cy;
+    const d = Math.hypot(dx, dy);
+    if (d > R){ dx = dx/d*R; dy = dy/d*R; }
+    knob.style.transform = `translate(${dx}px,${dy}px)`;
+    let wx = dx, wy = dy;
+    if (document.body.classList.contains('rot')){ wx = dy; wy = -dx; }
+    Stick.dx = wx / R; Stick.dy = wy / R;
+  }
+  function end(e){
+    if (e.pointerId !== activeId) return;
+    activeId = null;
+    Stick.dx = 0; Stick.dy = 0;
+    knob.style.transform = 'translate(0,0)';
+  }
+})();
+
+/* ============ 키보드 입력 ============ */
+const Keys = { l:false, r:false, u:false, d:false };
+window.addEventListener('keydown', e=>{
+  if (e.key === ' ' || e.key === 'Enter'){
+    e.preventDefault();
+    if (document.getElementById('intro-overlay').classList.contains('show')) { introNext(); return; }
+    if (document.getElementById('dlg-overlay').classList.contains('show')) { Dialog.next(); return; }
+    Stage.interact();
+    return;
+  }
+  if (overlayOpen()) return;
+  if (['ArrowLeft','a','A'].includes(e.key)) Keys.l = true;
+  if (['ArrowRight','d','D'].includes(e.key)) Keys.r = true;
+  if (['ArrowUp','w','W'].includes(e.key)) Keys.u = true;
+  if (['ArrowDown','s','S'].includes(e.key)) Keys.d = true;
+});
+window.addEventListener('keyup', e=>{
+  if (['ArrowLeft','a','A'].includes(e.key)) Keys.l = false;
+  if (['ArrowRight','d','D'].includes(e.key)) Keys.r = false;
+  if (['ArrowUp','w','W'].includes(e.key)) Keys.u = false;
+  if (['ArrowDown','s','S'].includes(e.key)) Keys.d = false;
+});
+
+/* ============ Dialog 엔진 ============ */
+const Stage = {
+  state: { talkStage: 0 },
+  paused: false,
+  interact(){
+    if (document.querySelector('.ov.show')) return;
+    const n = window.__nearNpc;
+    if (!n) return;
+    if (n.id === 'jeongdojeon'){
+      const key = 'jeongdojeon_' + Math.min(Stage.state.talkStage, 2);
+      Dialog.open(key, n);
+    } else if (n.id === 'worker'){
+      Dialog.open('worker_0', n);
+    }
+  },
+  endChapter(){
+    document.getElementById('end-screen').classList.add('show');
+  }
+};
+const Dialog = {
+  key: null, npc: null, idx: 0, data: null,
+  open(key, npc){
+    this.key = key; this.npc = npc; this.idx = 0;
+    this.data = NPC_DATA[key];
+    Stage.paused = true;
+    document.getElementById('dlg-overlay').classList.add('show');
+    document.getElementById('dlg-name').textContent = this.data.name;
+    document.getElementById('dlg-tag').textContent = '1392년 · 한양';
+    document.getElementById('dlg-portrait').textContent = this.data.icon;
+    this.render();
+  },
+  render(){
+    const beat = this.data.beats[this.idx];
+    document.getElementById('dlg-text').textContent = beat.t;
+  },
+  next(){
+    this.idx++;
+    if (this.idx >= this.data.beats.length){ this.finish(); return; }
+    this.render();
+  },
+  finish(){
+    document.getElementById('dlg-overlay').classList.remove('show');
+    if (this.data.endsChapter){
+      Stage.endChapter();
+      return;
+    }
+    Stage.paused = false;
+    if (this.npc.id === 'jeongdojeon'){
+      Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 2);
+    }
+  }
+};
+document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
+
+/* ============ 모던 인트로 ============ */
+const INTRO_LINES = [
+  '독서실. 형광등 불빛 아래, 한능검 문제집이 책상 위에 펼쳐져 있다.',
+  '"조선 전기…태조, 태종, 세종…" 몇 번을 읽어도 이름과 사건이 뒤섞인다.',
+  '눈꺼풀이 무거워진다. 시계는 새벽 1시를 가리키고 있었다.',
+  '"딱 5분만…" 책상에 엎드린 순간, 눈앞이 흐려진다.',
+  '— 그리고 눈을 떴을 때, 사방에서 흙먼지 냄새가 났다.'
+];
+let introIdx = 0;
+function renderIntro(){ document.getElementById('intro-text').textContent = INTRO_LINES[introIdx]; }
+function introNext(){
+  introIdx++;
+  if (introIdx >= INTRO_LINES.length){
+    const fade = document.getElementById('fade');
+    fade.classList.add('show');
+    setTimeout(() => {
+      document.getElementById('intro-overlay').classList.remove('show');
+      fade.classList.remove('show');
+    }, 600);
+    return;
+  }
+  renderIntro();
+}
+document.getElementById('intro-panel').addEventListener('click', introNext);
+renderIntro();
+
+/* ============ Phaser Scene ============ */
+class MainScene extends Phaser.Scene {
+  constructor(){ super('main'); }
+  preload(){
+    this.load.spritesheet('tiles', 'assets/tiles/tileset.png', { frameWidth: TS, frameHeight: TS });
+  }
+  create(){
+    const map = this.make.tilemap({ data: MAP, tileWidth: TS, tileHeight: TS });
+    const tileset = map.addTilesetImage('tiles', 'tiles', TS, TS, 0, 0);
+    this.layer = map.createLayer(0, tileset, 0, 0);
+
+    // NPC (역할별 실루엣: 문관=사각+각대, 평민=단순 사각)
+    this.npcSprites = {};
+    NPCS.forEach(n => {
+      const g = this.add.graphics();
+      drawFigure(g, n.color, 'scholar');
+      const key = 'npc_' + n.id;
+      g.generateTexture(key, 40, 56);
+      g.destroy();
+      const spr = this.add.image(n.tx*TS + TS/2, n.ty*TS + TS/2, key);
+      this.npcSprites[n.id] = spr;
+      const mark = this.add.text(n.tx*TS + TS/2, n.ty*TS + TS/2 - 44, '!', { fontSize: '22px', color: '#f0c96b', fontStyle: 'bold' });
+      mark.setOrigin(0.5); mark.setVisible(false);
+      spr.__mark = mark;
+    });
+
+    // 플레이어
+    const pg = this.add.graphics();
+    drawFigure(pg, 0xc94f4f, 'commoner');
+    pg.generateTexture('player', 40, 56);
+    pg.destroy();
+    this.player = this.add.image(9*TS, 12*TS, 'player');
+
+    this.cameras.main.startFollow(this.player, true, 0.15, 0.15);
+    this.cameras.main.setZoom(1);
+
+    window.__nearNpc = null;
+  }
+  update(time, dt){
+    if (Stage.paused || overlayOpen()){ return; }
+    let vx = Stick.dx, vy = Stick.dy;
+    if (Keys.l) vx -= 1;
+    if (Keys.r) vx += 1;
+    if (Keys.u) vy -= 1;
+    if (Keys.d) vy += 1;
+    const len = Math.hypot(vx, vy);
+    const speed = 220;
+    const dtS = Math.min(0.05, dt/1000);
+    if (len > 0.05){
+      vx/=len; vy/=len;
+      const nx = this.player.x + vx*speed*dtS;
+      const ny = this.player.y + vy*speed*dtS;
+      const pad = 12;
+      if (!isBarrier(Math.floor((nx-pad)/TS),Math.floor((this.player.y-pad)/TS)) &&
+          !isBarrier(Math.floor((nx+pad)/TS),Math.floor((this.player.y-pad)/TS)) &&
+          !isBarrier(Math.floor((nx-pad)/TS),Math.floor((this.player.y+pad)/TS)) &&
+          !isBarrier(Math.floor((nx+pad)/TS),Math.floor((this.player.y+pad)/TS))) this.player.x = nx;
+      if (!isBarrier(Math.floor((this.player.x-pad)/TS),Math.floor((ny-pad)/TS)) &&
+          !isBarrier(Math.floor((this.player.x+pad)/TS),Math.floor((ny-pad)/TS)) &&
+          !isBarrier(Math.floor((this.player.x-pad)/TS),Math.floor((ny+pad)/TS)) &&
+          !isBarrier(Math.floor((this.player.x+pad)/TS),Math.floor((ny+pad)/TS))) this.player.y = ny;
+    }
+    // 근접 NPC 판정
+    let found = null, best = TS*1.7;
+    NPCS.forEach(n => {
+      const spr = this.npcSprites[n.id];
+      const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, spr.x, spr.y);
+      spr.__mark.setVisible(false);
+      if (d < best){ best = d; found = n; }
+    });
+    if (found){ this.npcSprites[found.id].__mark.setVisible(true); }
+    if (found !== window.__nearNpc){
+      window.__nearNpc = found;
+      document.getElementById('act-btn').classList.toggle('show', !!found);
+    }
+  }
+}
+function drawFigure(g, color, role){
+  // 그림자
+  g.fillStyle(0x000000, 0.25);
+  g.fillEllipse(20, 50, 24, 8);
+  if (role === 'scholar'){
+    g.fillStyle(color, 1);
+    g.fillTriangle(15,20, 25,20, 30,44);
+    g.fillTriangle(15,20, 10,44, 30,44);
+    g.fillStyle(0xf1c79a, 1);
+    g.fillCircle(20, 14, 10);
+    g.fillStyle(0x1c1a16, 1);
+    g.fillEllipse(20, 7, 16, 8);
+  } else {
+    g.fillStyle(color, 1);
+    g.fillRect(11, 20, 18, 24);
+    g.fillStyle(0xf1c79a, 1);
+    g.fillCircle(20, 14, 10);
+  }
+  g.fillStyle(0x2b2015, 1);
+  g.fillCircle(17, 14, 1.6);
+  g.fillCircle(23, 14, 1.6);
+}
+
+const config = {
+  type: Phaser.AUTO,
+  parent: 'game-holder',
+  width: VW,
+  height: VH,
+  backgroundColor: '#bfa374',
+  scene: MainScene,
+  scale: { mode: Phaser.Scale.RESIZE }
+};
+window.__phaserGame = new Phaser.Game(config);
+</script>
+</body>
+</html>
