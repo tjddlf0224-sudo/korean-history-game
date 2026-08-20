@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>한국사 게임 - 1화 왕권의 기틀</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; background: #000; font-family: -apple-system, "Pretendard", "Malgun Gothic", sans-serif; }
+  #wrap { position: fixed; inset: 0; touch-action: none; }
+  #game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
+  #hud { position: absolute; top: calc(10px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left));
+    color: #f5f0e6; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.8); z-index: 5; }
+  #hud .sub { font-size: 11px; opacity: .75; margin-top: 2px; }
+
+  /* 조이스틱 */
+  #stick-zone { position: absolute; left: calc(18px + env(safe-area-inset-left)); bottom: calc(18px + env(safe-area-inset-bottom));
+    width: 130px; height: 130px; z-index: 6; touch-action: none; }
+  #stick-base { position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25); }
+  #stick-knob { position: absolute; width: 52px; height: 52px; left: 39px; top: 39px; border-radius: 50%; background: rgba(255,255,255,0.55); transition: transform .05s linear; }
+
+  /* 대화 버튼 */
+  #act-btn { position: absolute; right: calc(22px + env(safe-area-inset-right)); bottom: calc(34px + env(safe-area-inset-bottom));
+    width: 68px; height: 68px; border-radius: 50%; border: none; touch-action: none;
+    background: #d9a441; color: #2b1d0e; font-size: 26px; box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 6; }
+  #act-btn.show { opacity: 1; pointer-events: auto; }
+
+  /* 공통 오버레이 */
+  .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
+  .ov.show { display: flex; }
+  .ov.center { align-items: center; }
+
+  #dlg-panel, #quiz-panel, #intro-panel {
+    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #2b2015ee; border: 2px solid #c9a24a;
+    border-radius: 14px; padding: 16px 18px; color: #f5ecd8; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    max-height: 80%; overflow-y: auto;
+  }
+  .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-name { font-weight: bold; font-size: 15px; color: #f0c96b; }
+  .dlg-tag { font-size: 11px; opacity: .7; }
+  .dlg-box { font-size: 15px; line-height: 1.5; min-height: 54px; white-space: pre-wrap; }
+  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
+  .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
+  @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+
+  #intro-panel { max-width: 560px; text-align: center; }
+  #intro-text { font-size: 15px; line-height: 1.8; min-height: 90px; white-space: pre-wrap; }
+  #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
+
+  .quiz-tag { font-size: 12px; color: #f0c96b; margin-bottom: 6px; }
+  .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { padding: 12px 14px; border-radius: 10px; border: 1px solid #c9a24a; background: #3a2c1a; color: #f5ecd8;
+    font-size: 14px; text-align: left; }
+  .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
+  .quiz-opt.wrong { background: #5d2f2f; border-color: #bf5f5f; }
+  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #d8c9a3; min-height: 20px; }
+  .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
+  .quiz-next.show { opacity: .85; }
+
+  #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
+  #fade.show { opacity: 1; pointer-events: auto; }
+
+  #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
+    background: #000; color: #f0c96b; text-align: center; padding: 24px; }
+  #end-screen.show { display: flex; }
+  #end-screen h2 { font-size: 20px; margin-bottom: 10px; }
+  #end-screen p { color: #d8c9a3; font-size: 14px; line-height: 1.7; }
+  #end-score { color: #f0c96b; font-size: 15px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game"></canvas>
+
+  <div id="hud">
+    <div>1화 · 왕권의 기틀</div>
+    <div class="sub">1400년경, 궁궐 내전</div>
+  </div>
+
+  <div id="stick-zone">
+    <div id="stick-base"><div id="stick-knob"></div></div>
+  </div>
+  <button id="act-btn" onclick="Stage.interact()">💬</button>
+
+  <!-- 회상 인트로 -->
+  <div class="ov center show" id="intro-overlay">
+    <div id="intro-panel">
+      <div id="intro-text"></div>
+      <div id="intro-next">탭하여 계속 ▶</div>
+    </div>
+  </div>
+
+  <!-- 대화 -->
+  <div class="ov" id="dlg-overlay">
+    <div id="dlg-panel">
+      <div class="dlg-top">
+        <div class="dlg-portrait" id="dlg-portrait">👤</div>
+        <div>
+          <div class="dlg-tag" id="dlg-tag"></div>
+          <div class="dlg-name" id="dlg-name"></div>
+        </div>
+      </div>
+      <div class="dlg-box" id="dlg-text"></div>
+      <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+    </div>
+  </div>
+
+  <!-- 확인 퀴즈 / 보스전 -->
+  <div class="ov center" id="quiz-overlay">
+    <div id="quiz-panel">
+      <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
+      <div class="quiz-q" id="quiz-q"></div>
+      <div class="quiz-opts" id="quiz-opts"></div>
+      <div class="quiz-fb" id="quiz-fb"></div>
+      <div class="quiz-next" id="quiz-next">계속 <span class="arrow">▶</span></div>
+    </div>
+  </div>
+
+  <div id="fade"></div>
+
+  <div id="end-screen">
+    <div>
+      <h2>1화 · 끝</h2>
+      <p>태종: (창밖을 보며)<br>"…내가 모진 일을 많이 했다는 걸 아네. 형제도 처형도 가리지 않았지.<br>하지만 다음 왕만큼은, 이런 험한 일을 하지 않고도 나라를 다스릴 수 있게 만들어주고 싶었네."</p>
+      <div id="end-score"></div>
+      <p style="margin-top:18px; opacity:.7;">2화 「황금시대」에서 계속됩니다.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ 기본 설정 ============ */
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const TS = 40;
+const T = { WALL: 0, GROUND: 1, WOOD: 2, STONE: 3 };
+const WT = 22, HT = 18;
+
+function resize(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+/* ============ 맵: 궁궐 내전 ============ */
+function buildMap(){
+  const g = [];
+  for (let y = 0; y < HT; y++){ g[y] = new Uint8Array(WT); g[y].fill(T.GROUND); }
+  for (let x = 0; x < WT; x++){ g[0][x] = T.WALL; g[HT-1][x] = T.WALL; }
+  for (let y = 0; y < HT; y++){ g[y][0] = T.WALL; g[y][WT-1] = T.WALL; }
+  // 어전(왕이 있는 돌바닥 구역)
+  for (let y = 3; y < 9; y++) for (let x = 7; x < 15; x++) g[y][x] = T.STONE;
+  // 병장기고(목재 구역 — 사병 훈련장 흔적)
+  for (let y = 11; y < 15; y++) for (let x = 3; x < 8; x++) g[y][x] = T.WOOD;
+  return g;
+}
+const MAP = buildMap();
+function isBarrier(x, y){
+  if (x < 0 || y < 0 || x >= WT || y >= HT) return true;
+  if (MAP[Math.floor(y)][Math.floor(x)] === T.WALL) return true;
+  for (const n of NPCS){ if (Math.round(n.x) === Math.round(x) && Math.round(n.y) === Math.round(y)) return true; }
+  return false;
+}
+
+const TILE_COLOR = { [T.GROUND]: '#b7a487', [T.WALL]: '#3d3428', [T.WOOD]: '#96774f', [T.STONE]: '#8f867a' };
+function drawMap(camX, camY){
+  const x0 = Math.max(0, Math.floor(camX / TS));
+  const y0 = Math.max(0, Math.floor(camY / TS));
+  const x1 = Math.min(WT, Math.ceil((camX + canvas.width) / TS) + 1);
+  const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
+  for (let y = y0; y < y1; y++){
+    for (let x = x0; x < x1; x++){
+      ctx.fillStyle = TILE_COLOR[MAP[y][x]];
+      ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, TS+1);
+      if (MAP[y][x] === T.WALL){
+        ctx.fillStyle = 'rgba(0,0,0,.15)';
+        ctx.fillRect(x*TS - camX, y*TS - camY, TS+1, 6);
+      }
+    }
+  }
+}
+
+/* ============ NPC ============ */
+const NPCS = [
+  { id: 'taejong', name: '태종', x: 11, y: 5.5, color: '#8a2f2f', icon: '👑' },
+  { id: 'guard', name: '내금위 군사', x: 5.5, y: 13, color: '#4f5d75', icon: '🛡️' },
+];
+
+/* ============ 캐릭터 드로잉 ============ */
+function drawCharacter(px, py, color, facing){
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.fillStyle = 'rgba(0,0,0,.25)';
+  ctx.beginPath(); ctx.ellipse(0, 16, 12, 5, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = color;
+  ctx.fillRect(-9, -6, 18, 20);
+  ctx.fillStyle = '#f1c79a';
+  ctx.beginPath(); ctx.arc(0, -14, 10, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#2b2015';
+  const eo = facing === 'l' ? -2 : facing === 'r' ? 2 : 0;
+  ctx.beginPath(); ctx.arc(eo-3, -14, 1.4, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(eo+3, -14, 1.4, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+
+/* ============ 오버레이 상태 통합 체크 ============ */
+function overlayOpen(){
+  return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show');
+}
+
+/* ============ World: 이동/카메라/충돌 ============ */
+const World = {
+  px: 11, py: 12, facing: 'u', speed: 3.4,
+  stick: { active: false, dx: 0, dy: 0 },
+  keys: { l:false, r:false, u:false, d:false },
+  paused: false,
+  nearNpc: null,
+  lastT: 0,
+
+  canStand(x, y){
+    const pad = 0.3;
+    return !isBarrier(x-pad, y-pad) && !isBarrier(x+pad, y-pad) && !isBarrier(x-pad, y+pad) && !isBarrier(x+pad, y+pad);
+  },
+
+  update(dt){
+    if (this.paused || overlayOpen()) return;
+    let vx = this.stick.dx, vy = this.stick.dy;
+    if (this.keys.l) vx -= 1;
+    if (this.keys.r) vx += 1;
+    if (this.keys.u) vy -= 1;
+    if (this.keys.d) vy += 1;
+    const len = Math.hypot(vx, vy);
+    if (len > 0.05){
+      vx /= len; vy /= len;
+      if (Math.abs(vx) > Math.abs(vy)) this.facing = vx > 0 ? 'r' : 'l';
+      else this.facing = vy > 0 ? 'd' : 'u';
+      const nx = this.px + vx * this.speed * dt;
+      const ny = this.py + vy * this.speed * dt;
+      if (this.canStand(nx, this.py)) this.px = nx;
+      if (this.canStand(this.px, ny)) this.py = ny;
+    }
+    this.checkNpc();
+  },
+
+  checkNpc(){
+    let found = null, best = 1.7;
+    for (const n of NPCS){
+      const d = Math.hypot(n.x - this.px, n.y - this.py);
+      if (d < best){ best = d; found = n; }
+    }
+    if (found !== this.nearNpc){
+      this.nearNpc = found;
+      const btn = document.getElementById('act-btn');
+      if (found) btn.classList.add('show'); else btn.classList.remove('show');
+    }
+  },
+
+  render(){
+    const camX = this.px*TS - canvas.width/2;
+    const camY = this.py*TS - canvas.height/2;
+    ctx.fillStyle = '#b7a487';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawMap(camX, camY);
+    for (const n of NPCS){
+      drawCharacter(n.x*TS - camX, n.y*TS - camY, n.color, 'd');
+      if (n === this.nearNpc){
+        ctx.fillStyle = '#f0c96b';
+        ctx.font = '16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('!', n.x*TS - camX, n.y*TS - camY - 34);
+      }
+    }
+    drawCharacter(this.px*TS - camX, this.py*TS - camY, '#c94f4f', this.facing);
+  }
+};
+
+/* 조이스틱 입력 (Pointer Events 통일) */
+(function bindStick(){
+  const zone = document.getElementById('stick-zone');
+  const knob = document.getElementById('stick-knob');
+  let activeId = null, cx = 0, cy = 0;
+  const R = 44;
+  zone.addEventListener('pointerdown', e=>{
+    if (activeId !== null) return;
+    activeId = e.pointerId;
+    zone.setPointerCapture(activeId);
+    const r = zone.getBoundingClientRect();
+    cx = r.left + r.width/2; cy = r.top + r.height/2;
+    World.stick.active = true;
+    move(e);
+  });
+  zone.addEventListener('pointermove', move);
+  zone.addEventListener('pointerup', end);
+  zone.addEventListener('pointercancel', end);
+  function move(e){
+    if (e.pointerId !== activeId) return;
+    let dx = e.clientX - cx, dy = e.clientY - cy;
+    const d = Math.hypot(dx, dy);
+    if (d > R){ dx = dx/d*R; dy = dy/d*R; }
+    knob.style.transform = `translate(${dx}px,${dy}px)`;
+    World.stick.dx = dx / R; World.stick.dy = dy / R;
+  }
+  function end(e){
+    if (e.pointerId !== activeId) return;
+    activeId = null;
+    World.stick.active = false; World.stick.dx = 0; World.stick.dy = 0;
+    knob.style.transform = 'translate(0,0)';
+  }
+})();
+
+/* 키보드 입력 */
+window.addEventListener('keydown', e=>{
+  if (e.key === ' ' || e.key === 'Enter'){
+    e.preventDefault();
+    if (document.getElementById('intro-overlay').classList.contains('show')) { introNext(); return; }
+    if (document.getElementById('dlg-overlay').classList.contains('show')) { Dialog.next(); return; }
+    if (document.getElementById('quiz-overlay').classList.contains('show')) { Quiz.confirmIfReady(); return; }
+    Stage.interact();
+    return;
+  }
+  if (overlayOpen()) return;
+  if (['ArrowLeft','a','A'].includes(e.key)) World.keys.l = true;
+  if (['ArrowRight','d','D'].includes(e.key)) World.keys.r = true;
+  if (['ArrowUp','w','W'].includes(e.key)) World.keys.u = true;
+  if (['ArrowDown','s','S'].includes(e.key)) World.keys.d = true;
+});
+window.addEventListener('keyup', e=>{
+  if (['ArrowLeft','a','A'].includes(e.key)) World.keys.l = false;
+  if (['ArrowRight','d','D'].includes(e.key)) World.keys.r = false;
+  if (['ArrowUp','w','W'].includes(e.key)) World.keys.u = false;
+  if (['ArrowDown','s','S'].includes(e.key)) World.keys.d = false;
+});
+
+/* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
+const NPC_DATA = {
+  taejong_0: {
+    name: '태종', icon: '👑',
+    beats: [
+      { who:'npc', t:'오랜만이군. 정도전 밑에서 얼쩡거리던 그자로군, 기억하네.' },
+      { who:'npc', t:'내가 왕자 시절 사병을 거느렸던 것도, 결국 그 힘이 얼마나 위험한지 몸소 겪었기 때문일세.' },
+      { who:'npc', t:'그래서 즉위하자마자 제일 먼저 한 일이 뭔지 아나? 나부터 포함해서, 모든 종친과 공신의 사병을 없앤 것이었네.' },
+      { who:'npc', t:'권근을 비롯한 신하들이 진작부터 이걸 건의해왔지. 자, 그럼 하나 물어봄세.' },
+    ],
+    quiz: {
+      q: '태종이 왕권을 안정시키기 위해 실제로 시행한 정책은?',
+      opts: ['종친과 공신이 거느리던 사병을 모두 없앴다', '지방에 유향소를 새로 설치했다'],
+      answer: 0,
+      feedback: ['유향소는 훗날 성종 대에 다시 설치되는 지방 자치 기구예요. 이때 이야기는 아니에요.', '정답! 왕권을 위협할 수 있는 사병을 혁파해 군사력을 국가(왕)에게 집중시켰습니다.']
+    }
+  },
+  taejong_1: {
+    name: '태종', icon: '👑',
+    beats: [
+      { who:'npc', t:'지금까지는 육조가 의정부를 거쳐야만 내게 보고할 수 있었네. 그러다 보니 결정이 늦고, 재상들 손에 권한이 몰렸지.' },
+      { who:'npc', t:'이제 육조가 나에게 직접 보고하도록 바꿀 것이야. 그리고 하나 더 — 문하부도 손을 봤네.' },
+    ],
+    quiz: {
+      q: '태종이 문하부를 폐지하면서, 그 낭사(郎舍)를 독립시켜 만든 언론 기구는?',
+      opts: ['사간원', '홍문관'],
+      answer: 0,
+      feedback: ['홍문관은 훗날 성종 대에 옛 집현전의 기능을 이어받아 만들어지는 기구예요.', '정답! 문하부의 낭사를 독립시켜 사간원을 만들고, 왕에게 직언하는 역할을 맡겼습니다.']
+    }
+  },
+  taejong_2: {
+    name: '태종', icon: '👑',
+    beats: [
+      { who:'npc', t:'…내가 이렇게까지 왕권을 다잡아 놓은 이유가 뭐라고 생각하나?' },
+      { who:'npc', t:'다음 왕에게는, 이런 험한 일 없이도 마음껏 학문과 정치를 펼칠 수 있는 나라를 물려주고 싶어서였네.' },
+      { who:'npc', t:'그 아이 이름이 무엇이었더라… 그래, 충녕대군. 곧 왕위에 오를 걸세. 자네도 한번 겪어보게 — 내가 만든 이 시대의 기틀을.' },
+    ],
+    quiz: null,
+    startsBoss: true
+  },
+  guard_0: {
+    name: '내금위 군사', icon: '🛡️',
+    beats: [
+      { who:'npc', t:'예전엔 여기서 왕자님들의 사병들이 훈련을 하곤 했었지. 지금은 다 흩어졌지만.' },
+    ],
+    quiz: null
+  }
+};
+
+const BOSS_QUESTIONS = [
+  {
+    q: '정몽주가 죽고 조선이 세워진 뒤, 태종이 왕권 강화를 위해 시행한 정책으로 옳은 것은?',
+    opts: ['종친과 공신의 사병을 모두 혁파했다', '수령을 감찰하는 암행어사를 처음 파견했다'],
+    answer: 0,
+    feedback: ['암행어사는 훨씬 후대의 제도예요.', '정답! 사병 혁파가 태종 왕권 강화의 핵심 정책이었습니다.']
+  },
+  {
+    q: '태종이 문하부를 폐지하며 독립시킨 언론 기구는?',
+    opts: ['사간원', '의금부'],
+    answer: 0,
+    feedback: ['의금부는 국왕 직속의 사법 기구로, 이때 만들어진 언론 기구가 아니에요.', '정답! 사간원이 문하부 낭사에서 독립해 만들어졌습니다.']
+  },
+  {
+    q: '태종이 왕권을 위협할 수 있다고 본 외척(민무구·민무질 형제)에게 내린 처분은?',
+    opts: ['자결을 명했다', '유향소로 유배 보냈다'],
+    answer: 0,
+    feedback: ['유향소는 처벌 기구가 아니라 지방 자치 기구예요.', '정답! 외척 세력까지도 가차없이 숙청하며 왕권을 다졌습니다.']
+  },
+  {
+    q: '태종 대에 있었던 통치 제도 변화로 옳은 것은?',
+    opts: ['6조가 의정부를 거치지 않고 왕에게 직접 보고하게 했다', '경국대전을 완성해 반포했다'],
+    answer: 0,
+    feedback: ['경국대전 완성·반포는 훗날 성종 대의 일이에요.', '정답! 육조직계제로 왕이 6조를 직접 통솔하도록 바꿨습니다.']
+  }
+];
+
+const Stage = {
+  state: { talkStage: 0 },
+  interact(){
+    if (overlayOpen()) return;
+    const n = World.nearNpc;
+    if (!n) return;
+    if (n.id === 'taejong'){
+      const key = 'taejong_' + Math.min(Stage.state.talkStage, 2);
+      Dialog.open(key, n);
+    } else if (n.id === 'guard'){
+      Dialog.open('guard_0', n);
+    }
+  }
+};
+
+/* ============ Dialog 엔진 ============ */
+const Dialog = {
+  key: null, npc: null, idx: 0, data: null,
+  open(key, npc){
+    this.key = key; this.npc = npc; this.idx = 0;
+    this.data = NPC_DATA[key];
+    World.paused = true;
+    document.getElementById('dlg-overlay').classList.add('show');
+    document.getElementById('dlg-name').textContent = this.data.name;
+    document.getElementById('dlg-tag').textContent = '1400년경 · 한양';
+    document.getElementById('dlg-portrait').textContent = this.data.icon;
+    this.render();
+  },
+  render(){
+    document.getElementById('dlg-text').textContent = this.data.beats[this.idx].t;
+  },
+  next(){
+    this.idx++;
+    if (this.idx >= this.data.beats.length){ this.finish(); return; }
+    this.render();
+  },
+  finish(){
+    document.getElementById('dlg-overlay').classList.remove('show');
+    if (this.data.quiz){
+      Quiz.open(this.data.quiz, () => this.afterQuiz());
+    } else {
+      this.afterQuiz();
+    }
+  },
+  afterQuiz(){
+    if (this.data.startsBoss){
+      Quiz.openSequence(BOSS_QUESTIONS, (score, total) => Stage.finishBoss(score, total));
+      return; // World.paused 유지 — 보스전도 오버레이라 어차피 막히지만 명시적으로 유지
+    }
+    World.paused = false;
+    if (this.npc.id === 'taejong'){
+      Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 2);
+    }
+  }
+};
+document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
+
+/* ============ Quiz 엔진 (단일 확인퀴즈 + 보스전 연속퀴즈 공용) ============ */
+const Quiz = {
+  data: null, onDone: null, answered: false, optButtons: [],
+  seq: null, seqIdx: 0, seqScore: 0, seqOnDone: null,
+
+  open(data, onDone){
+    this.seq = null;
+    this._openOne(data, onDone);
+  },
+  openSequence(list, onAllDone){
+    this.seq = list; this.seqIdx = 0; this.seqScore = 0; this.seqOnDone = onAllDone;
+    this._openOne(this.seq[0], () => this._seqAdvance());
+  },
+  _seqAdvance(){
+    this.seqIdx++;
+    if (this.seqIdx >= this.seq.length){
+      const score = this.seqScore, total = this.seq.length;
+      this.seq = null;
+      this.seqOnDone && this.seqOnDone(score, total);
+      return;
+    }
+    this._openOne(this.seq[this.seqIdx], () => this._seqAdvance());
+  },
+  _openOne(data, onDone){
+    this.data = data; this.onDone = onDone; this.answered = false;
+    document.getElementById('quiz-overlay').classList.add('show');
+    document.getElementById('quiz-tag').textContent = this.seq ? `보스전 · ${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
+    document.getElementById('quiz-q').textContent = data.q;
+    document.getElementById('quiz-fb').textContent = '';
+    document.getElementById('quiz-next').classList.remove('show');
+    const opts = document.getElementById('quiz-opts');
+    opts.innerHTML = '';
+    this.optButtons = data.opts.map((text, i) => {
+      const b = document.createElement('button');
+      b.className = 'quiz-opt';
+      b.textContent = (i+1) + '. ' + text;
+      b.onclick = () => this.pick(i);
+      opts.appendChild(b);
+      return b;
+    });
+  },
+  pick(i){
+    if (this.answered) return;
+    this.answered = true;
+    const correct = i === this.data.answer;
+    if (correct && this.seq) this.seqScore++;
+    this.optButtons[i].classList.add(correct ? 'correct' : 'wrong');
+    if (!correct) this.optButtons[this.data.answer].classList.add('correct');
+    document.getElementById('quiz-fb').textContent = this.data.feedback[i];
+    const next = document.getElementById('quiz-next');
+    next.classList.add('show');
+    next.onclick = () => this.confirmIfReady();
+  },
+  confirmIfReady(){
+    if (!this.answered) return;
+    document.getElementById('quiz-overlay').classList.remove('show');
+    this.onDone && this.onDone();
+  }
+};
+
+/* ============ 회상 인트로 ============ */
+const INTRO_LINES = [
+  '정도전이 마지막으로 남긴 말이 귓가에 맴돈다. "이방원 나리가 부쩍 날 찾아오시더군…"',
+  '그날 밤, 정도전은 목숨을 잃었다. 세자 자리를 두고 이복형제들과 대립하던 이방원이, 자신을 세자에서 밀어낸 이들을 먼저 친 것이다.',
+  '몇 년의 시간이 빠르게 흘러간다.',
+  '눈을 뜨자 낯익은 궁궐이 보인다. 하지만 왕좌엔 이제 다른 사람이 앉아 있었다 — 이방원, 태종.'
+];
+let introIdx = 0;
+function renderIntro(){ document.getElementById('intro-text').textContent = INTRO_LINES[introIdx]; }
+function introNext(){
+  introIdx++;
+  if (introIdx >= INTRO_LINES.length){
+    const fade = document.getElementById('fade');
+    fade.classList.add('show');
+    setTimeout(() => {
+      document.getElementById('intro-overlay').classList.remove('show');
+      fade.classList.remove('show');
+    }, 600);
+    return;
+  }
+  renderIntro();
+}
+document.getElementById('intro-panel').addEventListener('click', introNext);
+renderIntro();
+
+/* ============ 챕터 종료 ============ */
+Stage.finishBoss = function(score, total){
+  document.getElementById('end-score').textContent = `보스전 결과: ${score} / ${total} 정답`;
+  Stage.endChapter();
+};
+Stage.endChapter = function(){
+  document.getElementById('end-screen').classList.add('show');
+};
+
+/* ============ 메인 루프 ============ */
+function loop(t){
+  if (!World.lastT) World.lastT = t;
+  const dt = Math.min(0.05, (t - World.lastT) / 1000);
+  World.lastT = t;
+  World.update(dt);
+  World.render();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
