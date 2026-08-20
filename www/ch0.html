@@ -184,31 +184,84 @@ function drawMap(camX, camY){
   }
 }
 
-/* ============ NPC ============ */
+/* ============ NPC ============
+   look.role로 실루엣이 달라짐: king(왕)/general(무관)/scholar(문관)/commoner(평민) */
 const NPCS = [
-  { id: 'jeongdojeon', name: '정도전', x: 7.5, y: 6, color: '#4a5fbf', icon: '📜' },
-  { id: 'worker', name: '인부', x: 17, y: 14, color: '#8a6d3b', icon: '🧱' },
+  { id: 'jeongdojeon', name: '정도전', x: 7.5, y: 6, look: { role: 'scholar', body: '#38507a', accent: '#c9a24a' } },
+  { id: 'worker', name: '인부', x: 17, y: 14, look: { role: 'commoner', body: '#8a6d3b', accent: '#c9a24a', headband: true } },
 ];
+const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
-/* ============ 캐릭터 드로잉 ============ */
-function drawCharacter(px, py, color, facing){
-  const cx = px, cy = py;
+/* ============ 캐릭터 드로잉 (역할별 실루엣) ============ */
+function drawCharacter(px, py, facing, look){
+  const role = (look && look.role) || 'commoner';
+  const body = (look && look.body) || '#8a6d3b';
+  const accent = (look && look.accent) || '#c9a24a';
+  const eo = facing === 'l' ? -2 : facing === 'r' ? 2 : 0;
   ctx.save();
-  ctx.translate(cx, cy);
+  ctx.translate(px, py);
   // 그림자
   ctx.fillStyle = 'rgba(0,0,0,.25)';
   ctx.beginPath(); ctx.ellipse(0, 16, 12, 5, 0, 0, Math.PI*2); ctx.fill();
-  // 몸
-  ctx.fillStyle = color;
-  ctx.fillRect(-9, -6, 18, 20);
-  // 머리
-  ctx.fillStyle = '#f1c79a';
-  ctx.beginPath(); ctx.arc(0, -14, 10, 0, Math.PI*2); ctx.fill();
-  // 눈(방향 표시용 살짝)
+
+  if (role === 'king'){
+    ctx.fillStyle = body;
+    ctx.beginPath();
+    ctx.moveTo(-6,-8); ctx.lineTo(6,-8); ctx.lineTo(13,14); ctx.lineTo(-13,14); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = accent; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-6,-8); ctx.lineTo(0,3); ctx.lineTo(6,-8); ctx.stroke();
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#1c1a16';
+    ctx.beginPath(); ctx.ellipse(0,-21,9,5,0,Math.PI,0); ctx.fill();
+    ctx.fillRect(-9,-22,18,4);
+    ctx.beginPath(); ctx.ellipse(-12,-17,5,2,-0.4,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(12,-17,5,2,0.4,0,Math.PI*2); ctx.fill();
+  } else if (role === 'general'){
+    ctx.fillStyle = body;
+    ctx.fillRect(-9,-6,18,20);
+    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1;
+    for (let i=-3;i<=11;i+=4){ ctx.beginPath(); ctx.moveTo(-9,i); ctx.lineTo(9,i); ctx.stroke(); }
+    ctx.fillStyle = accent;
+    ctx.fillRect(-12,-7,6,6); ctx.fillRect(6,-7,6,6);
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#565a5e';
+    ctx.beginPath(); ctx.arc(0,-16,10,Math.PI,0); ctx.fill();
+    ctx.fillRect(-10,-16,20,4);
+    ctx.fillStyle = accent;
+    ctx.beginPath(); ctx.moveTo(0,-27); ctx.lineTo(-2,-32); ctx.lineTo(2,-32); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#6b5636'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(13,-18); ctx.lineTo(13,14); ctx.stroke();
+  } else if (role === 'scholar'){
+    ctx.fillStyle = body;
+    ctx.beginPath();
+    ctx.moveTo(-5,-8); ctx.lineTo(5,-8); ctx.lineTo(10,14); ctx.lineTo(-10,14); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = accent;
+    ctx.fillRect(-10,4,20,3);
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#1c1a16';
+    ctx.beginPath(); ctx.ellipse(0,-21,8,5,0,Math.PI,0); ctx.fill();
+    ctx.fillRect(-8,-22,16,4);
+    ctx.fillRect(-14,-19,6,2);
+    ctx.fillRect(8,-19,6,2);
+  } else {
+    ctx.fillStyle = body;
+    ctx.fillRect(-9,-6,18,20);
+    ctx.strokeStyle = accent; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-9,-6); ctx.lineTo(0,2); ctx.lineTo(9,-6); ctx.stroke();
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    if (look && look.headband){
+      ctx.fillStyle = accent;
+      ctx.fillRect(-10,-18,20,3);
+    }
+  }
+
   ctx.fillStyle = '#2b2015';
-  const eo = facing === 'l' ? -2 : facing === 'r' ? 2 : 0;
-  ctx.beginPath(); ctx.arc(eo-3, -14, 1.4, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(eo+3, -14, 1.4, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(eo-3,-14,1.4,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(eo+3,-14,1.4,0,Math.PI*2); ctx.fill();
   ctx.restore();
 }
 
@@ -276,7 +329,7 @@ const World = {
     drawMap(camX, camY);
     // NPC
     for (const n of NPCS){
-      drawCharacter(n.x*TS - camX, n.y*TS - camY, n.color, 'd');
+      drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
       if (n === this.nearNpc){
         ctx.fillStyle = '#f0c96b';
         ctx.font = '16px sans-serif';
@@ -285,7 +338,7 @@ const World = {
       }
     }
     // 플레이어
-    drawCharacter(this.px*TS - camX, this.py*TS - camY, '#c94f4f', this.facing);
+    drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
   }
 };
 
