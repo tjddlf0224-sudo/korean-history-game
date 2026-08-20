@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>한국사 게임 - 근대개항기 2화 군인들의 함성</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; background: #000; font-family: -apple-system, "Pretendard", "Malgun Gothic", sans-serif; }
+  #wrap { position: fixed; top: 0; left: 0; touch-action: none; transform-origin: top left; }
+  body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
+  #game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+  #hud { position: absolute; top: calc(10px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left));
+    color: #f5f0e6; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.8); z-index: 5; }
+  #hud .sub { font-size: 11px; opacity: .75; margin-top: 2px; }
+  #stick-zone { position: absolute; left: calc(18px + env(safe-area-inset-left)); bottom: calc(18px + env(safe-area-inset-bottom));
+    width: 130px; height: 130px; z-index: 6; touch-action: none; }
+  #stick-base { position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25); }
+  #stick-knob { position: absolute; width: 52px; height: 52px; left: 39px; top: 39px; border-radius: 50%; background: rgba(255,255,255,0.55); transition: transform .05s linear; }
+  #act-btn { position: absolute; right: calc(22px + env(safe-area-inset-right)); bottom: calc(34px + env(safe-area-inset-bottom));
+    width: 68px; height: 68px; border-radius: 50%; border: none; touch-action: none;
+    background: #d9a441; color: #2b1d0e; box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 6; }
+  #act-btn.show { opacity: 1; pointer-events: auto; }
+  .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
+  .ov.show { display: flex; }
+  .ov.center { align-items: center; }
+  #intro-overlay { background: #180f0d; }
+  #dlg-panel, #intro-panel {
+    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241612ee; border: 2px solid #a85c2f;
+    border-radius: 14px; padding: 16px 18px; color: #f0e0d8; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    max-height: 80%; overflow-y: auto;
+  }
+  .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #5a3a2a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-name { font-weight: bold; font-size: 15px; color: #e0954a; }
+  .dlg-tag { font-size: 11px; opacity: .7; }
+  .dlg-box { font-size: 15px; line-height: 1.5; min-height: 54px; white-space: pre-wrap; }
+  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
+  .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
+  @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+  #intro-panel { max-width: 560px; text-align: center; }
+  #intro-text { font-size: 15px; line-height: 1.8; min-height: 90px; white-space: pre-wrap; }
+  #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
+  #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
+  #fade.show { opacity: 1; pointer-events: auto; }
+  #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
+    background: #000; color: #e0954a; text-align: center; padding: 24px; }
+  #end-screen.show { display: flex; }
+  #end-screen h2 { font-size: 20px; margin-bottom: 10px; }
+  #end-screen p { color: #d8c3b3; font-size: 14px; line-height: 1.7; }
+  #end-screen a { display: inline-block; margin: 10px 8px 0; color: #1a1408; background: #e0954a; text-decoration: none;
+    padding: 10px 22px; border-radius: 999px; font-size: 14px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game"></canvas>
+  <div id="hud">
+    <div>근대·개항기 2화 · 군인들의 함성</div>
+    <div class="sub">1882년, 무위영 병영 · 창덕궁</div>
+  </div>
+  <div id="stick-zone"><div id="stick-base"><div id="stick-knob"></div></div></div>
+  <button id="act-btn" onclick="Stage.interact()">
+    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v9c0 .83-.67 1.5-1.5 1.5H9.8l-3.9 3.4c-.5.44-1.27.08-1.27-.58V16h-.13C3.67 16 3 15.33 3 14.5v-9C3 4.67 3.67 4 4.5 4"
+        stroke="#2b1d0e" stroke-width="1.6" stroke-linejoin="round" fill="#2b1d0e" fill-opacity="0.06"/>
+      <circle cx="8.3" cy="9.8" r="1.15" fill="#2b1d0e"/><circle cx="12" cy="9.8" r="1.15" fill="#2b1d0e"/><circle cx="15.7" cy="9.8" r="1.15" fill="#2b1d0e"/>
+    </svg>
+  </button>
+  <div class="ov center show" id="intro-overlay">
+    <div id="intro-panel"><div id="intro-text"></div><div id="intro-next">탭하여 계속 ▶</div></div>
+  </div>
+  <div class="ov" id="dlg-overlay">
+    <div id="dlg-panel">
+      <div class="dlg-top">
+        <div class="dlg-portrait" id="dlg-portrait">👤</div>
+        <div><div class="dlg-tag" id="dlg-tag"></div><div class="dlg-name" id="dlg-name"></div></div>
+      </div>
+      <div class="dlg-box" id="dlg-text"></div>
+      <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+    </div>
+  </div>
+  <div id="fade"></div>
+  <div id="end-screen">
+    <div>
+      <h2>군인들의 함성 — 끝</h2>
+      <p>급료 열세 달이 밀린 구식 군인들의 분노가 도성을 뒤흔들었다.<br>흥선대원군이 다시 나섰지만, 청나라 군대가 그를 끌고 가며 사태를 정리했다.</p>
+      <p style="margin-top:14px; opacity:.75;">이날 이후 청의 내정간섭이 본격화된다 — 이에 반발하는 급진개화파의 움직임이 다음 이야기다.</p>
+      <a href="gaehang_ch3.html">다음 화로(3화)</a><a href="index.html">챕터 목록</a>
+    </div>
+  </div>
+</div>
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const TS = 40;
+const T = { WALL: 0, GROUND: 1, WOOD: 2, STONE: 3 };
+const WT = 22, HT = 16;
+const wrapEl = document.getElementById('wrap');
+function applyOrientation(){
+  const iw = window.innerWidth, ih = window.innerHeight;
+  const portrait = ih > iw;
+  document.body.classList.toggle('rot', portrait);
+  const w = portrait ? ih : iw, h = portrait ? iw : ih;
+  wrapEl.style.width = w + 'px'; wrapEl.style.height = h + 'px';
+  canvas.width = w; canvas.height = h;
+}
+window.addEventListener('resize', applyOrientation);
+window.addEventListener('orientationchange', applyOrientation);
+applyOrientation();
+
+function buildMap(){
+  const g = [];
+  for (let y = 0; y < HT; y++){ g[y] = new Uint8Array(WT); g[y].fill(T.GROUND); }
+  for (let x = 0; x < WT; x++){ g[0][x] = T.WALL; g[HT-1][x] = T.WALL; }
+  for (let y = 0; y < HT; y++){ g[y][0] = T.WALL; g[y][WT-1] = T.WALL; }
+  for (let y = 5; y < 11; y++) for (let x = 6; x < 16; x++) g[y][x] = T.WOOD; // 병영 마루
+  return g;
+}
+const MAP = buildMap();
+function isBarrier(x, y){
+  if (x < 0 || y < 0 || x >= WT || y >= HT) return true;
+  if (MAP[Math.floor(y)][Math.floor(x)] === T.WALL) return true;
+  for (const n of NPCS){ if (Math.round(n.x) === Math.round(x) && Math.round(n.y) === Math.round(y)) return true; }
+  return false;
+}
+const TILE_COLOR = { [T.GROUND]: '#8a7462', [T.WALL]: '#241a16', [T.WOOD]: '#5c4530', [T.STONE]: '#8c8676' };
+function hash2(x, y, seed){
+  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
+  h = (h ^ (h >>> 13)) >>> 0; h = Math.imul(h, 1274126177); h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967295;
+}
+function shadeColor(hex, amt){
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
+  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
+  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
+  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
+  return `rgb(${r|0},${g|0},${b|0})`;
+}
+function drawTile(t, tx, ty, px, py){
+  const base = TILE_COLOR[t];
+  ctx.fillStyle = base; ctx.fillRect(px, py, TS+1, TS+1);
+  if (t === T.GROUND){
+    for (let i=0;i<4;i++){
+      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
+      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
+      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (t === T.WOOD){
+    for (let i=0;i<3;i++){
+      const n = hash2(tx*3+i, ty, 6);
+      ctx.fillStyle = shadeColor(base, (n-0.5)*0.25);
+      ctx.fillRect(px + i*(TS/3), py, TS/3 - 1, TS+1);
+    }
+  } else if (t === T.WALL){
+    ctx.fillStyle = shadeColor(base, -0.1); ctx.fillRect(px, py, TS+1, TS+1);
+    ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(px, py, TS+1, 6);
+  }
+}
+function drawMap(camX, camY){
+  const x0 = Math.max(0, Math.floor(camX / TS)), y0 = Math.max(0, Math.floor(camY / TS));
+  const x1 = Math.min(WT, Math.ceil((camX + canvas.width) / TS) + 1), y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
+  for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
+}
+
+const NPCS = [
+  { id: 'daewongun', name: '흥선대원군', x: 11, y: 8, look: { role: 'king', body: '#3a2a1e', accent: '#e0954a' } },
+  { id: 'soldier', name: '무위영 병사', x: 9, y: 10, look: { role: 'general', body: '#5a4a3a', accent: '#8c8676', headband:true } },
+];
+const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
+
+function drawCharacter(px, py, facing, look){
+  const role = (look && look.role) || 'commoner';
+  const body = (look && look.body) || '#8a6d3b', accent = (look && look.accent) || '#c9a24a';
+  const eo = facing === 'l' ? -2 : facing === 'r' ? 2 : 0;
+  ctx.save(); ctx.translate(px, py);
+  ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(0, 16, 12, 5, 0, 0, Math.PI*2); ctx.fill();
+  if (role === 'king'){
+    ctx.fillStyle = body;
+    ctx.beginPath(); ctx.moveTo(-6,-8); ctx.lineTo(6,-8); ctx.lineTo(13,14); ctx.lineTo(-13,14); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = accent; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-6,-8); ctx.lineTo(0,3); ctx.lineTo(6,-8); ctx.stroke();
+    ctx.fillStyle = '#f1c79a'; ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#1c1a16'; ctx.beginPath(); ctx.ellipse(0,-21,9,5,0,Math.PI,0); ctx.fill();
+    ctx.fillRect(-9,-22,18,4);
+  } else if (role === 'general'){
+    ctx.fillStyle = body; ctx.fillRect(-9,-6,18,20);
+    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1;
+    for (let i=-3;i<=11;i+=4){ ctx.beginPath(); ctx.moveTo(-9,i); ctx.lineTo(9,i); ctx.stroke(); }
+    ctx.fillStyle = '#f1c79a'; ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    if (look.headband){ ctx.fillStyle = accent; ctx.fillRect(-10,-18,20,3); }
+  } else {
+    ctx.fillStyle = body; ctx.fillRect(-9,-6,18,20);
+    ctx.strokeStyle = accent; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-9,-6); ctx.lineTo(0,2); ctx.lineTo(9,-6); ctx.stroke();
+    ctx.fillStyle = '#f1c79a'; ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+  }
+  ctx.fillStyle = '#2b2015';
+  ctx.beginPath(); ctx.arc(eo-3,-14,1.4,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(eo+3,-14,1.4,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+function overlayOpen(){ return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show'); }
+const World = {
+  px: 10, py: 9, facing: 'u', speed: 3.4,
+  stick: { active: false, dx: 0, dy: 0 }, keys: { l:false, r:false, u:false, d:false }, paused: false, nearNpc: null, lastT: 0,
+  canStand(x, y){ const pad = 0.3; return !isBarrier(x-pad, y-pad) && !isBarrier(x+pad, y-pad) && !isBarrier(x-pad, y+pad) && !isBarrier(x+pad, y+pad); },
+  update(dt){
+    if (this.paused || overlayOpen()) return;
+    let vx = this.stick.dx, vy = this.stick.dy;
+    if (this.keys.l) vx -= 1; if (this.keys.r) vx += 1; if (this.keys.u) vy -= 1; if (this.keys.d) vy += 1;
+    const len = Math.hypot(vx, vy);
+    if (len > 0.05){
+      vx /= len; vy /= len;
+      if (Math.abs(vx) > Math.abs(vy)) this.facing = vx > 0 ? 'r' : 'l'; else this.facing = vy > 0 ? 'd' : 'u';
+      const nx = this.px + vx * this.speed * dt, ny = this.py + vy * this.speed * dt;
+      if (this.canStand(nx, this.py)) this.px = nx;
+      if (this.canStand(this.px, ny)) this.py = ny;
+    }
+    this.checkNpc();
+  },
+  checkNpc(){
+    let found = null, best = 1.7;
+    for (const n of NPCS){ const d = Math.hypot(n.x - this.px, n.y - this.py); if (d < best){ best = d; found = n; } }
+    if (found !== this.nearNpc){ this.nearNpc = found; document.getElementById('act-btn').classList.toggle('show', !!found); }
+  },
+  render(){
+    const camX = this.px*TS - canvas.width/2, camY = this.py*TS - canvas.height/2;
+    ctx.fillStyle = '#241a16'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawMap(camX, camY);
+    for (const n of NPCS){
+      drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
+      if (n === this.nearNpc){ ctx.fillStyle = '#e0954a'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('!', n.x*TS - camX, n.y*TS - camY - 34); }
+    }
+    drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
+    const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.4)');
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+};
+(function bindStick(){
+  const zone = document.getElementById('stick-zone'), knob = document.getElementById('stick-knob');
+  let activeId = null, cx = 0, cy = 0; const R = 44;
+  zone.addEventListener('pointerdown', e=>{
+    if (activeId !== null) return; activeId = e.pointerId;
+    try { zone.setPointerCapture(activeId); } catch(err) {}
+    const r = zone.getBoundingClientRect(); cx = r.left + r.width/2; cy = r.top + r.height/2;
+    World.stick.active = true; move(e);
+  });
+  zone.addEventListener('pointermove', move); zone.addEventListener('pointerup', end); zone.addEventListener('pointercancel', end);
+  function move(e){
+    if (e.pointerId !== activeId) return;
+    let dx = e.clientX - cx, dy = e.clientY - cy; const d = Math.hypot(dx, dy);
+    if (d > R){ dx = dx/d*R; dy = dy/d*R; }
+    knob.style.transform = `translate(${dx}px,${dy}px)`;
+    let wx = dx, wy = dy; if (document.body.classList.contains('rot')){ wx = dy; wy = -dx; }
+    World.stick.dx = wx / R; World.stick.dy = wy / R;
+  }
+  function end(e){ if (e.pointerId !== activeId) return; activeId = null; World.stick.active = false; World.stick.dx = 0; World.stick.dy = 0; knob.style.transform = 'translate(0,0)'; }
+})();
+window.addEventListener('keydown', e=>{
+  if (e.key === ' ' || e.key === 'Enter'){
+    e.preventDefault();
+    if (document.getElementById('intro-overlay').classList.contains('show')) { introNext(); return; }
+    if (document.getElementById('dlg-overlay').classList.contains('show')) { Dialog.next(); return; }
+    Stage.interact(); return;
+  }
+  if (overlayOpen()) return;
+  if (['ArrowLeft','a','A'].includes(e.key)) World.keys.l = true;
+  if (['ArrowRight','d','D'].includes(e.key)) World.keys.r = true;
+  if (['ArrowUp','w','W'].includes(e.key)) World.keys.u = true;
+  if (['ArrowDown','s','S'].includes(e.key)) World.keys.d = true;
+});
+window.addEventListener('keyup', e=>{
+  if (['ArrowLeft','a','A'].includes(e.key)) World.keys.l = false;
+  if (['ArrowRight','d','D'].includes(e.key)) World.keys.r = false;
+  if (['ArrowUp','w','W'].includes(e.key)) World.keys.u = false;
+  if (['ArrowDown','s','S'].includes(e.key)) World.keys.d = false;
+});
+
+/* 사료 근거: 우리역사넷 "임오군란 1882" — 무위영 구식 군인의 급료 차별과 봉기,
+   흥선대원군의 일시 재집권. 아래 대사는 참고해 재창작한 것으로 원문이 아님.
+   '무위영 병사'는 실존 인물이 아닌 가상 캐릭터(임오군란은 특정 지도자 없이
+   다수 하급 군인이 주도한 봉기였음을 반영). */
+const NPC_DATA = {
+  daewongun_0: {
+    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+    beats: [
+      { t:'…내가 하야한 지 몇 해 되지도 않았는데, 벌써 이 나라 꼴이 말이 아니로군.' },
+      { t:'별기군이라는 신식 군대는 매달 급료를 꼬박꼬박 받는다지. 그런데 저 무위영 구식 군인들은 열세 달째 급료가 밀렸다는군.' },
+      { t:'그것도 모자라 이번 달에 나눠준 쌀에는 겨와 모래가 절반이었다더군. 사람이 먹을 게 아니야.' },
+      { t:'저 군인들의 분노가 어디로 향할지, 지켜볼 만하겠어.' },
+    ]
+  },
+  daewongun_1: {
+    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+    beats: [
+      { t:'(창덕궁, 며칠 뒤) 결국 일이 터졌군. 무위영 군인들이 선혜청 당상의 집을 부수고, 일본 공사관까지 들이쳤다고 하네.' },
+      { t:'그들이 나를 다시 찾아왔어. "대감께서 다시 나서주십시오"라고 하더군.' },
+      { t:'내가 별기군을 없애고 옛 5군영 체제로 되돌리기로 했네. 저들의 요구가 아주 근거 없는 것은 아니었으니까.' },
+      { t:'하지만 이걸로 끝날 것 같지는 않군. 중전께서는 이미 궁을 빠져나가 몸을 피하셨다고 하니.' },
+    ]
+  },
+  daewongun_2: {
+    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+    beats: [
+      { t:'청나라 군대가 한성에 들어왔다는 소식을 들었을 땐, 이미 늦었다는 걸 직감했네.' },
+      { t:'오장경이 이끄는 군사들이 나를 청군 진영으로 초대하더군. 가서 보니, 그건 초대가 아니라 나포였어.' },
+      { t:'…이대로 청나라로 끌려가는가 보네. 내가 다시 이 궁을 밟을 수 있을지는 모르겠군.' },
+      { t:'다만 한 가지는 분명하네 — 청의 군대가 이 땅에 들어온 이상, 저들이 그냥 물러가지는 않을 걸세. 상인들의 장사길까지 파고들겠지.' },
+    ],
+    endsChapter: true
+  },
+  soldier_0: {
+    name:'무위영 병사', icon:'🍚', img:'assets/portraits/muwiyeong_soldier.png',
+    beats: [
+      { t:'이보게, 이 쌀 좀 보게. 겨하고 모래가 반이야. 이걸 먹으라고 준 건가, 말라 죽으라고 준 건가.' },
+      { t:'별기군 놈들은 신식 총 들고 매달 꼬박꼬박 급료를 받는데, 우리는 열세 달째 코빼기도 못 봤네.' },
+      { t:'선혜청 그 양반한테 따지러 갈 참이야. 이대로는 도저히 못 참겠어.' },
+    ]
+  }
+};
+const Stage = {
+  state: { talkStage: 0 },
+  interact(){
+    if (document.querySelector('.ov.show')) return;
+    const n = World.nearNpc; if (!n) return;
+    if (n.id === 'daewongun'){ const key = 'daewongun_' + Math.min(Stage.state.talkStage, 2); Dialog.open(key, n); }
+    else if (n.id === 'soldier'){ Dialog.open('soldier_0', n); }
+  }
+};
+const Dialog = {
+  key: null, npc: null, idx: 0, data: null,
+  open(key, npc){
+    this.key = key; this.npc = npc; this.idx = 0; this.data = NPC_DATA[key];
+    World.paused = true;
+    document.getElementById('dlg-overlay').classList.add('show');
+    document.getElementById('dlg-name').textContent = this.data.name;
+    document.getElementById('dlg-tag').textContent = '1882년 · 한양';
+    document.getElementById('dlg-portrait').textContent = this.data.icon;
+    this.render();
+  },
+  render(){ document.getElementById('dlg-text').textContent = this.data.beats[this.idx].t; },
+  next(){ this.idx++; if (this.idx >= this.data.beats.length){ this.finish(); return; } this.render(); },
+  finish(){
+    document.getElementById('dlg-overlay').classList.remove('show');
+    if (this.data.endsChapter){ Stage.endChapter(); return; }
+    World.paused = false;
+    if (this.npc.id === 'daewongun'){ Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 2); }
+  }
+};
+document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
+
+const INTRO_LINES = [
+  '강화도조약 이후 조선은 개화 정책을 서둘렀다. 신식 군대 별기군이 창설되고, 구식 군인들은 찬밥 신세가 되었다.',
+  '급료는 열세 달째 밀려 있었다. 백성들의 삶도 나아지지 않았다.',
+  '1882년 여름, 마침내 오랜 불만이 터져 나온다.'
+];
+let introIdx = 0;
+function renderIntro(){ document.getElementById('intro-text').textContent = INTRO_LINES[introIdx]; }
+function introNext(){
+  introIdx++;
+  if (introIdx >= INTRO_LINES.length){
+    const fade = document.getElementById('fade'); fade.classList.add('show');
+    setTimeout(() => { document.getElementById('intro-overlay').classList.remove('show'); fade.classList.remove('show'); }, 600);
+    return;
+  }
+  renderIntro();
+}
+document.getElementById('intro-panel').addEventListener('click', introNext);
+renderIntro();
+Stage.endChapter = function(){ document.getElementById('end-screen').classList.add('show'); };
+function loop(t){
+  if (!World.lastT) World.lastT = t;
+  const dt = Math.min(0.05, (t - World.lastT) / 1000);
+  World.lastT = t; World.update(dt); World.render();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
