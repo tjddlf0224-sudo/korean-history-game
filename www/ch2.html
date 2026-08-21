@@ -250,9 +250,14 @@ const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
 /* ============ 주인공(학생) 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용.
    ch0_phaser와 동일한 4방향 걷기 시트를 그대로 재사용(같은 인물이므로 전 챕터 공통). */
+/* 주의(재발 방지): assets/player/left_*.png·right_*.png 원본 파일 자체가 좌우
+   내용이 뒤바뀌어 있음(ch0_phaser에서 이미 발견/수정된 문제, DIR_SRC로 보정).
+   여기서도 동일하게 보정하지 않으면 왼쪽으로 이동 시 오른쪽을 보는 등 반대로 렌더됨. */
+const DIR_SRC = { down:'down', up:'up', left:'right', right:'left' };
 const PLAYER_SPRITES = {};
 ['down','up','left','right'].forEach(dir => {
-  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${dir}_${i}.png`; return im; });
+  const src = DIR_SRC[dir];
+  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${src}_${i}.png`; return im; });
 });
 const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
 function drawPlayerSprite(px, py, facing, moving){
