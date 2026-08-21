@@ -76,6 +76,22 @@
   #end-screen a { display: inline-block; margin: 10px 8px 0; color: #1a1408; background: #d9a441; text-decoration: none;
     padding: 10px 22px; border-radius: 999px; font-size: 14px; font-weight: bold; }
   #end-score { color: #d98c6b; font-size: 15px; margin-top: 14px; white-space: pre-wrap; }
+
+  /* 미니맵: 회전 트릭의 영향을 받지 않도록 #wrap 밖(body 직속)에 두고
+     position:fixed로 실제 화면 좌표 기준 우상단에 고정. 내용은 독립 2D
+     캔버스에 매 프레임 직접 그린다(회전된 컨테이너 안에 두면 위치/비율이
+     둘 다 어긋나므로 반드시 #wrap 밖에 둬야 함). */
+  #minimap-canvas { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 50;
+    box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
+
+  /* 마지막 대사/보스전까지 다 마쳐도 곧장 챕터가 끝나지 않고, 이 버튼을
+     눌러야만 끝난다 — 그 전까지는 계속 돌아다니며 다른 NPC와 대화 가능. */
+  #next-chapter-btn { position: absolute; left: 50%; top: calc(14px + env(safe-area-inset-top)); transform: translateX(-50%);
+    background: #d9a441; color: #2b1d0e; border: none; border-radius: 999px; padding: 10px 20px;
+    font-size: 14px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 7; }
+  #next-chapter-btn.show { opacity: 1; pointer-events: auto; }
 </style>
 </head>
 <body>
@@ -126,6 +142,8 @@
     </div>
   </div>
 
+  <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
+
   <div id="fade"></div>
 
   <div id="end-screen">
@@ -138,6 +156,8 @@
     </div>
   </div>
 </div>
+
+<canvas id="minimap-canvas"></canvas>
 
 <script>
 /* ============ 기본 설정 ============ */
@@ -707,11 +727,48 @@ renderIntro();
 Stage.finishBoss = function(score, total){
   Stage.state.bossDone = true;
   document.getElementById('end-score').textContent = `보스전 결과: ${score} / ${total} 정답`;
-  Stage.endChapter();
+  document.getElementById('next-chapter-btn').classList.add('show');
+  World.paused = false;
 };
 Stage.endChapter = function(){
   document.getElementById('end-screen').classList.add('show');
 };
+
+/* ============ 미니맵: 회전 트릭의 영향을 받지 않도록 #wrap 밖의 독립된
+   2D 캔버스에 매 프레임 직접 그린다. 타일맵(MAP/TILE_COLOR)을 그대로 축소해서 사용. */
+const miniCanvas = document.getElementById('minimap-canvas');
+const miniCtx = miniCanvas.getContext('2d');
+function sizeMinimapCanvas(){
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  miniCanvas.width = Math.round(160 * dpr);
+  miniCanvas.height = Math.round(90 * dpr);
+}
+sizeMinimapCanvas();
+window.addEventListener('resize', sizeMinimapCanvas);
+function drawMinimap(){
+  const w = miniCanvas.width, h = miniCanvas.height;
+  const cw = w / WT, ch = h / HT;
+  miniCtx.clearRect(0, 0, w, h);
+  for (let y=0;y<HT;y++){
+    for (let x=0;x<WT;x++){
+      miniCtx.fillStyle = TILE_COLOR[MAP[y][x]] || '#3a2c1a';
+      miniCtx.fillRect(x*cw, y*ch, cw+0.5, ch+0.5);
+    }
+  }
+  for (const n of NPCS){
+    miniCtx.fillStyle = '#8a2f2f';
+    miniCtx.beginPath();
+    miniCtx.arc(n.x*cw, n.y*ch, 3, 0, Math.PI*2);
+    miniCtx.fill();
+  }
+  miniCtx.fillStyle = '#2f6fbf';
+  miniCtx.strokeStyle = '#ffffff';
+  miniCtx.lineWidth = 1;
+  miniCtx.beginPath();
+  miniCtx.arc(World.px*cw, World.py*ch, 4, 0, Math.PI*2);
+  miniCtx.fill();
+  miniCtx.stroke();
+}
 
 /* ============ 메인 루프 ============ */
 function loop(t){
@@ -720,6 +777,7 @@ function loop(t){
   World.lastT = t;
   World.update(dt);
   World.render();
+  drawMinimap();
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
