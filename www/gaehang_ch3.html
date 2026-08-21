@@ -365,7 +365,12 @@ const World = {
       ctx.fillStyle = '#e0b94a';
       ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
+      if (n === this.nearNpcClose){
+        ctx.fillText(n.name, sx, sy - 66);
+      } else {
+        const key = Stage.keyFor(n.id);
+        if (!key || !seenDialogKeys.has(key)) ctx.fillText('!', sx, sy - 66);
+      }
     }
     if (DEBUG_GRID){
       const step = 16;
@@ -496,24 +501,27 @@ const NPC_DATA = {
 
 const Stage = {
   state: { talkStage: 0 },
+  keyFor(id){
+    if (id === 'gimokgyun') return 'gimokgyun_' + Math.min(Stage.state.talkStage, 3);
+    if (id === 'hongyeongsik') return 'hongyeongsik_0';
+    return null;
+  },
   interact(){
     if (document.querySelector('.ov.show')) return;
     const n = World.nearNpc;
     if (!n) return;
-    if (n.id === 'gimokgyun'){
-      const key = 'gimokgyun_' + Math.min(Stage.state.talkStage, 3);
-      Dialog.open(key, n);
-    } else if (n.id === 'hongyeongsik'){
-      Dialog.open('hongyeongsik_0', n);
-    }
+    const key = Stage.keyFor(n.id);
+    if (key) Dialog.open(key, n);
   }
 };
 
+const seenDialogKeys = new Set();
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
     this.key = key; this.npc = npc; this.idx = 0;
     this.data = NPC_DATA[key];
+    seenDialogKeys.add(key);
     World.paused = true;
     document.getElementById('dlg-overlay').classList.add('show');
     document.getElementById('dlg-name').textContent = this.data.name;

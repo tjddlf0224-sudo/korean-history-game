@@ -495,7 +495,12 @@ const World = {
       ctx.fillStyle = '#f0c96b';
       ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
+      if (n === this.nearNpcClose){
+        ctx.fillText(n.name, sx, sy - 66);
+      } else {
+        const key = Stage.keyFor(n.id);
+        if (!key || !seenDialogKeys.has(key)) ctx.fillText('!', sx, sy - 66);
+      }
     }
     if (DEBUG_GRID){
       const step = 16;
@@ -677,28 +682,28 @@ const NPC_DATA = {
 const Stage = {
   state: { seogeojeongStage: 0, seongjongStage: 0, bossADone: false, bossBDone: false,
     seogeojeongScore: 0, seogeojeongTotal: 0, seongjongScore: 0, seongjongTotal: 0 },
+  keyFor(id){
+    if (id === 'seogeojeong') return Stage.state.bossADone ? 'seogeojeong_repeat' : 'seogeojeong_' + Math.min(Stage.state.seogeojeongStage, 2);
+    if (id === 'seongjong') return Stage.state.bossBDone ? 'seongjong_repeat' : 'seongjong_' + Math.min(Stage.state.seongjongStage, 1);
+    return null;
+  },
   interact(){
     if (overlayOpen()) return;
     const n = World.nearNpc;
     if (!n) return;
-    if (n.id === 'seogeojeong'){
-      if (Stage.state.bossADone){ Dialog.open('seogeojeong_repeat', n); return; }
-      const key = 'seogeojeong_' + Math.min(Stage.state.seogeojeongStage, 2);
-      Dialog.open(key, n);
-    } else if (n.id === 'seongjong'){
-      if (Stage.state.bossBDone){ Dialog.open('seongjong_repeat', n); return; }
-      const key = 'seongjong_' + Math.min(Stage.state.seongjongStage, 1);
-      Dialog.open(key, n);
-    }
+    const key = Stage.keyFor(n.id);
+    if (key) Dialog.open(key, n);
   }
 };
 
 /* ============ Dialog 엔진 (beat별 화자 override 지원) ============ */
+const seenDialogKeys = new Set();
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
     this.key = key; this.npc = npc; this.idx = 0;
     this.data = NPC_DATA[key];
+    seenDialogKeys.add(key);
     World.paused = true;
     document.getElementById('dlg-overlay').classList.add('show');
     document.getElementById('dlg-tag').textContent = '1469~1494년 · 조선';

@@ -351,27 +351,30 @@ window.addEventListener('keyup', e=>{
 const Stage = {
   state: { talkStage: 0 },
   paused: false,
+  keyFor(id){
+    if (id === 'jeongdojeon') return 'jeongdojeon_' + Math.min(Stage.state.talkStage, 2);
+    if (id === 'worker') return 'worker_0';
+    return null;
+  },
   interact(){
     if (document.querySelector('.ov.show')) return;
     const n = window.__nearNpc;
     if (!n) return;
-    if (n.id === 'jeongdojeon'){
-      const key = 'jeongdojeon_' + Math.min(Stage.state.talkStage, 2);
-      Dialog.open(key, n);
-    } else if (n.id === 'worker'){
-      Dialog.open('worker_0', n);
-    }
+    const key = Stage.keyFor(n.id);
+    if (key) Dialog.open(key, n);
   },
   endChapter(){
     document.getElementById('end-screen').classList.add('show');
     document.getElementById('minimap-canvas').style.visibility = 'hidden';
   }
 };
+const seenDialogKeys = new Set();
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
     this.key = key; this.npc = npc; this.idx = 0;
     this.data = NPC_DATA[key];
+    seenDialogKeys.add(key);
     Stage.paused = true;
     document.getElementById('dlg-overlay').classList.add('show');
     document.getElementById('dlg-name').textContent = this.data.name;
@@ -602,9 +605,17 @@ class MainScene extends Phaser.Scene {
     let found = null;
     if (nearest && nearestD < SHOW_RANGE){
       const spr = this.npcSprites[nearest.id];
-      spr.__mark.setVisible(true);
-      spr.__mark.setText(nearestD < INTERACT_RANGE ? spr.__mark.__npcName : '!');
-      if (nearestD < INTERACT_RANGE) found = nearest;
+      const close = nearestD < INTERACT_RANGE;
+      if (close){
+        spr.__mark.setVisible(true);
+        spr.__mark.setText(spr.__mark.__npcName);
+        found = nearest;
+      } else {
+        const key = Stage.keyFor(nearest.id);
+        const done = key && seenDialogKeys.has(key);
+        spr.__mark.setVisible(!done);
+        spr.__mark.setText('!');
+      }
     }
     if (found !== window.__nearNpc){
       window.__nearNpc = found;

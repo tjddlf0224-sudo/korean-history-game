@@ -479,7 +479,12 @@ const World = {
       ctx.fillStyle = '#f0c96b';
       ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
+      if (n === this.nearNpcClose){
+        ctx.fillText(n.name, sx, sy - 66);
+      } else {
+        const key = Stage.keyFor(n.id);
+        if (!key || !seenDialogKeys.has(key)) ctx.fillText('!', sx, sy - 66);
+      }
     }
     if (DEBUG_GRID){
       const step = 16;
@@ -641,25 +646,30 @@ const BOSS_QUESTIONS = [
 
 const Stage = {
   state: { talkStage: 0 },
+  keyFor(id){
+    if (id === 'taejong') return 'taejong_' + Math.min(Stage.state.talkStage, 2);
+    if (id === 'guard') return 'guard_0';
+    return null;
+  },
   interact(){
     if (overlayOpen()) return;
     const n = World.nearNpc;
     if (!n) return;
-    if (n.id === 'taejong'){
-      const key = 'taejong_' + Math.min(Stage.state.talkStage, 2);
-      Dialog.open(key, n);
-    } else if (n.id === 'guard'){
-      Dialog.open('guard_0', n);
-    }
+    const key = Stage.keyFor(n.id);
+    if (key) Dialog.open(key, n);
   }
 };
 
 /* ============ Dialog 엔진 ============ */
+// 이미 본 대사 키를 기록해 두었다가, NPC 근처의 '!' 표시를 결정할 때 쓴다
+// (본 적 있는 키 = 더 들려줄 새 내용이 없다는 뜻이므로 '!'를 끈다).
+const seenDialogKeys = new Set();
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
     this.key = key; this.npc = npc; this.idx = 0;
     this.data = NPC_DATA[key];
+    seenDialogKeys.add(key);
     World.paused = true;
     document.getElementById('dlg-overlay').classList.add('show');
     document.getElementById('dlg-name').textContent = this.data.name;

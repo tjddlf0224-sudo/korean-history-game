@@ -532,7 +532,12 @@ const World = {
       ctx.fillStyle = '#f0c96b';
       ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
+      if (n === this.nearNpcClose){
+        ctx.fillText(n.name, sx, sy - 66);
+      } else {
+        const key = Stage.keyFor(n.id);
+        if (!key || !seenDialogKeys.has(key)) ctx.fillText('!', sx, sy - 66);
+      }
     }
     if (DEBUG_GRID){
       const step = 16;
@@ -754,30 +759,31 @@ const NPC_DATA = {
 const Stage = {
   state: { sejongStage: 0, kimStage: 0, bossADone: false, bossBDone: false,
     sejongScore: 0, sejongTotal: 0, kimScore: 0, kimTotal: 0 },
+  keyFor(id){
+    if (id === 'sejong') return Stage.state.bossADone ? 'sejong_repeat' : 'sejong_' + Math.min(Stage.state.sejongStage, 3);
+    if (id === 'kimjongseo') return Stage.state.bossBDone ? 'kim_repeat' : 'kim_' + Math.min(Stage.state.kimStage, 2);
+    if (id === 'sinsukju') return 'sinsukju_0';
+    return null;
+  },
   interact(){
     if (overlayOpen()) return;
     const n = World.nearNpc;
     if (!n) return;
-    if (n.id === 'sejong'){
-      if (Stage.state.bossADone){ Dialog.open('sejong_repeat', n); return; }
-      const key = 'sejong_' + Math.min(Stage.state.sejongStage, 3);
-      Dialog.open(key, n);
-    } else if (n.id === 'kimjongseo'){
-      if (Stage.state.bossBDone){ Dialog.open('kim_repeat', n); return; }
-      const key = 'kim_' + Math.min(Stage.state.kimStage, 2);
-      Dialog.open(key, n);
-    } else if (n.id === 'sinsukju'){
-      Dialog.open('sinsukju_0', n);
-    }
+    const key = Stage.keyFor(n.id);
+    if (key) Dialog.open(key, n);
   }
 };
 
 /* ============ Dialog 엔진 (beat별 화자 override 지원) ============ */
+// 이미 본 대사 키를 기록해 두었다가, NPC 근처의 '!' 표시를 결정할 때 쓴다
+// (본 적 있는 키 = 더 들려줄 새 내용이 없다는 뜻이므로 '!'를 끈다).
+const seenDialogKeys = new Set();
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
     this.key = key; this.npc = npc; this.idx = 0;
     this.data = NPC_DATA[key];
+    seenDialogKeys.add(key);
     World.paused = true;
     document.getElementById('dlg-overlay').classList.add('show');
     document.getElementById('dlg-tag').textContent = '1418~1450년 · 조선';
