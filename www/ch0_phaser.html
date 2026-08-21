@@ -17,13 +17,15 @@
     color: #f5f0e6; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.8); z-index: 5; }
   #hud .sub { font-size: 11px; opacity: .75; margin-top: 2px; }
 
-  /* 미니맵 테두리: 실제 그림은 Phaser의 두 번째 카메라(miniCam)가 그리고,
-     이 div는 그 위에 겹쳐 보이는 장식 테두리일 뿐이다. 위치는 항상 JS(repositionMinimap)가
-     계산해서 top/left로 직접 지정한다 — #wrap이 회전된 상태에서는 "로컬 좌표계"와
-     "화면상 보이는 위치"가 어긋나므로(로컬 좌상단이 화면 우상단이 됨) 고정 CSS로는 불가능함. */
-  #minimap-frame { position: absolute;
-    border: 2px solid #d9a441; border-radius: 6px; pointer-events: none; z-index: 5;
-    box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+  /* 미니맵: #wrap 안에 두면 회전 트랜스폼을 그대로 물려받아서(로컬 좌상단이
+     화면 우상단이 되고, 가로세로 박스 크기까지 화면상에서 뒤바뀌어 보임) 위치도
+     비율도 맞추기가 매우 까다로워진다. 그래서 아예 #wrap 밖(body 직속)에 두고
+     position:fixed로 실제 화면 좌표 기준으로 고정 — 회전 상태와 무관하게 항상
+     "진짜 화면"의 우상단에 뜬다. 내용은 Phaser가 아니라 독립된 2D 캔버스에
+     매 프레임 직접 그린다(updateMinimap 참고). */
+  #minimap-canvas { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 50;
+    box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #dccba0; }
 
   #stick-zone { position: absolute; left: calc(18px + env(safe-area-inset-left)); bottom: calc(18px + env(safe-area-inset-bottom));
     width: 130px; height: 130px; z-index: 6; touch-action: none; }
@@ -79,8 +81,6 @@
     <div class="sub">1392년, 한양 도성 공사 현장</div>
   </div>
 
-  <div id="minimap-frame"></div>
-
   <div id="stick-zone">
     <div id="stick-base"><div id="stick-knob"></div></div>
   </div>
@@ -126,6 +126,8 @@
   </div>
 </div>
 
+<canvas id="minimap-canvas"></canvas>
+
 <script>
 /* ============ 가로모드 고정 (기존 챕터와 동일 트릭) ============ */
 const wrapEl = document.getElementById('wrap');
@@ -148,28 +150,7 @@ function applyOrientation(){
   if (window.__phaserGame){
     window.__phaserGame.scale.resize(VW, VH);
   }
-  window.repositionMinimap();
 }
-// 미니맵을 "화면상" 우상단에 고정한다. #wrap이 rotate(90deg)+translateY(-100%)로
-// 돌아간 상태에서는 로컬 좌표계의 좌상단이 실제 화면의 우상단으로 보이므로
-// (HUD가 top:left인데도 화면 우측에 세로로 뜨는 것과 같은 이치), 회전 여부에 따라
-// 미니맵을 배치할 로컬 좌표 자체를 다르게 계산해야 한다.
-window.repositionMinimap = function(){
-  const scene = window.__phaserGame && window.__phaserGame.scene.scenes[0];
-  const MINI_W = 160, MINI_H = Math.round(MINI_W * 768 / 1376);
-  const margin = 10;
-  const portrait = document.body.classList.contains('rot');
-  const localX = portrait ? margin : (VW - MINI_W - margin);
-  const localY = portrait ? 78 : margin; // 회전 상태에서는 HUD 텍스트 아래로 내려서 안 겹치게 함
-  if (scene && scene.miniCam) scene.miniCam.setPosition(localX, localY);
-  const frame = document.getElementById('minimap-frame');
-  if (frame){
-    frame.style.left = localX + 'px';
-    frame.style.top = localY + 'px';
-    frame.style.width = MINI_W + 'px';
-    frame.style.height = MINI_H + 'px';
-  }
-};
 window.addEventListener('resize', applyOrientation);
 window.addEventListener('orientationchange', () => setTimeout(applyOrientation, 80));
 if (window.visualViewport){
@@ -456,16 +437,6 @@ class MainScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player, true, 0.15, 0.15);
     this.cameras.main.setZoom(1.2);
 
-    // 미니맵: 전체 배경(1376x768)을 축소해서 보여주는 두 번째 카메라. 위치는
-    // 화면 크기(VW)가 바뀔 때마다 repositionMinimap()이 우상단에 다시 맞춘다.
-    const MINI_W = 160, MINI_H = Math.round(MINI_W * BG_H / BG_W);
-    this.miniCam = this.cameras.add(VW - MINI_W - 10, 10, MINI_W, MINI_H)
-      .setZoom(MINI_W / BG_W)
-      .setBounds(0, 0, BG_W, BG_H)
-      .setBackgroundColor(0xdccba0)
-      .setName('mini');
-    window.repositionMinimap();
-
     window.__nearNpc = null;
   }
   update(time, dt){
@@ -519,7 +490,43 @@ class MainScene extends Phaser.Scene {
       window.__nearNpc = found;
       document.getElementById('act-btn').classList.toggle('show', !!found);
     }
+    drawMinimap(this.player.x, this.player.y);
   }
+}
+
+/* ============ 미니맵: 회전 트릭의 영향을 받지 않도록 #wrap 밖의 독립된
+   2D 캔버스에 매 프레임 직접 그린다(Phaser 카메라를 쓰지 않음) ============ */
+const miniCanvas = document.getElementById('minimap-canvas');
+const miniCtx = miniCanvas.getContext('2d');
+const miniBgImg = new Image();
+miniBgImg.src = 'assets/scenes/ch0_bg.png';
+function sizeMinimapCanvas(){
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  miniCanvas.width = Math.round(160 * dpr);
+  miniCanvas.height = Math.round(90 * dpr);
+}
+sizeMinimapCanvas();
+window.addEventListener('resize', sizeMinimapCanvas);
+function drawMinimap(playerX, playerY){
+  const w = miniCanvas.width, h = miniCanvas.height;
+  const sx = w / BG_W, sy = h / BG_H;
+  miniCtx.clearRect(0, 0, w, h);
+  if (miniBgImg.complete && miniBgImg.naturalWidth){
+    miniCtx.drawImage(miniBgImg, 0, 0, w, h);
+  }
+  NPCS.forEach(n => {
+    miniCtx.fillStyle = '#8a2f2f';
+    miniCtx.beginPath();
+    miniCtx.arc(n.px*sx, n.py*sy, 3, 0, Math.PI*2);
+    miniCtx.fill();
+  });
+  miniCtx.fillStyle = '#2f6fbf';
+  miniCtx.strokeStyle = '#ffffff';
+  miniCtx.lineWidth = 1;
+  miniCtx.beginPath();
+  miniCtx.arc(playerX*sx, playerY*sy, 4, 0, Math.PI*2);
+  miniCtx.fill();
+  miniCtx.stroke();
 }
 function drawFigure(g, color, role){
   if (role === 'scholar'){
