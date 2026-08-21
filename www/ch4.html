@@ -219,7 +219,7 @@ const ZONES = {
       { x0:530, y0:265, x1:850, y1:515 },   // 가운데 서안(書案)+방석
     ],
     npcs: [
-      { id: 'seogeojeong', name: '서거정', x: 690, y: 560, look: { role: 'scholar', body: '#2f5c6b', accent: '#c9a24a' } },
+      { id: 'seogeojeong', name: '서거정', x: 690, y: 560, img: 'assets/portraits/seogeojeong.png', look: { role: 'scholar', body: '#2f5c6b', accent: '#c9a24a' } },
     ],
     exits: [ { rect:{x0:600,y0:735,x1:780,y1:768}, to:'gyeonggukdaejeon', spawn:{x:688,y:120}, label:'경국대전 편찬실로' } ],
   },
@@ -240,7 +240,7 @@ const ZONES = {
       { x0:990, y0:655, x1:1310, y1:725 },   // 아래 오른쪽 서가
     ],
     npcs: [
-      { id: 'seongjong', name: '성종', x: 688, y: 340, look: { role: 'king', body: '#4a6b3d', accent: '#e0b94a' } },
+      { id: 'seongjong', name: '성종', x: 688, y: 340, img: 'assets/portraits/seongjong.png', look: { role: 'king', body: '#4a6b3d', accent: '#e0b94a' } },
     ],
     exits: [ { rect:{x0:600,y0:735,x1:780,y1:768}, to:'hongmungwan', spawn:{x:690,y:590}, label:'홍문관으로' } ],
   },
@@ -272,6 +272,23 @@ function drawPlayerSprite(px, py, facing, moving){
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
   const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // ch0_phaser와 동일한 화면상 크기(73.6*줌1.2=88px)로 맞춤
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -447,8 +464,9 @@ const World = {
     const zone = ZONES[this.zone];
     ctx.save();
     ctx.scale(ZOOM, ZOOM);
-    for (const n of zone.npcs){ drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     for (const n of zone.npcs){
       if (n === this.nearNpc){
@@ -587,7 +605,7 @@ const NPC_DATA = {
     quiz: null
   },
   seongjong_0: {
-    name: '성종', icon: '👑',
+    name: '성종', icon: '👑', img: 'assets/portraits/seongjong.png',
     beats: [
       { who:'npc', t:'직전법을 시행한 지 오래됐지만, 문제가 생겼네. 관리들이 정해진 것보다 더 많은 곡식을 거둬가는 일이 잦아졌어.' },
       { who:'npc', t:'그래서 내가 새로운 방법을 궁리했지. 관청이 직접 세금을 걷어서 관리에게 나눠주도록 말일세. 이 제도의 이름을 아나?' },
@@ -599,7 +617,7 @@ const NPC_DATA = {
     ]
   },
   seongjong_1: {
-    name: '성종', icon: '👑',
+    name: '성종', icon: '👑', img: 'assets/portraits/seongjong.png',
     beats: [
       { who:'npc', t:'법전만으로는 부족하지. 음악도, 예법도 정비해야 나라의 격이 갖춰지는 법이네.' },
       { who:'npc', t:'성현 등에게 명해 궁중 음악의 이론까지 책으로 정리하게 했지.' },
@@ -616,7 +634,7 @@ const NPC_DATA = {
     finishesBossB: true
   },
   seongjong_repeat: {
-    name: '성종', icon: '👑',
+    name: '성종', icon: '👑', img: 'assets/portraits/seongjong.png',
     beats: [ { who:'npc', t:'서거정도 잘 만나보았는가? 그가 이 법전에 얼마나 공을 들였는지 모른다네.' } ],
     quiz: null
   }

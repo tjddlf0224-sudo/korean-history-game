@@ -218,8 +218,8 @@ const ZONES = {
       { x0:1290, y0:0, x1:BG_W, y1:BG_H },  // 우측 서가
     ],
     npcs: [
-      { id: 'sejong', name: '세종', x: 620, y: 300, look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
-      { id: 'scholar', name: '집현전 학사', x: 760, y: 300, look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
+      { id: 'sejong', name: '세종', x: 620, y: 300, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
+      { id: 'scholar', name: '집현전 학사', x: 760, y: 300, img: 'assets/portraits/scholar.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
     exits: [ { rect:{x0:1310,y0:660,x1:1376,y1:768}, to:'gukgyeong', spawn:{x:80,y:690}, label:'국경 진영으로' } ],
   },
@@ -231,7 +231,7 @@ const ZONES = {
       { x0:1090, y0:60, x1:BG_W, y1:250 }, // 우상단 망루/건물
     ],
     npcs: [
-      { id: 'kimjongseo', name: '김종서', x: 688, y: 420, look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
+      { id: 'kimjongseo', name: '김종서', x: 688, y: 420, img: 'assets/portraits/kimjongseo.png', look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
     ],
     exits: [ { rect:{x0:0,y0:660,x1:60,y1:768}, to:'jiphyeonjeon', spawn:{x:1300,y:690}, label:'집현전으로' } ],
   },
@@ -263,6 +263,23 @@ function drawPlayerSprite(px, py, facing, moving){
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
   const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // ch0_phaser와 동일한 화면상 크기(73.6*줌1.2=88px)로 맞춤
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -452,8 +469,9 @@ const World = {
     const zone = ZONES[this.zone];
     ctx.save();
     ctx.scale(ZOOM, ZOOM);
-    for (const n of zone.npcs){ drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     for (const n of zone.npcs){
       if (n === this.nearNpc){

@@ -215,8 +215,8 @@ const ZONES = {
       { x0:1210, y0:0, x1:1376, y1:768 },   // 우측 행각
     ],
     npcs: [
-      { id: 'sejo', name: '세조', x: 650, y: 380, look: { role: 'king', body: '#5a1f24', accent: '#b06a3a' } },
-      { id: 'attendant', name: '늙은 내관', x: 700, y: 410, look: { role: 'commoner', body: '#5a5650', accent: '#8a7a5a', headband: true } },
+      { id: 'sejo', name: '세조', x: 650, y: 380, img: 'assets/portraits/sejo.png', look: { role: 'king', body: '#5a1f24', accent: '#b06a3a' } },
+      { id: 'attendant', name: '늙은 내관', x: 700, y: 410, img: 'assets/portraits/naesi.png', look: { role: 'commoner', body: '#5a5650', accent: '#8a7a5a', headband: true } },
     ],
     exits: [ { rect:{x0:950,y0:730,x1:1150,y1:768}, to:'ganghwado', spawn:{x:650,y:480}, label:'강화도 유배지로' } ],
   },
@@ -257,6 +257,23 @@ function drawPlayerSprite(px, py, facing, moving){
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
   const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // ch0_phaser와 동일한 화면상 크기(73.6*줌1.2=88px)로 맞춤
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -434,8 +451,9 @@ const World = {
     const zone = ZONES[this.zone];
     ctx.save();
     ctx.scale(ZOOM, ZOOM);
-    for (const n of zone.npcs){ drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     for (const n of zone.npcs){
       if (n === this.nearNpc){

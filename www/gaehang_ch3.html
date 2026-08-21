@@ -41,7 +41,7 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #5a4a2a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #5a4a2a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 15px; color: #e0b94a; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
@@ -262,8 +262,8 @@ function drawMap(camX, camY){
 
 /* ============ NPC (역할별 실루엣 재사용) ============ */
 const NPCS = [
-  { id: 'gimokgyun', name: '김옥균', x: 10, y: 6.5, look: { role: 'scholar', body: '#2f4a6e', accent: '#e0b94a' } },
-  { id: 'hongyeongsik', name: '홍영식', x: 12.5, y: 12, look: { role: 'scholar', body: '#4a3a2a', accent: '#c9a24a' } },
+  { id: 'gimokgyun', name: '김옥균', x: 10, y: 6.5, img: 'assets/portraits/gimokgyun.png', look: { role: 'scholar', body: '#2f4a6e', accent: '#e0b94a' } },
+  { id: 'hongyeongsik', name: '홍영식', x: 12.5, y: 12, img: 'assets/portraits/hongyeongsik.png', look: { role: 'scholar', body: '#4a3a2a', accent: '#c9a24a' } },
 ];
 const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
@@ -284,6 +284,23 @@ function drawPlayerSprite(px, py, facing, moving){
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
   const H = 58, W = H * (img.naturalWidth / img.naturalHeight);
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -382,7 +399,8 @@ const World = {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawMap(camX, camY);
     for (const n of NPCS){
-      drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
+      if (n.img) drawNpcSprite(n.x*TS - camX, n.y*TS - camY, n.img);
+      else drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
       if (n === this.nearNpc){
         ctx.fillStyle = '#e0b94a';
         ctx.font = '16px sans-serif';

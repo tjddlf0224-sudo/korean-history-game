@@ -212,7 +212,7 @@ const ZONES = {
     spawn: { x: 690, y: 560 },
     barriers: [ { x0:540, y0:55, x1:835, y1:225 } ], // 어좌 단상
     npcs: [
-      { id: 'taejong', name: '태종', x: 688, y: 300, look: { role: 'king', body: '#8a2f2f', accent: '#e0b94a' } },
+      { id: 'taejong', name: '태종', x: 688, y: 300, img: 'assets/portraits/taejong.png', look: { role: 'king', body: '#8a2f2f', accent: '#e0b94a' } },
     ],
     exits: [ { rect:{x0:600,y0:735,x1:780,y1:768}, to:'hullyeonjang', spawn:{x:120,y:640}, label:'사병 훈련장으로' } ],
   },
@@ -252,6 +252,22 @@ function drawPlayerSprite(px, py, facing, moving){
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
   const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // ch0_phaser와 동일한 화면상 크기(73.6*줌1.2=88px)로 맞춤
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -427,8 +443,9 @@ const World = {
     const zone = ZONES[this.zone];
     ctx.save();
     ctx.scale(ZOOM, ZOOM);
-    for (const n of zone.npcs){ drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     for (const n of zone.npcs){
       if (n === this.nearNpc){

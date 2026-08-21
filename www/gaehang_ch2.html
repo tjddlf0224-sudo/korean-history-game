@@ -36,7 +36,7 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #5a3a2a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #5a3a2a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 15px; color: #e0954a; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
@@ -205,8 +205,8 @@ function drawMap(camX, camY){
 }
 
 const NPCS = [
-  { id: 'daewongun', name: '흥선대원군', x: 11, y: 8, look: { role: 'king', body: '#3a2a1e', accent: '#e0954a' } },
-  { id: 'soldier', name: '무위영 병사', x: 9, y: 10, look: { role: 'general', body: '#5a4a3a', accent: '#8c8676', headband:true } },
+  { id: 'daewongun', name: '흥선대원군', x: 11, y: 8, img: 'assets/portraits/daewongun.png', look: { role: 'king', body: '#3a2a1e', accent: '#e0954a' } },
+  { id: 'soldier', name: '무위영 병사', x: 9, y: 10, img: 'assets/portraits/muwiyeong_soldier.png', look: { role: 'general', body: '#5a4a3a', accent: '#8c8676', headband:true } },
 ];
 const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
@@ -227,6 +227,23 @@ function drawPlayerSprite(px, py, facing, moving){
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
   const H = 58, W = H * (img.naturalWidth / img.naturalHeight);
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -291,7 +308,8 @@ const World = {
     ctx.fillStyle = '#241a16'; ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawMap(camX, camY);
     for (const n of NPCS){
-      drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
+      if (n.img) drawNpcSprite(n.x*TS - camX, n.y*TS - camY, n.img);
+      else drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
       if (n === this.nearNpc){ ctx.fillStyle = '#e0954a'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('!', n.x*TS - camX, n.y*TS - camY - 34); }
     }
     drawPlayerSprite(this.px*TS - camX, this.py*TS - camY, this.facing, this.moving);

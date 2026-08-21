@@ -215,8 +215,8 @@ const ZONES = {
     barriers: [ { x0:0, y0:0, x1:BG_W, y1:20 }, { x0:0, y0:748, x1:BG_W, y1:BG_H },
       { x0:0, y0:0, x1:20, y1:BG_H }, { x0:1356, y0:0, x1:BG_W, y1:BG_H } ],
     npcs: [
-      { id: 'commoner1', name: '떠도는 백성', x: 480, y: 380, look: { role: 'commoner', body: '#5a5650', accent: '#8a7a5a', headband: true } },
-      { id: 'josik', name: '조식', x: 900, y: 380, look: { role: 'scholar', body: '#4a4030', accent: '#7a9a5a' } },
+      { id: 'commoner1', name: '떠도는 백성', x: 480, y: 380, img: 'assets/portraits/commoner2.png', look: { role: 'commoner', body: '#5a5650', accent: '#8a7a5a', headband: true } },
+      { id: 'josik', name: '조식', x: 900, y: 380, img: 'assets/portraits/josik.png', look: { role: 'scholar', body: '#4a4030', accent: '#7a9a5a' } },
     ],
     exits: [
       { rect:{x0:0,y0:340,x1:60,y1:460}, to:'sago', spawn:{x:1290,y:390}, label:'사초 사고로' },
@@ -230,7 +230,7 @@ const ZONES = {
       { x0:60, y0:430, x1:560, y1:650 }, { x0:820, y0:430, x1:1320, y1:650 },
       { x0:0, y0:0, x1:60, y1:BG_H }, { x0:1320, y0:0, x1:BG_W, y1:BG_H } ],
     npcs: [
-      { id: 'kimilson', name: '김일손', x: 688, y: 380, look: { role: 'scholar', body: '#4a3050', accent: '#8a6d3b' } },
+      { id: 'kimilson', name: '김일손', x: 688, y: 380, img: 'assets/portraits/kimilson.png', look: { role: 'scholar', body: '#4a3050', accent: '#8a6d3b' } },
     ],
     exits: [ { rect:{x0:1310,y0:330,x1:1376,y1:460}, to:'pokjeong', spawn:{x:70,y:400}, label:'궁궐로' } ],
   },
@@ -238,7 +238,7 @@ const ZONES = {
     img: 'assets/scenes/ch5_yubae.png', label: '유배지',
     barriers: [ { x0:490, y0:200, x1:850, y1:430 } ], // 초가집
     npcs: [
-      { id: 'jogwangjo', name: '조광조', x: 900, y: 600, look: { role: 'scholar', body: '#3a5040', accent: '#c9a24a' } },
+      { id: 'jogwangjo', name: '조광조', x: 900, y: 600, img: 'assets/portraits/jogwangjo.png', look: { role: 'scholar', body: '#3a5040', accent: '#c9a24a' } },
     ],
     exits: [ { rect:{x0:0,y0:330,x1:66,y1:460}, to:'pokjeong', spawn:{x:1300,y:400}, label:'궁궐로' } ],
   },
@@ -270,6 +270,23 @@ function drawPlayerSprite(px, py, facing, moving){
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
   const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // ch0_phaser와 동일한 화면상 크기(73.6*줌1.2=88px)로 맞춤
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -444,8 +461,9 @@ const World = {
     const zone = ZONES[this.zone];
     ctx.save();
     ctx.scale(ZOOM, ZOOM);
-    for (const n of zone.npcs){ drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     for (const n of zone.npcs){
       if (n === this.nearNpc){

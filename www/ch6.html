@@ -205,8 +205,8 @@ const ZONES = {
       { x0:780, y0:475, x1:1205, y1:590 },  // 우측 하단 방석·서안 열
     ],
     npcs: [
-      { id: 'yiyi', name: '이이', x: 640, y: 280, look: { role: 'scholar', body: '#3a4a6a', accent: '#c9b8f0' } },
-      { id: 'yihwang2', name: '이황', x: 740, y: 280, look: { role: 'scholar', body: '#4a3a5a', accent: '#c9b8f0' } },
+      { id: 'yiyi', name: '이이', x: 640, y: 280, img: 'assets/portraits/yiyi.png', look: { role: 'scholar', body: '#3a4a6a', accent: '#c9b8f0' } },
+      { id: 'yihwang2', name: '이황', x: 740, y: 280, img: 'assets/portraits/yihwang.png', look: { role: 'scholar', body: '#4a3a5a', accent: '#c9b8f0' } },
     ],
     exits: [],
   },
@@ -238,6 +238,23 @@ function drawPlayerSprite(px, py, facing, moving){
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
   const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // ch0_phaser와 동일한 화면상 크기(73.6*줌1.2=88px)로 맞춤
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -349,8 +366,9 @@ const World = {
     const zone = ZONES[this.zone];
     ctx.save();
     ctx.scale(ZOOM, ZOOM);
-    for (const n of zone.npcs){ drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     for (const n of zone.npcs){
       if (n === this.nearNpc){
@@ -430,7 +448,7 @@ window.addEventListener('keyup', e=>{
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
   yiyi_0: {
-    name: '이이', icon: '📖',
+    name: '이이', icon: '📖', img: 'assets/portraits/yiyi.png',
     beats: [
       { who:'npc', t:'우리가 그렇게 많은 벗을 잃어가며 지켜온 조정인데… 이제는 우리끼리 다시 갈라서고 있으니, 마음이 무겁습니다.' },
       { who:'npc', t:'심의겸과 김효원, 두 사람의 사소한 다툼에서 시작된 일이 어쩌다 여기까지 왔는지. 이제 사람들은 자신을 동인이다, 서인이다 나누어 부르기 시작했습니다.' },
@@ -438,7 +456,7 @@ const NPC_DATA = {
     ]
   },
   yiyi_1: {
-    name: '이이', icon: '📖',
+    name: '이이', icon: '📖', img: 'assets/portraits/yiyi.png',
     beats: [
       { who:'npc', t:'…얼마 전엔 정여립이라는 자가 반역을 꾀했다는 고변이 올라왔습니다. 그 일을 조사하는 과정에서 또 많은 사람이 화를 입었지요.' },
       { who:'npc', t:'동인과 서인의 골은 그 사건을 거치며 더 깊어졌습니다. …자네도 이 조정의 공기가 심상치 않다는 걸 느끼겠지.' },
