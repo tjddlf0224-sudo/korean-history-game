@@ -68,8 +68,6 @@
 
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
   #fade.show { opacity: 1; pointer-events: auto; }
-  #door-fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .18s ease; z-index: 30; }
-  #door-fade.show { opacity: 1; }
 
   #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
     background: #000; color: #f0c96b; text-align: center; padding: 24px; }
@@ -150,7 +148,6 @@
   <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
 
   <div id="fade"></div>
-  <div id="door-fade"></div>
 
   <div id="end-screen">
     <div>
@@ -168,9 +165,6 @@
 /* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-const TS = 40;
-const T = { WALL: 0, GROUND: 1, STONE: 2, FIELD: 3, BUILDING: 4, FLOOR: 5, IWALL: 6 };
-const WT = 60, HT = 18;
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -204,193 +198,70 @@ setTimeout(applyOrientation, 300);
 setTimeout(applyOrientation, 800);
 applyOrientation();
 
-/* ============ 맵: 집현전(서) — 국경 진영(동) ============ */
-function buildMap(){
-  const g = [];
-  for (let y = 0; y < HT; y++){ g[y] = new Uint8Array(WT); g[y].fill(T.GROUND); }
-  for (let x = 0; x < WT; x++){ g[0][x] = T.WALL; g[HT-1][x] = T.WALL; }
-  for (let y = 0; y < HT; y++){ g[y][0] = T.WALL; g[y][WT-1] = T.WALL; }
-  // 집현전 앞마당(돌바닥)
-  for (let y = 3; y < 10; y++) for (let x = 3; x < 13; x++) g[y][x] = T.STONE;
-  // 집현전 건물(지붕 — 통과 불가, 앞마당 북쪽에 자리잡은 실제 전각)
-  for (let y = 3; y < 6; y++) for (let x = 5; x < 11; x++) g[y][x] = T.BUILDING;
-  // 국경 진영(다른 바닥재)
-  for (let y = 8; y < 15; y++) for (let x = 21; x < 31; x++) g[y][x] = T.FIELD;
-  // 집현전 내부(멀리 떨어진 별도 구역 — door 텔레포트로만 오갈 수 있어 실제로 다른 공간처럼 분리됨)
-  for (let y = 2; y < 12; y++) for (let x = 40; x < 56; x++) g[y][x] = T.IWALL;
-  for (let y = 3; y < 11; y++) for (let x = 41; x < 55; x++) g[y][x] = T.FLOOR;
-  return g;
-}
-const DOORS = [
-  { x: 8, y: 6, toX: 48, toY: 9 },
-  { x: 48, y: 10, toX: 8, toY: 7 }
-];
-const MAP = buildMap();
-function isBarrier(x, y){
-  if (x < 0 || y < 0 || x >= WT || y >= HT) return true;
-  const t = MAP[Math.floor(y)][Math.floor(x)];
-  if (t === T.WALL || t === T.BUILDING || t === T.IWALL) return true;
-  for (const n of NPCS){ if (Math.round(n.x) === Math.round(x) && Math.round(n.y) === Math.round(y)) return true; }
+/* ============ 구역(zone): 실사 배경 이미지 + 구역별 충돌/NPC/출구 ============
+   기존엔 하나의 타일맵 안에서 문(door) 텔레포트로 집현전 내부↔앞마당을 오갔지만,
+   이제 구역마다 별도의 실사 배경 이미지를 쓰므로 "앞마당"은 별도 배경이 없어
+   집현전 내부 구역에 흡수(스폰 지점만 그쪽에 둠)하고, 국경 진영과는 화면 가장자리
+   exits로 오간다(ch1과 동일한 젤다식 화면 전환). */
+const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
+const ZONES = {
+  jiphyeonjeon: {
+    img: 'assets/scenes/ch2_jiphyeonjeon.png', label: '집현전',
+    spawn: { x: 688, y: 600 },
+    barriers: [
+      { x0:0, y0:0, x1:BG_W, y1:108 },      // 위쪽 서가
+      { x0:0, y0:640, x1:BG_W, y1:BG_H },   // 아래쪽 서가
+      { x0:0, y0:0, x1:95, y1:BG_H },       // 좌측 서가
+      { x0:1290, y0:0, x1:BG_W, y1:BG_H },  // 우측 서가
+    ],
+    npcs: [
+      { id: 'sejong', name: '세종', x: 620, y: 300, look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
+      { id: 'scholar', name: '집현전 학사', x: 760, y: 300, look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
+    ],
+    exits: [ { rect:{x0:1310,y0:660,x1:1376,y1:768}, to:'gukgyeong', spawn:{x:80,y:690}, label:'국경 진영으로' } ],
+  },
+  gukgyeong: {
+    img: 'assets/scenes/ch2_gukgyeong.png', label: '국경 진영',
+    barriers: [
+      { x0:0, y0:0, x1:BG_W, y1:30 }, { x0:0, y0:738, x1:BG_W, y1:BG_H },
+      { x0:0, y0:0, x1:30, y1:BG_H }, { x0:1346, y0:0, x1:BG_W, y1:BG_H },
+      { x0:1090, y0:60, x1:BG_W, y1:250 }, // 우상단 망루/건물
+    ],
+    npcs: [
+      { id: 'kimjongseo', name: '김종서', x: 688, y: 420, look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
+    ],
+    exits: [ { rect:{x0:0,y0:660,x1:60,y1:768}, to:'jiphyeonjeon', spawn:{x:1300,y:690}, label:'집현전으로' } ],
+  },
+};
+const zoneImgs = {};
+for (const id in ZONES){ const im = new Image(); im.src = ZONES[id].img; zoneImgs[id] = im; }
+
+function isBarrierPx(zoneId, x, y){
+  if (x < 6 || y < 6 || x >= BG_W-6 || y >= BG_H-6) return true;
+  for (const b of ZONES[zoneId].barriers){ if (x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) return true; }
   return false;
 }
-
-/* 국가유산청 3D 에셋 마켓 웹뷰어로 확인한 실제 색감 참고(아트/국가유산_비주얼_레퍼런스.md):
-   경복궁 화강암 판석(집현전), 남한산성 성벽, 낙안읍성 초가마을 녹지(국경 진영) */
-const TILE_COLOR = { [T.GROUND]: '#b7a98c', [T.WALL]: '#443a2c', [T.STONE]: '#a89f8f', [T.FIELD]: '#748a52',
-  [T.BUILDING]: '#33404a', [T.FLOOR]: '#7a5c38', [T.IWALL]: '#5c4326' };
-function hash2(x, y, seed){
-  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
-  h = (h ^ (h >>> 13)) >>> 0;
-  h = Math.imul(h, 1274126177);
-  h = (h ^ (h >>> 16)) >>> 0;
-  return h / 4294967295;
-}
-function shadeColor(hex, amt){
-  const n = parseInt(hex.slice(1), 16);
-  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
-  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
-  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
-  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
-  return `rgb(${r|0},${g|0},${b|0})`;
-}
-function drawTile(t, tx, ty, px, py){
-  const base = TILE_COLOR[t];
-  ctx.fillStyle = base;
-  ctx.fillRect(px, py, TS+1, TS+1);
-  if (t === T.GROUND){
-    for (let i=0;i<4;i++){
-      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
-      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
-      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
-    }
-  } else if (t === T.STONE){
-    const half = TS/2;
-    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
-      const n = hash2(tx*2+bx, ty*2+by, 5);
-      ctx.fillStyle = shadeColor(base, (n-0.5)*0.18);
-      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
-    }
-    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 1;
-    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
-  } else if (t === T.FIELD){
-    // 국경 진영 들풀: 작은 풀잎 다발
-    for (let i=0;i<5;i++){
-      const nx = hash2(tx*5+i, ty, 4), ny = hash2(tx*5+i, ty, 6), na = hash2(tx*5+i, ty, 8);
-      const bx = px + 3 + nx*(TS-6), by = py + 3 + ny*(TS-6);
-      const ang = (na-0.5) * 0.9;
-      ctx.strokeStyle = shadeColor(base, na>0.5 ? 0.22 : -0.15);
-      ctx.lineWidth = 1.6;
-      ctx.beginPath(); ctx.moveTo(bx, by+4); ctx.lineTo(bx + Math.sin(ang)*5, by-5); ctx.stroke();
-    }
-  } else if (t === T.WALL){
-    const rows = 3, rowH = TS/rows, cols = 2;
-    for (let r=0;r<rows;r++){
-      const offset = (r%2===0) ? 0 : TS/cols/2;
-      for (let c=-1;c<=cols;c++){
-        const n = hash2(tx*10+r*4+c+30, ty, 11);
-        const bx = px + c*(TS/cols) + offset;
-        ctx.fillStyle = shadeColor(base, (n-0.5)*0.22);
-        ctx.fillRect(Math.max(px,bx)+1, py+r*rowH+1, TS/cols-2, rowH-2);
-      }
-    }
-    ctx.strokeStyle = 'rgba(0,0,0,.15)'; ctx.lineWidth = 1;
-    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
-    ctx.fillStyle = 'rgba(0,0,0,.2)';
-    ctx.fillRect(px, py, TS+1, 5);
-  } else if (t === T.BUILDING){
-    // 집현전 기와지붕: 바로 위에서 본 지붕골 + 남쪽 면(처마·기둥) 파사드
-    const rows = 4;
-    for (let r=0;r<rows;r++){
-      const n = hash2(tx*4+r, ty, 13);
-      ctx.fillStyle = shadeColor(base, (n-0.5)*0.16 - r*0.02);
-      ctx.fillRect(px, py + r*(TS/rows), TS+1, TS/rows + 1);
-    }
-    ctx.strokeStyle = 'rgba(255,255,255,.08)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(px, py+1); ctx.lineTo(px+TS, py+1); ctx.stroke();
-    const belowIsBuilding = ty+1 < HT && MAP[ty+1] && MAP[ty+1][tx] === T.BUILDING;
-    if (!belowIsBuilding){
-      ctx.fillStyle = '#7a2a1f';
-      ctx.fillRect(px, py+TS-6, TS+1, 6);
-      ctx.fillStyle = 'rgba(0,0,0,.35)';
-      ctx.fillRect(px, py+TS-6, TS+1, 2);
-    }
-  } else if (t === T.FLOOR){
-    // 집현전 내부 마룻바닥: 널판 결
-    const planks = 4;
-    for (let i=0;i<planks;i++){
-      const n = hash2(tx, ty*planks+i, 6);
-      ctx.fillStyle = shadeColor(base, (n-0.5)*0.16);
-      ctx.fillRect(px, py + i*(TS/planks), TS+1, TS/planks - 1);
-    }
-  } else if (t === T.IWALL){
-    // 집현전 내부 목재 벽: 세로 판재
-    const planks = 3;
-    for (let i=0;i<planks;i++){
-      const n = hash2(tx*3+i, ty, 15);
-      ctx.fillStyle = shadeColor(base, (n-0.5)*0.2);
-      ctx.fillRect(px + i*(TS/planks), py, TS/planks - 1, TS+1);
-    }
-    ctx.strokeStyle = 'rgba(0,0,0,.2)'; ctx.lineWidth = 1;
-    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
-  }
-}
-function drawMap(camX, camY){
-  const x0 = Math.max(0, Math.floor(camX / TS));
-  const y0 = Math.max(0, Math.floor(camY / TS));
-  const x1 = Math.min(WT, Math.ceil((camX + canvas.width) / TS) + 1);
-  const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
-  for (let y = y0; y < y1; y++){
-    for (let x = x0; x < x1; x++){
-      drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
-    }
-  }
-}
-
-/* ============ 문(입구·소품) ============
-   도어 타일에 붉은 문지방을 그려 "여기가 입구다"를 알려주고,
-   집현전 내부에는 서가·서안을 정적 소품으로 배치해 학자의 공간임을 드러낸다. */
-function drawProps(camX, camY){
-  for (const d of DOORS){
-    const px = d.x*TS - camX, py = d.y*TS - camY;
-    if (px < -TS || py < -TS || px > canvas.width + TS || py > canvas.height + TS) continue;
-    ctx.fillStyle = '#7a2a1f';
-    ctx.fillRect(px + 6, py + 6, TS - 12, TS - 12);
-    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1;
-    ctx.strokeRect(px + 6.5, py + 6.5, TS - 13, TS - 13);
-  }
-  drawBookshelf(43*TS - camX, 3*TS - camY);
-  drawBookshelf(46*TS - camX, 3*TS - camY);
-  drawBookshelf(49*TS - camX, 3*TS - camY);
-  drawBookshelf(52*TS - camX, 3*TS - camY);
-  drawDesk(48*TS - camX, 6*TS - camY);
-}
-function drawBookshelf(px, py){
-  if (px < -TS || py < -TS || px > canvas.width + TS || py > canvas.height + TS) return;
-  ctx.fillStyle = '#3d2c18';
-  ctx.fillRect(px - 14, py - 6, 28, 26);
-  ctx.strokeStyle = 'rgba(0,0,0,.4)'; ctx.lineWidth = 1;
-  for (let i=0;i<3;i++){ ctx.beginPath(); ctx.moveTo(px-14, py-6+i*9); ctx.lineTo(px+14, py-6+i*9); ctx.stroke(); }
-  ctx.fillStyle = '#8a6d3b';
-  for (let i=0;i<4;i++){ ctx.fillRect(px-11+i*7, py-4, 4, 6); }
-}
-function drawDesk(px, py){
-  if (px < -TS || py < -TS || px > canvas.width + TS || py > canvas.height + TS) return;
-  ctx.fillStyle = '#5c4326';
-  ctx.fillRect(px - 20, py - 10, 40, 18);
-  ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1;
-  ctx.strokeRect(px - 20.5, py - 10.5, 41, 19);
-  ctx.fillStyle = '#e8dcc4';
-  ctx.fillRect(px - 8, py - 6, 14, 10);
-}
-
-/* ============ NPC ============
-   look.role로 실루엣이 달라짐: king(왕)/general(무관)/scholar(문관)/commoner(평민) */
-const NPCS = [
-  { id: 'sejong', name: '세종', x: 48, y: 5, look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
-  { id: 'scholar', name: '집현전 학사', x: 44, y: 6, look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
-  { id: 'kimjongseo', name: '김종서', x: 25, y: 11, look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
-];
 const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
+
+/* ============ 주인공(학생) 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용.
+   ch0_phaser와 동일한 4방향 걷기 시트를 그대로 재사용(같은 인물이므로 전 챕터 공통). */
+const PLAYER_SPRITES = {};
+['down','up','left','right'].forEach(dir => {
+  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${dir}_${i}.png`; return im; });
+});
+const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
+function drawPlayerSprite(px, py, facing, moving){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 15, 13, 5, 0, 0, Math.PI*2); ctx.fill();
+  const dir = DIR_NAME[facing] || 'down';
+  const frames = PLAYER_SPRITES[dir];
+  const seq = [0, 1, 0, 2];
+  const idx = moving ? seq[Math.floor(performance.now()/140) % seq.length] : 0;
+  const img = frames[idx];
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 58, W = H * (img.naturalWidth / img.naturalHeight);
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
 
 /* ============ 캐릭터 드로잉 (역할별 실루엣) ============ */
 function drawCharacter(px, py, facing, look){
@@ -483,29 +354,34 @@ function overlayOpen(){
   return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show');
 }
 
-/* ============ World: 이동/카메라/충돌 ============ */
+/* ============ World: 이동/카메라/충돌/구역 전환 ============ */
 const World = {
-  px: 17, py: 9, facing: 'd', speed: 3.4,
+  zone: 'jiphyeonjeon', px: ZONES.jiphyeonjeon.spawn.x, py: ZONES.jiphyeonjeon.spawn.y,
+  facing: 'd', speed: 260,
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
   paused: false,
+  transitioning: false,
+  moving: false,
   nearNpc: null,
   lastT: 0,
 
   canStand(x, y){
-    const pad = 0.3;
-    return !isBarrier(x-pad, y-pad) && !isBarrier(x+pad, y-pad) && !isBarrier(x-pad, y+pad) && !isBarrier(x+pad, y+pad);
+    const pad = 16;
+    return !isBarrierPx(this.zone, x-pad, y-pad) && !isBarrierPx(this.zone, x+pad, y-pad) &&
+           !isBarrierPx(this.zone, x-pad, y+pad) && !isBarrierPx(this.zone, x+pad, y+pad);
   },
 
   update(dt){
-    if (this.paused || overlayOpen()) return;
+    if (this.paused || this.transitioning || overlayOpen()) return;
     let vx = this.stick.dx, vy = this.stick.dy;
     if (this.keys.l) vx -= 1;
     if (this.keys.r) vx += 1;
     if (this.keys.u) vy -= 1;
     if (this.keys.d) vy += 1;
     const len = Math.hypot(vx, vy);
-    if (len > 0.05){
+    this.moving = len > 0.05;
+    if (this.moving){
       vx /= len; vy /= len;
       if (Math.abs(vx) > Math.abs(vy)) this.facing = vx > 0 ? 'r' : 'l';
       else this.facing = vy > 0 ? 'd' : 'u';
@@ -514,36 +390,39 @@ const World = {
       if (this.canStand(nx, this.py)) this.px = nx;
       if (this.canStand(this.px, ny)) this.py = ny;
     }
+    this.checkExit();
     this.checkNpc();
-    this.checkDoor();
   },
 
-  doorCooldown: 0,
-  checkDoor(){
-    if (this.doorCooldown > 0){ this.doorCooldown -= 1/60; return; }
-    const px = Math.round(this.px), py = Math.round(this.py);
-    for (const d of DOORS){
-      if (px === d.x && py === d.y){
-        this.useDoor(d);
+  /* 구역 경계(exits) 사각형에 들어가면 다음 구역으로 페이드 전환(젤다식 화면 전환) */
+  checkExit(){
+    for (const e of ZONES[this.zone].exits){
+      const r = e.rect;
+      if (this.px >= r.x0 && this.px <= r.x1 && this.py >= r.y0 && this.py <= r.y1){
+        this.goToZone(e.to, e.spawn);
         return;
       }
     }
   },
-  useDoor(d){
-    this.paused = true;
-    const fade = document.getElementById('door-fade');
+  goToZone(zoneId, spawn){
+    this.transitioning = true;
+    const fade = document.getElementById('fade');
     fade.classList.add('show');
     setTimeout(() => {
-      World.px = d.toX; World.py = d.toY;
-      fade.classList.remove('show');
-      World.paused = false;
-      World.doorCooldown = 0.6;
-    }, 190);
+      this.zone = zoneId;
+      this.px = spawn.x; this.py = spawn.y;
+      this.nearNpc = null;
+      document.getElementById('act-btn').classList.remove('show');
+      setTimeout(() => {
+        fade.classList.remove('show');
+        this.transitioning = false;
+      }, 60);
+    }, 600);
   },
 
   checkNpc(){
-    let found = null, best = 1.7;
-    for (const n of NPCS){
+    let found = null, best = 90;
+    for (const n of ZONES[this.zone].npcs){
       const d = Math.hypot(n.x - this.px, n.y - this.py);
       if (d < best){ best = d; found = n; }
     }
@@ -555,22 +434,31 @@ const World = {
   },
 
   render(){
-    const camX = this.px*TS - canvas.width/2;
-    const camY = this.py*TS - canvas.height/2;
-    ctx.fillStyle = '#b7a98c';
+    const img = zoneImgs[this.zone];
+    const viewW = canvas.width / ZOOM, viewH = canvas.height / ZOOM;
+    const camX = Math.max(0, Math.min(Math.max(0, BG_W - viewW), this.px - viewW/2));
+    const camY = Math.max(0, Math.min(Math.max(0, BG_H - viewH), this.py - viewH/2));
+    ctx.fillStyle = '#1a140c';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawMap(camX, camY);
-    drawProps(camX, camY);
-    for (const n of NPCS){
-      drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
+    if (img.complete && img.naturalWidth){
+      const srcW = Math.min(viewW, BG_W), srcH = Math.min(viewH, BG_H);
+      ctx.drawImage(img, camX, camY, srcW, srcH, 0, 0, srcW*ZOOM, srcH*ZOOM);
+    }
+    const zone = ZONES[this.zone];
+    ctx.save();
+    ctx.scale(ZOOM, ZOOM);
+    for (const n of zone.npcs){ drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    ctx.restore();
+    drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
+    for (const n of zone.npcs){
       if (n === this.nearNpc){
+        const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
         ctx.fillStyle = '#f0c96b';
-        ctx.font = '16px sans-serif';
+        ctx.font = 'bold 16px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('!', n.x*TS - camX, n.y*TS - camY - 34);
+        ctx.fillText('!', sx, sy - 40);
       }
     }
-    drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
     vg.addColorStop(1, 'rgba(0,0,0,.28)');
@@ -945,8 +833,8 @@ Stage.endChapter = function(){
   document.getElementById('end-screen').classList.add('show');
 };
 
-/* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다
-   (Phaser 카메라나 게임 캔버스와 별개). 타일맵(MAP/TILE_COLOR)을 그대로 축소해서 사용. */
+/* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다.
+   현재 구역의 배경 이미지를 그대로 축소해서 사용(구역이 바뀌면 자동 반영). */
 const miniCanvas = document.getElementById('minimap-canvas');
 const miniCtx = miniCanvas.getContext('2d');
 function sizeMinimapCanvas(){
@@ -958,25 +846,21 @@ sizeMinimapCanvas();
 window.addEventListener('resize', sizeMinimapCanvas);
 function drawMinimap(){
   const w = miniCanvas.width, h = miniCanvas.height;
-  const cw = w / WT, ch = h / HT;
+  const img = zoneImgs[World.zone];
+  const sx = w / BG_W, sy = h / BG_H;
   miniCtx.clearRect(0, 0, w, h);
-  for (let y=0;y<HT;y++){
-    for (let x=0;x<WT;x++){
-      miniCtx.fillStyle = TILE_COLOR[MAP[y][x]] || '#3a2c1a';
-      miniCtx.fillRect(x*cw, y*ch, cw+0.5, ch+0.5);
-    }
-  }
-  for (const n of NPCS){
-    miniCtx.fillStyle = '#8a2f2f';
+  if (img.complete && img.naturalWidth){ miniCtx.drawImage(img, 0, 0, w, h); }
+  for (const n of ZONES[World.zone].npcs){
+    miniCtx.fillStyle = '#c23b3b';
     miniCtx.beginPath();
-    miniCtx.arc(n.x*cw, n.y*ch, 3, 0, Math.PI*2);
+    miniCtx.arc(n.x*sx, n.y*sy, 4, 0, Math.PI*2);
     miniCtx.fill();
   }
-  miniCtx.fillStyle = '#2f6fbf';
+  miniCtx.fillStyle = '#3d84e6';
   miniCtx.strokeStyle = '#ffffff';
-  miniCtx.lineWidth = 1;
+  miniCtx.lineWidth = 1.2;
   miniCtx.beginPath();
-  miniCtx.arc(World.px*cw, World.py*ch, 4, 0, Math.PI*2);
+  miniCtx.arc(World.px*sx, World.py*sy, 5, 0, Math.PI*2);
   miniCtx.fill();
   miniCtx.stroke();
 }
