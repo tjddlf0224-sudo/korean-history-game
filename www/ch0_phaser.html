@@ -55,11 +55,13 @@
   .dlg-name { font-weight: bold; font-size: 17px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
+  .dlg-note { display: block; margin-top: 10px; font-size: 13px; font-style: italic; font-family: Georgia, "Nanum Myeongjo", serif;
+    color: #b8a06a; opacity: .8; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
-  #intro-panel { max-width: 400px; text-align: center; }
+  #intro-panel { }
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
 
@@ -105,7 +107,7 @@
     </svg>
   </button>
 
-  <div class="ov center show" id="intro-overlay">
+  <div class="ov show" id="intro-overlay">
     <div id="intro-panel">
       <div id="intro-text"></div>
       <div id="intro-next">탭하여 계속 ▶</div>
@@ -343,7 +345,12 @@ const Dialog = {
   },
   render(){
     const beat = this.data.beats[this.idx];
-    document.getElementById('dlg-text').textContent = beat.t;
+    // '※'로 시작하는 줄은 NPC가 실제로 하는 말이 아니라 참고용 주석(지명 설명 등)이므로
+    // 대사와 다른 스타일(작게·기울임·옅은 색)로 구분해서 보여준다.
+    const html = beat.t.split('\n').map(line =>
+      line.trim().startsWith('※') ? `<span class="dlg-note">${line}</span>` : line
+    ).join('\n');
+    document.getElementById('dlg-text').innerHTML = html;
   },
   next(){
     this.idx++;

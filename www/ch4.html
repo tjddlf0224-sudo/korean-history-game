@@ -51,7 +51,7 @@
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
-  #intro-panel { max-width: 400px; text-align: center; }
+  #intro-panel { }
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
 
@@ -112,7 +112,7 @@
   <button id="act-btn" onclick="Stage.interact()">💬</button>
 
   <!-- 회상 인트로 -->
-  <div class="ov center show" id="intro-overlay">
+  <div class="ov show" id="intro-overlay">
     <div id="intro-panel">
       <div id="intro-text"></div>
       <div id="intro-next">탭하여 계속 ▶</div>
