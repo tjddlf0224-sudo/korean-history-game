@@ -165,7 +165,9 @@ const BARRIERS = [
 ];
 function isBarrierPx(x, y){
   if (x < 12 || y < 12 || x > BG_W-12 || y > BG_H-12) return true;
-  return BARRIERS.some(b => x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1);
+  if (BARRIERS.some(b => x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1)) return true;
+  const NPC_BLOCK_R = 24; // NPC 사람 크기만큼 플레이어가 못 지나가게 막는 반경
+  return NPCS.some(n => Math.hypot(x - n.px, y - n.py) < NPC_BLOCK_R);
 }
 
 /* 좌우 스프라이트 소스가 실제 이동 방향과 반대로 나와서(에셋 라벨링 오차),
