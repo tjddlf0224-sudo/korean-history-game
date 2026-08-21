@@ -57,6 +57,10 @@
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
 
+  #quiz-panel { position: relative; }
+  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid #c9a24a; background: #3a2c1a; color: #f5ecd8; font-size: 14px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .quiz-tag { font-size: 12px; color: #f0c96b; margin-bottom: 6px; }
   .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
   .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
@@ -86,7 +90,7 @@
      보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
      미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
   #minimap-canvas { position: absolute; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
-    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 50;
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 4;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
 
   /* 마지막 대사(보스전)까지 다 마쳐도 곧장 챕터가 끝나지 않고, 이 버튼을
@@ -138,6 +142,7 @@
   <!-- 확인 퀴즈 / 보스전 -->
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
+      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -237,9 +242,14 @@ const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
 /* ============ 주인공(학생) 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용.
    ch0_phaser와 동일한 4방향 걷기 시트를 그대로 재사용(같은 인물이므로 전 챕터 공통). */
+/* 주의(재발 방지): assets/player/left_*.png·right_*.png 원본 파일 자체가 좌우
+   내용이 뒤바뀌어 있음(ch0_phaser에서 이미 발견/수정된 문제, DIR_SRC로 보정).
+   여기서도 동일하게 보정하지 않으면 왼쪽으로 이동 시 오른쪽을 보는 등 반대로 렌더됨. */
+const DIR_SRC = { down:'down', up:'up', left:'right', right:'left' };
 const PLAYER_SPRITES = {};
 ['down','up','left','right'].forEach(dir => {
-  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${dir}_${i}.png`; return im; });
+  const src = DIR_SRC[dir];
+  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${src}_${i}.png`; return im; });
 });
 const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
 function drawPlayerSprite(px, py, facing, moving){
@@ -417,11 +427,16 @@ const World = {
   },
 
   checkNpc(){
-    let found = null, best = 90;
+    // ch0_phaser와 동일한 2단계 거리(멀면 !, 가까우면 이름)로 통일
+    const SHOW_RANGE = 192, INTERACT_RANGE = 108.8;
+    let shown = null, best = SHOW_RANGE;
     for (const n of ZONES[this.zone].npcs){
       const d = Math.hypot(n.x - this.px, n.y - this.py);
-      if (d < best){ best = d; found = n; }
+      if (d < best){ best = d; shown = n; }
     }
+    this.nearNpcShown = shown;
+    this.nearNpcClose = (shown && best < INTERACT_RANGE) ? shown : null;
+    const found = this.nearNpcClose;
     if (found !== this.nearNpc){
       this.nearNpc = found;
       const btn = document.getElementById('act-btn');
@@ -447,14 +462,13 @@ const World = {
     ctx.restore();
     for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
-    for (const n of zone.npcs){
-      if (n === this.nearNpc){
-        const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
-        ctx.fillStyle = '#f0c96b';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('!', sx, sy - 40);
-      }
+    if (this.nearNpcShown){
+      const n = this.nearNpcShown;
+      const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
+      ctx.fillStyle = '#f0c96b';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
     }
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
@@ -671,6 +685,12 @@ const Quiz = {
     this.seq = list; this.seqIdx = 0; this.seqScore = 0; this.seqOnDone = onAllDone;
     this._openOne(this.seq[0], () => this._seqAdvance());
   },
+  abort(){
+    // 보스전/퀴즈를 중간에 그만두고 싶을 때(우상단 X) — 점수 집계 없이 그냥 닫는다.
+    document.getElementById('quiz-overlay').classList.remove('show');
+    this.seq = null; this.data = null; this.onDone = null; this.seqOnDone = null;
+    World.paused = false;
+  },
   _seqAdvance(){
     this.seqIdx++;
     if (this.seqIdx >= this.seq.length){
@@ -684,7 +704,7 @@ const Quiz = {
   _openOne(data, onDone){
     this.data = data; this.onDone = onDone; this.answered = false;
     document.getElementById('quiz-overlay').classList.add('show');
-    document.getElementById('quiz-tag').textContent = this.seq ? `보스전 · ${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
+    document.getElementById('quiz-tag').textContent = this.seq ? `${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
     document.getElementById('quiz-q').textContent = data.q;
     document.getElementById('quiz-fb').textContent = '';
     document.getElementById('quiz-next').classList.remove('show');
@@ -706,7 +726,7 @@ const Quiz = {
     if (correct && this.seq) this.seqScore++;
     this.optButtons[i].classList.add(correct ? 'correct' : 'wrong');
     if (!correct) this.optButtons[this.data.answer].classList.add('correct');
-    document.getElementById('quiz-fb').textContent = this.data.feedback[i];
+    document.getElementById('quiz-fb').textContent = this.data.feedback[correct ? 1 : 0];
     const next = document.getElementById('quiz-next');
     next.classList.add('show');
     next.onclick = () => this.confirmIfReady();
@@ -748,7 +768,7 @@ renderIntro();
    플레이어가 원할 때 직접 눌러야 끝나며, 그 전까지 계속 돌아다니며
    다른 NPC와도 대화할 수 있다. */
 Stage.finishBoss = function(score, total){
-  document.getElementById('end-score').textContent = `보스전 결과: ${score} / ${total} 정답`;
+  document.getElementById('end-score').textContent = `결과: ${score} / ${total} 정답`;
   document.getElementById('next-chapter-btn').classList.add('show');
   World.paused = false; // 보스전 직후에도 곧장 끝내지 않으므로 이동을 다시 풀어줘야 함
 };
@@ -800,6 +820,16 @@ function loop(t){
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
+
+/* iOS Safari는 viewport meta의 user-scalable=no를 무시하는 경우가 있어(접근성 정책),
+   핀치줌/더블탭줌을 JS로 한 번 더 확실히 막는다. */
+document.addEventListener('gesturestart', e => e.preventDefault());
+let __lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - __lastTouchEnd <= 300) e.preventDefault();
+  __lastTouchEnd = now;
+}, { passive: false });
 </script>
 </body>
 </html>

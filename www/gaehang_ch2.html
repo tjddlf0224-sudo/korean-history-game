@@ -62,7 +62,7 @@
      보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
      미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
   #minimap-canvas { position: absolute; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
-    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 50;
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 4;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
 
   /* 마지막 대사까지 다 들어도 곧장 챕터가 끝나지 않고, 이 버튼을
@@ -171,9 +171,14 @@ const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
 /* ============ 주인공(학생) 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용.
    ch0_phaser와 동일한 4방향 걷기 시트를 그대로 재사용(같은 인물이므로 전 챕터 공통). */
+/* 주의(재발 방지): assets/player/left_*.png·right_*.png 원본 파일 자체가 좌우
+   내용이 뒤바뀌어 있음(ch0_phaser에서 이미 발견/수정된 문제, DIR_SRC로 보정).
+   여기서도 동일하게 보정하지 않으면 왼쪽으로 이동 시 오른쪽을 보는 등 반대로 렌더됨. */
+const DIR_SRC = { down:'down', up:'up', left:'right', right:'left' };
 const PLAYER_SPRITES = {};
 ['down','up','left','right'].forEach(dir => {
-  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${dir}_${i}.png`; return im; });
+  const src = DIR_SRC[dir];
+  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${src}_${i}.png`; return im; });
 });
 const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
 function drawPlayerSprite(px, py, facing, moving){
@@ -264,8 +269,16 @@ const World = {
     this.checkNpc();
   },
   checkNpc(){
-    let found = null, best = 90;
-    for (const n of NPCS){ const d = Math.hypot(n.x - this.px, n.y - this.py); if (d < best){ best = d; found = n; } }
+    // ch0_phaser와 동일한 2단계 거리(멀면 !, 가까우면 이름)로 통일
+    const SHOW_RANGE = 192, INTERACT_RANGE = 108.8;
+    let shown = null, best = SHOW_RANGE;
+    for (const n of NPCS){
+      const d = Math.hypot(n.x - this.px, n.y - this.py);
+      if (d < best){ best = d; shown = n; }
+    }
+    this.nearNpcShown = shown;
+    this.nearNpcClose = (shown && best < INTERACT_RANGE) ? shown : null;
+    const found = this.nearNpcClose;
     if (found !== this.nearNpc){ this.nearNpc = found; document.getElementById('act-btn').classList.toggle('show', !!found); }
   },
   render(){
@@ -283,11 +296,13 @@ const World = {
     ctx.restore();
     for (const n of NPCS){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
-    for (const n of NPCS){
-      if (n === this.nearNpc){
-        const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
-        ctx.fillStyle = '#e0954a'; ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('!', sx, sy - 40);
-      }
+    if (this.nearNpcShown){
+      const n = this.nearNpcShown;
+      const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
+      ctx.fillStyle = '#e0954a';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
     }
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.4)');
@@ -467,6 +482,14 @@ function loop(t){
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
+
+document.addEventListener('gesturestart', e => e.preventDefault());
+let __lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - __lastTouchEnd <= 300) e.preventDefault();
+  __lastTouchEnd = now;
+}, { passive: false });
 </script>
 </body>
 </html>

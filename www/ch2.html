@@ -216,10 +216,12 @@ const ZONES = {
       { x0:0, y0:640, x1:BG_W, y1:BG_H },   // 아래쪽 서가
       { x0:0, y0:0, x1:95, y1:BG_H },       // 좌측 서가
       { x0:1290, y0:0, x1:BG_W, y1:BG_H },  // 우측 서가
+      { x0:100, y0:175, x1:1290, y1:335 },  // 앞쪽 책상열(그림 위를 걸어다니지 못하게 차단)
+      { x0:100, y0:435, x1:1290, y1:575 },  // 뒤쪽 책상열
     ],
     npcs: [
-      { id: 'sejong', name: '세종', x: 620, y: 300, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
-      { id: 'scholar', name: '집현전 학사', x: 760, y: 300, img: 'assets/portraits/scholar.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
+      { id: 'sejong', name: '세종', x: 480, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
+      { id: 'sinsukju', name: '신숙주', x: 900, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
     exits: [ { rect:{x0:1310,y0:660,x1:1376,y1:768}, to:'gukgyeong', spawn:{x:80,y:690}, label:'국경 진영으로' } ],
   },
@@ -443,11 +445,16 @@ const World = {
   },
 
   checkNpc(){
-    let found = null, best = 90;
+    // ch0_phaser와 동일한 2단계 거리(멀면 !, 가까우면 이름)로 통일
+    const SHOW_RANGE = 192, INTERACT_RANGE = 108.8;
+    let shown = null, best = SHOW_RANGE;
     for (const n of ZONES[this.zone].npcs){
       const d = Math.hypot(n.x - this.px, n.y - this.py);
-      if (d < best){ best = d; found = n; }
+      if (d < best){ best = d; shown = n; }
     }
+    this.nearNpcShown = shown;
+    this.nearNpcClose = (shown && best < INTERACT_RANGE) ? shown : null;
+    const found = this.nearNpcClose;
     if (found !== this.nearNpc){
       this.nearNpc = found;
       const btn = document.getElementById('act-btn');
@@ -473,14 +480,13 @@ const World = {
     ctx.restore();
     for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
-    for (const n of zone.npcs){
-      if (n === this.nearNpc){
-        const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
-        ctx.fillStyle = '#f0c96b';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('!', sx, sy - 40);
-      }
+    if (this.nearNpcShown){
+      const n = this.nearNpcShown;
+      const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
+      ctx.fillStyle = '#f0c96b';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
     }
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
@@ -624,9 +630,9 @@ const NPC_DATA = {
     beats: [ { who:'npc', t:'북방의 김종서 장군도 한번 찾아가 보게. 그쪽 이야기도 들을 만할 걸세.' } ],
     quiz: null
   },
-  scholar_0: {
-    name: '집현전 학사', icon: '📖', img: 'assets/portraits/scholar.png',
-    beats: [ { who:'npc', t:'전하께서 밤을 새워 언문 자모를 고르고 계시네. 우리도 곁에서 거들 뿐이지만, 참으로 뿌듯한 나날일세.' } ],
+  sinsukju_0: {
+    name: '신숙주', icon: '🖋️', img: 'assets/portraits/sinsukju.png',
+    beats: [ { who:'npc', t:'전하께서 밤을 새워 언문 자모를 고르고 계십니다. 저도 곁에서 거들 뿐이지만, 참으로 뿌듯한 나날입니다.' } ],
     quiz: null
   },
   kim_0: {
@@ -693,8 +699,8 @@ const Stage = {
       if (Stage.state.bossBDone){ Dialog.open('kim_repeat', n); return; }
       const key = 'kim_' + Math.min(Stage.state.kimStage, 2);
       Dialog.open(key, n);
-    } else if (n.id === 'scholar'){
-      Dialog.open('scholar_0', n);
+    } else if (n.id === 'sinsukju'){
+      Dialog.open('sinsukju_0', n);
     }
   }
 };
@@ -714,7 +720,9 @@ const Dialog = {
     const beat = this.data.beats[this.idx];
     document.getElementById('dlg-name').textContent = beat.name || this.data.name;
     const portraitEl = document.getElementById('dlg-portrait');
-    const img = beat.img || this.data.img;
+    // beat.name으로 화자가 바뀌었는데 그 줄에 전용 img가 없다면(예: 최만리),
+    // 이전 화자(예: 세종)의 초상을 그대로 물려받으면 안 되므로 아이콘으로 대체한다.
+    const img = beat.img || (beat.name ? null : this.data.img);
     if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}')`; }
     else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
     document.getElementById('dlg-text').textContent = beat.t;
@@ -801,7 +809,7 @@ const Quiz = {
     if (correct && this.seq) this.seqScore++;
     this.optButtons[i].classList.add(correct ? 'correct' : 'wrong');
     if (!correct) this.optButtons[this.data.answer].classList.add('correct');
-    document.getElementById('quiz-fb').textContent = this.data.feedback[i];
+    document.getElementById('quiz-fb').textContent = this.data.feedback[correct ? 1 : 0];
     const next = document.getElementById('quiz-next');
     next.classList.add('show');
     next.onclick = () => this.confirmIfReady();
