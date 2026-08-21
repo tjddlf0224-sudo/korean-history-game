@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import numpy as np
 
 S = 3
-W, H = 900 * S, 620 * S
+W, H = 900 * S, 420 * S
 im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
 d = ImageDraw.Draw(im)
 
@@ -28,7 +28,7 @@ im = Image.fromarray(arr, 'RGBA')
 # 얼룩(세월의 흔적) + 가장자리 어둡게(빈티지 vignette)
 rng2 = np.random.default_rng(5)
 for _ in range(16):
-    cx, cy = int(rng2.integers(30 * S, (900 - 30) * S)), int(rng2.integers(30 * S, (620 - 30) * S))
+    cx, cy = int(rng2.integers(30 * S, (900 - 30) * S)), int(rng2.integers(30 * S, (420 - 30) * S))
     r = int(rng2.integers(14 * S, 46 * S))
     spot = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     sd = ImageDraw.Draw(spot)
@@ -47,7 +47,7 @@ d = ImageDraw.Draw(im)
 
 font_path = '/System/Library/Fonts/Supplemental/AppleMyungjo.ttf'
 title_font = ImageFont.truetype(font_path, int(30 * S))
-body_font = ImageFont.truetype(font_path, int(22 * S))
+body_font = ImageFont.truetype(font_path, int(25 * S))
 
 INK = (35, 27, 19, 240)
 
@@ -66,25 +66,19 @@ d.line([(80 * S, ty + 46 * S), (W - 80 * S, ty + 46 * S)], fill=(90, 65, 35, 160
 # 본문: 실제 최만리 등 갑자상소(1444)의 핵심 논지를 참고해 새로 쓴 요약 문구
 # (원문 그대로가 아니라 이 게임 톤에 맞춰 재구성한 것 — 프로젝트 공통 원칙)
 columns = [
-    '自古中國',
-    '言語不同',
-    '因音制字',
-    '未有變夏',
-    '從夷者也',
-    '諺文一作',
-    '字學自廢',
-    '吏文亦弛',
-    '刑獄之司',
-    '恐生偏枉',
-    '此臣等之',
-    '區區憂慮',
+    '自古中國言語不同',
+    '因音制字未有變夏',
+    '從夷者也諺文一作',
+    '字學自廢吏文亦弛',
+    '刑獄之司恐生偏枉',
+    '此臣等之區區憂慮',
 ]
 n_cols = len(columns)
-margin_x = 60 * S
-top_y = 96 * S
-bottom_y = H - 30 * S
+margin_x = 50 * S
+top_y = 76 * S
+bottom_y = H - 26 * S
 col_w = (W - margin_x * 2) / n_cols
-line_gap = 30 * S
+line_gap = 32 * S
 
 for i, text in enumerate(columns):
     col_idx = n_cols - 1 - i
@@ -112,6 +106,6 @@ sd.text((sx, sy - sr * 0.5), '崔', font=sfont, fill=(160, 25, 25, 210), anchor=
 sd.text((sx, sy + sr * 0.5), '理', font=sfont, fill=(160, 25, 25, 210), anchor='mm')
 im = Image.alpha_composite(im, seal)
 
-out = im.resize((900, 620), Image.LANCZOS)
+out = im.resize((900, 420), Image.LANCZOS)
 out.save('choemalli_sangso_full.png')
 print('saved', out.size)
