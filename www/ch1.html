@@ -233,7 +233,12 @@ const ZONES = {
     npcs: [
       { id: 'guard', name: '내금위 군사', x: 1150, y: 150, img: 'assets/portraits/general.png', look: { role: 'general', body: '#4f5d75', accent: '#8a6d3b' } },
     ],
-    exits: [ { rect:{x0:0,y0:560,x1:70,y1:768}, to:'naejeon', spawn:{x:690,y:690}, label:'궁궐 내전으로' } ],
+    exits: [
+      { rect:{x0:0,y0:560,x1:70,y1:768}, to:'naejeon', spawn:{x:690,y:690}, label:'궁궐 내전으로' },
+      // 우측 아래쪽: 울타리가 끝나는 지점(모서리 기둥)부터 건물 사이의 트인 구간 —
+      // 배경 그림상 담이 없는 틈이라 여기로도 나갈 수 있게 함.
+      { rect:{x0:900,y0:730,x1:990,y1:768}, to:'naejeon', spawn:{x:690,y:700}, label:'궁궐 내전으로' },
+    ],
   },
 };
 const zoneImgs = {};
