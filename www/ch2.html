@@ -46,7 +46,7 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 17px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
@@ -371,8 +371,10 @@ const World = {
 
   canStand(x, y){
     const pad = 16;
-    return !isBarrierPx(this.zone, x-pad, y-pad) && !isBarrierPx(this.zone, x+pad, y-pad) &&
-           !isBarrierPx(this.zone, x-pad, y+pad) && !isBarrierPx(this.zone, x+pad, y+pad);
+    if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
+        isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
+    for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
+    return true;
   },
 
   update(dt){
@@ -533,10 +535,10 @@ window.addEventListener('keyup', e=>{
    beats 항목에 name/icon을 개별로 주면 그 줄만 다른 화자로 표시된다(최만리 논쟁 장면용 확장). */
 const NPC_DATA = {
   sejong_0: {
-    name: '세종', icon: '👑',
+    name: '세종', icon: '👑', img: 'assets/portraits/sejong.png',
     beats: [
       { who:'npc', t:'(책에서 눈을 떼며) 왔는가. 여기가 집현전일세 — 내가 가장 아끼는 곳이지.' },
-      { who:'npc', name:'신숙주', icon:'🖋️', t:'저는 신숙주라 합니다. 앞으로 전하의 여러 사업을 함께 도울 테니, 잘 부탁드립니다.' },
+      { who:'npc', name:'신숙주', icon:'🖋️', img:'assets/portraits/sinsukju.png', t:'저는 신숙주라 합니다. 앞으로 전하의 여러 사업을 함께 도울 테니, 잘 부탁드립니다.' },
       { who:'npc', t:'마침 잘 왔군. 최만리를 비롯한 신하들이 언문(훈민정음)에 반대하는 상소를 올렸다네. 자네도 함께 들어보겠나?' },
       { who:'npc', name:'최만리', icon:'📯', t:'전하, 언문이라는 것이 옛 글자와 다르니, 중국에라도 흘러 들어가면 우리가 오랑캐와 다를 바 없다는 비난을 받을까 두렵습니다.' },
     ],
@@ -551,7 +553,7 @@ const NPC_DATA = {
     ]
   },
   sejong_1: {
-    name: '세종', icon: '👑',
+    name: '세종', icon: '👑', img: 'assets/portraits/sejong.png',
     beats: [
       { who:'npc', t:'가뭄과 홍수를 미리 알 수 있다면 얼마나 많은 백성을 구할 수 있겠는가.' },
       { who:'npc', t:'이 그릇에 빗물을 받아 재는 것만으로 그게 가능하다니, 참으로 놀랍지 않은가. 이 기구의 이름을 아나?' },
@@ -566,10 +568,10 @@ const NPC_DATA = {
     ]
   },
   sejong_2: {
-    name: '세종', icon: '👑',
+    name: '세종', icon: '👑', img: 'assets/portraits/sejong.png',
     beats: [
       { who:'npc', t:'언문은 이제 시작일 뿐이네. 이 글자로 수많은 책을 펴낼 걸세 — 역사서, 의학서, 음악까지.' },
-      { who:'npc', name:'신숙주', icon:'🖋️', t:'박연 어른이 편경도 새로 만드셨다지요. 소리가 예전 것보다 훨씬 맑고 정확하다 들었습니다.' },
+      { who:'npc', name:'신숙주', icon:'🖋️', img:'assets/portraits/sinsukju.png', t:'박연 어른이 편경도 새로 만드셨다지요. 소리가 예전 것보다 훨씬 맑고 정확하다 들었습니다.' },
     ],
     quizSeq: [
       { q:'세종이 박연에게 명해 새로 만들게 한 궁중 타악기는?', opts:['편경','거문고'], answer:0,
@@ -583,7 +585,7 @@ const NPC_DATA = {
     ]
   },
   sejong_3: {
-    name: '세종', icon: '👑',
+    name: '세종', icon: '👑', img: 'assets/portraits/sejong.png',
     beats: [
       { who:'npc', t:'(늙고 지친 목소리로) …요즘 몸이 예전 같지 않네.' },
       { who:'npc', t:'다음 왕위는 문종, 그리고 어린 세손에게 이어지겠지. 부디 이 아이가 무사히 왕좌를 지킬 수 있기를…' },
@@ -600,17 +602,17 @@ const NPC_DATA = {
     finishesBossA: true
   },
   sejong_repeat: {
-    name: '세종', icon: '👑',
+    name: '세종', icon: '👑', img: 'assets/portraits/sejong.png',
     beats: [ { who:'npc', t:'북방의 김종서 장군도 한번 찾아가 보게. 그쪽 이야기도 들을 만할 걸세.' } ],
     quiz: null
   },
   scholar_0: {
-    name: '집현전 학사', icon: '📖',
+    name: '집현전 학사', icon: '📖', img: 'assets/portraits/scholar.png',
     beats: [ { who:'npc', t:'전하께서 밤을 새워 언문 자모를 고르고 계시네. 우리도 곁에서 거들 뿐이지만, 참으로 뿌듯한 나날일세.' } ],
     quiz: null
   },
   kim_0: {
-    name: '김종서', icon: '🗡️',
+    name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
     beats: [
       { who:'npc', t:'여기가 우리 국경의 끝일세. 압록강과 두만강까지 우리 땅으로 확실히 그어놓아야, 후손들이 다시는 이 땅을 두고 다투지 않을 것이야.' },
       { who:'npc', t:'내가 이곳에 무엇을 설치했는지 아나?' },
@@ -621,7 +623,7 @@ const NPC_DATA = {
     ]
   },
   kim_1: {
-    name: '김종서', icon: '🗡️',
+    name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
     beats: [
       { who:'npc', t:'그저 땅만 넓힌다고 되는 일이 아닐세. 사람이 살아야 진짜 우리 땅이 되는 것이야.' },
       { who:'npc', t:'그래서 남쪽의 백성들을 이곳으로 옮겨 살게 하고 있네.' },
@@ -636,7 +638,7 @@ const NPC_DATA = {
     ]
   },
   kim_2: {
-    name: '김종서', icon: '🗡️',
+    name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
     beats: [
       { who:'npc', t:'왜구가 남쪽 바다를 계속 노략질한다더군. 전하께서 곧 큰 결단을 내리실 걸세.' },
       { who:'npc', t:'자, 그럼 내가 아는 걸 좀 시험해보겠나?' },
@@ -652,7 +654,7 @@ const NPC_DATA = {
     finishesBossB: true
   },
   kim_repeat: {
-    name: '김종서', icon: '🗡️',
+    name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
     beats: [ { who:'npc', t:'전하께서 계신 집현전에도 들러보게. 요즘 편찮으시다는 소문이 있어 걱정이군.' } ],
     quiz: null
   }
@@ -693,7 +695,10 @@ const Dialog = {
   render(){
     const beat = this.data.beats[this.idx];
     document.getElementById('dlg-name').textContent = beat.name || this.data.name;
-    document.getElementById('dlg-portrait').textContent = beat.icon || this.data.icon;
+    const portraitEl = document.getElementById('dlg-portrait');
+    const img = beat.img || this.data.img;
+    if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}')`; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
     document.getElementById('dlg-text').textContent = beat.t;
   },
   next(){

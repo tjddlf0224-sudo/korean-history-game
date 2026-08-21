@@ -46,7 +46,7 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #2f4a5c; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #2f4a5c; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 15px; color: #7fc4e8; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
@@ -366,8 +366,10 @@ const World = {
 
   canStand(x, y){
     const pad = 16;
-    return !isBarrierPx(this.zone, x-pad, y-pad) && !isBarrierPx(this.zone, x+pad, y-pad) &&
-           !isBarrierPx(this.zone, x-pad, y+pad) && !isBarrierPx(this.zone, x+pad, y+pad);
+    if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
+        isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
+    for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
+    return true;
   },
 
   update(dt){
@@ -529,7 +531,7 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
   seogeojeong_0: {
-    name: '서거정', icon: '📚',
+    name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
     beats: [
       { who:'npc', t:'오, 자네가 그 여행자로군. 마침 잘 왔네 — 이게 뭔지 아나? 『경국대전』일세.' },
       { who:'npc', t:'세조 대에 시작한 걸, 지금 전하(성종)께서 마침내 완성하셨지. 이전·호전·예전·병전·형전·공전, 여섯 갈래로 나라의 모든 법을 정리했네.' },
@@ -542,7 +544,7 @@ const NPC_DATA = {
     ]
   },
   seogeojeong_1: {
-    name: '서거정', icon: '📚',
+    name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
     beats: [
       { who:'npc', t:'이참에 궁궐의 여러 관청이 뭘 하는 곳인지 하나씩 짚어보세. 사헌부, 사간원, 홍문관, 의금부, 승정원, 유향소, 경재소까지 — 전부 헷갈리기 딱 좋지.' },
       { who:'npc', t:'사헌부, 사간원, 홍문관 — 이 셋을 합쳐 삼사(三司)라 부르네. 모두 임금에게 직언하는 자리이니, 아무리 왕이라도 이들 앞에서는 함부로 할 수 없다네.' },
@@ -560,7 +562,7 @@ const NPC_DATA = {
     ]
   },
   seogeojeong_2: {
-    name: '서거정', icon: '📚',
+    name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
     beats: [
       { who:'npc', t:'좋아, 삼사는 잘 아는군. 아직 몇 군데 더 남았네 — 의금부, 승정원, 유향소, 경재소까지 마저 짚어보세.' },
       { who:'npc', t:'이걸 다 알면, 경국대전이 왜 그렇게 방대한 책인지도 짐작이 갈 걸세.' },
@@ -580,7 +582,7 @@ const NPC_DATA = {
     finishesBossA: true
   },
   seogeojeong_repeat: {
-    name: '서거정', icon: '📚',
+    name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
     beats: [ { who:'npc', t:'동쪽 고을에 계신 전하께도 한번 가보게. 요즘 백성들 살림을 직접 살피고 계시다더군.' } ],
     quiz: null
   },
@@ -653,7 +655,10 @@ const Dialog = {
   render(){
     const beat = this.data.beats[this.idx];
     document.getElementById('dlg-name').textContent = beat.name || this.data.name;
-    document.getElementById('dlg-portrait').textContent = beat.icon || this.data.icon;
+    const portraitEl = document.getElementById('dlg-portrait');
+    const img = beat.img || this.data.img;
+    if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}')`; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
     document.getElementById('dlg-text').textContent = beat.t;
   },
   next(){

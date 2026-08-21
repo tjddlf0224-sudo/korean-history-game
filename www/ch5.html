@@ -46,7 +46,7 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #3a2222; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #3a2222; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 15px; color: #c96b5a; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
@@ -364,8 +364,10 @@ const World = {
 
   canStand(x, y){
     const pad = 16;
-    return !isBarrierPx(this.zone, x-pad, y-pad) && !isBarrierPx(this.zone, x+pad, y-pad) &&
-           !isBarrierPx(this.zone, x-pad, y+pad) && !isBarrierPx(this.zone, x+pad, y+pad);
+    if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
+        isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
+    for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
+    return true;
   },
 
   update(dt){
@@ -524,7 +526,7 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
   kimilson_0: {
-    name: '김일손', icon: '📜',
+    name: '김일손', icon: '📜', img: 'assets/portraits/kimilson.png',
     beats: [
       { who:'npc', t:'무오사화의 서막이었지.' },
       { who:'npc', name:'연산군', icon:'👑', t:'김일손, 네놈이 쓴 사초에 무슨 내용이 있는지 내가 모를 줄 알았느냐. 세조 할아버님을 비방하는 글이라니!' },
@@ -537,7 +539,7 @@ const NPC_DATA = {
     startsMini: 1
   },
   kimilson_1: {
-    name: '김일손', icon: '📜',
+    name: '김일손', icon: '📜', img: 'assets/portraits/kimilson.png',
     beats: [
       { who:'npc', t:'다시 왔군. 무오사화와 갑자사화, 두 사건이 자꾸 뒤섞이지 않는가? 하나씩 정리해보세.' }
     ],
@@ -552,12 +554,12 @@ const NPC_DATA = {
     finishesRevisit: 1
   },
   kimilson_repeat: {
-    name: '김일손', icon: '📜',
+    name: '김일손', icon: '📜', img: 'assets/portraits/kimilson.png',
     beats: [ { who:'npc', t:'…이미 지나간 일이네. 다른 이들의 이야기도 들어보게.' } ],
     quiz: null
   },
   jogwangjo_0: {
-    name: '조광조', icon: '📖',
+    name: '조광조', icon: '📖', img: 'assets/portraits/jogwangjo.png',
     beats: [
       { who:'npc', t:'반정으로 왕이 바뀌었어도, 이 나라엔 아직 고칠 게 산더미입니다. 소격서부터 없애야 합니다 — 도교 제사를 지내는 그런 곳에, 나라 살림을 쓸 이유가 없지요.' },
       { who:'npc', t:'현량과로 인재를 천거해서 뽑으면, 시험만으로는 알 수 없는 사람의 됨됨이까지 볼 수 있습니다.' },
@@ -568,7 +570,7 @@ const NPC_DATA = {
     startsMini: 2
   },
   jogwangjo_1: {
-    name: '조광조', icon: '📖',
+    name: '조광조', icon: '📖', img: 'assets/portraits/jogwangjo.png',
     beats: [
       { who:'npc', t:'다시 오셨군요. 제 이야기가 앞서 들으신 무오사화와 헷갈리실 법도 하지요.' }
     ],
@@ -581,12 +583,12 @@ const NPC_DATA = {
     finishesRevisit: 2
   },
   jogwangjo_repeat: {
-    name: '조광조', icon: '📖',
+    name: '조광조', icon: '📖', img: 'assets/portraits/jogwangjo.png',
     beats: [ { who:'npc', t:'…이미 지나간 일입니다. 다른 이들의 이야기도 들어보시지요.' } ],
     quiz: null
   },
   commoner1_0: {
-    name: '떠도는 백성', icon: '🗣️',
+    name: '떠도는 백성', icon: '🗣️', img: 'assets/portraits/commoner2.png',
     beats: [
       { who:'npc', t:'인종 임금께서 즉위 1년도 안 되어 세상을 떠나시니, 어린 명종을 대신해 문정왕후께서 수렴청정을 시작하셨지.' },
       { who:'npc', t:'이번엔 윤임 대감 쪽 사람들이 쫓겨났다더군… 다음엔 또 누가 화를 입을지.' },
@@ -596,7 +598,7 @@ const NPC_DATA = {
     startsMini: 3
   },
   commoner1_1: {
-    name: '떠도는 백성', icon: '🗣️',
+    name: '떠도는 백성', icon: '🗣️', img: 'assets/portraits/commoner2.png',
     beats: [
       { who:'npc', t:'또 왔는가? 을사사화 이야기, 좀 더 짚어볼까.' }
     ],
@@ -609,23 +611,23 @@ const NPC_DATA = {
     finishesRevisit: 3
   },
   commoner1_repeat: {
-    name: '떠도는 백성', icon: '🗣️',
+    name: '떠도는 백성', icon: '🗣️', img: 'assets/portraits/commoner2.png',
     beats: [ { who:'npc', t:'…나야 그저 소문으로 들었을 뿐이네.' } ],
     quiz: null
   },
   josik_0: {
-    name: '조식', icon: '⛰️',
+    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
     beats: [
       { who:'npc', t:'나는 벼슬길에 나가지 않았네. 이 어지러운 조정에 나가느니, 여기서 제자를 기르는 게 낫다 여겼지.' },
       { who:'npc', t:'경(敬)과 의(義), 이 두 글자를 늘 몸에 새기고 살았네.' },
-      { who:'npc', name:'이황', icon:'📗', t:'저는 향약을 만들어 마을 사람들이 서로 돕고 잘못을 바로잡도록 했습니다. 조정이 흔들려도, 마을은 스스로 바로 설 수 있어야 하니까요.' },
+      { who:'npc', name:'이황', icon:'📗', img:'assets/portraits/yihwang.png', t:'저는 향약을 만들어 마을 사람들이 서로 돕고 잘못을 바로잡도록 했습니다. 조정이 흔들려도, 마을은 스스로 바로 설 수 있어야 하니까요.' },
       { who:'npc', t:'…자, 이제 반세기에 걸친 이 참극의 흐름을 되짚어볼 차례일세.' },
     ],
     quiz: null,
     startsMini: 4
   },
   josik_1: {
-    name: '조식', icon: '⛰️',
+    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
     beats: [
       { who:'npc', t:'돌아왔군. 나와 이황, 우리 둘을 뭐라 부르는지 아나?' }
     ],
@@ -636,7 +638,7 @@ const NPC_DATA = {
     finishesRevisit: 4
   },
   josik_repeat: {
-    name: '조식', icon: '⛰️',
+    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
     beats: [ { who:'npc', t:'산은 늘 그 자리에 있네. 급할 것 없지.' } ],
     quiz: null
   }
@@ -715,7 +717,10 @@ const Dialog = {
   render(){
     const beat = this.data.beats[this.idx];
     document.getElementById('dlg-name').textContent = beat.name || this.data.name;
-    document.getElementById('dlg-portrait').textContent = beat.icon || this.data.icon;
+    const portraitEl = document.getElementById('dlg-portrait');
+    const img = beat.img || this.data.img;
+    if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}')`; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
     document.getElementById('dlg-text').textContent = beat.t;
   },
   next(){

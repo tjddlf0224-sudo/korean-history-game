@@ -45,7 +45,7 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 17px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
@@ -344,8 +344,10 @@ const World = {
 
   canStand(x, y){
     const pad = 16;
-    return !isBarrierPx(this.zone, x-pad, y-pad) && !isBarrierPx(this.zone, x+pad, y-pad) &&
-           !isBarrierPx(this.zone, x-pad, y+pad) && !isBarrierPx(this.zone, x+pad, y+pad);
+    if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
+        isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
+    for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
+    return true;
   },
 
   update(dt){
@@ -507,7 +509,7 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
   taejong_0: {
-    name: '태종', icon: '👑',
+    name: '태종', icon: '👑', img: 'assets/portraits/taejong.png',
     beats: [
       { who:'npc', t:'오랜만이군. 정도전 밑에서 얼쩡거리던 그자로군, 기억하네.' },
       { who:'npc', t:'내가 왕자 시절 사병을 거느렸던 것도, 결국 그 힘이 얼마나 위험한지 몸소 겪었기 때문일세.' },
@@ -522,7 +524,7 @@ const NPC_DATA = {
     }
   },
   taejong_1: {
-    name: '태종', icon: '👑',
+    name: '태종', icon: '👑', img: 'assets/portraits/taejong.png',
     beats: [
       { who:'npc', t:'지금까지는 육조가 의정부를 거쳐야만 내게 보고할 수 있었네. 그러다 보니 결정이 늦고, 재상들 손에 권한이 몰렸지.' },
       { who:'npc', t:'이제 육조가 나에게 직접 보고하도록 바꿀 것이야. 그리고 하나 더 — 문하부도 손을 봤네.' },
@@ -535,7 +537,7 @@ const NPC_DATA = {
     }
   },
   taejong_2: {
-    name: '태종', icon: '👑',
+    name: '태종', icon: '👑', img: 'assets/portraits/taejong.png',
     beats: [
       { who:'npc', t:'…내가 이렇게까지 왕권을 다잡아 놓은 이유가 뭐라고 생각하나?' },
       { who:'npc', t:'다음 왕에게는, 이런 험한 일 없이도 마음껏 학문과 정치를 펼칠 수 있는 나라를 물려주고 싶어서였네.' },
@@ -545,7 +547,7 @@ const NPC_DATA = {
     startsBoss: true
   },
   guard_0: {
-    name: '내금위 군사', icon: '🛡️',
+    name: '내금위 군사', icon: '🛡️', img: 'assets/portraits/general.png',
     beats: [
       { who:'npc', t:'예전엔 여기서 왕자님들의 사병들이 훈련을 하곤 했었지. 지금은 다 흩어졌지만.' },
     ],
@@ -605,7 +607,9 @@ const Dialog = {
     document.getElementById('dlg-overlay').classList.add('show');
     document.getElementById('dlg-name').textContent = this.data.name;
     document.getElementById('dlg-tag').textContent = '1400년경 · 한양';
-    document.getElementById('dlg-portrait').textContent = this.data.icon;
+    const portraitEl = document.getElementById('dlg-portrait');
+    if (this.data.img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${this.data.img}')`; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = this.data.icon; }
     this.render();
   },
   render(){

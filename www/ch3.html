@@ -45,7 +45,7 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #4a2b2b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #4a2b2b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 15px; color: #d98c6b; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
@@ -351,8 +351,10 @@ const World = {
 
   canStand(x, y){
     const pad = 16;
-    return !isBarrierPx(this.zone, x-pad, y-pad) && !isBarrierPx(this.zone, x+pad, y-pad) &&
-           !isBarrierPx(this.zone, x-pad, y+pad) && !isBarrierPx(this.zone, x+pad, y+pad);
+    if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
+        isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
+    for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
+    return true;
   },
 
   update(dt){
@@ -514,7 +516,7 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
   sejo_0: {
-    name: '세조', icon: '👑',
+    name: '세조', icon: '👑', img: 'assets/portraits/sejo.png',
     beats: [
       { who:'npc', t:'자네도 날 원망하는 눈으로 보는가? …상관없네.' },
       { who:'npc', t:'나는 이 나라를 지키기 위해 힘을 잡아야 했을 뿐이야. 그래, 다들 그 일을 뭐라고 부르는지 아나?' },
@@ -527,7 +529,7 @@ const NPC_DATA = {
     }
   },
   sejo_1: {
-    name: '세조', icon: '👑',
+    name: '세조', icon: '👑', img: 'assets/portraits/sejo.png',
     beats: [
       { who:'npc', t:'지금까지는 관리가 죽어도 그 아내와 자식에게 수신전·휼양전이란 이름으로 계속 땅이 남았지.' },
       { who:'npc', t:'그러다 보니 나눠줄 땅이 부족해졌네. 그래서 내가 무엇을 시행했는지 아나?' },
@@ -540,7 +542,7 @@ const NPC_DATA = {
     }
   },
   sejo_2: {
-    name: '세조', icon: '👑',
+    name: '세조', icon: '👑', img: 'assets/portraits/sejo.png',
     beats: [
       { who:'npc', t:'지방의 힘 있는 자들을 그대로 두면 다시 나 같은 자가 나올지도 모르지.' },
       { who:'npc', t:'그래서 백성들의 신분을 낱낱이 파악하는 제도를 다시 시행했더니, 함길도에서 반발이 일어났네.' },
@@ -553,7 +555,7 @@ const NPC_DATA = {
     }
   },
   sejo_3: {
-    name: '세조', icon: '👑',
+    name: '세조', icon: '👑', img: 'assets/portraits/sejo.png',
     beats: [
       { who:'npc', t:'(혼잣말) …내가 만든 이 제도들이, 다음 왕들의 시대에 제대로 뿌리내리길 바랄 뿐이네.' },
       { who:'npc', t:'가기 전에, 이 시대에 있었던 일들을 자네가 제대로 알고 있는지 한번 보고 싶군.' },
@@ -562,12 +564,12 @@ const NPC_DATA = {
     startsBoss: true
   },
   sejo_repeat: {
-    name: '세조', icon: '👑',
+    name: '세조', icon: '👑', img: 'assets/portraits/sejo.png',
     beats: [ { who:'npc', t:'…더 할 말은 없네. 이 시대는 이미 지나갔으니.' } ],
     quiz: null
   },
   attendant_0: {
-    name: '늙은 내관', icon: '🕯️',
+    name: '늙은 내관', icon: '🕯️', img: 'assets/portraits/naesi.png',
     beats: [
       { who:'npc', t:'(작은 목소리로) …예전엔 이 궁이 이렇게 조용하지 않았는데. 요 몇 해 사이 많은 분들이 사라지셨지.' },
     ],
@@ -620,7 +622,10 @@ const Dialog = {
   render(){
     const beat = this.data.beats[this.idx];
     document.getElementById('dlg-name').textContent = beat.name || this.data.name;
-    document.getElementById('dlg-portrait').textContent = beat.icon || this.data.icon;
+    const portraitEl = document.getElementById('dlg-portrait');
+    const img = beat.img || this.data.img;
+    if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}')`; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
     document.getElementById('dlg-text').textContent = beat.t;
   },
   next(){
