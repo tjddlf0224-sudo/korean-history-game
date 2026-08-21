@@ -77,10 +77,12 @@
     padding: 10px 22px; border-radius: 999px; font-size: 14px; font-weight: bold; }
   #end-score { color: #f0c96b; font-size: 15px; margin-top: 14px; }
 
-  /* 미니맵: 회전 트릭의 영향을 받지 않도록 #wrap 밖(body 직속)에 두고
-     position:fixed로 실제 화면 좌표 기준 우상단에 고정. 내용은 독립 2D
-     캔버스에 매 프레임 직접 그린다(현재 구역의 배경 이미지를 축소해서 사용). */
-  #minimap-canvas { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
+  /* 미니맵: 반드시 #wrap 안에 둬야 한다. #wrap의 rotate(90deg)를 같이 물려받아야
+     플레이어가 폰을 돌려서 보는 시야 기준으로 똑바로, 우상단에 놓이기 때문.
+     (밖으로 빼서 position:fixed로 "물리적 화면 우상단"에 고정하면, 폰을 돌려
+     보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
+     미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
+  #minimap-canvas { position: absolute; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
     width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 50;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
 
@@ -154,9 +156,8 @@
       <div><a href="ch2.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
     </div>
   </div>
+  <canvas id="minimap-canvas"></canvas>
 </div>
-
-<canvas id="minimap-canvas"></canvas>
 
 <script>
 /* ============ 기본 설정 ============ */

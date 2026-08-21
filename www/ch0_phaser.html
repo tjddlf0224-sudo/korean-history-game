@@ -17,13 +17,12 @@
     color: #f5f0e6; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.8); z-index: 5; }
   #hud .sub { font-size: 11px; opacity: .75; margin-top: 2px; }
 
-  /* 미니맵: #wrap 안에 두면 회전 트랜스폼을 그대로 물려받아서(로컬 좌상단이
-     화면 우상단이 되고, 가로세로 박스 크기까지 화면상에서 뒤바뀌어 보임) 위치도
-     비율도 맞추기가 매우 까다로워진다. 그래서 아예 #wrap 밖(body 직속)에 두고
-     position:fixed로 실제 화면 좌표 기준으로 고정 — 회전 상태와 무관하게 항상
-     "진짜 화면"의 우상단에 뜬다. 내용은 Phaser가 아니라 독립된 2D 캔버스에
-     매 프레임 직접 그린다(updateMinimap 참고). */
-  #minimap-canvas { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
+  /* 미니맵: 반드시 #wrap 안에 둬야 한다. #wrap의 rotate(90deg)를 같이 물려받아야
+     플레이어가 폰을 돌려서 보는 시야 기준으로 똑바로, 우상단에 놓이기 때문.
+     (밖으로 빼서 position:fixed로 "물리적 화면 우상단"에 고정하면, 폰을 돌려
+     보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
+     미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
+  #minimap-canvas { position: absolute; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
     width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 50;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #dccba0;
     visibility: hidden; } /* 독서실 인트로 화면에는 안 보여야 하므로 기본은 숨김 —
@@ -139,9 +138,8 @@
       <div><a href="ch1.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
     </div>
   </div>
+  <canvas id="minimap-canvas"></canvas>
 </div>
-
-<canvas id="minimap-canvas"></canvas>
 
 <script>
 /* ============ 가로모드 고정 (기존 챕터와 동일 트릭) ============ */
