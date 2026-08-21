@@ -73,6 +73,7 @@
     font-size: 14px; text-align: left; }
   .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
   .quiz-opt.wrong { background: #5d2f2f; border-color: #bf5f5f; }
+  .quiz-opt:disabled { opacity: .55; cursor: default; }
   .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #d8c9a3; min-height: 20px; }
   .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
   .quiz-next.show { opacity: .85; }
@@ -95,7 +96,7 @@
      보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
      미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
   #minimap-canvas { position: absolute; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
-    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 50;
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 4;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
 
   /* 마지막 대사/보스전까지 다 마쳐도 곧장 챕터가 끝나지 않고, 이 버튼을
@@ -904,16 +905,25 @@ const Quiz = {
   },
   pick(i){
     if (this.answered) return;
-    this.answered = true;
     const origIdx = this.order[i];
     const correct = origIdx === this.data.answer;
-    if (correct && this.seq) this.seqScore++;
-    this.optButtons[i].classList.add(correct ? 'correct' : 'wrong');
-    if (!correct) this.optButtons[this.order.indexOf(this.data.answer)].classList.add('correct');
-    document.getElementById('quiz-fb').textContent = this.data.feedback[correct ? 1 : 0];
-    const next = document.getElementById('quiz-next');
-    next.classList.add('show');
-    next.onclick = () => this.confirmIfReady();
+    if (correct){
+      // 정답을 고르면 확정하고 다음 문제로 넘어갈 수 있게 한다.
+      this.answered = true;
+      if (this.seq) this.seqScore++;
+      this.optButtons[i].classList.add('correct');
+      this.optButtons.forEach(b => b.disabled = true);
+      document.getElementById('quiz-fb').textContent = this.data.feedback[1];
+      const next = document.getElementById('quiz-next');
+      next.classList.add('show');
+      next.onclick = () => this.confirmIfReady();
+    } else {
+      // 오답이면 그 보기만 비활성화하고, 정답을 맞힐 때까지 다시 고를 기회를 준다
+      // (다음 문제로는 못 넘어감 — 정답 공개도 하지 않음).
+      this.optButtons[i].classList.add('wrong');
+      this.optButtons[i].disabled = true;
+      document.getElementById('quiz-fb').textContent = this.data.feedback[0];
+    }
   },
   confirmIfReady(){
     if (!this.answered) return;

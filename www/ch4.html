@@ -69,6 +69,7 @@
     font-size: 14px; text-align: left; }
   .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
   .quiz-opt.wrong { background: #5d2f2f; border-color: #bf5f5f; }
+  .quiz-opt:disabled { opacity: .55; cursor: default; }
   .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #cfe3ec; min-height: 20px; }
   .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
   .quiz-next.show { opacity: .85; }
@@ -803,16 +804,25 @@ const Quiz = {
   },
   pick(i){
     if (this.answered) return;
-    this.answered = true;
     const origIdx = this.order[i];
     const correct = origIdx === this.data.answer;
-    if (correct && this.seq) this.seqScore++;
-    this.optButtons[i].classList.add(correct ? 'correct' : 'wrong');
-    if (!correct) this.optButtons[this.order.indexOf(this.data.answer)].classList.add('correct');
-    document.getElementById('quiz-fb').textContent = this.data.feedback[correct ? 1 : 0];
-    const next = document.getElementById('quiz-next');
-    next.classList.add('show');
-    next.onclick = () => this.confirmIfReady();
+    if (correct){
+      // 정답을 고르면 확정하고 다음 문제로 넘어갈 수 있게 한다.
+      this.answered = true;
+      if (this.seq) this.seqScore++;
+      this.optButtons[i].classList.add('correct');
+      this.optButtons.forEach(b => b.disabled = true);
+      document.getElementById('quiz-fb').textContent = this.data.feedback[1];
+      const next = document.getElementById('quiz-next');
+      next.classList.add('show');
+      next.onclick = () => this.confirmIfReady();
+    } else {
+      // 오답이면 그 보기만 비활성화하고, 정답을 맞힐 때까지 다시 고를 기회를 준다
+      // (다음 문제로는 못 넘어감 — 정답 공개도 하지 않음).
+      this.optButtons[i].classList.add('wrong');
+      this.optButtons[i].disabled = true;
+      document.getElementById('quiz-fb').textContent = this.data.feedback[0];
+    }
   },
   confirmIfReady(){
     if (!this.answered) return;
