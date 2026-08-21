@@ -115,6 +115,7 @@
   <div id="hud">
     <div>2화 · 황금시대</div>
     <div class="sub">1418~1450년, 집현전과 북방 국경</div>
+    <div class="progress" id="hud-goal"></div>
   </div>
 
   <div id="stick-zone">
@@ -956,10 +957,17 @@ document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
 
 /* ============ 챕터 진행 / 종료 (두 구역 보스전 모두 끝나야 종료) ============ */
+function updateHudGoal(){
+  const el = document.getElementById('hud-goal');
+  if (Stage.state.bossADone && Stage.state.bossBDone){ el.textContent = ''; return; }
+  if (!Stage.state.bossADone){ el.textContent = '다음 목표: 집현전에서 세종과 대화하기'; }
+  else { el.textContent = '다음 목표: 국경 진영에서 김종서와 대화하기'; }
+}
 Stage.finishBoss = function(id, score, total){
   if (id === 'A'){ Stage.state.bossADone = true; Stage.state.bossAScore = `${score}/${total}`; }
   else { Stage.state.bossBDone = true; Stage.state.bossBScore = `${score}/${total}`; }
   World.paused = false;
+  updateHudGoal();
   if (Stage.state.bossADone && Stage.state.bossBDone){
     document.getElementById('end-score').textContent =
       `집현전: ${Stage.state.bossAScore} 정답\n국경: ${Stage.state.bossBScore} 정답`;
@@ -969,6 +977,7 @@ Stage.finishBoss = function(id, score, total){
 Stage.endChapter = function(){
   document.getElementById('end-screen').classList.add('show');
 };
+updateHudGoal();
 
 /* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다.
    현재 구역의 배경 이미지를 그대로 축소해서 사용(구역이 바뀌면 자동 반영). */
