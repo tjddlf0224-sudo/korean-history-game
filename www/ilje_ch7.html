@@ -462,6 +462,25 @@ function drawMinimap(){
   const sx = w / BG_W, sy = h / BG_H;
   miniCtx.clearRect(0, 0, w, h);
   if (img.complete && img.naturalWidth){ miniCtx.drawImage(img, 0, 0, w, h); }
+  // 구역 전환 출구(문)를 미니맵에도 표시 — 어디로 나가야 다음 구역인지 한눈에 보이게.
+  // (이모지 폰트 미지원 환경에서도 항상 똑같이 보이도록 직접 그린 문 아이콘 사용)
+  for (const ex of (ZONES[World.zone].exits || [])){
+    const pad = 8;
+    const cx = Math.max(pad, Math.min(w-pad, (ex.rect.x0 + ex.rect.x1) / 2 * sx));
+    const cy = Math.max(pad, Math.min(h-pad, (ex.rect.y0 + ex.rect.y1) / 2 * sy));
+    const dw = 7, dh = 9;
+    miniCtx.fillStyle = '#c9a24a';
+    miniCtx.strokeStyle = '#3a2c1a';
+    miniCtx.lineWidth = 1;
+    miniCtx.beginPath();
+    miniCtx.roundRect(cx - dw/2, cy - dh/2, dw, dh, 1.5);
+    miniCtx.fill();
+    miniCtx.stroke();
+    miniCtx.fillStyle = '#3a2c1a';
+    miniCtx.beginPath();
+    miniCtx.arc(cx + dw/2 - 2, cy + 1, 0.9, 0, Math.PI*2);
+    miniCtx.fill();
+  }
   for (const n of NPCS){
     miniCtx.fillStyle = '#c23b3b';
     miniCtx.beginPath();

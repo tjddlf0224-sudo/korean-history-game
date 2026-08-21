@@ -228,10 +228,10 @@ const ZONES = {
     img: 'assets/scenes/ch2_jiphyeonjeon.png', label: '집현전',
     spawn: { x: 688, y: 600 },
     barriers: [
-      { x0:0, y0:0, x1:BG_W, y1:108 },      // 위쪽 서가
-      { x0:0, y0:640, x1:1200, y1:BG_H },   // 아래쪽 서가(우하단 출구 앞은 비워둠 — 배경에 실제로 문 모양 틈이 그려져 있음)
+      { x0:0, y0:0, x1:645, y1:108 }, { x0:728, y0:0, x1:BG_W, y1:108 }, // 위쪽 서가(12시 방향 정문 앞은 비워둠 — 실제로 문짝이 그려져 있는 자리)
+      { x0:0, y0:640, x1:BG_W, y1:BG_H },   // 아래쪽 서가
       { x0:0, y0:0, x1:95, y1:BG_H },       // 좌측 서가
-      { x0:1290, y0:0, x1:BG_W, y1:640 },   // 우측 서가(마찬가지로 출구 앞까지만)
+      { x0:1290, y0:0, x1:BG_W, y1:BG_H },  // 우측 서가
       // 책상/의자 배리어: 배경 이미지를 픽셀 단위로 직접 분석(어두운 윤곽선
       // connected-component 검출)해서 실제 가구 외곽만 정확히 감쌈. 이전엔
       // "책상 열" 하나를 세로로 크게 묶어서(y175~335) 막아버리는 바람에 두
@@ -261,19 +261,22 @@ const ZONES = {
       { id: 'sejong', name: '세종', x: 590, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
       { id: 'sinsukju', name: '신숙주', x: 790, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
-    exits: [ { rect:{x0:1310,y0:660,x1:1376,y1:768}, to:'gukgyeong', spawn:{x:80,y:690}, label:'국경 진영으로' } ],
+    // 출구는 12시 방향(북쪽) 정문 — 실제로 배경에 여닫이문이 그려진 자리로 옮김.
+    exits: [ { rect:{x0:645,y0:0,x1:728,y1:35}, to:'gukgyeong', spawn:{x:688,y:700}, label:'국경 진영으로' } ],
   },
   gukgyeong: {
     img: 'assets/scenes/ch2_gukgyeong.png', label: '국경 진영',
     barriers: [
-      { x0:0, y0:0, x1:BG_W, y1:30 }, { x0:0, y0:738, x1:BG_W, y1:BG_H },
+      { x0:0, y0:0, x1:BG_W, y1:30 },
+      { x0:0, y0:738, x1:625, y1:BG_H }, { x0:740, y0:738, x1:BG_W, y1:BG_H }, // 아래쪽 울타리(6시 방향 관문 앞은 비워둠)
       { x0:0, y0:0, x1:30, y1:BG_H }, { x0:1346, y0:0, x1:BG_W, y1:BG_H },
       { x0:1090, y0:60, x1:BG_W, y1:250 }, // 우상단 망루/건물
     ],
     npcs: [
       { id: 'kimjongseo', name: '김종서', x: 688, y: 420, img: 'assets/portraits/kimjongseo.png', look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
     ],
-    exits: [ { rect:{x0:0,y0:660,x1:60,y1:768}, to:'jiphyeonjeon', spawn:{x:1300,y:690}, label:'집현전으로' } ],
+    // 출구는 6시 방향(남쪽) 관문 — 실제로 배경에 지붕 있는 관문이 그려진 자리로 옮김.
+    exits: [ { rect:{x0:625,y0:735,x1:740,y1:768}, to:'jiphyeonjeon', spawn:{x:688,y:120}, label:'집현전으로' } ],
   },
 };
 const zoneImgs = {};
@@ -996,6 +999,25 @@ function drawMinimap(){
   const sx = w / BG_W, sy = h / BG_H;
   miniCtx.clearRect(0, 0, w, h);
   if (img.complete && img.naturalWidth){ miniCtx.drawImage(img, 0, 0, w, h); }
+  // 구역 전환 출구(문)를 미니맵에도 표시 — 어디로 나가야 다음 구역인지 한눈에 보이게.
+  // (이모지 폰트 미지원 환경에서도 항상 똑같이 보이도록 직접 그린 문 아이콘 사용)
+  for (const ex of (ZONES[World.zone].exits || [])){
+    const pad = 8;
+    const cx = Math.max(pad, Math.min(w-pad, (ex.rect.x0 + ex.rect.x1) / 2 * sx));
+    const cy = Math.max(pad, Math.min(h-pad, (ex.rect.y0 + ex.rect.y1) / 2 * sy));
+    const dw = 7, dh = 9;
+    miniCtx.fillStyle = '#c9a24a';
+    miniCtx.strokeStyle = '#3a2c1a';
+    miniCtx.lineWidth = 1;
+    miniCtx.beginPath();
+    miniCtx.roundRect(cx - dw/2, cy - dh/2, dw, dh, 1.5);
+    miniCtx.fill();
+    miniCtx.stroke();
+    miniCtx.fillStyle = '#3a2c1a';
+    miniCtx.beginPath();
+    miniCtx.arc(cx + dw/2 - 2, cy + 1, 0.9, 0, Math.PI*2);
+    miniCtx.fill();
+  }
   for (const n of ZONES[World.zone].npcs){
     miniCtx.fillStyle = '#c23b3b';
     miniCtx.beginPath();
