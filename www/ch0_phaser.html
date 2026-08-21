@@ -26,7 +26,7 @@
      보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
      미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
   #minimap-canvas { position: absolute; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
-    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 50;
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 4;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #dccba0;
     visibility: hidden; } /* 독서실 인트로 화면에는 안 보여야 하므로 기본은 숨김 —
        실제 게임 월드로 들어가면(introNext 완료 시) JS가 visible로 바꿔줌 */
@@ -46,13 +46,28 @@
   .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
+  .ov.center { align-items: center; }
   #intro-overlay { background: linear-gradient(rgba(10,8,6,.35), rgba(10,8,6,.6)), url('assets/scenes/intro_dokseosil.png') center/cover no-repeat, #15110c; }
 
-  #dlg-panel, #intro-panel {
+  #dlg-panel, #intro-panel, #quiz-panel {
     width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #2b2015ee; border: 2px solid #c9a24a;
     border-radius: 14px; padding: 16px 18px; color: #f5ecd8; box-shadow: 0 8px 24px rgba(0,0,0,.5);
     max-height: 80%; overflow-y: auto;
   }
+  #quiz-panel { position: relative; }
+  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid #c9a24a; background: #3a2c1a; color: #f5ecd8; font-size: 14px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .quiz-tag { font-size: 12px; color: #f0c96b; margin-bottom: 6px; }
+  .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { padding: 12px 14px; border-radius: 10px; border: 1px solid #c9a24a; background: #3a2c1a; color: #f5ecd8;
+    font-size: 14px; text-align: left; }
+  .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
+  .quiz-opt.wrong { background: #5d2f2f; border-color: #bf5f5f; }
+  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #d8c9a3; min-height: 20px; }
+  .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
+  .quiz-next.show { opacity: .85; }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
   .dlg-name { font-weight: bold; font-size: 17px; color: #f0c96b; }
@@ -128,6 +143,18 @@
       </div>
       <div class="dlg-box" id="dlg-text"></div>
       <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+    </div>
+  </div>
+
+  <!-- 확인 퀴즈 -->
+  <div class="ov center" id="quiz-overlay">
+    <div id="quiz-panel">
+      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
+      <div class="quiz-q" id="quiz-q"></div>
+      <div class="quiz-opts" id="quiz-opts"></div>
+      <div class="quiz-fb" id="quiz-fb"></div>
+      <div class="quiz-next" id="quiz-next">계속 <span class="arrow">▶</span></div>
     </div>
   </div>
 
@@ -217,15 +244,27 @@ const NPC_DATA = {
       { t:'어이, 거기 자네. 처음 보는 얼굴인데 — 그냥 구경하러 온 겐가?' },
       { t:'(씩 웃으며) 맞네, 삼봉 정도전일세. 이 새 궁궐 이름도 내가 지었지 — 경복궁(景福宮), \'큰 복을 누리라\'는 뜻으로.' },
       { t:'아무리 훌륭한 임금이라도 대를 이어 계속 훌륭할 순 없는 법이야. 그래서 나는 유능한 신하들이 함께 다스리는 나라를 꿈꾸고 있네.' },
-      { t:'나라 이름도 새로 정했지. 아주 오래전 단군왕검이 세운 나라의 이름을 이어받아 — 조선(朝鮮)이라 하기로 했네.' },
-    ]
+      { t:'마침 잘 왔네. 지금 새 나라 이름을 두고 논의 중인데 — 자네도 한마디 거들어 보겠나?' },
+    ],
+    quiz: {
+      q: '새 나라의 이름으로 최종 채택된 것은?',
+      opts: ['화령(和寧)', '조선(朝鮮)'],
+      answer: 1,
+      feedback: ['화령은 태조 이성계의 고향 이름으로, 후보에는 올랐지만 채택되지 않았어요.', '정답! 아주 오래전 단군왕검이 세운 나라의 이름을 이어받아 \'조선\'으로 정해졌습니다.']
+    }
   },
   jeongdojeon_1: {
     name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
     beats: [
       { t:'궁궐만 짓는다고 나라가 서는 게 아닐세. 도읍 자리부터 제대로 골라야지.' },
-      { t:'전하께서 몸소 무악(毋岳)<sup>1)</sup> 땅까지 살피러 다니셨다네. 결국 산이 사방을 둘러싸 방어에 유리하고, 한강이 가까워 물자를 옮기기도 좋은 한양으로 정해졌지.\n1) 무악: 지금의 서울 서대문구 신촌·연희동 일대(안산 자락)' },
-    ]
+      { t:'전하께서 몸소 무악(毋岳)<sup>1)</sup> 땅까지 살피러 다니셨다네. 결국 어디로 정해졌는지 아나?\n1) 무악: 지금의 서울 서대문구 신촌·연희동 일대(안산 자락)' },
+    ],
+    quiz: {
+      q: '풍수·교통·방어를 따져본 끝에 실제로 새 도읍으로 정해진 곳은?',
+      opts: ['무악', '한양'],
+      answer: 1,
+      feedback: ['무악도 후보지였지만 채택되지는 않았어요.', '정답! 산이 사방을 둘러싸 방어에 유리하고, 한강이 가까워 물자를 옮기기도 좋은 한양으로 정해졌습니다.']
+    }
   },
   jeongdojeon_2: {
     name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
@@ -291,6 +330,7 @@ window.addEventListener('keydown', e=>{
     e.preventDefault();
     if (document.getElementById('intro-overlay').classList.contains('show')) { introNext(); return; }
     if (document.getElementById('dlg-overlay').classList.contains('show')) { Dialog.next(); return; }
+    if (document.getElementById('quiz-overlay').classList.contains('show')) { Quiz.confirmIfReady(); return; }
     Stage.interact();
     return;
   }
@@ -363,6 +403,13 @@ const Dialog = {
   },
   finish(){
     document.getElementById('dlg-overlay').classList.remove('show');
+    if (this.data.quiz){
+      Quiz.open(this.data.quiz, () => this.afterQuiz());
+    } else {
+      this.afterQuiz();
+    }
+  },
+  afterQuiz(){
     Stage.paused = false;
     if (this.npc.id === 'jeongdojeon'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 2);
@@ -376,6 +423,51 @@ const Dialog = {
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
+
+/* ============ Quiz 엔진(ch1.html과 동일 패턴) ============ */
+const Quiz = {
+  data: null, onDone: null, answered: false, optButtons: [],
+  open(data, onDone){
+    this.data = data; this.onDone = onDone; this.answered = false;
+    document.getElementById('quiz-overlay').classList.add('show');
+    document.getElementById('quiz-tag').textContent = '확인 퀴즈';
+    document.getElementById('quiz-q').textContent = data.q;
+    document.getElementById('quiz-fb').textContent = '';
+    document.getElementById('quiz-next').classList.remove('show');
+    const opts = document.getElementById('quiz-opts');
+    opts.innerHTML = '';
+    this.optButtons = data.opts.map((text, i) => {
+      const b = document.createElement('button');
+      b.className = 'quiz-opt';
+      b.textContent = (i+1) + '. ' + text;
+      b.onclick = () => this.pick(i);
+      opts.appendChild(b);
+      return b;
+    });
+  },
+  pick(i){
+    if (this.answered) return;
+    this.answered = true;
+    const correct = i === this.data.answer;
+    this.optButtons[i].classList.add(correct ? 'correct' : 'wrong');
+    if (!correct) this.optButtons[this.data.answer].classList.add('correct');
+    document.getElementById('quiz-fb').textContent = this.data.feedback[correct ? 1 : 0];
+    const next = document.getElementById('quiz-next');
+    next.classList.add('show');
+    next.onclick = () => this.confirmIfReady();
+  },
+  confirmIfReady(){
+    if (!this.answered) return;
+    document.getElementById('quiz-overlay').classList.remove('show');
+    this.onDone && this.onDone();
+  },
+  abort(){
+    // 퀴즈를 중간에 그만두고 싶을 때(우상단 X) — 완료 콜백 없이 그냥 닫는다.
+    document.getElementById('quiz-overlay').classList.remove('show');
+    this.data = null; this.onDone = null;
+    Stage.paused = false;
+  }
+};
 
 /* ============ 모던 인트로 ============ */
 const INTRO_LINES = [
@@ -599,6 +691,16 @@ const config = {
   scale: { mode: Phaser.Scale.NONE }
 };
 window.__phaserGame = new Phaser.Game(config);
+
+/* iOS Safari는 viewport meta의 user-scalable=no를 무시하는 경우가 있어(접근성 정책),
+   핀치줌/더블탭줌을 JS로 한 번 더 확실히 막는다. */
+document.addEventListener('gesturestart', e => e.preventDefault());
+let __lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - __lastTouchEnd <= 300) e.preventDefault();
+  __lastTouchEnd = now;
+}, { passive: false });
 </script>
 </body>
 </html>
