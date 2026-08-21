@@ -227,14 +227,14 @@ const PLAYER_SPRITES = {};
 const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
 function drawPlayerSprite(px, py, facing, moving){
   ctx.fillStyle = 'rgba(0,0,0,.28)';
-  ctx.beginPath(); ctx.ellipse(px, py + 15, 13, 5, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
   const dir = DIR_NAME[facing] || 'down';
   const frames = PLAYER_SPRITES[dir];
   const seq = [0, 1, 0, 2];
   const idx = moving ? seq[Math.floor(performance.now()/140) % seq.length] : 0;
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
-  const H = 58, W = H * (img.naturalWidth / img.naturalHeight);
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // ch0_phaser와 동일한 화면상 크기(73.6*줌1.2=88px)로 맞춤
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -282,7 +282,7 @@ function overlayOpen(){
 
 const World = {
   zone: 'jojeong', px: ZONES.jojeong.spawn.x, py: ZONES.jojeong.spawn.y,
-  facing: 'd', speed: 260,
+  facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 ch0_phaser와 맞춤
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
   paused: false,
