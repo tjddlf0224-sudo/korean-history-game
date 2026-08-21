@@ -179,110 +179,37 @@ setTimeout(applyOrientation, 300);
 setTimeout(applyOrientation, 800);
 applyOrientation();
 
-/* ============ 맵: 궁궐 내전 ============ */
-function buildMap(){
-  const g = [];
-  for (let y = 0; y < HT; y++){ g[y] = new Uint8Array(WT); g[y].fill(T.GROUND); }
-  for (let x = 0; x < WT; x++){ g[0][x] = T.WALL; g[HT-1][x] = T.WALL; }
-  for (let y = 0; y < HT; y++){ g[y][0] = T.WALL; g[y][WT-1] = T.WALL; }
-  // 어전(왕이 있는 돌바닥 구역)
-  for (let y = 3; y < 9; y++) for (let x = 7; x < 15; x++) g[y][x] = T.STONE;
-  // 병장기고(목재 구역 — 사병 훈련장 흔적)
-  for (let y = 11; y < 15; y++) for (let x = 3; x < 8; x++) g[y][x] = T.WOOD;
-  return g;
-}
-const MAP = buildMap();
-function isBarrier(x, y){
-  if (x < 0 || y < 0 || x >= WT || y >= HT) return true;
-  if (MAP[Math.floor(y)][Math.floor(x)] === T.WALL) return true;
-  for (const n of NPCS){ if (Math.round(n.x) === Math.round(x) && Math.round(n.y) === Math.round(y)) return true; }
+/* ============ 구역(zone): 실사 배경 이미지 + 구역별 충돌/NPC/출구 ============
+   각 챕터는 여러 무대(구역)로 구성되며, 구역마다 별도의 배경 이미지(1376x768)를 쓴다.
+   플레이어가 exits 사각형에 들어가면 다음 구역으로 페이드 전환된다(젤다식 화면 전환). */
+const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
+const ZONES = {
+  naejeon: {
+    img: 'assets/scenes/ch1_naejeon.png', label: '궁궐 내전',
+    spawn: { x: 690, y: 560 },
+    barriers: [ { x0:540, y0:55, x1:835, y1:225 } ], // 어좌 단상
+    npcs: [
+      { id: 'taejong', name: '태종', x: 688, y: 300, look: { role: 'king', body: '#8a2f2f', accent: '#e0b94a' } },
+    ],
+    exits: [ { rect:{x0:600,y0:735,x1:780,y1:768}, to:'hullyeonjang', spawn:{x:120,y:640}, label:'사병 훈련장으로' } ],
+  },
+  hullyeonjang: {
+    img: 'assets/scenes/ch1_hullyeonjang.png', label: '사병 훈련장',
+    barriers: [ { x0:995, y0:520, x1:1376, y1:768 } ], // 우하단 건물 모서리
+    npcs: [
+      { id: 'guard', name: '내금위 군사', x: 1150, y: 150, look: { role: 'general', body: '#4f5d75', accent: '#8a6d3b' } },
+    ],
+    exits: [ { rect:{x0:0,y0:560,x1:70,y1:768}, to:'naejeon', spawn:{x:690,y:690}, label:'궁궐 내전으로' } ],
+  },
+};
+const zoneImgs = {};
+for (const id in ZONES){ const im = new Image(); im.src = ZONES[id].img; zoneImgs[id] = im; }
+
+function isBarrierPx(zoneId, x, y){
+  if (x < 6 || y < 6 || x >= BG_W-6 || y >= BG_H-6) return true;
+  for (const b of ZONES[zoneId].barriers){ if (x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) return true; }
   return false;
 }
-
-/* 국가유산청 3D 에셋 마켓 웹뷰어로 확인한 실제 색감 참고(아트/국가유산_비주얼_레퍼런스.md):
-   남한산성 성벽(자연석 쌓기), 경복궁 화강암 판석 */
-const TILE_COLOR = { [T.GROUND]: '#b7a487', [T.WALL]: '#443a2c', [T.WOOD]: '#8f7148', [T.STONE]: '#938a7d' };
-function hash2(x, y, seed){
-  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
-  h = (h ^ (h >>> 13)) >>> 0;
-  h = Math.imul(h, 1274126177);
-  h = (h ^ (h >>> 16)) >>> 0;
-  return h / 4294967295;
-}
-function shadeColor(hex, amt){
-  const n = parseInt(hex.slice(1), 16);
-  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
-  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
-  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
-  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
-  return `rgb(${r|0},${g|0},${b|0})`;
-}
-function drawTile(t, tx, ty, px, py){
-  const base = TILE_COLOR[t];
-  ctx.fillStyle = base;
-  ctx.fillRect(px, py, TS+1, TS+1);
-  if (t === T.GROUND){
-    for (let i=0;i<4;i++){
-      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
-      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
-      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
-    }
-  } else if (t === T.STONE){
-    // 화강암 판석: 낱장 블록 + 줄눈
-    const half = TS/2;
-    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
-      const n = hash2(tx*2+bx, ty*2+by, 5);
-      ctx.fillStyle = shadeColor(base, (n-0.5)*0.18);
-      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
-    }
-    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 1;
-    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
-  } else if (t === T.WOOD){
-    // 병장기고 마루: 널판 결
-    const planks = 4;
-    for (let i=0;i<planks;i++){
-      const n = hash2(tx, ty*planks+i, 6);
-      ctx.fillStyle = shadeColor(base, (n-0.5)*0.2);
-      ctx.fillRect(px, py + i*(TS/planks), TS+1, TS/planks - 1);
-    }
-    ctx.strokeStyle = 'rgba(0,0,0,.12)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, py+TS); ctx.stroke();
-  } else if (t === T.WALL){
-    // 성벽: 자연석 부정형 쌓기(2줄 엇갈림)
-    const rows = 3, rowH = TS/rows, cols = 2;
-    for (let r=0;r<rows;r++){
-      const offset = (r%2===0) ? 0 : TS/cols/2;
-      for (let c=-1;c<=cols;c++){
-        const n = hash2(tx*10+r*4+c+30, ty, 11);
-        const bx = px + c*(TS/cols) + offset;
-        ctx.fillStyle = shadeColor(base, (n-0.5)*0.22);
-        ctx.fillRect(Math.max(px,bx)+1, py+r*rowH+1, TS/cols-2, rowH-2);
-      }
-    }
-    ctx.strokeStyle = 'rgba(0,0,0,.15)'; ctx.lineWidth = 1;
-    ctx.strokeRect(px+0.5, py+0.5, TS, TS);
-    ctx.fillStyle = 'rgba(0,0,0,.2)';
-    ctx.fillRect(px, py, TS+1, 5);
-  }
-}
-function drawMap(camX, camY){
-  const x0 = Math.max(0, Math.floor(camX / TS));
-  const y0 = Math.max(0, Math.floor(camY / TS));
-  const x1 = Math.min(WT, Math.ceil((camX + canvas.width) / TS) + 1);
-  const y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
-  for (let y = y0; y < y1; y++){
-    for (let x = x0; x < x1; x++){
-      drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
-    }
-  }
-}
-
-/* ============ NPC ============
-   look.role로 실루엣이 달라짐: king(왕)/general(무관)/scholar(문관)/commoner(평민) */
-const NPCS = [
-  { id: 'taejong', name: '태종', x: 11, y: 5.5, look: { role: 'king', body: '#8a2f2f', accent: '#e0b94a' } },
-  { id: 'guard', name: '내금위 군사', x: 5.5, y: 13, look: { role: 'general', body: '#4f5d75', accent: '#8a6d3b' } },
-];
 const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
 /* ============ 캐릭터 드로잉 (역할별 실루엣) ============ */
@@ -362,22 +289,24 @@ function overlayOpen(){
   return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show');
 }
 
-/* ============ World: 이동/카메라/충돌 ============ */
+/* ============ World: 이동/카메라/충돌/구역 전환 ============ */
 const World = {
-  px: 11, py: 12, facing: 'u', speed: 3.4,
+  zone: 'naejeon', px: ZONES.naejeon.spawn.x, py: ZONES.naejeon.spawn.y,
+  facing: 'd', speed: 260,
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
   paused: false,
+  transitioning: false,
   nearNpc: null,
-  lastT: 0,
 
   canStand(x, y){
-    const pad = 0.3;
-    return !isBarrier(x-pad, y-pad) && !isBarrier(x+pad, y-pad) && !isBarrier(x-pad, y+pad) && !isBarrier(x+pad, y+pad);
+    const pad = 16;
+    return !isBarrierPx(this.zone, x-pad, y-pad) && !isBarrierPx(this.zone, x+pad, y-pad) &&
+           !isBarrierPx(this.zone, x-pad, y+pad) && !isBarrierPx(this.zone, x+pad, y+pad);
   },
 
   update(dt){
-    if (this.paused || overlayOpen()) return;
+    if (this.paused || this.transitioning || overlayOpen()) return;
     let vx = this.stick.dx, vy = this.stick.dy;
     if (this.keys.l) vx -= 1;
     if (this.keys.r) vx += 1;
@@ -393,12 +322,41 @@ const World = {
       if (this.canStand(nx, this.py)) this.px = nx;
       if (this.canStand(this.px, ny)) this.py = ny;
     }
+    this.checkExit();
     this.checkNpc();
   },
 
+  /* 구역 경계(exits) 사각형에 들어가면 다음 구역으로 페이드 전환(젤다식 화면 전환) */
+  checkExit(){
+    for (const e of ZONES[this.zone].exits){
+      const r = e.rect;
+      if (this.px >= r.x0 && this.px <= r.x1 && this.py >= r.y0 && this.py <= r.y1){
+        this.goToZone(e.to, e.spawn);
+        return;
+      }
+    }
+  },
+  goToZone(zoneId, spawn){
+    this.transitioning = true;
+    const fade = document.getElementById('fade');
+    fade.classList.add('show');
+    setTimeout(() => {
+      this.zone = zoneId;
+      this.px = spawn.x; this.py = spawn.y;
+      this.nearNpc = null;
+      document.getElementById('act-btn').classList.remove('show');
+      const sub = document.querySelector('#hud .sub');
+      if (sub) sub.textContent = ZONES[zoneId].label;
+      setTimeout(() => {
+        fade.classList.remove('show');
+        this.transitioning = false;
+      }, 60);
+    }, 600);
+  },
+
   checkNpc(){
-    let found = null, best = 1.7;
-    for (const n of NPCS){
+    let found = null, best = 90;
+    for (const n of ZONES[this.zone].npcs){
       const d = Math.hypot(n.x - this.px, n.y - this.py);
       if (d < best){ best = d; found = n; }
     }
@@ -410,21 +368,31 @@ const World = {
   },
 
   render(){
-    const camX = this.px*TS - canvas.width/2;
-    const camY = this.py*TS - canvas.height/2;
-    ctx.fillStyle = '#b7a487';
+    const img = zoneImgs[this.zone];
+    const viewW = canvas.width / ZOOM, viewH = canvas.height / ZOOM;
+    const camX = Math.max(0, Math.min(Math.max(0, BG_W - viewW), this.px - viewW/2));
+    const camY = Math.max(0, Math.min(Math.max(0, BG_H - viewH), this.py - viewH/2));
+    ctx.fillStyle = '#1a140c';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawMap(camX, camY);
-    for (const n of NPCS){
-      drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
+    if (img.complete && img.naturalWidth){
+      const srcW = Math.min(viewW, BG_W), srcH = Math.min(viewH, BG_H);
+      ctx.drawImage(img, camX, camY, srcW, srcH, 0, 0, srcW*ZOOM, srcH*ZOOM);
+    }
+    const zone = ZONES[this.zone];
+    ctx.save();
+    ctx.scale(ZOOM, ZOOM);
+    for (const n of zone.npcs){ drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    drawCharacter(this.px - camX, this.py - camY, this.facing, PLAYER_LOOK);
+    ctx.restore();
+    for (const n of zone.npcs){
       if (n === this.nearNpc){
+        const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
         ctx.fillStyle = '#f0c96b';
-        ctx.font = '16px sans-serif';
+        ctx.font = 'bold 16px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('!', n.x*TS - camX, n.y*TS - camY - 34);
+        ctx.fillText('!', sx, sy - 40);
       }
     }
-    drawCharacter(this.px*TS - camX, this.py*TS - camY, this.facing, PLAYER_LOOK);
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
     vg.addColorStop(1, 'rgba(0,0,0,.3)');
