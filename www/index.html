@@ -23,7 +23,6 @@
 
   .topbar { display:flex; align-items:baseline; gap:10px; margin-bottom: 10px; flex: none; }
   h1 { font-size: 17px; margin: 0; color:#f0c96b; white-space:nowrap; }
-  .lede { font-size: 11px; opacity: .6; margin: 0; line-height:1.5; white-space:nowrap; }
 
   /* 타임라인: 왼쪽(과거)→오른쪽(현재) 시간순으로 시대를 가로로 배열.
      #timeline이 세로로도 남은 공간을 다 차지해야 .timeline-line(가운데쯤)과
@@ -31,13 +30,13 @@
   #timeline { position: relative; flex: 1 1 auto; min-height: 0; }
   /* 선 위치(--line-y)는 화면 높이에 따라 JS가 정해준다 — 고정값으로 두면
      낮은 화면(가로모드 폰)에서 카드 영역이 지나치게 눌린다. */
-  .timeline-line { position: absolute; top: var(--line-y, 96px); left: 0; right: 0; height: 2px;
+  .timeline-line { position: absolute; top: var(--line-y, 32px); left: 0; right: 0; height: 2px;
     background: #6a5636; z-index: 0; }
   .eras-row { display:flex; align-items:stretch; gap: 26px; position:relative; z-index:1; height:100%; }
   .era-col { flex: 0 0 auto; width: 216px; display:flex; flex-direction:column; }
   .era-marker-wrap { display:flex; flex-direction:column; align-items:center; margin-bottom:10px; flex:none; }
   .era-dot { width:13px; height:13px; border-radius:50%; background:#d9a441; border:3px solid #15110c;
-    box-shadow: 0 0 0 1px #6a5636; margin-top: calc(var(--line-y, 96px) - 6px); }
+    box-shadow: 0 0 0 1px #6a5636; margin-top: calc(var(--line-y, 32px) - 6px); }
   .era-dot.plan { background:#5a4c36; }
   .era-year { font-size:10px; opacity:.55; margin-top:6px; white-space:nowrap; }
 
@@ -74,7 +73,6 @@
     <div id="app">
       <div class="topbar">
         <h1>한국사 게임</h1>
-        <p class="lede">한능검 1급 대비 탐험형 학습 게임 · 시대순 타임라인 — 옆으로 스크롤해서 시대를 넘나드세요</p>
       </div>
       <div id="timeline">
         <div class="timeline-line"></div>
@@ -102,7 +100,7 @@ function applyOrientation(){
   wrapEl.style.height = h + 'px';
   // 타임라인 가로선을 화면 높이의 약 24% 지점(대략 중앙 위쪽)에 두되,
   // 너무 낮거나 높지 않도록 범위를 제한한다.
-  const lineY = Math.max(46, Math.min(110, Math.round(h * 0.24)));
+  const lineY = Math.max(26, Math.min(42, Math.round(h * 0.09)));
   document.documentElement.style.setProperty('--line-y', lineY + 'px');
   document.body.classList.toggle('short', h < 430);
 }
