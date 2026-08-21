@@ -15,31 +15,33 @@
   #wrap { position: fixed; top: 0; left: 0; touch-action: pan-x pan-y; transform-origin: top left; overflow: hidden; }
   body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
 
-  #scroller { width:100%; height:100%; overflow-x:auto; overflow-y:auto; -webkit-overflow-scrolling:touch; }
-  #app { min-height:100%; padding: calc(14px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+  /* 가로(시대 이동)로만 페이지 전체가 스크롤되고, 세로는 페이지 단위가 아니라
+     카드가 넘치는 시대의 .cards 안에서만(그 시대 칸만) 스크롤되게 한다. */
+  #scroller { width:100%; height:100%; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; }
+  #app { height:100%; width:max-content; min-width:100%; padding: calc(14px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
     calc(16px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left)); display:flex; flex-direction:column; }
 
-  .topbar { display:flex; align-items:baseline; gap:10px; margin-bottom: 14px; flex: none; }
+  .topbar { display:flex; align-items:baseline; gap:10px; margin-bottom: 10px; flex: none; }
   h1 { font-size: 17px; margin: 0; color:#f0c96b; white-space:nowrap; }
-  .lede { font-size: 11px; opacity: .6; margin: 0; line-height:1.5; }
+  .lede { font-size: 11px; opacity: .6; margin: 0; line-height:1.5; white-space:nowrap; }
 
-  /* 타임라인: 왼쪽(과거)→오른쪽(현재) 시간순으로 시대를 가로로 배열 */
-  #timeline { position: relative; flex: 1 1 auto; }
-  .timeline-line { position: absolute; top: 24px; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, #4a3c26, #6a5636 6%, #6a5636 94%, #4a3c26); z-index: 0; }
-  .timeline-line::before, .timeline-line::after { content:''; position:absolute; top:-3px; width:8px; height:8px;
-    border-radius:50%; background:#6a5636; }
-  .timeline-line::before { left:-2px; }
-  .timeline-line::after { right:-2px; }
-  .eras-row { display:flex; align-items:flex-start; gap: 26px; position:relative; z-index:1; padding-bottom: 20px; }
-  .era-col { flex: 0 0 auto; width: 216px; }
-  .era-marker-wrap { display:flex; flex-direction:column; align-items:center; margin-bottom:10px; }
+  /* 타임라인: 왼쪽(과거)→오른쪽(현재) 시간순으로 시대를 가로로 배열.
+     #timeline이 세로로도 남은 공간을 다 차지해야 .timeline-line(가운데쯤)과
+     .cards(아래쪽, 넘치면 그 칸만 스크롤)가 제대로 자리잡는다. */
+  #timeline { position: relative; flex: 1 1 auto; min-height: 0; }
+  /* 선 위치(--line-y)는 화면 높이에 따라 JS가 정해준다 — 고정값으로 두면
+     낮은 화면(가로모드 폰)에서 카드 영역이 지나치게 눌린다. */
+  .timeline-line { position: absolute; top: var(--line-y, 96px); left: 0; right: 0; height: 2px;
+    background: #6a5636; z-index: 0; }
+  .eras-row { display:flex; align-items:stretch; gap: 26px; position:relative; z-index:1; height:100%; }
+  .era-col { flex: 0 0 auto; width: 216px; display:flex; flex-direction:column; }
+  .era-marker-wrap { display:flex; flex-direction:column; align-items:center; margin-bottom:10px; flex:none; }
   .era-dot { width:13px; height:13px; border-radius:50%; background:#d9a441; border:3px solid #15110c;
-    box-shadow: 0 0 0 1px #6a5636; margin-top: 18px; }
+    box-shadow: 0 0 0 1px #6a5636; margin-top: calc(var(--line-y, 96px) - 6px); }
   .era-dot.plan { background:#5a4c36; }
   .era-year { font-size:10px; opacity:.55; margin-top:6px; white-space:nowrap; }
 
-  .era-head { text-align:center; margin-bottom: 10px; }
+  .era-head { text-align:center; margin-bottom: 10px; flex:none; }
   .era-title { font-size: 15px; font-weight: bold; display:block; }
   .era-badge { display:inline-block; font-size: 10px; padding: 2px 8px; border-radius: 999px; margin-top:4px; }
   .badge-live { background:#2f5d3a; color:#c9f0d0; }
@@ -47,7 +49,10 @@
   .badge-plan { background:#3a2c1a; color:#d8c9a3; border:1px solid #6a5636; }
   .era-pct { display:block; font-size: 10px; opacity:.5; margin-top:3px; }
 
-  .cards { display:grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+  /* flex:1이어야 남은 세로 공간을 채우고, min-height:0이어야 넘칠 때 부모(페이지)가
+     아니라 이 안에서만 overflow-y:auto로 스크롤된다(플렉스 자식의 흔한 함정). */
+  .cards { display:grid; grid-template-columns: repeat(2, 1fr); gap: 7px; align-content:start;
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-bottom: 4px; }
   .card { display:block; text-decoration:none; color:inherit; background:#241b10; border:1px solid #4a3c26;
     border-radius: 10px; padding: 8px 9px; transition: border-color .15s, transform .1s; }
   .card:active { transform: scale(0.96); }
@@ -56,7 +61,11 @@
   .card .name { font-size: 12px; margin-top: 2px; line-height:1.3; }
   .card .who { font-size: 9.5px; opacity:.6; margin-top: 3px; }
 
-  .plan-note { font-size: 11px; opacity:.55; line-height:1.5; text-align:center; padding-top: 4px; }
+  .plan-note { font-size: 11px; opacity:.55; line-height:1.5; text-align:center; padding-top: 4px; flex:none; margin:6px 0 0; }
+  /* 가로모드 폰처럼 화면이 낮을 땐 카드 영역을 최대한 확보하려고 안내문을 숨긴다.
+     회전 트릭 때문에 CSS 미디어쿼리로는 실제 게임 화면 높이를 알 수 없어서
+     JS가 body에 .short 클래스를 붙여준다. */
+  body.short .plan-note { display:none; }
 </style>
 </head>
 <body>
@@ -91,6 +100,11 @@ function applyOrientation(){
   const h = portrait ? iw : ih;
   wrapEl.style.width = w + 'px';
   wrapEl.style.height = h + 'px';
+  // 타임라인 가로선을 화면 높이의 약 24% 지점(대략 중앙 위쪽)에 두되,
+  // 너무 낮거나 높지 않도록 범위를 제한한다.
+  const lineY = Math.max(46, Math.min(110, Math.round(h * 0.24)));
+  document.documentElement.style.setProperty('--line-y', lineY + 'px');
+  document.body.classList.toggle('short', h < 430);
 }
 window.addEventListener('resize', applyOrientation);
 window.addEventListener('orientationchange', () => setTimeout(applyOrientation, 80));
