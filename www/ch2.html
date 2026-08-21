@@ -58,6 +58,10 @@
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
 
+  #quiz-panel { position: relative; }
+  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid #c9a24a; background: #3a2c1a; color: #f5ecd8; font-size: 14px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .quiz-tag { font-size: 12px; color: #f0c96b; margin-bottom: 6px; }
   .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
   .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
@@ -140,6 +144,7 @@
   <!-- 확인 퀴즈 / 보스전 -->
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
+      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -216,8 +221,15 @@ const ZONES = {
       { x0:0, y0:640, x1:BG_W, y1:BG_H },   // 아래쪽 서가
       { x0:0, y0:0, x1:95, y1:BG_H },       // 좌측 서가
       { x0:1290, y0:0, x1:BG_W, y1:BG_H },  // 우측 서가
-      { x0:100, y0:175, x1:1290, y1:335 },  // 앞쪽 책상열(그림 위를 걸어다니지 못하게 차단)
-      { x0:100, y0:435, x1:1290, y1:575 },  // 뒤쪽 책상열
+      // 책상열: 배경 그림 속 5개 열(각 책상+의자) 위치에만 차단을 두고, 열 사이
+      // 간격은 열어둬서 위아래로도 자유롭게 지나다닐 수 있게 함(전체 폭을 다
+      // 막으면 가운데 통로에 갇혀 위/아래로 못 가는 문제가 있었음).
+      { x0:170, y0:175, x1:310, y1:335 }, { x0:390, y0:175, x1:530, y1:335 },
+      { x0:615, y0:175, x1:755, y1:335 }, { x0:840, y0:175, x1:980, y1:335 },
+      { x0:1060, y0:175, x1:1200, y1:335 },
+      { x0:170, y0:435, x1:310, y1:575 }, { x0:390, y0:435, x1:530, y1:575 },
+      { x0:615, y0:435, x1:755, y1:575 }, { x0:840, y0:435, x1:980, y1:575 },
+      { x0:1060, y0:435, x1:1200, y1:575 },
     ],
     npcs: [
       { id: 'sejong', name: '세종', x: 480, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
@@ -779,6 +791,12 @@ const Quiz = {
     this.seq = list; this.seqIdx = 0; this.seqScore = 0; this.seqOnDone = onAllDone;
     this._openOne(this.seq[0], () => this._seqAdvance());
   },
+  abort(){
+    // 보스전/퀴즈를 중간에 그만두고 싶을 때(우상단 X) — 점수 집계 없이 그냥 닫는다.
+    document.getElementById('quiz-overlay').classList.remove('show');
+    this.seq = null; this.data = null; this.onDone = null; this.seqOnDone = null;
+    World.paused = false;
+  },
   _seqAdvance(){
     this.seqIdx++;
     if (this.seqIdx >= this.seq.length){
@@ -792,7 +810,7 @@ const Quiz = {
   _openOne(data, onDone){
     this.data = data; this.onDone = onDone; this.answered = false;
     document.getElementById('quiz-overlay').classList.add('show');
-    document.getElementById('quiz-tag').textContent = this.seq ? `보스전 · ${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
+    document.getElementById('quiz-tag').textContent = this.seq ? `${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
     document.getElementById('quiz-q').textContent = data.q;
     document.getElementById('quiz-fb').textContent = '';
     document.getElementById('quiz-next').classList.remove('show');
@@ -853,7 +871,7 @@ renderIntro();
 function updateHudProgress(){
   const a = Stage.state.bossADone ? '완료' : '진행중';
   const b = Stage.state.bossBDone ? '완료' : '진행중';
-  document.getElementById('hud-progress').textContent = `집현전 보스전: ${a} · 국경 보스전: ${b}`;
+  document.getElementById('hud-progress').textContent = `집현전: ${a} · 국경: ${b}`;
 }
 updateHudProgress();
 
@@ -864,7 +882,7 @@ Stage.finishBoss = function(id, score, total){
   World.paused = false;
   if (Stage.state.bossADone && Stage.state.bossBDone){
     document.getElementById('end-score').textContent =
-      `집현전 보스전: ${Stage.state.bossAScore} 정답\n국경 보스전: ${Stage.state.bossBScore} 정답`;
+      `집현전: ${Stage.state.bossAScore} 정답\n국경: ${Stage.state.bossBScore} 정답`;
     document.getElementById('next-chapter-btn').classList.add('show');
   }
 };
