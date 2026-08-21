@@ -2,90 +2,157 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>한국사 게임 — 챕터 목록</title>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin:0; padding:0; min-height:100%; background:#15110c; font-family: -apple-system, "Pretendard", "Malgun Gothic", sans-serif; color:#f5ecd8; }
-  #app { max-width: 880px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom)); }
-  h1 { font-size: 22px; margin: 0 0 4px; color:#f0c96b; }
-  .lede { font-size: 13px; opacity: .75; margin: 0 0 28px; line-height:1.6; }
+  html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; overscroll-behavior:none;
+    background:#15110c; font-family: -apple-system, "Pretendard", "Malgun Gothic", sans-serif; color:#f5ecd8; }
 
-  .era { margin-bottom: 30px; }
-  .era-head { display:flex; align-items:baseline; gap:10px; margin-bottom: 10px; }
-  .era-title { font-size: 16px; font-weight: bold; }
-  .era-badge { font-size: 11px; padding: 3px 9px; border-radius: 999px; }
+  /* 가로모드 고정: 이 게임은 항상 가로로만 플레이한다(세로모드 없음).
+     게임 챕터들과 동일한 트릭 — 세로 뷰포트면 #wrap 전체를 90도 돌려서
+     강제로 가로 화면처럼 쓴다. */
+  #wrap { position: fixed; top: 0; left: 0; touch-action: pan-x pan-y; transform-origin: top left; overflow: hidden; }
+  body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
+
+  #scroller { width:100%; height:100%; overflow-x:auto; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  #app { min-height:100%; padding: calc(14px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
+    calc(16px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left)); display:flex; flex-direction:column; }
+
+  .topbar { display:flex; align-items:baseline; gap:10px; margin-bottom: 14px; flex: none; }
+  h1 { font-size: 17px; margin: 0; color:#f0c96b; white-space:nowrap; }
+  .lede { font-size: 11px; opacity: .6; margin: 0; line-height:1.5; }
+
+  /* 타임라인: 왼쪽(과거)→오른쪽(현재) 시간순으로 시대를 가로로 배열 */
+  #timeline { position: relative; flex: 1 1 auto; }
+  .timeline-line { position: absolute; top: 24px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #4a3c26, #6a5636 6%, #6a5636 94%, #4a3c26); z-index: 0; }
+  .timeline-line::before, .timeline-line::after { content:''; position:absolute; top:-3px; width:8px; height:8px;
+    border-radius:50%; background:#6a5636; }
+  .timeline-line::before { left:-2px; }
+  .timeline-line::after { right:-2px; }
+  .eras-row { display:flex; align-items:flex-start; gap: 26px; position:relative; z-index:1; padding-bottom: 20px; }
+  .era-col { flex: 0 0 auto; width: 216px; }
+  .era-marker-wrap { display:flex; flex-direction:column; align-items:center; margin-bottom:10px; }
+  .era-dot { width:13px; height:13px; border-radius:50%; background:#d9a441; border:3px solid #15110c;
+    box-shadow: 0 0 0 1px #6a5636; margin-top: 18px; }
+  .era-dot.plan { background:#5a4c36; }
+  .era-year { font-size:10px; opacity:.55; margin-top:6px; white-space:nowrap; }
+
+  .era-head { text-align:center; margin-bottom: 10px; }
+  .era-title { font-size: 15px; font-weight: bold; display:block; }
+  .era-badge { display:inline-block; font-size: 10px; padding: 2px 8px; border-radius: 999px; margin-top:4px; }
   .badge-live { background:#2f5d3a; color:#c9f0d0; }
+  .badge-partial { background:#4a4020; color:#f0dca0; }
   .badge-plan { background:#3a2c1a; color:#d8c9a3; border:1px solid #6a5636; }
-  .era-pct { margin-left:auto; font-size: 11px; opacity:.55; }
+  .era-pct { display:block; font-size: 10px; opacity:.5; margin-top:3px; }
 
-  .cards { display:grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 10px; }
+  .cards { display:grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
   .card { display:block; text-decoration:none; color:inherit; background:#241b10; border:1px solid #4a3c26;
-    border-radius: 12px; padding: 12px 14px; transition: border-color .15s, transform .1s; }
-  .card:active { transform: scale(0.97); }
+    border-radius: 10px; padding: 8px 9px; transition: border-color .15s, transform .1s; }
+  .card:active { transform: scale(0.96); }
   .card.live { border-color:#c9a24a; }
-  .card.disabled { opacity:.4; pointer-events:none; }
-  .card .num { font-size:11px; color:#f0c96b; opacity:.8; }
-  .card .name { font-size: 14px; margin-top: 3px; line-height:1.35; }
-  .card .who { font-size: 11px; opacity:.6; margin-top: 4px; }
+  .card .num { font-size:9.5px; color:#f0c96b; opacity:.85; }
+  .card .name { font-size: 12px; margin-top: 2px; line-height:1.3; }
+  .card .who { font-size: 9.5px; opacity:.6; margin-top: 3px; }
 
-  .plan-note { font-size: 12px; opacity:.6; line-height:1.6; background:#1c150d; border:1px dashed #4a3c26; border-radius:10px; padding:10px 12px; }
+  .plan-note { font-size: 11px; opacity:.55; line-height:1.5; text-align:center; padding-top: 4px; }
 </style>
 </head>
 <body>
-<div id="app">
-  <h1>한국사 게임</h1>
-  <p class="lede">한능검(한국사능력검정시험) 1급 대비 탐험형 학습 게임. 시대를 넘나들며 NPC와 대화하고 실제 역사를 체험합니다.<br>진하게 표시된 챕터는 지금 플레이할 수 있고, 나머지는 기획서가 완성된 상태로 순차 구현 중입니다.</p>
-
-  <div class="era">
-    <div class="era-head">
-      <span class="era-title">조선 전기</span><span class="era-badge badge-live">플레이 가능 · 전 7화</span>
-      <span class="era-pct">1392~1592</span>
-    </div>
-    <div class="cards">
-      <a class="card live" href="ch0_phaser.html"><div class="num">0화 · 신버전</div><div class="name">새 나라의 설계자</div><div class="who">태조 · 정도전</div></a>
-      <a class="card live" href="ch0.html"><div class="num">0화</div><div class="name">새 나라의 설계자</div><div class="who">태조 · 정도전</div></a>
-      <a class="card live" href="ch1.html"><div class="num">1화</div><div class="name">왕권의 기틀</div><div class="who">태종</div></a>
-      <a class="card live" href="ch2.html"><div class="num">2화</div><div class="name">황금시대</div><div class="who">세종</div></a>
-      <a class="card live" href="ch3.html"><div class="num">3화</div><div class="name">피의 계승</div><div class="who">세조</div></a>
-      <a class="card live" href="ch4.html"><div class="num">4화</div><div class="name">법과 제도의 완성</div><div class="who">성종</div></a>
-      <a class="card live" href="ch5.html"><div class="num">5화</div><div class="name">사림과 피바람</div><div class="who">연산군~명종</div></a>
-      <a class="card live" href="ch6.html"><div class="num">6화 · 완결</div><div class="name">폭풍 전야</div><div class="who">선조</div></a>
+<div id="wrap">
+  <div id="scroller">
+    <div id="app">
+      <div class="topbar">
+        <h1>한국사 게임</h1>
+        <p class="lede">한능검 1급 대비 탐험형 학습 게임 · 시대순 타임라인 — 옆으로 스크롤해서 시대를 넘나드세요</p>
+      </div>
+      <div id="timeline">
+        <div class="timeline-line"></div>
+        <div class="eras-row" id="eras-row"></div>
+      </div>
+      <p class="plan-note">기획 중인 시대는 실제 기출 750문항(15개 회차) 분석을 바탕으로 챕터 구조와 NPC 대사까지 미리 설계되어 있습니다. 완성되는 대로 순서대로 추가됩니다.</p>
     </div>
   </div>
-
-  <div class="era" id="era-list"></div>
-
-  <p class="plan-note">기획 중인 시대는 실제 기출 750문항(15개 회차) 분석을 바탕으로 챕터 구조와 NPC 대사까지 미리 설계되어 있습니다. 완성되는 대로 이 목록에 순서대로 추가됩니다.</p>
 </div>
+
 <script>
+/* 가로모드 고정 (게임 챕터들과 동일 로직) */
+const wrapEl = document.getElementById('wrap');
+function getViewportSize(){
+  if (window.visualViewport) return { w: window.visualViewport.width, h: window.visualViewport.height };
+  return { w: window.innerWidth, h: window.innerHeight };
+}
+function applyOrientation(){
+  const { w: iw, h: ih } = getViewportSize();
+  const portrait = ih > iw;
+  document.body.classList.toggle('rot', portrait);
+  const w = portrait ? ih : iw;
+  const h = portrait ? iw : ih;
+  wrapEl.style.width = w + 'px';
+  wrapEl.style.height = h + 'px';
+}
+window.addEventListener('resize', applyOrientation);
+window.addEventListener('orientationchange', () => setTimeout(applyOrientation, 80));
+if (window.visualViewport){
+  window.visualViewport.addEventListener('resize', applyOrientation);
+  window.visualViewport.addEventListener('scroll', applyOrientation);
+}
+setTimeout(applyOrientation, 300);
+setTimeout(applyOrientation, 800);
+applyOrientation();
+
+/* ============ 시대순(왼쪽=과거 → 오른쪽=현재) 타임라인 데이터 ============ */
 const ERAS = [
-  { title: '선사·초기국가', pct: '4.3%', range: '구석기 ~ 고조선·초기국가' },
-  { title: '고대', pct: '14.5%', range: '삼국시대 ~ 남북국시대' },
-  { title: '고려', pct: '16.5%', range: '918 ~ 1392' },
-  { title: '조선 후기', pct: '11.6%', range: '1592 ~ 1863' },
-  { title: '근대·개항기', pct: '13.7%', range: '1863 ~ 1910', cards: [
+  { title: '선사·초기국가', year: '~ BC108', pct: '4.3%', range: '구석기 ~ 고조선·초기국가' },
+  { title: '고대', year: 'BC57 ~ 918', pct: '14.5%', range: '삼국시대 ~ 남북국시대' },
+  { title: '고려', year: '918 ~ 1392', pct: '16.5%', range: '918 ~ 1392' },
+  { title: '조선 전기', year: '1392 ~ 1592', pct: null, range: null, cards: [
+    { href: 'ch0_phaser.html', num: '0화 · 신버전', name: '새 나라의 설계자', who: '태조 · 정도전' },
+    { href: 'ch0.html', num: '0화', name: '새 나라의 설계자', who: '태조 · 정도전' },
+    { href: 'ch1.html', num: '1화', name: '왕권의 기틀', who: '태종' },
+    { href: 'ch2.html', num: '2화', name: '황금시대', who: '세종' },
+    { href: 'ch3.html', num: '3화', name: '피의 계승', who: '세조' },
+    { href: 'ch4.html', num: '4화', name: '법과 제도의 완성', who: '성종' },
+    { href: 'ch5.html', num: '5화', name: '사림과 피바람', who: '연산군~명종' },
+    { href: 'ch6.html', num: '6화 · 완결', name: '폭풍 전야', who: '선조' },
+  ] },
+  { title: '조선 후기', year: '1592 ~ 1863', pct: '11.6%', range: '1592 ~ 1863' },
+  { title: '근대·개항기', year: '1863 ~ 1910', pct: '13.7%', range: '1863 ~ 1910', cards: [
     { href: 'gaehang_ch2.html', num: '2화 · 체험판', name: '군인들의 함성', who: '임오군란 · 흥선대원군' },
     { href: 'gaehang_ch3.html', num: '3화 · 체험판', name: '삼일천하의 꿈', who: '갑신정변 · 김옥균' },
   ] },
-  { title: '일제강점기', pct: '16.5%', range: '1910 ~ 1945', cards: [
+  { title: '일제강점기', year: '1910 ~ 1945', pct: '16.5%', range: '1910 ~ 1945', cards: [
     { href: 'ilje_ch7.html', num: '7화 · 체험판', name: '임정의 부활', who: '한인애국단 · 김구·윤봉길' },
   ] },
-  { title: '현대', pct: '10.9%', range: '1945 ~ 현재' },
+  { title: '현대', year: '1945 ~ 현재', pct: '10.9%', range: '1945 ~ 현재' },
 ];
-const wrap = document.getElementById('era-list');
+
+const row = document.getElementById('eras-row');
 ERAS.forEach(e => {
-  const div = document.createElement('div');
-  div.className = 'era';
-  const badge = e.cards ? '<span class="era-badge badge-live">일부 체험 가능</span>' : '<span class="era-badge badge-plan">기획 완료 · 구현 예정</span>';
-  let html = `<div class="era-head"><span class="era-title">${e.title}</span>${badge}<span class="era-pct">${e.range} · 기출 ${e.pct}</span></div>`;
+  const col = document.createElement('div');
+  col.className = 'era-col';
+  const isFull = e.title === '조선 전기';
+  const hasCards = !!e.cards;
+  const badge = isFull ? '<span class="era-badge badge-live">플레이 가능 · 전 7화</span>'
+    : hasCards ? '<span class="era-badge badge-partial">일부 체험 가능</span>'
+    : '<span class="era-badge badge-plan">기획 완료 · 구현 예정</span>';
+  const dotClass = (isFull || hasCards) ? 'era-dot' : 'era-dot plan';
+  const pctLine = e.pct ? `<span class="era-pct">기출 ${e.pct}</span>` : '';
+  let html = `
+    <div class="era-marker-wrap"><div class="${dotClass}"></div><div class="era-year">${e.year}</div></div>
+    <div class="era-head">
+      <span class="era-title">${e.title}</span>
+      ${badge}
+      ${pctLine}
+    </div>`;
   if (e.cards){
     html += '<div class="cards">' + e.cards.map(c =>
       `<a class="card live" href="${c.href}"><div class="num">${c.num}</div><div class="name">${c.name}</div><div class="who">${c.who}</div></a>`
     ).join('') + '</div>';
   }
-  div.innerHTML = html;
-  wrap.appendChild(div);
+  col.innerHTML = html;
+  row.appendChild(col);
 });
 </script>
 </body>
