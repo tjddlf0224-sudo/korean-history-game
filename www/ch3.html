@@ -209,6 +209,11 @@ applyOrientation();
    유배지 구역, 2곳으로 구성된다. 플레이어가 exits 사각형에 들어가면 다음 구역으로
    페이드 전환된다(젤다식 화면 전환, ch1과 동일 패턴). */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
+/* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
+   빨간 점 격자로 표시해서 눈으로 바로 확인할 수 있다(책상 등 가구
+   배리어를 배경 그림과 맞춰 잡을 때, 좌표를 눈대중으로 추측하다 계속
+   틀렸던 문제의 재발 방지용). */
+const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
   gungya: {
     img: 'assets/scenes/ch3_gungya.png', label: '궁궐 야간',
@@ -478,6 +483,20 @@ const World = {
       ctx.textAlign = 'center';
       ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
     }
+    if (DEBUG_GRID){
+      const step = 16;
+      for (let gx = 0; gx < BG_W; gx += step){
+        for (let gy = 0; gy < BG_H; gy += step){
+          if (!isBarrierPx(this.zone, gx, gy)) continue;
+          const sx2 = (gx - camX) * ZOOM, sy2 = (gy - camY) * ZOOM;
+          if (sx2 < -step*ZOOM || sx2 > canvas.width || sy2 < -step*ZOOM || sy2 > canvas.height) continue;
+          ctx.fillStyle = 'rgba(255,40,40,0.45)';
+          ctx.fillRect(sx2 - 2, sy2 - 2, 4, 4);
+        }
+      }
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
+      ctx.fillText(`DEBUG px:(${Math.round(this.px)},${Math.round(this.py)}) zone:${this.zone}`, 6, canvas.height - 8);
+    }
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.25, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
     vg.addColorStop(1, 'rgba(0,0,0,.4)');
@@ -722,12 +741,20 @@ const Quiz = {
     document.getElementById('quiz-q').textContent = data.q;
     document.getElementById('quiz-fb').textContent = '';
     document.getElementById('quiz-next').classList.remove('show');
+    // 모든 퀴즈 데이터가 answer:0(첫 번째 보기)으로 통일 작성돼 있어서
+    // 화면에 그대로 노출하면 정답이 항상 1번으로 예측 가능해짐 — 매번
+    // 보기 순서를 섞어서 표시하고, order[화면순서]=원본인덱스로 매핑해둔다.
+    this.order = data.opts.map((_, i) => i);
+    for (let i = this.order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.order[i], this.order[j]] = [this.order[j], this.order[i]];
+    }
     const opts = document.getElementById('quiz-opts');
     opts.innerHTML = '';
-    this.optButtons = data.opts.map((text, i) => {
+    this.optButtons = this.order.map((origIdx, i) => {
       const b = document.createElement('button');
       b.className = 'quiz-opt';
-      b.textContent = (i+1) + '. ' + text;
+      b.textContent = (i+1) + '. ' + data.opts[origIdx];
       b.onclick = () => this.pick(i);
       opts.appendChild(b);
       return b;
@@ -736,10 +763,11 @@ const Quiz = {
   pick(i){
     if (this.answered) return;
     this.answered = true;
-    const correct = i === this.data.answer;
+    const origIdx = this.order[i];
+    const correct = origIdx === this.data.answer;
     if (correct && this.seq) this.seqScore++;
     this.optButtons[i].classList.add(correct ? 'correct' : 'wrong');
-    if (!correct) this.optButtons[this.data.answer].classList.add('correct');
+    if (!correct) this.optButtons[this.order.indexOf(this.data.answer)].classList.add('correct');
     document.getElementById('quiz-fb').textContent = this.data.feedback[correct ? 1 : 0];
     const next = document.getElementById('quiz-next');
     next.classList.add('show');

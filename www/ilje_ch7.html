@@ -148,6 +148,11 @@ applyOrientation();
 
 /* ============ 구역: 상하이 임시정부 청사(단일 구역, 실사 배경) ============ */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
+/* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
+   빨간 점 격자로 표시해서 눈으로 바로 확인할 수 있다(책상 등 가구
+   배리어를 배경 그림과 맞춰 잡을 때, 좌표를 눈대중으로 추측하다 계속
+   틀렸던 문제의 재발 방지용). */
+const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
   imjeong: {
     img: 'assets/scenes/ilje_ch7_imjeong.png', label: '임시정부 청사',
@@ -299,6 +304,20 @@ const World = {
       const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
       ctx.fillStyle = '#9dc3e0'; ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center';
       ctx.fillText(n === this.nearNpc ? n.name : '!', sx, sy - 66);
+    }
+    if (DEBUG_GRID){
+      const step = 16;
+      for (let gx = 0; gx < BG_W; gx += step){
+        for (let gy = 0; gy < BG_H; gy += step){
+          if (!isBarrierPx(this.zone, gx, gy)) continue;
+          const sx2 = (gx - camX) * ZOOM, sy2 = (gy - camY) * ZOOM;
+          if (sx2 < -step*ZOOM || sx2 > canvas.width || sy2 < -step*ZOOM || sy2 > canvas.height) continue;
+          ctx.fillStyle = 'rgba(255,40,40,0.45)';
+          ctx.fillRect(sx2 - 2, sy2 - 2, 4, 4);
+        }
+      }
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
+      ctx.fillText(`DEBUG px:(${Math.round(this.px)},${Math.round(this.py)}) zone:${this.zone}`, 6, canvas.height - 8);
     }
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.45)');

@@ -216,15 +216,20 @@ applyOrientation();
    집현전 내부 구역에 흡수(스폰 지점만 그쪽에 둠)하고, 국경 진영과는 화면 가장자리
    exits로 오간다(ch1과 동일한 젤다식 화면 전환). */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
+/* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
+   빨간 점 격자로 표시해서 눈으로 바로 확인할 수 있다(책상 등 가구
+   배리어를 배경 그림과 맞춰 잡을 때, 좌표를 눈대중으로 추측하다 계속
+   틀렸던 문제의 재발 방지용). */
+const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
   jiphyeonjeon: {
     img: 'assets/scenes/ch2_jiphyeonjeon.png', label: '집현전',
     spawn: { x: 688, y: 600 },
     barriers: [
       { x0:0, y0:0, x1:BG_W, y1:108 },      // 위쪽 서가
-      { x0:0, y0:640, x1:BG_W, y1:BG_H },   // 아래쪽 서가
+      { x0:0, y0:640, x1:1200, y1:BG_H },   // 아래쪽 서가(우하단 출구 앞은 비워둠 — 배경에 실제로 문 모양 틈이 그려져 있음)
       { x0:0, y0:0, x1:95, y1:BG_H },       // 좌측 서가
-      { x0:1290, y0:0, x1:BG_W, y1:BG_H },  // 우측 서가
+      { x0:1290, y0:0, x1:BG_W, y1:640 },   // 우측 서가(마찬가지로 출구 앞까지만)
       // 책상열: 배경 그림 속 5개 열(각 책상+의자) 위치에만 차단을 두고, 열 사이
       // 간격은 열어둬서 위아래로도 자유롭게 지나다닐 수 있게 함(전체 폭을 다
       // 막으면 가운데 통로에 갇혀 위/아래로 못 가는 문제가 있었음).
@@ -508,6 +513,20 @@ const World = {
       ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(n === this.nearNpcClose ? n.name : '!', sx, sy - 66);
+    }
+    if (DEBUG_GRID){
+      const step = 16;
+      for (let gx = 0; gx < BG_W; gx += step){
+        for (let gy = 0; gy < BG_H; gy += step){
+          if (!isBarrierPx(this.zone, gx, gy)) continue;
+          const sx2 = (gx - camX) * ZOOM, sy2 = (gy - camY) * ZOOM;
+          if (sx2 < -step*ZOOM || sx2 > canvas.width || sy2 < -step*ZOOM || sy2 > canvas.height) continue;
+          ctx.fillStyle = 'rgba(255,40,40,0.45)';
+          ctx.fillRect(sx2 - 2, sy2 - 2, 4, 4);
+        }
+      }
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
+      ctx.fillText(`DEBUG px:(${Math.round(this.px)},${Math.round(this.py)}) zone:${this.zone}`, 6, canvas.height - 8);
     }
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
@@ -843,12 +862,20 @@ const Quiz = {
     document.getElementById('quiz-q').textContent = data.q;
     document.getElementById('quiz-fb').textContent = '';
     document.getElementById('quiz-next').classList.remove('show');
+    // 모든 퀴즈 데이터가 answer:0(첫 번째 보기)으로 통일 작성돼 있어서
+    // 화면에 그대로 노출하면 정답이 항상 1번으로 예측 가능해짐 — 매번
+    // 보기 순서를 섞어서 표시하고, order[화면순서]=원본인덱스로 매핑해둔다.
+    this.order = data.opts.map((_, i) => i);
+    for (let i = this.order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.order[i], this.order[j]] = [this.order[j], this.order[i]];
+    }
     const opts = document.getElementById('quiz-opts');
     opts.innerHTML = '';
-    this.optButtons = data.opts.map((text, i) => {
+    this.optButtons = this.order.map((origIdx, i) => {
       const b = document.createElement('button');
       b.className = 'quiz-opt';
-      b.textContent = (i+1) + '. ' + text;
+      b.textContent = (i+1) + '. ' + data.opts[origIdx];
       b.onclick = () => this.pick(i);
       opts.appendChild(b);
       return b;
@@ -857,10 +884,11 @@ const Quiz = {
   pick(i){
     if (this.answered) return;
     this.answered = true;
-    const correct = i === this.data.answer;
+    const origIdx = this.order[i];
+    const correct = origIdx === this.data.answer;
     if (correct && this.seq) this.seqScore++;
     this.optButtons[i].classList.add(correct ? 'correct' : 'wrong');
-    if (!correct) this.optButtons[this.data.answer].classList.add('correct');
+    if (!correct) this.optButtons[this.order.indexOf(this.data.answer)].classList.add('correct');
     document.getElementById('quiz-fb').textContent = this.data.feedback[correct ? 1 : 0];
     const next = document.getElementById('quiz-next');
     next.classList.add('show');
