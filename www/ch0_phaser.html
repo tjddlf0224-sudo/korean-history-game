@@ -60,8 +60,8 @@
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
-  #intro-panel { max-width: 560px; text-align: center; }
-  #intro-text { font-size: 15px; line-height: 1.8; min-height: 90px; white-space: pre-wrap; }
+  #intro-panel { max-width: 400px; text-align: center; }
+  #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
 
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
@@ -533,21 +533,22 @@ function drawMinimap(playerX, playerY){
   // introNext()/Stage.endChapter()에서 직접 처리한다(위 참고).
   const w = miniCanvas.width, h = miniCanvas.height;
   const sx = w / BG_W, sy = h / BG_H;
+  const dotScale = w / 160; // 미니맵 캔버스는 DPR만큼 내부 해상도가 커지므로, 점 크기도 같이 맞춰줌
   miniCtx.clearRect(0, 0, w, h);
   if (miniBgImg.complete && miniBgImg.naturalWidth){
     miniCtx.drawImage(miniBgImg, 0, 0, w, h);
   }
   NPCS.forEach(n => {
-    miniCtx.fillStyle = '#8a2f2f';
+    miniCtx.fillStyle = '#c23b3b';
     miniCtx.beginPath();
-    miniCtx.arc(n.px*sx, n.py*sy, 3, 0, Math.PI*2);
+    miniCtx.arc(n.px*sx, n.py*sy, 5*dotScale, 0, Math.PI*2);
     miniCtx.fill();
   });
-  miniCtx.fillStyle = '#2f6fbf';
+  miniCtx.fillStyle = '#3d84e6';
   miniCtx.strokeStyle = '#ffffff';
-  miniCtx.lineWidth = 1;
+  miniCtx.lineWidth = 1.5*dotScale;
   miniCtx.beginPath();
-  miniCtx.arc(playerX*sx, playerY*sy, 4, 0, Math.PI*2);
+  miniCtx.arc(playerX*sx, playerY*sy, 6*dotScale, 0, Math.PI*2);
   miniCtx.fill();
   miniCtx.stroke();
 }
@@ -576,6 +577,10 @@ const config = {
   parent: 'game-holder',
   width: VW,
   height: VH,
+  // resolution을 안 주면 캔버스 내부 해상도가 CSS 픽셀 크기 그대로 잡혀서,
+  // 레티나 화면(DPR 2~3배)에서는 브라우저가 그 저해상도 캔버스를 확대해서
+  // 보여주게 되고 그 결과 캐릭터 테두리가 계단현상으로 뭉개져 보인다.
+  resolution: Math.min(3, window.devicePixelRatio || 1),
   backgroundColor: '#bfa374',
   scene: MainScene,
   // Scale.RESIZE는 부모 크기를 getBoundingClientRect()(=화면상 시각적 박스)로 측정하는데,
