@@ -119,9 +119,6 @@
 <script>
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-const TS = 40;
-const T = { WALL: 0, GROUND: 1, WOOD: 2, STONE: 3 };
-const WT = 22, HT = 16;
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
@@ -149,74 +146,32 @@ setTimeout(applyOrientation, 300);
 setTimeout(applyOrientation, 800);
 applyOrientation();
 
-function buildMap(){
-  const g = [];
-  for (let y = 0; y < HT; y++){ g[y] = new Uint8Array(WT); g[y].fill(T.GROUND); }
-  for (let x = 0; x < WT; x++){ g[0][x] = T.WALL; g[HT-1][x] = T.WALL; }
-  for (let y = 0; y < HT; y++){ g[y][0] = T.WALL; g[y][WT-1] = T.WALL; }
-  for (let y = 4; y < 9; y++) for (let x = 7; x < 15; x++) g[y][x] = T.WOOD; // 임정 청사 마루
-  for (let y = 10; y < 14; y++) for (let x = 8; x < 14; x++) g[y][x] = T.STONE; // 공원 광장
-  return g;
-}
-const MAP = buildMap();
-function isBarrier(x, y){
-  if (x < 0 || y < 0 || x >= WT || y >= HT) return true;
-  if (MAP[Math.floor(y)][Math.floor(x)] === T.WALL) return true;
-  for (const n of NPCS){ if (Math.round(n.x) === Math.round(x) && Math.round(n.y) === Math.round(y)) return true; }
+/* ============ 구역: 상하이 임시정부 청사(단일 구역, 실사 배경) ============ */
+const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
+const ZONES = {
+  imjeong: {
+    img: 'assets/scenes/ilje_ch7_imjeong.png', label: '임시정부 청사',
+    spawn: { x: 1050, y: 660 },
+    barriers: [
+      { x0:460, y0:190, x1:790, y1:340 }, // 위쪽 책상
+      { x0:460, y0:380, x1:790, y1:530 }, // 아래쪽 책상
+      { x0:860, y0:40, x1:1200, y1:200 }, // 서가
+    ],
+    npcs: [
+      { id: 'gimgu', name: '김구', x: 900, y: 260, img: 'assets/portraits/gimgu.png', look: { role: 'scholar', body: '#2a3a4a', accent: '#9dc3e0' } },
+      { id: 'yunbonggil', name: '윤봉길', x: 900, y: 460, img: 'assets/portraits/yunbonggil.png', look: { role: 'commoner', body: '#3a4a52', accent: '#c9d9e8', headband:true } },
+    ],
+    exits: [],
+  },
+};
+const zoneImgs = {};
+for (const id in ZONES){ const im = new Image(); im.src = ZONES[id].img; zoneImgs[id] = im; }
+function isBarrierPx(zoneId, x, y){
+  if (x < 6 || y < 6 || x >= BG_W-6 || y >= BG_H-6) return true;
+  for (const b of ZONES[zoneId].barriers){ if (x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) return true; }
   return false;
 }
-const TILE_COLOR = { [T.GROUND]: '#5a6a72', [T.WALL]: '#0e1418', [T.WOOD]: '#3a4a52', [T.STONE]: '#6a7880' };
-function hash2(x, y, seed){
-  let h = (x*374761393 + y*668265263 + (seed||0)*2246822519) | 0;
-  h = (h ^ (h >>> 13)) >>> 0; h = Math.imul(h, 1274126177); h = (h ^ (h >>> 16)) >>> 0;
-  return h / 4294967295;
-}
-function shadeColor(hex, amt){
-  const n = parseInt(hex.slice(1), 16);
-  let r = (n>>16)&255, g = (n>>8)&255, b = n&255;
-  r = Math.max(0, Math.min(255, r + (amt<0 ? r*amt : (255-r)*amt)));
-  g = Math.max(0, Math.min(255, g + (amt<0 ? g*amt : (255-g)*amt)));
-  b = Math.max(0, Math.min(255, b + (amt<0 ? b*amt : (255-b)*amt)));
-  return `rgb(${r|0},${g|0},${b|0})`;
-}
-function drawTile(t, tx, ty, px, py){
-  const base = TILE_COLOR[t];
-  ctx.fillStyle = base; ctx.fillRect(px, py, TS+1, TS+1);
-  if (t === T.GROUND){
-    for (let i=0;i<4;i++){
-      const n1 = hash2(tx*4+i, ty, 1), n2 = hash2(tx*4+i, ty, 2), n3 = hash2(tx*4+i, ty, 3);
-      ctx.fillStyle = n3 > 0.5 ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
-      ctx.beginPath(); ctx.arc(px + 4 + n1*(TS-8), py + 4 + n2*(TS-8), 1.5 + n3*2, 0, Math.PI*2); ctx.fill();
-    }
-  } else if (t === T.STONE){
-    const half = TS/2;
-    for (let by=0; by<2; by++) for (let bx=0; bx<2; bx++){
-      const n = hash2(tx*2+bx, ty*2+by, 5);
-      ctx.fillStyle = shadeColor(base, (n-0.5)*0.18);
-      ctx.fillRect(px+bx*half+1, py+by*half+1, half-2, half-2);
-    }
-    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 1; ctx.strokeRect(px+0.5, py+0.5, TS, TS);
-  } else if (t === T.WOOD){
-    for (let i=0;i<3;i++){
-      const n = hash2(tx*3+i, ty, 6);
-      ctx.fillStyle = shadeColor(base, (n-0.5)*0.25);
-      ctx.fillRect(px + i*(TS/3), py, TS/3 - 1, TS+1);
-    }
-  } else if (t === T.WALL){
-    ctx.fillStyle = shadeColor(base, -0.1); ctx.fillRect(px, py, TS+1, TS+1);
-    ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(px, py, TS+1, 6);
-  }
-}
-function drawMap(camX, camY){
-  const x0 = Math.max(0, Math.floor(camX / TS)), y0 = Math.max(0, Math.floor(camY / TS));
-  const x1 = Math.min(WT, Math.ceil((camX + canvas.width) / TS) + 1), y1 = Math.min(HT, Math.ceil((camY + canvas.height) / TS) + 1);
-  for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) drawTile(MAP[y][x], x, y, x*TS - camX, y*TS - camY);
-}
-
-const NPCS = [
-  { id: 'gimgu', name: '김구', x: 10, y: 6, img: 'assets/portraits/gimgu.png', look: { role: 'scholar', body: '#2a3a4a', accent: '#9dc3e0' } },
-  { id: 'yunbonggil', name: '윤봉길', x: 11, y: 12, img: 'assets/portraits/yunbonggil.png', look: { role: 'commoner', body: '#3a4a52', accent: '#c9d9e8', headband:true } },
-];
+const NPCS = ZONES.imjeong.npcs;
 const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
 /* ============ 주인공(학생) 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용.
@@ -228,14 +183,14 @@ const PLAYER_SPRITES = {};
 const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
 function drawPlayerSprite(px, py, facing, moving){
   ctx.fillStyle = 'rgba(0,0,0,.28)';
-  ctx.beginPath(); ctx.ellipse(px, py + 15, 13, 5, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
   const dir = DIR_NAME[facing] || 'down';
   const frames = PLAYER_SPRITES[dir];
   const seq = [0, 1, 0, 2];
   const idx = moving ? seq[Math.floor(performance.now()/140) % seq.length] : 0;
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
-  const H = 58, W = H * (img.naturalWidth / img.naturalHeight);
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -283,9 +238,15 @@ function drawCharacter(px, py, facing, look){
 }
 function overlayOpen(){ return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show'); }
 const World = {
-  px: 10, py: 9, facing: 'u', speed: 3.4,
+  zone: 'imjeong', px: ZONES.imjeong.spawn.x, py: ZONES.imjeong.spawn.y, facing: 'd', speed: 165,
   stick: { active: false, dx: 0, dy: 0 }, keys: { l:false, r:false, u:false, d:false }, paused: false, nearNpc: null, lastT: 0,
-  canStand(x, y){ const pad = 0.3; return !isBarrier(x-pad, y-pad) && !isBarrier(x+pad, y-pad) && !isBarrier(x-pad, y+pad) && !isBarrier(x+pad, y+pad); },
+  canStand(x, y){
+    const pad = 16;
+    if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
+        isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
+    for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
+    return true;
+  },
   update(dt){
     if (this.paused || overlayOpen()) return;
     let vx = this.stick.dx, vy = this.stick.dy;
@@ -302,20 +263,31 @@ const World = {
     this.checkNpc();
   },
   checkNpc(){
-    let found = null, best = 1.7;
+    let found = null, best = 90;
     for (const n of NPCS){ const d = Math.hypot(n.x - this.px, n.y - this.py); if (d < best){ best = d; found = n; } }
     if (found !== this.nearNpc){ this.nearNpc = found; document.getElementById('act-btn').classList.toggle('show', !!found); }
   },
   render(){
-    const camX = this.px*TS - canvas.width/2, camY = this.py*TS - canvas.height/2;
-    ctx.fillStyle = '#0e1418'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawMap(camX, camY);
-    for (const n of NPCS){
-      if (n.img) drawNpcSprite(n.x*TS - camX, n.y*TS - camY, n.img);
-      else drawCharacter(n.x*TS - camX, n.y*TS - camY, 'd', n.look);
-      if (n === this.nearNpc){ ctx.fillStyle = '#9dc3e0'; ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('!', n.x*TS - camX, n.y*TS - camY - 34); }
+    const img = zoneImgs[this.zone];
+    const viewW = canvas.width / ZOOM, viewH = canvas.height / ZOOM;
+    const camX = Math.max(0, Math.min(Math.max(0, BG_W - viewW), this.px - viewW/2));
+    const camY = Math.max(0, Math.min(Math.max(0, BG_H - viewH), this.py - viewH/2));
+    ctx.fillStyle = '#1a140c'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if (img.complete && img.naturalWidth){
+      const srcW = Math.min(viewW, BG_W), srcH = Math.min(viewH, BG_H);
+      ctx.drawImage(img, camX, camY, srcW, srcH, 0, 0, srcW*ZOOM, srcH*ZOOM);
     }
-    drawPlayerSprite(this.px*TS - camX, this.py*TS - camY, this.facing, this.moving);
+    ctx.save(); ctx.scale(ZOOM, ZOOM);
+    for (const n of NPCS){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    ctx.restore();
+    for (const n of NPCS){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
+    drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
+    for (const n of NPCS){
+      if (n === this.nearNpc){
+        const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
+        ctx.fillStyle = '#9dc3e0'; ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('!', sx, sy - 40);
+      }
+    }
     const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, canvas.height*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.45)');
     ctx.fillStyle = vg; ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -455,25 +427,21 @@ sizeMinimapCanvas();
 window.addEventListener('resize', sizeMinimapCanvas);
 function drawMinimap(){
   const w = miniCanvas.width, h = miniCanvas.height;
-  const cw = w / WT, ch = h / HT;
+  const img = zoneImgs[World.zone];
+  const sx = w / BG_W, sy = h / BG_H;
   miniCtx.clearRect(0, 0, w, h);
-  for (let y=0;y<HT;y++){
-    for (let x=0;x<WT;x++){
-      miniCtx.fillStyle = TILE_COLOR[MAP[y][x]] || '#3a2c1a';
-      miniCtx.fillRect(x*cw, y*ch, cw+0.5, ch+0.5);
-    }
-  }
+  if (img.complete && img.naturalWidth){ miniCtx.drawImage(img, 0, 0, w, h); }
   for (const n of NPCS){
-    miniCtx.fillStyle = '#8a2f2f';
+    miniCtx.fillStyle = '#c23b3b';
     miniCtx.beginPath();
-    miniCtx.arc(n.x*cw, n.y*ch, 3, 0, Math.PI*2);
+    miniCtx.arc(n.x*sx, n.y*sy, 4, 0, Math.PI*2);
     miniCtx.fill();
   }
-  miniCtx.fillStyle = '#2f6fbf';
+  miniCtx.fillStyle = '#3d84e6';
   miniCtx.strokeStyle = '#ffffff';
-  miniCtx.lineWidth = 1;
+  miniCtx.lineWidth = 1.2;
   miniCtx.beginPath();
-  miniCtx.arc(World.px*cw, World.py*ch, 4, 0, Math.PI*2);
+  miniCtx.arc(World.px*sx, World.py*sy, 5, 0, Math.PI*2);
   miniCtx.fill();
   miniCtx.stroke();
 }
