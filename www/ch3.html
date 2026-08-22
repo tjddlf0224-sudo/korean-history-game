@@ -622,6 +622,7 @@ const NPC_DATA = {
       { who:'npc', t:'계유정난이 있고 얼마 안 돼, 함길도를 지키던 이징옥이 나에게 반기를 들었었네. 그 땅은 그 뒤로도 조용할 날이 없었지.' },
       { who:'npc', t:'그날 이후 단종은… 노산군으로 신분이 낮춰져 영월로 유배되었네. 다시는 궁으로 돌아오지 못했지.' },
       { who:'npc', t:'제도만 손댄 게 아닐세. 불경을 한글로 옮겨 펴내라 일러 간경도감도 새로 두었네.' },
+      { who:'npc', t:'도성 안에 절도 하나 다시 세우고, 그 앞에 흰 대리석으로 열 층 탑을 올렸네. 고려 경천사 탑을 본떠 만든 것이라 생김새가 예사롭지 않지.' },
       { who:'npc', t:'가기 전에, 이 시대에 있었던 일들을 자네가 제대로 알고 있는지 한번 보고 싶군.' },
     ],
     quiz: null,
@@ -653,7 +654,9 @@ const BOSS_QUESTIONS = [
   { q:'세조가 불교 경전을 한글로 번역·간행하기 위해 설치한 기구는?', opts:['간경도감','교서관'], answer:0, src:[63,69,74,77],
     feedback:['교서관은 서적 인쇄를 담당하던 일반 관청이에요.','정답! 간경도감입니다.'] },
   { q:'금성대군이 단종 복위를 도모하다 발각된 사건 무렵, 별개로 함길도에서 일어난 반란은?', opts:['이징옥의 난','임꺽정의 난'], answer:0, src:[78],
-    feedback:['임꺽정의 난은 훗날 명종 대의 사건이에요.','정답! 계유정난 직후 일어난 이징옥의 난입니다.'] }
+    feedback:['임꺽정의 난은 훗날 명종 대의 사건이에요.','정답! 계유정난 직후 일어난 이징옥의 난입니다.'] },
+  { q:'세조 대에 대리석으로 세워진, 고려 경천사지 십층석탑의 양식을 이어받은 탑은?', opts:['원각사지 십층석탑','불국사 삼층석탑'], answer:0, src:[19,33,44,57,63],
+    feedback:['불국사 삼층석탑(석가탑)은 통일신라의 탑이에요.','정답! 원각사지 십층석탑입니다. 지금의 서울 탑골공원 자리에 있어요.'] }
 ];
 
 const Stage = {
@@ -701,7 +704,9 @@ const Dialog = {
   },
   finish(){
     document.getElementById('dlg-overlay').classList.remove('show');
-    if (this.data.quiz){
+    if (this.data.quizSeq){
+      Quiz.openSequence(this.data.quizSeq, () => this.afterQuiz());
+    } else if (this.data.quiz){
       Quiz.open(this.data.quiz, () => this.afterQuiz());
     } else {
       this.afterQuiz();
