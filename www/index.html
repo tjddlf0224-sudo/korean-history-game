@@ -139,37 +139,60 @@ applyOrientation();
 
 /* ============ 시대순(왼쪽=과거 → 오른쪽=현재) 타임라인 데이터 ============ */
 const ERAS = [
-  { title: '선사·초기국가', year: '~ BC108', pct: '4.3%', range: '구석기 ~ 고조선·초기국가' },
-  { title: '고대', year: 'BC57 ~ 918', pct: '14.5%', range: '삼국시대 ~ 남북국시대' },
-  { title: '고려', year: '918 ~ 1392', pct: '16.5%', range: '918 ~ 1392' },
-  { title: '조선 전기', year: '1392 ~ 1592', pct: null, range: null, cards: [
+  { title: '선사·초기국가', year: '~ BC108', pct: '4.7%', range: '구석기 ~ 고조선·초기국가', cards: [
+    { href: 'seonsa1.html', num: '선사 1화', name: '뗀석기에서 고인돌까지', who: '구석기~고조선' },
+  ] },
+  { title: '고대', year: 'BC57 ~ 918', pct: '14.4%', range: '삼국시대 ~ 남북국시대', cards: [
+    { href: 'godae1.html', num: '고대 1화', name: '세 나라의 겨룸', who: '무령왕 · 진흥왕' },
+    { href: 'godae2.html', num: '고대 2화', name: '통일과 발해', who: '장보고 · 의상 · 발해' },
+    { href: 'godae3.html', num: '고대 3화', name: '후삼국', who: '견훤 · 궁예 · 최치원' },
+  ] },
+  { title: '고려', year: '918 ~ 1392', pct: '14.4%', range: '918 ~ 1392', cards: [
+    { href: 'goryeo1.html', num: '고려 1화', name: '왕건의 나라', who: '태조 · 광종 · 최승로' },
+    { href: 'goryeo2.html', num: '고려 2화', name: '무신과 몽골', who: '서희 · 최충헌 · 삼별초' },
+    { href: 'goryeo3.html', num: '고려 3화', name: '원 간섭기와 공민왕', who: '공민왕 · 지눌 · 의천' },
+  ] },
+  { title: '조선 전기', year: '1392 ~ 1592', pct: '8.2%', range: null, cards: [
     { href: 'ch0.html', num: '0화', name: '새 나라의 설계자', who: '태조 · 정도전' },
     { href: 'ch1.html', num: '1화', name: '왕권의 기틀', who: '태종' },
     { href: 'ch2.html', num: '2화', name: '황금시대', who: '세종' },
-    { href: 'ch3.html', num: '3화', name: '피의 계승', who: '세조' },
+    { href: 'ch3.html', num: '3화', name: '피의 계승', who: '세조 · 단종' },
     { href: 'ch4.html', num: '4화', name: '법과 제도의 완성', who: '성종' },
     { href: 'ch5.html', num: '5화', name: '사림과 피바람', who: '연산군~명종' },
-    { href: 'ch6.html', num: '6화 · 완결', name: '폭풍 전야', who: '선조' },
+    { href: 'ch6.html', num: '6화', name: '폭풍 전야', who: '선조' },
   ] },
-  { title: '조선 후기', year: '1592 ~ 1863', pct: '11.6%', range: '1592 ~ 1863' },
-  { title: '근대·개항기', year: '1863 ~ 1910', pct: '13.7%', range: '1863 ~ 1910', cards: [
-    { href: 'gaehang_ch2.html', num: '2화 · 체험판', name: '군인들의 함성', who: '임오군란 · 흥선대원군' },
-    { href: 'gaehang_ch3.html', num: '3화 · 체험판', name: '삼일천하의 꿈', who: '갑신정변 · 김옥균' },
+  { title: '조선 후기', year: '1592 ~ 1863', pct: '15.3%', range: '1592 ~ 1863', cards: [
+    { href: 'hugi1.html', num: '후기 1화', name: '두 번의 전란', who: '광해군 · 병자호란' },
+    { href: 'hugi2.html', num: '후기 2화', name: '실학과 저잣거리', who: '정약용 · 정조' },
+    { href: 'hugi3.html', num: '후기 3화', name: '세도와 봉기', who: '홍경래 · 최제우' },
   ] },
-  { title: '일제강점기', year: '1910 ~ 1945', pct: '16.5%', range: '1910 ~ 1945', cards: [
-    { href: 'ilje_ch7.html', num: '7화 · 체험판', name: '임정의 부활', who: '한인애국단 · 김구·윤봉길' },
+  { title: '근대·개항기', year: '1863 ~ 1910', pct: '12.8%', range: '1863 ~ 1910', cards: [
+    { href: 'gaehang1.html', num: '개항 1화', name: '강화도의 대포', who: '흥선대원군 · 최익현' },
+    { href: 'gaehang_ch2.html', num: '개항 2화', name: '군인들의 함성', who: '임오군란' },
+    { href: 'gaehang_ch3.html', num: '개항 3화', name: '삼일천하의 꿈', who: '갑신정변 · 김옥균' },
+    { href: 'gaehang4.html', num: '개항 4화', name: '우금치의 함성', who: '전봉준 · 갑오개혁' },
+    { href: 'gaehang5.html', num: '개항 5화', name: '대한제국과 국권피탈', who: '고종 · 신민회' },
   ] },
-  { title: '현대', year: '1945 ~ 현재', pct: '10.9%', range: '1945 ~ 현재' },
+  { title: '일제강점기', year: '1910 ~ 1945', pct: '15.1%', range: '1910 ~ 1945', cards: [
+    { href: 'ilje1.html', num: '일제 1화', name: '만세 소리', who: '3·1 운동 · 박은식' },
+    { href: 'ilje2.html', num: '일제 2화', name: '실력을 기르자', who: '신간회 · 의열단 · 청산리' },
+    { href: 'ilje_ch7.html', num: '일제 7화', name: '임정의 부활', who: '김구 · 윤봉길' },
+  ] },
+  { title: '현대', year: '1945 ~ 현재', pct: '9.7%', range: '1945 ~ 현재', cards: [
+    { href: 'hyeondae1.html', num: '현대 1화', name: '해방, 그리고 갈라짐', who: '여운형 · 6·25' },
+    { href: 'hyeondae2.html', num: '현대 2화', name: '광장의 사람들', who: '4·19 · 5·18 · 6월항쟁' },
+  ] },
 ];
 
 const row = document.getElementById('eras-row');
 ERAS.forEach(e => {
   const col = document.createElement('div');
   col.className = 'era-col';
-  const isFull = e.title === '조선 전기';
+  // 배경 그림이 아직 없는 챕터도 대사·퀴즈는 전부 동작한다(폴백 렌더링).
+  const isFull = ['조선 전기'].includes(e.title);
   const hasCards = !!e.cards;
   const badge = isFull ? '<span class="era-badge badge-live">플레이 가능 · 전 7화</span>'
-    : hasCards ? '<span class="era-badge badge-partial">일부 체험 가능</span>'
+    : hasCards ? '<span class="era-badge badge-partial">플레이 가능 · 그림 준비 중</span>'
     : '<span class="era-badge badge-plan">기획 완료 · 구현 예정</span>';
   const dotClass = (isFull || hasCards) ? 'era-dot' : 'era-dot plan';
   const pctLine = e.pct ? `<span class="era-pct">기출 ${e.pct}</span>` : '';

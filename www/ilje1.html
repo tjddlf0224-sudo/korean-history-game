@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>한국사 게임 - 근대개항기 2화 군인들의 함성</title>
+<title>한국사 게임 - 일제 1화 만세 소리</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -13,47 +13,77 @@
   #wrap { position: fixed; top: 0; left: 0; touch-action: none; transform-origin: top left; }
   body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
   #game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
   #hud { position: absolute; top: calc(10px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left));
     color: #f5f0e6; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.8); z-index: 5; }
   #hud .sub { font-size: 11px; opacity: .75; margin-top: 2px; }
+
   #stick-zone { position: absolute; left: calc(18px + env(safe-area-inset-left)); bottom: calc(18px + env(safe-area-inset-bottom));
     width: 130px; height: 130px; z-index: 6; touch-action: none; }
   #stick-base { position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25); }
   #stick-knob { position: absolute; width: 52px; height: 52px; left: 39px; top: 39px; border-radius: 50%; background: rgba(255,255,255,0.55); transition: transform .05s linear; }
+
   #act-btn { position: absolute; right: calc(22px + env(safe-area-inset-right)); bottom: calc(34px + env(safe-area-inset-bottom));
     width: 68px; height: 68px; border-radius: 50%; border: none; touch-action: none;
     background: #d9a441; color: #2b1d0e; box-shadow: 0 4px 10px rgba(0,0,0,.4);
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 6; }
   #act-btn.show { opacity: 1; pointer-events: auto; }
+
   .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
-  #intro-overlay { background: #180f0d; }
-  #dlg-panel, #quiz-panel, #intro-panel {
-    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241612ee; border: 2px solid #a85c2f;
-    border-radius: 14px; padding: 16px 18px; color: #f0e0d8; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  #intro-overlay { background: #0c0f14; }
+
+  #dlg-panel, #intro-panel {
+    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26ee; border: 2px solid #6a6a8a;
+    border-radius: 14px; padding: 16px 18px; color: #eae6f2; box-shadow: 0 8px 24px rgba(0,0,0,.5);
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #5a3a2a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
-  .dlg-name { font-weight: bold; font-size: 15px; color: #e0954a; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #4a4560; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
+  .dlg-name { font-weight: bold; font-size: 15px; color: #c9b8f0; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+
   #intro-panel { }
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
+
+  #quiz-panel { position: relative; width: 100%; max-width: 640px;
+    margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26f2;
+    border: 2px solid #6a6a8a; border-radius: 14px; padding: 16px 18px; color: #eae6f2;
+    box-shadow: 0 8px 24px rgba(0,0,0,.5); max-height: 80%; overflow-y: auto; }
+  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2; font-size: 14px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .quiz-tag { font-size: 12px; color: #c9b8f0; margin-bottom: 6px; }
+  .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { padding: 12px 14px; border-radius: 10px; border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2;
+    font-size: 14px; text-align: left; }
+  .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
+  .quiz-opt.wrong { background: #5d2f3f; border-color: #bf5f7f; }
+  .quiz-opt:disabled { opacity: .55; cursor: default; }
+  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #cfc7de; min-height: 20px; }
+  .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
+  .quiz-next.show { opacity: .85; }
+  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #8d86a4; letter-spacing: .02em; }
+  .quiz-src:empty { display: none; }
+
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
   #fade.show { opacity: 1; pointer-events: auto; }
+
   #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
-    background: #000; color: #e0954a; text-align: center; padding: 24px; }
+    background: linear-gradient(rgba(5,8,14,.5), rgba(5,8,14,.8)), url('assets/scenes/ch6_busan_ending.png') center/cover no-repeat, #000;
+    color: #c9b8f0; text-align: center; padding: 24px; }
   #end-screen.show { display: flex; }
   #end-screen h2 { font-size: 20px; margin-bottom: 10px; }
-  #end-screen p { color: #d8c3b3; font-size: 14px; line-height: 1.7; }
-  #end-screen a { display: inline-block; margin: 10px 8px 0; color: #1a1408; background: #e0954a; text-decoration: none;
+  #end-screen p { color: #cfc7de; font-size: 14px; line-height: 1.7; }
+  #end-screen a { display: inline-block; margin-top: 22px; color: #0c0f14; background: #c9b8f0; text-decoration: none;
     padding: 10px 22px; border-radius: 999px; font-size: 14px; font-weight: bold; }
 
   /* 미니맵: 반드시 #wrap 안에 둬야 한다. #wrap의 rotate(90deg)를 같이 물려받아야
@@ -99,58 +129,51 @@
   #dlg-panel.alt-speaker { background: #17222bee; border-color: #6f9bb5; }
   #dlg-panel.alt-speaker .dlg-name { color: #9fd0e8; }
   #dlg-panel.alt-speaker .dlg-portrait { box-shadow: 0 0 0 2px #6f9bb5; }
-  #quiz-panel { position: relative; width: 100%; max-width: 640px;
-    margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26f2;
-    border: 2px solid #6a6a8a; border-radius: 14px; padding: 16px 18px; color: #eae6f2;
-    box-shadow: 0 8px 24px rgba(0,0,0,.5); max-height: 80%; overflow-y: auto; }
-  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2; font-size: 14px; line-height: 1;
-    display: flex; align-items: center; justify-content: center; cursor: pointer; }
-  .quiz-tag { font-size: 12px; color: #c9b8f0; margin-bottom: 6px; }
-  .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
-  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
-  .quiz-opt { padding: 12px 14px; border-radius: 10px; border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2;
-    font-size: 14px; text-align: left; }
-  .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
-  .quiz-opt.wrong { background: #5d2f3f; border-color: #bf5f7f; }
-  .quiz-opt:disabled { opacity: .55; cursor: default; }
-  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #cfc7de; min-height: 20px; }
-  .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
-  .quiz-next.show { opacity: .85; }
-  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #8d86a4; letter-spacing: .02em; }
-  .quiz-src:empty { display: none; }
 </style>
 </head>
 <body>
 <div id="wrap">
   <canvas id="game"></canvas>
+
   <div id="hud">
-    <div>근대·개항기 2화 · 군인들의 함성</div>
-    <div class="sub">1882년, 고종</div>
+    <div>일제 1화 · 만세 소리</div>
+    <div class="sub">1910~1919년, 무단통치기</div>
     <div class="sub" id="hud-goal"></div>
   </div>
-  <div id="stick-zone"><div id="stick-base"><div id="stick-knob"></div></div></div>
+
+  <div id="stick-zone">
+    <div id="stick-base"><div id="stick-knob"></div></div>
+  </div>
   <button id="act-btn" onclick="Stage.interact()">
     <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v9c0 .83-.67 1.5-1.5 1.5H9.8l-3.9 3.4c-.5.44-1.27.08-1.27-.58V16h-.13C3.67 16 3 15.33 3 14.5v-9C3 4.67 3.67 4 4.5 4"
         stroke="#2b1d0e" stroke-width="1.6" stroke-linejoin="round" fill="#2b1d0e" fill-opacity="0.06"/>
-      <circle cx="8.3" cy="9.8" r="1.15" fill="#2b1d0e"/><circle cx="12" cy="9.8" r="1.15" fill="#2b1d0e"/><circle cx="15.7" cy="9.8" r="1.15" fill="#2b1d0e"/>
+      <circle cx="8.3" cy="9.8" r="1.15" fill="#2b1d0e"/>
+      <circle cx="12" cy="9.8" r="1.15" fill="#2b1d0e"/>
+      <circle cx="15.7" cy="9.8" r="1.15" fill="#2b1d0e"/>
     </svg>
   </button>
+
   <div class="ov show" id="intro-overlay">
-    <div id="intro-panel"><div id="intro-text"></div><div id="intro-next">탭하여 계속 ▶</div></div>
+    <div id="intro-panel">
+      <div id="intro-text"></div>
+      <div id="intro-next">탭하여 계속 ▶</div>
+    </div>
   </div>
+
   <div class="ov" id="dlg-overlay">
     <div id="dlg-panel">
       <div class="dlg-top">
         <div class="dlg-portrait" id="dlg-portrait">👤</div>
-        <div><div class="dlg-tag" id="dlg-tag"></div><div class="dlg-name" id="dlg-name"></div></div>
+        <div>
+          <div class="dlg-tag" id="dlg-tag"></div>
+          <div class="dlg-name" id="dlg-name"></div>
+        </div>
       </div>
       <div class="dlg-box" id="dlg-text"></div>
       <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
     </div>
   </div>
-  <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
 
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
@@ -164,13 +187,17 @@
     </div>
   </div>
 
+  <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
+
   <div id="fade"></div>
+
   <div id="end-screen">
     <div>
-      <h2>군인들의 함성 — 끝</h2>
-      <p>급료 열세 달이 밀린 구식 군인들의 분노가 도성을 뒤흔들었다.<br>흥선대원군이 다시 나섰지만, 청나라 군대가 그를 끌고 가며 사태를 정리했다.</p>
-      <p style="margin-top:14px; opacity:.75;">이날 이후 청의 내정간섭이 본격화된다 — 이에 반발하는 급진개화파의 움직임이 다음 이야기다.</p>
-      <a href="gaehang_ch3.html">다음 화로(3화)</a><a href="index.html">챕터 목록</a>
+      <h2>일제 1화 · 끝</h2>
+      <p>만세 소리는 온 나라와 국외까지 번졌다.</p>
+      <p>그리고 그 힘이 상하이에 정부를 세웠다.</p>
+      <p style="margin-top:18px; opacity:.7;">일제 2화 「실력을 기르자」에서 계속됩니다.</p>
+      <div><a href="ilje2.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
     </div>
   </div>
   <div id="zone-banner"></div>
@@ -179,6 +206,7 @@
 </div>
 
 <script>
+/* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케일 전)
@@ -186,6 +214,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
 const ART_V = '?v=2';
+
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
@@ -218,8 +247,10 @@ function applyOrientation(){
   const { w: iw, h: ih } = getViewportSize();
   const portrait = ih > iw;
   document.body.classList.toggle('rot', portrait);
-  const w = portrait ? ih : iw, h = portrait ? iw : ih;
-  wrapEl.style.width = w + 'px'; wrapEl.style.height = h + 'px';
+  const w = portrait ? ih : iw;
+  const h = portrait ? iw : ih;
+  wrapEl.style.width = w + 'px';
+  wrapEl.style.height = h + 'px';
   // 디스플레이 배율(DPR) 대응: 백킹 스토어를 물리 픽셀만큼 키우고 컨텍스트를 그만큼
   // 스케일해 둔다. 이걸 빼면 캔버스가 논리 픽셀 1배로 그려진 뒤 브라우저가 2~3배로
   // 늘려서 배경/NPC/주인공이 전부 뭉개진다(Phaser의 resolution 옵션과 같은 취지 — 다만 그 옵션은 Phaser 3.16에서 제거돼 실제로는 동작하지 않았고, 그래서 0화도 이 방식으로 옮겼다).
@@ -243,6 +274,9 @@ setTimeout(applyOrientation, 300);
 setTimeout(applyOrientation, 800);
 applyOrientation();
 
+/* ============ 구역(zone): 실사 배경 이미지 + 충돌/NPC ============
+   무대는 탑골공원. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
+   재서 스펙에 적어 둔다 — 배경을 바꾸면 스펙의 좌표도 같이 고쳐야 한다. */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 /* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
    빨간 점 격자로 표시해서 눈으로 바로 확인할 수 있다(책상 등 가구
@@ -250,29 +284,32 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
    틀렸던 문제의 재발 방지용). */
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
-  byeongyeong: {
-    img: 'assets/scenes/gaehang_ch2_barracks.png', label: '무위영 병영',
-    spawn: { x: 700, y: 620 },
-    barriers: [ { x0:400, y0:0, x1:1250, y1:200 } ], // 낡은 병영 건물
+  tapgol: {
+    img: 'assets/scenes/ilje1_tapgol.png', label: '탑골공원',
+    spawn: { x: 688, y: 470 },
+    barriers: [
+    ],
     npcs: [
-      { id: 'daewongun', name: '흥선대원군', x: 700, y: 460, img: 'assets/portraits/daewongun.png', look: { role: 'king', body: '#3a2a1e', accent: '#e0954a' } },
-      { id: 'soldier', name: '무위영 병사', x: 470, y: 560, img: 'assets/portraits/muwiyeong_soldier.png', look: { role: 'general', body: '#5a4a3a', accent: '#8c8676', headband:true } },
+      { id:'mudan', name:'헌병경찰 피해자', x:330, y:250, img:'assets/portraits/mudan.png', look:{ role:'commoner', body:'#5a5650', accent:'#8a7a5a' } },
+      { id:'samil', name:'만세 시위 학생', x:700, y:240, img:'assets/portraits/samil.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
+      { id:'bakeunsik', name:'박은식', x:1060, y:280, img:'assets/portraits/bakeunsik.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
+      { id:'gwangbokhoe', name:'대한광복회 단원', x:688, y:640, img:'assets/portraits/gwangbokhoe.png', look:{ role:'general', body:'#4a4a58', accent:'#8a6d3b' } },
     ],
     exits: [],
   },
 };
 const zoneImgs = {};
 for (const id in ZONES){ const im = new Image(); im.src = ZONES[id].img; zoneImgs[id] = im; }
+
 function isBarrierPx(zoneId, x, y){
   if (x < 6 || y < 6 || x >= BG_W-6 || y >= BG_H-6) return true;
   for (const b of ZONES[zoneId].barriers){ if (x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) return true; }
   return false;
 }
-const NPCS = ZONES.byeongyeong.npcs;
 const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
-/* ============ 주인공(학생) 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용.
-   전 챕터 공통으로 4방향 걷기 시트를 그대로 재사용(같은 인물이므로 전 챕터 공통). */
+/* ============ 주인공 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용
+   (NPC는 아직 초상화가 없어 drawCharacter() 실루엣을 그대로 유지) ============ */
 /* 주의(재발 방지): assets/player/left_*.png·right_*.png 원본 파일 자체가 좌우
    내용이 뒤바뀌어 있음(0화에서 처음 발견/수정된 문제, DIR_SRC로 보정).
    여기서도 동일하게 보정하지 않으면 왼쪽으로 이동 시 오른쪽을 보는 등 반대로 렌더됨. */
@@ -292,7 +329,7 @@ function drawPlayerSprite(px, py, facing, moving){
   const idx = moving ? seq[Math.floor(performance.now()/140) % seq.length] : 0;
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
-  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // 전 챕터 공통으로 화면상 크기(73.6*줌1.2=88px)로 맞춤
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
@@ -321,36 +358,46 @@ function drawNpcSprite(px, py, imgPath, look){
 
 function drawCharacter(px, py, facing, look){
   const role = (look && look.role) || 'commoner';
-  const body = (look && look.body) || '#8a6d3b', accent = (look && look.accent) || '#c9a24a';
+  const body = (look && look.body) || '#8a6d3b';
+  const accent = (look && look.accent) || '#c9a24a';
   const eo = facing === 'l' ? -2 : facing === 'r' ? 2 : 0;
-  ctx.save(); ctx.translate(px, py);
-  ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(0, 16, 12, 5, 0, 0, Math.PI*2); ctx.fill();
-  if (role === 'king'){
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.fillStyle = 'rgba(0,0,0,.25)';
+  ctx.beginPath(); ctx.ellipse(0, 16, 12, 5, 0, 0, Math.PI*2); ctx.fill();
+
+  if (role === 'scholar'){
     ctx.fillStyle = body;
-    ctx.beginPath(); ctx.moveTo(-6,-8); ctx.lineTo(6,-8); ctx.lineTo(13,14); ctx.lineTo(-13,14); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = accent; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(-6,-8); ctx.lineTo(0,3); ctx.lineTo(6,-8); ctx.stroke();
-    ctx.fillStyle = '#f1c79a'; ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#1c1a16'; ctx.beginPath(); ctx.ellipse(0,-21,9,5,0,Math.PI,0); ctx.fill();
-    ctx.fillRect(-9,-22,18,4);
-  } else if (role === 'general'){
-    ctx.fillStyle = body; ctx.fillRect(-9,-6,18,20);
-    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1;
-    for (let i=-3;i<=11;i+=4){ ctx.beginPath(); ctx.moveTo(-9,i); ctx.lineTo(9,i); ctx.stroke(); }
-    ctx.fillStyle = '#f1c79a'; ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
-    if (look.headband){ ctx.fillStyle = accent; ctx.fillRect(-10,-18,20,3); }
+    ctx.beginPath();
+    ctx.moveTo(-5,-8); ctx.lineTo(5,-8); ctx.lineTo(10,14); ctx.lineTo(-10,14); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = accent;
+    ctx.fillRect(-10,4,20,3);
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#1c1a16';
+    ctx.beginPath(); ctx.ellipse(0,-21,8,5,0,Math.PI,0); ctx.fill();
+    ctx.fillRect(-8,-22,16,4);
+    ctx.fillRect(-14,-19,6,2);
+    ctx.fillRect(8,-19,6,2);
   } else {
-    ctx.fillStyle = body; ctx.fillRect(-9,-6,18,20);
+    ctx.fillStyle = body;
+    ctx.fillRect(-9,-6,18,20);
     ctx.strokeStyle = accent; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(-9,-6); ctx.lineTo(0,2); ctx.lineTo(9,-6); ctx.stroke();
-    ctx.fillStyle = '#f1c79a'; ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
   }
+
   ctx.fillStyle = '#2b2015';
   ctx.beginPath(); ctx.arc(eo-3,-14,1.4,0,Math.PI*2); ctx.fill();
   ctx.beginPath(); ctx.arc(eo+3,-14,1.4,0,Math.PI*2); ctx.fill();
   ctx.restore();
 }
-function overlayOpen(){ return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show'); }
+
+function overlayOpen(){
+  return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show');
+}
+
 /* 구역 이름 배너 — goToZone()과 최초 진입에서 부른다. */
 function showZoneBanner(text){
   const el = document.getElementById('zone-banner');
@@ -365,13 +412,21 @@ function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
   const done = document.getElementById('next-chapter-btn').classList.contains('show');
-  const t = done ? '다음 목표: 다음 화로 넘어가기' : '다음 목표: ' + (Stage.state.talkStage < 2 ? '흥선대원군과 대화하기' : '무위영 병사와 대화하기');
+  const t = done ? '다음 목표: 다음 화로 넘어가기'
+    : '다음 목표: ' + (Stage.state.talkStage < 0 ? '헌병경찰 피해자와 대화하기' : '만세 시위 학생과 대화하기');
   if (el.textContent !== t) el.textContent = t;
 }
 
 const World = {
-  zone: 'byeongyeong', px: ZONES.byeongyeong.spawn.x, py: ZONES.byeongyeong.spawn.y, facing: 'd', speed: 165,
-  stick: { active: false, dx: 0, dy: 0 }, keys: { l:false, r:false, u:false, d:false }, paused: false, nearNpc: null, lastT: 0,
+  zone: 'tapgol', px: ZONES.tapgol.spawn.x, py: ZONES.tapgol.spawn.y,
+  facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
+  stick: { active: false, dx: 0, dy: 0 },
+  keys: { l:false, r:false, u:false, d:false },
+  paused: false,
+  moving: false,
+  nearNpc: null,
+  lastT: 0,
+
   canStand(x, y){
     const pad = 16;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
@@ -379,40 +434,53 @@ const World = {
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
     return true;
   },
+
   update(dt){
     if (this.paused || overlayOpen()) return;
     let vx = this.stick.dx, vy = this.stick.dy;
-    if (this.keys.l) vx -= 1; if (this.keys.r) vx += 1; if (this.keys.u) vy -= 1; if (this.keys.d) vy += 1;
+    if (this.keys.l) vx -= 1;
+    if (this.keys.r) vx += 1;
+    if (this.keys.u) vy -= 1;
+    if (this.keys.d) vy += 1;
     const len = Math.hypot(vx, vy);
     this.moving = len > 0.05;
     if (this.moving){
       vx /= len; vy /= len;
-      if (Math.abs(vx) > Math.abs(vy)) this.facing = vx > 0 ? 'r' : 'l'; else this.facing = vy > 0 ? 'd' : 'u';
-      const nx = this.px + vx * this.speed * dt, ny = this.py + vy * this.speed * dt;
+      if (Math.abs(vx) > Math.abs(vy)) this.facing = vx > 0 ? 'r' : 'l';
+      else this.facing = vy > 0 ? 'd' : 'u';
+      const nx = this.px + vx * this.speed * dt;
+      const ny = this.py + vy * this.speed * dt;
       if (this.canStand(nx, this.py)) this.px = nx;
       if (this.canStand(this.px, ny)) this.py = ny;
     }
     this.checkNpc();
   },
+
   checkNpc(){
     // 전 챕터 공통으로 2단계 거리(멀면 !, 가까우면 이름)로 통일
     const SHOW_RANGE = 192, INTERACT_RANGE = 108.8;
     let shown = null, best = SHOW_RANGE;
-    for (const n of NPCS){
+    for (const n of ZONES[this.zone].npcs){
       const d = Math.hypot(n.x - this.px, n.y - this.py);
       if (d < best){ best = d; shown = n; }
     }
     this.nearNpcShown = shown;
     this.nearNpcClose = (shown && best < INTERACT_RANGE) ? shown : null;
     const found = this.nearNpcClose;
-    if (found !== this.nearNpc){ this.nearNpc = found; document.getElementById('act-btn').classList.toggle('show', !!found); }
+    if (found !== this.nearNpc){
+      this.nearNpc = found;
+      const btn = document.getElementById('act-btn');
+      if (found) btn.classList.add('show'); else btn.classList.remove('show');
+    }
   },
+
   render(){
     const img = zoneImgs[this.zone];
     const viewW = VIEW_W / ZOOM, viewH = VIEW_H / ZOOM;
     const camX = Math.max(0, Math.min(Math.max(0, BG_W - viewW), this.px - viewW/2));
     const camY = Math.max(0, Math.min(Math.max(0, BG_H - viewH), this.py - viewH/2));
-    ctx.fillStyle = '#1a140c'; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    ctx.fillStyle = '#242030';
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     if (img && img.complete && img.naturalWidth){
       const srcW = Math.min(viewW, BG_W), srcH = Math.min(viewH, BG_H);
       ctx.drawImage(img, camX, camY, srcW, srcH, 0, 0, srcW*ZOOM, srcH*ZOOM);
@@ -428,15 +496,17 @@ const World = {
       ctx.fillText('배경 그림 준비 중 — ' + (ZONES[this.zone].label || ''), viewW/2, 26);
       ctx.restore();
     }
-    ctx.save(); ctx.scale(ZOOM, ZOOM);
-    for (const n of NPCS){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    const zone = ZONES[this.zone];
+    ctx.save();
+    ctx.scale(ZOOM, ZOOM);
+    for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
-    for (const n of NPCS){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     if (this.nearNpcShown){
       const n = this.nearNpcShown;
       const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
-      ctx.fillStyle = '#e0954a';
+      ctx.fillStyle = '#c9b8f0';
       ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'center';
       if (n === this.nearNpcClose){
@@ -461,25 +531,37 @@ const World = {
       ctx.fillText(`DEBUG px:(${Math.round(this.px)},${Math.round(this.py)}) zone:${this.zone}`, 6, VIEW_H - 8);
     }
     const vg = ctx.createRadialGradient(VIEW_W/2, VIEW_H/2, VIEW_H*0.3, VIEW_W/2, VIEW_H/2, VIEW_H*0.8);
-    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.4)');
-    ctx.fillStyle = vg; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,.4)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
 };
+
 (function bindStick(){
-  const zone = document.getElementById('stick-zone'), knob = document.getElementById('stick-knob');
-  let activeId = null, cx = 0, cy = 0; const R = 44;
+  const zone = document.getElementById('stick-zone');
+  const knob = document.getElementById('stick-knob');
+  let activeId = null, cx = 0, cy = 0;
+  const R = 44;
   zone.addEventListener('pointerdown', e=>{
-    if (activeId !== null) return; activeId = e.pointerId;
+    if (activeId !== null) return;
+    activeId = e.pointerId;
     try { zone.setPointerCapture(activeId); } catch(err) {}
-    const r = zone.getBoundingClientRect(); cx = r.left + r.width/2; cy = r.top + r.height/2;
-    World.stick.active = true; move(e);
+    const r = zone.getBoundingClientRect();
+    cx = r.left + r.width/2; cy = r.top + r.height/2;
+    World.stick.active = true;
+    move(e);
   });
-  zone.addEventListener('pointermove', move); zone.addEventListener('pointerup', end); zone.addEventListener('pointercancel', end);
+  zone.addEventListener('pointermove', move);
+  zone.addEventListener('pointerup', end);
+  zone.addEventListener('pointercancel', end);
   function move(e){
     if (e.pointerId !== activeId) return;
-    let dx = e.clientX - cx, dy = e.clientY - cy; const d = Math.hypot(dx, dy);
+    let dx = e.clientX - cx, dy = e.clientY - cy;
+    const d = Math.hypot(dx, dy);
     if (d > R){ dx = dx/d*R; dy = dy/d*R; }
-    let wx = dx, wy = dy; if (document.body.classList.contains('rot')){ wx = dy; wy = -dx; }
+    let wx = dx, wy = dy;
+    if (document.body.classList.contains('rot')){ wx = dy; wy = -dx; }
     // 조이스틱 손잡이는 #wrap 안에 있어서 translate가 '회전된' 좌표계로
     // 해석된다. 화면 델타(dx,dy)를 그대로 주면 손잡이만 90도 틀어져
     // 보인다(이동은 멀쩡한데 손잡이만 오른쪽으로 꺾이던 문제). 이동에
@@ -487,15 +569,21 @@ const World = {
     knob.style.transform = `translate(${wx}px,${wy}px)`;
     World.stick.dx = wx / R; World.stick.dy = wy / R;
   }
-  function end(e){ if (e.pointerId !== activeId) return; activeId = null; World.stick.active = false; World.stick.dx = 0; World.stick.dy = 0; knob.style.transform = 'translate(0,0)'; }
+  function end(e){
+    if (e.pointerId !== activeId) return;
+    activeId = null;
+    World.stick.active = false; World.stick.dx = 0; World.stick.dy = 0;
+    knob.style.transform = 'translate(0,0)';
+  }
 })();
+
 window.addEventListener('keydown', e=>{
   if (e.key === ' ' || e.key === 'Enter'){
     e.preventDefault();
     if (document.getElementById('intro-overlay').classList.contains('show')) { introNext(); return; }
-    if (document.getElementById('quiz-overlay').classList.contains('show')) { Quiz.confirmIfReady(); return; }
     if (document.getElementById('dlg-overlay').classList.contains('show')) { Dialog.next(); return; }
-    Stage.interact(); return;
+    Stage.interact();
+    return;
   }
   if (overlayOpen()) return;
   if (['ArrowLeft','a','A'].includes(e.key)) World.keys.l = true;
@@ -510,106 +598,103 @@ window.addEventListener('keyup', e=>{
   if (['ArrowDown','s','S'].includes(e.key)) World.keys.d = false;
 });
 
-/* 사료 근거: 우리역사넷 "임오군란 1882" — 무위영 구식 군인의 급료 차별과 봉기,
-   흥선대원군의 일시 재집권. 아래 대사는 참고해 재창작한 것으로 원문이 아님.
-   '무위영 병사'는 실존 인물이 아닌 가상 캐릭터(임오군란은 특정 지도자 없이
-   다수 하급 군인이 주도한 봉기였음을 반영). */
+/* ============ 대화 데이터 (사료 근거: hm_077_0070 정여립 모반, hm_077_0080 동서 붕당 발생.
+   아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
+   보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
-  daewongun_0: {
-    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+  mudan_0: {
+    name: '헌병경찰 피해자', icon: '⛓️', img: 'assets/portraits/mudan.png',
     beats: [
-      { t:'…내가 하야한 지 몇 해 되지도 않았는데, 벌써 이 나라 꼴이 말이 아니로군.' },
-      { t:'별기군이라는 신식 군대는 매달 급료를 꼬박꼬박 받는다지. 그런데 저 무위영 구식 군인들은 열세 달째 급료가 밀렸다는군.' },
-      { t:'그것도 모자라 이번 달에 나눠준 쌀에는 겨와 모래가 절반이었다더군. 사람이 먹을 게 아니야.' },
-      { t:'저 군인들의 분노가 어디로 향할지, 지켜볼 만하겠어.' },
+      { who:'npc', t:'헌병이 경찰 노릇을 하오. 재판도 없이 곤장을 치지 — 조선인에게만 태형을 되살렸소.' },
+      { who:'npc', t:'땅도 잃었소. 정한 기간 안에 신고하라 하는데, 글을 모르거나 문서가 없으면 그대로 빼앗기오. 그 땅이 동양척식주식회사로 넘어갔지.' },
+      { who:'npc', t:'회사를 세우려면 총독의 허가를 받아야 하오. 우리 손으로 뭘 해 보려야 할 수가 없소.' },
+    ],
+    quizSeq: [
+      { q:'1910년대 일제가 헌병에게 경찰 업무를 맡기고 조선인에게만 태형을 적용한 통치 방식은?',
+        opts:['무단 통치','문화 통치'], answer:0, src:[20, 23, 39, 46, 48, 51, 55, 61, 70, 73, 75],
+        feedback:['문화 통치는 3·1 운동 뒤 1920년대에 내세운 기만적 통치 방식이에요.','정답! 무단 통치입니다. 교사도 제복을 입고 칼을 찼어요.'] },
+      { q:'기한 안에 신고한 땅만 소유를 인정해 많은 농민이 땅을 잃게 만든 1910년대 일제의 정책은?',
+        opts:['토지조사사업','산미증식계획'], answer:0, src:[10, 13, 17, 22, 27, 77, 78],
+        feedback:['산미증식계획은 1920년대에 쌀 생산을 늘려 일본으로 가져간 정책이에요.','정답! 토지조사사업입니다. 총독부의 지세 수입이 크게 늘었어요.'] },
+      { q:'회사를 세울 때 조선 총독의 허가를 받도록 해 민족 자본의 성장을 막은 법령은?',
+        opts:['회사령','국가총동원법'], answer:0, src:[39, 46, 66],
+        feedback:['국가총동원법은 1938년 전시 동원을 위한 법이에요.','정답! 회사령입니다.'] },
     ]
   },
-  daewongun_1: {
-    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+  samil_0: {
+    name: '만세 시위 학생', icon: '📢', img: 'assets/portraits/samil.png',
     beats: [
-      { t:'(창덕궁, 며칠 뒤) 결국 일이 터졌군. 무위영 군인들이 선혜청 당상의 집을 부수고, 일본 공사관까지 들이쳤다고 하네.' },
-      { t:'그들이 나를 다시 찾아왔어. "대감께서 다시 나서주십시오"라고 하더군.' },
-      { t:'내가 별기군을 없애고 옛 5군영 체제로 되돌리기로 했네. 저들의 요구가 아주 근거 없는 것은 아니었으니까.' },
-      { t:'하지만 이걸로 끝날 것 같지는 않군. 중전께서는 이미 궁을 빠져나가 몸을 피하셨다고 하니.' },
+      { who:'npc', t:'민족 대표들이 태화관에서 독립선언서를 읽는 동안, 우리는 이 탑골공원에서 읽었습니다.' },
+      { who:'npc', t:'"오등은 자에 아 조선의 독립국임과 조선인의 자주민임을 선언하노라." — 그 첫 줄을 아직도 외웁니다.' },
+      { who:'npc', t:'만세는 도시에서 농촌으로, 국내에서 만주와 연해주로 번졌습니다. 유관순 누나는 아우내 장터에서 만세를 부르다 붙잡혔지요.' },
+      { who:'npc', t:'일본은 총을 쐈습니다. 제암리에서는 교회에 사람들을 가두고 불을 질렀습니다.' },
+    ],
+    quizSeq: [
+      { q:'1919년 3월 1일 시작되어 전국과 국외로 번진, 우리 역사상 최대 규모의 독립운동은?',
+        opts:['3·1 운동','6·10 만세 운동'], answer:0, src:[27, 29, 42, 46, 47, 56, 61, 63, 68, 75],
+        feedback:['6·10 만세 운동은 1926년 순종의 장례를 계기로 일어난 운동이에요.','정답! 3·1 운동입니다.'] },
+      { q:'3·1 운동이 일제의 통치 방식에 가져온 변화는?',
+        opts:['무단 통치에서 이른바 문화 통치로 바뀌었다','헌병 경찰제가 처음 시행되었다'], answer:0, src:[6, 27, 29, 39, 46, 48, 51, 55, 56, 61, 63, 70],
+        feedback:['헌병 경찰제는 오히려 3·1 운동 뒤에 폐지(형식상)돼요.','정답! 무단 통치가 한계에 부딪혀 문화 통치로 방식을 바꿔요.'] },
+      { q:'3·1 운동을 계기로 여러 임시 정부를 통합해 1919년 상하이에 세워진 것은?',
+        opts:['대한민국 임시정부','신간회'], answer:0, src:[13, 14, 15, 16, 17, 18, 20, 21, 24, 29, 30, 33],
+        feedback:['신간회는 1927년 국내에서 만들어진 민족 협동 단체예요.','정답! 대한민국 임시정부입니다.'] },
     ]
   },
-  daewongun_2: {
-    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+  bakeunsik_0: {
+    name: '박은식', icon: '📖', img: 'assets/portraits/bakeunsik.png',
     beats: [
-      { t:'청나라 군대가 한성에 들어왔다는 소식을 들었을 땐, 이미 늦었다는 걸 직감했네.' },
-      { t:'오장경이 이끄는 군사들이 나를 청군 진영으로 초대하더군. 가서 보니, 그건 초대가 아니라 나포였어.' },
-      { t:'…이대로 청나라로 끌려가는가 보네. 내가 다시 이 궁을 밟을 수 있을지는 모르겠군.' },
-      { t:'다만 한 가지는 분명하네 — 청의 군대가 이 땅에 들어온 이상, 저들이 그냥 물러가지는 않을 걸세. 상인들의 장사길까지 파고들겠지.' },
+      { who:'npc', t:'나라는 형체요 역사는 정신이오. 형체가 없어져도 정신이 살아 있으면 나라는 죽지 않소.' },
+      { who:'npc', t:'그래서 「한국통사」를 썼소. 나라가 어떻게 무너졌는지를 적었지. 이어서 「한국독립운동지혈사」도 썼소.' },
+      { who:'npc', t:'신채호 선생은 「조선상고사」에서 역사를 아와 비아의 투쟁이라 하셨소. 「독사신론」으로 민족주의 사학의 문을 여신 분이오.' },
+    ],
+    quizSeq: [
+      { q:'"나라는 형체요 역사는 정신"이라 하며 「한국통사」를 지은 민족주의 사학자는?',
+        opts:['박은식','신채호'], answer:0, src:[16, 19, 24, 29, 41, 48, 55, 57],
+        feedback:['신채호는 「조선상고사」·「독사신론」을 쓴 사학자예요.','정답! 박은식입니다.'] },
+      { q:'역사를 "아와 비아의 투쟁"으로 규정하고 「조선상고사」를 쓴 사학자는?',
+        opts:['신채호','정인보'], answer:0, src:[16, 17, 25, 27, 37, 60, 72],
+        feedback:['정인보는 조선학 운동을 이끌며 "얼" 사상을 강조한 학자예요.','정답! 신채호입니다.'] },
+    ]
+  },
+  gwangbokhoe_0: {
+    name: '대한광복회 단원', icon: '🔫', img: 'assets/portraits/gwangbokhoe.png',
+    beats: [
+      { who:'npc', t:'1910년대에도 싸움은 있었소. 다만 드러내지 못했을 뿐이오.' },
+      { who:'npc', t:'우리 대한광복회는 박상진 총사령 아래 대구에서 만들어졌소. 군대식으로 조직해 군자금을 모으고 친일 부호를 처단했지.' },
+      { who:'npc', t:'나라 밖에도 기지를 세웠소. 서간도 삼원보의 신흥무관학교, 북간도의 서전서숙과 명동학교, 연해주의 대한광복군 정부까지.' },
+    ],
+    quizSeq: [
+      { q:'박상진을 총사령으로 하여 공화정 수립을 목표로 군자금을 모으고 친일 부호를 처단한 1910년대 국내 비밀 결사는?',
+        opts:['대한광복회','신간회'], answer:0, src:[17, 24, 27, 39, 45, 66, 75, 79],
+        feedback:['신간회는 1927년에 결성된 합법적 민족 협동 단체예요.','정답! 대한광복회입니다.'] },
+      { q:'신민회가 서간도 삼원보에 세워 독립군 지휘관을 길러낸 학교는?',
+        opts:['신흥무관학교','오산학교'], answer:0, src:[11, 18, 23, 25, 29, 31, 36, 38, 45, 48, 50, 54],
+        feedback:['오산학교는 이승훈이 국내 정주에 세운 학교예요.','정답! 신흥무관학교입니다.'] },
     ],
     endsChapter: true
   },
-  soldier_0: {
-    name:'무위영 병사', icon:'🍚', img:'assets/portraits/muwiyeong_soldier.png',
-    beats: [
-      { t:'이보게, 이 쌀 좀 보게. 겨하고 모래가 반이야. 이걸 먹으라고 준 건가, 말라 죽으라고 준 건가.' },
-      { t:'별기군 놈들은 신식 총 들고 매달 꼬박꼬박 급료를 받는데, 우리는 열세 달째 코빼기도 못 봤네.' },
-      { t:'선혜청 그 양반한테 따지러 갈 참이야. 이대로는 도저히 못 참겠어.' },
-    ]
-  }
 };
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
-    if (id === 'daewongun') return 'daewongun_' + Math.min(Stage.state.talkStage, 2);
-    if (id === 'soldier') return 'soldier_0';
+    if (id === 'mudan') return 'mudan_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'samil') return 'samil_0';
+    if (id === 'bakeunsik') return 'bakeunsik_0';
+    if (id === 'gwangbokhoe') return 'gwangbokhoe_0';
     return null;
   },
   interact(){
     if (document.querySelector('.ov.show')) return;
-    const n = World.nearNpc; if (!n) return;
+    const n = World.nearNpc;
+    if (!n) return;
     const key = Stage.keyFor(n.id);
     if (key) Dialog.open(key, n);
   }
 };
-const seenDialogKeys = new Set();
-const Dialog = {
-  key: null, npc: null, idx: 0, data: null,
-  open(key, npc){
-    this.key = key; this.npc = npc; this.idx = 0; this.data = NPC_DATA[key];
-    seenDialogKeys.add(key);
-    World.paused = true;
-    document.getElementById('dlg-overlay').classList.add('show');
-    document.getElementById('dlg-name').textContent = this.data.name;
-    document.getElementById('dlg-tag').textContent = '1882년 · 한양';
-    document.getElementById('dlg-portrait').textContent = this.data.icon;
-    this.render();
-  },
-  render(){
-    const beat = this.data.beats[this.idx];
-    // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
-    // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
-    const interjecting = !!beat.name && beat.name !== this.data.name;
-    document.getElementById('dlg-panel').classList.toggle('alt-speaker', interjecting);
-    const nameEl = document.getElementById('dlg-name');
-    if (nameEl) nameEl.textContent = beat.name || this.data.name;
-    const portraitEl = document.getElementById('dlg-portrait');
-    if (portraitEl){
-      const img = beat.img || (beat.name ? null : this.data.img);
-      if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
-    }
-    document.getElementById('dlg-text').textContent = beat.t;
-  },
-  next(){ this.idx++; if (this.idx >= this.data.beats.length){ this.finish(); return; } this.render(); },
-  finish(){
-    document.getElementById('dlg-overlay').classList.remove('show');
-    if (this.data.quizSeq){ Quiz.openSequence(this.data.quizSeq, () => this.afterQuiz()); }
-    else if (this.data.quiz){ Quiz.open(this.data.quiz, () => this.afterQuiz()); }
-    else { this.afterQuiz(); }
-  },
-  afterQuiz(){
-    World.paused = false;
-    if (this.npc.id === 'daewongun'){ Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 2); }
-    if (this.data.endsChapter){ document.getElementById('next-chapter-btn').classList.add('show'); }
-  }
-};
-document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
 
+const seenDialogKeys = new Set();
+/* 기출 출처 표기: src에 회차 배열을 넣으면 2개까지 나열, 3개 이상은 축약. */
 function formatQuizSrc(src){
   if (!src) return '';
   if (typeof src === 'string') return '기출 출처 · ' + src;
@@ -694,31 +779,103 @@ const Quiz = {
   }
 };
 
+const Dialog = {
+  key: null, npc: null, idx: 0, data: null,
+  open(key, npc){
+    this.key = key; this.npc = npc; this.idx = 0;
+    this.data = NPC_DATA[key];
+    seenDialogKeys.add(key);
+    World.paused = true;
+    document.getElementById('dlg-overlay').classList.add('show');
+    document.getElementById('dlg-name').textContent = this.data.name;
+    document.getElementById('dlg-tag').textContent = '일제강점기 · 경성';
+    const portraitEl = document.getElementById('dlg-portrait');
+    if (this.data.img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${this.data.img}')`; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = this.data.icon; }
+    this.render();
+  },
+  render(){
+    const beat = this.data.beats[this.idx];
+    // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
+    // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
+    const interjecting = !!beat.name && beat.name !== this.data.name;
+    document.getElementById('dlg-panel').classList.toggle('alt-speaker', interjecting);
+    const nameEl = document.getElementById('dlg-name');
+    if (nameEl) nameEl.textContent = beat.name || this.data.name;
+    const portraitEl = document.getElementById('dlg-portrait');
+    if (portraitEl){
+      const img = beat.img || (beat.name ? null : this.data.img);
+      if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
+      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
+    }
+    document.getElementById('dlg-text').textContent = beat.t;
+  },
+  next(){
+    this.idx++;
+    if (this.idx >= this.data.beats.length){
+      this.finish();
+      return;
+    }
+    this.render();
+  },
+  finish(){
+    document.getElementById('dlg-overlay').classList.remove('show');
+    if (this.data.quizSeq){
+      Quiz.openSequence(this.data.quizSeq, () => this.afterQuiz());
+    } else if (this.data.quiz){
+      Quiz.open(this.data.quiz, () => this.afterQuiz());
+    } else {
+      this.afterQuiz();
+    }
+  },
+  afterQuiz(){
+    World.paused = false;
+    if (this.npc.id === 'mudan'){
+      Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 0);
+    }
+    if (this.data.endsChapter){
+      document.getElementById('next-chapter-btn').classList.add('show');
+    }
+  }
+};
+document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
+
+/* ============ 모던 인트로 ============ */
 const INTRO_LINES = [
-  '강화도조약 이후 조선은 개화 정책을 서둘렀다. 신식 군대 별기군이 창설되고, 구식 군인들은 찬밥 신세가 되었다.',
-  '급료는 열세 달째 밀려 있었다. 백성들의 삶도 나아지지 않았다.',
-  '1882년 여름, 마침내 오랜 불만이 터져 나온다.'
+  '교사도 칼을 차고 교단에 선다. 헌병이 재판 없이 매를 친다.',
+  '땅은 신고하지 않으면 빼앗기고, 회사는 허가 없이 세울 수 없다.',
+  '숨죽인 십 년이 지나고 — 1919년 3월, 종로에서 소리가 터졌다.',
 ];
 let introIdx = 0;
-function renderIntro(){ document.getElementById('intro-text').textContent = INTRO_LINES[introIdx]; }
+function renderIntro(){
+  document.getElementById('intro-text').textContent = INTRO_LINES[introIdx];
+}
 function introNext(){
   introIdx++;
   if (introIdx >= INTRO_LINES.length){
-    const fade = document.getElementById('fade'); fade.classList.add('show');
-    setTimeout(() => { document.getElementById('intro-overlay').classList.remove('show');
+    const fade = document.getElementById('fade');
+    fade.classList.add('show');
+    setTimeout(() => {
+      document.getElementById('intro-overlay').classList.remove('show');
     // 인트로가 걷히고 첫 무대가 드러나는 순간에도 구역 이름을 띄운다
     // (이동할 때만 띄우면 시작 지점이 어딘지 끝내 알 수 없다).
-    showZoneBanner(ZONES[World.zone] && ZONES[World.zone].label); fade.classList.remove('show'); }, 600);
+    showZoneBanner(ZONES[World.zone] && ZONES[World.zone].label);
+      fade.classList.remove('show');
+    }, 600);
     return;
   }
   renderIntro();
 }
 document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
-Stage.endChapter = function(){ document.getElementById('end-screen').classList.add('show'); };
 
-/* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다.
-   현재 구역의 배경 이미지를 그대로 축소해서 사용. */
+Stage.endChapter = function(){
+  document.getElementById('end-screen').classList.add('show');
+};
+
+/* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다
+   (Phaser 카메라나 게임 캔버스와 별개). 구역이 바뀌면 현재 구역의 배경
+   이미지를 그대로 축소해서 보여준다. */
 const miniCanvas = document.getElementById('minimap-canvas');
 const miniCtx = miniCanvas.getContext('2d');
 function sizeMinimapCanvas(){
@@ -753,17 +910,17 @@ function drawMinimap(){
     miniCtx.arc(cx + dw/2 - 2, cy + 1, 0.9, 0, Math.PI*2);
     miniCtx.fill();
   }
-  for (const n of NPCS){
-    miniCtx.fillStyle = '#c23b3b';
+  for (const n of ZONES[World.zone].npcs){
+    miniCtx.fillStyle = '#8a2f2f';
     miniCtx.beginPath();
-    miniCtx.arc(n.x*sx, n.y*sy, 4, 0, Math.PI*2);
+    miniCtx.arc(n.x*sx, n.y*sy, 3, 0, Math.PI*2);
     miniCtx.fill();
   }
-  miniCtx.fillStyle = '#3d84e6';
+  miniCtx.fillStyle = '#2f6fbf';
   miniCtx.strokeStyle = '#ffffff';
-  miniCtx.lineWidth = 1.2;
+  miniCtx.lineWidth = 1;
   miniCtx.beginPath();
-  miniCtx.arc(World.px*sx, World.py*sy, 5, 0, Math.PI*2);
+  miniCtx.arc(World.px*sx, World.py*sy, 4, 0, Math.PI*2);
   miniCtx.fill();
   miniCtx.stroke();
 }
@@ -771,7 +928,9 @@ function drawMinimap(){
 function loop(t){
   if (!World.lastT) World.lastT = t;
   const dt = Math.min(0.05, (t - World.lastT) / 1000);
-  World.lastT = t; World.update(dt); World.render();
+  World.lastT = t;
+  World.update(dt);
+  World.render();
   drawMinimap();
   updateHudGoal();
   { const zl = document.getElementById('zone-label');
