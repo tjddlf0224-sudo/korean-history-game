@@ -166,47 +166,32 @@ def main():
     img = Image.composite(ink_layer, img, edge)
     d = ImageDraw.Draw(img)
 
-    # 8도 근사 경계선 — 교과서 지도와 같은 수준의 개략선.
-    # (경위도로 잡은 뒤 육지 안쪽에서만 보이도록 마스킹한다)
-    province_lines = [
-        # 평안도 / 함길도 (낭림산맥 능선 부근)
-        [(126.4, 41.6), (127.3, 41.0), (127.6, 40.2), (127.4, 39.6)],
-        # 평안도 / 황해도
-        [(124.6, 39.2), (125.6, 38.9), (126.6, 38.7)],
-        # 함길도 / 강원도
-        [(127.4, 39.6), (128.3, 39.1), (128.9, 38.6)],
-        # 황해도 / 경기도
-        [(126.6, 38.7), (126.9, 38.1), (127.3, 37.9)],
-        # 강원도 / 경기도
-        [(127.3, 37.9), (127.8, 37.6), (128.1, 37.2)],
-        # 경기도 / 충청도
-        [(126.4, 36.9), (127.1, 36.9), (127.9, 36.9)],
-        # 강원도 / 경상도
-        [(128.1, 37.2), (128.7, 37.0), (129.2, 36.8)],
-        # 충청도 / 경상도
-        [(127.9, 36.9), (128.1, 36.3), (128.0, 35.7)],
-        # 충청도 / 전라도
-        [(126.4, 36.0), (127.0, 36.0), (127.6, 35.9)],
-        # 전라도 / 경상도
-        [(127.6, 35.9), (127.8, 35.3), (127.9, 34.9)],
-    ]
-    plines = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    dp = ImageDraw.Draw(plines)
-    for seg in province_lines:
-        pts = [project(lon, lat) for lon, lat in seg]
-        dp.line(pts, fill=BORDER_LINE + (190,), width=2, joint='curve')
-    plines.putalpha(Image.composite(plines.getchannel('A'),
-                                    Image.new('L', (W, H), 0), land_mask))
-    img = Image.alpha_composite(img.convert('RGBA'), plines).convert('RGB')
-    d = ImageDraw.Draw(img)
+    # 8도 경계선은 뺐다. 이 축척에서는 근사선이 산줄기와 어긋나 조잡해 보이고,
+    # 도 이름 라벨도 함께 뺐다(도 이름은 이미 아는 상식이라 지도만 어지럽힌다).
+    # 대신 고을 이름으로 위치를 짚게 한다. 좌표는 map_points.json에 남겨둔다.
 
     # 압록강·두만강 — 국경이므로 다른 선보다 굵고 진하게
+    # 두 강은 모두 백두산에서 발원해 서로 반대 방향으로 흐른다(압록강은 서남,
+    # 두만강은 동북). 데이터를 그대로 이으면 백두산을 관통하는 한 줄기처럼
+    # 보이므로, 발원점 둘레를 비워 물길이 거기서 시작한다는 것이 드러나게 한다.
+    BAEKDU = (128.06, 41.99)
+    bx0, by0 = project(*BAEKDU)
+    SOURCE_GAP = 15                      # 백두산 둘레 이만큼은 강을 그리지 않는다
+
     rivers = load('korea_rivers.geojson')
     for f in rivers['features']:
         for ln in lines(f['geometry']):
             pts = [project(lon, lat) for lon, lat in ln]
-            if len(pts) >= 2:
-                d.line(pts, fill=RIVER, width=6, joint='curve')
+            seg = []
+            for p in pts:
+                if math.hypot(p[0] - bx0, p[1] - by0) < SOURCE_GAP:
+                    if len(seg) >= 2:
+                        d.line(seg, fill=RIVER, width=6, joint='curve')
+                    seg = []
+                else:
+                    seg.append(p)
+            if len(seg) >= 2:
+                d.line(seg, fill=RIVER, width=6, joint='curve')
 
     # ── 섬 보강 ──────────────────────────────────────────────
     # 독도는 Natural Earth 1:50m 데이터에 들어갈 만큼 크지 않아 아예 빠져 있다.
@@ -228,10 +213,14 @@ def main():
         ix, iy = project(lon, lat)
         d.line([(ix, iy), (ix + dx, iy + dy)], fill=INK, width=1)
 
-    # 백두산 표식(두 강이 갈라지는 지점)
+    # 백두산 — 두 강이 갈라지는 지점. 산이므로 초록 세모로 그리고, 봉우리에만
+    # 흰 눈을 얹는다(예전엔 흰 세모라 지도 기호인지 산인지 알기 어려웠다).
     bx, by = project(128.06, 41.99)
-    d.polygon([(bx, by - 13), (bx - 12, by + 7), (bx + 12, by + 7)],
-              fill=(238, 240, 240), outline=INK)
+    MOUNT = (58, 104, 62)
+    d.polygon([(bx, by - 15), (bx - 14, by + 8), (bx + 14, by + 8)],
+              fill=MOUNT, outline=INK)
+    d.polygon([(bx, by - 15), (bx - 5, by - 3), (bx + 5, by - 3)],
+              fill=(242, 244, 244))
 
     img = img.filter(ImageFilter.SMOOTH)
     out = os.path.join(HERE, 'joseon8do.png')
@@ -290,6 +279,14 @@ def main():
             {'id': 'busanpo',  'lonlat': [129.08, 35.20], 'name': '부산포', 'off': [10, 26]},
             {'id': 'yeompo',   'lonlat': [129.36, 35.53], 'name': '염포',   'off': [22, 4]},
         ],
+        # 강 이름 — 어느 물줄기가 어느 강인지 지도에서 바로 읽히게 한다.
+        # 'from'/'to'는 그 강이 어디서 어디까지인지 캡션에 쓰는 설명.
+        'rivers': [
+            {'id': 'amnokgang', 'lonlat': [125.60, 40.35], 'name': '압록강',
+             'note': '백두산에서 서남쪽으로 흘러 의주를 지나 서해로'},
+            {'id': 'dumangang', 'lonlat': [129.25, 42.12], 'name': '두만강',
+             'note': '백두산에서 동북쪽으로 흘러 동해로'},
+        ],
         'markers': [
             {'id': 'hamgil',  'lonlat': [130.0, 42.6], 'label': '6진(두만강)'},
             {'id': 'amnok',   'lonlat': [126.0, 40.9], 'label': '4군(압록강)'},
@@ -297,7 +294,7 @@ def main():
             {'id': 'hanyang', 'lonlat': [126.98, 37.57], 'label': '한양'},
         ],
     }
-    for group in ('provinces', 'markers', 'islands', 'countries', 'cities'):
+    for group in ('provinces', 'markers', 'islands', 'countries', 'cities', 'rivers'):
         for it in points[group]:
             x, y = project(*it['lonlat'])
             ox, oy = it.get('off', [0, 0])

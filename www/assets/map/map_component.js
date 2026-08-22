@@ -29,12 +29,13 @@ let MAP_MARKERS = {};
 let ISLANDS = [];
 let COUNTRIES = [];   // 주변국 이름 — 시대별로 갈린다(명/여진 ↔ 청)
 let CITIES = [];      // 세종 대 주요 고을
+let RIVERS = [];      // 압록강·두만강 이름표
 
 async function loadMapPoints(){
   if (PROVINCES.length) return;
   // 지도를 다시 그리면 좌표가 통째로 바뀐다. 캐시된 옛 JSON을 쓰면 라벨이
   // 엉뚱한 자리에 찍히므로 버전 쿼리를 붙여 확실히 새로 받는다.
-  const res = await fetch('assets/map/map_points.json?v=2');
+  const res = await fetch('assets/map/map_points.json?v=3');
   const d = await res.json();
   MAP_W = d.size[0]; MAP_H = d.size[1];
   PROVINCES = d.provinces.map(p => ({ id:p.id, x:p.x, y:p.y,
@@ -44,6 +45,7 @@ async function loadMapPoints(){
   ISLANDS = d.islands || [];
   COUNTRIES = d.countries || [];
   CITIES = d.cities || [];
+  RIVERS = d.rivers || [];
 }
 
 const GameMap = {
@@ -110,7 +112,7 @@ const GameMap = {
 
     if (!this.img){
       this.img = new Image();
-      this.img.src = 'assets/map/joseon8do.png?v=2';
+      this.img.src = 'assets/map/joseon8do.png?v=3';
       this.img.onload = () => this._draw();
     }
     this.el.classList.add('show');
@@ -218,10 +220,14 @@ const GameMap = {
       label(t, c.x * s, c.y * s, cf, 'rgba(96,92,84,.92)', 'rgba(238,238,234,.85)');
     }
 
-    // 도 이름 라벨
-    const fs = Math.max(9, Math.round(15 * s));
-    for (const p of PROVINCES){
-      label(p.name[era], p.x * s, p.y * s, fs, '#4a3822', 'rgba(250,244,230,.92)');
+    // 도 이름(충청도·경상도…)은 그리지 않는다. 이미 아는 상식이라 지도만
+    // 어지럽힌다는 판단. 위치 감은 아래 고을 이름들이 대신한다.
+    // (PROVINCES 데이터는 남겨뒀으니 필요해지면 여기서 다시 그리면 된다)
+
+    // 강 이름 — 어느 물줄기가 압록강이고 두만강인지 바로 읽히게 한다.
+    const rf = Math.max(9, Math.round(14 * s));
+    for (const r of RIVERS){
+      label(r.name, r.x * s, r.y * s, rf, '#2c5a7a', 'rgba(250,244,230,.95)');
     }
 
     // 주요 고을 — 작은 점 + 이름. 한양·평양은 조금 크게.
@@ -259,11 +265,20 @@ const GameMap = {
       const r = Math.max(7, 11 * s) * (this.hover === m.id ? 1.25 : pulse);
       this.hotspots.push({ id:m.id, x, y: y + oy, r: Math.max(r, 16 * s) });
 
-      ctx.beginPath(); ctx.arc(x, y, r * 1.9, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(217,164,65,.22)'; ctx.fill();
-      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
-      ctx.fillStyle = '#d9a441'; ctx.fill();
-      ctx.lineWidth = Math.max(1.5, 2*s); ctx.strokeStyle = '#3a2c1a'; ctx.stroke();
+      // 백두산은 지도 그림에 이미 초록 산으로 그려져 있다. 그 위에 금색 원을
+      // 덮으면 산이 가려지므로, 산 지점은 원 없이 은은한 강조 링만 얹는다.
+      if (m.id === 'baekdu'){
+        ctx.beginPath(); ctx.arc(x, y, r * 1.7, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(217,164,65,.16)'; ctx.fill();
+        ctx.lineWidth = Math.max(1.5, 2*s);
+        ctx.strokeStyle = 'rgba(217,164,65,.75)'; ctx.stroke();
+      } else {
+        ctx.beginPath(); ctx.arc(x, y, r * 1.9, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(217,164,65,.22)'; ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fillStyle = '#d9a441'; ctx.fill();
+        ctx.lineWidth = Math.max(1.5, 2*s); ctx.strokeStyle = '#3a2c1a'; ctx.stroke();
+      }
 
       const lf = Math.max(9, Math.round(13 * s));
       ctx.font = `bold ${lf}px "Gowun Batang", serif`;
