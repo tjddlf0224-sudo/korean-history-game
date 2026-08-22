@@ -318,7 +318,9 @@ const ZONES = {
       { x0:490, y0:205, x1:805,  y1:415 },   // 초가집
       { x0:780, y0:0,   x1:BG_W, y1:150 },   // 물가(서강)
     ],
-    npcs: [],
+    npcs: [
+      { id: 'danjong', name: '노산군', x: 600, y: 465, img: 'assets/portraits/danjong.png', look: { role: 'commoner', body: '#e8e2d2', accent: '#6b5636' } },
+    ],
     exits: [ { rect:{x0:665,y0:600,x1:748,y1:700}, to:'gungya', spawn:{x:700,y:640}, label:'궁궐로' } ],
   },
 };
@@ -733,6 +735,30 @@ const NPC_DATA = {
     beats: [ { who:'npc', t:'…더 할 말은 없네. 이 시대는 이미 지나갔으니.' } ],
     quiz: null
   },
+  /* 노산군(단종) — 청령포. 폐위되어 노산군으로 강등된 뒤라 왕의 복식이 아니라
+     흰 무명 도포 차림이다. 기출은 사육신 4문항(46·65·78회), 그리고 65·78회가
+     "사육신 사건 뒤 상왕을 노산군으로 낮추어 영월에 유배"라고 명시한다. */
+  danjong_0: {
+    name: '노산군', icon: '🕯️', img: 'assets/portraits/danjong.png',
+    beats: [
+      { who:'npc', t:'…나를 아는가. 열두 살에 임금이 되었다가, 열여섯에 상왕이 되었고, 이제는 노산군일세. 왕이 아니니 곤룡포도 벗었지.' },
+      { who:'npc', t:'돈화문을 나선 것이 유월이었네. 닷새를 걸어 여기 영월에 닿았지. 강이 삼면을 두르고 남쪽은 벼랑이라, 배가 없으면 나갈 수도 들어올 수도 없는 곳일세.' },
+      { who:'npc', t:'성삼문, 박팽년… 집현전에서 할바마마를 모시던 이들이 나를 다시 세우려다 잡혔다더군. 숙부께서 친히 국문하셨다지.' },
+      { who:'npc', t:'그 일로 나는 상왕에서 노산군으로 낮춰져 이리 왔네. 숙부의 아우 금성대군마저 순흥에서 같은 일을 꾀하다 목숨을 잃었다 들었고.' },
+      { who:'npc', t:'…원망은 없네. 다만 자네는 이 일을 잊지 말게. 그것이면 되네.' },
+    ],
+    quizSeq: [
+      { q:'성삼문·박팽년 등 단종의 복위를 꾀하다 발각되어 목숨을 잃은 여섯 신하를 부르는 말은?',
+        opts:['사육신','삼학사'], answer:0, src:[46,65,78],
+        feedback:['삼학사는 훗날 병자호란 때 척화를 주장한 세 신하예요.','정답! 사육신입니다. 성삼문·박팽년·하위지·이개·유응부·유성원이지요.'] },
+      { q:'노산군으로 낮춰진 단종이 유배되어 사약을 받은 곳은?',
+        opts:['영월 청령포','강화도'], answer:0, src:[65,78],
+        feedback:['강화도는 훗날 연산군과 광해군이 유배된 곳이에요.','정답! 강원도 영월 청령포입니다. 서강이 삼면을 두르고 남쪽은 벼랑이라 배 없이는 드나들 수 없었어요.'] },
+      { q:'사육신 사건 뒤, 순흥에서 다시 단종 복위를 도모하다 목숨을 잃은 세조의 동생은?',
+        opts:['금성대군','안평대군'], answer:0, src:[78],
+        feedback:['안평대군은 그보다 앞서 계유정난 때 제거되었어요.','정답! 금성대군입니다.'] },
+    ]
+  },
   attendant_0: {
     name: '늙은 내관', icon: '🕯️', img: 'assets/portraits/naesi.png',
     beats: [
@@ -764,6 +790,7 @@ const Stage = {
   keyFor(id){
     if (id === 'sejo') return Stage.state.bossDone ? 'sejo_repeat' : 'sejo_' + Math.min(Stage.state.sejoStage, 3);
     if (id === 'attendant') return 'attendant_0';
+    if (id === 'danjong') return 'danjong_0';
     return null;
   },
   interact(){
