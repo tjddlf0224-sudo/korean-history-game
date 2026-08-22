@@ -278,9 +278,8 @@ const ZONES = {
     npcs: [
       { id: 'sejong', name: '세종', x: 590, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
       { id: 'sinsukju', name: '신숙주', x: 790, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
-      // 초상 준비되면 img 추가 예정(위 NPC_DATA의 TODO 참고) — 그전까지는 실루엣.
-      { id: 'suyang', name: '수양대군', x: 950, y: 385, look: { role: 'general', body: '#5c3d3d', accent: '#a88a4a' } },
-      { id: 'jangyeongsil', name: '장영실', x: 687, y: 556, look: { role: 'scholar', body: '#4a4a3d', accent: '#9ab0c9' } },
+      { id: 'suyang', name: '수양대군', x: 950, y: 385, img: 'assets/portraits/suyang.png', look: { role: 'general', body: '#5c3d3d', accent: '#a88a4a' } },
+      { id: 'jangyeongsil', name: '장영실', x: 687, y: 556, img: 'assets/portraits/jangyeongsil.png', look: { role: 'scholar', body: '#4a4a3d', accent: '#9ab0c9' } },
     ],
     // 출구는 12시 방향(북쪽) 정문 — 실제로 배경에 여닫이문이 그려진 자리로 옮김.
     exits: [ { rect:{x0:645,y0:0,x1:728,y1:35}, to:'gukgyeong', spawn:{x:688,y:700}, label:'국경 진영으로' } ],
@@ -729,9 +728,7 @@ const NPC_DATA = {
     quiz: null
   },
   suyang_0: {
-    // TODO: 초상 준비되면 img:'assets/portraits/suyang.png' 추가(즉위 전이라 왕의
-    // 곤룡포 아닌 대군 복식으로 새로 생성 예정 — 기존 sejo.png는 왕 즉위 후 모습이라 안 맞음).
-    name: '수양대군', icon: '🏹',
+    name: '수양대군', icon: '🏹', img: 'assets/portraits/suyang.png',
     beats: [
       { who:'npc', t:'나는 수양대군일세. 아바마마를 도와 이런저런 일을 거들고 있지 — 요즘은 돌아가신 어마마마의 명복을 빌며 석보상절이라는 글을 짓고 있다네.' },
       { who:'npc', t:'몸이 약한 형님을 대신해, 종실도 힘을 보태야 할 때가 있는 법이지.' },
@@ -739,8 +736,7 @@ const NPC_DATA = {
     quiz: null
   },
   jangyeongsil_0: {
-    // TODO: 초상 준비되면 img:'assets/portraits/jangyeongsil.png' 추가.
-    name: '장영실', icon: '⚙️',
+    name: '장영실', icon: '⚙️', img: 'assets/portraits/jangyeongsil.png',
     beats: [
       { who:'npc', t:'소인은 장영실이라 하옵니다. 원래는 관노 출신이었으나, 손재주를 눈여겨보신 전하께서 관직까지 내려주셨지요.' },
       { who:'npc', t:'요즘은 물이 스스로 시간을 알려주는 자격루와, 하늘의 별자리를 관측하는 혼천의를 손보고 있습니다.' },
