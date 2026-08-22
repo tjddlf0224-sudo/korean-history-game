@@ -65,17 +65,20 @@ const GameMap = {
     this.canvas.addEventListener('wheel', (e) => {
       e.preventDefault(); this._scrollBy(e.deltaY);
     }, { passive: false });
-    // 드래그(마우스·터치 공통)로 위아래 스크롤. 살짝만 움직이면 '클릭'으로 본다.
+    // 드래그(마우스·터치 공통)로 지도 세로 스크롤. 살짝만 움직이면 '클릭'으로 본다.
+    // 좌표는 반드시 _pos()를 거친다 — 세로모드에서 #wrap이 90도 회전돼 있어서
+    // 화면 X/Y와 캔버스 로컬 x/y가 서로 뒤바뀌기 때문(아래 _pos 주석 참고).
     let dragY = null, moved = 0;
-    const start = (y) => { dragY = y; moved = 0; };
-    const move = (y) => {
+    const start = (e) => { dragY = this._pos(e).y; moved = 0; };
+    const move = (e) => {
       if (dragY === null) return;
+      const y = this._pos(e).y;
       const dy = dragY - y; dragY = y; moved += Math.abs(dy);
-      this._scrollBy(dy * (this.canvas.width / this.canvas.clientWidth));
+      this._scrollBy(dy);
     };
     const end = () => { this._dragMoved = moved; dragY = null; };
-    this.canvas.addEventListener('pointerdown', (e) => start(e.clientY));
-    this.canvas.addEventListener('pointermove', (e) => move(e.clientY));
+    this.canvas.addEventListener('pointerdown', start);
+    this.canvas.addEventListener('pointermove', move);
     this.canvas.addEventListener('pointerup', end);
     this.canvas.addEventListener('pointercancel', end);
   },
@@ -233,10 +236,25 @@ const GameMap = {
     this.scrollY = Math.max(0, Math.min(this.maxScroll, (this.scrollY || 0) + dy));
   },
 
+  /* 화면 좌표(clientX/Y) → 캔버스 로컬 좌표.
+
+     세로모드에서는 #wrap에 `rotate(90deg) translateY(-100%)`가 걸려 있고,
+     getBoundingClientRect()는 회전된 요소의 "축정렬 바운딩 박스"를 돌려준다.
+     그래서 회전을 무시하고 (clientX-left, clientY-top)으로 계산하면 축이
+     통째로 뒤바뀐다 — 실제로 세로 스크롤이 좌우 드래그로만 먹고, 마커를
+     눌러도 아무 반응이 없던 원인이 이것이다.
+
+     wrap 로컬 (x,y)는 화면 (H-y, x)로 간다(H=wrap 높이). 캔버스 로컬 원점은
+     화면상 (rect.right, rect.top)에 놓이고, 로컬 +x는 화면 아래쪽,
+     로컬 +y는 화면 왼쪽을 향한다. 그 역변환이 아래 rot 분기다. */
   _pos(e){
     const r = this.canvas.getBoundingClientRect();
-    const dpr = this.canvas.width / r.width;
-    return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr };
+    const rot = document.body.classList.contains('rot');
+    const lx = rot ? (e.clientY - r.top)  : (e.clientX - r.left);
+    const ly = rot ? (r.right - e.clientX) : (e.clientY - r.top);
+    const cssW = rot ? r.height : r.width;   // 회전 시 화면상 '높이'가 캔버스 폭
+    const dpr = this.canvas.width / (cssW || 1);
+    return { x: lx * dpr, y: ly * dpr };
   },
 
   _hit(p){
