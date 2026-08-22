@@ -369,8 +369,17 @@ const ZONES = {
     exits: [ { rect:{x0:615,y0:652,x1:770,y1:698}, to:'pokjeong', spawn:{x:688,y:600}, label:'궁궐로' } ],
   },
 };
+// 배경은 같은 이름의 .webp를 먼저 찾고, 없으면 스펙에 적힌 .png로 되돌아간다.
+// 게임은 배경을 ZOOM(1.6)배에 기기 픽셀비까지 곱해 그리므로 1376폭 원본은
+// 화면에서 최대 4.8배로 늘어나 뿌옇다. 2배 해상도 webp는 그 뿌연 정도를
+// 줄이면서도 png보다 파일이 작다. 아직 변환하지 않은 그림은 png 그대로 뜬다.
 const zoneImgs = {};
-for (const id in ZONES){ const im = new Image(); im.src = ZONES[id].img; zoneImgs[id] = im; }
+for (const id in ZONES){
+  const png = ZONES[id].img, im = new Image();
+  im.onerror = () => { if (im.src.endsWith('.webp')) { im.onerror = null; im.src = png; } };
+  im.src = png.replace(/\.png$/, '.webp');
+  zoneImgs[id] = im;
+}
 
 function isBarrierPx(zoneId, x, y){
   if (x < 6 || y < 6 || x >= BG_W-6 || y >= BG_H-6) return true;
@@ -624,7 +633,10 @@ const World = {
     ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     if (img && img.complete && img.naturalWidth){
       const srcW = Math.min(viewW, BG_W), srcH = Math.min(viewH, BG_H);
-      ctx.drawImage(img, camX, camY, srcW, srcH, 0, 0, srcW*ZOOM, srcH*ZOOM);
+      // 배경 그림이 BG_W보다 클 수 있다(2배 webp). 잘라낼 구간도 같은 배로 키운다 —
+      // 안 그러면 그림의 왼쪽 위 1/4만 확대돼서 나온다.
+      const s = img.naturalWidth / BG_W;
+      ctx.drawImage(img, camX*s, camY*s, srcW*s, srcH*s, 0, 0, srcW*ZOOM, srcH*ZOOM);
     } else {
       // 배경 그림이 아직 없는 구역 — 격자 바닥과 안내를 대신 그려서, 그림이
       // 준비되기 전에도 대사·퀴즈·이동을 그대로 확인할 수 있게 한다.
