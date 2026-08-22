@@ -29,7 +29,7 @@
    "barriers": [],
    "npcs": [
     {
-     "id": "daewongun2",
+     "id": "daewongun",
      "name": "흥선대원군",
      "x": 330,
      "y": 250,
@@ -78,7 +78,7 @@
  ],
  "talkers": [
   {
-   "id": "daewongun2",
+   "id": "daewongun",
    "stages": 1,
    "goal": "흥선대원군과 대화하기"
   },
@@ -96,9 +96,9 @@
   }
  ],
  "npcData": {
-  "daewongun2_0": {
+  "daewongun_0": {
    "name": "흥선대원군",
-   "portrait": "daewongun2",
+   "portrait": "daewongun",
    "icon": "🏛️",
    "beats": [
     {

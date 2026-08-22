@@ -965,17 +965,17 @@ gaehang1 = {
  'zones':[{'id':'ganghwado','label':'강화도 연무당','img':'assets/scenes/gaehang1_ganghwa.png',
    'spawn':[688,470],'barriers':[],
    'npcs':[
-     {'id':'daewongun2','name':'흥선대원군','x':330,'y':250,'look':{'role':'king','body':'#4a4a58','accent':'#c9a24a'}},
+     {'id':'daewongun','name':'흥선대원군','x':330,'y':250,'look':{'role':'king','body':'#4a4a58','accent':'#c9a24a'}},
      {'id':'sinheon','name':'접견대관','x':700,'y':240,'look':{'role':'scholar','body':'#3d5a6b','accent':'#c9a24a'}},
      {'id':'choeikhyeon','name':'최익현','x':1060,'y':280,'look':{'role':'scholar','body':'#4a5a68','accent':'#e0b94a'}},
      {'id':'gaehwa','name':'개화파 관원','x':688,'y':640,'look':{'role':'scholar','body':'#5c4a2f','accent':'#c9a24a'}},
    ],'exits':[]}],
- 'talkers':[{'id':'daewongun2','stages':1,'goal':'흥선대원군과 대화하기'},
+ 'talkers':[{'id':'daewongun','stages':1,'goal':'흥선대원군과 대화하기'},
             {'id':'sinheon','goal':'접견대관과 대화하기'},
             {'id':'choeikhyeon','goal':'최익현과 대화하기'},
             {'id':'gaehwa','goal':'개화파 관원과 대화하기'}],
  'npcData':dict([
-  npc('daewongun2_0','흥선대원군','daewongun2','🏛️',[
+  npc('daewongun_0','흥선대원군','daewongun','🏛️',[
     '나는 무너진 왕실의 위엄을 다시 세우려 했네. 경복궁을 다시 짓고, 세도의 소굴이던 비변사를 없앴지.',
     '양반에게도 군포를 물렸네 — 호포제일세. 환곡은 마을이 스스로 꾸리게 했고 — 사창제지. 서원은 마흔일곱만 남기고 헐었네.',
     '서양 배가 몰려오자 나는 문을 닫았네. 전국에 비석을 세워 새겼지 — 화친을 주장하는 것은 나라를 파는 것이라고.'],

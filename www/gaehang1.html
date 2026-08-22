@@ -290,7 +290,7 @@ const ZONES = {
     barriers: [
     ],
     npcs: [
-      { id:'daewongun2', name:'흥선대원군', x:330, y:250, img:'assets/portraits/daewongun2.png', look:{ role:'king', body:'#4a4a58', accent:'#c9a24a' } },
+      { id:'daewongun', name:'흥선대원군', x:330, y:250, img:'assets/portraits/daewongun.png', look:{ role:'king', body:'#4a4a58', accent:'#c9a24a' } },
       { id:'sinheon', name:'접견대관', x:700, y:240, img:'assets/portraits/sinheon.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'choeikhyeon', name:'최익현', x:1060, y:280, img:'assets/portraits/choeikhyeon.png', look:{ role:'scholar', body:'#4a5a68', accent:'#e0b94a' } },
       { id:'gaehwa', name:'개화파 관원', x:688, y:640, img:'assets/portraits/gaehwa.png', look:{ role:'scholar', body:'#5c4a2f', accent:'#c9a24a' } },
@@ -602,8 +602,8 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
-  daewongun2_0: {
-    name: '흥선대원군', icon: '🏛️', img: 'assets/portraits/daewongun2.png',
+  daewongun_0: {
+    name: '흥선대원군', icon: '🏛️', img: 'assets/portraits/daewongun.png',
     beats: [
       { who:'npc', t:'나는 무너진 왕실의 위엄을 다시 세우려 했네. 경복궁을 다시 짓고, 세도의 소굴이던 비변사를 없앴지.' },
       { who:'npc', t:'양반에게도 군포를 물렸네 — 호포제일세. 환곡은 마을이 스스로 꾸리게 했고 — 사창제지. 서원은 마흔일곱만 남기고 헐었네.' },
@@ -677,7 +677,7 @@ const NPC_DATA = {
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
-    if (id === 'daewongun2') return 'daewongun2_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'daewongun') return 'daewongun_' + Math.min(Stage.state.talkStage, 0);
     if (id === 'sinheon') return 'sinheon_0';
     if (id === 'choeikhyeon') return 'choeikhyeon_0';
     if (id === 'gaehwa') return 'gaehwa_0';
@@ -829,7 +829,7 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
-    if (this.npc.id === 'daewongun2'){
+    if (this.npc.id === 'daewongun'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 0);
     }
     if (this.data.endsChapter){
