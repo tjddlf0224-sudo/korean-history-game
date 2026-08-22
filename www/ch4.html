@@ -270,7 +270,8 @@ const ZONES = {
       { x0:BG_W-20, y0:20, x1:BG_W, y1:BG_H },
     ],
     npcs: [
-      { id: 'jwasu', name: '김 좌수', x: 688, y: 400, img: 'assets/portraits/jwasu.png', look: { role: 'scholar', body: '#3d4a6b', accent: '#8a9ab0' } },
+      // 초상 준비되면 img:'assets/portraits/jwasu.png' 추가 — 그전까지는 실루엣.
+      { id: 'jwasu', name: '김 좌수', x: 688, y: 400, look: { role: 'scholar', body: '#3d4a6b', accent: '#8a9ab0' } },
     ],
     exits: [ { rect:{x0:600,y0:745,x1:790,y1:768}, to:'hongmungwan', spawn:{x:688,y:200}, label:'홍문관으로' } ],
   },
@@ -701,7 +702,8 @@ const NPC_DATA = {
     quiz: null
   },
   jwasu_0: {
-    name: '김 좌수', icon: '🎋', img: 'assets/portraits/jwasu.png',
+    // TODO: 초상 준비되면 img:'assets/portraits/jwasu.png' 추가.
+    name: '김 좌수', icon: '🎋',
     beats: [
       { who:'npc', t:'어허, 궁궐에서 온 손님이구먼. 나는 이 고을 유향소의 좌수일세 — 나이 많고 덕망 있는 자를 향회에서 뽑아 좌수로 세운다네.' },
       { who:'npc', t:'우리 유향소가 하는 일은 간단하네. 사또를 보좌하고, 향리들이 백성을 함부로 대하지 않는지 감찰하고, 고을 풍속을 바로잡는 것이지.' },
