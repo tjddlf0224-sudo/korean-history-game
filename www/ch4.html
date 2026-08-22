@@ -283,29 +283,27 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
   hongmungwan: {
-    // 배경을 새로 뽑아 좌표를 전부 다시 쟀다(100px 격자를 얹어 눈으로 확인).
-    // 12시 여닫이문 → 지방 고을, 6시 계단 → 편찬실(감교청). 좌우는 서가 벽.
+    // 배경을 닫힌 문 버전으로 다시 뽑아 좌표를 전부 다시 쟀다(100px 격자 확인).
+    // 사방이 서가 벽이고 가운데 탁자 하나. 12시·6시 문은 닫혀 있으므로 출구
+    // 판정은 벽 배리어 '앞'(방 안쪽)에 둬야 걸어가 닿을 수 있다.
     img: 'assets/scenes/ch4_hongmungwan.png', label: '홍문관',
-    spawn: { x: 688, y: 420 },
+    spawn: { x: 688, y: 560 },
     barriers: [
-      { x0:0, y0:0, x1:115, y1:BG_H },        // 좌측 서가 벽
-      { x0:1265, y0:0, x1:BG_W, y1:BG_H },    // 우측 서가 벽
-      { x0:0, y0:0, x1:620, y1:140 },         // 위쪽 서가(12시 문 앞은 비움)
-      { x0:780, y0:0, x1:BG_W, y1:140 },
-      { x0:315, y0:150, x1:495, y1:230 },     // 좌측 책상
-      { x0:355, y0:240, x1:455, y1:320 },     // 좌측 방석
-      { x0:875, y0:150, x1:1055, y1:230 },    // 우측 책상
-      { x0:1055, y0:170, x1:1110, y1:240 },   // 등가(燈架)
-      { x0:920, y0:240, x1:1020, y1:320 },    // 우측 방석
-      { x0:545, y0:550, x1:600, y1:BG_H },    // 6시 계단 좌측 기둥
-      { x0:780, y0:550, x1:840, y1:BG_H },    // 6시 계단 우측 기둥
+      { x0:0, y0:0, x1:BG_W, y1:158 },        // 위쪽 서가 벽(가운데가 12시 문)
+      { x0:0, y0:632, x1:BG_W, y1:BG_H },     // 아래쪽 서가 벽(가운데가 6시 문)
+      { x0:0, y0:0, x1:190, y1:BG_H },        // 좌측 서가 벽
+      { x0:1190, y0:0, x1:BG_W, y1:BG_H },    // 우측 서가 벽
+      { x0:545, y0:318, x1:832, y1:442 },     // 가운데 탁자
+      { x0:650, y0:278, x1:725, y1:320 },     // 방석(위)
+      { x0:595, y0:448, x1:670, y1:505 },     // 방석(아래 좌)
+      { x0:710, y0:448, x1:785, y1:505 },     // 방석(아래 우)
     ],
     npcs: [
-      { id: 'seogeojeong', name: '서거정', x: 688, y: 300, img: 'assets/portraits/seogeojeong.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
+      { id: 'seogeojeong', name: '서거정', x: 400, y: 380, img: 'assets/portraits/seogeojeong.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
     exits: [
-      { rect:{x0:605,y0:650,x1:775,y1:760}, to:'gyeonggukdaejeon', spawn:{x:690,y:590}, label:'편찬실로' },
-      { rect:{x0:625,y0:0,x1:775,y1:60}, to:'jibang_goeul', spawn:{x:680,y:660}, label:'지방 고을로' },
+      { rect:{x0:620,y0:158,x1:790,y1:218}, to:'jibang_goeul', spawn:{x:680,y:640}, label:'지방 고을로' },
+      { rect:{x0:615,y0:572,x1:790,y1:630}, to:'gyeonggukdaejeon', spawn:{x:690,y:590}, label:'편찬실로' },
     ],
   },
   gyeonggukdaejeon: {
@@ -348,6 +346,11 @@ const ZONES = {
       { x0:0, y0:490, x1:180, y1:610 },
     ],
     npcs: [
+      // 각 시설 대문 앞에 한 명씩. 기출 비중대로 관아(수령 13문항)가 가장 크고,
+      // 향교 8문항, 유향소 6문항 순이다.
+      { id: 'suryeong', name: '사또', x: 320, y: 430, img: 'assets/portraits/suryeong.png', look: { role: 'king', body: '#2b2b33', accent: '#c9a24a' } },
+      { id: 'hyangni', name: '호방', x: 560, y: 430, img: 'assets/portraits/hyangni.png', look: { role: 'scholar', body: '#4a5a68', accent: '#8a7a5a' } },
+      { id: 'hundo', name: '훈도', x: 850, y: 545, img: 'assets/portraits/hundo.png', look: { role: 'scholar', body: '#4a5a68', accent: '#c9a24a' } },
       { id: 'jwasu', name: '김 좌수', x: 380, y: 675, img: 'assets/portraits/jwasu.png', look: { role: 'scholar', body: '#5c4a2f', accent: '#8a6d3b' } },
     ],
     exits: [ { rect:{x0:580,y0:690,x1:770,y1:760}, to:'hongmungwan', spawn:{x:688,y:110}, label:'홍문관으로' } ],
@@ -819,6 +822,66 @@ const NPC_DATA = {
     beats: [ { who:'npc', t:'서거정도 잘 만나보았는가? 그가 이 법전에 얼마나 공을 들였는지 모른다네.' } ],
     quiz: null
   },
+  suryeong_0: {
+    name: '사또', icon: '🪭', img: 'assets/portraits/suryeong.png',
+    beats: [
+      { who:'npc', t:'나는 이 고을의 수령일세. 임금께서 팔도의 부·목·군·현마다 나 같은 사람을 내려보내시지 — 고려 때처럼 향리에게 고을을 맡겨두지 않는다는 뜻이야.' },
+      { who:'npc', t:'수령이 할 일은 경국대전에 일곱 가지로 못 박혀 있네. 농사와 누에치기를 일으키고, 호구를 늘리고, 학교를 일으키고, 군정을 닦고, 부역을 고르게 하고, 소송을 간소히 하고, 간사한 무리를 없애는 것 — 이를 수령칠사라 하지.' },
+      { who:'npc', t:'감사(관찰사)께서 해마다 이 일곱 가지로 내 성적을 매기신다네. 게을리할 수가 없지.' },
+    ],
+    quizSeq: [
+      { q:'조선에서 팔도의 부·목·군·현에 파견되어 고을을 직접 다스린 지방관은?',
+        opts:['수령','향리'], answer:0, src:[26,34,42],
+        feedback:['향리는 지방 관아에서 실무를 맡던 아전이에요.','정답! 수령입니다. 고려와 달리 모든 군현에 지방관을 보냈어요.'] },
+      { q:'농상 장려·호구 증식·학교 진흥 등 경국대전에 규정된 수령의 일곱 가지 임무를 부르는 말은?',
+        opts:['수령칠사','수령오사'], answer:0, src:[14,26,34],
+        feedback:['일곱 가지예요.','정답! 수령칠사입니다. 관찰사가 이 기준으로 수령을 평가했어요.'] },
+      { q:'수령의 근무 성적을 해마다 매기고 도내 고을을 감찰한 종2품 지방관은?',
+        opts:['관찰사(감사)','좌수'], answer:0, src:[26],
+        feedback:['좌수는 유향소의 우두머리로, 고을 사족이 맡았어요.','정답! 관찰사입니다. 도 하나를 맡아 수령을 고과했어요.'] },
+      { q:'수령이 자기 출신 지역에 부임하지 못하도록 한, 조선의 인사 원칙은?',
+        opts:['상피제','과전법'], answer:0, src:[42],
+        feedback:['과전법은 관리에게 토지의 수조권을 준 제도예요.','정답! 상피제입니다. 수령의 임기는 1,800일로 정해져 있었어요.'] },
+    ]
+  },
+  hyangni_0: {
+    name: '호방', icon: '🖋️', img: 'assets/portraits/hyangni.png',
+    beats: [
+      { who:'npc', t:'소인은 이 고을 관아의 호방이올시다. 호적과 세금을 맡고 있지요. 사또께서는 몇 해 있다 떠나시지만, 저희는 대대로 이 고을 사람입니다.' },
+      { who:'npc', t:'…그래서 저희를 두고 말이 많습지요. 경국대전에는 아예 향리가 수령을 농락하거나 뇌물을 받으면 어찌 벌한다는 조문까지 실려 있으니까요.' },
+      { who:'npc', t:'고려 적에는 향리도 외역전이라는 땅을 받았습니다만, 지금은 그것도 없습니다.' },
+    ],
+    quizSeq: [
+      { q:'지방 관아에서 수령을 보좌하며 행정 실무를 맡았고, 조선에서는 외역전을 지급받지 못한 계층은?',
+        opts:['향리','유향소 좌수'], answer:0, src:[8,24,42],
+        feedback:['좌수는 유향소를 이끄는 고을 사족이에요.','정답! 향리입니다. 고려와 달리 조선의 향리는 보수로 줄 토지를 받지 못했어요.'] },
+      { q:'향리의 불법 행위를 규찰하고 고을 풍속을 바로잡던 향촌 자치 기구는?',
+        opts:['유향소','경재소'], answer:0, src:[57,67],
+        feedback:['경재소는 한양에 두고 유향소를 관리·감독한 기구예요.','정답! 유향소입니다. 성종 대에 김종직 등의 건의로 다시 세워졌어요.'] },
+    ]
+  },
+  hundo_0: {
+    name: '훈도', icon: '📖', img: 'assets/portraits/hundo.png',
+    beats: [
+      { who:'npc', t:'여기가 우리 고을 향교일세. 나라에서 부·목·군·현마다 하나씩 세웠지 — 아무리 작은 현이라도 학교 하나는 두게 되어 있네.' },
+      { who:'npc', t:'담 안은 두 구역으로 나뉘네. 뒤쪽 대성전에는 공자를 비롯한 성현의 위패를 모시고, 앞쪽 명륜당에서 경전을 강의하지. 양옆의 동재·서재는 학생들이 묵는 곳일세.' },
+      { who:'npc', t:'나는 중앙에서 내려보낸 훈도라네. 큰 고을에는 교수를, 작은 고을에는 나 같은 훈도를 보내지.' },
+    ],
+    quizSeq: [
+      { q:'조선이 부·목·군·현마다 하나씩 세운 지방의 국립 교육 기관은?',
+        opts:['향교','서원'], answer:0, src:[7,9,21,30,47,54],
+        feedback:['서원은 사림이 세운 사립 기관으로, 1543년 백운동서원이 처음이에요.','정답! 향교입니다. 한 고을에 하나씩(1읍 1교) 나라에서 세웠어요.'] },
+      { q:'향교에서 공자와 성현의 위패를 모시고 제사를 지내던 건물은?',
+        opts:['대성전','명륜당'], answer:0, src:[21,30,47,54],
+        feedback:['명륜당은 경전을 강의하던 강학 공간이에요.','정답! 대성전입니다.'] },
+      { q:'향교에서 유교 경전을 가르치던 강학 공간의 이름은?',
+        opts:['명륜당','동재'], answer:0, src:[21,30,47,54],
+        feedback:['동재는 학생들이 묵던 기숙 공간이에요.','정답! 명륜당입니다.'] },
+      { q:'조선이 향교에 중앙에서 내려보낸 교관은?',
+        opts:['교수와 훈도','좌수와 별감'], answer:0, src:[7,9],
+        feedback:['좌수와 별감은 유향소의 임원이에요.','정답! 큰 고을에는 교수를, 작은 고을에는 훈도를 파견했어요.'] },
+    ]
+  },
   jwasu_0: {
     name: '김 좌수', icon: '🎋', img: 'assets/portraits/jwasu.png',
     beats: [
@@ -854,6 +917,9 @@ const Stage = {
     if (id === 'seogeojeong') return Stage.state.bossADone ? 'seogeojeong_repeat' : 'seogeojeong_' + Math.min(Stage.state.seogeojeongStage, 2);
     if (id === 'seongjong') return Stage.state.bossBDone ? 'seongjong_repeat' : 'seongjong_' + Math.min(Stage.state.seongjongStage, 1);
     if (id === 'jwasu') return 'jwasu_0';
+    if (id === 'suryeong') return 'suryeong_0';
+    if (id === 'hyangni') return 'hyangni_0';
+    if (id === 'hundo') return 'hundo_0';
     return null;
   },
   interact(){
