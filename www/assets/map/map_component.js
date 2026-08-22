@@ -54,6 +54,9 @@ const GameMap = {
           <div class="map-title" id="map-title"></div>
           <div class="map-caption" id="map-caption"></div>
           <div class="map-fb" id="map-fb"></div>
+          <div id="map-cancel" style="display:none;margin-top:12px;align-self:flex-start;
+               padding:8px 16px;border-radius:999px;border:1px solid #c9a24a;
+               background:#3a2c1a;color:#f5ecd8;font-size:13px;cursor:pointer">돌아가기</div>
         </div>
       </div>`;
     (document.getElementById('wrap') || document.body).appendChild(ov);
@@ -91,6 +94,11 @@ const GameMap = {
     document.getElementById('map-title').textContent = opts.title || '지도';
     document.getElementById('map-caption').textContent = opts.caption || '';
     document.getElementById('map-fb').textContent = '';
+    // 허브 모드(목적지 고르기)에서는 그냥 되돌아갈 수 있어야 한다. 퀴즈 모드는
+    // 정답을 짚어야 넘어가는 게 목적이므로 취소 버튼을 두지 않는다.
+    const cancel = document.getElementById('map-cancel');
+    cancel.style.display = this.opts.onCancel ? 'block' : 'none';
+    cancel.onclick = () => { this.close(); this.opts.onCancel && this.opts.onCancel(); };
 
     if (!this.img){
       this.img = new Image();
@@ -143,7 +151,17 @@ const GameMap = {
     }
   },
 
+  /* 표시할 지점 목록.
+     - 허브 모드(destinations): 각 목적지의 marker만 띄우고, 라벨은 목적지 이름으로
+       덮어쓴다(예: hamgil 지점을 '6진 진영으로'라고 보여줌).
+     - 퀴즈 모드(markers+answer): 기존 방식 그대로. */
   _activeMarkers(){
+    const dests = this.opts.destinations;
+    if (dests && dests.length){
+      return dests.filter(d => MAP_MARKERS[d.marker])
+                  .map(d => ({ id: d.marker, ...MAP_MARKERS[d.marker],
+                               label: d.label || MAP_MARKERS[d.marker].label }));
+    }
     const ids = this.opts.markers || Object.keys(MAP_MARKERS);
     return ids.filter(id => MAP_MARKERS[id]).map(id => ({ id, ...MAP_MARKERS[id] }));
   },
@@ -279,6 +297,8 @@ const GameMap = {
     }
     fb.textContent = '';
     this.close();
-    if (this.opts.onPick) this.opts.onPick(id);
+    // 허브 모드면 고른 목적지 정보를 함께 넘긴다.
+    const dest = (this.opts.destinations || []).find(d => d.marker === id) || null;
+    if (this.opts.onPick) this.opts.onPick(id, dest);
   },
 };

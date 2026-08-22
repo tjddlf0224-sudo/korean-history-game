@@ -212,7 +212,7 @@
   <canvas id="minimap-canvas"></canvas>
 </div>
 
-<script src="assets/map/map_component.js?v=2"></script>
+<script src="assets/map/map_component.js?v=3"></script>
 <script>
 /* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
@@ -346,6 +346,18 @@ const ZONES = {
         markers: ['amnok', 'baekdu', 'hamgil'],
         answer: 'hamgil',
         wrongMsg: '그쪽이 아닐세. 6진은 두만강 유역, 함길도 쪽이라네.',
+      },
+      // 12시 문은 궁궐 밖으로 나가는 유일한 문이다. 처음 한 번은 위 viaMap 퀴즈로
+      // 6진 위치를 직접 짚게 하고, 그 뒤부터는 이 hub를 띄워 지도에서 갈 곳을
+      // 고르게 한다(장소가 늘어나면 destinations에 한 줄씩 추가하면 된다).
+      hub: {
+        title: '궁궐 밖으로',
+        era: 'early',
+        focus: 'north',
+        caption: '어디로 가시겠습니까?',
+        destinations: [
+          { marker: 'hamgil', label: '6진 진영으로', to: 'gukgyeong', spawn: { x:688, y:700 } },
+        ],
       } },
       // 6시 방향 창호지 문 → 밖의 간의대(천문 관측대)로 나간다
       { rect:{x0:630,y0:735,x1:740,y1:768}, to:'ganuidae', spawn:{x:680,y:600}, label:'간의대로' },
@@ -589,6 +601,23 @@ const World = {
               Stage.state.mapDone[e.viaMap.key] = true;
               this.transitioning = false;
               this.goToZone(e.to, e.spawn);
+            }
+          }));
+          return;
+        }
+        // 지도 허브가 붙은 출구 — 지도를 띄워 갈 곳을 고르게 한다.
+        // 돌아가기를 누르면 문 앞에서 다시 checkExit이 걸려 무한히 다시 뜨므로,
+        // 플레이어를 출구 사각형 밖으로 한 발 밀어낸 뒤 재개한다.
+        if (e.hub && e.hub.destinations && e.hub.destinations.length){
+          this.transitioning = true;
+          GameMap.open(Object.assign({}, e.hub, {
+            onPick: (id, dest) => {
+              this.transitioning = false;
+              if (dest) this.goToZone(dest.to, dest.spawn);
+            },
+            onCancel: () => {
+              this.py = Math.min(BG_H - 20, r.y1 + 26);
+              this.transitioning = false;
             }
           }));
           return;
