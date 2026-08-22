@@ -351,6 +351,7 @@ const ZONES = {
       { id: 'suryeong', name: '사또', x: 320, y: 430, img: 'assets/portraits/suryeong.png', look: { role: 'king', body: '#2b2b33', accent: '#c9a24a' } },
       { id: 'hyangni', name: '호방', x: 560, y: 430, img: 'assets/portraits/hyangni.png', look: { role: 'scholar', body: '#4a5a68', accent: '#8a7a5a' } },
       { id: 'hundo', name: '훈도', x: 850, y: 545, img: 'assets/portraits/hundo.png', look: { role: 'scholar', body: '#4a5a68', accent: '#c9a24a' } },
+      { id: 'yusaeng', name: '유생', x: 700, y: 560, img: 'assets/portraits/yusaeng.png', look: { role: 'scholar', body: '#7a8a6b', accent: '#c9a24a' } },
       { id: 'jwasu', name: '김 좌수', x: 380, y: 675, img: 'assets/portraits/jwasu.png', look: { role: 'scholar', body: '#5c4a2f', accent: '#8a6d3b' } },
     ],
     exits: [ { rect:{x0:580,y0:690,x1:770,y1:760}, to:'hongmungwan', spawn:{x:688,y:110}, label:'홍문관으로' } ],
@@ -882,6 +883,22 @@ const NPC_DATA = {
         feedback:['좌수와 별감은 유향소의 임원이에요.','정답! 큰 고을에는 교수를, 작은 고을에는 훈도를 파견했어요.'] },
     ]
   },
+  yusaeng_0: {
+    name: '유생', icon: '📜', img: 'assets/portraits/yusaeng.png',
+    beats: [
+      { who:'npc', t:'저는 이 고을 향교에서 글을 읽습니다. 어릴 적엔 서당에서 천자문과 동몽선습을 뗐지요.' },
+      { who:'npc', t:'한양 아이들은 향교 대신 4부 학당에 들어갑니다. 성균관 아래 동·서·남·중 넷을 두었지요.' },
+      { who:'npc', t:'제 바람은 소과에 붙는 것입니다. 생원시나 진사시에 합격해야 성균관에 들어가고, 거기서 대과를 준비할 수 있으니까요.' },
+    ],
+    quizSeq: [
+      { q:'소과(생원시·진사시)에 합격해야 입학할 수 있었던 조선 최고의 교육 기관은?',
+        opts:['성균관','향교'], answer:0, src:[15],
+        feedback:['향교는 지방 고을마다 둔 중등 교육 기관이에요.','정답! 성균관입니다. 여기서 대과를 준비했어요.'] },
+      { q:'한양에 동·서·남·중 넷을 두어, 지방의 향교에 해당하는 역할을 한 교육 기관은?',
+        opts:['4부 학당','서당'], answer:0, src:[15],
+        feedback:['서당은 마을마다 있던 초급 교육 기관이에요.','정답! 4부 학당입니다.'] },
+    ]
+  },
   jwasu_0: {
     name: '김 좌수', icon: '🎋', img: 'assets/portraits/jwasu.png',
     beats: [
@@ -920,6 +937,7 @@ const Stage = {
     if (id === 'suryeong') return 'suryeong_0';
     if (id === 'hyangni') return 'hyangni_0';
     if (id === 'hundo') return 'hundo_0';
+    if (id === 'yusaeng') return 'yusaeng_0';
     return null;
   },
   interact(){

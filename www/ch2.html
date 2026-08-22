@@ -427,6 +427,7 @@ const ZONES = {
       { x0:1090, y0:60, x1:BG_W, y1:250 }, // 우상단 망루/건물
     ],
     npcs: [
+      { id: 'choeyundeok', name: '최윤덕', x: 430, y: 430, img: 'assets/portraits/choeyundeok.png', look: { role: 'general', body: '#4f5d75', accent: '#8a6d3b' } },
       { id: 'kimjongseo', name: '김종서', x: 688, y: 420, img: 'assets/portraits/kimjongseo.png', look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
     ],
     // 출구는 6시 방향(남쪽) 관문 — 실제로 배경에 지붕 있는 관문이 그려진 자리로 옮김.
@@ -989,6 +990,55 @@ const NPC_DATA = {
         feedback:['앙부일구는 해시계예요.','정답! 측우기입니다. 각 고을에 보급해 강우량을 재어 보고하게 했어요.'] },
     ]
   },
+  /* 최윤덕 — 4군(기출 4문항, 6·26·46·75회). 그동안 김종서 문항의 오답 보기로만
+     등장해서, 압록강 쪽을 실제로 개척한 사람을 만날 수가 없었다. */
+  /* 권농 들녘 두 사람 — 농사직설(기출 11문항: 7·9·18·19·20·39·43·54·55·58·66회).
+     58회 지문이 "나이든 농부들의 경험을 모으고 정초에게 정리하게 하여"라고 쓰는
+     그대로, 노농이 경험을 말하고 정초가 그것을 책으로 묶는 구도로 짰다. */
+  nonong_0: {
+    name: '늙은 농부', icon: '🌾', img: 'assets/portraits/nonong.png',
+    beats: [
+      { who:'npc', t:'예순 해를 이 땅에서 농사지었소이다. 얼마 전 감사 어른이 사람을 보내, 우리가 어떻게 씨를 고르고 언제 물을 대는지 하나하나 물어 적어 가더이다.' },
+      { who:'npc', t:'중국 책에 적힌 대로 하면 이 땅에선 안 되는 게 많소. 논이 다르고 비가 다르고 흙이 다르니까요. 그걸 나라에서 이제야 물어봐 주니 반갑습디다.' },
+    ],
+    quizSeq: [
+      { q:'세종이 각 도 감사에게 명해 나이 든 농부들의 경험을 조사하게 한 뒤, 그것을 바탕으로 펴낸 농서는?',
+        opts:['농사직설','금양잡록'], answer:0, src:[7,9,18,19,20,39,43,54,55,58,66],
+        feedback:['금양잡록은 성종 대에 강희맹이 지은 농서예요.','정답! 농사직설입니다. 우리 풍토에 맞는 농법을 처음으로 정리했어요.'] },
+    ]
+  },
+  jeongcho_0: {
+    name: '정초', icon: '📗', img: 'assets/portraits/jeongcho.png',
+    beats: [
+      { who:'npc', t:'나는 정초일세. 전하의 명을 받아 변효문과 함께 이 조사들을 한 권으로 묶고 있네.' },
+      { who:'npc', t:'그동안 농사는 중국 농서를 베껴 가르쳤네. 허나 오방의 풍토가 다르니 곡식을 심고 가꾸는 법도 각기 마땅함이 있는 법이지.' },
+      { who:'npc', t:'씨앗을 고르고 갈무리하는 법, 논밭 가는 법, 벼와 기장과 조와 수수와 콩과 팥과 보리와 밀 기르는 법 — 우리 땅에서 실제로 되는 것만 적었네.' },
+    ],
+    quizSeq: [
+      { q:'세종의 명으로 농사직설을 편찬한 인물은?',
+        opts:['정초와 변효문','정인지와 권제'], answer:0, src:[20,58],
+        feedback:['정인지와 권제는 용비어천가를 지은 사람들이에요.','정답! 정초와 변효문입니다.'] },
+      { q:'농사직설이 이전의 농서와 결정적으로 달랐던 점은?',
+        opts:['우리나라 풍토에 맞는 농법을 정리했다','중국의 농서를 그대로 번역했다'], answer:0, src:[20,55,58],
+        feedback:['오히려 중국 농서를 그대로 따르는 데서 벗어난 것이 핵심이에요.','정답! 오방의 풍토가 다르니 농법도 달라야 한다는 생각에서 나온 책이에요.'] },
+    ]
+  },
+  choeyundeok_0: {
+    name: '최윤덕', icon: '🛡️', img: 'assets/portraits/choeyundeok.png',
+    beats: [
+      { who:'npc', t:'김종서 대감이 두만강 쪽을 맡았다면, 압록강 쪽은 내가 맡았네. 전하의 명을 받아 여진의 이만주를 치러 올라산성까지 올라갔지.' },
+      { who:'npc', t:'그 싸움 끝에 압록강 상류에 네 고을을 새로 두었네. 여연·자성·무창·우예 — 이것이 4군일세.' },
+      { who:'npc', t:'다만 무력만으로는 끝나지 않아. 국경에 무역소를 두어 저들이 우리와 물건을 바꾸게도 했네. 치되 달래는 것, 둘을 함께 써야 국경이 조용하지.' },
+    ],
+    quizSeq: [
+      { q:'세종의 명으로 여진을 정벌하고 압록강 유역을 개척한 장군은?',
+        opts:['최윤덕','이종무'], answer:0, src:[46],
+        feedback:['이종무는 남쪽 대마도를 정벌한 장군이에요.','정답! 최윤덕입니다. 두만강 쪽 6진은 김종서가 맡았어요.'] },
+      { q:'최윤덕이 압록강 유역에 설치한 네 고을(4군)의 이름은?',
+        opts:['여연·자성·무창·우예','종성·온성·회령·경원'], answer:0, src:[6,26,46],
+        feedback:['그건 두만강 유역 6진에 속한 고을들이에요.','정답! 여연·자성·무창·우예입니다.'] },
+    ]
+  },
   kim_0: {
     name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
     beats: [
@@ -1052,6 +1102,9 @@ const Stage = {
     if (id === 'kimjongseo') return Stage.state.bossBDone ? 'kim_repeat' : 'kim_' + Math.min(Stage.state.kimStage, 2);
     if (id === 'sinsukju') return 'sinsukju_0';
     if (id === 'jangyeongsil') return 'jangyeongsil_0';
+    if (id === 'choeyundeok') return 'choeyundeok_0';
+    if (id === 'jeongcho') return 'jeongcho_0';
+    if (id === 'nonong') return 'nonong_0';
     return null;
   },
   interact(){

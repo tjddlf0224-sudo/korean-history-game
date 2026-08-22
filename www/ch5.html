@@ -358,6 +358,7 @@ const ZONES = {
       { x0:925, y0:300, x1:1035, y1:560 },    // 동재
     ],
     npcs: [
+      { id: 'juseboong', name: '주세붕', x: 690, y: 450, img: 'assets/portraits/juseboong.png', look: { role: 'scholar', body: '#3d4a6b', accent: '#c9a24a' } },
       { id: 'josik', name: '조식', x: 560, y: 490, img: 'assets/portraits/josik.png', look: { role: 'scholar', body: '#4a4030', accent: '#7a9a5a' } },
       { id: 'yihwang', name: '이황', x: 820, y: 490, img: 'assets/portraits/yihwang.png', look: { role: 'scholar', body: '#4a3a5a', accent: '#c9b8f0' } },
     ],
@@ -843,6 +844,30 @@ const NPC_DATA = {
     name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
     beats: [ { who:'npc', t:'산은 늘 그 자리에 있네. 급할 것 없지.' } ],
     quiz: null
+  },
+  /* 주세붕 — 서원의 시작(백운동서원 8문항, 사액 6문항). 5화가 서원을 다루면서
+     정작 '최초의 서원을 누가 어디에 세웠나'가 비어 있었다. */
+  juseboong_0: {
+    name: '주세붕', icon: '🏫', img: 'assets/portraits/juseboong.png',
+    beats: [
+      { who:'npc', t:'나는 풍기 군수로 있던 주세붕일세. 이런 곳을 처음 세울 때는 사람들이 다들 의심했지 — 나라의 향교가 있는데 굳이 왜 따로 짓느냐고.' },
+      { who:'npc', t:'허나 나는 안향 선생이 살던 그 고을에 사당을 세우고 싶었네. 이 땅에 성리학을 처음 들여온 분이니까. 그 사당에 글 읽는 집을 붙인 것이 시작일세.' },
+      { who:'npc', t:'훗날 퇴계(이황)가 그 뒤를 이어 풍기 군수가 되더니, 임금께 편액과 토지·노비를 내려달라 청했다더군. 그리하여 이름을 새로 받았지.' },
+    ],
+    quizSeq: [
+      { q:'우리나라 최초의 서원을 세운 인물은?',
+        opts:['주세붕','이황'], answer:0, src:[9,12,24,39,46],
+        feedback:['이황은 그 서원에 사액을 청한 사람이에요.','정답! 풍기 군수 주세붕입니다.'] },
+      { q:'주세붕이 세운 우리나라 최초의 서원 이름은?',
+        opts:['백운동서원','도산서원'], answer:0, src:[9,12,24,46],
+        feedback:['도산서원은 훗날 이황을 기려 세운 서원이에요.','정답! 백운동서원입니다.'] },
+      { q:'백운동서원에서 제사한, 이 땅에 성리학을 처음 들여온 고려의 인물은?',
+        opts:['안향','정몽주'], answer:0, src:[24,46],
+        feedback:['정몽주는 고려 말의 충신으로 성리학자이지만, 성리학을 처음 들여온 사람은 따로 있어요.','정답! 안향(문성공)입니다.'] },
+      { q:'백운동서원이 임금에게 편액과 토지·노비를 받아 최초의 사액서원이 되면서 바뀐 이름은?',
+        opts:['소수서원','도동서원'], answer:0, src:[9,46],
+        feedback:['도동서원은 김굉필을 기린 다른 서원이에요.','정답! 소수서원입니다. 이황의 건의로 사액을 받았어요.'] },
+    ]
   },
   yihwang_0: {
     name: '이황', icon: '📗', img: 'assets/portraits/yihwang.png',
