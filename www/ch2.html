@@ -369,12 +369,38 @@ const ZONES = {
         focus: 'north',
         caption: '어디로 가시겠습니까?',
         destinations: [
-          { marker: 'hamgil', label: '6진 진영으로', to: 'gukgyeong', spawn: { x:688, y:700 } },
+          { marker: 'hamgil',  label: '6진 진영으로', to: 'gukgyeong', spawn: { x:688, y:700 } },
+          { marker: 'hanyang', label: '권농 들녘으로', to: 'gwonnong', spawn: { x:700, y:300 } },
         ],
       } },
       // 6시 방향 창호지 문 → 밖의 간의대(천문 관측대)로 나간다
       { rect:{x0:630,y0:735,x1:740,y1:768}, to:'ganuidae', spawn:{x:680,y:600}, label:'간의대로' },
     ],
+  },
+  /* 권농 들녘 — 농사직설(기출 11문항, 7·9·18·19·20·39·43·54·55·58·66회)을
+     위한 무대. 조선전기 문화 항목 중 게임에 통째로 빠져 있던 최대 공백이었다.
+     기출 지문(58회)이 "나이든 농부들의 경험을 모으고 정초에게 정리하게 하여"
+     라고 쓰는 그대로, 노농과 정초 두 사람을 세워 그 과정을 재현한다.
+     배리어는 배경 그림을 100px 격자로 직접 읽어 잡았다 — 논·밭·개울은 못 걷고
+     가운데 흙마당과 아래로 난 길만 열려 있다. */
+  gwonnong: {
+    img: 'assets/scenes/ch2_gwonnong.png', label: '권농 들녘',
+    spawn: { x: 700, y: 300 },
+    barriers: [
+      { x0:0, y0:0, x1:440, y1:400 },        // 물 댄 논(위쪽)
+      { x0:0, y0:380, x1:560, y1:BG_H },     // 물 댄 논(아래쪽)
+      { x0:455, y0:0, x1:840, y1:115 },      // 약초밭·건조대
+      { x0:895, y0:0, x1:1320, y1:435 },     // 밭고랑·조밭(소가 있는 곳)
+      { x0:815, y0:480, x1:1120, y1:700 },   // 초가집·장독
+      { x0:725, y0:550, x1:845, y1:625 },    // 쟁기·농기구
+      { x0:1110, y0:495, x1:1190, y1:590 },  // 집 옆 나무
+      { x0:1295, y0:0, x1:BG_W, y1:BG_H },   // 개울
+    ],
+    npcs: [
+      { id: 'jeongcho', name: '정초', x: 700, y: 190, img: 'assets/portraits/jeongcho.png', look: { role: 'scholar', body: '#8a2f2f', accent: '#c9a24a' } },
+      { id: 'nonong', name: '늙은 농부', x: 620, y: 470, img: 'assets/portraits/nonong.png', look: { role: 'commoner', body: '#d8d2c2', accent: '#8a7a5a' } },
+    ],
+    exits: [ { rect:{x0:600,y0:700,x1:790,y1:760}, to:'jiphyeonjeon', spawn:{x:688,y:135}, label:'집현전으로' } ],
   },
   gukgyeong: {
     img: 'assets/scenes/ch2_gukgyeong.png', label: '국경 진영',
