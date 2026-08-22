@@ -14,6 +14,7 @@
   퀴즈 출처       — src를 손으로 적으면 틀리고, 틀려도 티가 안 남
   좌표 정합       — 배경을 바꾸고 배리어만 고쳤다가 도착 지점이 벽 안이라 갇힘
   그림 존재       — 없으면 오류가 아니라 '생성 대기' 목록으로 뽑는다
+  안 쓰는 배경    — 0화 인트로 배경 CSS를 빠뜨려 파일만 남고 화면은 까맸던 적 있음
 """
 import json
 import os
@@ -86,6 +87,22 @@ def check_assets(f, s):
     return miss
 
 
+def check_unused_scenes(used):
+    """아무 챕터도 안 쓰는 배경 — 대개 참조가 사라진 것이다.
+
+    0화를 Phaser에서 캔버스로 옮길 때 인트로 배경(독서실) CSS 한 줄을
+    빠뜨려서, 파일은 그대로 있는데 화면만 까맣게 나온 적이 있다.
+    파일이 남아 있으면 '없는 그림' 목록에도 안 잡히니 이쪽으로 잡는다.
+    """
+    d = os.path.join(WWW, 'assets', 'scenes')
+    for f in sorted(os.listdir(d)):
+        # _raw / _orig는 그림을 뽑을 때 쓴 원본이라 게임이 안 써도 정상이다.
+        if not f.endswith('.png') or f.startswith('_') or f.endswith(('_raw.png', '_orig.png')):
+            continue
+        if 'assets/scenes/' + f not in used:
+            warns.append(f'assets/scenes/{f}  아무 챕터도 쓰지 않음 — 참조가 빠진 건 아닌지')
+
+
 def check_links(f, s):
     for href in set(re.findall(r'href="([\w\-]+\.html)"', s)) | set(re.findall(r"href: '([\w\-]+\.html)'", s)):
         if not os.path.exists(os.path.join(WWW, href)):
@@ -123,7 +140,7 @@ def check_spawn_inside_barrier(f, s):
 def main():
     chs = chapters()
     print(f'챕터 {len(chs)}개 검사\n')
-    allmiss, nq = set(), 0
+    allmiss, nq, used = set(), 0, set()
     for f, s in chs:
         check_syntax(f, s)
         check_features(f, s)
@@ -131,7 +148,10 @@ def main():
         check_links(f, s)
         check_spawn_inside_barrier(f, s)
         allmiss |= set(check_assets(f, s))
+        used |= set(re.findall(r"assets/scenes/[\w.\-]+\.png", s))
     idx = open(os.path.join(WWW, 'index.html'), encoding='utf-8').read()
+    used |= set(re.findall(r"assets/scenes/[\w.\-]+\.png", idx))
+    check_unused_scenes(used)
     check_links('index.html', idx)
     listed = set(re.findall(r"href: '([\w\-]+\.html)'", idx))
     for f, _ in chs:

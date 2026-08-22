@@ -33,7 +33,19 @@
   .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
-  #intro-overlay { background: #0c0f14; }
+  /* 인트로 배경(독서실). Phaser에서 캔버스로 옮길 때 이 줄을 빠뜨려서
+     한동안 까만 화면만 나왔다. webp를 먼저 쓰고, 못 읽는 브라우저는
+     앞줄의 png로 되돌아간다. */
+  #intro-overlay {
+    background: linear-gradient(rgba(10,8,6,.35), rgba(10,8,6,.6)),
+      url('assets/scenes/intro_dokseosil.png') center/cover no-repeat, #15110c;
+  }
+  #intro-overlay {
+    background: linear-gradient(rgba(10,8,6,.35), rgba(10,8,6,.6)),
+      image-set(url('assets/scenes/intro_dokseosil.webp') type('image/webp'),
+                url('assets/scenes/intro_dokseosil.png') type('image/png')) center/cover no-repeat,
+      #15110c;
+  }
 
   #dlg-panel, #intro-panel {
     width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26ee; border: 2px solid #6a6a8a;
