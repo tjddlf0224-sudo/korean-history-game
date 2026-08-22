@@ -93,7 +93,7 @@
      (밖으로 빼서 position:fixed로 "물리적 화면 우상단"에 고정하면, 폰을 돌려
      보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
      미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
-  #minimap-canvas { position: absolute; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
+  #minimap-canvas { position: absolute; top: calc(32px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
     width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 4;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
 
@@ -116,6 +116,13 @@
     text-shadow: 0 1px 4px rgba(0,0,0,.9);
     opacity: 0; transition: opacity .45s ease; }
   #zone-banner.show { opacity: 1; }
+
+  /* 현재 장소 이름 — 미니맵 바로 위에 상시 표시(어느 맵인지 항상 알 수 있게).
+     미니맵은 그만큼 아래로 내렸다. 도착 순간의 큰 배너(#zone-banner)와 역할이 다르다. */
+  #zone-label { position: absolute; top: calc(10px + env(safe-area-inset-top));
+    right: calc(10px + env(safe-area-inset-right)); width: 160px; text-align: center;
+    z-index: 4; color: #f0c96b; font-size: 12px; letter-spacing: .04em;
+    text-shadow: 0 1px 3px rgba(0,0,0,.9); pointer-events: none; }
 </style>
 </head>
 <body>
@@ -124,7 +131,8 @@
 
   <div id="hud">
     <div>3화 · 피의 계승</div>
-    <div class="sub">1453~1468년, 궁궐 조정</div>
+    <div class="sub">1453~1468년, 단종~세조</div>
+    <div class="sub" id="hud-goal"></div>
   </div>
 
   <div id="stick-zone">
@@ -182,6 +190,7 @@
     </div>
   </div>
   <div id="zone-banner"></div>
+  <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
 </div>
 
@@ -426,6 +435,14 @@ function showZoneBanner(text){
   el.classList.add('show');
   clearTimeout(el.__t);
   el.__t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function updateHudGoal(){
+  const el = document.getElementById('hud-goal');
+  if (!el) return;
+  const done = document.getElementById('next-chapter-btn').classList.contains('show');
+  const t = done ? '다음 목표: 다음 화로 넘어가기' : '다음 목표: ' + (!Stage.state.bossDone ? '궁궐 조정에서 세조와 대화하기' : '늙은 내관과 대화하기');
+  if (el.textContent !== t) el.textContent = t;
 }
 
 const World = {
@@ -984,6 +1001,10 @@ function loop(t){
   World.update(dt);
   World.render();
   drawMinimap();
+  updateHudGoal();
+  { const zl = document.getElementById('zone-label');
+    const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
+    if (zl && zl.textContent !== nm) zl.textContent = nm; }
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
