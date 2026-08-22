@@ -293,8 +293,15 @@ const ZONES = {
     img: 'assets/scenes/ch4_hongmungwan.png', label: '홍문관',
     spawn: { x: 688, y: 560 },
     barriers: [
-      { x0:0, y0:0, x1:BG_W, y1:158 },        // 위쪽 서가 벽(가운데가 12시 문)
-      { x0:0, y0:632, x1:BG_W, y1:BG_H },     // 아래쪽 서가 벽(가운데가 6시 문)
+      // 위/아래 벽은 '문 칸'만 얇게 만든다. 서가가 있는 구간은 두껍지만, 문
+      // 앞은 마룻바닥이 문턱까지 이어져 있어서(위 y105·아래 y695까지 바닥)
+      // 벽 하나로 뭉뚱그리면 문에서 한참 떨어진 데서 이동이 걸린다.
+      { x0:0, y0:0, x1:605, y1:148 },         // 위쪽 서가(좌)
+      { x0:800, y0:0, x1:BG_W, y1:148 },      // 위쪽 서가(우)
+      { x0:605, y0:0, x1:800, y1:103 },       // 12시 문짝
+      { x0:0, y0:636, x1:600, y1:BG_H },      // 아래쪽 서가(좌)
+      { x0:800, y0:636, x1:BG_W, y1:BG_H },   // 아래쪽 서가(우)
+      { x0:600, y0:698, x1:800, y1:BG_H },    // 6시 문짝
       { x0:0, y0:0, x1:190, y1:BG_H },        // 좌측 서가 벽
       { x0:1190, y0:0, x1:BG_W, y1:BG_H },    // 우측 서가 벽
       { x0:545, y0:318, x1:832, y1:442 },     // 가운데 탁자
@@ -306,8 +313,8 @@ const ZONES = {
       { id: 'seogeojeong', name: '서거정', x: 400, y: 380, img: 'assets/portraits/seogeojeong.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
     exits: [
-      { rect:{x0:620,y0:158,x1:790,y1:218}, to:'jibang_goeul', spawn:{x:680,y:640}, label:'지방 고을로' },
-      { rect:{x0:615,y0:572,x1:790,y1:630}, to:'gyeonggukdaejeon', spawn:{x:690,y:590}, label:'편찬실로' },
+      { rect:{x0:610,y0:103,x1:795,y1:158}, to:'jibang_goeul', spawn:{x:680,y:640}, label:'지방 고을로' },
+      { rect:{x0:610,y0:640,x1:795,y1:696}, to:'gyeonggukdaejeon', spawn:{x:690,y:590}, label:'편찬실로' },
     ],
   },
   gyeonggukdaejeon: {
@@ -341,7 +348,7 @@ const ZONES = {
     npcs: [
       { id: 'seongjong', name: '성종', x: 690, y: 300, img: 'assets/portraits/seongjong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
     ],
-    exits: [ { rect:{x0:635,y0:95,x1:748,y1:148}, to:'hongmungwan', spawn:{x:688,y:520}, label:'홍문관으로' } ],
+    exits: [ { rect:{x0:635,y0:95,x1:748,y1:148}, to:'hongmungwan', spawn:{x:690,y:600}, label:'홍문관으로' } ],
   },
   jibang_goeul: {
     // 새 배경: 관아(가장 큰 담장 안, 좌상) · 향교(가운데 담장 안, 두 채) ·
@@ -370,7 +377,7 @@ const ZONES = {
       { id: 'yusaeng', name: '유생', x: 700, y: 560, img: 'assets/portraits/yusaeng.png', look: { role: 'scholar', body: '#7a8a6b', accent: '#c9a24a' } },
       { id: 'jwasu', name: '김 좌수', x: 380, y: 675, img: 'assets/portraits/jwasu.png', look: { role: 'scholar', body: '#5c4a2f', accent: '#8a6d3b' } },
     ],
-    exits: [ { rect:{x0:580,y0:690,x1:770,y1:760}, to:'hongmungwan', spawn:{x:688,y:230}, label:'홍문관으로' } ],
+    exits: [ { rect:{x0:580,y0:690,x1:770,y1:760}, to:'hongmungwan', spawn:{x:688,y:180}, label:'홍문관으로' } ],
   },
 };
 const zoneImgs = {};
