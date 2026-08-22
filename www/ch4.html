@@ -283,9 +283,8 @@ const ZONES = {
       { x0:658, y0:558, x1:838, y1:698 },   // 하단 중앙 사각 초가
     ],
     npcs: [
-      // 초상 준비되면 img:'assets/portraits/jwasu.png' 추가 — 그전까지는 실루엣.
       // 향청 정문 디딤돌 앞(배경에 실제로 계단이 그려진 자리).
-      { id: 'jwasu', name: '김 좌수', x: 520, y: 510, look: { role: 'scholar', body: '#3d4a6b', accent: '#8a9ab0' } },
+      { id: 'jwasu', name: '김 좌수', x: 520, y: 510, img: 'assets/portraits/jwasu.png', look: { role: 'scholar', body: '#3d4a6b', accent: '#8a9ab0' } },
     ],
     // 마을 남쪽으로 난 흙길(집 두 채 사이의 트인 구간)이 나가는 길.
     exits: [ { rect:{x0:515,y0:738,x1:650,y1:768}, to:'hongmungwan', spawn:{x:688,y:200}, label:'홍문관으로' } ],
@@ -717,8 +716,7 @@ const NPC_DATA = {
     quiz: null
   },
   jwasu_0: {
-    // TODO: 초상 준비되면 img:'assets/portraits/jwasu.png' 추가.
-    name: '김 좌수', icon: '🎋',
+    name: '김 좌수', icon: '🎋', img: 'assets/portraits/jwasu.png',
     beats: [
       { who:'npc', t:'어허, 궁궐에서 온 손님이구먼. 나는 이 고을 유향소의 좌수일세 — 나이 많고 덕망 있는 자를 향회에서 뽑아 좌수로 세운다네.' },
       { who:'npc', t:'우리 유향소가 하는 일은 간단하네. 사또를 보좌하고, 향리들이 백성을 함부로 대하지 않는지 감찰하고, 고을 풍속을 바로잡는 것이지.' },
