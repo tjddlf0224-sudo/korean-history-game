@@ -99,6 +99,14 @@
     right: calc(10px + env(safe-area-inset-right)); width: 160px; text-align: center;
     z-index: 4; color: #f0c96b; font-size: 12px; letter-spacing: .04em;
     text-shadow: 0 1px 3px rgba(0,0,0,.9); pointer-events: none; }
+
+  /* 대화 중에 다른 인물이 끼어들면(beat에 name이 따로 붙은 경우) 대화창 색을
+     통째로 바꿔 '말하는 사람이 바뀌었다'를 한눈에 보이게 한다. 이름만 바뀌면
+     존댓말/반말이 갑자기 뒤섞여 읽히는 것처럼 어색해진다(5화 조식↔이황).
+     챕터마다 기본 팔레트가 따뜻한 계열이라, 끼어드는 쪽은 차가운 계열로 잡았다. */
+  #dlg-panel.alt-speaker { background: #17222bee; border-color: #6f9bb5; }
+  #dlg-panel.alt-speaker .dlg-name { color: #9fd0e8; }
+  #dlg-panel.alt-speaker .dlg-portrait { box-shadow: 0 0 0 2px #6f9bb5; }
 </style>
 </head>
 <body>
@@ -605,6 +613,18 @@ const Dialog = {
   },
   render(){
     const beat = this.data.beats[this.idx];
+    // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
+    // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
+    const interjecting = !!beat.name && beat.name !== this.data.name;
+    document.getElementById('dlg-panel').classList.toggle('alt-speaker', interjecting);
+    const nameEl = document.getElementById('dlg-name');
+    if (nameEl) nameEl.textContent = beat.name || this.data.name;
+    const portraitEl = document.getElementById('dlg-portrait');
+    if (portraitEl){
+      const img = beat.img || (beat.name ? null : this.data.img);
+      if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}')`; }
+      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
+    }
     document.getElementById('dlg-text').textContent = beat.t;
   },
   next(){
