@@ -222,7 +222,7 @@ const ZONES = {
     img: 'assets/scenes/ch4_hongmungwan.png', label: '홍문관',
     spawn: { x: 350, y: 400 },
     barriers: [
-      { x0:0, y0:0, x1:BG_W, y1:155 },      // 위쪽 서가 + 문
+      { x0:0, y0:0, x1:610, y1:155 }, { x0:765, y0:0, x1:BG_W, y1:155 }, // 위쪽 서가(12시 방향 문 앞은 비워둠 — 실제로 여닫이문이 그려진 자리)
       { x0:0, y0:80, x1:185, y1:660 },      // 좌측 서가
       { x0:1190, y0:80, x1:BG_W, y1:660 },  // 우측 서가
       { x0:60, y0:615, x1:575, y1:715 },    // 아래 왼쪽 서가
@@ -232,7 +232,10 @@ const ZONES = {
     npcs: [
       { id: 'seogeojeong', name: '서거정', x: 690, y: 560, img: 'assets/portraits/seogeojeong.png', look: { role: 'scholar', body: '#2f5c6b', accent: '#c9a24a' } },
     ],
-    exits: [ { rect:{x0:600,y0:735,x1:780,y1:768}, to:'gyeonggukdaejeon', spawn:{x:688,y:120}, label:'경국대전 편찬실로' } ],
+    exits: [
+      { rect:{x0:600,y0:735,x1:780,y1:768}, to:'gyeonggukdaejeon', spawn:{x:688,y:120}, label:'경국대전 편찬실로' },
+      { rect:{x0:610,y0:0,x1:765,y1:40}, to:'jibang_goeul', spawn:{x:688,y:700}, label:'지방 고을로' },
+    ],
   },
   gyeonggukdaejeon: {
     img: 'assets/scenes/ch4_gyeonggukdaejeon.png', label: '경국대전 편찬실',
@@ -254,6 +257,22 @@ const ZONES = {
       { id: 'seongjong', name: '성종', x: 688, y: 340, img: 'assets/portraits/seongjong.png', look: { role: 'king', body: '#4a6b3d', accent: '#e0b94a' } },
     ],
     exits: [ { rect:{x0:600,y0:735,x1:780,y1:768}, to:'hongmungwan', spawn:{x:690,y:590}, label:'홍문관으로' } ],
+  },
+  jibang_goeul: {
+    // TODO: 실제 배경(향청 건물 등) 도착하면 가구/건물 배치에 맞춰 barriers 재조정할 것 —
+    // 지금은 art 없이 빈 바닥으로 미리 짜둔 상태(door 위치는 hongmungwan 북쪽 문과 맞춤).
+    img: 'assets/scenes/ch4_jibang_goeul.png', label: '지방 고을',
+    spawn: { x: 688, y: 700 },
+    barriers: [
+      { x0:0, y0:0, x1:BG_W, y1:20 },
+      { x0:0, y0:748, x1:600, y1:BG_H }, { x0:790, y0:748, x1:BG_W, y1:BG_H }, // 남쪽 벽(홍문관 가는 문 자리는 비움)
+      { x0:0, y0:20, x1:20, y1:BG_H },
+      { x0:BG_W-20, y0:20, x1:BG_W, y1:BG_H },
+    ],
+    npcs: [
+      { id: 'jwasu', name: '김 좌수', x: 688, y: 400, img: 'assets/portraits/jwasu.png', look: { role: 'scholar', body: '#3d4a6b', accent: '#8a9ab0' } },
+    ],
+    exits: [ { rect:{x0:600,y0:745,x1:790,y1:768}, to:'hongmungwan', spawn:{x:688,y:200}, label:'홍문관으로' } ],
   },
 };
 const zoneImgs = {};
@@ -641,7 +660,10 @@ const NPC_DATA = {
   },
   seogeojeong_repeat: {
     name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
-    beats: [ { who:'npc', t:'동쪽 고을에 계신 전하께도 한번 가보게. 요즘 백성들 살림을 직접 살피고 계시다더군.' } ],
+    beats: [
+      { who:'npc', t:'동쪽 고을에 계신 전하께도 한번 가보게. 요즘 백성들 살림을 직접 살피고 계시다더군.' },
+      { who:'npc', t:'북쪽 문으로 나가면 지방 고을이 나올 걸세. 유향소가 실제로 어떻게 돌아가는지, 직접 가서 좌수 어른을 뵙고 오게.' },
+    ],
     quiz: null
   },
   seongjong_0: {
@@ -677,6 +699,15 @@ const NPC_DATA = {
     name: '성종', icon: '👑', img: 'assets/portraits/seongjong.png',
     beats: [ { who:'npc', t:'서거정도 잘 만나보았는가? 그가 이 법전에 얼마나 공을 들였는지 모른다네.' } ],
     quiz: null
+  },
+  jwasu_0: {
+    name: '김 좌수', icon: '🎋', img: 'assets/portraits/jwasu.png',
+    beats: [
+      { who:'npc', t:'어허, 궁궐에서 온 손님이구먼. 나는 이 고을 유향소의 좌수일세 — 나이 많고 덕망 있는 자를 향회에서 뽑아 좌수로 세운다네.' },
+      { who:'npc', t:'우리 유향소가 하는 일은 간단하네. 사또를 보좌하고, 향리들이 백성을 함부로 대하지 않는지 감찰하고, 고을 풍속을 바로잡는 것이지.' },
+      { who:'npc', t:'물론 우리도 아무렇게나 하는 건 아닐세 — 한양의 경재소에서 우리 유향소를 관리·감독하고 있으니, 자네가 궁궐에서 들은 얘기와도 다르지 않을 걸세.' },
+    ],
+    quiz: null
   }
 };
 
@@ -686,6 +717,7 @@ const Stage = {
   keyFor(id){
     if (id === 'seogeojeong') return Stage.state.bossADone ? 'seogeojeong_repeat' : 'seogeojeong_' + Math.min(Stage.state.seogeojeongStage, 2);
     if (id === 'seongjong') return Stage.state.bossBDone ? 'seongjong_repeat' : 'seongjong_' + Math.min(Stage.state.seongjongStage, 1);
+    if (id === 'jwasu') return 'jwasu_0';
     return null;
   },
   interact(){
