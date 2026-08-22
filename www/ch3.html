@@ -915,6 +915,9 @@ const Quiz = {
     World.paused = false;
   },
   _seqAdvance(){
+    // 마지막 문항을 끝낸 뒤 한 번 더 불리면 this.seq가 null이라 터진다.
+    // 실제로 자동 점검(_smoke.html)에서 잡혔다.
+    if (!this.seq) return;
     this.seqIdx++;
     if (this.seqIdx >= this.seq.length){
       const score = this.seqScore, total = this.seq.length;

@@ -153,6 +153,8 @@ def main():
         print(f'\n■ 아직 없는 그림 {len(allmiss)}개 (폴백으로 플레이는 됨)')
         for p in sorted(allmiss):
             print('   ·', p)
+    print('\n※ 이건 파일 텍스트만 본다. 실제로 걸어서 NPC에 닿는지, 대사와 퀴즈가'
+          '\n   끝까지 도는지는 브라우저에서 www/_smoke.html을 열어 확인할 것.')
     return 1 if fails else 0
 
 

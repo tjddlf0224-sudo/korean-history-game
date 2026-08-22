@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>전 챕터 자동 플레이 점검</title>
+<!--
+  check_all.py는 파일 텍스트만 본다. 그래서 잡히지 않는 부류가 있다 —
+  실제로 걸어서 NPC에게 닿을 수 있는가, 대사를 끝까지 넘길 수 있는가,
+  퀴즈가 정말 열리고 끝나는가. 5화에서 서원이 통째로 못 가는 구역이었던 것도
+  파일만 봐서는 멀쩡했다.
+
+  이 페이지는 챕터를 하나씩 iframe에 띄우고, 게임 루프 대신 World.update를
+  직접 돌려서 다음을 확인한다.
+
+    1) 불러오는 동안 예외가 났는가
+    2) spawn에서 걸어서 모든 NPC·출구에 닿는가 (8px 격자 너비 우선 탐색)
+    3) 모든 NPC 대사를 끝까지 넘길 수 있는가
+    4) 대사 뒤 퀴즈가 열리고, 정답을 고르면 끝까지 진행되는가
+
+  requestAnimationFrame은 탭이 숨겨져 있으면 돌지 않으므로 일부러 쓰지 않는다.
+
+  브라우저로 열어서 '전체 검사' 버튼을 누르거나, 콘솔에서 runAll()을 부른다.
+  게임에 포함되는 파일이 아니라 점검용이다.
+-->
+<style>
+  body { font: 14px/1.6 -apple-system, "Malgun Gothic", sans-serif; background:#15110c; color:#f5ecd8; margin:0; padding:20px; }
+  h1 { font-size:18px; margin:0 0 12px; }
+  button { font:inherit; padding:8px 16px; background:#f0c96b; border:0; border-radius:6px; cursor:pointer; }
+  #out { white-space:pre-wrap; margin-top:16px; font-family:ui-monospace,Menlo,monospace; font-size:12px; }
+  .ok { color:#8fd694; } .bad { color:#ff8f7a; } .warn { color:#f0c96b; }
+  iframe { width:900px; height:520px; border:1px solid #443; margin-top:16px; }
+</style>
+</head>
+<body>
+<h1>전 챕터 자동 플레이 점검</h1>
+<button id="go">전체 검사</button>
+<div id="out">준비됨.</div>
+<iframe id="frame" title="검사 대상"></iframe>
+<script>
+const CHAPTERS = ["ch0.html","ch1.html","ch2.html","ch3.html","ch4.html","ch5.html","ch6.html",
+  "gaehang1.html","gaehang4.html","gaehang5.html","gaehang_ch2.html","gaehang_ch3.html",
+  "godae1.html","godae2.html","godae3.html","goryeo1.html","goryeo2.html","goryeo3.html",
+  "hugi1.html","hugi2.html","hugi3.html","hyeondae1.html","hyeondae2.html",
+  "ilje1.html","ilje2.html","ilje_ch7.html","seonsa1.html"];
+
+const out = document.getElementById('out');
+function say(s, cls){ out.innerHTML += `\n<span class="${cls||''}">${s}</span>`; }
+
+function load(file){
+  return new Promise((resolve, reject) => {
+    const f = document.getElementById('frame');
+    const errs = [];
+    f.onload = () => {
+      const w = f.contentWindow;
+      w.addEventListener('error', e => errs.push(String(e.message)));
+      // 인트로가 있으면 넘겨서 게임 화면 상태로 만든다.
+      try {
+        const ov = w.document.getElementById('intro-overlay');
+        if (ov) ov.classList.remove('show');
+        w.eval('World.paused = false');
+      } catch (e) { errs.push('인트로 넘기기 실패: ' + e.message); }
+      setTimeout(() => resolve({ w, errs }), 60);
+    };
+    f.onerror = () => reject(new Error('불러오기 실패'));
+    f.src = file + '?smoke=' + Date.now();
+  });
+}
+
+/** spawn에서 걸어서 닿는 칸을 8px 격자로 모두 찾는다. */
+function reachable(w, zoneId){
+  const Z = w.ZONES[zoneId], STEP = 8;
+  const saveZone = w.World.zone, sx = w.World.px, sy = w.World.py;
+  w.World.zone = zoneId;
+  const key = (x, y) => x + ',' + y;
+  // 다른 구역에서 넘어오기만 하는 구역은 spawn이 없다. 그런 구역은
+  // 이곳으로 들어오는 출구의 도착 지점에서 걷기 시작한다.
+  let from = Z.spawn;
+  if (!from){
+    for (const other of Object.values(w.ZONES))
+      for (const e of (other.exits || [])) if (e.to === zoneId) { from = e.spawn; break; }
+  }
+  if (!from) return { seen: new Set(), STEP, has: () => false, noStart: true };
+  const start = [Math.round(from.x / STEP) * STEP, Math.round(from.y / STEP) * STEP];
+  const seen = new Set([key(...start)]);
+  const q = [start];
+  // NPC 주변 34px은 canStand가 막으므로, 탐색은 NPC를 무시하고 지형만 본다.
+  const stand = (x, y) => {
+    const p = 16;
+    return !(w.isBarrierPx(zoneId, x-p, y-p) || w.isBarrierPx(zoneId, x+p, y-p) ||
+             w.isBarrierPx(zoneId, x-p, y+p) || w.isBarrierPx(zoneId, x+p, y+p));
+  };
+  while (q.length){
+    const [x, y] = q.pop();
+    for (const [dx, dy] of [[STEP,0],[-STEP,0],[0,STEP],[0,-STEP]]){
+      const nx = x + dx, ny = y + dy;
+      if (nx < 0 || ny < 0 || nx > 1376 || ny > 768) continue;
+      const k = key(nx, ny);
+      if (seen.has(k) || !stand(nx, ny)) continue;
+      seen.add(k); q.push([nx, ny]);
+    }
+  }
+  w.World.zone = saveZone; w.World.px = sx; w.World.py = sy;
+  return { seen, STEP, has: (x, y, r) => {
+    for (let ax = x - r; ax <= x + r; ax += STEP)
+      for (let ay = y - r; ay <= y + r; ay += STEP)
+        if (seen.has(key(Math.round(ax/STEP)*STEP, Math.round(ay/STEP)*STEP))) return true;
+    return false;
+  }};
+}
+
+/** 대사 하나를 끝까지 넘기고, 퀴즈가 붙어 있으면 정답으로 끝낸다. */
+function playDialog(w, key, npc, problems, tag){
+  const D = w.Dialog, doc = w.document;
+  D.open(key, npc);
+  const data = w.NPC_DATA[key];
+  if (!data){ problems.push(`${tag} NPC_DATA에 ${key} 없음`); return; }
+  for (let i = 0; i < data.beats.length + 2; i++){
+    if (!doc.getElementById('dlg-overlay').classList.contains('show')) break;
+    D.next();
+  }
+  if (doc.getElementById('dlg-overlay').classList.contains('show'))
+    problems.push(`${tag} ${key} 대사가 끝나지 않음`);
+
+  const quizOv = doc.getElementById('quiz-overlay');
+  let guard = 0;
+  while (quizOv && quizOv.classList.contains('show')){
+    if (++guard > 60){ problems.push(`${tag} ${key} 퀴즈가 끝나지 않음`); break; }
+    const btns = [...doc.querySelectorAll('#quiz-opts button')];
+    if (!btns.length){ problems.push(`${tag} ${key} 퀴즈에 보기가 없음`); break; }
+    // 보기는 섞이므로 화면 순서가 아니라 원래 정답 위치를 찾아 누른다.
+    const order = w.Quiz.order;
+    const pick = order ? order.indexOf(0) : 0;
+    if (pick < 0){ problems.push(`${tag} ${key} 정답 보기를 찾을 수 없음`); break; }
+    btns[pick].click();
+    w.Quiz.confirmIfReady();   // 채점
+    w.Quiz.confirmIfReady();   // 다음 문항 또는 닫기
+  }
+}
+
+async function runOne(file){
+  const problems = [];
+  const { w: raw, errs } = await load(file);
+  errs.forEach(e => problems.push('예외: ' + e));
+  // 챕터의 const 선언은 스크립트 스코프라 window의 속성이 아니다.
+  // 그 창 안에서 eval해야 집어 올 수 있다.
+  let w;
+  try {
+    w = { win: raw };
+    for (const n of ['ZONES','World','NPC_DATA','Dialog','Stage','Quiz','isBarrierPx'])
+      w[n] = raw.eval(n);
+    w.document = raw.document;
+  } catch (e) {
+    problems.push('전역 객체를 읽지 못함: ' + e.message);
+    return { problems, npcCount: 0, quizCount: 0 };
+  }
+  if (!w.ZONES || !w.World || !w.NPC_DATA || !w.Dialog){
+    problems.push('필수 객체 없음 (ZONES/World/NPC_DATA/Dialog)');
+    return { problems, npcCount: 0, quizCount: 0 };
+  }
+  let npcCount = 0, quizCount = 0;
+  const seenKeys = new Set();
+  for (const zid of Object.keys(w.ZONES)){
+    const Z = w.ZONES[zid];
+    const R = reachable(w, zid);
+    if (R.noStart) { problems.push(`[${zid}] 시작 지점도 들어오는 출구도 없음 — 갈 수 없는 구역`); continue; }
+    if (!R.seen.size) problems.push(`[${zid}] 시작 지점이 배리어 안 — 한 칸도 못 감`);
+    for (const n of Z.npcs){
+      npcCount++;
+      if (!R.has(n.x, n.y, 96)) problems.push(`[${zid}] ${n.name}에게 걸어서 닿을 수 없음 (${n.x},${n.y})`);
+    }
+    for (const e of (Z.exits || [])){
+      const cx = (e.rect.x0 + e.rect.x1) / 2, cy = (e.rect.y0 + e.rect.y1) / 2;
+      if (!R.has(cx, cy, 40)) problems.push(`[${zid}] 출구 '${e.label}'에 걸어서 닿을 수 없음`);
+      if (!w.ZONES[e.to]) problems.push(`[${zid}] 출구 '${e.label}'의 목적지 ${e.to} 없음`);
+    }
+  }
+  // 모든 대사 재생. keyFor는 챕터마다 다른 진행 상태(talkStage, sejongStage,
+  // bossADone…)를 본다. 그러니 상태를 억지로 밀어 넣지 말고, keyFor가 주는
+  // 키를 그대로 재생한다 — Dialog.finish가 알아서 다음 단계로 올려 준다.
+  const keys = Object.keys(w.NPC_DATA);
+  for (const zid of Object.keys(w.ZONES)) for (const n of w.ZONES[zid].npcs){
+    const played = new Set();
+    for (let guard = 0; guard < 12; guard++){
+      const k = w.Stage.keyFor(n.id);
+      if (!k) { if (!played.size) problems.push(`[${zid}] ${n.name}(${n.id})에 대사가 연결되지 않음`); break; }
+      if (!w.NPC_DATA[k]) { problems.push(`[${zid}] keyFor가 없는 대사 ${k}를 가리킴`); break; }
+      if (played.has(k)) break;              // 더 안 올라가면 마지막 단계
+      played.add(k); seenKeys.add(k);
+      quizCount += (w.NPC_DATA[k].quizSeq || []).length + (w.NPC_DATA[k].quiz ? 1 : 0);
+      playDialog(w, k, n, problems, `[${zid}]`);
+    }
+  }
+  // 보스전을 이겨야 열리는 대사(_repeat 등)는 이 검사로 닿지 않는다.
+  // 문제로 세지 않고 참고로만 남긴다.
+  const orphan = keys.filter(k => !seenKeys.has(k));
+  return { problems, npcCount, quizCount, orphan };
+}
+
+async function runAll(){
+  out.textContent = '';
+  const all = {};
+  let npcs = 0, quizzes = 0;
+  for (const f of CHAPTERS){
+    let r;
+    try { r = await runOne(f); }
+    catch (e) { r = { problems: ['검사 중 예외: ' + e.message + ' @ ' + String(e.stack).split('\n')[1]], npcCount: 0, quizCount: 0 }; }
+    all[f] = r.problems;
+    npcs += r.npcCount; quizzes += r.quizCount;
+    if (r.problems.length) { say(`❌ ${f}`, 'bad'); r.problems.forEach(p => say('     ' + p, 'bad')); }
+    else say(`✅ ${f}  NPC ${r.npcCount}명 · 퀴즈 ${r.quizCount}문항`
+      + (r.orphan && r.orphan.length ? `  (보스전 뒤 대사 ${r.orphan.length}개는 검사 밖)` : ''), 'ok');
+  }
+  const bad = Object.entries(all).filter(([, v]) => v.length);
+  say(`\n검사 ${CHAPTERS.length}개 · NPC ${npcs}명 · 퀴즈 ${quizzes}문항 · 문제 있는 챕터 ${bad.length}개`,
+    bad.length ? 'bad' : 'ok');
+  window.__smokeResult = all;
+  return all;
+}
+window.runAll = runAll;
+document.getElementById('go').onclick = runAll;
+</script>
+</body>
+</html>

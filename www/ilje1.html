@@ -716,6 +716,9 @@ const Quiz = {
     this._openOne(this.seq[0], () => this._seqAdvance());
   },
   _seqAdvance(){
+    // 마지막 문항을 끝낸 뒤 한 번 더 불리면 this.seq가 null이라 터진다.
+    // 실제로 자동 점검(_smoke.html)에서 잡혔다.
+    if (!this.seq) return;
     this.seqIdx++;
     if (this.seqIdx >= this.seq.length){
       const score = this.seqScore, total = this.seq.length;
@@ -769,8 +772,11 @@ const Quiz = {
   },
   confirmIfReady(){
     if (!this.answered) return;
+    // 콜백을 먼저 떼어 놓는다 — 떼지 않으면 같은 콜백이 두 번 불릴 수 있다.
+    this.answered = false;
+    const done = this.onDone; this.onDone = null;
     document.getElementById('quiz-overlay').classList.remove('show');
-    this.onDone && this.onDone();
+    done && done();
   },
   abort(){
     document.getElementById('quiz-overlay').classList.remove('show');
