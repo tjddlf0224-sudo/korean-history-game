@@ -185,9 +185,29 @@ const wrapEl = document.getElementById('wrap');
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
    그쪽이 실제 보이는 영역을 더 정확히 반영하므로 우선 사용한다. */
 function getViewportSize(){
-  if (window.visualViewport) return { w: window.visualViewport.width, h: window.visualViewport.height };
+  const vv = window.visualViewport;
+  // 핀치줌이 걸리면 vv.width/height가 확대 배율만큼 줄어든다. 그 값을 그대로 쓰면
+  // #wrap이 축소되면서 화면이 "확대된 채로" 굳어 되돌릴 수 없었다(실제 발생).
+  // 줌이 걸린 동안은 레이아웃 뷰포트를 써서 레이아웃이 줌을 따라가지 않게 한다.
+  if (vv && (vv.scale || 1) <= 1.01) return { w: vv.width, h: vv.height };
   return { w: window.innerWidth, h: window.innerHeight };
 }
+
+/* ============ 확대(핀치줌·더블탭줌) 차단 ============
+   iOS Safari는 접근성 정책상 viewport meta의 user-scalable=no를 무시하므로
+   JS로 직접 막는다. 위 getViewportSize의 폴백과 2중 방어. */
+['gesturestart','gesturechange','gestureend'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); }, { passive: false });
+});
+document.addEventListener('touchmove', function(e){
+  if (e.touches.length > 1) e.preventDefault();          // 두 손가락 = 핀치
+}, { passive: false });
+var __lastTouchEnd = 0;
+document.addEventListener('touchend', function(e){
+  var now = Date.now();
+  if (now - __lastTouchEnd <= 300) e.preventDefault();   // 더블탭 줌
+  __lastTouchEnd = now;
+}, { passive: false });
 function applyOrientation(){
   const { w: iw, h: ih } = getViewportSize();
   const portrait = ih > iw;
@@ -937,15 +957,6 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 
-/* iOS Safari는 viewport meta의 user-scalable=no를 무시하는 경우가 있어(접근성 정책),
-   핀치줌/더블탭줌을 JS로 한 번 더 확실히 막는다. */
-document.addEventListener('gesturestart', e => e.preventDefault());
-let __lastTouchEnd = 0;
-document.addEventListener('touchend', e => {
-  const now = Date.now();
-  if (now - __lastTouchEnd <= 300) e.preventDefault();
-  __lastTouchEnd = now;
-}, { passive: false });
 </script>
 </body>
 </html>
