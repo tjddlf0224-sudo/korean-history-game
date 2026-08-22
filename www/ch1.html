@@ -712,8 +712,8 @@ const Dialog = {
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
 
-/* 기출 출처 표기: data.src에 회차 번호 배열(예: [51,55,65])을 넣으면
-   3개까지는 그대로 나열하고, 4개 이상이면 "51회 등 6개 회차"로 줄인다
+/* 기출 출처 표기: data.src에 회차 번호 배열(예: [51,55])을 넣으면
+   2개까지는 그대로 나열하고, 3개 이상이면 "51회 등 6개 회차"로 줄인다
    (사화처럼 15개 회차에 걸친 개념을 다 나열하면 읽을 수 없기 때문).
    문자열을 넣으면 그대로 출력한다. */
 function formatQuizSrc(src){
@@ -721,7 +721,7 @@ function formatQuizSrc(src){
   if (typeof src === 'string') return '기출 출처 · ' + src;
   const rounds = [...src].sort((a, b) => a - b);
   if (!rounds.length) return '';
-  const body = rounds.length <= 3
+  const body = rounds.length <= 2
     ? rounds.join(', ') + '회'
     : `${rounds[0]}회 등 ${rounds.length}개 회차`;
   return '기출 출처 · ' + body;
