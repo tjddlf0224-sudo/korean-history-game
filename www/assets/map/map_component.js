@@ -13,7 +13,9 @@
        onPick: (id) => { ... }  // 정답을 고르면 호출
      });
 
-   지도 이미지는 assets/map/joseon8do.png (세로형 760x980).
+   지도 이미지는 assets/map/joseon8do.png (세로형 760x1212).
+   조선 본토뿐 아니라 요동·만주·연해주·일본 북단까지 함께 그려져 있고,
+   주변국 이름은 era에 따라 갈린다(early=명·여진, late=청).
    한반도 전체를 한 화면에 욱여넣으면 지명·강 이름이 읽을 수 없을 만큼 작아지므로,
    가로 폭에 맞춰 '확대'해서 일부만 보여주고 위아래로 스크롤/드래그하게 한다.
    focus 옵션으로 처음 보여줄 위치를 지정한다(예: focus:'north' → 북방 국경). */
@@ -25,10 +27,14 @@ let MAP_W = 760, MAP_H = 980;
 let PROVINCES = [];
 let MAP_MARKERS = {};
 let ISLANDS = [];
+let COUNTRIES = [];   // 주변국 이름 — 시대별로 갈린다(명/여진 ↔ 청)
+let CITIES = [];      // 세종 대 주요 고을
 
 async function loadMapPoints(){
   if (PROVINCES.length) return;
-  const res = await fetch('assets/map/map_points.json');
+  // 지도를 다시 그리면 좌표가 통째로 바뀐다. 캐시된 옛 JSON을 쓰면 라벨이
+  // 엉뚱한 자리에 찍히므로 버전 쿼리를 붙여 확실히 새로 받는다.
+  const res = await fetch('assets/map/map_points.json?v=2');
   const d = await res.json();
   MAP_W = d.size[0]; MAP_H = d.size[1];
   PROVINCES = d.provinces.map(p => ({ id:p.id, x:p.x, y:p.y,
@@ -36,6 +42,8 @@ async function loadMapPoints(){
   MAP_MARKERS = {};
   for (const m of d.markers) MAP_MARKERS[m.id] = { x:m.x, y:m.y, label:m.label };
   ISLANDS = d.islands || [];
+  COUNTRIES = d.countries || [];
+  CITIES = d.cities || [];
 }
 
 const GameMap = {
@@ -102,7 +110,7 @@ const GameMap = {
 
     if (!this.img){
       this.img = new Image();
-      this.img.src = 'assets/map/joseon8do.png';
+      this.img.src = 'assets/map/joseon8do.png?v=2';
       this.img.onload = () => this._draw();
     }
     this.el.classList.add('show');
@@ -185,19 +193,49 @@ const GameMap = {
       ctx.fillText('지도 이미지 준비 중', this.canvas.width/2, this.canvas.height/2);
     }
 
-    // 도 이름 라벨
     const era = this.opts.era === 'late' ? 'late' : 'early';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+    /* 라벨이 캔버스 밖으로 잘리지 않게 x를 안쪽으로 당긴다. 지도 가장자리에
+       놓이는 라벨(요동의 '명' 등)은 원래 위치가 맞는데도 절반이 잘려 나간다. */
+    const clampX = (x, w) => Math.max(w / 2 + 2, Math.min(this.canvas.width - w / 2 - 2, x));
+    const label = (t, x, y, fs, fill, halo) => {
+      ctx.font = `bold ${fs}px "Gowun Batang", serif`;
+      const cx = clampX(x, ctx.measureText(t).width);
+      ctx.lineWidth = Math.max(2, fs * 0.3);
+      ctx.strokeStyle = halo;
+      ctx.strokeText(t, cx, y);
+      ctx.fillStyle = fill;
+      ctx.fillText(t, cx, y);
+    };
+
+    // 주변국 이름 — 조선 땅 이름보다 크고 흐리게 깔아 '남의 나라'로 읽히게 한다.
+    // 시대에 맞는 이름만 그린다(세종 대라면 명·여진, 조선 후기라면 청).
+    const cf = Math.max(11, Math.round(19 * s));
+    for (const c of COUNTRIES){
+      const t = c[era];
+      if (!t) continue;
+      label(t, c.x * s, c.y * s, cf, 'rgba(96,92,84,.92)', 'rgba(238,238,234,.85)');
+    }
+
+    // 도 이름 라벨
     const fs = Math.max(9, Math.round(15 * s));
-    ctx.font = `bold ${fs}px "Gowun Batang", serif`;
     for (const p of PROVINCES){
-      const x = p.x * s, y = p.y * s;
-      const t = p.name[era];
-      ctx.lineWidth = Math.max(2, fs * 0.28);
-      ctx.strokeStyle = 'rgba(250,244,230,.92)';
-      ctx.strokeText(t, x, y);
-      ctx.fillStyle = '#4a3822';
-      ctx.fillText(t, x, y);
+      label(p.name[era], p.x * s, p.y * s, fs, '#4a3822', 'rgba(250,244,230,.92)');
+    }
+
+    // 주요 고을 — 작은 점 + 이름. 한양·평양은 조금 크게.
+    const gf = Math.max(8, Math.round(11 * s));
+    for (const c of CITIES){
+      const x = c.x * s, y = c.y * s;
+      const r = (c.big ? 3.4 : 2.3) * Math.max(1, s * 0.9);
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+      ctx.fillStyle = '#6b3a3a'; ctx.fill();
+      ctx.lineWidth = Math.max(1, s); ctx.strokeStyle = 'rgba(250,244,230,.9)'; ctx.stroke();
+      // 점은 실제 위치, 글자는 lx/ly(겹침 피하려 흩어 놓은 자리)에 그린다.
+      const lx = (c.lx !== undefined ? c.lx : c.x) * s;
+      const ly = (c.ly !== undefined ? c.ly : c.y) * s;
+      label(c.name, lx, ly - r - gf * 0.72, gf, '#3f3020', 'rgba(250,244,230,.95)');
     }
 
     // 섬 이름 — 도 이름보다 작게. 독도·울릉도·제주도는 반드시 표기한다.

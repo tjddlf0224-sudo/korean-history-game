@@ -28,21 +28,29 @@ import os
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-# 한반도는 남북으로 긴 땅이라 16:9 가로 캔버스에 맞춰 늘리면 형태가 망가진다.
-# 실제 종횡비를 지키는 세로형 캔버스를 쓰고, 오버레이에서는 높이에 맞춰 축소한다.
-W, H = 760, 980
 
-# 데이터 실측 범위(lon 124.35~130.93, lat 33.20~43.00)에 여백을 둔 표시 범위
-LON_C, LAT_C = 127.65, 38.10
-LAT_SPAN = 10.9              # 화면에 담을 위도 폭
-MARGIN_TOP = 0.06            # 위아래 여백 비율
+# 표시 범위를 경위도로 못박는다(예전엔 중심+위도폭이라 좌우 여백이 얼마나
+# 생기는지 가늠이 안 됐고, 그 결과 한반도가 캔버스 폭의 54%밖에 못 채워
+# 화면 절반이 바다였다). 지금 범위는 세 가지를 동시에 만족시킨 값이다.
+#   서쪽 123.6 — 압록강 건너 요동(명)까지 보이게
+#   동쪽 132.4 — 독도(131.87)와 그 라벨까지 반드시 들어가게
+#   남쪽  32.9 — 제주도 아래 라벨 자리 + 일본 규슈 북단
+#   북쪽  43.9 — 두만강 북쪽 만주(여진)까지
+# 이 범위에서 한반도 본토가 가로 폭의 약 75%를 차지한다.
+LON_MIN, LON_MAX = 123.6, 132.4
+LAT_MIN, LAT_MAX = 32.9, 43.9
+
+W = 760                       # 가로는 고정, 세로는 축척에서 계산된다
 
 PAPER = (232, 214, 180)
 PAPER_DARK = (214, 192, 152)
 SEA = (150, 178, 186)
 SEA_DEEP = (128, 158, 168)
-LAND = (222, 206, 168)
+LAND = (222, 206, 168)          # 조선 — 따뜻한 종이색
+FOREIGN = (196, 196, 190)       # 주변국 — 차갑고 채도 낮은 회색으로 구분
+FOREIGN_DARK = (182, 182, 176)
 INK = (74, 56, 34)
+FOREIGN_INK = (108, 104, 96)
 RIVER = (72, 118, 150)
 BORDER_LINE = (140, 116, 78)
 
@@ -54,13 +62,14 @@ def load(name):
 
 # 등장방형 투영 — x는 cos(중위도)로 축척을 맞춰 실제 형태를 유지한다.
 # (16:9에 억지로 채우려고 x를 늘렸더니 한반도가 옆으로 퍼져서 폐기한 방식)
-_COS = math.cos(math.radians(LAT_C))
-_K = (H * (1 - MARGIN_TOP * 2)) / LAT_SPAN   # 위도 1도당 픽셀
+_COS = math.cos(math.radians((LAT_MIN + LAT_MAX) / 2))
+_K = W / ((LON_MAX - LON_MIN) * _COS)        # 경도 1도당 픽셀
+H = int(round((LAT_MAX - LAT_MIN) * _K))
 
 
 def project(lon, lat):
-    x = W / 2 + (lon - LON_C) * _COS * _K
-    y = H / 2 - (lat - LAT_C) * _K
+    x = (lon - LON_MIN) * _COS * _K
+    y = (LAT_MAX - lat) * _K
     return x, y
 
 
@@ -93,6 +102,38 @@ def main():
         t = y / H
         c = tuple(int(SEA_DEEP[i] + (SEA[i] - SEA_DEEP[i]) * t) for i in range(3))
         d.line([(0, y), (W, y)], fill=c)
+
+    # ── 주변국 육지 ────────────────────────────────────────
+    # 예전에는 한반도만 그려서 지도 윗부분(만주)이 통째로 바다처럼 보였다.
+    # 이제 요동·만주·연해주·일본 북단을 실제 지형으로 그린다.
+    #
+    # 주의: 나라별로 따로 그리면 중국-러시아, 중국-북한 같은 '현대 국경선'이
+    # 지도에 찍힌다. 조선 지도에 20세기 국경을 그리는 셈이라 반드시 피해야
+    # 한다(한반도 해안선에서 휴전선이 그려졌던 것과 같은 실수). 그래서 모든
+    # 주변국을 하나의 마스크로 합친 뒤 그 '가장자리'만 해안선으로 뽑는다.
+    # 명/여진/청 같은 정치적 구분은 선이 아니라 라벨로만 표시한다 —
+    # 15세기 이 일대의 세력권은 선으로 그을 만큼 고정돼 있지 않았다.
+    neighbors = load('neighbors.geojson')
+    foreign_mask = Image.new('L', (W, H), 0)
+    fm = ImageDraw.Draw(foreign_mask)
+    for f in neighbors['features']:
+        for ring in rings(f['geometry']):
+            pts = [project(lon, lat) for lon, lat in ring]
+            if len(pts) >= 3:
+                fm.polygon(pts, fill=255)
+
+    foreign = Image.new('RGB', (W, H), FOREIGN)
+    fgrain = Image.new('L', (W, H), 0)
+    dfg = ImageDraw.Draw(fgrain)
+    for i in range(0, H, 3):
+        dfg.line([(0, i), (W, i)], fill=6)
+    foreign = Image.composite(Image.new('RGB', (W, H), FOREIGN_DARK), foreign, fgrain)
+    img = Image.composite(foreign, img, foreign_mask)
+
+    fedge = foreign_mask.filter(ImageFilter.MaxFilter(5))
+    fedge = ImageChops.subtract(fedge, foreign_mask)
+    img = Image.composite(Image.new('RGB', (W, H), FOREIGN_INK), img, fedge)
+    d = ImageDraw.Draw(img)
 
     # 육지 — 한반도 + 만주 쪽 일부가 데이터에 함께 들어오지만,
     # 남/북한만 추출했으므로 한반도만 그려진다.
@@ -215,6 +256,39 @@ def main():
             {'id': 'jeju',    'lonlat': [126.53, 33.38],     'off': [0, 26],   'name': '제주도'},
             {'id': 'ulleung', 'lonlat': [130.876, 37.502],   'off': [26, -14], 'name': '울릉도'},
             {'id': 'dokdo',   'lonlat': [131.8724, 37.2411], 'off': [26, 14],  'name': '독도'},
+            # 대마도 — 이종무의 정벌(1419)과 계해약조(1443)의 무대라 반드시 짚어준다
+            {'id': 'daemado', 'lonlat': [129.30, 34.30],     'off': [30, 0],   'name': '대마도'},
+        ],
+        # 주변국 이름 — 시대에 따라 갈린다. 조선 전기(early)의 북쪽 이웃은
+        # 명(明)과 여진(女眞)이다. 청(淸)은 1636년에 서는 나라라 이 시대엔
+        # 아직 없다 — early에 청을 쓰면 200년을 앞당기는 시대착오가 된다.
+        # 값이 None이면 그 시대엔 그리지 않는다.
+        'countries': [
+            {'id': 'ming',    'lonlat': [123.95, 40.95], 'early': '명(明)',     'late': None},
+            {'id': 'jurchen', 'lonlat': [129.30, 43.35], 'early': '여진(女眞)', 'late': None},
+            {'id': 'qing',    'lonlat': [126.60, 42.95], 'early': None,         'late': '청(淸)'},
+            {'id': 'japan',   'lonlat': [130.70, 33.35], 'early': '일본(日本)', 'late': '일본(日本)'},
+        ],
+        # 세종 대 주요 고을. 감영 소재지·국경 관문·삼포처럼 기출과 직접
+        # 이어지는 곳만 골랐다(경상감영은 조선 전기엔 대구가 아니라 상주).
+        'cities': [
+            {'id': 'hanyang',  'lonlat': [126.98, 37.57], 'name': '한양', 'big': True},
+            {'id': 'gaeseong', 'lonlat': [126.55, 37.97], 'name': '개성'},
+            {'id': 'pyeongyang', 'lonlat': [125.75, 39.02], 'name': '평양', 'big': True},
+            {'id': 'uiju',     'lonlat': [124.50, 40.10], 'name': '의주'},
+            {'id': 'ganggye',  'lonlat': [126.60, 40.97], 'name': '강계'},
+            {'id': 'hoeryeong','lonlat': [129.75, 42.44], 'name': '회령'},
+            {'id': 'gyeongseong', 'lonlat': [129.60, 41.58], 'name': '경성'},
+            {'id': 'chungju',  'lonlat': [127.93, 36.97], 'name': '충주'},
+            {'id': 'sangju',   'lonlat': [128.16, 36.41], 'name': '상주'},
+            {'id': 'jeonju',   'lonlat': [127.15, 35.82], 'name': '전주'},
+            {'id': 'naju',     'lonlat': [126.72, 35.02], 'name': '나주'},
+            {'id': 'gyeongju', 'lonlat': [129.22, 35.84], 'name': '경주'},
+            # 삼포 — 계해약조로 왜인의 왕래를 이 세 곳으로 묶었다. 서로 가까워
+            # 라벨이 겹치므로 off로 흩어 놓는다.
+            {'id': 'jepo',     'lonlat': [128.68, 35.13], 'name': '제포',   'off': [-16, 16]},
+            {'id': 'busanpo',  'lonlat': [129.08, 35.20], 'name': '부산포', 'off': [10, 26]},
+            {'id': 'yeompo',   'lonlat': [129.36, 35.53], 'name': '염포',   'off': [22, 4]},
         ],
         'markers': [
             {'id': 'hamgil',  'lonlat': [130.0, 42.6], 'label': '6진(두만강)'},
@@ -223,11 +297,17 @@ def main():
             {'id': 'hanyang', 'lonlat': [126.98, 37.57], 'label': '한양'},
         ],
     }
-    for group in ('provinces', 'markers', 'islands'):
+    for group in ('provinces', 'markers', 'islands', 'countries', 'cities'):
         for it in points[group]:
             x, y = project(*it['lonlat'])
             ox, oy = it.get('off', [0, 0])
-            it['x'], it['y'] = round(x + ox, 1), round(y + oy, 1)
+            if group == 'cities':
+                # 고을은 점은 실제 위치에, 글자만 off 만큼 밀어 놓는다.
+                # (섬은 지시선 끝에 글자를 다는 방식이라 x,y 자체를 옮긴다)
+                it['x'], it['y'] = round(x, 1), round(y, 1)
+                it['lx'], it['ly'] = round(x + ox, 1), round(y + oy, 1)
+            else:
+                it['x'], it['y'] = round(x + ox, 1), round(y + oy, 1)
     with open(os.path.join(HERE, 'map_points.json'), 'w', encoding='utf-8') as f:
         json.dump(points, f, ensure_ascii=False, indent=1)
 

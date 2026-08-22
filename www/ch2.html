@@ -212,7 +212,7 @@
   <canvas id="minimap-canvas"></canvas>
 </div>
 
-<script src="assets/map/map_component.js?v=3"></script>
+<script src="assets/map/map_component.js?v=5"></script>
 <script>
 /* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
@@ -737,9 +737,13 @@ const World = {
     let dx = e.clientX - cx, dy = e.clientY - cy;
     const d = Math.hypot(dx, dy);
     if (d > R){ dx = dx/d*R; dy = dy/d*R; }
-    knob.style.transform = `translate(${dx}px,${dy}px)`;
     let wx = dx, wy = dy;
     if (document.body.classList.contains('rot')){ wx = dy; wy = -dx; }
+    // 조이스틱 손잡이는 #wrap 안에 있어서 translate가 '회전된' 좌표계로
+    // 해석된다. 화면 델타(dx,dy)를 그대로 주면 손잡이만 90도 틀어져
+    // 보인다(이동은 멀쩡한데 손잡이만 오른쪽으로 꺾이던 문제). 이동에
+    // 쓰는 값과 똑같은 wx,wy로 그려서 손가락·주인공·손잡이를 일치시킨다.
+    knob.style.transform = `translate(${wx}px,${wy}px)`;
     World.stick.dx = wx / R; World.stick.dy = wy / R;
   }
   function end(e){
