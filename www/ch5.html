@@ -105,6 +105,18 @@
     font-size: 14px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,.4);
     opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 7; }
   #next-chapter-btn.show { opacity: 1; pointer-events: auto; }
+
+  /* 구역 이름 배너: 새 맵에 도착하면 화면 상단 가운데에 잠깐 떠서 '여기가 어디인지'를
+     알려준다(맵만 바뀌고 이름이 없어 어딘지 모르겠다는 문제). #wrap 안에 두어야
+     세로모드 90도 회전을 같이 물려받아 플레이어 시야 기준으로 똑바로 보인다. */
+  #zone-banner { position: absolute; left: 50%; top: calc(64px + env(safe-area-inset-top));
+    transform: translateX(-50%); z-index: 8; pointer-events: none;
+    padding: 8px 22px; border-radius: 999px; white-space: nowrap;
+    background: rgba(20,14,8,.62); border: 1px solid rgba(217,164,65,.55);
+    color: #f0c96b; font-size: 15px; letter-spacing: .06em;
+    text-shadow: 0 1px 4px rgba(0,0,0,.9);
+    opacity: 0; transition: opacity .45s ease; }
+  #zone-banner.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -171,6 +183,7 @@
       <div><a href="ch6.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
     </div>
   </div>
+  <div id="zone-banner"></div>
   <canvas id="minimap-canvas"></canvas>
 </div>
 
@@ -245,7 +258,9 @@ applyOrientation();
    원래는 하나의 타일맵을 네 사분면(사초각/유배지/저잣거리/산림)으로 나눠 썼지만,
    실사 배경이 부족해 저잣거리(떠도는 백성)와 산림(조식)을 "궁궐(폭정)"에 임시로
    함께 배치했었다. 이후 서원 배경이 준비되어 조식을 제 무대로 옮기고, 이황도
-   함께 세웠다(서원은 교육기관 기출 최다 개념 — 21회차).
+   함께 세웠다(서원은 교육기관 기출 최다 개념 — 21회차). 남아 있던 '떠도는
+   백성'도 궁궐 안에 저잣거리 백성이 서 있는 꼴이라, 같은 대사를 할 만한
+   나인(궁녀)으로 바꿔 임시 배치를 완전히 정리했다.
    pokjeong을 허브로 두고 나머지 구역(사초 사고/유배지/서원)은 그리로만 돌아간다. */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 /* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
@@ -260,13 +275,16 @@ const ZONES = {
     barriers: [ { x0:0, y0:0, x1:BG_W, y1:20 }, { x0:0, y0:748, x1:BG_W, y1:BG_H },
       { x0:0, y0:0, x1:20, y1:BG_H }, { x0:1356, y0:0, x1:BG_W, y1:BG_H } ],
     npcs: [
-      { id: 'commoner1', name: '떠도는 백성', x: 480, y: 380, img: 'assets/portraits/commoner2.png', look: { role: 'commoner', body: '#5a5650', accent: '#8a7a5a', headband: true } },
+      // 원래 '떠도는 백성'이었는데, 여기는 궁궐 안이라 저잣거리 백성이 있을 자리가
+      // 아니다. 대사 내용도 인종·명종 교체와 문정왕후 수렴청정 같은 궁중 소식이라
+      // 궁녀가 훨씬 자연스럽다(초상 gungnyeo.png는 여태 안 쓰이고 있었다).
+      { id: 'commoner1', name: '나인', x: 480, y: 380, img: 'assets/portraits/gungnyeo.png', look: { role: 'commoner', body: '#4a4a58', accent: '#8a7a5a' } },
     ],
     exits: [
       { rect:{x0:0,y0:340,x1:60,y1:460}, to:'sago', spawn:{x:1290,y:390}, label:'사초 사고로' },
-      { rect:{x0:1316,y0:340,x1:1376,y1:460}, to:'yubae', spawn:{x:80,y:390}, label:'유배지로' },
+      { rect:{x0:1316,y0:340,x1:1376,y1:460}, to:'yubae', spawn:{x:688,y:560}, label:'유배지로' },
       // 조식·이황은 이제 서원에 있다(전엔 배경이 없어 궁궐에 임시로 세워뒀음)
-      { rect:{x0:600,y0:738,x1:780,y1:768}, to:'seowon', spawn:{x:688,y:560}, label:'서원으로' },
+      { rect:{x0:600,y0:700,x1:780,y1:747}, to:'seowon', spawn:{x:688,y:560}, label:'서원으로' },
     ],
   },
   sago: {
@@ -286,11 +304,22 @@ const ZONES = {
   },
   yubae: {
     img: 'assets/scenes/ch5_yubae.png', label: '유배지',
-    barriers: [ { x0:490, y0:200, x1:850, y1:430 } ], // 초가집
+    // 울타리를 실제 배리어로 세운다. 전에는 울타리가 그림일 뿐이라 담을 뚫고
+    // 나가 왼쪽 끝에서 궁궐로 넘어갔다. 배경을 픽셀로 재보니 하단 울타리가
+    // x 225~612 / 762~1150 두 토막이고 그 사이 x 612~762가 유일하게 트인 곳
+    // (6시 방향)이라, 나가는 길을 그 틈 하나로 모은다.
+    barriers: [
+      { x0:490, y0:200, x1:850, y1:430 },     // 초가집
+      { x0:200, y0:80,  x1:248,  y1:700 },    // 좌측 울타리
+      { x0:240, y0:80,  x1:1170, y1:158 },    // 상단 울타리
+      { x0:1122, y0:80, x1:1180, y1:700 },    // 우측 울타리
+      { x0:220, y0:620, x1:614,  y1:700 },    // 하단 울타리(좌)
+      { x0:760, y0:620, x1:1155, y1:700 },    // 하단 울타리(우)
+    ], // 초가집
     npcs: [
       { id: 'jogwangjo', name: '조광조', x: 900, y: 600, img: 'assets/portraits/jogwangjo.png', look: { role: 'scholar', body: '#3a5040', accent: '#c9a24a' } },
     ],
-    exits: [ { rect:{x0:0,y0:330,x1:66,y1:460}, to:'pokjeong', spawn:{x:1300,y:400}, label:'궁궐로' } ],
+    exits: [ { rect:{x0:625,y0:665,x1:750,y1:760}, to:'pokjeong', spawn:{x:1300,y:400}, label:'궁궐로' } ],
   },
   seowon: {
     // 서원 — 교육기관 기출 최다 개념(21회차). 사림이 향촌에 뿌리내린 근거지라
@@ -315,7 +344,7 @@ const ZONES = {
       { id: 'josik', name: '조식', x: 560, y: 490, img: 'assets/portraits/josik.png', look: { role: 'scholar', body: '#4a4030', accent: '#7a9a5a' } },
       { id: 'yihwang', name: '이황', x: 820, y: 490, img: 'assets/portraits/yihwang.png', look: { role: 'scholar', body: '#4a3a5a', accent: '#c9b8f0' } },
     ],
-    exits: [ { rect:{x0:615,y0:690,x1:770,y1:768}, to:'pokjeong', spawn:{x:688,y:600}, label:'궁궐로' } ],
+    exits: [ { rect:{x0:615,y0:652,x1:770,y1:698}, to:'pokjeong', spawn:{x:688,y:600}, label:'궁궐로' } ],
   },
 };
 const zoneImgs = {};
@@ -448,6 +477,16 @@ function overlayOpen(){
 }
 
 /* ============ World: 이동/카메라/충돌/구역 전환 ============ */
+/* 구역 이름 배너 — goToZone()과 최초 진입에서 부른다. */
+function showZoneBanner(text){
+  const el = document.getElementById('zone-banner');
+  if (!el || !text) return;
+  el.textContent = text;
+  el.classList.add('show');
+  clearTimeout(el.__t);
+  el.__t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
 const World = {
   zone: 'pokjeong', px: ZONES.pokjeong.spawn.x, py: ZONES.pokjeong.spawn.y,
   facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 ch0_phaser와 맞춤
@@ -505,6 +544,7 @@ const World = {
     setTimeout(() => {
       this.zone = zoneId;
       this.px = spawn.x; this.py = spawn.y;
+      showZoneBanner(ZONES[zoneId].label);
       this.nearNpc = null;
       document.getElementById('act-btn').classList.remove('show');
       setTimeout(() => {
@@ -715,7 +755,7 @@ const NPC_DATA = {
     quiz: null
   },
   commoner1_0: {
-    name: '떠도는 백성', icon: '🗣️', img: 'assets/portraits/commoner2.png',
+    name: '나인', icon: '🗣️', img: 'assets/portraits/commoner2.png',
     beats: [
       { who:'npc', t:'인종 임금께서 즉위 1년도 안 되어 세상을 떠나시니, 어린 명종을 대신해 문정왕후께서 수렴청정을 시작하셨지.' },
       { who:'npc', t:'이번엔 윤임 대감 쪽 사람들이 쫓겨났다더군… 다음엔 또 누가 화를 입을지.' },
@@ -725,7 +765,7 @@ const NPC_DATA = {
     startsMini: 3
   },
   commoner1_1: {
-    name: '떠도는 백성', icon: '🗣️', img: 'assets/portraits/commoner2.png',
+    name: '나인', icon: '🗣️', img: 'assets/portraits/commoner2.png',
     beats: [
       { who:'npc', t:'또 왔는가? 을사사화 이야기, 좀 더 짚어볼까.' }
     ],
@@ -738,7 +778,7 @@ const NPC_DATA = {
     finishesRevisit: 3
   },
   commoner1_repeat: {
-    name: '떠도는 백성', icon: '🗣️', img: 'assets/portraits/commoner2.png',
+    name: '나인', icon: '🗣️', img: 'assets/portraits/commoner2.png',
     beats: [ { who:'npc', t:'…나야 그저 소문으로 들었을 뿐이네.' } ],
     quiz: null
   },
@@ -1028,6 +1068,9 @@ function introNext(){
     fade.classList.add('show');
     setTimeout(() => {
       document.getElementById('intro-overlay').classList.remove('show');
+    // 인트로가 걷히고 첫 무대가 드러나는 순간에도 구역 이름을 띄운다
+    // (이동할 때만 띄우면 시작 지점이 어딘지 끝내 알 수 없다).
+    showZoneBanner(ZONES[World.zone] && ZONES[World.zone].label);
       fade.classList.remove('show');
     }, 600);
     return;
