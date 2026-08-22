@@ -292,7 +292,7 @@ function applyOrientation(){
   wrapEl.style.height = h + 'px';
   // 디스플레이 배율(DPR) 대응: 백킹 스토어를 물리 픽셀만큼 키우고 컨텍스트를 그만큼
   // 스케일해 둔다. 이걸 빼면 캔버스가 논리 픽셀 1배로 그려진 뒤 브라우저가 2~3배로
-  // 늘려서 배경/NPC/주인공이 전부 뭉개진다(ch0_phaser의 resolution 옵션과 동일한 취지).
+  // 늘려서 배경/NPC/주인공이 전부 뭉개진다(Phaser의 resolution 옵션과 같은 취지 — 다만 그 옵션은 Phaser 3.16에서 제거돼 실제로는 동작하지 않았고, 그래서 0화도 이 방식으로 옮겼다).
   // 이후 드로잉 코드는 전부 논리 픽셀(VIEW_W/VIEW_H)만 쓰면 된다.
   const dpr = Math.min(3, window.devicePixelRatio || 1);
   VIEW_W = w; VIEW_H = h;
@@ -473,9 +473,9 @@ function isBarrierPx(zoneId, x, y){
 const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
 /* ============ 주인공(학생) 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용.
-   ch0_phaser와 동일한 4방향 걷기 시트를 그대로 재사용(같은 인물이므로 전 챕터 공통). */
+   전 챕터 공통으로 4방향 걷기 시트를 그대로 재사용(같은 인물이므로 전 챕터 공통). */
 /* 주의(재발 방지): assets/player/left_*.png·right_*.png 원본 파일 자체가 좌우
-   내용이 뒤바뀌어 있음(ch0_phaser에서 이미 발견/수정된 문제, DIR_SRC로 보정).
+   내용이 뒤바뀌어 있음(0화에서 처음 발견/수정된 문제, DIR_SRC로 보정).
    여기서도 동일하게 보정하지 않으면 왼쪽으로 이동 시 오른쪽을 보는 등 반대로 렌더됨. */
 const DIR_SRC = { down:'down', up:'up', left:'right', right:'left' };
 const PLAYER_SPRITES = {};
@@ -493,13 +493,13 @@ function drawPlayerSprite(px, py, facing, moving){
   const idx = moving ? seq[Math.floor(performance.now()/140) % seq.length] : 0;
   const img = frames[idx];
   if (!img.complete || !img.naturalWidth) return;
-  const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // ch0_phaser와 동일한 화면상 크기(73.6*줌1.2=88px)로 맞춤
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // 전 챕터 공통으로 화면상 크기(73.6*줌1.2=88px)로 맞춤
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
 
 /* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
-   실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
+   실루엣 대신 실제 이미지를 필드에도 그린다(0화 Phaser판와 동일하게). */
 const NPC_SPRITE_CACHE = {};
 function getNpcImg(path){
   if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path + ART_V; NPC_SPRITE_CACHE[path] = im; }
@@ -618,7 +618,7 @@ function showZoneBanner(text){
 
 const World = {
   zone: 'jiphyeonjeon', px: ZONES.jiphyeonjeon.spawn.x, py: ZONES.jiphyeonjeon.spawn.y,
-  facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 ch0_phaser와 맞춤
+  facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
   paused: false,
@@ -715,7 +715,7 @@ const World = {
   },
 
   checkNpc(){
-    // ch0_phaser와 동일한 2단계 거리(멀면 !, 가까우면 이름)로 통일
+    // 전 챕터 공통으로 2단계 거리(멀면 !, 가까우면 이름)로 통일
     const SHOW_RANGE = 192, INTERACT_RANGE = 108.8;
     let shown = null, best = SHOW_RANGE;
     for (const n of ZONES[this.zone].npcs){
