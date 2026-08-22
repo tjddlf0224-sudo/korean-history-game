@@ -297,16 +297,29 @@ const ZONES = {
       { id: 'sejo', name: '세조', x: 650, y: 380, img: 'assets/portraits/sejo.png', look: { role: 'king', body: '#5a1f24', accent: '#b06a3a' } },
       { id: 'attendant', name: '늙은 내관', x: 700, y: 410, img: 'assets/portraits/naesi.png', look: { role: 'commoner', body: '#5a5650', accent: '#8a7a5a', headband: true } },
     ],
-    exits: [ { rect:{x0:950,y0:730,x1:1150,y1:768}, to:'ganghwado', spawn:{x:650,y:480}, label:'강화도 유배지로' } ],
+    exits: [ // 아래쪽 전각(문루) 배리어가 y>=695라 pad 16 기준 y 679까지만 닿는다.
+      // 출구는 그 바로 앞에 둬야 걸어가서 문에 닿을 수 있다.
+      { rect:{x0:570,y0:640,x1:870,y1:694}, to:'ganghwado', spawn:{x:650,y:480}, label:'영월 청령포로' } ],
   },
+  /* 단종의 유배지는 강화도가 아니라 강원도 영월 청령포다. 1456년 돈화문을
+     떠나 닷새 만에 영월에 닿았고, 노산군으로 강등되어 이곳에 위리안치되었다가
+     관풍헌에서 사약을 받았다(강화도는 훗날 연산군·광해군의 유배지). 배경 그림은
+     물가에 울타리 친 초가라 서강에 삼면이 둘러싸인 청령포로 그대로 읽힌다.
+     zone id(ganghwado)는 저장 데이터 호환 때문에 그대로 두고 이름만 바로잡는다. */
   ganghwado: {
-    img: 'assets/scenes/ch3_ganghwado.png', label: '강화도 유배지',
+    img: 'assets/scenes/ch3_ganghwado.png', label: '영월 청령포',
+    spawn: { x: 700, y: 495 },
     barriers: [
-      { x0:495, y0:180, x1:865, y1:430 }, // 초가 오두막
-      { x0:900, y0:0, x1:1376, y1:160 },  // 우상단 바다·바위
+      { x0:405, y0:185, x1:450,  y1:585 },   // 좌측 울타리
+      { x0:440, y0:183, x1:935,  y1:220 },   // 상단 울타리
+      { x0:900, y0:185, x1:950,  y1:585 },   // 우측 울타리
+      { x0:410, y0:528, x1:662,  y1:585 },   // 하단 울타리(좌) — 가운데는 트인 문
+      { x0:743, y0:528, x1:945,  y1:585 },   // 하단 울타리(우)
+      { x0:490, y0:205, x1:805,  y1:415 },   // 초가집
+      { x0:780, y0:0,   x1:BG_W, y1:150 },   // 물가(서강)
     ],
     npcs: [],
-    exits: [ { rect:{x0:550,y0:730,x1:820,y1:768}, to:'gungya', spawn:{x:1000,y:600}, label:'궁궐로' } ],
+    exits: [ { rect:{x0:665,y0:600,x1:748,y1:700}, to:'gungya', spawn:{x:700,y:640}, label:'궁궐로' } ],
   },
 };
 const zoneImgs = {};
