@@ -73,6 +73,9 @@
   .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #cfe3ec; min-height: 20px; }
   .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
   .quiz-next.show { opacity: .85; }
+  /* 기출 출처 배지: 이 문항이 몇 회 몇 번 기출에서 온 것인지 표시(퀴즈 우측 하단). */
+  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #a89372; letter-spacing: .02em; }
+  .quiz-src:empty { display: none; }
 
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
   #fade.show { opacity: 1; pointer-events: auto; }
@@ -151,6 +154,7 @@
       <div class="quiz-opts" id="quiz-opts"></div>
       <div class="quiz-fb" id="quiz-fb"></div>
       <div class="quiz-next" id="quiz-next">계속 <span class="arrow">▶</span></div>
+      <div class="quiz-src" id="quiz-src"></div>
     </div>
   </div>
 
@@ -836,6 +840,8 @@ const Quiz = {
     document.getElementById('quiz-q').textContent = data.q;
     document.getElementById('quiz-fb').textContent = '';
     document.getElementById('quiz-next').classList.remove('show');
+    // 기출 출처(있을 때만 표시) — data.src 예: '68회 20번'
+    document.getElementById('quiz-src').textContent = data.src ? '기출 출처 · ' + data.src : '';
     // 모든 퀴즈 데이터가 answer:0(첫 번째 보기)으로 통일 작성돼 있어서
     // 화면에 그대로 노출하면 정답이 항상 1번으로 예측 가능해짐 — 매번
     // 보기 순서를 섞어서 표시하고, order[화면순서]=원본인덱스로 매핑해둔다.
