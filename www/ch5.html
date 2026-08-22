@@ -178,6 +178,7 @@
 /* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케일 전)
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -197,8 +198,17 @@ function applyOrientation(){
   const h = portrait ? iw : ih;
   wrapEl.style.width = w + 'px';
   wrapEl.style.height = h + 'px';
-  canvas.width = w;
-  canvas.height = h;
+  // 디스플레이 배율(DPR) 대응: 백킹 스토어를 물리 픽셀만큼 키우고 컨텍스트를 그만큼
+  // 스케일해 둔다. 이걸 빼면 캔버스가 논리 픽셀 1배로 그려진 뒤 브라우저가 2~3배로
+  // 늘려서 배경/NPC/주인공이 전부 뭉개진다(ch0_phaser의 resolution 옵션과 동일한 취지).
+  // 이후 드로잉 코드는 전부 논리 픽셀(VIEW_W/VIEW_H)만 쓰면 된다.
+  const dpr = Math.min(3, window.devicePixelRatio || 1);
+  VIEW_W = w; VIEW_H = h;
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
 }
 window.addEventListener('resize', applyOrientation);
 window.addEventListener('orientationchange', () => setTimeout(applyOrientation, 80));
@@ -504,11 +514,11 @@ const World = {
 
   render(){
     const img = zoneImgs[this.zone];
-    const viewW = canvas.width / ZOOM, viewH = canvas.height / ZOOM;
+    const viewW = VIEW_W / ZOOM, viewH = VIEW_H / ZOOM;
     const camX = Math.max(0, Math.min(Math.max(0, BG_W - viewW), this.px - viewW/2));
     const camY = Math.max(0, Math.min(Math.max(0, BG_H - viewH), this.py - viewH/2));
     ctx.fillStyle = '#1a140c';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     if (img.complete && img.naturalWidth){
       const srcW = Math.min(viewW, BG_W), srcH = Math.min(viewH, BG_H);
       ctx.drawImage(img, camX, camY, srcW, srcH, 0, 0, srcW*ZOOM, srcH*ZOOM);
@@ -539,19 +549,19 @@ const World = {
         for (let gy = 0; gy < BG_H; gy += step){
           if (!isBarrierPx(this.zone, gx, gy)) continue;
           const sx2 = (gx - camX) * ZOOM, sy2 = (gy - camY) * ZOOM;
-          if (sx2 < -step*ZOOM || sx2 > canvas.width || sy2 < -step*ZOOM || sy2 > canvas.height) continue;
+          if (sx2 < -step*ZOOM || sx2 > VIEW_W || sy2 < -step*ZOOM || sy2 > VIEW_H) continue;
           ctx.fillStyle = 'rgba(255,40,40,0.45)';
           ctx.fillRect(sx2 - 2, sy2 - 2, 4, 4);
         }
       }
       ctx.fillStyle = '#fff'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
-      ctx.fillText(`DEBUG px:(${Math.round(this.px)},${Math.round(this.py)}) zone:${this.zone}`, 6, canvas.height - 8);
+      ctx.fillText(`DEBUG px:(${Math.round(this.px)},${Math.round(this.py)}) zone:${this.zone}`, 6, VIEW_H - 8);
     }
-    const vg = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.22, canvas.width/2, canvas.height/2, canvas.height*0.8);
+    const vg = ctx.createRadialGradient(VIEW_W/2, VIEW_H/2, VIEW_H*0.22, VIEW_W/2, VIEW_H/2, VIEW_H*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
     vg.addColorStop(1, 'rgba(0,0,0,.45)');
     ctx.fillStyle = vg;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
 };
 
