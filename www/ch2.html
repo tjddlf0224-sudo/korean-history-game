@@ -40,7 +40,7 @@
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
 
-  #dlg-panel, #quiz-panel, #intro-panel {
+  #dlg-panel, #quiz-panel, #intro-panel, #gloss-panel {
     width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #2b2015ee; border: 2px solid #c9a24a;
     border-radius: 14px; padding: 16px 18px; color: #f5ecd8; box-shadow: 0 8px 24px rgba(0,0,0,.5);
     max-height: 80%; overflow-y: auto;
@@ -80,6 +80,15 @@
 
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
   #fade.show { opacity: 1; pointer-events: auto; }
+
+  .gloss-term { color: #f0c96b; text-decoration: underline dotted; text-underline-offset: 3px; cursor: pointer; }
+  #gloss-overlay { z-index: 35; }
+  #gloss-panel { position: relative; max-width: 320px; }
+  .gloss-title { font-size: 15px; color: #f0c96b; margin-bottom: 8px; padding-right: 24px; }
+  .gloss-body { font-size: 13.5px; line-height: 1.7; color: #f5ecd8; }
+  .gloss-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid #c9a24a; background: #3a2c1a; color: #f5ecd8; font-size: 14px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
   #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
     background: #000; color: #f0c96b; text-align: center; padding: 24px; }
@@ -156,6 +165,15 @@
       <div class="quiz-opts" id="quiz-opts"></div>
       <div class="quiz-fb" id="quiz-fb"></div>
       <div class="quiz-next" id="quiz-next">계속 <span class="arrow">▶</span></div>
+    </div>
+  </div>
+
+  <!-- 용어 설명 모달: 대사/퀴즈 속 낯선 용어를 누르면 뜬다 -->
+  <div class="ov center" id="gloss-overlay" onclick="if(event.target===this) closeGlossary()">
+    <div id="gloss-panel">
+      <button class="gloss-close" onclick="closeGlossary()">✕</button>
+      <div class="gloss-title" id="gloss-term"></div>
+      <div class="gloss-body" id="gloss-body"></div>
     </div>
   </div>
 
@@ -260,6 +278,9 @@ const ZONES = {
     npcs: [
       { id: 'sejong', name: '세종', x: 590, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
       { id: 'sinsukju', name: '신숙주', x: 790, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
+      // 초상 준비되면 img 추가 예정(위 NPC_DATA의 TODO 참고) — 그전까지는 실루엣.
+      { id: 'suyang', name: '수양대군', x: 950, y: 385, look: { role: 'general', body: '#5c3d3d', accent: '#a88a4a' } },
+      { id: 'jangyeongsil', name: '장영실', x: 687, y: 556, look: { role: 'scholar', body: '#4a4a3d', accent: '#9ab0c9' } },
     ],
     // 출구는 12시 방향(북쪽) 정문 — 실제로 배경에 여닫이문이 그려진 자리로 옮김.
     exits: [ { rect:{x0:645,y0:0,x1:728,y1:35}, to:'gukgyeong', spawn:{x:688,y:700}, label:'국경 진영으로' } ],
@@ -707,6 +728,25 @@ const NPC_DATA = {
     beats: [ { who:'npc', t:'전하께서 밤을 새워 언문 자모를 고르고 계십니다. 저도 곁에서 거들 뿐이지만, 참으로 뿌듯한 나날입니다.' } ],
     quiz: null
   },
+  suyang_0: {
+    // TODO: 초상 준비되면 img:'assets/portraits/suyang.png' 추가(즉위 전이라 왕의
+    // 곤룡포 아닌 대군 복식으로 새로 생성 예정 — 기존 sejo.png는 왕 즉위 후 모습이라 안 맞음).
+    name: '수양대군', icon: '🏹',
+    beats: [
+      { who:'npc', t:'나는 수양대군일세. 아바마마를 도와 이런저런 일을 거들고 있지 — 요즘은 돌아가신 어마마마의 명복을 빌며 석보상절이라는 글을 짓고 있다네.' },
+      { who:'npc', t:'몸이 약한 형님을 대신해, 종실도 힘을 보태야 할 때가 있는 법이지.' },
+    ],
+    quiz: null
+  },
+  jangyeongsil_0: {
+    // TODO: 초상 준비되면 img:'assets/portraits/jangyeongsil.png' 추가.
+    name: '장영실', icon: '⚙️',
+    beats: [
+      { who:'npc', t:'소인은 장영실이라 하옵니다. 원래는 관노 출신이었으나, 손재주를 눈여겨보신 전하께서 관직까지 내려주셨지요.' },
+      { who:'npc', t:'요즘은 물이 스스로 시간을 알려주는 자격루와, 하늘의 별자리를 관측하는 혼천의를 손보고 있습니다.' },
+    ],
+    quiz: null
+  },
   kim_0: {
     name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
     beats: [
@@ -763,6 +803,8 @@ const Stage = {
     if (id === 'sejong') return Stage.state.bossADone ? 'sejong_repeat' : 'sejong_' + Math.min(Stage.state.sejongStage, 3);
     if (id === 'kimjongseo') return Stage.state.bossBDone ? 'kim_repeat' : 'kim_' + Math.min(Stage.state.kimStage, 2);
     if (id === 'sinsukju') return 'sinsukju_0';
+    if (id === 'suyang') return 'suyang_0';
+    if (id === 'jangyeongsil') return 'jangyeongsil_0';
     return null;
   },
   interact(){
@@ -859,6 +901,31 @@ const Dialog = {
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
 
 /* ============ Quiz 엔진 (단일 확인퀴즈 + 보스전 연속퀴즈 공용) ============ */
+/* ============ 용어 설명(글로서리): 퀴즈 문제/보기/피드백에 낯선 용어가
+   나오면 밑줄 친 단어를 눌러 모달로 설명을 볼 수 있게 한다. 새 용어는
+   GLOSSARY에 추가하기만 하면 별도 코드 수정 없이 자동으로 링크된다. ============ */
+const GLOSSARY = {
+  '이두': '한자의 음(소리)과 훈(뜻)을 빌려 우리말 문장을 적던 표기법. 신라의 설총이 체계를 정리한 것으로 전해지며, 훈민정음이 만들어지기 전까지 한자로 우리말을 적는 대표적인 방법이었다.',
+};
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function glossarize(text){
+  let out = escapeHtml(text);
+  for (const term in GLOSSARY){
+    out = out.split(term).join(`<span class="gloss-term" onclick="event.stopPropagation();openGlossary('${term}')">${term}</span>`);
+  }
+  return out;
+}
+function openGlossary(term){
+  document.getElementById('gloss-term').textContent = term;
+  document.getElementById('gloss-body').textContent = GLOSSARY[term] || '';
+  document.getElementById('gloss-overlay').classList.add('show');
+}
+function closeGlossary(){
+  document.getElementById('gloss-overlay').classList.remove('show');
+}
+
 const Quiz = {
   data: null, onDone: null, answered: false, optButtons: [],
   seq: null, seqIdx: 0, seqScore: 0, seqOnDone: null,
@@ -891,7 +958,7 @@ const Quiz = {
     this.data = data; this.onDone = onDone; this.answered = false;
     document.getElementById('quiz-overlay').classList.add('show');
     document.getElementById('quiz-tag').textContent = this.seq ? `${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
-    document.getElementById('quiz-q').textContent = data.q;
+    document.getElementById('quiz-q').innerHTML = glossarize(data.q);
     document.getElementById('quiz-fb').textContent = '';
     document.getElementById('quiz-next').classList.remove('show');
     // 모든 퀴즈 데이터가 answer:0(첫 번째 보기)으로 통일 작성돼 있어서
@@ -907,7 +974,7 @@ const Quiz = {
     this.optButtons = this.order.map((origIdx, i) => {
       const b = document.createElement('button');
       b.className = 'quiz-opt';
-      b.textContent = (i+1) + '. ' + data.opts[origIdx];
+      b.innerHTML = (i+1) + '. ' + glossarize(data.opts[origIdx]);
       b.onclick = () => this.pick(i);
       opts.appendChild(b);
       return b;
@@ -923,7 +990,7 @@ const Quiz = {
       if (this.seq) this.seqScore++;
       this.optButtons[i].classList.add('correct');
       this.optButtons.forEach(b => b.disabled = true);
-      document.getElementById('quiz-fb').textContent = this.data.feedback[1];
+      document.getElementById('quiz-fb').innerHTML = glossarize(this.data.feedback[1]);
       const next = document.getElementById('quiz-next');
       next.classList.add('show');
       next.onclick = () => this.confirmIfReady();
@@ -932,7 +999,7 @@ const Quiz = {
       // (다음 문제로는 못 넘어감 — 정답 공개도 하지 않음).
       this.optButtons[i].classList.add('wrong');
       this.optButtons[i].disabled = true;
-      document.getElementById('quiz-fb').textContent = this.data.feedback[0];
+      document.getElementById('quiz-fb').innerHTML = glossarize(this.data.feedback[0]);
     }
   },
   confirmIfReady(){
