@@ -150,6 +150,10 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케일 전)
+/* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
+   초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
+   (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
+const ART_V = '?v=2';
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
@@ -244,7 +248,7 @@ const DIR_SRC = { down:'down', up:'up', left:'right', right:'left' };
 const PLAYER_SPRITES = {};
 ['down','up','left','right'].forEach(dir => {
   const src = DIR_SRC[dir];
-  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${src}_${i}.png`; return im; });
+  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${src}_${i}.png` + ART_V; return im; });
 });
 const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
 function drawPlayerSprite(px, py, facing, moving){
@@ -265,7 +269,7 @@ function drawPlayerSprite(px, py, facing, moving){
    실루엣 대신 실제 이미지를 필드에도 그린다(ch0_phaser와 동일하게). */
 const NPC_SPRITE_CACHE = {};
 function getNpcImg(path){
-  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path; NPC_SPRITE_CACHE[path] = im; }
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path + ART_V; NPC_SPRITE_CACHE[path] = im; }
   return NPC_SPRITE_CACHE[path];
 }
 function drawNpcSprite(px, py, imgPath){
@@ -536,7 +540,7 @@ const Dialog = {
     const portraitEl = document.getElementById('dlg-portrait');
     if (portraitEl){
       const img = beat.img || (beat.name ? null : this.data.img);
-      if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}')`; }
+      if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
       else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
     }
     document.getElementById('dlg-text').textContent = beat.t;
