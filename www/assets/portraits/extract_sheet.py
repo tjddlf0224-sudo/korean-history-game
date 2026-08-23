@@ -5,7 +5,12 @@ crop_and_key_v5.py는 시트 하나마다 SRC/COLS/ROWS/LABELS를 손으로 고�
 앞으로 찍을 시트가 18장이라 그 방식은 반드시 어긋난다. 시트별 격자와 이름을
 아래 SHEETS에 미리 적어 두고, 쓸 때는 파일과 키만 준다.
 
-  python3 extract_sheet.py ~/Downloads/Gemini_....png seonsa1
+  python3 extract_sheet.py ~/Downloads/Gemini_....png sheet1   # 한 장
+  python3 extract_sheet.py --all ~/Downloads                    # 다섯 장 한꺼번에
+
+--all은 폴더에서 sheet1~sheet5로 시작하는 파일을 찾아 순서대로 처리한다.
+다섯 장을 다 받은 뒤 이름만 sheet1.png … sheet5.png로 바꿔 두고 한 번 돌리면
+70명이 같은 조건으로 한꺼번에 잘려 나온다.
 
 키를 생략하면 등록된 시트 목록을 보여준다.
 이름이 None인 칸은 빈 칸(배경만)이라 건너뛴다.
@@ -24,24 +29,31 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 # 챕터별 시트 구성 — 제미나이_프롬프트.md의 프롬프트와 순서가 정확히 같아야 한다.
 SHEETS = {
-    'seonsa1':  (2, 2, ['gusukgi', 'sinseokgi', 'cheongdonggi', 'dangun']),
-    'godae1':   (2, 2, ['gwanggaeto', 'muryeong', 'jinheung', 'hwarang']),
-    'godae2':   (2, 2, ['jangbogo', 'uisang', 'balhae', 'minjeong']),
-    'godae3':   (2, 2, ['gyeonhwon', 'gungye', 'choechiwon', None]),
-    'goryeo1':  (2, 2, ['wanggeon', 'gwangjong', 'choeseungno', None]),
-    'goryeo2':  (2, 2, ['seohui', 'yungwan', 'choechunghyeon', 'sambyeolcho']),
-    'goryeo3':  (2, 2, ['uicheon', 'jinul', 'igyubo', 'gongmin']),
-    'hugi1':    (2, 2, ['gwanghae', 'injo', 'hullyeon', 'daedong']),
-    'hugi2':    (3, 2, ['jeongjo', 'jeongyagyong', 'bakjega', 'hongdaeyong', 'gimhongdo', None]),
-    'hugi3':    (2, 2, ['samjeong', 'hongyeong', 'imsul', 'choeje']),
-    'gaehang1': (2, 2, ['choeikhyeon', 'sinheon', 'gaehwa', None]),
-    'gaehang4': (2, 2, ['jeonbongjun', 'jipgang', 'gungug', 'eulmi']),
-    'gaehang5': (3, 2, ['gojong', 'seojaepil', 'maeil', 'sinminhoe', 'jeongmi', None]),
-    'ilje1':    (2, 2, ['mudan', 'samil', 'bakeunsik', 'gwangbokhoe']),
-    'ilje2':    (3, 2, ['mulsan', 'eohakhoe', 'singanhoe', 'uiyeoldan', 'cheongsanri', None]),
-    'hyeondae1': (3, 2, ['yeounhyeong', 'sintak', 'yukio', 'jeju', 'nongji', None]),
-    'hyeondae2': (3, 2, ['sasaoip', 'yusin', 'gwangju', 'yuwol', 'tongil', None]),
+    # 5열 3행 15명 고정. 이미 게임에 들어간 48명이 같은 조건(5x3 마젠타 시트)에서
+    # 나왔다. 시트마다 조건을 바꾸면 인물끼리 밝기가 어긋난다 — 노산군을 혼자
+    # 크게 뽑았다가 밝기가 153으로 튀어(나머지는 60~98) 다시 뽑은 적이 있다.
+    'sheet1': (5, 3, [
+        'gusukgi', 'sinseokgi', 'cheongdonggi', 'dangun', 'gwanggaeto',
+        'muryeong', 'jinheung', 'hwarang', 'jangbogo', 'uisang',
+        'balhae', 'minjeong', 'gyeonhwon', 'gungye', 'choechiwon']),
+    'sheet2': (5, 3, [
+        'wanggeon', 'gwangjong', 'choeseungno', 'seohui', 'yungwan',
+        'choechunghyeon', 'sambyeolcho', 'uicheon', 'jinul', 'igyubo',
+        'gongmin', 'gwanghae', 'injo', 'hullyeon', 'daedong']),
+    'sheet3': (5, 3, [
+        'jeongjo', 'jeongyagyong', 'bakjega', 'hongdaeyong', 'gimhongdo',
+        'samjeong', 'hongyeong', 'imsul', 'choeje', 'choeikhyeon',
+        'sinheon', 'gaehwa', 'jeonbongjun', 'jipgang', 'gungug']),
+    'sheet4': (5, 3, [
+        'eulmi', 'gojong', 'seojaepil', 'maeil', 'sinminhoe',
+        'jeongmi', 'mudan', 'samil', 'bakeunsik', 'gwangbokhoe',
+        'mulsan', 'eohakhoe', 'singanhoe', 'uiyeoldan', 'cheongsanri']),
+    'sheet5': (5, 3, [
+        'yeounhyeong', 'sintak', 'yukio', 'jeju', 'nongji',
+        'sasaoip', 'yusin', 'gwangju', 'yuwol', 'tongil',
+        None, None, None, None, None]),
 }
+
 
 MARGIN = 11   # 셀 사이 격자선을 크롭 밖으로 밀어내는 여백
 PAD = 8       # 최종 출력에 남길 여백
@@ -94,33 +106,66 @@ def extract(cell, out):
     return im.size
 
 
-def main():
-    if len(sys.argv) < 3:
-        print('사용법: python3 extract_sheet.py <시트.png> <챕터키>\n')
-        print('등록된 시트:')
-        for k, (c, r, names) in SHEETS.items():
-            live = [n for n in names if n]
-            print(f'  {k:11s} {c}열×{r}행  {len(live)}명  {", ".join(live)}')
-        return 1
-
-    src, key = sys.argv[1], sys.argv[2]
+def run(src, key):
     assert key in SHEETS, f'모르는 시트 키: {key}'
     cols, rows, labels = SHEETS[key]
-
     im = Image.open(os.path.expanduser(src)).convert('RGB')
     W, H = im.size
     cw, ch = W / cols, H / rows
-    print(f'{key}: {W}×{H} → {cols}열×{rows}행, 칸 크기 {int(cw)}×{int(ch)}')
-
+    print(f'{key}: {os.path.basename(src)} {W}x{H} → {cols}열x{rows}행, 칸 {int(cw)}x{int(ch)}')
+    if ch < 500:
+        print(f'  ※ 칸 높이 {int(ch)}px — 인물이 {int(ch*0.8)}px 남짓으로 나온다.'
+              ' 게임 화면에서 필요한 건 420px쯤이니, 너무 작으면 시트를 다시 받는 게 낫다.')
+    done = 0
     for i, name in enumerate(labels):
         if not name:
             continue
         col, row = i % cols, i // cols
         box = (int(col * cw) + MARGIN, int(row * ch) + MARGIN,
                int((col + 1) * cw) - MARGIN, int((row + 1) * ch) - MARGIN)
-        out = os.path.join(HERE, name + '.png')
-        size = extract(im.crop(box), out)
-        print(f'  {name+".png":24s} {"실패 — 칸이 비었나?" if not size else f"{size[0]}×{size[1]}"}')
+        size = extract(im.crop(box), os.path.join(HERE, name + '.png'))
+        print(f'  {name+".png":24s} {"실패 - 칸이 비었나?" if not size else f"{size[0]}x{size[1]}"}')
+        done += 1 if size else 0
+    return done
+
+
+def find_sheets(folder):
+    """폴더에서 sheet1~sheet5로 시작하는 파일을 키 순서대로 짝지어 준다."""
+    folder = os.path.expanduser(folder)
+    out = []
+    for key in SHEETS:
+        hit = sorted(f for f in os.listdir(folder)
+                     if f.lower().startswith(key) and f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')))
+        if hit:
+            out.append((os.path.join(folder, hit[0]), key))
+        else:
+            print(f'  (없음) {key} — 파일 이름을 {key}.png로 바꿔 두면 잡힌다')
+    return out
+
+
+def main():
+    args = sys.argv[1:]
+    if args and args[0] == '--all':
+        folder = args[1] if len(args) > 1 else os.path.expanduser('~/Downloads')
+        pairs = find_sheets(folder)
+        if not pairs:
+            print('처리할 시트가 없다.')
+            return 1
+        total = sum(run(src, key) for src, key in pairs)
+        print(f'\n{len(pairs)}장에서 {total}명 추출 완료.')
+        print('확인: python3 assets/tools/check_all.py')
+        return 0
+
+    if len(args) < 2:
+        print('사용법: python3 extract_sheet.py <시트.png> <시트키>')
+        print('        python3 extract_sheet.py --all <폴더>   (기본 ~/Downloads)\n')
+        print('등록된 시트:')
+        for k, (c, r, names) in SHEETS.items():
+            live = [n for n in names if n]
+            print(f'  {k:9s} {c}열x{r}행  {len(live)}명  {", ".join(live)}')
+        return 1
+
+    run(args[0], args[1])
     return 0
 
 
