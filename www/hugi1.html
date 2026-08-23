@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>타임슬립 한국사 - 조선후기 2화 광해군과 두 호란</title>
+<title>한국사 게임 - 조선후기 2화 광해군과 두 호란</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -143,6 +143,31 @@
     background: rgba(255,255,255,.07); border-top: 1px solid rgba(255,255,255,.12); }
   /* 표가 뜬 칸에서는 대사가 짧아야 한 화면에 다 들어온다. */
   #dlg-panel.has-chart .dlg-box { font-size: 15px; min-height: 0; }
+  /* 표 말고도 세 가지를 더 그린다.
+     bar  — 비율이나 크기 비교(대동법 확산, 수출액 같은 것)
+     flow — 순서가 중요한 것(삼국 통일, 대외 항쟁 차례)
+     tree — 갈라져 나가는 것(붕당 계보, 왕위 계승) */
+  .dlg-chart .bar-row { display:flex; align-items:center; gap:8px; padding:4px 8px;
+    border-bottom:1px solid rgba(255,255,255,.10); font-size:11.5px; }
+  .dlg-chart .bar-row:last-of-type { border-bottom:0; }
+  .dlg-chart .bar-label { flex:0 0 74px; font-weight:bold; }
+  .dlg-chart .bar-track { flex:1; height:12px; border-radius:3px; background:rgba(255,255,255,.10); overflow:hidden; }
+  .dlg-chart .bar-fill { height:100%; background:rgba(255,255,255,.45); }
+  .dlg-chart .bar-val { flex:0 0 auto; opacity:.85; white-space:nowrap; }
+  .dlg-chart .flow { display:flex; flex-wrap:wrap; align-items:stretch; gap:5px; padding:8px; }
+  .dlg-chart .flow-step { flex:1 1 0; min-width:78px; padding:5px 6px; border-radius:6px;
+    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); font-size:11.5px; line-height:1.35; }
+  .dlg-chart .flow-step b { display:block; font-size:12.5px; margin-bottom:1px; }
+  .dlg-chart .flow-arrow { align-self:center; opacity:.55; font-size:12px; }
+  .dlg-chart .tree { padding:8px; font-size:11.5px; }
+  .dlg-chart .tree-root { display:inline-block; padding:3px 9px; border-radius:6px; font-weight:bold;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2); }
+  .dlg-chart .tree-branch { display:flex; gap:6px; margin-top:6px; }
+  .dlg-chart .tree-col { flex:1; border-top:1px solid rgba(255,255,255,.2); padding-top:6px; }
+  .dlg-chart .tree-node { padding:3px 7px; border-radius:5px; background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.16); margin-bottom:4px; }
+  .dlg-chart .tree-node b { font-size:12px; }
+  .dlg-chart .tree-node span { display:block; opacity:.8; font-size:10.5px; }
 </style>
 </head>
 <body>
@@ -678,6 +703,32 @@ const NPC_DATA = {
       { who:'npc', t:'후금이 청이라 이름을 고치고 군신의 예를 요구했소. 오랑캐에게 무릎을 꿇으란 말이오?' },
       { who:'npc', t:'전하께서 이 산성으로 드셨소. 사십칠 일을 버텼으나 양식이 떨어졌고, 강화도가 먼저 무너졌다는 소식이 왔소.' },
       { who:'npc', t:'결국 삼전도에서… 더는 말하지 않겠소. 훗날 효종께서 북벌을 준비하신 것도 그 치욕 때문이오.' },
+      { who:'npc', chart:{ head: [
+'',
+'정묘호란',
+'병자호란',
+], rows: [
+[
+'연도',
+'1627',
+'1636',
+],
+[
+'상대',
+'후금',
+'청',
+],
+[
+'임금',
+'인조',
+'인조',
+],
+[
+'결과',
+'형제 관계',
+'군신 관계 · 삼전도',
+],
+], note: '<b>형제(정묘) → 군신(병자)</b>으로 무거워지네. 삼전도는 뒤쪽 병자호란일세.' }, t:'호란은 두 번일세. 둘을 나란히 놓아야 헷갈리지 않네.' },
     ],
     quizSeq: [
       { q:'청의 군신 관계 요구를 거부해 일어났고, 인조가 남한산성에서 항전하다 삼전도에서 항복한 전쟁은?',
@@ -695,6 +746,13 @@ const NPC_DATA = {
       { who:'npc', t:'그래서 광해군 때 경기도부터 바꿨습니다. 특산물 대신 토지 결수에 따라 쌀로 내게 한 것입니다 — 대동법이지요.' },
       { who:'npc', t:'땅을 많이 가진 이가 더 내게 되니 양반들이 반대했습니다. 전국에 퍼지는 데 백 년이 걸렸습니다.' },
       { who:'npc', t:'영조 대에는 군포를 두 필에서 한 필로 줄였습니다 — 균역법입니다. 모자란 몫은 결작과 선무군관포 따위로 메웠지요.' },
+      { who:'npc', chart:{ type: 'bar', bars: [
+{ label: '1608 경기', v: 1, text: '광해군' },
+{ label: '1623 강원', v: 2, text: '인조' },
+{ label: '1651 충청', v: 4, text: '효종' },
+{ label: '1658 전라', v: 5, text: '효종' },
+{ label: '1708 전국', v: 10, text: '숙종' },
+], note: '<b>광해군 경기에서 시작 → 숙종 때 전국</b>. 딱 100년입니다. 방납의 폐단을 없애려 한 것이지요.' }, t:'대동법이 전국에 퍼지는 데 백 년이 걸렸습니다. 이렇게요.' },
     ],
     quizSeq: [
       { q:'특산물 대신 토지 결수에 따라 쌀·베·돈으로 내게 한, 광해군 때 경기도에서 시작된 세금 제도는?',
@@ -820,6 +878,32 @@ const Quiz = {
   }
 };
 
+/* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
+function drawChart(c){
+  if (c.type === 'bar'){
+    const max = Math.max.apply(null, c.bars.map(b => b.v));
+    return c.bars.map(b =>
+      '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
+      + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'
+      + '<div class="bar-val">' + (b.text || b.v) + '</div></div>').join('');
+  }
+  if (c.type === 'flow'){
+    return '<div class="flow">' + c.steps.map((s, i) =>
+      (i ? '<div class="flow-arrow">▶</div>' : '')
+      + '<div class="flow-step"><b>' + s.t + '</b>' + (s.s || '') + '</div>').join('') + '</div>';
+  }
+  if (c.type === 'tree'){
+    return '<div class="tree"><div class="tree-root">' + c.root + '</div><div class="tree-branch">'
+      + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
+          '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
+        ).join('') + '</div>').join('') + '</div></div>';
+  }
+  return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
+    + '</tr></thead><tbody>'
+    + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
+    + '</tbody></table>';
+}
+
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
@@ -852,10 +936,7 @@ const Dialog = {
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
-      chartEl.innerHTML = '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
-        + '</tr></thead><tbody>'
-        + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
-        + '</tbody></table>'
+      chartEl.innerHTML = drawChart(c)
         + (c.note ? '<div class="chart-note">' + c.note + '</div>' : '');
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }

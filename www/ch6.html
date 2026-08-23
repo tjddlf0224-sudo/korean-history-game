@@ -143,6 +143,31 @@
     background: rgba(255,255,255,.07); border-top: 1px solid rgba(255,255,255,.12); }
   /* 표가 뜬 칸에서는 대사가 짧아야 한 화면에 다 들어온다. */
   #dlg-panel.has-chart .dlg-box { font-size: 15px; min-height: 0; }
+  /* 표 말고도 세 가지를 더 그린다.
+     bar  — 비율이나 크기 비교(대동법 확산, 수출액 같은 것)
+     flow — 순서가 중요한 것(삼국 통일, 대외 항쟁 차례)
+     tree — 갈라져 나가는 것(붕당 계보, 왕위 계승) */
+  .dlg-chart .bar-row { display:flex; align-items:center; gap:8px; padding:4px 8px;
+    border-bottom:1px solid rgba(255,255,255,.10); font-size:11.5px; }
+  .dlg-chart .bar-row:last-of-type { border-bottom:0; }
+  .dlg-chart .bar-label { flex:0 0 74px; font-weight:bold; }
+  .dlg-chart .bar-track { flex:1; height:12px; border-radius:3px; background:rgba(255,255,255,.10); overflow:hidden; }
+  .dlg-chart .bar-fill { height:100%; background:rgba(255,255,255,.45); }
+  .dlg-chart .bar-val { flex:0 0 auto; opacity:.85; white-space:nowrap; }
+  .dlg-chart .flow { display:flex; flex-wrap:wrap; align-items:stretch; gap:5px; padding:8px; }
+  .dlg-chart .flow-step { flex:1 1 0; min-width:78px; padding:5px 6px; border-radius:6px;
+    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); font-size:11.5px; line-height:1.35; }
+  .dlg-chart .flow-step b { display:block; font-size:12.5px; margin-bottom:1px; }
+  .dlg-chart .flow-arrow { align-self:center; opacity:.55; font-size:12px; }
+  .dlg-chart .tree { padding:8px; font-size:11.5px; }
+  .dlg-chart .tree-root { display:inline-block; padding:3px 9px; border-radius:6px; font-weight:bold;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2); }
+  .dlg-chart .tree-branch { display:flex; gap:6px; margin-top:6px; }
+  .dlg-chart .tree-col { flex:1; border-top:1px solid rgba(255,255,255,.2); padding-top:6px; }
+  .dlg-chart .tree-node { padding:3px 7px; border-radius:5px; background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.16); margin-bottom:4px; }
+  .dlg-chart .tree-node b { font-size:12px; }
+  .dlg-chart .tree-node span { display:block; opacity:.8; font-size:10.5px; }
 </style>
 </head>
 <body>
@@ -650,6 +675,17 @@ const NPC_DATA = {
       { who:'npc', t:'우리가 그렇게 많은 벗을 잃어가며 지켜온 조정인데… 이제는 우리끼리 다시 갈라서고 있으니, 마음이 무겁습니다.' },
       { who:'npc', t:'발단은 이조전랑 자리였습니다. 낮은 품계지만 후임을 스스로 천거하고 삼사의 인사를 좌우하니, 누가 앉느냐가 곧 조정의 향방이었지요.' },
       { who:'npc', t:'그 자리를 두고 심의겸과 김효원이 부딪쳤습니다. 김효원은 한양 동쪽 건천동에, 심의겸은 서쪽 정릉동에 살았지요. 그래서 사람들이 동인이다, 서인이다 부르기 시작한 겁니다.' },
+      { who:'npc', chart:{
+          type:'tree', root:'사림 (선조 대)',
+          cols:[[{t:'동인', s:'김효원 · 한양 동쪽'},
+                 {t:'└ 남인', s:'이황 계열 · 온건'},
+                 {t:'└ 북인', s:'조식 계열 · 강경'}],
+                [{t:'서인', s:'심의겸 · 한양 서쪽'},
+                 {t:'└ 노론', s:'송시열 · 뒷날 집권'},
+                 {t:'└ 소론', s:'윤증 · 소수'}]],
+          note:'<b>동인이 먼저 남·북으로</b>(정여립 사건 뒤), <b>서인이 나중에 노·소로</b> 갈라집니다. 동인이 이황·조식 제자들이라는 것만 잡으면 됩니다.'
+        },
+        t:'이 갈래가 앞으로 200년을 좌우합니다. 한 번 그려 보지요.' },
       { who:'npc', t:'저는 어느 쪽도 옳다 그르다 하지 않았습니다. 양쪽을 조제하여 함께 세우려 했지요. 그 뜻을 담아 임금께 글도 올렸습니다.' },
     ],
     quizSeq: [
@@ -792,6 +828,32 @@ const Quiz = {
   }
 };
 
+/* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
+function drawChart(c){
+  if (c.type === 'bar'){
+    const max = Math.max.apply(null, c.bars.map(b => b.v));
+    return c.bars.map(b =>
+      '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
+      + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'
+      + '<div class="bar-val">' + (b.text || b.v) + '</div></div>').join('');
+  }
+  if (c.type === 'flow'){
+    return '<div class="flow">' + c.steps.map((s, i) =>
+      (i ? '<div class="flow-arrow">▶</div>' : '')
+      + '<div class="flow-step"><b>' + s.t + '</b>' + (s.s || '') + '</div>').join('') + '</div>';
+  }
+  if (c.type === 'tree'){
+    return '<div class="tree"><div class="tree-root">' + c.root + '</div><div class="tree-branch">'
+      + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
+          '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
+        ).join('') + '</div>').join('') + '</div></div>';
+  }
+  return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
+    + '</tr></thead><tbody>'
+    + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
+    + '</tbody></table>';
+}
+
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
@@ -824,10 +886,7 @@ const Dialog = {
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
-      chartEl.innerHTML = '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
-        + '</tr></thead><tbody>'
-        + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
-        + '</tbody></table>'
+      chartEl.innerHTML = drawChart(c)
         + (c.note ? '<div class="chart-note">' + c.note + '</div>' : '');
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }

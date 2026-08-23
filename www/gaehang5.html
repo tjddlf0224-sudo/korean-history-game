@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>타임슬립 한국사 - 개항 5화 대한제국과 국권피탈</title>
+<title>한국사 게임 - 개항 5화 대한제국과 국권피탈</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -143,6 +143,31 @@
     background: rgba(255,255,255,.07); border-top: 1px solid rgba(255,255,255,.12); }
   /* 표가 뜬 칸에서는 대사가 짧아야 한 화면에 다 들어온다. */
   #dlg-panel.has-chart .dlg-box { font-size: 15px; min-height: 0; }
+  /* 표 말고도 세 가지를 더 그린다.
+     bar  — 비율이나 크기 비교(대동법 확산, 수출액 같은 것)
+     flow — 순서가 중요한 것(삼국 통일, 대외 항쟁 차례)
+     tree — 갈라져 나가는 것(붕당 계보, 왕위 계승) */
+  .dlg-chart .bar-row { display:flex; align-items:center; gap:8px; padding:4px 8px;
+    border-bottom:1px solid rgba(255,255,255,.10); font-size:11.5px; }
+  .dlg-chart .bar-row:last-of-type { border-bottom:0; }
+  .dlg-chart .bar-label { flex:0 0 74px; font-weight:bold; }
+  .dlg-chart .bar-track { flex:1; height:12px; border-radius:3px; background:rgba(255,255,255,.10); overflow:hidden; }
+  .dlg-chart .bar-fill { height:100%; background:rgba(255,255,255,.45); }
+  .dlg-chart .bar-val { flex:0 0 auto; opacity:.85; white-space:nowrap; }
+  .dlg-chart .flow { display:flex; flex-wrap:wrap; align-items:stretch; gap:5px; padding:8px; }
+  .dlg-chart .flow-step { flex:1 1 0; min-width:78px; padding:5px 6px; border-radius:6px;
+    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); font-size:11.5px; line-height:1.35; }
+  .dlg-chart .flow-step b { display:block; font-size:12.5px; margin-bottom:1px; }
+  .dlg-chart .flow-arrow { align-self:center; opacity:.55; font-size:12px; }
+  .dlg-chart .tree { padding:8px; font-size:11.5px; }
+  .dlg-chart .tree-root { display:inline-block; padding:3px 9px; border-radius:6px; font-weight:bold;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2); }
+  .dlg-chart .tree-branch { display:flex; gap:6px; margin-top:6px; }
+  .dlg-chart .tree-col { flex:1; border-top:1px solid rgba(255,255,255,.2); padding-top:6px; }
+  .dlg-chart .tree-node { padding:3px 7px; border-radius:5px; background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.16); margin-bottom:4px; }
+  .dlg-chart .tree-node b { font-size:12px; }
+  .dlg-chart .tree-node span { display:block; opacity:.8; font-size:10.5px; }
 </style>
 </head>
 <body>
@@ -675,6 +700,37 @@ const NPC_DATA = {
       { who:'npc', t:'우리 신문은 영국인 베델이 사장이라 통감부도 함부로 하지 못했소. 그래서 가장 강하게 쓸 수 있었지.' },
       { who:'npc', t:'일본이 화폐를 정리한다며 백동화를 등급 매겨 바꿔 주었소. 조선 상인의 돈이 하루아침에 종이가 되었소.' },
       { who:'npc', t:'나라 빚 천삼백만 원을 국민의 힘으로 갚자는 운동이 대구에서 시작되었소. 담배를 끊고 반지를 내놓았지. 우리 신문이 앞장서서 알렸소.' },
+      { who:'npc', chart:{ head: [
+'조약',
+'연도',
+'핵심',
+], rows: [
+[
+'강화도',
+'1876',
+'최초 불평등 · 치외법권',
+],
+[
+'한일 의정서',
+'1904',
+'군사 요지 사용',
+],
+[
+'을사늑약',
+'1905',
+'외교권 박탈 · 통감부',
+],
+[
+'한일 신협약',
+'1907',
+'차관 정치 · 군대 해산',
+],
+[
+'한일 병합',
+'1910',
+'국권 상실',
+],
+], note: '<b>외교권(1905) → 행정권(1907) → 나라(1910)</b> 순서로 빼앗겼습니다.' }, t:'나라가 어떻게 넘어갔는지, 조약만 늘어놓아도 보입니다.' },
     ],
     quizSeq: [
       { q:'일본에서 들여온 차관을 국민의 성금으로 갚자며 대구에서 시작된 운동은?',
@@ -837,6 +893,32 @@ const Quiz = {
   }
 };
 
+/* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
+function drawChart(c){
+  if (c.type === 'bar'){
+    const max = Math.max.apply(null, c.bars.map(b => b.v));
+    return c.bars.map(b =>
+      '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
+      + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'
+      + '<div class="bar-val">' + (b.text || b.v) + '</div></div>').join('');
+  }
+  if (c.type === 'flow'){
+    return '<div class="flow">' + c.steps.map((s, i) =>
+      (i ? '<div class="flow-arrow">▶</div>' : '')
+      + '<div class="flow-step"><b>' + s.t + '</b>' + (s.s || '') + '</div>').join('') + '</div>';
+  }
+  if (c.type === 'tree'){
+    return '<div class="tree"><div class="tree-root">' + c.root + '</div><div class="tree-branch">'
+      + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
+          '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
+        ).join('') + '</div>').join('') + '</div></div>';
+  }
+  return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
+    + '</tr></thead><tbody>'
+    + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
+    + '</tbody></table>';
+}
+
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
@@ -869,10 +951,7 @@ const Dialog = {
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
-      chartEl.innerHTML = '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
-        + '</tr></thead><tbody>'
-        + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
-        + '</tbody></table>'
+      chartEl.innerHTML = drawChart(c)
         + (c.note ? '<div class="chart-note">' + c.note + '</div>' : '');
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }

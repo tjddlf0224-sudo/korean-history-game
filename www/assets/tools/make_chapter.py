@@ -98,7 +98,9 @@ def npcdata_block(spec):
             if b.get('speaker'):
                 extra = (f", name:'{b['speaker']['name']}', icon:'{b['speaker'].get('icon','👤')}'"
                          f", img:'assets/portraits/{b['speaker']['portrait']}.png'")
-            out.append(f"      {{ who:'npc'{extra}, t:{t} }},")
+            # 대화창 위에 띄우는 표·막대·흐름도·계보
+            chart = f", chart:{js(b['chart'], 0)}" if b.get('chart') else ''
+            out.append(f"      {{ who:'npc'{extra}{chart}, t:{t} }},")
         out.append('    ],')
         qs = d.get('quiz', [])
         if qs:

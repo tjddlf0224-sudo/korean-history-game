@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>타임슬립 한국사 - 고려 3화 벽란도의 바닷길</title>
+<title>한국사 게임 - 고려 3화 벽란도의 바닷길</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -143,6 +143,31 @@
     background: rgba(255,255,255,.07); border-top: 1px solid rgba(255,255,255,.12); }
   /* 표가 뜬 칸에서는 대사가 짧아야 한 화면에 다 들어온다. */
   #dlg-panel.has-chart .dlg-box { font-size: 15px; min-height: 0; }
+  /* 표 말고도 세 가지를 더 그린다.
+     bar  — 비율이나 크기 비교(대동법 확산, 수출액 같은 것)
+     flow — 순서가 중요한 것(삼국 통일, 대외 항쟁 차례)
+     tree — 갈라져 나가는 것(붕당 계보, 왕위 계승) */
+  .dlg-chart .bar-row { display:flex; align-items:center; gap:8px; padding:4px 8px;
+    border-bottom:1px solid rgba(255,255,255,.10); font-size:11.5px; }
+  .dlg-chart .bar-row:last-of-type { border-bottom:0; }
+  .dlg-chart .bar-label { flex:0 0 74px; font-weight:bold; }
+  .dlg-chart .bar-track { flex:1; height:12px; border-radius:3px; background:rgba(255,255,255,.10); overflow:hidden; }
+  .dlg-chart .bar-fill { height:100%; background:rgba(255,255,255,.45); }
+  .dlg-chart .bar-val { flex:0 0 auto; opacity:.85; white-space:nowrap; }
+  .dlg-chart .flow { display:flex; flex-wrap:wrap; align-items:stretch; gap:5px; padding:8px; }
+  .dlg-chart .flow-step { flex:1 1 0; min-width:78px; padding:5px 6px; border-radius:6px;
+    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); font-size:11.5px; line-height:1.35; }
+  .dlg-chart .flow-step b { display:block; font-size:12.5px; margin-bottom:1px; }
+  .dlg-chart .flow-arrow { align-self:center; opacity:.55; font-size:12px; }
+  .dlg-chart .tree { padding:8px; font-size:11.5px; }
+  .dlg-chart .tree-root { display:inline-block; padding:3px 9px; border-radius:6px; font-weight:bold;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2); }
+  .dlg-chart .tree-branch { display:flex; gap:6px; margin-top:6px; }
+  .dlg-chart .tree-col { flex:1; border-top:1px solid rgba(255,255,255,.2); padding-top:6px; }
+  .dlg-chart .tree-node { padding:3px 7px; border-radius:5px; background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.16); margin-bottom:4px; }
+  .dlg-chart .tree-node b { font-size:12px; }
+  .dlg-chart .tree-node span { display:block; opacity:.8; font-size:10.5px; }
 </style>
 </head>
 <body>
@@ -647,6 +672,31 @@ const NPC_DATA = {
       { who:'npc', t:'나라가 관리에게 녹봉 대신 땅을 주네. 정확히는 땅 자체가 아니라 거기서 조세를 거둘 권리일세.' },
       { who:'npc', t:'곡식을 거두는 땅이 전지, 땔감을 얻는 땅이 시지야. 그래서 전시과라 하네.' },
       { who:'npc', t:'976년 경종 때 처음 정했는데, 그때는 관품만이 아니라 옷 색깔까지 따졌지. 998년 목종 때 고쳐 관직만 보게 했고, 1076년 문종 때 다시 손봐 현직 관리에게만 주기로 했네.' },
+      { who:'npc', chart:{ head: [
+'',
+'연도',
+'왕',
+'지급 기준',
+], rows: [
+[
+'시정',
+'976',
+'경종',
+'인품 + 관품',
+],
+[
+'개정',
+'998',
+'목종',
+'관직만',
+],
+[
+'경정',
+'1076',
+'문종',
+'현직만',
+],
+], note: '<b>인품 → 관직 → 현직</b>으로 점점 좁아지네. 나라가 땅을 아끼게 된 것일세.' }, t:'전시과는 세 번 고쳐졌네. 무엇을 보고 주었는지가 매번 달라지지.' },
       { who:'npc', t:'높은 벼슬아치에게는 공음전을 따로 주었네. 이건 자손에게 물려줄 수 있어 — 문벌 귀족이 대를 잇는 밑천이 되었지.' },
     ],
     quizSeq: [
@@ -819,6 +869,32 @@ const Quiz = {
   }
 };
 
+/* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
+function drawChart(c){
+  if (c.type === 'bar'){
+    const max = Math.max.apply(null, c.bars.map(b => b.v));
+    return c.bars.map(b =>
+      '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
+      + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'
+      + '<div class="bar-val">' + (b.text || b.v) + '</div></div>').join('');
+  }
+  if (c.type === 'flow'){
+    return '<div class="flow">' + c.steps.map((s, i) =>
+      (i ? '<div class="flow-arrow">▶</div>' : '')
+      + '<div class="flow-step"><b>' + s.t + '</b>' + (s.s || '') + '</div>').join('') + '</div>';
+  }
+  if (c.type === 'tree'){
+    return '<div class="tree"><div class="tree-root">' + c.root + '</div><div class="tree-branch">'
+      + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
+          '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
+        ).join('') + '</div>').join('') + '</div></div>';
+  }
+  return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
+    + '</tr></thead><tbody>'
+    + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
+    + '</tbody></table>';
+}
+
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
@@ -851,10 +927,7 @@ const Dialog = {
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
-      chartEl.innerHTML = '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
-        + '</tr></thead><tbody>'
-        + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
-        + '</tbody></table>'
+      chartEl.innerHTML = drawChart(c)
         + (c.note ? '<div class="chart-note">' + c.note + '</div>' : '');
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }

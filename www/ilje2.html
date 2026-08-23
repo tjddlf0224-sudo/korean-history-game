@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>타임슬립 한국사 - 일제 2화 실력을 기르자</title>
+<title>한국사 게임 - 일제 2화 실력을 기르자</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -143,6 +143,31 @@
     background: rgba(255,255,255,.07); border-top: 1px solid rgba(255,255,255,.12); }
   /* 표가 뜬 칸에서는 대사가 짧아야 한 화면에 다 들어온다. */
   #dlg-panel.has-chart .dlg-box { font-size: 15px; min-height: 0; }
+  /* 표 말고도 세 가지를 더 그린다.
+     bar  — 비율이나 크기 비교(대동법 확산, 수출액 같은 것)
+     flow — 순서가 중요한 것(삼국 통일, 대외 항쟁 차례)
+     tree — 갈라져 나가는 것(붕당 계보, 왕위 계승) */
+  .dlg-chart .bar-row { display:flex; align-items:center; gap:8px; padding:4px 8px;
+    border-bottom:1px solid rgba(255,255,255,.10); font-size:11.5px; }
+  .dlg-chart .bar-row:last-of-type { border-bottom:0; }
+  .dlg-chart .bar-label { flex:0 0 74px; font-weight:bold; }
+  .dlg-chart .bar-track { flex:1; height:12px; border-radius:3px; background:rgba(255,255,255,.10); overflow:hidden; }
+  .dlg-chart .bar-fill { height:100%; background:rgba(255,255,255,.45); }
+  .dlg-chart .bar-val { flex:0 0 auto; opacity:.85; white-space:nowrap; }
+  .dlg-chart .flow { display:flex; flex-wrap:wrap; align-items:stretch; gap:5px; padding:8px; }
+  .dlg-chart .flow-step { flex:1 1 0; min-width:78px; padding:5px 6px; border-radius:6px;
+    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); font-size:11.5px; line-height:1.35; }
+  .dlg-chart .flow-step b { display:block; font-size:12.5px; margin-bottom:1px; }
+  .dlg-chart .flow-arrow { align-self:center; opacity:.55; font-size:12px; }
+  .dlg-chart .tree { padding:8px; font-size:11.5px; }
+  .dlg-chart .tree-root { display:inline-block; padding:3px 9px; border-radius:6px; font-weight:bold;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2); }
+  .dlg-chart .tree-branch { display:flex; gap:6px; margin-top:6px; }
+  .dlg-chart .tree-col { flex:1; border-top:1px solid rgba(255,255,255,.2); padding-top:6px; }
+  .dlg-chart .tree-node { padding:3px 7px; border-radius:5px; background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.16); margin-bottom:4px; }
+  .dlg-chart .tree-node b { font-size:12px; }
+  .dlg-chart .tree-node span { display:block; opacity:.8; font-size:10.5px; }
 </style>
 </head>
 <body>
@@ -667,6 +692,27 @@ const NPC_DATA = {
       { who:'npc', t:'정우회 선언이 계기가 되어 1927년 신간회가 만들어졌습니다. 일제강점기 최대의 합법 단체였지요.' },
       { who:'npc', t:'광주에서 학생들이 일어났을 때 우리는 진상 조사단을 보내고 민중 대회를 열려 했습니다. 그 일로 간부들이 잡혀갔고, 뒤에 해소되고 말았습니다.' },
       { who:'npc', t:'여성계에서도 근우회가 함께 만들어졌습니다.' },
+      { who:'npc', chart:{ head: [
+'시기',
+'이름',
+'대표 정책',
+], rows: [
+[
+'1910년대',
+'무단 통치',
+'헌병 경찰 · 조선 태형령 · 토지 조사 사업',
+],
+[
+'1920년대',
+'문화 통치',
+'보통 경찰 · 산미 증식 계획 · 회사령 폐지',
+],
+[
+'1930~40년대',
+'민족 말살',
+'황국 신민 서사 · 창씨개명 · 국가 총동원령',
+],
+], note: '<b>3·1 운동이 무단에서 문화로</b>, <b>중일 전쟁이 문화에서 말살로</b> 넘어가는 분기점입니다.' }, t:'일제의 통치는 10년 단위로 성격이 바뀝니다. 셋으로 나눠 보시지요.' },
     ],
     quizSeq: [
       { q:'민족주의 세력과 사회주의 세력이 손을 잡아 1927년에 만든, 일제강점기 최대의 합법적 민족 운동 단체는?',
@@ -849,6 +895,32 @@ const Quiz = {
   }
 };
 
+/* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
+function drawChart(c){
+  if (c.type === 'bar'){
+    const max = Math.max.apply(null, c.bars.map(b => b.v));
+    return c.bars.map(b =>
+      '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
+      + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'
+      + '<div class="bar-val">' + (b.text || b.v) + '</div></div>').join('');
+  }
+  if (c.type === 'flow'){
+    return '<div class="flow">' + c.steps.map((s, i) =>
+      (i ? '<div class="flow-arrow">▶</div>' : '')
+      + '<div class="flow-step"><b>' + s.t + '</b>' + (s.s || '') + '</div>').join('') + '</div>';
+  }
+  if (c.type === 'tree'){
+    return '<div class="tree"><div class="tree-root">' + c.root + '</div><div class="tree-branch">'
+      + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
+          '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
+        ).join('') + '</div>').join('') + '</div></div>';
+  }
+  return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
+    + '</tr></thead><tbody>'
+    + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
+    + '</tbody></table>';
+}
+
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   open(key, npc){
@@ -881,10 +953,7 @@ const Dialog = {
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
-      chartEl.innerHTML = '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
-        + '</tr></thead><tbody>'
-        + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
-        + '</tbody></table>'
+      chartEl.innerHTML = drawChart(c)
         + (c.note ? '<div class="chart-note">' + c.note + '</div>' : '');
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
