@@ -78,7 +78,7 @@ SHEETS = {
     'sheet9': (5, 3, [
         'myocheong', 'gimbusik', 'seokgong', 'geunchogo', 'seongwang',
         'daejoyeong', 'munwang', 'sinsunggyeom', 'gyeongsunwang', 'yuhyeongwon',
-        'iik', None, None, None, None]),
+        'iik', 'yangheonsu', 'eojaeyeon', None, None]),
 }
 
 
