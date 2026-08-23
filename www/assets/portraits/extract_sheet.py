@@ -78,10 +78,12 @@ SHEETS = {
     'sheet9': (5, 3, [
         'myocheong', 'gimbusik', 'seokgong', 'geunchogo', 'seongwang',
         'daejoyeong', 'munwang', 'sinsunggyeom', 'gyeongsunwang', 'yuhyeongwon',
-        'iik', 'yangheonsu', 'eojaeyeon', 'uibyeongbu', 'gimgu']),
+        'iik', 'yangheonsu', 'eojaeyeon', 'uibyeongbu', 'anchangho']),
+    # gimgu·yunbonggil는 뺐다 — ilje_ch7.html에 이미 있는 사람들이고 초상도
+    # 이미 있음(일제 2화 한인애국단 콘텐츠가 중복이라 국민대표회의로 교체됨).
     # 다음 몇 명이 필요해지면 여기(sheet10) 빈 칸부터 채울 것.
     'sheet10': (5, 3, [
-        'yunbonggil', None, None, None, None,
+        'sinchaeho', None, None, None, None,
         None, None, None, None, None,
         None, None, None, None, None]),
 }
