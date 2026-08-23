@@ -52,14 +52,16 @@ SHEETS = {
     'sheet5': (5, 2, [
         'yeounhyeong', 'sintak', 'yukio', 'jeju', 'nongji',
         'sasaoip', 'yusin', 'gwangju', 'yuwol', 'tongil']),
+    # 맨 오른쪽 아래 칸은 일부러 비운다 — 제미나이 로고가 늘 그 자리(모서리에서
+    # 128,117픽셀)에 찍혀서, 인물을 두면 옷 위에 별이 얹힌다. 비워 두면 아예 안 겹친다.
     'sheet6': (5, 3, [
         'suro', 'ureuk', 'cheolsang', 'wae', 'gyebaek',
         'gwanchang', 'gimyusin', 'munmu', 'sinmun', 'jeonsigwa',
-        'songsang', 'arabsang', 'jujeon', 'yisunsin', 'gwakjaeu']),
+        'songsang', 'arabsang', 'jujeon', 'yisunsin', None]),
     'sheet7': (5, 3, [
-        'gimsimin', 'gwonyul', 'johun', 'nongae', 'hanil',
-        'veteran', 'saemaul', 'olympic', 'gimdaejung', 'seollal',
-        'dano', 'chuseok', 'dongji', None, None]),
+        'gwakjaeu', 'gimsimin', 'gwonyul', 'johun', 'nongae',
+        'hanil', 'veteran', 'saemaul', 'olympic', 'gimdaejung',
+        'seollal', 'dano', 'chuseok', 'dongji', None]),
 }
 
 

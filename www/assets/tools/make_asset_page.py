@@ -33,7 +33,7 @@ def parse():
                            prompt=prompt.strip(),
                            done=os.path.exists(os.path.join(WWW, 'assets/scenes', fn))))
     sheets = []
-    for m in re.finditer(r'## 2-(\d+)\. ([^\[]+)\[키: `(\w+)`\] — 5열 3행, (\d+)명\n\n```\n(.*?)\n```', md, re.S):
+    for m in re.finditer(r'## 2-(\d+)\. ([^\[]+)\[키: `(\w+)`\] — [^\n]*?(\d+)명[^\n]*\n\n```\n(.*?)\n```', md, re.S):
         no, title, key, n, prompt = m.groups()
         who = re.findall(r'^\d+\) ([^:]+):', prompt, re.M)
         done = sum(os.path.exists(os.path.join(WWW, 'assets/portraits', f'{x}.png'))
