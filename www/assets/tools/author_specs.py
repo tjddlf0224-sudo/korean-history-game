@@ -224,7 +224,7 @@ godae1 = {
    'npcs':[
      {'id':'muryeong','name':'무령왕','x':430,'y':330,'look':{'role':'king','body':'#5a2f4a','accent':'#e0b94a'}},
      {'id':'gwanggaeto','name':'고구려 장수','x':690,'y':300,'look':{'role':'general','body':'#4f5d75','accent':'#8a6d3b'}},
-     {'id':'seongwang','name':'백제 성왕','x':950,'y':470,'look':{'role':'king','body':'#5a3a5a','accent':'#c9a24a'}},
+     {'id':'seongwang','name':'백제 성왕','x':540,'y':470,'look':{'role':'king','body':'#5a3a5a','accent':'#c9a24a'}},
      {'id':'jinheung','name':'진흥왕','x':1030,'y':330,'look':{'role':'king','body':'#7a2f3d','accent':'#e0b94a'}},
      {'id':'hwarang','name':'화랑','x':1090,'y':430,'look':{'role':'general','body':'#3d5a6b','accent':'#c9a24a'}},
    ],'exits':[{'rect':[600,0,790,55],'to':'hanseong','spawn':[688,690],'label':'한성으로'}]}],
