@@ -325,7 +325,7 @@ setTimeout(applyOrientation, 800);
 applyOrientation();
 
 /* ============ 구역(zone): 실사 배경 이미지 + 충돌/NPC ============
-   무대는 한강 유역 성터. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
+   무대는 한성 위례성 / 한강 유역 성터. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
    재서 스펙에 적어 둔다 — 배경을 바꾸면 스펙의 좌표도 같이 고쳐야 한다. */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 /* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
@@ -334,11 +334,28 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
    틀렸던 문제의 재발 방지용). */
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
+  /* 근초고왕(4세기 전성기)과 성왕(6세기, 관산성 전사)이 챕터 이름표에도
+     없이 빠져 있었다 — 성왕은 기출 13회, 근초고왕은 4회로 둘 다 낮지 않은데
+     진흥왕 대사 속 표에 이름만 스쳐 지나갔다. 근초고왕은 앞선 시대인 한성을
+     새 무대로 세우고, 성왕은 진흥왕과 같은 시대라 기존 무대에 그대로 넣었다. */
+  hanseong: {
+    img: 'assets/scenes/godae1_hanseong.png', label: '한성 위례성',
+    spawn: { x: 688, y: 600 },
+    barriers: [
+    ],
+    npcs: [
+      { id:'geunchogo', name:'근초고왕', x:688, y:400, img:'assets/portraits/geunchogo.png', look:{ role:'king', body:'#7a3a3a', accent:'#e0b94a' } },
+    ],
+    exits: [
+      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'samguk', spawn:{x:688,y:220}, label:'한강 아래로' },
+    ],
+  },
   samguk: {
     img: 'assets/scenes/godae1_hangang.png', label: '한강 유역 성터',
     spawn: { x: 688, y: 470 },
     barriers: [
-      { x0:0, y0:0, x1:1376, y1:175 },  // 성벽과 문루
+      { x0:0, y0:0, x1:565, y1:175 },  // 성벽
+      { x0:795, y0:0, x1:1376, y1:175 },  // 성벽과 문루
       { x0:480, y0:175, x1:575, y1:255 },  // 성벽 계단
       { x0:795, y0:175, x1:890, y1:255 },  // 성벽 계단
       { x0:0, y0:160, x1:150, y1:445 },  // 왼쪽 담
@@ -353,10 +370,13 @@ const ZONES = {
     npcs: [
       { id:'muryeong', name:'무령왕', x:430, y:330, img:'assets/portraits/muryeong.png', look:{ role:'king', body:'#5a2f4a', accent:'#e0b94a' } },
       { id:'gwanggaeto', name:'고구려 장수', x:690, y:300, img:'assets/portraits/gwanggaeto.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
+      { id:'seongwang', name:'백제 성왕', x:950, y:470, img:'assets/portraits/seongwang.png', look:{ role:'king', body:'#5a3a5a', accent:'#c9a24a' } },
       { id:'jinheung', name:'진흥왕', x:1030, y:330, img:'assets/portraits/jinheung.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
       { id:'hwarang', name:'화랑', x:688, y:545, img:'assets/portraits/hwarang.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
     ],
-    exits: [],
+    exits: [
+      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'hanseong', spawn:{x:688,y:690}, label:'한성으로' },
+    ],
   },
 };
 const zoneImgs = {};
@@ -483,8 +503,10 @@ function updateHudGoal(){
   // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
+      ['geunchogo', '한성에서 근초고왕과 대화하기'],
       ['muryeong', '무령왕과 대화하기'],
       ['gwanggaeto', '고구려 장수와 대화하기'],
+      ['seongwang', '백제 성왕과 대화하기'],
       ['jinheung', '진흥왕과 대화하기'],
       ['hwarang', '화랑과 대화하기']
     ];
@@ -498,7 +520,7 @@ function updateHudGoal(){
 }
 
 const World = {
-  zone: 'samguk', px: ZONES.samguk.spawn.x, py: ZONES.samguk.spawn.y,
+  zone: 'hanseong', px: ZONES.hanseong.spawn.x, py: ZONES.hanseong.spawn.y,
   facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
@@ -682,6 +704,24 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  geunchogo_0: {
+    name: '근초고왕', icon: '👑', img: 'assets/portraits/geunchogo.png',
+    beats: [
+      { who:'npc', t:'나는 백제의 근초고왕일세. 마한의 남은 세력을 마저 정복해 백제의 땅을 남쪽 바다까지 넓혔지.' },
+      { who:'npc', t:'북으로도 밀고 올라갔네. 371년, 평양성까지 쳐서 고구려 고국원왕을 그 자리에서 전사시켰지.' },
+      { who:'npc', t:'왕위도 형제가 아니라 아들에게 곧장 물려주도록 했네. 부자 상속을 확실히 다진 것이지.' },
+      { who:'npc', t:'바다 건너 왜와도 가까이 지냈네. 가지가 일곱으로 뻗은 쇠칼 하나를 보냈다고 전하더군 — 칠지도라 부르는 그것 말일세.' },
+      { who:'npc', t:'박사 고흥에게 나라의 지난 일을 정리하게 했네. 「서기」라 이름 붙였지. 우리 손으로 남긴 첫 역사책일세.' },
+    ],
+    quizSeq: [
+      { q:'4세기 백제의 전성기를 이끌며 마한의 남은 세력을 정복하고 평양성을 공격해 고구려 고국원왕을 전사시킨 왕은?',
+        opts:['근초고왕','침류왕'], answer:0, src:[32, 65, 73],
+        feedback:['침류왕은 근초고왕의 손자로, 백제에 불교를 처음 받아들인 왕이에요.','정답! 근초고왕입니다. 백제가 한강 유역을 완전히 차지하고 남해안까지 뻗어 나간 전성기예요.'] },
+      { q:'근초고왕 때 박사 고흥이 편찬한, 백제 최초의 역사서는?',
+        opts:['서기','국사'], answer:0, src:[32],
+        feedback:['국사는 신라 진흥왕 때 거칠부가 편찬한 역사서예요.','정답! 「서기」입니다. 삼국은 저마다 전성기에 자기 나라의 역사서를 남겼어요.'] },
+    ]
+  },
   muryeong_0: {
     name: '무령왕', icon: '👑', img: 'assets/portraits/muryeong.png',
     beats: [
@@ -723,10 +763,29 @@ const NPC_DATA = {
         feedback:['민화는 조선 후기 서민들이 즐긴 그림이에요.','정답! 고구려 고분 벽화입니다. 무용총·강서대묘 등이 유명해요.'] },
     ]
   },
+  seongwang_0: {
+    name: '백제 성왕', icon: '👑', img: 'assets/portraits/seongwang.png',
+    beats: [
+      { who:'npc', t:'나는 백제 성왕일세. 즉위하고 얼마 지나지 않아 도읍을 웅진에서 사비로 옮겼네 — 좁은 웅진으로는 나라를 다시 일으키기 어려웠거든.' },
+      { who:'npc', t:'나라 이름도 남부여로 고쳤네. 부여의 정통을 잇는다는 뜻을 담았지. 중앙에는 22부를, 지방에는 5방을 두어 다스림도 새로 짰네.' },
+      { who:'npc', t:'신라 진흥왕과 손을 잡았네. 힘을 합쳐 고구려를 밀어내고, 백여 년 만에 한강 하류를 되찾았지.' },
+      { who:'npc', t:'허나 진흥왕이 그 땅을 통째로 삼켜 버렸네. 나·제 동맹이 그렇게 깨졌지.' },
+      { who:'npc', t:'분을 참지 못해 신라를 쳤으나, 관산성에서 매복에 걸려 이 목숨을 잃었네. 554년의 일일세.' },
+    ],
+    quizSeq: [
+      { q:'웅진에서 사비로 도읍을 옮기고 나라 이름을 남부여로 고친 백제의 왕은?',
+        opts:['성왕','문주왕'], answer:0, src:[22, 36, 45, 50, 59, 64, 67, 78],
+        feedback:['문주왕은 한성이 함락된 뒤 웅진으로 도읍을 옮긴 왕이에요.','정답! 성왕입니다. 538년 사비로 천도하고 국호를 남부여로 고쳤어요.'] },
+      { q:'신라 진흥왕과 함께 한강 하류를 되찾았다가 곧 빼앗기자 이를 되찾으려 신라를 공격했지만 전사한 싸움은?',
+        opts:['관산성 전투','황산벌 전투'], answer:0, src:[59, 78],
+        feedback:['황산벌 전투는 660년 백제 멸망 직전 계백이 최후 항전을 벌인 싸움이에요.','정답! 관산성 전투입니다. 554년 성왕이 이 싸움에서 전사했어요.'] },
+    ]
+  },
   jinheung_0: {
     name: '진흥왕', icon: '⚔️', img: 'assets/portraits/jinheung.png',
     beats: [
       { who:'npc', t:'나는 신라의 진흥왕일세. 백제와 손잡고 고구려에게서 한강을 빼앗았다가, 이내 백제까지 밀어내고 한강 전부를 차지했지.' },
+      { who:'npc', t:'그 일로 성왕이 크게 노해 군사를 일으켰지만, 관산성에서 도리어 목숨을 잃었네. 나로서는 뼈아픈 배신이었지만, 그 땅이 통일의 밑천이 되었네.' },
       { who:'npc', t:'한강을 쥐니 중국과 곧장 통할 수 있게 되더군. 그것이 훗날 삼국을 아우르는 밑천이 되었네.' },
       { who:'npc', t:'내가 다녀간 곳마다 비석을 세웠네. 북한산에도, 창녕에도, 멀리 함경도 황초령과 마운령에도.' },
       { who:'npc', chart:{ head: [
@@ -785,8 +844,10 @@ const NPC_DATA = {
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
-    if (id === 'muryeong') return 'muryeong_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'geunchogo') return 'geunchogo_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'muryeong') return 'muryeong_0';
     if (id === 'gwanggaeto') return 'gwanggaeto_0';
+    if (id === 'seongwang') return 'seongwang_0';
     if (id === 'jinheung') return 'jinheung_0';
     if (id === 'hwarang') return 'hwarang_0';
     return null;
@@ -1008,7 +1069,7 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
-    if (this.npc.id === 'muryeong'){
+    if (this.npc.id === 'geunchogo'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 0);
     }
     if (this.data.endsChapter){
