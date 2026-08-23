@@ -78,7 +78,12 @@ SHEETS = {
     'sheet9': (5, 3, [
         'myocheong', 'gimbusik', 'seokgong', 'geunchogo', 'seongwang',
         'daejoyeong', 'munwang', 'sinsunggyeom', 'gyeongsunwang', 'yuhyeongwon',
-        'iik', 'yangheonsu', 'eojaeyeon', 'uibyeongbu', None]),
+        'iik', 'yangheonsu', 'eojaeyeon', 'uibyeongbu', 'gimgu']),
+    # 다음 몇 명이 필요해지면 여기(sheet10) 빈 칸부터 채울 것.
+    'sheet10': (5, 3, [
+        'yunbonggil', None, None, None, None,
+        None, None, None, None, None,
+        None, None, None, None, None]),
 }
 
 
