@@ -1,0 +1,340 @@
+<title>기출 왕조 지도</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+  :root{
+    --ink:#2b241c; --ink-soft:#544a3a;
+    --paper:#f3ead9; --paper-2:#e9ddc4; --paper-3:#ddcda9;
+    --line:#c9b990;
+    --accent:#a23b2e;   /* dancheong red — high frequency */
+    --accent-2:#2f5d50; /* jade — country accents / secondary */
+    --gold:#9c7a26;
+    --muted:#8a7c63;
+    --card-bg:#faf4e6;
+    --shadow: 0 1px 0 rgba(43,36,28,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#ecdfc4; --ink-soft:#cbb999;
+      --paper:#211c15; --paper-2:#2a231a; --paper-3:#362d20;
+      --line:#4a3f2c;
+      --accent:#e2694f;
+      --accent-2:#6fae98;
+      --gold:#d3ac52;
+      --muted:#9c8f74;
+      --card-bg:#2a2318;
+      --shadow: 0 1px 0 rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#ecdfc4; --ink-soft:#cbb999;
+    --paper:#211c15; --paper-2:#2a231a; --paper-3:#362d20;
+    --line:#4a3f2c;
+    --accent:#e2694f;
+    --accent-2:#6fae98;
+    --gold:#d3ac52;
+    --muted:#9c8f74;
+    --card-bg:#2a2318;
+    --shadow: 0 1px 0 rgba(0,0,0,.3);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Noto Sans KR', -apple-system, sans-serif;
+    font-variant-numeric: tabular-nums;
+    min-height:100vh;
+  }
+  .wrap{ max-width:1180px; margin:0 auto; padding:28px 20px 80px; }
+
+  header.page{ padding: 6px 4px 22px; border-bottom: 1px solid var(--line); margin-bottom:18px; }
+  h1{
+    font-family:'Noto Serif KR', serif; font-weight:900;
+    font-size: clamp(24px, 4vw, 34px); margin:0 0 8px; letter-spacing:-.01em;
+    text-wrap: balance;
+  }
+  .lede{ color:var(--ink-soft); font-size:14.5px; line-height:1.7; max-width:72ch; margin:0; }
+  .lede b{ color:var(--ink); font-weight:700; }
+  .note{ color:var(--muted); font-size:12.5px; margin-top:10px; line-height:1.6; }
+
+  nav.tabs{
+    position:sticky; top:0; z-index:20; background:var(--paper);
+    display:flex; gap:6px; flex-wrap:wrap; padding:12px 4px; margin-bottom:6px;
+    border-bottom:1px solid var(--line);
+  }
+  nav.tabs button{
+    font-family:'Noto Sans KR', sans-serif; font-weight:700; font-size:13.5px;
+    color:var(--ink-soft); background:var(--paper-2); border:1px solid var(--line);
+    border-radius:999px; padding:8px 16px; cursor:pointer;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  nav.tabs button:hover{ border-color: var(--gold); color:var(--ink); }
+  nav.tabs button.active{
+    background: var(--ink); color: var(--paper); border-color: var(--ink);
+  }
+
+  section.view{ display:none; }
+  section.view.active{ display:block; animation: fade .25s ease; }
+  @keyframes fade{ from{ opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+  /* ---- 랭킹 뷰 ---- */
+  .rank-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin: 18px 4px 14px; flex-wrap:wrap;}
+  .rank-head h2{ font-family:'Noto Serif KR',serif; font-size:19px; margin:0; }
+  .rank-head .sub{ color:var(--muted); font-size:12.5px; }
+  .ranklist{ display:flex; flex-direction:column; gap:3px; }
+  .rankrow{
+    display:grid; grid-template-columns: 30px 1fr auto 120px; align-items:center; gap:12px;
+    padding:8px 10px; border-radius:8px; background:var(--card-bg); border:1px solid var(--line);
+  }
+  .rankrow .pos{ font-family:'Noto Serif KR',serif; font-weight:700; color:var(--muted); font-size:13px; text-align:right; }
+  .rankrow .who{ display:flex; align-items:baseline; gap:8px; min-width:0; }
+  .rankrow .who .nm{ font-family:'Noto Serif KR',serif; font-weight:700; font-size:15.5px; white-space:nowrap; }
+  .rankrow .who .tag{ font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .dupmark{
+    flex:none; font-size:10px; font-weight:700; color:var(--accent-2);
+    border:1px solid var(--accent-2); border-radius:999px; padding:1px 6px;
+    cursor:help; white-space:nowrap;
+  }
+  .dupdot{
+    position:absolute; top:-2px; right:-2px; z-index:2;
+    width:14px; height:14px; border-radius:50%; font-size:8px; line-height:14px;
+    text-align:center; font-weight:900; color:#fff; background:var(--accent-2);
+    cursor:help; border:1.5px solid var(--card-bg);
+  }
+  .rankrow .bar-wrap{ height:8px; border-radius:5px; background:var(--paper-3); overflow:hidden; min-width:80px; }
+  .rankrow .bar{ height:100%; border-radius:5px; background:var(--accent); }
+  .rankrow .cnt{ font-weight:900; font-size:15px; text-align:right; color:var(--accent); }
+  .rankrow.top .cnt{ font-size:17px; }
+
+  /* ---- 계보 뷰 ---- */
+  .era-head{ margin: 16px 4px 18px; }
+  .era-head h2{ font-family:'Noto Serif KR',serif; font-size:22px; margin:0 0 4px; }
+  .era-head .sub{ color:var(--muted); font-size:12.5px; }
+
+  .lineage{ margin-bottom: 30px; }
+  .lineage .country{
+    display:flex; align-items:center; gap:8px; margin: 0 4px 8px;
+  }
+  .lineage .country .dot{ width:9px; height:9px; border-radius:50%; background:var(--accent-2); flex:none; }
+  .lineage .country .cname{ font-family:'Noto Serif KR',serif; font-weight:700; font-size:15px; }
+  .lineage .country .ccount{ color:var(--muted); font-size:11.5px; }
+
+  .strip-outer{ position:relative; }
+  .strip{
+    display:flex; align-items:flex-end; gap:0; overflow-x:auto; padding: 10px 4px 14px;
+    scrollbar-width: thin;
+  }
+  .strip::-webkit-scrollbar{ height:7px; }
+  .strip::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+
+  .king{
+    flex: none; width:104px; display:flex; flex-direction:column; align-items:center;
+    padding: 0 6px; position:relative;
+  }
+  .king::before{
+    content:''; position:absolute; left:0; right:0; top:41px; height:2px; background:var(--line); z-index:0;
+  }
+  .king:first-child::before{ left:50%; }
+  .king:last-child::before{ right:50%; }
+
+  .king .badge{
+    position:relative; z-index:1;
+    width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--card-bg); border:2px solid var(--line);
+    font-family:'Noto Serif KR',serif; font-weight:900; font-size:14px; color:var(--muted);
+    margin-bottom:8px; transition: transform .15s;
+  }
+  .king:hover .badge{ transform: scale(1.08); }
+  .king .nm{ font-family:'Noto Serif KR',serif; font-weight:700; font-size:13.5px; text-align:center; line-height:1.25; white-space:nowrap; }
+  .king .yr{ font-size:10.5px; color:var(--muted); margin-top:2px; }
+  .king .freq{ font-size:11px; font-weight:700; margin-top:5px; padding:1px 8px; border-radius:999px; color:var(--muted); background:var(--paper-2); border:1px solid var(--line); }
+
+  /* 빈도 등급 */
+  .king[data-tier="0"] .badge{ opacity:.45; }
+  .king[data-tier="0"] .freq{ opacity:.55; }
+  .king[data-tier="1"] .badge{ border-color:#b7a06a; color:#8a7137; }
+  .king[data-tier="1"] .freq{ color:#8a7137; }
+  .king[data-tier="2"] .badge{ border-color:var(--gold); color:var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--card-bg)); }
+  .king[data-tier="2"] .freq{ color:var(--gold); border-color:var(--gold); }
+  .king[data-tier="3"] .badge{ border-color:var(--accent); color:var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--card-bg)); width:44px; height:44px; font-size:15px; }
+  .king[data-tier="3"] .freq{ color:var(--accent); border-color:var(--accent); font-weight:900; }
+  .king[data-tier="4"] .badge{ border-color:var(--accent); color:#fff; background:var(--accent); width:48px; height:48px; font-size:16px; box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+  .king[data-tier="4"] .freq{ color:#fff; background:var(--accent); border-color:var(--accent); font-weight:900; }
+  .king[data-tier="4"] .nm{ font-weight:900; }
+
+  .legend{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin: 4px 4px 20px; font-size:11.5px; color:var(--muted); }
+  .legend .sw{ display:inline-flex; align-items:center; gap:5px; }
+  .legend i{ width:10px; height:10px; border-radius:50%; display:inline-block; border:2px solid var(--line); }
+  .legend i.t0{ opacity:.45; }
+  .legend i.t1{ border-color:#b7a06a; }
+  .legend i.t2{ border-color:var(--gold); }
+  .legend i.t3{ border-color:var(--accent); }
+  .legend i.t4{ border-color:var(--accent); background:var(--accent); }
+
+  footer.credit{ margin-top: 40px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:11.5px; line-height:1.7; }
+</style>
+
+<div class="wrap">
+  <header class="page">
+    <h1>기출 왕조 지도</h1>
+    <p class="lede">한국사능력검정시험 기출문제(6~79회)에 등장한 <b>왕 이름 언급 횟수</b>를 시대·나라별 계보로 펼쳐 봅니다. 원 안의 숫자가 클수록, 색이 붉을수록 자주 나온 왕입니다.</p>
+    <p class="note">데이터는 게임 제작용으로 쌓아 온 기출 태그 색인(6~79회, 5,500여 개 태그)에서 왕 이름을 추려 집계했습니다. 고려·조선이 함께 쓴 묘호(태조·성종·현종·문종·숙종·예종·인종·명종·경종·고종 등)와 백제·발해가 함께 쓴 '무왕'은 태그에 딸린 세부 사건(예: 훈요십조→고려, 한양천도→조선)을 직접 읽어 시대별로 갈랐습니다. 다만 세부 사건이 안 달린 일부 언급은 어느 쪽인지 가려낼 수 없어 계산에서 제외했으므로, 실제보다 약간 적게 잡혔을 수 있습니다. 이렇게 <b>이름이 겹치는 왕</b>에는 <span class="dupmark" style="cursor:default;">동명이인</span> 표시(계보 원에는 작은 점)를 달아, 다른 시대·나라의 동명이인과 헷갈리지 않도록 했습니다.</p>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <section class="view" id="view-rank">
+    <div class="rank-head">
+      <h2>전체 랭킹 · 기출에 가장 많이 나온 왕</h2>
+      <span class="sub">129명 중 언급 상위 30명 · 총 언급 366회</span>
+    </div>
+    <div class="ranklist" id="ranklist"></div>
+  </section>
+
+  <div id="era-views"></div>
+
+  <footer class="credit">기출 왕조 지도 · 한능검 1급 대비 게임 「타임슬립 한국사」 제작 참고자료</footer>
+</div>
+
+<script>
+const DATA = [["선사·초기국가","고조선",[{"name":"단군왕검","year":"(건국)","n":3},{"name":"위만","year":"BC194","n":0},{"name":"우거왕","year":"~BC108","n":1}]],["고대","고구려",[{"name":"동명성왕","year":"BC37","n":0},{"name":"유리왕","year":"BC19","n":0},{"name":"대무신왕","year":"18","n":0},{"name":"태조왕","year":"53","n":0},{"name":"고국천왕","year":"179","n":0},{"name":"미천왕","year":"300","n":0},{"name":"고국원왕","year":"331","n":1},{"name":"소수림왕","year":"371","n":6},{"name":"광개토대왕","year":"391","n":6},{"name":"장수왕","year":"413","n":5},{"name":"문자명왕","year":"491","n":0},{"name":"안장왕","year":"519","n":0},{"name":"양원왕","year":"545","n":0},{"name":"평원왕","year":"559","n":0},{"name":"영양왕","year":"590","n":0},{"name":"영류왕","year":"618","n":0},{"name":"보장왕","year":"642","n":0}]],["고대","백제",[{"name":"온조왕","year":"BC18","n":0},{"name":"고이왕","year":"234","n":0},{"name":"책계왕","year":"286","n":0},{"name":"근초고왕","year":"346","n":2},{"name":"근구수왕","year":"375","n":0},{"name":"침류왕","year":"384","n":0},{"name":"아신왕","year":"392","n":0},{"name":"전지왕","year":"405","n":0},{"name":"비유왕","year":"427","n":0},{"name":"개로왕","year":"455","n":3},{"name":"문주왕","year":"475","n":0},{"name":"삼근왕","year":"477","n":1},{"name":"동성왕","year":"479","n":0},{"name":"무령왕","year":"501","n":6},{"name":"성왕","year":"523","n":8},{"name":"위덕왕","year":"554","n":0},{"name":"무왕","year":"600","n":2},{"name":"의자왕","year":"641","n":1}]],["고대","신라·통일신라",[{"name":"박혁거세","year":"BC57","n":0},{"name":"탈해이사금","year":"57","n":0},{"name":"파사이사금","year":"80","n":0},{"name":"내물마립간","year":"356","n":0},{"name":"눌지마립간","year":"417","n":1},{"name":"소지마립간","year":"479","n":0},{"name":"지증왕","year":"500","n":6},{"name":"법흥왕","year":"514","n":5},{"name":"진흥왕","year":"540","n":11},{"name":"진지왕","year":"576","n":0},{"name":"진평왕","year":"579","n":0},{"name":"선덕여왕","year":"632","n":0},{"name":"진덕여왕","year":"647","n":0},{"name":"무열왕","year":"654","n":0},{"name":"문무왕","year":"661","n":4},{"name":"신문왕","year":"681","n":15},{"name":"성덕왕","year":"702","n":0},{"name":"경덕왕","year":"742","n":1},{"name":"혜공왕","year":"765","n":0},{"name":"원성왕","year":"785","n":2},{"name":"헌덕왕","year":"809","n":0},{"name":"흥덕왕","year":"826","n":1},{"name":"진성여왕","year":"887","n":2},{"name":"경순왕","year":"927","n":1}]],["고대","가야",[{"name":"김수로왕","year":"42","n":1},{"name":"이진아시왕","year":"(대가야 시조)","n":1}]],["고대","발해",[{"name":"대조영","year":"698","n":1},{"name":"무왕","year":"719","n":7},{"name":"문왕","year":"737","n":4},{"name":"선왕","year":"818","n":0}]],["고려","고려",[{"name":"태조","year":"918","n":17},{"name":"혜종","year":"943","n":0},{"name":"정종","year":"945","n":0},{"name":"광종","year":"949","n":15},{"name":"경종","year":"975","n":0},{"name":"성종","year":"981","n":15},{"name":"목종","year":"997","n":0},{"name":"현종","year":"1009","n":3},{"name":"덕종","year":"1031","n":0},{"name":"정종","year":"1034","n":0},{"name":"문종","year":"1046","n":2},{"name":"순종","year":"1083","n":0},{"name":"선종","year":"1083","n":6},{"name":"헌종","year":"1094","n":0},{"name":"숙종","year":"1095","n":11},{"name":"예종","year":"1105","n":5},{"name":"인종","year":"1122","n":3},{"name":"의종","year":"1146","n":0},{"name":"명종","year":"1170","n":0},{"name":"신종","year":"1197","n":0},{"name":"희종","year":"1204","n":0},{"name":"강종","year":"1211","n":0},{"name":"고종","year":"1213","n":0},{"name":"원종","year":"1259","n":2},{"name":"충렬왕","year":"1274","n":1},{"name":"충선왕","year":"1298","n":0},{"name":"충숙왕","year":"1313","n":0},{"name":"충혜왕","year":"1330","n":0},{"name":"충목왕","year":"1344","n":0},{"name":"충정왕","year":"1348","n":0},{"name":"공민왕","year":"1351","n":16},{"name":"우왕","year":"1374","n":0},{"name":"창왕","year":"1388","n":0},{"name":"공양왕","year":"1389","n":0}]],["조선 전기","조선",[{"name":"태조","year":"1392","n":1},{"name":"정종","year":"1398","n":0},{"name":"태종","year":"1400","n":16},{"name":"세종","year":"1418","n":24},{"name":"문종","year":"1450","n":0},{"name":"단종","year":"1452","n":3},{"name":"세조","year":"1455","n":10},{"name":"예종","year":"1468","n":0},{"name":"성종","year":"1469","n":12},{"name":"연산군","year":"1494","n":2},{"name":"중종","year":"1506","n":3},{"name":"인종","year":"1544","n":0},{"name":"명종","year":"1545","n":8}]],["조선 후기","조선",[{"name":"선조","year":"1567","n":4},{"name":"광해군","year":"1608","n":5},{"name":"인조","year":"1623","n":3},{"name":"효종","year":"1649","n":4},{"name":"현종","year":"1659","n":1},{"name":"숙종","year":"1674","n":10},{"name":"경종","year":"1720","n":2},{"name":"영조","year":"1724","n":20},{"name":"정조","year":"1776","n":27},{"name":"순조","year":"1800","n":4},{"name":"헌종","year":"1834","n":0},{"name":"철종","year":"1849","n":2}]],["근대·개항기","대한제국",[{"name":"고종","year":"1863","n":1},{"name":"순종","year":"1907","n":0}]]]
+;
+
+const ERA_ORDER = ["전체 랭킹","선사·초기국가","고대","고려","조선 전기","조선 후기","근대·개항기"];
+const eraGroups = {};
+DATA.forEach(([era, country, kings]) => {
+  (eraGroups[era] = eraGroups[era] || []).push([country, kings]);
+});
+
+function tier(n){
+  if (n === 0) return 0;
+  if (n <= 3) return 1;
+  if (n <= 8) return 2;
+  if (n <= 15) return 3;
+  return 4;
+}
+
+// ---- 동명이인(같은 이름, 다른 사람) 찾기 ----
+// 나라·시대가 달라도, 같은 나라 안에서도(예: 고려 정종 3대·10대) 이름이 겹치면 전부 모은다.
+const nameGroups = {};
+DATA.forEach(([era, country, kings]) => {
+  kings.forEach(k => {
+    (nameGroups[k.name] = nameGroups[k.name] || []).push({ ...k, era, country });
+  });
+});
+function dupOthers(name, era, country, year){
+  const group = nameGroups[name];
+  if (!group || group.length < 2) return null;
+  const others = group.filter(o => !(o.era === era && o.country === country && o.year === year));
+  return others.length ? others : null;
+}
+function withJosa(word, withBatchim, noBatchim){
+  const code = word.charCodeAt(word.length - 1) - 0xAC00;
+  if (code < 0 || code > 11171) return word + noBatchim; // 한글 아니면 기본값
+  return word + ((code % 28) ? withBatchim : noBatchim);
+}
+function dupTitleText(name, others){
+  const list = others.map(o => `${o.country} ${o.name}(${o.year}, ${o.n}회)`).join(' / ');
+  return `${withJosa(name, '과', '와')} 같은 이름의 다른 왕이 있습니다: ${list}`.replace(/"/g,'&quot;');
+}
+function dupBadge(name, era, country, year){
+  const others = dupOthers(name, era, country, year);
+  if (!others) return '';
+  return `<span class="dupmark" title="${dupTitleText(name, others)}">동명이인</span>`;
+}
+function dupDot(name, era, country, year){
+  const others = dupOthers(name, era, country, year);
+  if (!others) return '';
+  return `<span class="dupdot" title="${dupTitleText(name, others)}">동</span>`;
+}
+
+// ---- tabs ----
+const tabsEl = document.getElementById('tabs');
+ERA_ORDER.forEach((era, i) => {
+  const b = document.createElement('button');
+  b.textContent = era;
+  b.dataset.era = era;
+  if (i === 0) b.classList.add('active');
+  b.addEventListener('click', () => selectEra(era));
+  tabsEl.appendChild(b);
+});
+
+// ---- ranking view ----
+const allKings = [];
+DATA.forEach(([era, country, kings]) => {
+  kings.forEach(k => allKings.push({...k, era, country}));
+});
+allKings.sort((a,b) => b.n - a.n);
+const maxN = allKings[0].n;
+const rankList = document.getElementById('ranklist');
+allKings.slice(0, 30).forEach((k, i) => {
+  const row = document.createElement('div');
+  row.className = 'rankrow' + (i < 3 ? ' top' : '');
+  row.innerHTML = `
+    <div class="pos">${i+1}</div>
+    <div class="who"><span class="nm">${k.name}</span>${dupBadge(k.name, k.era, k.country, k.year)}<span class="tag">${k.country} · ${k.era}</span></div>
+    <div class="bar-wrap"><div class="bar" style="width:${Math.max(4, k.n/maxN*100)}%"></div></div>
+    <div class="cnt">${k.n}회</div>`;
+  rankList.appendChild(row);
+});
+
+// ---- era lineage views ----
+const eraViewsEl = document.getElementById('era-views');
+ERA_ORDER.slice(1).forEach(era => {
+  const section = document.createElement('section');
+  section.className = 'view';
+  section.id = 'view-' + era;
+
+  const countryOrder = eraGroups[era].map(([c]) => c);
+  section.innerHTML = `
+    <div class="era-head">
+      <h2>${era}</h2>
+      <span class="sub">${countryOrder.join(' · ')}</span>
+    </div>
+    <div class="legend">
+      <span class="sw"><i class="t0"></i>0회</span>
+      <span class="sw"><i class="t1"></i>1~3회</span>
+      <span class="sw"><i class="t2"></i>4~8회</span>
+      <span class="sw"><i class="t3"></i>9~15회</span>
+      <span class="sw"><i class="t4"></i>16회+</span>
+      <span class="sw"><span class="dupdot" style="position:static; display:inline-flex; align-items:center; justify-content:center;">동</span>다른 시대·나라에 같은 이름의 왕이 또 있음(가리키면 확인)</span>
+    </div>
+  `;
+
+  eraGroups[era].forEach(([country, kings]) => {
+    const total = kings.reduce((s,k) => s + k.n, 0);
+    const lineage = document.createElement('div');
+    lineage.className = 'lineage';
+    lineage.innerHTML = `
+      <div class="country"><span class="dot"></span><span class="cname">${country}</span><span class="ccount">· 왕 ${kings.length}명 · 언급 합계 ${total}회</span></div>
+      <div class="strip-outer"><div class="strip"></div></div>
+    `;
+    const strip = lineage.querySelector('.strip');
+    kings.forEach(k => {
+      const t = tier(k.n);
+      const el = document.createElement('div');
+      el.className = 'king';
+      el.dataset.tier = t;
+      el.innerHTML = `
+        <div class="badge">${k.n}${dupDot(k.name, era, country, k.year)}</div>
+        <div class="nm">${k.name}</div>
+        <div class="yr">${k.year}</div>
+        <div class="freq">${k.n}회</div>
+      `;
+      strip.appendChild(el);
+    });
+    section.appendChild(lineage);
+  });
+
+  eraViewsEl.appendChild(section);
+});
+
+function selectEra(era){
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('active', b.dataset.era === era));
+  document.querySelectorAll('section.view').forEach(s => s.classList.remove('active'));
+  const id = era === '전체 랭킹' ? 'view-rank' : 'view-' + era;
+  document.getElementById(id).classList.add('active');
+}
+selectEra('전체 랭킹');
+</script>
