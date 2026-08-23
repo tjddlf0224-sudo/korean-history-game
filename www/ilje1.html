@@ -355,7 +355,9 @@ const ZONES = {
     ],
     npcs: [
       { id:'mudan', name:'헌병경찰 피해자', x:420, y:250, img:'assets/portraits/mudan.png', look:{ role:'commoner', body:'#5a5650', accent:'#8a7a5a' } },
-      { id:'samil', name:'만세 시위 학생', x:700, y:240, img:'assets/portraits/samil.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
+      { id:'yugwansun', name:'유관순', x:700, y:240, img:'assets/portraits/yugwansun.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
+      { id:'siwon1', name:'만세 시위 시민', x:630, y:330, img:'assets/portraits/siwon1.png', look:{ role:'commoner', body:'#8a7a5a', accent:'#e8e2d2' } },
+      { id:'siwon2', name:'만세 시위 시민', x:790, y:330, img:'assets/portraits/siwon2.png', look:{ role:'commoner', body:'#6b5636', accent:'#e8e2d2' } },
       { id:'bakeunsik', name:'박은식', x:1060, y:280, img:'assets/portraits/bakeunsik.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
       { id:'gwangbokhoe', name:'대한광복회 단원', x:688, y:600, img:'assets/portraits/gwangbokhoe.png', look:{ role:'general', body:'#4a4a58', accent:'#8a6d3b' } },
       { id:'uibyeongbu', name:'독립의군부 단원', x:1000, y:550, img:'assets/portraits/uibyeongbu.png', look:{ role:'commoner', body:'#5a4a3a', accent:'#8a7a5a' } },
@@ -488,7 +490,9 @@ function updateHudGoal(){
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
       ['mudan', '헌병경찰 피해자와 대화하기'],
-      ['samil', '만세 시위 학생과 대화하기'],
+      ['yugwansun', '유관순과 대화하기'],
+      ['siwon1', '만세 시위 시민과 대화하기'],
+      ['siwon2', '만세 시위 시민과 대화하기'],
       ['bakeunsik', '박은식과 대화하기'],
       ['gwangbokhoe', '대한광복회 단원과 대화하기'],
       ['uibyeongbu', '독립의군부 단원과 대화하기']
@@ -706,15 +710,20 @@ const NPC_DATA = {
         feedback:['국가총동원법은 1938년 전시 동원을 위한 법이에요.','정답! 회사령입니다.'] },
     ]
   },
-  samil_0: {
-    name: '만세 시위 학생', icon: '📢', img: 'assets/portraits/samil.png',
+  yugwansun_0: {
+    name: '유관순', icon: '📢', img: 'assets/portraits/yugwansun.png',
     beats: [
-      { who:'npc', t:'민족 대표들이 태화관에서 독립선언서를 읽는 동안, 우리는 이 탑골공원에서 읽었습니다.' },
+      { who:'npc', t:'저는 유관순입니다. 이화학당에서 공부하던 중 3·1 운동이 터지자, 학교가 문을 닫아 고향 천안으로 내려갔습니다.' },
+      { who:'npc', t:'민족 대표들이 태화관에서 독립선언서를 읽는 동안, 서울에서는 저희 같은 학생들이 이 탑골공원에서 읽었습니다.' },
       { who:'npc', t:'"오등은 자에 아 조선의 독립국임과 조선인의 자주민임을 선언하노라." — 그 첫 줄을 아직도 외웁니다.' },
-      { who:'npc', t:'만세는 도시에서 농촌으로, 국내에서 만주와 연해주로 번졌습니다. 유관순 누나는 아우내 장터에서 만세를 부르다 붙잡혔지요.' },
+      { who:'npc', t:'고향에 내려가서는 가만히 있을 수 없었습니다. 1919년 4월 1일, 아우내 장터에 사람들을 모아 만세를 불렀습니다. 그 자리에서 부모님을 잃었고, 저도 붙잡혔습니다.' },
+      { who:'npc', t:'서대문형무소에 갇혀서도 만세를 그치지 않았습니다. 갖은 고문에도 뜻을 굽히지 않았고, 이듬해 그 안에서 눈을 감았습니다.' },
       { who:'npc', t:'일본은 총을 쐈습니다. 제암리에서는 교회에 사람들을 가두고 불을 질렀습니다.' },
     ],
     quizSeq: [
+      { q:'이화학당 학생으로 3·1 운동에 참여했다가 고향 천안으로 내려가, 1919년 4월 1일 아우내 장터 만세 시위를 이끈 인물은?',
+        opts:['유관순','남자현'], answer:0, src:[50],
+        feedback:['남자현은 만주에서 활동한 여성 독립운동가로, 일본 관료 암살을 시도했어요.','정답! 유관순입니다. 아우내 장터에서 부모를 잃고 체포되어, 서대문형무소에서 순국했어요.'] },
       { q:'1919년 3월 1일 시작되어 전국과 국외로 번진, 우리 역사상 최대 규모의 독립운동은?',
         opts:['3·1 운동','6·10 만세 운동'], answer:0, src:[27, 29, 42, 46, 47, 56, 61, 63, 68, 75],
         feedback:['6·10 만세 운동은 1926년 순종의 장례를 계기로 일어난 운동이에요.','정답! 3·1 운동입니다.'] },
@@ -724,6 +733,30 @@ const NPC_DATA = {
       { q:'3·1 운동을 계기로 여러 임시 정부를 통합해 1919년 상하이에 세워진 것은?',
         opts:['대한민국 임시정부','신간회'], answer:0, src:[13, 14, 15, 16, 17, 18, 20, 21, 24, 29, 30, 33],
         feedback:['신간회는 1927년 국내에서 만들어진 민족 협동 단체예요.','정답! 대한민국 임시정부입니다.'] },
+    ]
+  },
+  siwon1_0: {
+    name: '만세 시위 시민', icon: '📢', img: 'assets/portraits/siwon1.png',
+    beats: [
+      { who:'npc', t:'나는 그저 장사치일 뿐입니다. 허나 이 나라가 없어지는데 가만있을 수 있겠습니까. 가게 문을 닫고 나왔습니다.' },
+      { who:'npc', t:'보십시오, 이렇게 사람이 모입니다. 학생도, 상인도, 농사꾼도, 늙은이도 다 나왔지요. 양반과 상놈을 가리지 않았습니다.' },
+    ],
+    quizSeq: [
+      { q:'3·1 운동에 참여한 사람들의 모습으로 옳은 것은?',
+        opts:['학생·상인·농민 등 각계각층이 참여했다','양반 사대부만 참여했다'], answer:0, src:[27, 29, 56, 61, 63],
+        feedback:['3·1 운동은 신분과 계층을 가리지 않은 전 민족적 운동이었어요.','정답! 3·1 운동은 도시와 농촌, 남녀노소를 가리지 않은 전 민족적 운동이었어요.'] },
+    ]
+  },
+  siwon2_0: {
+    name: '만세 시위 시민', icon: '✊', img: 'assets/portraits/siwon2.png',
+    beats: [
+      { who:'npc', t:'저는 시골에서 왔습니다. 헌병이 무서워도, 이 소식을 듣고는 가만있을 수가 없었지요.' },
+      { who:'npc', t:'장터마다, 산 위마다 봉화가 오르듯 만세 소리가 이어졌습니다. 그러다 수원 제암리에서 끔찍한 일이 있었다고 들었습니다.' },
+    ],
+    quizSeq: [
+      { q:'3·1 운동이 확산되던 중 일본 군경이 마을 사람들을 교회에 가두고 불을 질러 학살한 사건이 일어난 곳은?',
+        opts:['제암리','아우내 장터'], answer:0, src:[42],
+        feedback:['아우내 장터는 유관순이 만세 시위를 이끈 천안의 장터예요.','정답! 제암리입니다. 수원(화성) 제암리에서 일어난 학살 사건이에요.'] },
     ]
   },
   bakeunsik_0: {
@@ -807,7 +840,9 @@ const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
     if (id === 'mudan') return 'mudan_' + Math.min(Stage.state.talkStage, 0);
-    if (id === 'samil') return 'samil_0';
+    if (id === 'yugwansun') return 'yugwansun_0';
+    if (id === 'siwon1') return 'siwon1_0';
+    if (id === 'siwon2') return 'siwon2_0';
     if (id === 'bakeunsik') return 'bakeunsik_0';
     if (id === 'gwangbokhoe') return 'gwangbokhoe_0';
     if (id === 'uibyeongbu') return 'uibyeongbu_0';
