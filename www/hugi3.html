@@ -325,7 +325,7 @@ setTimeout(applyOrientation, 800);
 applyOrientation();
 
 /* ============ 구역(zone): 실사 배경 이미지 + 충돌/NPC ============
-   무대는 삼정이 무너진 고을. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
+   무대는 정주성 / 삼정이 무너진 고을. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
    재서 스펙에 적어 둔다 — 배경을 바꾸면 스펙의 좌표도 같이 고쳐야 한다. */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 /* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
@@ -334,6 +334,22 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
    틀렸던 문제의 재발 방지용). */
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
+  /* 홍경래의 난(1811~12)이 임술농민봉기(1862)·동학 창시(1860)보다
+     50년 앞서는데 한 고을에 몰아넣여 시대가 섞여 있었다. 정주성을 앞선
+     시대의 무대로 따로 세웠다. */
+  jeongju: {
+    img: 'assets/scenes/hugi3_jeongju.png', label: '정주성',
+    spawn: { x: 688, y: 600 },
+    barriers: [
+    ],
+    npcs: [
+      { id:'hongyeong', name:'홍경래', x:500, y:400, img:'assets/portraits/hongyeong.png', look:{ role:'general', body:'#5c2f2f', accent:'#c9a24a' } },
+      { id:'useen', name:'정주성 아낙', x:900, y:400, img:'assets/portraits/useen.png', look:{ role:'commoner', body:'#6b8a4a', accent:'#e8e4d8' } },
+    ],
+    exits: [
+      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'sedo', spawn:{x:688,y:690}, label:'다른 고을로' },
+    ],
+  },
   sedo: {
     img: 'assets/scenes/hugi3_sedo.png', label: '삼정이 무너진 고을',
     spawn: { x: 688, y: 470 },
@@ -355,12 +371,13 @@ const ZONES = {
       { x0:800, y0:635, x1:1376, y1:768 },  // 마른 논
     ],
     npcs: [
-      { id:'hongyeong', name:'홍경래', x:330, y:250, img:'assets/portraits/hongyeong.png', look:{ role:'general', body:'#5c2f2f', accent:'#c9a24a' } },
       { id:'imsul', name:'진주 농민', x:700, y:270, img:'assets/portraits/imsul.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
       { id:'choeje', name:'최제우', x:975, y:300, img:'assets/portraits/choeje.png', look:{ role:'scholar', body:'#4a4a58', accent:'#e0b94a' } },
       { id:'samjeong', name:'아전', x:688, y:640, img:'assets/portraits/samjeong.png', look:{ role:'scholar', body:'#4a5a68', accent:'#8a7a5a' } },
     ],
-    exits: [],
+    exits: [
+      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'jeongju', spawn:{x:688,y:170}, label:'정주성으로' },
+    ],
   },
 };
 const zoneImgs = {};
@@ -487,7 +504,8 @@ function updateHudGoal(){
   // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
-      ['hongyeong', '홍경래와 대화하기'],
+      ['hongyeong', '정주성에서 홍경래와 대화하기'],
+      ['useen', '정주성에서 아낙과 대화하기'],
       ['imsul', '진주 농민과 대화하기'],
       ['choeje', '최제우와 대화하기'],
       ['samjeong', '아전과 대화하기']
@@ -502,7 +520,7 @@ function updateHudGoal(){
 }
 
 const World = {
-  zone: 'sedo', px: ZONES.sedo.spawn.x, py: ZONES.sedo.spawn.y,
+  zone: 'jeongju', px: ZONES.jeongju.spawn.x, py: ZONES.jeongju.spawn.y,
   facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
@@ -691,12 +709,30 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'나는 평안도 사람이다. 아무리 글을 읽고 재주가 있어도, 서북 사람이라는 이유로 벼슬길이 막힌다.' },
       { who:'npc', t:'평서대원수라 칭하고 격문을 돌렸다. 몰락한 양반과 상인, 광산 노동자와 농민이 모였다.' },
+      { who:'npc', t:'관군이 성벽 아래에 화약을 묻어 터뜨렸소. 그 틈으로 밀고 들어왔지. 나는 그 자리에서 목숨을 잃었소.' },
       { who:'npc', t:'정주성에서 넉 달을 버텼다. …끝내 성은 무너졌지만, 서북 차별을 세상에 알렸다.' },
     ],
     quizSeq: [
       { q:'서북 지역에 대한 차별과 세도 정치에 반발해 1811년 평안도에서 일어난 봉기는?',
         opts:['홍경래의 난','임술 농민 봉기'], answer:0, src:[12, 14, 16, 18, 23, 32, 35, 41, 46, 49, 52, 55],
         feedback:['임술 농민 봉기는 1862년 진주에서 시작돼 전국으로 번진 봉기예요.','정답! 홍경래의 난입니다. 정주성에서 관군에 맞서 넉 달을 버텼어요.'] },
+      { q:'홍경래의 난이 최후를 맞은, 넉 달간 관군에 맞서 항전한 평안도의 성은?',
+        opts:['정주성','진주성'], answer:0, src:[12, 14, 16, 18, 23, 32, 35, 41, 46, 49, 52, 55],
+        feedback:['진주성은 임진왜란과 임술 농민 봉기 때 나오는 경상도의 성이에요.','정답! 정주성입니다. 관군이 성벽 아래에 화약을 묻어 터뜨리고 함락시켰어요.'] },
+    ]
+  },
+  useen_0: {
+    name: '정주성 아낙', icon: '🌾', img: 'assets/portraits/useen.png',
+    beats: [
+      { who:'npc', t:'나리, 여기 모인 사람이 다 같은 처지는 아니었습니다.' },
+      { who:'npc', t:'몰락한 양반도, 광산에서 일하던 사람도, 장사하던 사람도, 우리 같은 농사꾼도 있었지요. 신분은 달라도 서북 사람이라 무시당하는 건 다 같았습니다.' },
+      { who:'npc', t:'평안도 사람은 아무리 과거에 급제해도 큰 벼슬은 못 한다는 게 정해진 것처럼 굳어 있었으니까요.' },
+      { who:'npc', t:'성이 무너지던 날, 살아남은 이들도 잡혀갔습니다. 어린아이까지 목숨을 잃었지요. …그날 일은 아직도 입에 담기가 어렵습니다.' },
+    ],
+    quizSeq: [
+      { q:'홍경래의 난에 함께한 계층으로 옳지 않은 것은?',
+        opts:['중앙의 훈구파 대신들','몰락 양반·광산 노동자·상인·농민'], answer:0, src:[12, 14, 16, 18, 23, 32, 35, 41, 46, 49, 52, 55],
+        feedback:['몰락 양반부터 광산 노동자, 상인, 농민까지 다양한 계층이 함께했어요.','정답! 훈구파는 조선 전기 세력이라 시대가 전혀 달라요. 홍경래의 난은 서북 차별에 반발한 여러 계층의 연합이었어요.'] },
     ]
   },
   imsul_0: {
@@ -786,6 +822,7 @@ const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
     if (id === 'hongyeong') return 'hongyeong_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'useen') return 'useen_0';
     if (id === 'imsul') return 'imsul_0';
     if (id === 'choeje') return 'choeje_0';
     if (id === 'samjeong') return 'samjeong_0';

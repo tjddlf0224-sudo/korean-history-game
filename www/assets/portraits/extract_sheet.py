@@ -67,7 +67,7 @@ SHEETS = {
     # 새로 필요해진 사람들. 5x2로 두고 마지막 칸은 비워 로고를 피한다.
     'sheet8': (5, 2, [
         'seonjo', 'hwangyungil', 'gimseongil', 'jeongcheol', 'gunjol',
-        'sinrip', 'haengju_yeoin', None, None, None]),
+        'sinrip', 'haengju_yeoin', 'useen', None, None]),
 }
 
 
