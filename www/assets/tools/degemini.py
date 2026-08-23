@@ -13,20 +13,27 @@
     가로세로 비가 다른 이미지들(1376x768 / 1046x1024 / 1328x800)을 같은 비율로
     보다 보니 매번 다른 데를 짚었다.
 
-지금 방식:
-  워터마크는 흰색을 반투명하게 덮어씌운 것이라
+지금 방식 — 그림 종류에 따라 둘로 나눈다.
 
-      보이는색 = 원래색 x (1 - a) + 255 x a
+  [인물 시트]  --sheet   되돌리기
+    워터마크는 흰색을 반투명하게 덮어씌운 것이라
+        보이는색 = 원래색 x (1 - a) + 255 x a
+    로 쓸 수 있다. 자리 안쪽을 도려내고 테두리에서 번지게 채워 '원래 밝기'를
+    가늠한 뒤 a를 재고, 식을 뒤집어 원래색을 되돌린다. 밑에 있던 그림이
+    그대로 살아나므로 인물에는 이게 맞다. 두 번 돌린다.
+    재는 a는 템플릿의 1.8배를 넘지 못하게 막는다 — 두루마리처럼 밝은 소품
+    위에서는 '원래 밝기' 추정이 어두워져 a가 튀고, 그대로 되돌리면 종이가
+    누렇게 뜬다.
 
-  로 쓸 수 있다. 덮인 정도 a는 이미지마다 같으므로 한 번만 재 두면 된다.
-  22장의 (밝아진 정도)를 중앙값으로 모아 별 모양 알파를 떠서
-  gemini_watermark_alpha.png에 넣어 두었다(값 x1000으로 저장).
-  지울 때는 그 자리에 알파를 대고
+  [배경 그림]  기본       본떠 메우기 (inpaint.py)
+    배경은 밑그림을 되살리는 것보다 무늬가 이어지는 게 중요하다. 구멍
+    테두리에서부터 한 조각씩, 같은 그림 안에서 가장 비슷한 조각을 찾아
+    붙인다. 울타리 살과 기와 줄이 끊기지 않고 이어진다.
+    인물에 쓰면 안 된다 — 손이나 책 같은 소품을 끌어와 붙인다.
 
-      원래색 = (보이는색 - 255a) / (1 - a)
-
-  로 되돌린다. 메우는 게 아니라 되돌리는 것이라 밑에 있던 그림이 살아나고,
-  알파가 0인 곳(별 바깥)은 한 픽셀도 바뀌지 않는다.
+  자리는 '오른쪽 아래 모서리에서 (128, 117)픽셀'로 고정이다. 이미지 크기
+  대비 비율이 아니다. 모양과 진하기는 gemini_watermark_alpha.png에 떠 두었다
+  (22장의 밝아진 정도를 중앙값으로 모은 것, 값 x1000으로 저장).
 
   python3 degemini.py <이미지...>            # 제자리에서 지움(원본은 .orig로 복사)
   python3 degemini.py --check <이미지...>    # 지우지 않고 전/후 비교만 /tmp/dg_*.png
@@ -38,6 +45,9 @@ import sys
 import numpy as np
 from PIL import Image
 from scipy import ndimage
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import inpaint
 
 # 오른쪽 아래 모서리에서 이만큼 떨어진 곳이 워터마크 중심(픽셀 고정).
 OFF_X, OFF_Y = 128, 117
@@ -92,40 +102,25 @@ def measure_alpha(patch, tpl):
     a = (L - clean) / np.maximum(255.0 - clean, 1.0)
     a = np.where(support, np.clip(a, 0.0, 0.75), 0.0)
     a = ndimage.gaussian_filter(a, 0.8)
+    # 템플릿보다 지나치게 진하게 재는 것을 막는다. 밝은 소품(두루마리·종이) 위에서는
+    # '원래 밝기' 추정이 어두워지는 바람에 a가 튀고, 그대로 되돌리면 종이가 누렇게 뜬다.
+    a = np.minimum(a, tpl * 1.8)
     a[~support] = 0.0
     return a
 
 
-def patch_copy(rgb, x0, y0, s, tpl):
-    """워터마크 자리를 근처의 깨끗한 자리로 덮는다(배경 그림용).
-
-    배경은 흙·물·기와처럼 무늬가 이어지는 그림이라, 옆자리를 떠다 붙이면
-    티가 안 난다. 인물 시트에는 쓰면 안 된다 — 얼굴이나 옷이 잘려 나간다.
-    """
-    w, h = rgb.size
-    arr = np.asarray(rgb).astype(np.float64)
-    target = arr[y0:y0 + s, x0:x0 + s]
-    # 같은 높이에서 왼쪽으로 여러 후보를 보고, 가장 밋밋한(경계가 적은) 자리를 고른다
-    best, best_score = None, None
-    for dx in range(int(s * 1.4), int(s * 5), max(8, s // 4)):
-        sx = x0 - dx
-        if sx < 0:
-            break
-        cand = arr[y0:y0 + s, sx:sx + s]
-        gy, gx = np.gradient(cand.mean(axis=2))
-        score = float(np.abs(gx).mean() + np.abs(gy).mean())
-        if best_score is None or score < best_score:
-            best, best_score = cand, score
-    if best is None:
-        return None
-    # 가장자리를 부드럽게 이어 붙인다
-    m = (ndimage.gaussian_filter((tpl > 0).astype(np.float64), 4.0))
-    m = np.clip(m / max(m.max(), 1e-6) * 1.8, 0, 1)[..., None]
-    arr[y0:y0 + s, x0:x0 + s] = target * (1 - m) + best * m
-    return Image.fromarray(np.clip(arr, 0, 255).astype('uint8'))
+def unblend(patch, passes=2):
+    """되돌리기 — 워터마크에 덮인 만큼을 재서 원래 색으로 복원한다(인물용)."""
+    cur = patch.astype(np.float64)
+    tpl = alpha()
+    for _ in range(passes):
+        a = measure_alpha(cur, tpl)
+        rec = (cur - 255.0 * a[..., None]) / np.maximum(1.0 - a, 0.05)[..., None]
+        cur = np.where((a > 0)[..., None], np.clip(rec, 0, 255), cur)
+    return cur.astype('uint8')
 
 
-def process(path, check=False, mode_patch=False):
+def process(path, check=False, sheet=False):
     name = os.path.basename(path)
     im = Image.open(path)
     mode = im.mode
@@ -133,71 +128,58 @@ def process(path, check=False, mode_patch=False):
     w, h = rgb.size
     pos = place(w, h)
     if pos is None:
-        print(f'  {name[:46]:48s} 이미지가 작아 자리를 못 잡음 — 그대로 둠')
+        print(f'  {name[:44]:46s} 이미지가 작아 자리를 못 잡음 — 그대로 둠')
         return False
     x0, y0, s = pos
-    if mode_patch:
-        newim = patch_copy(rgb, x0, y0, s, alpha())
-        if newim is None:
-            print(f'  {name[:46]:48s} 덮을 자리를 못 찾음 — 그대로 둠')
-            return False
-        if check:
-            b = np.asarray(rgb.crop((x0, y0, x0 + s, y0 + s)))
-            a2 = np.asarray(newim.crop((x0, y0, x0 + s, y0 + s)))
-            cmp = Image.new('RGB', (s * 2 + 6, s), (20, 20, 20))
-            cmp.paste(Image.fromarray(b), (0, 0)); cmp.paste(Image.fromarray(a2), (s + 6, 0))
-            cmp.resize(((s * 2 + 6) * 3, s * 3), Image.NEAREST) \
-               .save(f'/tmp/dg_{os.path.splitext(name)[0][:28]}.png')
-            print(f'  {name[:46]:48s} 덮어쓰기 자리 ({x0},{y0})')
-            return True
-        orig = path + '.orig'
-        if not os.path.exists(orig):
-            shutil.copy2(path, orig)
-        newim.save(path)
-        print(f'  {name[:46]:48s} 옆자리로 덮음')
-        return True
-    patch = np.asarray(rgb.crop((x0, y0, x0 + s, y0 + s))).astype(np.float64)
-    # 한 번에 다 못 걷어내는 장이 있다. 되돌린 뒤 남은 만큼을 다시 재서 두 번 돌린다.
-    cur, amax = patch, 0.0
-    for _ in range(2):
-        a = measure_alpha(cur, alpha())
-        amax = max(amax, float(a.max()))
-        rec = (cur - 255.0 * a[..., None]) / np.maximum(1.0 - a, 0.05)[..., None]
-        cur = np.where((a > 0)[..., None], np.clip(rec, 0, 255), cur)
-    out = cur.astype('uint8')
+
+    if sheet:
+        before = np.asarray(rgb.crop((x0, y0, x0 + s, y0 + s)))
+        after = unblend(before)
+        box = (x0, y0)
+        how = '되돌리기'
+    else:
+        # 배경은 무늬가 이어져야 해서 본떠 메운다. 확산으로 채우면 선이 끊기고,
+        # 사각형을 통째로 복사하면 엉뚱한 것(울타리 조각·문짝)이 딸려 온다.
+        P = 70
+        bx = (max(0, x0 - P), max(0, y0 - P), min(w, x0 + s + P), min(h, y0 + s + P))
+        before = np.asarray(rgb.crop(bx))
+        m = np.zeros(before.shape[:2], bool)
+        oy, ox = y0 - bx[1], x0 - bx[0]
+        m[oy:oy + s, ox:ox + s] = alpha() > 0.02
+        after = inpaint.exemplar_fill(before, m)
+        box = bx[:2]
+        how = '본떠 메우기'
 
     if check:
-        before = np.asarray(rgb.crop((x0, y0, x0 + s, y0 + s)))
-        cmp = Image.new('RGB', (s * 2 + 6, s), (20, 20, 20))
+        hh, ww = before.shape[:2]
+        cmp = Image.new('RGB', (ww * 2 + 6, hh), (20, 20, 20))
         cmp.paste(Image.fromarray(before), (0, 0))
-        cmp.paste(Image.fromarray(out), (s + 6, 0))
-        cmp.resize(((s * 2 + 6) * 3, s * 3), Image.NEAREST) \
-           .save(f'/tmp/dg_{os.path.splitext(name)[0][:28]}.png')
-        print(f'  {name[:46]:48s} 자리 ({x0},{y0}) · 최대 a={amax:.2f}')
+        cmp.paste(Image.fromarray(after), (ww + 6, 0))
+        cmp.save(f'/tmp/dg_{os.path.splitext(name)[0][:28]}.png')
+        print(f'  {name[:44]:46s} {how} · /tmp/dg_*.png')
         return True
 
-    rgb.paste(Image.fromarray(out), (x0, y0))
+    rgb.paste(Image.fromarray(after), box)
     if mode == 'RGBA':                    # 투명도는 그대로 살린다
         rgb = Image.merge('RGBA', rgb.split() + (im.split()[3],))
     orig = path + '.orig'
     if not os.path.exists(orig):
         shutil.copy2(path, orig)
     rgb.save(path)
-    print(f'  {name[:46]:48s} 워터마크 되돌림 · 최대 a={amax:.2f}')
+    print(f'  {name[:44]:46s} {how}로 지움')
     return True
 
 
 def main():
     args = [x for x in sys.argv[1:] if not x.startswith('--')]
     check = '--check' in sys.argv[1:]
-    # 배경 그림은 옆자리를 복사해 덮는 편이 확실하다(--patch).
-    # 인물 시트는 덮으면 인물이 잘리므로 되돌리기(기본)를 쓴다.
-    mp = '--patch' in sys.argv[1:]
+    sheet = '--sheet' in sys.argv[1:]
     if not args:
         print(__doc__)
         return 1
-    print(f'{len(args)}장 {"확인" if check else "처리"} ({"옆자리 덮기" if mp else "되돌리기"})')
-    n = sum(process(p, check, mp) for p in args)
+    print(f'{len(args)}장 {"확인" if check else "처리"} '
+          f'({"인물 시트 → 되돌리기" if sheet else "배경 → 본떠 메우기"})')
+    n = sum(process(p, check, sheet) for p in args)
     print(f'{n}/{len(args)}장 처리.')
     return 0
 
