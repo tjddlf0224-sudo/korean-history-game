@@ -473,6 +473,9 @@ function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
   const done = document.getElementById('next-chapter-btn').classList.contains('show');
+  // 아직 말 안 걸어 본 사람을 차례로 가리킨다. talkStage만 보고 정하면 첫 사람과
+  // 대화한 뒤로 영영 안 바뀐다(한산도에서 곽재우와 말을 끝내도 계속 곽재우를
+  // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
       ['daewongun', '흥선대원군과 대화하기'],

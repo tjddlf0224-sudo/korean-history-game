@@ -63,6 +63,11 @@ SHEETS = {
         'gwakjaeu', 'gimsimin', 'gwonyul', 'johun', 'nongae',
         'hanil', 'veteran', 'saemaul', 'olympic', 'gimdaejung',
         'seollal', 'dano', None, 'chuseok', 'dongji']),
+    # 6화 확장(통신사 보고)과 임진왜란 무대 분할(신립·행주 아낙)에서
+    # 새로 필요해진 사람들. 5x2로 두고 마지막 칸은 비워 로고를 피한다.
+    'sheet8': (5, 2, [
+        'seonjo', 'hwangyungil', 'gimseongil', 'jeongcheol', 'gunjol',
+        'sinrip', 'haengju_yeoin', None, None, None]),
 }
 
 

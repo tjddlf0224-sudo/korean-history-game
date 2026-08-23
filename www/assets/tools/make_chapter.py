@@ -177,8 +177,13 @@ def build(spec):
     # 정하면 여러 명 있는 챕터에서 첫 사람과 대화한 뒤로 영영 안 바뀐다
     # (한산도에서 곽재우와 말을 끝내도 계속 곽재우를 가리키던 버그).
     # 여러 단계짜리 인물은 단계마다 키가 달라지므로 Stage.keyFor로 물어본다.
+    # 템플릿(ch6.html)의 목표 로직 자체가 안에 여러 ';\n'을 가진 IIFE라서,
+    # 예전처럼 '첫 ;\n까지'로 비탐욕 매치하면 IIFE 중간에서 잘린다(실제로
+    # imjin.html이 그렇게 깨졌다 — ch6 전용 코드 잔해가 그대로 붙어 나왔다).
+    # 뒤에 오는 고정된 줄(el.textContent 갱신)을 종료 지점으로 삼는다.
     pairs = ',\n      '.join("['%s', '%s']" % (t['id'], t['goal']) for t in spec['talkers'])
-    sub(r"const t = done \? '다음 목표: 다음 화로 넘어가기'[\s\S]*?;\n",
+    sub(r"const t = done \? '다음 목표: 다음 화로 넘어가기'[\s\S]*?"
+        r"\n  if \(el\.textContent !== t\) el\.textContent = t;\n",
         "const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){\n"
         "    const order = [\n      " + pairs + "\n    ];\n"
         "    for (const [id, goal] of order){\n"
@@ -186,7 +191,8 @@ def build(spec):
         "      if (k && !seenDialogKeys.has(k)) return '다음 목표: ' + goal;\n"
         "    }\n"
         "    return '다음 목표: 다음 화로 넘어가기';\n"
-        "  })();\n", '목표')
+        "  })();\n"
+        "  if (el.textContent !== t) el.textContent = t;\n", '목표')
     sub(r"document\.getElementById\('dlg-tag'\)\.textContent = '[^']*';",
         f"document.getElementById('dlg-tag').textContent = '{spec['tag']}';", 'dlg-tag')
 
