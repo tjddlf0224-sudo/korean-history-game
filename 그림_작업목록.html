@@ -1,0 +1,847 @@
+<meta charset="utf-8">
+<title>한국사 게임 그림 목록</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap">
+<style>
+  /* 게임 화면의 색을 그대로 가져왔다 — 밤에는 게임과 같은 먹빛,
+     낮에는 같은 팔레트를 한지 쪽으로 뒤집은 것. */
+  :root {
+    --bg:#f6f1e6; --bg-2:#efe7d6; --card:#fffdf8; --line:#ddd0b4;
+    --ink:#2b2419; --ink-2:#6b5f4a; --gold:#8a6a1f; --gold-2:#b08c33;
+    --ok:#4a7c4e; --ok-bg:#e4efe1; --todo:#8a5a1f; --todo-bg:#f6e8d2;
+    --shadow:0 1px 2px rgba(43,36,25,.06), 0 8px 24px rgba(43,36,25,.06);
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#15110c; --bg-2:#1c1710; --card:#221c14; --line:#3a3024;
+      --ink:#f5ecd8; --ink-2:#b8a888; --gold:#f0c96b; --gold-2:#c9a24a;
+      --ok:#8fd694; --ok-bg:#1f2c1f; --todo:#f0c96b; --todo-bg:#2e2413;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#15110c; --bg-2:#1c1710; --card:#221c14; --line:#3a3024;
+    --ink:#f5ecd8; --ink-2:#b8a888; --gold:#f0c96b; --gold-2:#c9a24a;
+    --ok:#8fd694; --ok-bg:#1f2c1f; --todo:#f0c96b; --todo-bg:#2e2413;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.7 "Gowun Dodum", -apple-system, "Malgun Gothic", sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap { max-width:980px; margin:0 auto; padding:32px 20px 80px; }
+
+  h1, h2, h3 { font-family:"Gowun Batang", serif; text-wrap:balance; margin:0; }
+  h1 { font-size:1.9rem; letter-spacing:-.01em; }
+  .lede { color:var(--ink-2); margin:.6em 0 0; max-width:60ch; }
+
+  /* 요약 — 숫자가 먼저 눈에 들어와야 한다 */
+  .tally { display:flex; flex-wrap:wrap; gap:12px; margin:26px 0 8px; }
+  .stat {
+    flex:1 1 150px; background:var(--card); border:1px solid var(--line);
+    border-radius:12px; padding:14px 16px; box-shadow:var(--shadow);
+  }
+  .stat b { display:block; font-family:"Gowun Batang",serif; font-size:1.8rem;
+    line-height:1.2; font-variant-numeric:tabular-nums; color:var(--gold); }
+  .stat span { color:var(--ink-2); font-size:.85rem; }
+  .bar { height:8px; border-radius:99px; background:var(--bg-2);
+    border:1px solid var(--line); overflow:hidden; margin:16px 0 4px; }
+  .bar i { display:block; height:100%; background:var(--gold-2); }
+  .bar-note { color:var(--ink-2); font-size:.85rem; }
+
+  .how { background:var(--bg-2); border:1px solid var(--line); border-radius:12px;
+    padding:16px 18px; margin:28px 0; }
+  .how h2 { font-size:1.05rem; margin-bottom:.4em; }
+  .how ol { margin:0; padding-left:1.2em; color:var(--ink-2); }
+  .how li { margin:.35em 0; }
+  .how code, .meta code, .idx code {
+    font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.86em;
+    background:var(--bg); border:1px solid var(--line); border-radius:5px; padding:.1em .4em;
+  }
+
+  .filters { display:flex; gap:8px; flex-wrap:wrap; margin:30px 0 16px; }
+  .filters button {
+    font:inherit; font-size:.9rem; padding:7px 14px; border-radius:99px; cursor:pointer;
+    background:var(--card); color:var(--ink-2); border:1px solid var(--line);
+  }
+  .filters button[aria-pressed="true"] { background:var(--gold-2); color:var(--bg);
+    border-color:var(--gold-2); font-weight:700; }
+
+  h2.sec { font-size:1.15rem; margin:34px 0 14px; padding-bottom:8px;
+    border-bottom:1px solid var(--line); }
+
+  .grid { display:grid; gap:14px; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); }
+  .card {
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px 18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px;
+  }
+  .card.wide { grid-column:1/-1; }
+  .card.is-done { opacity:.55; }
+  .card .line { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .idx { color:var(--ink-2); font-size:.8rem; letter-spacing:.06em; }
+  .card h3 { font-size:1.12rem; margin:.25em 0 .2em; }
+  .meta { margin:0; color:var(--ink-2); font-size:.85rem; word-break:break-all; }
+  .chip { font-size:.75rem; padding:3px 10px; border-radius:99px; white-space:nowrap; font-weight:700; }
+  .chip.ok { color:var(--ok); background:var(--ok-bg); }
+  .chip.todo { color:var(--todo); background:var(--todo-bg); }
+
+  .whos { display:flex; flex-wrap:wrap; gap:6px; }
+  .who { font-size:.8rem; padding:3px 9px; border-radius:6px;
+    background:var(--bg-2); border:1px solid var(--line); color:var(--ink-2); }
+
+  .acts { display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; }
+  .acts button {
+    font:inherit; font-size:.9rem; padding:9px 16px; border-radius:9px; cursor:pointer;
+    border:1px solid var(--gold-2); background:var(--gold-2); color:var(--bg); font-weight:700;
+  }
+  .acts .peek { background:transparent; color:var(--gold); }
+  .acts button:focus-visible { outline:2px solid var(--gold); outline-offset:2px; }
+  .acts button.copied { background:var(--ok); border-color:var(--ok); color:var(--bg); }
+
+  pre.prompt {
+    margin:0; padding:14px 16px; background:var(--bg-2); border:1px solid var(--line);
+    border-radius:10px; white-space:pre-wrap; word-break:break-word;
+    font:13px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; color:var(--ink);
+    max-height:420px; overflow:auto;
+  }
+
+  table { width:100%; border-collapse:collapse; font-size:.9rem; }
+  .scroll { overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--card); }
+  th, td { padding:10px 12px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
+  thead th { background:var(--bg-2); font-family:"Gowun Batang",serif; white-space:nowrap; }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom:0; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; font-weight:700; color:var(--gold); white-space:nowrap; }
+  td.why, td.who-cell { color:var(--ink-2); font-size:.85rem; min-width:180px; }
+  tbody th { font-weight:700; white-space:nowrap; }
+
+  footer { margin-top:44px; padding-top:18px; border-top:1px solid var(--line);
+    color:var(--ink-2); font-size:.85rem; }
+  @media (prefers-reduced-motion:no-preference) { .acts button { transition:background .15s; } }
+</style>
+
+<div class="wrap">
+  <h1>제미나이로 뽑을 그림</h1>
+  <p class="lede">한국사 게임에 아직 없는 그림 목록이다. 카드마다 프롬프트가 통째로 들어 있으니
+    복사 버튼을 눌러 제미나이에 그대로 붙여 넣으면 된다.</p>
+
+  <div class="tally">
+    <div class="stat"><b>87</b><span>지금 뽑을 그림</span></div>
+    <div class="stat"><b>17</b><span>배경 (전체 17)</span></div>
+    <div class="stat"><b>70</b><span>NPC (시트 5장)</span></div>
+  </div>
+  <div class="bar"><i style="width:0%"></i></div>
+  <p class="bar-note">배경 0/17 · NPC 0/70 — 0% 받음.
+    그림이 없어도 게임은 폴백으로 돌아간다.</p>
+
+  <section class="how">
+    <h2>받은 뒤에 할 일</h2>
+    <ol>
+      <li><b>배경</b> — 카드에 적힌 <code>파일명.png</code> 그대로 이름을 바꿔
+        <code>www/assets/scenes/</code>에 넣고,
+        <code>python3 www/assets/scenes/to_webp.py</code>를 한 번 돌린다.</li>
+      <li><b>NPC 시트</b> — 다섯 장을 <b>다 받은 뒤</b> 이름만 <code>sheet1.png</code> …
+        <code>sheet5.png</code>로 바꿔 두고
+        <code>python3 www/assets/portraits/extract_sheet.py --all ~/Downloads</code>.
+        한 장씩 뽑아 조건이 달라지면 인물끼리 밝기가 어긋난다.</li>
+      <li>확인은 <code>python3 www/assets/tools/check_all.py</code>.</li>
+    </ol>
+  </section>
+
+  <div class="filters" role="group" aria-label="목록 거르기">
+    <button type="button" data-f="all" aria-pressed="true">전체</button>
+    <button type="button" data-f="scene" aria-pressed="false">배경만</button>
+    <button type="button" data-f="sheet" aria-pressed="false">NPC 시트만</button>
+    <button type="button" data-f="todo" aria-pressed="false">아직 안 받은 것만</button>
+  </div>
+
+  <div class="grid" id="grid">
+    <article class="card" data-kind="scene" id="seonsa1_river">
+      <header>
+        <div class="line">
+          <span class="idx">배경 1</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>선사의 강가</h3>
+        <p class="meta"><code>seonsa1_river.png</code> · 선사 1화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영(직교 투영). 사람·동물·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 선사시대 한반도의 강가. 화면을 가로질러 위쪽에 넓은 강이 흐르고, 아래쪽은 흙과 풀이 섞인 넓은 강변 벌판이다.
+왼쪽 가장자리에는 바위 절벽과 그 아래 얕은 동굴, 동굴 앞에 나뭇가지와 가죽으로 만든 막집, 불을 피운 자리와 검게 그을린 돌.
+가운데 위쪽에는 신석기 마을 — 땅을 둥글게 파고 짚으로 원뿔 지붕을 덮은 움집 서너 채, 그 앞에 뾰족한 밑바닥의 빗살무늬 토기 몇 점과 조개껍데기 무더기.
+오른쪽 가장자리에는 청동기 마을 — 네모난 움집, 마을을 두른 나무 목책과 도랑, 그 바깥에 커다란 판돌을 얹은 탁자식 고인돌 두 기, 옆에 작은 밭이랑.
+아래쪽 가운데는 아무것도 없는 넓은 맨흙 공터로 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 흙빛 황토, 마른 풀색, 강물의 탁한 청록. 계절은 초가을.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="godae1_hangang">
+      <header>
+        <div class="line">
+          <span class="idx">배경 2</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>한강 유역 성터</h3>
+        <p class="meta"><code>godae1_hangang.png</code> · 고대 1화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 삼국시대(4~6세기) 한강 유역의 산성 안마당. 화면 위쪽 멀리 넓은 강줄기가 보이고, 그 앞으로 돌을 쌓아 올린 성벽이 화면 위 가장자리를 가로지른다. 성벽 가운데에 나무 문루가 얹힌 성문.
+왼쪽 가장자리: 백제식 건물 — 기와를 얹은 낮은 목조 전각, 앞에 연꽃무늬 수막새가 흩어진 축대.
+오른쪽 가장자리: 고구려식 건물 — 투박한 돌기단 위 목조 망루, 옆에 말을 매어 두는 마구간과 여물통.
+화면 아래쪽 가장자리: 신라식 요소 — 다듬은 돌로 만든 낮은 제단과 그 위에 세운 매끈한 비석 한 기(글자는 새기지 말고 민무늬로), 주변에 소나무 몇 그루.
+성 안 한가운데는 다져진 흙 연병장으로 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 회색 돌, 짙은 기와빛, 마른 흙, 짙은 초록 소나무. 늦여름 오후 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="godae2_cheonghae">
+      <header>
+        <div class="line">
+          <span class="idx">배경 3</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>청해진 포구</h3>
+        <p class="meta"><code>godae2_cheonghae.png</code> · 고대 2화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 9세기 통일신라 청해진(완도)의 포구. 화면 아래쪽 절반은 잔물결이 이는 바다, 위쪽 절반은 섬의 흙땅이다.
+바다 쪽으로 나무 널을 깐 선착장 두 개가 뻗어 있고, 그 옆에 돛을 내린 나무 무역선 두 척이 정박해 있다. 배 안에는 짚으로 싼 짐과 항아리.
+물가를 따라 바닷속에 촘촘히 박아 세운 통나무 목책(원목 방책)이 줄지어 있다.
+화면 위쪽 가장자리: 기와를 얹은 진영 본채와 창고 두 채, 지붕이 낮고 튼튼하다. 옆에 도자기 항아리와 비단 두루마리를 쌓아 둔 야적장.
+왼쪽 가장자리: 돌로 쌓은 낮은 성벽과 깃대(깃발은 무늬 없는 단색 천).
+오른쪽 가장자리: 그물을 널어 말리는 나무 시렁과 소금 굽는 가마.
+포구 가운데 다져진 흙마당은 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 짙은 청록 바다, 젖은 나무의 갈색, 흰 모래. 맑은 아침 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="godae3_husamguk">
+      <header>
+        <div class="line">
+          <span class="idx">배경 4</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>후백제 진영</h3>
+        <p class="meta"><code>godae3_husamguk.png</code> · 고대 3화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 후삼국시대(10세기 초) 들판에 세운 군영. 마른 풀밭 위에 나무 울짱을 둘러 만든 진영이다.
+화면 위쪽 가장자리: 지휘용 큰 막사 한 채 — 천막 지붕에 나무 기둥, 입구를 걷어 올려 안이 조금 보이고 안쪽에 낮은 평상과 지도 두루마리. 막사 양옆에 높은 깃대 두 개(깃발은 무늬 없는 붉은 천, 글자 없음).
+왼쪽 가장자리: 병사들 천막 대여섯 채가 줄지어 있고, 창을 세워 둔 나무 거치대.
+오른쪽 가장자리: 군량 수레와 볏짚 더미, 말 세 마리를 매어 둔 말뚝과 여물통, 물통.
+화면 아래쪽 가장자리: 진영 정문 — 통나무 문과 양쪽 망루, 그 너머로 이어지는 흙길.
+진영 한가운데 다져진 흙 연병장은 아주 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 마른 갈색 풀, 천막의 삼베빛, 붉은 깃발. 흐린 늦가을 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="goryeo1_gaegyeong">
+      <header>
+        <div class="line">
+          <span class="idx">배경 5</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>개경 궁궐</h3>
+        <p class="meta"><code>goryeo1_gaegyeong.png</code> · 고려 1화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 10세기 고려 개경 궁궐(만월대)의 정전 앞마당. 산비탈을 깎아 만든 계단식 축대 위에 궁이 앉아 있다.
+화면 위쪽 가장자리: 높은 돌 축대와 그 위에 올라앉은 웅장한 정전 — 겹처마 기와지붕, 붉은 기둥, 단청. 축대 가운데로 폭 넓은 돌계단이 마당까지 내려온다.
+왼쪽 가장자리: 회랑(지붕 덮인 복도)이 세로로 길게 이어지고, 그 끝에 작은 부속 전각.
+오른쪽 가장자리: 같은 모양의 회랑과 부속 전각, 그 옆에 향로 받침과 큰 청자 항아리.
+화면 아래쪽 가장자리: 낮은 담과 솟을대문, 문 옆에 석등 두 기.
+마당 바닥은 네모나게 다듬은 박석(넓적한 돌)을 깐 것으로, 한가운데는 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 회백색 박석, 짙은 기와, 붉은 기둥과 청록 단청. 이른 아침의 맑고 서늘한 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="goryeo2_ganghwa">
+      <header>
+        <div class="line">
+          <span class="idx">배경 6</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>강화 임시 도읍</h3>
+        <p class="meta"><code>goryeo2_ganghwa.png</code> · 고려 2화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 13세기 몽골 침입기에 급히 옮겨 세운 강화도 임시 도읍. 개경의 궁궐보다 규모가 작고 급조한 티가 난다.
+화면 위쪽 가장자리: 임시 궁궐 본채 — 기와지붕이지만 단청이 옅고 기둥이 가늘다. 옆에 아직 다 짓지 못한 건물의 나무 골조와 쌓아 둔 목재.
+왼쪽 가장자리: 흙을 다져 쌓은 토성과 그 위 나무 울짱, 성벽 안쪽에 곡식 가마니를 쌓은 창고.
+오른쪽 가장자리: 팔만대장경을 새기는 판각소 — 지붕만 얹은 개방형 작업장, 긴 작업대 위에 나뭇결이 보이는 목판들과 조각칼, 옆에 물에 담가 둔 나무 판재 통.
+화면 아래쪽 가장자리 너머로 갯벌과 바다가 살짝 보이고, 작은 나룻배 한 척.
+마당 한가운데는 다져진 흙바닥으로 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 젖은 흙빛, 새로 켠 나무의 밝은 색, 잿빛 바다. 비 그친 뒤의 흐린 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="goryeo3_gaegyeong">
+      <header>
+        <div class="line">
+          <span class="idx">배경 7</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>개경 궁궐(고려 말)</h3>
+        <p class="meta"><code>goryeo3_gaegyeong.png</code> · 고려 3화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 14세기 고려 말 개경 궁궐 안뜰. 한때 화려했으나 전란과 오랜 간섭기를 거치며 낡은 기색이 있다.
+화면 위쪽 가장자리: 정전 — 기와지붕 일부가 내려앉아 새 기와로 기운 자국이 있고, 붉은 기둥의 칠이 군데군데 벗겨졌다. 앞에 낮은 돌계단.
+왼쪽 가장자리: 담장을 두른 작은 불당 — 지붕에 풍경이 달리고 앞마당에 석탑 한 기, 향로.
+오른쪽 가장자리: 서고 겸 집무처 — 문을 열어 둔 목조 건물, 안에 책궤와 두루마리 선반이 보인다. 옆에 벼루와 붓을 놓은 낮은 평상.
+화면 아래쪽 가장자리: 무너진 데를 새 돌로 기운 담장과 열린 협문, 그 옆에 늙은 소나무 한 그루와 이끼 낀 석등.
+안뜰 한가운데는 박석과 흙이 섞인 바닥으로 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 바랜 단청, 이끼 낀 돌, 잿빛 기와. 늦가을 저녁의 낮게 깔린 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="hugi1_namhan">
+      <header>
+        <div class="line">
+          <span class="idx">배경 8</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>남한산성</h3>
+        <p class="meta"><code>hugi1_namhan.png</code> · 조선후기 1화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 1636년 병자호란 때 농성 중인 남한산성 안. 한겨울이라 곳곳에 눈이 얕게 쌓였다.
+화면 위쪽 가장자리: 돌로 쌓은 성벽이 화면을 가로지르고, 성벽 위에 여장(총안이 뚫린 낮은 담)과 나무 문루가 얹힌 성문 하나.
+왼쪽 가장자리: 행궁 — 기와를 얹은 단정한 목조 건물 두 채, 마루에 방석과 낮은 서안. 앞마당에 눈을 쓸어 모은 자국.
+오른쪽 가장자리: 군수 창고와 장작 더미, 가마솥을 건 부뚜막에서 김이 오른다. 옆에 짚으로 덮은 곡식 가마니(수가 많지 않게 — 식량이 모자란 상황).
+화면 아래쪽 가장자리: 무기를 세워 둔 나무 거치대, 화승총과 창을 손질하는 낮은 작업대, 눈 덮인 소나무 몇 그루.
+성 안 한가운데는 눈을 치워 다져진 흙마당으로 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 잿빛 돌, 흰 눈, 짙은 소나무 초록, 부뚜막의 따뜻한 주황빛. 흐리고 추운 겨울 낮.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="hugi2_jeojat">
+      <header>
+        <div class="line">
+          <span class="idx">배경 9</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>한양 저잣거리</h3>
+        <p class="meta"><code>hugi2_jeojat.png</code> · 조선후기 2화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 18세기 조선 한양 종로의 저잣거리. 가로로 길게 뻗은 흙길 양옆에 가게가 늘어서 있다.
+화면 위쪽 가장자리: 시전 행랑 — 기와를 얹고 나란히 붙어 선 상점 예닐곱 칸, 앞에 천막 차양과 좌판. 좌판 위에 비단 두루마리, 종이 묶음, 놋그릇, 약재 상자가 종류별로 놓여 있다. (간판의 글자는 새기지 말고 빈 나무판으로)
+왼쪽 가장자리: 주막 — 초가지붕에 평상 두 개, 술항아리와 국솥, 마당에 매어 둔 나귀 한 마리.
+오른쪽 가장자리: 난전 — 땅바닥에 멍석을 깔고 채소·생선·짚신을 벌여 놓은 자리, 지게와 등짐, 큰 나무 저울.
+화면 아래쪽 가장자리: 낮은 돌담과 버드나무, 물을 긷는 우물과 두레박.
+길 한가운데는 사람이 다니는 넓은 흙길로 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 따뜻한 흙빛 길, 알록달록한 상품, 짙은 기와와 누런 초가. 늦봄 한낮의 밝은 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="hugi3_sedo">
+      <header>
+        <div class="line">
+          <span class="idx">배경 10</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>삼정이 무너진 고을</h3>
+        <p class="meta"><code>hugi3_sedo.png</code> · 조선후기 3화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 19세기 세도정치기, 수탈에 시달려 피폐해진 시골 고을. 마을 전체에 힘 빠진 기색이 돈다.
+화면 위쪽 가장자리: 관아 — 담장을 두른 기와집으로 이 마을에서 유일하게 멀쩡하다. 솟을대문 앞에 곤장을 놓는 낮은 형틀과 세곡을 담은 가마니 수레.
+왼쪽 가장자리: 환곡 창고 — 문이 반쯤 열려 안이 비어 보이고, 벽에 곡식 장부 두루마리가 걸려 있다. 앞에 빈 됫박과 말(곡식 되는 그릇).
+오른쪽 가장자리: 다 쓰러져 가는 초가 서너 채 — 지붕 이엉이 삭아 내려앉고, 마당에 깨진 항아리. 한 집은 사람이 떠나 문짝이 떨어져 있다.
+화면 아래쪽 가장자리: 갈라진 논바닥과 물이 마른 도랑, 뽑히지 않은 마른 벼 그루터기.
+고을 한가운데 흙길과 빈 마당은 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 바랜 누런 흙, 삭은 짚빛, 관아만 진한 기와색. 해 질 무렵의 스산한 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="gaehang1_ganghwa">
+      <header>
+        <div class="line">
+          <span class="idx">배경 11</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>강화도 연무당</h3>
+        <p class="meta"><code>gaehang1_ganghwa.png</code> · 개항 1화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 1876년 강화도 연무당 일대. 조선 수군 진지와 회담장이 함께 있다.
+화면 위쪽 가장자리: 연무당 — 기와를 얹은 널찍한 목조 대청, 문을 활짝 열어 두어 안의 마루와 낮은 서안 두 개, 방석이 보인다. 앞에 돌계단.
+왼쪽 가장자리: 해안 포대 — 흙과 돌로 쌓은 낮은 성벽에 총안이 뚫려 있고, 나무 포가에 얹은 구식 대포(홍이포) 두 문이 바다를 향한다. 옆에 둥근 포탄 무더기.
+오른쪽 가장자리: 진영 막사와 무기 거치대, 화승총을 세워 둔 시렁, 깃대(깃발은 무늬 없는 단색 천).
+화면 아래쪽 가장자리: 갯벌과 바다, 멀리 수평선에 검은 연기를 내뿜는 서양식 증기 군함의 실루엣이 아주 작게 하나.
+진지 한가운데 다져진 흙마당은 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 잿빛 갯벌, 흙빛 성벽, 검은 무쇠 대포. 안개 낀 이른 아침.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="gaehang4_ugeumchi">
+      <header>
+        <div class="line">
+          <span class="idx">배경 12</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>우금치 고개</h3>
+        <p class="meta"><code>gaehang4_ugeumchi.png</code> · 개항 4화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·시신·피는 절대 그리지 말고, 글자·화살표·UI·워터마크도 넣지 말 것.
+
+장면: 1894년 겨울 공주 우금치 고개. 야트막한 산줄기가 화면을 가로지르는 고갯길이다.
+화면 위쪽 가장자리: 고개 능선 — 흙을 파서 만든 참호와 모래주머니 방벽이 줄지어 있고, 그 뒤에 바퀴 달린 기관포(개틀링) 한 정과 탄약 상자. 방벽 뒤로 진지 천막 두 채.
+왼쪽 가장자리: 마른 억새밭과 앙상한 나무들, 바위 무더기.
+오른쪽 가장자리: 무너진 돌담과 버려진 초가 한 채, 옆에 부서진 수레.
+화면 아래쪽 가장자리: 농민군이 올라온 쪽 — 흙길에 죽창 여러 자루가 땅에 꽂혀 있고, 짚으로 만든 방패와 멍석, 꺼진 화톳불 자리.
+고갯마루 가운데 비탈길은 넓게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 마른 갈색 억새, 얼어붙은 잿빛 흙, 차가운 하늘빛. 서리 내린 초겨울 아침.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="gaehang5_hwangudan">
+      <header>
+        <div class="line">
+          <span class="idx">배경 13</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>환구단과 종로 거리</h3>
+        <p class="meta"><code>gaehang5_hwangudan.png</code> · 개항 5화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 1900년 무렵 대한제국 시기 한성. 환구단과 근대화된 거리가 한 화면에 있다.
+화면 위쪽 가장자리: 환구단 — 둥근 삼단 돌제단과 그 옆에 팔각 삼층 지붕의 황궁우, 주위를 두른 담과 삼문. 제단 위는 비워 둘 것.
+왼쪽 가장자리: 전통 기와 상점가 — 나무 차양을 단 가게들, 그 앞 길가에 새로 세운 나무 전신주와 전깃줄, 아래에 아치형 가로등.
+오른쪽 가장자리: 서양식 벽돌 이층 건물 한 채(신문사·상회 느낌, 아치형 창), 그 옆에 인력거 두 대가 세워져 있다.
+화면 아래쪽 가장자리: 거리를 가로지르는 전차 궤도 두 줄과, 궤도 위에 멈춰 선 목조 전차 한 량(사람은 태우지 말 것).
+거리 한가운데 넓은 흙길은 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 흰 화강암 제단, 붉은 벽돌, 짙은 기와, 전차의 짙은 초록. 맑은 초가을 오후.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="ilje1_tapgol">
+      <header>
+        <div class="line">
+          <span class="idx">배경 14</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>탑골공원</h3>
+        <p class="meta"><code>ilje1_tapgol.png</code> · 일제 1화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 1919년 3월 서울 탑골공원. 담으로 둘러싸인 네모난 도심 공원이다.
+화면 가운데 위쪽: 팔각정 — 팔각 평면에 기와 지붕을 얹은 목조 정자, 붉은 기둥과 낮은 난간, 앞에 돌계단 세 단. (정자 안은 비워 둘 것)
+왼쪽 가장자리: 원각사지 십층석탑 — 흰 대리석으로 된 높고 섬세한 층층 석탑 한 기, 둘레에 낮은 난간.
+오른쪽 가장자리: 큰 거북 받침 위에 세운 비석 한 기(글자는 새기지 말고 민무늬로), 그 옆에 벤치와 앙상한 나무 몇 그루.
+화면 아래쪽 가장자리: 벽돌 기둥에 철제 살을 끼운 공원 정문과 낮은 담장, 담 너머로 종로 거리의 기와 상점 지붕이 조금 보인다.
+공원 안 넓은 흙마당은 한가운데를 크게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 마른 흙빛 마당, 흰 대리석, 붉은 정자 기둥, 아직 잎이 없는 나무. 이른 봄의 서늘하고 맑은 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="ilje2_gyeongseong">
+      <header>
+        <div class="line">
+          <span class="idx">배경 15</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>경성 종로</h3>
+        <p class="meta"><code>ilje2_gyeongseong.png</code> · 일제 2화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 1920~30년대 경성 종로 거리. 전통 기와집과 근대 건물이 뒤섞여 있다.
+화면 위쪽 가장자리: 서양식 이삼층 벽돌 상가 — 큰 유리 진열창, 차양, 지붕 위 빈 광고탑 골조(글자는 넣지 말 것). 그 옆에 백화점풍 건물 모서리.
+왼쪽 가장자리: 조선인이 하던 재래 상점 줄 — 기와지붕 아래 나무 미닫이문과 좌판, 무명천 두루마리와 놋그릇, 문 옆에 빈 나무 간판.
+오른쪽 가장자리: 다방과 양복점 — 아치형 창과 차양, 문 앞에 자전거 두 대와 우체통.
+화면 아래쪽 가장자리: 거리를 가로지르는 전차 궤도와 목조 전차 한 량(사람은 태우지 말 것), 궤도 옆에 가로등과 전신주.
+길 한가운데 넓은 포장 흙길은 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 붉은 벽돌과 짙은 기와가 섞이고, 차양의 줄무늬 천이 포인트. 여름 오후의 강한 빛과 짧은 그림자.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="hyeondae1_haebang">
+      <header>
+        <div class="line">
+          <span class="idx">배경 16</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>해방 정국의 거리</h3>
+        <p class="meta"><code>hyeondae1_haebang.png</code> · 현대 1화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 1945~1948년 해방 직후 서울의 거리. 어수선하고 물자가 부족한 기색이 있다.
+화면 위쪽 가장자리: 관공서로 쓰이던 서양식 석조 건물 — 넓은 계단과 기둥, 정면에 아무 글자도 없는 빈 현수막 천이 걸려 있고, 옥상 깃대에는 태극기 한 장.
+왼쪽 가장자리: 담벼락 — 크고 작은 벽보와 삐라가 겹겹이 붙어 있다(글자는 쓰지 말고 잉크 자국처럼 뭉개진 무늬로만). 담 아래 나무 궤짝과 신문 묶음.
+오른쪽 가장자리: 판잣집 상점 몇 채 — 양철 지붕에 미군 보급 상자를 뜯어 만든 벽, 앞에 좌판과 됫박, 미제 통조림과 밀가루 포대.
+화면 아래쪽 가장자리: 흙길 가에 보따리와 이불짐이 쌓여 있고, 짐수레 한 대와 자전거. 멀리 낡은 목조 전차 궤도.
+거리 한가운데는 넓은 흙길로 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 잿빛 콘크리트, 녹슨 양철, 바랜 종이, 태극기의 붉고 푸른 점. 늦여름의 흐린 빛.</pre>
+    </article>
+    <article class="card" data-kind="scene" id="hyeondae2_gwangjang">
+      <header>
+        <div class="line">
+          <span class="idx">배경 17</span>
+          <span class="chip todo">대기</span>
+        </div>
+        <h3>광장</h3>
+        <p class="meta"><code>hyeondae2_gwangjang.png</code> · 현대 2화</p>
+      </header>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>1376x768 픽셀 가로형 이미지. 위에서 수직으로 내려다본 톱다운 RPG 게임 맵. 손으로 그린 수채·과슈 느낌의 따뜻한 채색, 부드러운 음영, 굵은 검은 외곽선 없음. 원근 왜곡 없는 정투영. 사람·글자·화살표·UI·워터마크는 절대 넣지 말 것.
+
+장면: 20세기 후반 한국 도심의 큰 광장. 시청 앞처럼 사방이 건물로 둘러싸인 열린 마당이다.
+화면 위쪽 가장자리: 돌로 지은 관청 건물 — 시계탑이 올라간 정면과 넓은 계단, 앞에 깃대 세 개(깃발은 태극기 한 장과 무늬 없는 단색 천 둘).
+왼쪽 가장자리: 1970~80년대 도심 빌딩들 — 콘크리트 사무 건물과 낮은 상가, 1층에 셔터를 반쯤 내린 가게, 옆에 공중전화 부스 두 대.
+오른쪽 가장자리: 은행나무 가로수 줄과 버스 정류장 표지, 정차한 낡은 시내버스 한 대(사람은 태우지 말 것).
+화면 아래쪽 가장자리: 광장을 두른 낮은 화강암 단과 분수대 — 물이 나오지 않아 바닥이 말라 있고, 옆에 나무 벤치 몇 개.
+광장 한가운데 넓은 보도블록 바닥은 크게 비워 둘 것 — 캐릭터가 걸어다닐 자리다.
+색감은 회색 보도블록과 콘크리트에 가로수의 초록, 태극기의 붉고 푸른 점. 6월 늦은 오후의 긴 그림자.</pre>
+    </article>
+    <article class="card wide" data-kind="sheet" id="sheet1">
+      <header>
+        <div class="line">
+          <span class="idx">시트 1 · <code>sheet1</code></span>
+          <span class="chip todo">15명 대기</span>
+        </div>
+        <h3>선사 · 고대</h3>
+        <p class="meta">5열 3행 격자 한 장에 15명</p>
+      </header>
+      <div class="whos"><span class="who">구석기 사냥꾼</span> <span class="who">신석기 여인</span> <span class="who">청동기 군장</span> <span class="who">고조선 제사장</span> <span class="who">고구려 장수</span> <span class="who">백제 무령왕</span> <span class="who">신라 진흥왕</span> <span class="who">신라 화랑</span> <span class="who">장보고</span> <span class="who">의상</span> <span class="who">발해 사신</span> <span class="who">촌주</span> <span class="who">견훤</span> <span class="who">궁예</span> <span class="who">최치원</span></div>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>정확히 5열 3행의 격자로 나뉜 한 장의 이미지를 그려 줘. 배경은 전체가 완전히 균일한 순수 마젠타(#FF00FF) 단색이고, 그림자·질감·그러데이션이 전혀 없어야 해. 칸을 나누는 선이나 테두리, 글자, 이름표, 번호는 절대 넣지 마.
+
+각 칸에는 인물 한 명이 정면을 보고 똑바로 서 있는 전신 모습을 그려 줘. 2등신~3등신의 귀엽고 둥근 게임 캐릭터 스타일, 부드러운 셀 채색과 은은한 음영, 굵은 검은 외곽선은 없이. 15명 모두 같은 조명, 같은 채도, 같은 크기로 그려서 한 명만 유독 밝거나 크게 튀지 않게 해 줘. 인물이 칸 높이의 약 80%를 차지하고 칸 안에 완전히 들어와야 하며, 옆 칸 인물과 절대 겹치지 않아야 해. 발밑 그림자는 그리지 마.
+
+왼쪽 위에서 오른쪽으로 읽어 내려가는 순서로(1~5번이 첫 줄, 6~10번이 둘째 줄, 11~15번이 셋째 줄) 정확히 이렇게 그려 줘.
+
+1) 구석기 사냥꾼: 짐승 가죽을 어깨에 비스듬히 두르고 허리에 가죽을 감은 남자. 다듬지 않은 덥수룩한 머리와 수염, 맨발. 한 손에 뗀석기 주먹도끼를 들었다. 옷은 바느질 자국 없이 거칠게 잘린 가죽.
+2) 신석기 여인: 삼베와 부드러운 가죽을 이어 지은 소매 있는 옷을 입고 허리를 끈으로 묶은 여자. 머리는 뒤로 묶었고 가슴에 조개껍데기 목걸이. 두 손으로 밑이 뾰족한 빗살무늬 토기를 안고 있다. 허리춤에 뼈바늘과 가락바퀴를 매달았다.
+3) 청동기 군장: 마을의 우두머리인 중년 남자. 곱게 짠 삼베 겉옷에 짐승 털 깃을 대고, 허리띠에 비파형 청동검을 찼다. 목에 옥 구슬 목걸이, 머리는 상투처럼 틀어 올렸다. 위엄 있는 표정으로 팔짱을 꼈다.
+4) 고조선 제사장: 흰 삼베 두루마기 같은 긴 옷을 입은 인물. 가슴에 굵은 끈으로 청동 거울(거친무늬 거울)을 걸고, 한 손에 여덟 개의 방울이 달린 청동 방울을 들었다. 머리에 새 깃털을 꽂았고 표정은 엄숙하다.
+5) 고구려 장수: 작은 쇳조각을 이어 붙인 비늘 갑옷(찰갑)을 입고 볼가리개가 달린 투구를 쓴 무장. 갑옷은 짙은 쇠빛에 가죽끈이 보이고, 어깨와 정강이에 덧댄 갑주. 허리에 고리자루 큰칼을 찼고 한 손에 창을 세워 들었다. 늠름한 표정.
+6) 백제 무령왕: 백제의 왕. 소매가 넓고 깃이 둥근 자주색 비단 포를 입고 넓은 허리띠를 맸다. 검은 관모 앞에 불꽃 모양으로 뻗은 금제 관 장식을 꽂았고 신발은 금동. 손에 홀(길쭉한 판)을 들고 온화하면서 기품 있는 표정.
+7) 신라 진흥왕: 신라의 왕. 자주색 소매 넓은 포를 입고, 나뭇가지와 사슴뿔 모양 세움장식이 달린 금관을 썼다. 금관에는 곱은옥과 달개(작은 금 원판)가 달려 반짝인다. 허리에 금 허리띠와 늘어뜨린 드리개. 젊고 야심 찬 표정.
+8) 신라 화랑: 열대여섯 살쯤 된 소년. 소매가 좁은 저고리와 통 넓은 바지를 입고 무릎 아래를 끈으로 묶었으며, 옷은 밝은 색에 화려한 선단(옷깃·소맷단 장식)이 있다. 머리는 뒤로 묶고 꽃 한 송이를 꽂았으며 등에 짧은 칼을 비스듬히 멨다. 맑고 씩씩한 표정.
+9) 장보고: 청해진을 이끈 무장. 소매 좁은 짙은 남색 무관 포를 입고 가슴과 어깨에 가죽 보호대를 댔으며, 넓은 가죽 허리띠에 환도를 찼다. 머리에는 검은 두건형 관모. 바닷바람에 그은 얼굴, 다부지고 자신만만한 표정. 한 손에 밧줄을 감은 나무 손잡이를 들었다.
+10) 의상: 신라의 승려. 머리를 깎았고, 잿빛 장삼 위에 붉은 갈색 가사를 왼쪽 어깨에서 오른쪽 허리로 비스듬히 둘렀다. 목에 나무 염주를 걸고 두 손을 모아 합장한 자세. 짚신을 신었고 표정은 온화하고 고요하다.
+11) 발해 사신: 발해의 고위 관리. 깃이 둥근 자주색 단령포를 입고 넓은 허리띠를 맸으며, 머리에는 양옆으로 날개가 달린 검은 복두를 썼다. 두 손으로 상아색 홀을 잡았고, 허리띠에 물고기 모양 장식이 든 금색 주머니(금어대)를 매달았다. 당당하고 격식 있는 자세.
+12) 촌주: 신라 시골 마을의 우두머리. 흰 삼베 저고리와 바지 위에 누런 겉옷을 걸치고 허리를 끈으로 묶었다. 머리에는 소박한 검은 두건. 한 손에 마을 호구를 적은 두루마리 문서를 들고 다른 손은 뒷짐. 성실하고 조심스러운 표정.
+13) 견훤: 후백제를 세운 왕. 무장 출신답게 비늘 갑옷 위에 짙은 자주색 소매 넓은 겉옷을 걸쳤고, 넓은 가죽 허리띠에 큰 칼을 찼다. 검은 관모를 썼고 수염이 짙다. 팔짱을 끼고 서서 거칠고 강인한 표정.
+14) 궁예: 후고구려를 세운 왕. 승려 출신이라 머리를 깎았고, 금빛 실로 수를 놓은 화려한 붉은 장삼 위에 왕의 겉옷을 걸쳤다. 한쪽 눈을 검은 안대로 가렸고 한 손에 금빛 지물을 들었다. 스스로를 미륵이라 여기는 듯한 기이하고 강렬한 눈빛.
+15) 최치원: 당에서 유학하고 돌아온 신라의 학자. 소매가 아주 넓은 붉은빛(비색) 관복 포를 입고 검은 복두를 썼으며, 허리에 옥 장식 띠를 맸다. 한 손에 두루마리 상소를, 다른 손에 붓을 들었다. 학식 있어 보이지만 어딘가 지치고 쓸쓸한 표정.</pre>
+    </article>
+    <article class="card wide" data-kind="sheet" id="sheet2">
+      <header>
+        <div class="line">
+          <span class="idx">시트 2 · <code>sheet2</code></span>
+          <span class="chip todo">15명 대기</span>
+        </div>
+        <h3>고려 · 조선 전란기</h3>
+        <p class="meta">5열 3행 격자 한 장에 15명</p>
+      </header>
+      <div class="whos"><span class="who">태조 왕건</span> <span class="who">광종</span> <span class="who">최승로</span> <span class="who">서희</span> <span class="who">윤관</span> <span class="who">최충헌</span> <span class="who">삼별초 장수</span> <span class="who">의천</span> <span class="who">지눌</span> <span class="who">이규보</span> <span class="who">공민왕</span> <span class="who">광해군</span> <span class="who">척화 대신</span> <span class="who">훈련도감 포수</span> <span class="who">선혜청 서리</span></div>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>정확히 5열 3행의 격자로 나뉜 한 장의 이미지를 그려 줘. 배경은 전체가 완전히 균일한 순수 마젠타(#FF00FF) 단색이고, 그림자·질감·그러데이션이 전혀 없어야 해. 칸을 나누는 선이나 테두리, 글자, 이름표, 번호는 절대 넣지 마.
+
+각 칸에는 인물 한 명이 정면을 보고 똑바로 서 있는 전신 모습을 그려 줘. 2등신~3등신의 귀엽고 둥근 게임 캐릭터 스타일, 부드러운 셀 채색과 은은한 음영, 굵은 검은 외곽선은 없이. 15명 모두 같은 조명, 같은 채도, 같은 크기로 그려서 한 명만 유독 밝거나 크게 튀지 않게 해 줘. 인물이 칸 높이의 약 80%를 차지하고 칸 안에 완전히 들어와야 하며, 옆 칸 인물과 절대 겹치지 않아야 해. 발밑 그림자는 그리지 마.
+
+왼쪽 위에서 오른쪽으로 읽어 내려가는 순서로(1~5번이 첫 줄, 6~10번이 둘째 줄, 11~15번이 셋째 줄) 정확히 이렇게 그려 줘.
+
+1) 태조 왕건: 고려를 세운 왕. 깃이 둥글고 소매가 아주 넓은 붉은빛 도는 누런 곤룡포(자황포)를 입고 넓은 옥 허리띠를 맸다. 머리에는 검은 복두. 수염이 단정한 중년, 두 손을 앞으로 모으고 너그럽고 듬직한 표정.
+2) 광종: 고려의 네 번째 왕이자 개혁 군주. 왕건보다 젊고 날카로운 인상. 붉은빛 도는 누런 곤룡포를 입었으나 옷깃과 소매의 금색 수가 더 화려하고 머리에 검은 복두를 썼다. 한 손에 노비 문서를 뜻하는 두루마리를 쥐고 단호하게 앞을 본다.
+3) 최승로: 고려의 문신. 깃이 둥근 자주색 공복(자삼)을 입고 넓은 허리띠를 맸으며, 양옆으로 날개가 달린 검은 복두를 썼다. 두 손으로 길쭉한 상아색 홀을 잡았고 옆구리에 두루마리 상소를 끼웠다. 나이 지긋하고 진중한 표정.
+4) 서희: 고려의 문신이자 외교가. 깃이 둥근 자주색 공복을 입고 양옆에 날개가 달린 검은 복두를 썼으며, 두 손으로 상아색 홀을 잡았다. 침착하고 영민한 눈빛, 말을 고르는 듯 입을 다물었다. 어깨에 얇은 여행용 겉옷을 걸쳤다.
+5) 윤관: 별무반을 이끈 고려의 장수. 쇠 비늘을 이어 붙인 갑옷 위에 짙은 남색 전포를 걸치고 어깨와 팔에 갑주를 덧댔다. 투구를 옆구리에 끼고 다른 손에 긴 창을 세워 들었다. 결의에 찬 표정.
+6) 최충헌: 고려 무신정권의 집권자. 검은빛 도는 갑옷 위에 짙은 자주색 비단 겉옷을 걸쳐 무장과 권신의 모습을 겹쳤다. 넓은 허리띠에 큰 칼을 찼고 검은 관모를 썼다. 팔짱을 끼고 내려다보는 듯한 위압적인 표정.
+7) 삼별초 장수: 진도·제주로 옮겨 가며 싸운 부대의 지휘관. 낡고 여기저기 기운 가죽·쇠 섞인 갑옷을 입고 머리에 붉은 천 두건을 둘렀다. 등에 활과 화살통을 멨고 한 손에 칼을 들었다. 지쳤지만 물러서지 않는 강한 눈빛.
+8) 의천: 왕자 출신의 고려 승려. 머리를 깎았고, 잿빛 장삼 위에 붉은 비단에 금실 수를 놓은 화려한 가사를 비스듬히 둘렀다. 목에 수정 염주, 한 손에 경전 책을 들었다. 젊고 총명하며 자신감 있는 표정.
+9) 지눌: 수행을 강조한 고려 승려. 머리를 깎았고, 물들이지 않은 거친 삼베 먹빛 승복만 걸쳤으며 장식이 전혀 없다. 나무 염주를 손목에 감고 지팡이를 짚었다. 마른 몸, 깊고 고요한 눈빛, 맨발에 짚신.
+10) 이규보: 고려의 문인. 소매가 넓은 녹색 공복을 입고 검은 복두를 썼으며 허리에 소박한 띠를 맸다. 한 손에 붓, 다른 손에 펼친 두루마리를 들었다. 술을 좋아한 듯 불그레한 얼굴에 여유롭고 유쾌한 표정.
+11) 공민왕: 원의 간섭에서 벗어나려 한 고려의 왕. 붉은빛 도는 누런 곤룡포에 넓은 옥 허리띠, 머리에는 검은 복두. 몽골식 변발이 아니라 상투를 튼 고려식 머리다. 젊고 단단한 표정으로 정면을 응시하고 한 손에 개혁 교서 두루마리를 쥐었다.
+12) 광해군: 조선의 왕. 붉은 비단 곤룡포를 입고 가슴과 양어깨에 금실로 수놓은 둥근 용무늬 흉배를 달았으며, 머리에 검은 익선관을 썼다. 넓은 옥 허리띠. 미간에 힘이 들어간, 고민 많고 경계하는 표정.
+13) 척화 대신: 청과 화친을 반대한 노년의 조선 문신. 깃이 둥근 검은 단령을 입고 가슴에 학 두 마리를 수놓은 흉배를 달았으며, 양옆으로 날개가 달린 검은 사모를 썼다. 두 손으로 상아 홀을 잡았고 흰 수염이 길다. 꼿꼿하고 결연한 표정.
+14) 훈련도감 포수: 조선 후기 중앙군 병사. 소매 좁은 남색 저고리 위에 소매 없는 붉은 더그레(전복)를 걸치고 허리를 넓은 띠로 묶었다. 머리에 검은 벙거지(전립)를 썼고 어깨에 화승총을 멨으며 허리에 화약통과 심지를 매달았다. 앳되고 긴장한 표정.
+15) 선혜청 서리: 대동법 실무를 보던 하급 관리. 흰 두루마기에 검은 갓을 쓰고 허리에 실띠를 맸다. 한쪽 팔에 두툼한 장부 책을 끼고 다른 손에 붓과 먹통을 들었다. 눈을 가늘게 뜬, 셈에 밝아 보이는 야무진 표정.</pre>
+    </article>
+    <article class="card wide" data-kind="sheet" id="sheet3">
+      <header>
+        <div class="line">
+          <span class="idx">시트 3 · <code>sheet3</code></span>
+          <span class="chip todo">15명 대기</span>
+        </div>
+        <h3>조선 후기 · 개항</h3>
+        <p class="meta">5열 3행 격자 한 장에 15명</p>
+      </header>
+      <div class="whos"><span class="who">정조</span> <span class="who">정약용</span> <span class="who">박제가</span> <span class="who">홍대용</span> <span class="who">김홍도</span> <span class="who">아전</span> <span class="who">홍경래</span> <span class="who">진주 농민</span> <span class="who">최제우</span> <span class="who">최익현</span> <span class="who">접견대관 신헌</span> <span class="who">개화파 관원</span> <span class="who">전봉준</span> <span class="who">집강소 집강</span> <span class="who">군국기무처 관원</span></div>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>정확히 5열 3행의 격자로 나뉜 한 장의 이미지를 그려 줘. 배경은 전체가 완전히 균일한 순수 마젠타(#FF00FF) 단색이고, 그림자·질감·그러데이션이 전혀 없어야 해. 칸을 나누는 선이나 테두리, 글자, 이름표, 번호는 절대 넣지 마.
+
+각 칸에는 인물 한 명이 정면을 보고 똑바로 서 있는 전신 모습을 그려 줘. 2등신~3등신의 귀엽고 둥근 게임 캐릭터 스타일, 부드러운 셀 채색과 은은한 음영, 굵은 검은 외곽선은 없이. 15명 모두 같은 조명, 같은 채도, 같은 크기로 그려서 한 명만 유독 밝거나 크게 튀지 않게 해 줘. 인물이 칸 높이의 약 80%를 차지하고 칸 안에 완전히 들어와야 하며, 옆 칸 인물과 절대 겹치지 않아야 해. 발밑 그림자는 그리지 마.
+
+왼쪽 위에서 오른쪽으로 읽어 내려가는 순서로(1~5번이 첫 줄, 6~10번이 둘째 줄, 11~15번이 셋째 줄) 정확히 이렇게 그려 줘.
+
+1) 정조: 조선의 왕. 붉은 비단 곤룡포에 금실로 수놓은 둥근 용무늬 흉배를 가슴과 양어깨에 달고 검은 익선관을 썼다. 넓은 옥 허리띠. 총명하고 단호하면서도 온기가 도는 표정, 한 손에 책 한 권을 들었다.
+2) 정약용: 실학자. 흰 도포에 검은 갓, 가슴에 세조대(가는 띠)를 맸다. 한 손에 도르래와 밧줄이 그려진 설계 도면 두루마리를 펼쳐 들었다. 마르고 단정한 얼굴, 골똘히 생각하는 표정.
+3) 박제가: 북학파 실학자. 흰 도포에 검은 갓, 어깨에 얇은 남색 겉옷을 걸쳤다. 한 손에 책을 들고 다른 손으로 바퀴 달린 작은 수레 모형을 가리킨다. 눈매가 날카롭고 말이 빠를 것 같은 활달한 표정.
+4) 홍대용: 실학자이자 천문학자. 흰 도포에 검은 갓. 두 손으로 고리들이 겹친 청동 혼천의(천체 모형)를 받쳐 들었다. 하늘을 올려다보다 시선을 내린 듯한, 호기심 어린 온화한 표정.
+5) 김홍도: 조선의 화원. 흰 도포에 검은 갓, 소매를 걷어 팔뚝이 보인다. 한 손에 붓을, 다른 팔에 접힌 화첩을 끼었고 허리에 벼루 주머니를 찼다. 사람 구경을 즐기는 듯 눈웃음 짓는 표정.
+6) 아전: 고을 관아의 향리. 흰 저고리와 바지 위에 검은 겉옷을 걸치고 검은 갓을 썼으며, 허리에 붓과 인장 주머니를 찼다. 한 팔에 두꺼운 장부를 끼고 다른 손으로 붓을 들었다. 능글맞고 계산 빠른 표정.
+7) 홍경래: 평안도 봉기를 이끈 인물. 흰 무명 저고리와 바지 위에 검은 쾌자(소매 없는 겉옷)를 걸치고 머리에 흰 천 두건을 둘렀다. 허리에 환도를 찼고 한 손에 아무 글자도 없는 붉은 깃발 장대를 쥐었다. 굳세고 결기 있는 표정.
+8) 진주 농민: 임술년 봉기에 나선 농부. 낡고 기운 흰 무명 저고리와 걷어 올린 바지, 짚신, 머리에 흰 수건을 질끈 동였다. 한 손에 대나무를 깎아 만든 죽창을 세워 들었다. 야위었지만 눈에 분노가 서린 표정.
+9) 최제우: 동학을 연 인물. 흰 도포에 검은 갓, 가슴에 실띠를 맸다. 두 손을 앞으로 모으고 한 손에 작은 경전 책을 들었다. 마른 얼굴에 깊고 형형한 눈빛, 조용하지만 사람을 끄는 분위기.
+10) 최익현: 위정척사를 주장한 유학자. 흰 도포에 검은 갓을 쓰고 가슴에 실띠를 맸다. 꼿꼿이 서서 한 손에 두루마리 상소를 들고 다른 손으로 자루 짧은 도끼를 땅에 짚었다(뜻을 받아들이지 않으려면 이 도끼로 목을 치라는 지부상소). 완고하고 결연한 표정.
+11) 접견대관 신헌: 무관 출신의 늙은 대신. 깃이 둥근 검은 단령을 입고 가슴에 호랑이를 수놓은 무관 흉배를 달았으며, 양옆에 날개가 달린 검은 사모를 썼다. 두 손으로 상아 홀을 잡았고 흰 수염이 길다. 무거운 짐을 진 듯 굳은 표정.
+12) 개화파 관원: 서양 문물을 보고 온 젊은 관리. 깃이 둥근 짙은 남색 단령에 검은 사모 차림이지만, 옆구리에 서양식 양장본 책 두 권을 끼고 목에 서양 회중시계 줄을 늘어뜨렸다. 눈이 반짝이는 호기심 많고 조급한 표정.
+13) 전봉준: 동학 농민군 지도자. 몸집이 작고 다부지다. 흰 무명 저고리와 바지에 짚신, 머리에 흰 수건을 동이고 어깨에 무명 겉옷을 걸쳤다. 팔짱을 끼고 서서 형형한 눈빛으로 정면을 본다. 화려한 것이 하나도 없는 차림.
+14) 집강소 집강: 농민군이 고을 행정을 맡아보던 자리의 책임자. 흰 무명 두루마기에 검은 갓, 어깨에 아무 글자 없는 무명 띠를 비스듬히 둘렀다. 한 팔에 폐정 개혁안을 적은 장부를 끼고 다른 손에 붓을 들었다. 진지하고 책임감 있는 표정.
+15) 군국기무처 관원: 갑오개혁을 추진하던 관리. 검은 두루마기 위에 소매 좁은 겉옷을 입고 머리에 검은 갓을 썼다. 상투는 아직 자르지 않았다. 두 손으로 개혁안 문서 묶음을 안았고 옆구리에 서양식 잉크병과 철필. 급하고 단호한 표정.</pre>
+    </article>
+    <article class="card wide" data-kind="sheet" id="sheet4">
+      <header>
+        <div class="line">
+          <span class="idx">시트 4 · <code>sheet4</code></span>
+          <span class="chip todo">15명 대기</span>
+        </div>
+        <h3>대한제국 · 일제강점기</h3>
+        <p class="meta">5열 3행 격자 한 장에 15명</p>
+      </header>
+      <div class="whos"><span class="who">을미의병</span> <span class="who">고종 황제</span> <span class="who">독립협회 회원</span> <span class="who">대한매일신보 기자</span> <span class="who">신민회 회원</span> <span class="who">정미의병</span> <span class="who">무단통치기의 조선인 상인</span> <span class="who">만세 시위 학생</span> <span class="who">박은식</span> <span class="who">대한광복회 단원</span> <span class="who">물산장려운동 참가자</span> <span class="who">조선어학회 회원</span> <span class="who">신간회 간부</span> <span class="who">의열단원</span> <span class="who">독립군 대장</span></div>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>정확히 5열 3행의 격자로 나뉜 한 장의 이미지를 그려 줘. 배경은 전체가 완전히 균일한 순수 마젠타(#FF00FF) 단색이고, 그림자·질감·그러데이션이 전혀 없어야 해. 칸을 나누는 선이나 테두리, 글자, 이름표, 번호는 절대 넣지 마.
+
+각 칸에는 인물 한 명이 정면을 보고 똑바로 서 있는 전신 모습을 그려 줘. 2등신~3등신의 귀엽고 둥근 게임 캐릭터 스타일, 부드러운 셀 채색과 은은한 음영, 굵은 검은 외곽선은 없이. 15명 모두 같은 조명, 같은 채도, 같은 크기로 그려서 한 명만 유독 밝거나 크게 튀지 않게 해 줘. 인물이 칸 높이의 약 80%를 차지하고 칸 안에 완전히 들어와야 하며, 옆 칸 인물과 절대 겹치지 않아야 해. 발밑 그림자는 그리지 마.
+
+왼쪽 위에서 오른쪽으로 읽어 내려가는 순서로(1~5번이 첫 줄, 6~10번이 둘째 줄, 11~15번이 셋째 줄) 정확히 이렇게 그려 줘.
+
+1) 을미의병: 1895년 명성황후 시해와 단발령에 맞서 일어난 유생 의병장. 흰 도포에 검은 갓을 그대로 쓴 채 그 위에 낡은 가죽 탄약대를 비스듬히 둘렀고, 어깨에 구식 화승총을 멨다. 상투를 지킨 머리, 분노와 슬픔이 섞인 표정.
+2) 고종 황제: 대한제국의 황제. 황제만 입는 밝은 황금색 곤룡포를 입고 가슴과 양어깨에 금실로 수놓은 둥근 용무늬 흉배를 달았다. 머리에 검은 익선관, 넓은 옥 허리띠. 위엄을 지키려 애쓰지만 눈가에 근심이 어린 중년의 표정.
+3) 독립협회 회원: 만민공동회에 나선 개화 지식인. 서양식 검은 프록코트에 조끼와 넥타이, 손에 중절모를 들었고 머리는 짧게 깎았다. 다른 손에 접은 신문 한 부. 자신만만하고 열정적인 표정.
+4) 대한매일신보 기자: 신문 기자. 흰 두루마기 위에 검은 조끼를 겹쳐 입고 머리에 중절모를 썼다. 한 손에 수첩과 연필, 옆구리에 신문 뭉치를 끼었다. 재빠르고 눈치 밝은 표정.
+5) 신민회 회원: 비밀결사에 참여한 애국계몽 운동가. 수수한 검은 두루마기에 짧게 깎은 머리, 손에 교과서 몇 권을 들었다. 주위를 살피는 듯 시선이 살짝 옆을 향하고 다부지게 입을 다물었다.
+6) 정미의병: 1907년 해산된 대한제국 군인 출신 의병. 대한제국 군복 상의(짙은 감색에 금색 단추와 어깨 견장)를 그대로 입었으나 바지는 흰 무명으로 갈아입고 짚신을 신었다. 어깨에 소총을 멨고 허리에 탄약대. 굳고 비장한 표정.
+7) 무단통치기의 조선인 상인: 헌병경찰의 즉결 처분에 시달린 평범한 중년 남자. 낡고 여러 번 기운 흰 두루마기에 검은 갓, 짚신. 한 손에 구겨진 벌금 고지서를 쥐었다. 어깨가 처지고 지친 표정이지만 상처나 피는 없다.
+8) 만세 시위 학생: 1919년 3·1 운동에 나선 남학생. 검은 학생복 상의에 금색 단추, 챙 있는 검은 학생모를 썼다. 두 손으로 작은 태극기를 높이 들었고 입을 크게 벌려 외치는 모습. 앳되고 벅찬 표정.
+9) 박은식: 노년의 역사학자. 흰 두루마기에 검은 갓, 둥근 금테 안경을 썼고 흰 수염이 길다. 한 팔에 두꺼운 원고 뭉치를 끼고 다른 손에 붓을 들었다. 슬픔을 누르고 기록하려는 듯 담담하고 단단한 표정.
+10) 대한광복회 단원: 1915년 비밀결사 회원. 짙은 회색 두루마기를 여미어 입고 검은 중절모를 눌러썼으며 목에 목도리를 둘렀다. 두 손은 소매 안에 넣었고 시선은 곁눈질하듯 살짝 옆을 본다. 긴장되고 결의에 찬 표정.
+11) 물산장려운동 참가자: 국산품 애용을 외친 청년. 손으로 짠 거친 무명 두루마기를 입고 고무신을 신었으며, 어깨에서 허리로 아무 글자도 없는 흰 무명 띠를 둘렀다. 한 손에 무명천 두루마리를 들었다. 씩씩하고 자부심 있는 표정.
+12) 조선어학회 회원: 우리말 사전을 만들던 학자. 흰 두루마기에 둥근 금테 안경, 짧게 깎은 머리. 두 팔로 카드 상자와 두툼한 원고 뭉치를 안았고 귀에 연필을 꽂았다. 꼼꼼하고 다정해 보이는 표정.
+13) 신간회 간부: 좌우가 손잡은 단체의 간부. 짙은 남색 양복에 조끼와 넥타이, 왼팔에 아무 글자 없는 흰 완장을 찼다. 한 손에 회의 서류를 들었다. 중재하는 사람다운 침착하고 신중한 표정.
+14) 의열단원: 무장 투쟁에 나선 청년. 검은 양복에 검은 중절모를 눌러쓰고 긴 코트를 걸쳤으며 손에 검은 가죽 가방을 들었다. 얼굴 반쯤이 모자챙 그늘에 들어가 있고 다문 입과 곧은 자세에서 결의가 느껴진다. 무기는 보이지 않게.
+15) 독립군 대장: 1920년대 만주에서 싸운 지휘관. 두꺼운 국방색 군복 상의에 가죽 허리띠와 탄약대, 털이 달린 방한모를 썼다. 목에 목도리를 감고 어깨에 소총을 멨으며 장갑 낀 손. 추위에 붉어진 얼굴, 노련하고 강인한 표정.</pre>
+    </article>
+    <article class="card wide" data-kind="sheet" id="sheet5">
+      <header>
+        <div class="line">
+          <span class="idx">시트 5 · <code>sheet5</code></span>
+          <span class="chip todo">10명 대기</span>
+        </div>
+        <h3>현대</h3>
+        <p class="meta">5열 3행 격자 한 장에 10명</p>
+      </header>
+      <div class="whos"><span class="who">여운형</span> <span class="who">신탁통치 반대 시민</span> <span class="who">피란민 여인</span> <span class="who">제주 사람</span> <span class="who">농지개혁 담당관</span> <span class="who">4·19 학생</span> <span class="who">1970년대 봉제 노동자</span> <span class="who">1980년 광주 시민</span> <span class="who">1987년 6월 항쟁 시민</span> <span class="who">2000년대 통일부 직원</span></div>
+      <div class="acts">
+        <button class="copy" type="button">프롬프트 복사</button>
+        <button class="peek" type="button" aria-expanded="false">펼쳐 보기</button>
+      </div>
+      <pre class="prompt" hidden>정확히 5열 3행의 격자로 나뉜 한 장의 이미지를 그려 줘. 배경은 전체가 완전히 균일한 순수 마젠타(#FF00FF) 단색이고, 그림자·질감·그러데이션이 전혀 없어야 해. 칸을 나누는 선이나 테두리, 글자, 이름표, 번호는 절대 넣지 마. 셋째 줄 오른쪽 끝 다섯 칸(11~15번 자리)은 인물 없이 마젠타 배경만 남겨 둘 것.
+
+각 칸에는 인물 한 명이 정면을 보고 똑바로 서 있는 전신 모습을 그려 줘. 2등신~3등신의 귀엽고 둥근 게임 캐릭터 스타일, 부드러운 셀 채색과 은은한 음영, 굵은 검은 외곽선은 없이. 10명 모두 같은 조명, 같은 채도, 같은 크기로 그려서 한 명만 유독 밝거나 크게 튀지 않게 해 줘. 인물이 칸 높이의 약 80%를 차지하고 칸 안에 완전히 들어와야 하며, 옆 칸 인물과 절대 겹치지 않아야 해. 발밑 그림자는 그리지 마.
+
+왼쪽 위에서 오른쪽으로 읽어 내려가는 순서로(1~5번이 첫 줄, 6~10번이 둘째 줄, 11~15번이 셋째 줄) 정확히 이렇게 그려 줘.
+
+1) 여운형: 해방 직후 건국준비위원회를 이끈 정치인. 짙은 회색 양복에 넥타이, 뒤로 넘긴 반백의 머리, 훤칠하고 단정한 인상. 한 손에 원고를 들고 다른 손을 가볍게 들어 연설하는 자세. 힘 있고 대중적인 표정.
+2) 신탁통치 반대 시민: 1946년 거리로 나온 청년. 흰 두루마기 위에 낡은 양복 조끼를 겹쳐 입고 머리는 짧게 깎았다. 두 손으로 아무 글자도 쓰이지 않은 흰 천 현수막 막대를 세워 들었다. 격앙되고 절박한 표정.
+3) 피란민 여인: 6·25 전쟁 때 남쪽으로 내려가던 여인. 흰 저고리에 검은 통치마, 흰 수건을 머리에 썼다. 머리에 보따리를 이고 등에 포대기로 아기를 업었다. 고무신이 해졌고, 지쳤지만 아이를 지키려는 단단한 눈빛.
+4) 제주 사람: 1948년 제주의 중년 농부. 감물을 들여 붉은 갈색이 된 제주 갈옷 저고리와 바지를 입고 짚신을 신었으며 머리에 낡은 흰 수건을 둘렀다. 손에 호미를 들었다. 말을 아끼는 듯 입을 다문, 슬픔이 배인 담담한 표정.
+5) 농지개혁 담당관: 1950년 토지 분배 실무를 맡은 공무원. 카키색 국민복 상의에 각반과 낡은 구두, 검은 뿔테 안경. 한 팔에 두꺼운 토지 대장을 끼고 다른 손에 만년필을 들었다. 사무적이지만 성실한 표정.
+6) 4·19 학생: 1960년 고등학생. 검은 교복 상의에 금색 단추와 흰 깃, 챙 있는 검은 학생모, 검은 바지에 운동화. 한 손을 번쩍 들어 올렸고 어깨에 책가방을 멨다. 앳되고 결의에 찬 표정.
+7) 1970년대 봉제 노동자: 청계천 평화시장에서 일하던 젊은 여성. 소매를 걷은 하늘색 작업복 상의에 앞치마, 머리를 수건으로 질끈 묶었고 목에 줄자를 걸었다. 손에 재단 가위와 천 조각. 피곤하지만 야무진 표정.
+8) 1980년 광주 시민: 흰 셔츠 소매를 걷어 올리고 작업복 바지를 입은 청년. 머리에 흰 띠를 두르고 목에 수건을 걸었으며, 두 손으로 태극기를 펼쳐 가슴 앞에 들었다. 무기는 그리지 말 것. 두렵지만 물러서지 않는 표정.
+9) 1987년 6월 항쟁 시민: 이른바 넥타이 부대. 회색 정장에 넥타이를 느슨하게 풀고 흰 와이셔츠 소매를 걷었으며, 한 손에 접은 신문을 다른 손에 흰 손수건을 들어 흔든다. 안경을 썼고 평범한 회사원의 얼굴에 벅찬 표정.
+10) 2000년대 통일부 직원: 남북 교류 실무자. 짙은 남색 정장에 사원증 목걸이, 단정한 짧은 머리. 한 팔에 파란 서류철을 끼고 다른 손에 한반도 모양이 그려진 작은 깃발을 들었다. 밝고 희망적인 표정.</pre>
+    </article>
+  </div>
+
+  <h2 class="sec">아직 프롬프트가 없는 것 — 다음에 만들 무대</h2>
+  <p class="lede">기출 3,700문항을 게임과 대조해 찾은 구멍이다. 챕터를 먼저 짜야
+    무대와 등장인물이 정해지므로, 프롬프트는 그때 이 목록에 추가한다.
+    다 합쳐 <b>320문항</b>어치다.</p>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>만들 챕터</th><th>무대</th><th>NPC</th><th>기출</th><th>왜</th></tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="row">임진왜란</th>
+        <td>한산도 통제영 · 행주산성</td>
+        <td class="who-cell">이순신 · 권율 · 곽재우 · 김시민 · 조헌 · 논개</td>
+        <td class="num">22</td>
+        <td class="why">기출 22문항으로 병자호란(20)보다 높은데 지금은 훈련도감 한 문항뿐</td>
+      </tr>
+      <tr>
+        <th scope="row">삼국 통일 전쟁과 가야</th>
+        <td>황산벌 · 백강 · 매소성</td>
+        <td class="who-cell">계백 · 관창 · 김유신 · 문무왕 · 의자왕</td>
+        <td class="num">47</td>
+        <td class="why">황산벌 7 · 백강 5 · 나당전쟁 5 + 금관가야 18 · 대가야 12 — 가야가 통째로 없다</td>
+      </tr>
+      <tr>
+        <th scope="row">통일신라의 정치</th>
+        <td>경주 국학과 관청</td>
+        <td class="who-cell">신문왕 · 원효 · 혜초 · 설총</td>
+        <td class="num">31</td>
+        <td class="why">신문왕 16 · 국학 5 · 부흥운동 10</td>
+      </tr>
+      <tr>
+        <th scope="row">고려의 경제와 무역</th>
+        <td>벽란도 포구</td>
+        <td class="who-cell">송 상인 · 아라비아 상인 · 전시과 담당 관리</td>
+        <td class="num">29</td>
+        <td class="why">전시과 13 · 해동통보 8 · 대외무역 8</td>
+      </tr>
+      <tr>
+        <th scope="row">현대 정부별 정책과 통일 노력</th>
+        <td>청와대 앞 · 판문점</td>
+        <td class="who-cell">박정희 · 김대중 · 남북회담 대표</td>
+        <td class="num">63</td>
+        <td class="why">김대중정부 11 · 통일노력 10 · 남북협상 9 · 박정희 9 · 유신체제 5</td>
+      </tr>
+      <tr>
+        <th scope="row">세시풍속·문화유산 도감</th>
+        <td>(챕터가 아니라 별도 콘텐츠)</td>
+        <td class="who-cell">—</td>
+        <td class="num">128</td>
+        <td class="why">문화유산 39 · 지역사 34 · 답사 19 · 세시풍속 19 · 생활상 17 — 출제 유형 자체가 빠져 있다</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    이 페이지는 <code>제미나이_프롬프트.md</code>에서 자동으로 만들어진다.
+    프롬프트를 고칠 때는 마크다운을 고치고
+    <code>python3 www/assets/tools/make_asset_page.py</code>를 다시 돌릴 것.
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll('.peek').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.closest('.card').querySelector('.prompt');
+      var open = pre.hidden;
+      pre.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? '접기' : '펼쳐 보기';
+    });
+  });
+
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.closest('.card').querySelector('.prompt');
+      var text = pre.textContent;
+      var ok = function () {
+        btn.textContent = '복사했어요';
+        btn.classList.add('copied');
+        setTimeout(function () { btn.textContent = '프롬프트 복사'; btn.classList.remove('copied'); }, 1600);
+      };
+      // 샌드박스에서 클립보드가 막히는 경우가 있다. 그때는 펼쳐서 직접 고르게 한다.
+      var fail = function () {
+        pre.hidden = false;
+        var r = document.createRange();
+        r.selectNodeContents(pre);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+        btn.textContent = '길게 눌러 복사하세요';
+        setTimeout(function () { btn.textContent = '프롬프트 복사'; }, 2600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(ok, fail);
+      } else {
+        fail();
+      }
+    });
+  });
+
+  var grid = document.getElementById('grid');
+  document.querySelectorAll('.filters button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.filters button').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      var f = btn.dataset.f;
+      grid.querySelectorAll('.card').forEach(function (c) {
+        var show = f === 'all' ? true
+          : f === 'todo' ? !c.classList.contains('is-done')
+          : c.dataset.kind === f;
+        c.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>
