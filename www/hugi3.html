@@ -288,11 +288,26 @@ const ZONES = {
     img: 'assets/scenes/hugi3_sedo.png', label: '삼정이 무너진 고을',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:355, y1:145 },  // 밭
+      { x0:345, y0:0, x1:1015, y1:215 },  // 관아 담
+      { x0:575, y0:100, x1:805, y1:235 },  // 솟을대문
+      { x0:15, y0:140, x1:255, y1:545 },  // 환곡 창고
+      { x0:195, y0:465, x1:265, y1:525 },  // 됫박
+      { x0:485, y0:210, x1:575, y1:280 },  // 형틀
+      { x0:800, y0:220, x1:885, y1:295 },  // 수레
+      { x0:995, y0:0, x1:1376, y1:135 },  // 초가
+      { x0:1005, y0:170, x1:1295, y1:335 },  // 초가
+      { x0:1245, y0:205, x1:1376, y1:435 },  // 초가
+      { x0:1005, y0:395, x1:1255, y1:525 },  // 초가
+      { x0:1025, y0:500, x1:1295, y1:605 },  // 초가
+      { x0:1285, y0:515, x1:1376, y1:595 },  // 항아리
+      { x0:0, y0:595, x1:600, y1:768 },  // 갈라진 논
+      { x0:800, y0:635, x1:1376, y1:768 },  // 마른 논
     ],
     npcs: [
       { id:'hongyeong', name:'홍경래', x:330, y:250, img:'assets/portraits/hongyeong.png', look:{ role:'general', body:'#5c2f2f', accent:'#c9a24a' } },
-      { id:'imsul', name:'진주 농민', x:700, y:240, img:'assets/portraits/imsul.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
-      { id:'choeje', name:'최제우', x:1060, y:280, img:'assets/portraits/choeje.png', look:{ role:'scholar', body:'#4a4a58', accent:'#e0b94a' } },
+      { id:'imsul', name:'진주 농민', x:700, y:270, img:'assets/portraits/imsul.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
+      { id:'choeje', name:'최제우', x:975, y:300, img:'assets/portraits/choeje.png', look:{ role:'scholar', body:'#4a4a58', accent:'#e0b94a' } },
       { id:'samjeong', name:'아전', x:688, y:640, img:'assets/portraits/samjeong.png', look:{ role:'scholar', body:'#4a5a68', accent:'#8a7a5a' } },
     ],
     exits: [],

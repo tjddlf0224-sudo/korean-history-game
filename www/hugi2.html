@@ -288,13 +288,33 @@ const ZONES = {
     img: 'assets/scenes/hugi2_jeojat.png', label: '한양 저잣거리',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:400, y1:235 },  // 주막
+      { x0:135, y0:190, x1:205, y1:290 },  // 항아리
+      { x0:195, y0:215, x1:350, y1:365 },  // 평상
+      { x0:400, y0:0, x1:1376, y1:135 },  // 시전 지붕
+      { x0:410, y0:120, x1:1376, y1:295 },  // 차양과 좌판
+      { x0:95, y0:230, x1:140, y1:605 },  // 담
+      { x0:350, y0:285, x1:435, y1:355 },  // 나귀
+      { x0:200, y0:445, x1:355, y1:535 },  // 평상
+      { x0:125, y0:505, x1:205, y1:575 },  // 항아리
+      { x0:160, y0:550, x1:280, y1:630 },  // 국솥
+      { x0:280, y0:560, x1:365, y1:645 },  // 찬장
+      { x0:0, y0:595, x1:125, y1:768 },  // 버드나무
+      { x0:395, y0:540, x1:665, y1:768 },  // 버드나무
+      { x0:1225, y0:605, x1:1376, y1:768 },  // 버드나무
+      { x0:0, y0:655, x1:1376, y1:735 },  // 아래 담
+      { x0:740, y0:565, x1:945, y1:665 },  // 우물
+      { x0:950, y0:525, x1:1060, y1:625 },  // 지게
+      { x0:980, y0:600, x1:1205, y1:660 },  // 저울
+      { x0:1075, y0:485, x1:1376, y1:615 },  // 난전 멍석
+      { x0:1240, y0:190, x1:1350, y1:280 },  // 저울
     ],
     npcs: [
-      { id:'jeongyagyong', name:'정약용', x:320, y:250, img:'assets/portraits/jeongyagyong.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
-      { id:'bakjega', name:'박제가', x:700, y:230, img:'assets/portraits/bakjega.png', look:{ role:'scholar', body:'#4a5a68', accent:'#e0b94a' } },
-      { id:'hongdaeyong', name:'홍대용', x:1060, y:280, img:'assets/portraits/hongdaeyong.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
-      { id:'gimhongdo', name:'김홍도', x:500, y:640, img:'assets/portraits/gimhongdo.png', look:{ role:'scholar', body:'#6b5636', accent:'#c9a24a' } },
-      { id:'jeongjo', name:'정조', x:900, y:640, img:'assets/portraits/jeongjo.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
+      { id:'jeongyagyong', name:'정약용', x:330, y:390, img:'assets/portraits/jeongyagyong.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'bakjega', name:'박제가', x:700, y:330, img:'assets/portraits/bakjega.png', look:{ role:'scholar', body:'#4a5a68', accent:'#e0b94a' } },
+      { id:'hongdaeyong', name:'홍대용', x:1060, y:345, img:'assets/portraits/hongdaeyong.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
+      { id:'gimhongdo', name:'김홍도', x:560, y:480, img:'assets/portraits/gimhongdo.png', look:{ role:'scholar', body:'#6b5636', accent:'#c9a24a' } },
+      { id:'jeongjo', name:'정조', x:900, y:500, img:'assets/portraits/jeongjo.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
     ],
     exits: [],
   },

@@ -288,12 +288,26 @@ const ZONES = {
     img: 'assets/scenes/goryeo3_gaegyeong.png', label: '개경 궁궐(고려 말)',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:1376, y1:215 },  // 정전과 좌우 전각
+      { x0:0, y0:140, x1:205, y1:435 },  // 불당
+      { x0:195, y0:220, x1:365, y1:335 },  // 담과 석탑
+      { x0:200, y0:370, x1:270, y1:420 },  // 향로
+      { x0:195, y0:395, x1:315, y1:525 },  // 담
+      { x0:0, y0:465, x1:255, y1:565 },  // 무너진 담
+      { x0:1165, y0:170, x1:1376, y1:505 },  // 서고
+      { x0:1135, y0:325, x1:1205, y1:525 },  // 담
+      { x0:1035, y0:450, x1:1185, y1:535 },  // 평상
+      { x0:0, y0:590, x1:590, y1:665 },  // 아래 담
+      { x0:780, y0:590, x1:1376, y1:665 },  // 아래 담
+      { x0:588, y0:525, x1:782, y1:605 },  // 협문 지붕
+      { x0:795, y0:515, x1:1015, y1:705 },  // 소나무
+      { x0:1025, y0:585, x1:1125, y1:705 },  // 석등
     ],
     npcs: [
       { id:'gongmin', name:'공민왕', x:688, y:230, img:'assets/portraits/gongmin.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
-      { id:'jinul', name:'지눌', x:320, y:300, img:'assets/portraits/jinul.png', look:{ role:'scholar', body:'#8a6d3b', accent:'#c9a24a' } },
+      { id:'jinul', name:'지눌', x:330, y:375, img:'assets/portraits/jinul.png', look:{ role:'scholar', body:'#8a6d3b', accent:'#c9a24a' } },
       { id:'uicheon', name:'의천', x:1060, y:300, img:'assets/portraits/uicheon.png', look:{ role:'scholar', body:'#6b5636', accent:'#e0b94a' } },
-      { id:'igyubo', name:'이규보', x:688, y:640, img:'assets/portraits/igyubo.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
+      { id:'igyubo', name:'이규보', x:688, y:495, img:'assets/portraits/igyubo.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
     ],
     exits: [],
   },

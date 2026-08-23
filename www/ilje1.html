@@ -288,12 +288,26 @@ const ZONES = {
     img: 'assets/scenes/ilje1_tapgol.png', label: '탑골공원',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:1376, y1:60 },  // 담
+      { x0:0, y0:0, x1:60, y1:730 },  // 담
+      { x0:1325, y0:0, x1:1376, y1:730 },  // 담
+      { x0:0, y0:685, x1:1376, y1:768 },  // 담
+      { x0:540, y0:0, x1:845, y1:255 },  // 팔각정
+      { x0:85, y0:85, x1:345, y1:505 },  // 석탑과 난간
+      { x0:1165, y0:260, x1:1270, y1:435 },  // 비석
+      { x0:925, y0:15, x1:1315, y1:145 },  // 나무
+      { x0:1125, y0:540, x1:1235, y1:695 },  // 나무
+      { x0:960, y0:135, x1:1220, y1:170 },  // 벤치
+      { x0:1225, y0:190, x1:1295, y1:255 },  // 벤치
+      { x0:1235, y0:435, x1:1295, y1:515 },  // 벤치
+      { x0:1230, y0:550, x1:1295, y1:630 },  // 벤치
+      { x0:585, y0:645, x1:795, y1:735 },  // 정문
     ],
     npcs: [
-      { id:'mudan', name:'헌병경찰 피해자', x:330, y:250, img:'assets/portraits/mudan.png', look:{ role:'commoner', body:'#5a5650', accent:'#8a7a5a' } },
+      { id:'mudan', name:'헌병경찰 피해자', x:420, y:250, img:'assets/portraits/mudan.png', look:{ role:'commoner', body:'#5a5650', accent:'#8a7a5a' } },
       { id:'samil', name:'만세 시위 학생', x:700, y:240, img:'assets/portraits/samil.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
       { id:'bakeunsik', name:'박은식', x:1060, y:280, img:'assets/portraits/bakeunsik.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
-      { id:'gwangbokhoe', name:'대한광복회 단원', x:688, y:640, img:'assets/portraits/gwangbokhoe.png', look:{ role:'general', body:'#4a4a58', accent:'#8a6d3b' } },
+      { id:'gwangbokhoe', name:'대한광복회 단원', x:688, y:600, img:'assets/portraits/gwangbokhoe.png', look:{ role:'general', body:'#4a4a58', accent:'#8a6d3b' } },
     ],
     exits: [],
   },

@@ -288,13 +288,26 @@ const ZONES = {
     img: 'assets/scenes/hyeondae1_haebang.png', label: '해방 정국의 거리',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:205, y1:768 },  // 벽보 담
+      { x0:185, y0:375, x1:345, y1:768 },  // 궤짝
+      { x0:230, y0:0, x1:1135, y1:290 },  // 석조 건물
+      { x0:895, y0:170, x1:1155, y1:280 },  // 판잣집 상점
+      { x0:1145, y0:0, x1:1376, y1:565 },  // 판잣집
+      { x0:895, y0:275, x1:1135, y1:345 },  // 좌판
+      { x0:1085, y0:365, x1:1220, y1:455 },  // 좌판
+      { x0:1125, y0:475, x1:1235, y1:575 },  // 자루
+      { x0:1285, y0:540, x1:1350, y1:595 },  // 자루
+      { x0:395, y0:615, x1:615, y1:735 },  // 보따리
+      { x0:615, y0:610, x1:795, y1:715 },  // 짐수레
+      { x0:805, y0:625, x1:965, y1:705 },  // 자전거
+      { x0:975, y0:660, x1:1376, y1:768 },  // 궤도
     ],
     npcs: [
-      { id:'yeounhyeong', name:'여운형', x:330, y:250, img:'assets/portraits/yeounhyeong.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
-      { id:'sintak', name:'신탁통치 반대 시민', x:700, y:240, img:'assets/portraits/sintak.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
-      { id:'jeju', name:'제주 사람', x:1060, y:280, img:'assets/portraits/jeju.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
-      { id:'nongji', name:'농지개혁 담당관', x:500, y:640, img:'assets/portraits/nongji.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
-      { id:'yukio', name:'피란민', x:900, y:640, img:'assets/portraits/yukio.png', look:{ role:'commoner', body:'#5a5650', accent:'#8a7a5a' } },
+      { id:'yeounhyeong', name:'여운형', x:330, y:335, img:'assets/portraits/yeounhyeong.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'sintak', name:'신탁통치 반대 시민', x:700, y:335, img:'assets/portraits/sintak.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
+      { id:'jeju', name:'제주 사람', x:1000, y:385, img:'assets/portraits/jeju.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
+      { id:'nongji', name:'농지개혁 담당관', x:500, y:565, img:'assets/portraits/nongji.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
+      { id:'yukio', name:'피란민', x:880, y:570, img:'assets/portraits/yukio.png', look:{ role:'commoner', body:'#5a5650', accent:'#8a7a5a' } },
     ],
     exits: [],
   },

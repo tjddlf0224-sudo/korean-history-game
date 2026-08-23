@@ -288,15 +288,23 @@ const ZONES = {
      한 줄로 세웠다 — 기출은 늘 "어느 정부 때인가"를 묻기 때문이다. */
   gwanghwamun: {
     img: 'assets/scenes/hyeondae3_panmunjeom.png', label: '광화문에서 판문점까지',
-    spawn: { x: 688, y: 470 },
+    spawn: { x: 688, y: 400 },
     barriers: [
+      { x0:0, y0:0, x1:290, y1:768 },  // 도로 건너 빌딩
+      { x0:415, y0:0, x1:1105, y1:335 },  // 마을과 밭
+      { x0:1100, y0:0, x1:1376, y1:185 },  // 숲
+      { x0:1105, y0:170, x1:1315, y1:565 },  // 판문점
+      { x0:1310, y0:180, x1:1376, y1:560 },  // 풀밭
+      { x0:1285, y0:555, x1:1376, y1:768 },  // 숲
+      { x0:415, y0:460, x1:1105, y1:768 },  // 공단
+      { x0:0, y0:465, x1:430, y1:768 },  // 빌딩
     ],
     npcs: [
-      { id:'hanil', name:'한일 회담 반대 학생', x:320, y:250, img:'assets/portraits/hanil.png', look:{ role:'commoner', body:'#2f2f38', accent:'#d8c48a' } },
-      { id:'veteran', name:'베트남 파병 군인', x:700, y:230, img:'assets/portraits/veteran.png', look:{ role:'general', body:'#5a6b4a', accent:'#8a7a5a' } },
-      { id:'saemaul', name:'새마을 지도자', x:1060, y:280, img:'assets/portraits/saemaul.png', look:{ role:'commoner', body:'#6b8a4a', accent:'#e8e4d8' } },
-      { id:'olympic', name:'서울올림픽 자원봉사자', x:500, y:640, img:'assets/portraits/olympic.png', look:{ role:'commoner', body:'#3f5a8a', accent:'#e0b94a' } },
-      { id:'gimdaejung', name:'김대중', x:900, y:640, img:'assets/portraits/gimdaejung.png', look:{ role:'king', body:'#2f3a4a', accent:'#c9a24a' } },
+      { id:'hanil', name:'한일 회담 반대 학생', x:340, y:395, img:'assets/portraits/hanil.png', look:{ role:'commoner', body:'#2f2f38', accent:'#d8c48a' } },
+      { id:'veteran', name:'베트남 파병 군인', x:520, y:400, img:'assets/portraits/veteran.png', look:{ role:'general', body:'#5a6b4a', accent:'#8a7a5a' } },
+      { id:'saemaul', name:'새마을 지도자', x:700, y:395, img:'assets/portraits/saemaul.png', look:{ role:'commoner', body:'#6b8a4a', accent:'#e8e4d8' } },
+      { id:'olympic', name:'서울올림픽 자원봉사자', x:880, y:400, img:'assets/portraits/olympic.png', look:{ role:'commoner', body:'#3f5a8a', accent:'#e0b94a' } },
+      { id:'gimdaejung', name:'김대중', x:1050, y:395, img:'assets/portraits/gimdaejung.png', look:{ role:'king', body:'#2f3a4a', accent:'#c9a24a' } },
     ],
     exits: [],
   },

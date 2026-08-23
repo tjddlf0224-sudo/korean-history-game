@@ -290,12 +290,26 @@ const ZONES = {
     img: 'assets/scenes/goryeo_byeokrando.png', label: '벽란도 포구',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:1376, y1:190 },  // 창고와 상점
+      { x0:55, y0:125, x1:205, y1:220 },  // 저울 평상
+      { x0:55, y0:270, x1:165, y1:360 },  // 통과 항아리
+      { x0:190, y0:280, x1:345, y1:365 },  // 소달구지
+      { x0:1100, y0:100, x1:1315, y1:220 },  // 화덕
+      { x0:1085, y0:220, x1:1270, y1:355 },  // 거푸집 멍석
+      { x0:1225, y0:285, x1:1305, y1:350 },  // 은덩이
+      { x0:0, y0:365, x1:285, y1:768 },  // 강
+      { x0:420, y0:365, x1:640, y1:768 },  // 강
+      { x0:730, y0:365, x1:1005, y1:768 },  // 강
+      { x0:1105, y0:365, x1:1376, y1:768 },  // 강
+      { x0:285, y0:600, x1:420, y1:768 },  // 강
+      { x0:640, y0:600, x1:730, y1:768 },  // 강
+      { x0:1005, y0:590, x1:1105, y1:768 },  // 강
     ],
     npcs: [
       { id:'jeonsigwa', name:'전시과 담당 관리', x:300, y:250, img:'assets/portraits/jeonsigwa.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
       { id:'songsang', name:'송 상인', x:700, y:240, img:'assets/portraits/songsang.png', look:{ role:'commoner', body:'#5c4a6b', accent:'#d8c48a' } },
-      { id:'arabsang', name:'대식국 상인', x:1080, y:300, img:'assets/portraits/arabsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#e0b94a' } },
-      { id:'jujeon', name:'주전도감 장인', x:688, y:640, img:'assets/portraits/jujeon.png', look:{ role:'commoner', body:'#5a5a4a', accent:'#b8a888' } },
+      { id:'arabsang', name:'대식국 상인', x:1040, y:300, img:'assets/portraits/arabsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#e0b94a' } },
+      { id:'jujeon', name:'주전도감 장인', x:688, y:555, img:'assets/portraits/jujeon.png', look:{ role:'commoner', body:'#5a5a4a', accent:'#b8a888' } },
     ],
     exits: [],
   },

@@ -288,13 +288,21 @@ const ZONES = {
     img: 'assets/scenes/gaehang5_hwangudan.png', label: '환구단과 종로 거리',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:305, y1:625 },  // 상점가
+      { x0:295, y0:25, x1:365, y1:625 },  // 전신주
+      { x0:260, y0:325, x1:345, y1:425 },  // 전선
+      { x0:340, y0:420, x1:420, y1:630 },  // 가로등
+      { x0:370, y0:0, x1:1110, y1:310 },  // 환구단과 담
+      { x0:1135, y0:0, x1:1376, y1:565 },  // 벽돌 건물
+      { x0:1050, y0:335, x1:1145, y1:505 },  // 인력거
+      { x0:765, y0:550, x1:1085, y1:735 },  // 전차
     ],
     npcs: [
-      { id:'gojong', name:'고종 황제', x:688, y:230, img:'assets/portraits/gojong.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
-      { id:'seojaepil', name:'독립협회 회원', x:320, y:300, img:'assets/portraits/seojaepil.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
-      { id:'maeil', name:'대한매일신보 기자', x:1060, y:300, img:'assets/portraits/maeil.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
+      { id:'gojong', name:'고종 황제', x:688, y:345, img:'assets/portraits/gojong.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
+      { id:'seojaepil', name:'독립협회 회원', x:400, y:355, img:'assets/portraits/seojaepil.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'maeil', name:'대한매일신보 기자', x:1050, y:345, img:'assets/portraits/maeil.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
       { id:'sinminhoe', name:'신민회 회원', x:500, y:640, img:'assets/portraits/sinminhoe.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
-      { id:'jeongmi', name:'정미의병', x:900, y:640, img:'assets/portraits/jeongmi.png', look:{ role:'general', body:'#5c2f2f', accent:'#8a6d3b' } },
+      { id:'jeongmi', name:'정미의병', x:900, y:510, img:'assets/portraits/jeongmi.png', look:{ role:'general', body:'#5c2f2f', accent:'#8a6d3b' } },
     ],
     exits: [],
   },

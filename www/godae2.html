@@ -286,14 +286,26 @@ const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
   cheonghae: {
     img: 'assets/scenes/godae2_cheonghae.png', label: '청해진 포구',
-    spawn: { x: 688, y: 470 },
+    spawn: { x: 688, y: 280 },
     barriers: [
+      { x0:0, y0:0, x1:215, y1:335 },  // 석축 담
+      { x0:245, y0:0, x1:515, y1:155 },  // 기와집
+      { x0:545, y0:0, x1:800, y1:155 },  // 창고
+      { x0:815, y0:0, x1:1185, y1:170 },  // 창고와 항아리
+      { x0:195, y0:170, x1:245, y1:340 },  // 깃대
+      { x0:1085, y0:230, x1:1230, y1:390 },  // 그물 시렁
+      { x0:1255, y0:165, x1:1376, y1:410 },  // 소금 가마
+      { x0:0, y0:375, x1:300, y1:768 },  // 바다
+      { x0:300, y0:388, x1:600, y1:768 },  // 바다
+      { x0:600, y0:400, x1:900, y1:768 },  // 바다
+      { x0:900, y0:392, x1:1200, y1:768 },  // 바다
+      { x0:1200, y0:400, x1:1376, y1:768 },  // 바다
     ],
     npcs: [
       { id:'jangbogo', name:'장보고', x:320, y:260, img:'assets/portraits/jangbogo.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'uisang', name:'의상', x:700, y:230, img:'assets/portraits/uisang.png', look:{ role:'scholar', body:'#8a6d3b', accent:'#e0b94a' } },
       { id:'balhae', name:'발해 사신', x:1080, y:280, img:'assets/portraits/balhae.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
-      { id:'minjeong', name:'촌주', x:688, y:640, img:'assets/portraits/minjeong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
+      { id:'minjeong', name:'촌주', x:560, y:300, img:'assets/portraits/minjeong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
     ],
     exits: [],
   },

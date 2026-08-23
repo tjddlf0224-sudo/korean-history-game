@@ -288,13 +288,28 @@ const ZONES = {
     img: 'assets/scenes/ilje2_gyeongseong.png', label: '경성 종로',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:935, y1:295 },  // 벽돌 상가
+      { x0:1135, y0:0, x1:1376, y1:305 },  // 건물
+      { x0:0, y0:260, x1:505, y1:550 },  // 재래 상점
+      { x0:985, y0:245, x1:1376, y1:550 },  // 다방과 양복점
+      { x0:1025, y0:515, x1:1095, y1:565 },  // 자전거
+      { x0:1210, y0:515, x1:1270, y1:565 },  // 자전거
+      { x0:1295, y0:545, x1:1345, y1:610 },  // 우체통
+      { x0:955, y0:230, x1:1005, y1:515 },  // 전신주
+      { x0:1010, y0:335, x1:1040, y1:510 },  // 깃발
+      { x0:80, y0:585, x1:140, y1:705 },  // 전신주
+      { x0:150, y0:635, x1:255, y1:705 },  // 가로등
+      { x0:635, y0:580, x1:705, y1:735 },  // 전신주
+      { x0:955, y0:635, x1:1040, y1:705 },  // 가로등
+      { x0:1240, y0:585, x1:1295, y1:705 },  // 전신주
+      { x0:700, y0:570, x1:945, y1:665 },  // 전차
     ],
     npcs: [
-      { id:'mulsan', name:'물산장려회 회원', x:320, y:250, img:'assets/portraits/mulsan.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
-      { id:'singanhoe', name:'신간회 간부', x:700, y:230, img:'assets/portraits/singanhoe.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
-      { id:'uiyeoldan', name:'의열단원', x:1060, y:280, img:'assets/portraits/uiyeoldan.png', look:{ role:'general', body:'#3d3d4a', accent:'#8a6d3b' } },
-      { id:'cheongsanri', name:'독립군 대장', x:500, y:640, img:'assets/portraits/cheongsanri.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
-      { id:'eohakhoe', name:'조선어학회 회원', x:900, y:640, img:'assets/portraits/eohakhoe.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'mulsan', name:'물산장려회 회원', x:560, y:345, img:'assets/portraits/mulsan.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
+      { id:'singanhoe', name:'신간회 간부', x:920, y:345, img:'assets/portraits/singanhoe.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
+      { id:'uiyeoldan', name:'의열단원', x:820, y:470, img:'assets/portraits/uiyeoldan.png', look:{ role:'general', body:'#3d3d4a', accent:'#8a6d3b' } },
+      { id:'cheongsanri', name:'독립군 대장', x:900, y:700, img:'assets/portraits/cheongsanri.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
+      { id:'eohakhoe', name:'조선어학회 회원', x:700, y:330, img:'assets/portraits/eohakhoe.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
     ],
     exits: [],
   },

@@ -290,11 +290,43 @@ const ZONES = {
     img: 'assets/scenes/seonsa1_river.png', label: '선사의 강가',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:86, y1:89 },  // 강
+      { x0:86, y0:0, x1:172, y1:113 },
+      { x0:172, y0:0, x1:258, y1:123 },
+      { x0:258, y0:0, x1:344, y1:104 },
+      { x0:344, y0:0, x1:430, y1:78 },
+      { x0:430, y0:0, x1:516, y1:104 },
+      { x0:516, y0:0, x1:602, y1:118 },
+      { x0:602, y0:0, x1:688, y1:163 },
+      { x0:688, y0:0, x1:774, y1:168 },
+      { x0:774, y0:0, x1:860, y1:107 },
+      { x0:860, y0:0, x1:946, y1:98 },
+      { x0:946, y0:0, x1:1032, y1:95 },
+      { x0:1032, y0:0, x1:1118, y1:92 },
+      { x0:1118, y0:0, x1:1204, y1:91 },
+      { x0:1204, y0:0, x1:1290, y1:108 },
+      { x0:1290, y0:0, x1:1376, y1:98 },
+      { x0:0, y0:60, x1:430, y1:400 },  // 바위 절벽과 언덕
+      { x0:273, y0:339, x1:427, y1:478 },  // 막집
+      { x0:71, y0:494, x1:286, y1:703 },  // 막집
+      { x0:226, y0:481, x1:329, y1:549 },  // 모닥불
+      { x0:487, y0:200, x1:605, y1:325 },  // 움집
+      { x0:588, y0:160, x1:703, y1:270 },  // 움집
+      { x0:742, y0:155, x1:845, y1:262 },  // 움집
+      { x0:820, y0:205, x1:930, y1:315 },  // 움집
+      { x0:805, y0:292, x1:910, y1:395 },  // 움집
+      { x0:1067, y0:186, x1:1176, y1:430 },  // 목책
+      { x0:1166, y0:137, x1:1355, y1:243 },  // 집
+      { x0:1205, y0:417, x1:1379, y1:541 },  // 집
+      { x0:1047, y0:516, x1:1201, y1:639 },  // 고인돌
+      { x0:1025, y0:627, x1:1151, y1:743 },  // 고인돌
+      { x0:1130, y0:430, x1:1376, y1:560 },  // 마을 흙둑
+      { x0:1150, y0:620, x1:1376, y1:740 },  // 밭
     ],
     npcs: [
-      { id:'gusukgi', name:'뗀석기 사냥꾼', x:300, y:250, img:'assets/portraits/gusukgi.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
-      { id:'sinseokgi', name:'빗살무늬 아낙', x:700, y:250, img:'assets/portraits/sinseokgi.png', look:{ role:'commoner', body:'#a89878', accent:'#6b5636' } },
-      { id:'cheongdonggi', name:'송국리 군장', x:1080, y:300, img:'assets/portraits/cheongdonggi.png', look:{ role:'general', body:'#5c4a2f', accent:'#c9a24a' } },
+      { id:'gusukgi', name:'뗀석기 사냥꾼', x:400, y:560, img:'assets/portraits/gusukgi.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
+      { id:'sinseokgi', name:'빗살무늬 아낙', x:690, y:310, img:'assets/portraits/sinseokgi.png', look:{ role:'commoner', body:'#a89878', accent:'#6b5636' } },
+      { id:'cheongdonggi', name:'송국리 군장', x:1010, y:330, img:'assets/portraits/cheongdonggi.png', look:{ role:'general', body:'#5c4a2f', accent:'#c9a24a' } },
       { id:'dangun', name:'고조선 제사장', x:688, y:640, img:'assets/portraits/dangun.png', look:{ role:'scholar', body:'#4a4a58', accent:'#e0b94a' } },
     ],
     exits: [],

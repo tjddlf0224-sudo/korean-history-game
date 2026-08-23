@@ -289,16 +289,32 @@ const ZONES = {
      소식이 모이는 한 곳을 택한 것이다. */
   hansan: {
     img: 'assets/scenes/imjin_hansando.png', label: '한산도 통제영',
-    spawn: { x: 688, y: 470 },
+    spawn: { x: 688, y: 330 },
     barriers: [
+      { x0:0, y0:0, x1:185, y1:190 },  // 화살통
+      { x0:185, y0:10, x1:335, y1:115 },  // 활 시렁
+      { x0:385, y0:0, x1:985, y1:220 },  // 통제영 본채
+      { x0:550, y0:100, x1:590, y1:285 },  // 깃대
+      { x0:0, y0:235, x1:235, y1:340 },  // 대포와 포탄
+      { x0:0, y0:350, x1:235, y1:475 },  // 대포와 포탄
+      { x0:0, y0:290, x1:65, y1:385 },  // 나무 더미
+      { x0:15, y0:460, x1:145, y1:535 },  // 통
+      { x0:995, y0:10, x1:1376, y1:135 },  // 초가 창고
+      { x0:1245, y0:125, x1:1376, y1:255 },  // 초가 창고
+      { x0:1175, y0:95, x1:1265, y1:185 },  // 소금 가마
+      { x0:1095, y0:315, x1:1376, y1:445 },  // 그물 시렁
+      { x0:1260, y0:460, x1:1350, y1:535 },  // 우물
+      { x0:110, y0:435, x1:1235, y1:768 },  // 바다
+      { x0:0, y0:530, x1:115, y1:768 },  // 바다
+      { x0:1230, y0:540, x1:1376, y1:768 },  // 바다
     ],
     npcs: [
       { id:'yisunsin', name:'이순신', x:300, y:250, img:'assets/portraits/yisunsin.png', look:{ role:'general', body:'#3f5a6b', accent:'#c9a24a' } },
       { id:'gwakjaeu', name:'곽재우', x:690, y:230, img:'assets/portraits/gwakjaeu.png', look:{ role:'general', body:'#8a3a3a', accent:'#e0b94a' } },
       { id:'gimsimin', name:'김시민', x:1080, y:270, img:'assets/portraits/gimsimin.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
-      { id:'gwonyul', name:'권율', x:420, y:640, img:'assets/portraits/gwonyul.png', look:{ role:'general', body:'#5a4a4a', accent:'#c9a24a' } },
-      { id:'johun', name:'조헌', x:720, y:660, img:'assets/portraits/johun.png', look:{ role:'scholar', body:'#e8e4d8', accent:'#6b5636' } },
-      { id:'nongae', name:'논개', x:1000, y:640, img:'assets/portraits/nongae.png', look:{ role:'commoner', body:'#7a4a5a', accent:'#d8c48a' } },
+      { id:'gwonyul', name:'권율', x:420, y:340, img:'assets/portraits/gwonyul.png', look:{ role:'general', body:'#5a4a4a', accent:'#c9a24a' } },
+      { id:'johun', name:'조헌', x:850, y:330, img:'assets/portraits/johun.png', look:{ role:'scholar', body:'#e8e4d8', accent:'#6b5636' } },
+      { id:'nongae', name:'논개', x:1000, y:380, img:'assets/portraits/nongae.png', look:{ role:'commoner', body:'#7a4a5a', accent:'#d8c48a' } },
     ],
     exits: [],
   },

@@ -288,12 +288,25 @@ const ZONES = {
     img: 'assets/scenes/gaehang1_ganghwa.png', label: '강화도 연무당',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:325, y0:0, x1:1010, y1:220 },  // 연무당
+      { x0:1070, y0:0, x1:1376, y1:565 },  // 초가 막사
+      { x0:1095, y0:140, x1:1230, y1:235 },  // 무기 거치대
+      { x0:1155, y0:460, x1:1270, y1:540 },  // 무기 거치대
+      { x0:1090, y0:295, x1:1130, y1:535 },  // 깃대
+      { x0:0, y0:150, x1:235, y1:610 },  // 포대 성벽
+      { x0:80, y0:250, x1:290, y1:335 },  // 대포
+      { x0:80, y0:395, x1:270, y1:475 },  // 대포
+      { x0:240, y0:475, x1:330, y1:550 },  // 포탄
+      { x0:0, y0:545, x1:335, y1:620 },  // 성벽
+      { x0:0, y0:555, x1:400, y1:768 },  // 갯벌과 바다
+      { x0:400, y0:585, x1:900, y1:768 },  // 갯벌과 바다
+      { x0:900, y0:555, x1:1376, y1:768 },  // 갯벌과 바다
     ],
     npcs: [
       { id:'daewongun', name:'흥선대원군', x:330, y:250, img:'assets/portraits/daewongun.png', look:{ role:'king', body:'#4a4a58', accent:'#c9a24a' } },
       { id:'sinheon', name:'접견대관', x:700, y:240, img:'assets/portraits/sinheon.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'choeikhyeon', name:'최익현', x:1060, y:280, img:'assets/portraits/choeikhyeon.png', look:{ role:'scholar', body:'#4a5a68', accent:'#e0b94a' } },
-      { id:'gaehwa', name:'개화파 관원', x:688, y:640, img:'assets/portraits/gaehwa.png', look:{ role:'scholar', body:'#5c4a2f', accent:'#c9a24a' } },
+      { id:'gaehwa', name:'개화파 관원', x:760, y:500, img:'assets/portraits/gaehwa.png', look:{ role:'scholar', body:'#5c4a2f', accent:'#c9a24a' } },
     ],
     exits: [],
   },

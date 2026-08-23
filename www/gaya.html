@@ -290,11 +290,30 @@ const ZONES = {
     img: 'assets/scenes/gaya_gimhae.png', label: '김해 철 시장',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:85, x1:330, y1:305 },  // 대장간
+      { x0:165, y0:260, x1:335, y1:345 },  // 모루
+      { x0:0, y0:300, x1:315, y1:475 },  // 덩이쇠 더미
+      { x0:0, y0:375, x1:135, y1:525 },  // 초가
+      { x0:325, y0:160, x1:505, y1:280 },  // 창고
+      { x0:390, y0:10, x1:1015, y1:140 },  // 고분과 담
+      { x0:615, y0:125, x1:805, y1:190 },  // 제단
+      { x0:455, y0:160, x1:1055, y1:220 },  // 개울
+      { x0:1015, y0:0, x1:1125, y1:255 },  // 개울
+      { x0:1015, y0:95, x1:1376, y1:255 },  // 초가집
+      { x0:985, y0:245, x1:1376, y1:465 },  // 장터
+      { x0:1095, y0:445, x1:1335, y1:565 },  // 말과 시렁
+      { x0:295, y0:375, x1:425, y1:525 },  // 버드나무
+      { x0:435, y0:495, x1:545, y1:575 },  // 상자와 통
+      { x0:745, y0:485, x1:1035, y1:645 },  // 수레
+      { x0:470, y0:530, x1:620, y1:768 },  // 배
+      { x0:745, y0:530, x1:850, y1:768 },  // 배
+      { x0:0, y0:600, x1:470, y1:768 },  // 강
+      { x0:850, y0:610, x1:1376, y1:768 },  // 강
     ],
     npcs: [
-      { id:'suro', name:'금관가야 왕', x:300, y:250, img:'assets/portraits/suro.png', look:{ role:'king', body:'#4a5a6b', accent:'#c9a24a' } },
+      { id:'suro', name:'금관가야 왕', x:420, y:330, img:'assets/portraits/suro.png', look:{ role:'king', body:'#4a5a6b', accent:'#c9a24a' } },
       { id:'ureuk', name:'우륵', x:700, y:240, img:'assets/portraits/ureuk.png', look:{ role:'scholar', body:'#5c4a6b', accent:'#d8c48a' } },
-      { id:'cheolsang', name:'덩이쇠 상인', x:1080, y:300, img:'assets/portraits/cheolsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
+      { id:'cheolsang', name:'덩이쇠 상인', x:980, y:350, img:'assets/portraits/cheolsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
       { id:'wae', name:'왜 사신', x:688, y:640, img:'assets/portraits/wae.png', look:{ role:'commoner', body:'#5a6b5a', accent:'#b8a888' } },
     ],
     exits: [],

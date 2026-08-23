@@ -288,13 +288,25 @@ const ZONES = {
     img: 'assets/scenes/hyeondae2_gwangjang.png', label: '광장',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:445, y1:535 },  // 빌딩
+      { x0:0, y0:580, x1:445, y1:768 },  // 빌딩
+      { x0:540, y0:0, x1:1155, y1:190 },  // 관청
+      { x0:605, y0:180, x1:1145, y1:325 },  // 계단과 단
+      { x0:765, y0:170, x1:795, y1:315 },  // 깃대
+      { x0:870, y0:170, x1:900, y1:235 },  // 깃대
+      { x0:960, y0:170, x1:990, y1:315 },  // 깃대
+      { x0:1150, y0:0, x1:1376, y1:365 },  // 가로수와 도로
+      { x0:1155, y0:350, x1:1235, y1:435 },  // 가로수
+      { x0:1190, y0:350, x1:1376, y1:555 },  // 버스와 정류장
+      { x0:1145, y0:540, x1:1376, y1:768 },  // 가로수
+      { x0:585, y0:610, x1:1085, y1:768 },  // 분수대
     ],
     npcs: [
-      { id:'sasaoip', name:'4·19 학생', x:320, y:250, img:'assets/portraits/sasaoip.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#3d5a6b' } },
-      { id:'yusin', name:'유신 시대 노동자', x:700, y:230, img:'assets/portraits/yusin.png', look:{ role:'commoner', body:'#5a5650', accent:'#8a7a5a' } },
-      { id:'gwangju', name:'광주 시민군', x:1060, y:280, img:'assets/portraits/gwangju.png', look:{ role:'commoner', body:'#4a4a58', accent:'#8a6d3b' } },
+      { id:'sasaoip', name:'4·19 학생', x:480, y:300, img:'assets/portraits/sasaoip.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#3d5a6b' } },
+      { id:'yusin', name:'유신 시대 노동자', x:700, y:365, img:'assets/portraits/yusin.png', look:{ role:'commoner', body:'#5a5650', accent:'#8a7a5a' } },
+      { id:'gwangju', name:'광주 시민군', x:1060, y:365, img:'assets/portraits/gwangju.png', look:{ role:'commoner', body:'#4a4a58', accent:'#8a6d3b' } },
       { id:'yuwol', name:'6월 항쟁 시민', x:500, y:640, img:'assets/portraits/yuwol.png', look:{ role:'commoner', body:'#3d5a6b', accent:'#c9a24a' } },
-      { id:'tongil', name:'통일부 직원', x:900, y:640, img:'assets/portraits/tongil.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
+      { id:'tongil', name:'통일부 직원', x:900, y:565, img:'assets/portraits/tongil.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
     ],
     exits: [],
   },

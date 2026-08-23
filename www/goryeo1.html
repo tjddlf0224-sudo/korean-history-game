@@ -288,11 +288,21 @@ const ZONES = {
     img: 'assets/scenes/goryeo1_gaegyeong.png', label: '개경 궁궐',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:1376, y1:200 },  // 정전과 위 축대
+      { x0:190, y0:200, x1:560, y1:335 },  // 축대 벽
+      { x0:760, y0:200, x1:1040, y1:335 },  // 축대 벽
+      { x0:0, y0:195, x1:340, y1:700 },  // 왼쪽 회랑
+      { x0:1030, y0:195, x1:1376, y1:700 },  // 오른쪽 회랑
+      { x0:995, y0:420, x1:1135, y1:510 },  // 향로와 항아리
+      { x0:0, y0:660, x1:1376, y1:768 },  // 아래 담
+      { x0:565, y0:585, x1:805, y1:768 },  // 솟을대문
+      { x0:475, y0:660, x1:535, y1:735 },  // 석등
+      { x0:840, y0:660, x1:900, y1:735 },  // 석등
     ],
     npcs: [
       { id:'wanggeon', name:'태조 왕건', x:688, y:230, img:'assets/portraits/wanggeon.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
-      { id:'gwangjong', name:'광종', x:330, y:330, img:'assets/portraits/gwangjong.png', look:{ role:'king', body:'#5c2f2f', accent:'#e0b94a' } },
-      { id:'choeseungno', name:'최승로', x:1060, y:330, img:'assets/portraits/choeseungno.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
+      { id:'gwangjong', name:'광종', x:400, y:380, img:'assets/portraits/gwangjong.png', look:{ role:'king', body:'#5c2f2f', accent:'#e0b94a' } },
+      { id:'choeseungno', name:'최승로', x:980, y:380, img:'assets/portraits/choeseungno.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
     ],
     exits: [],
   },

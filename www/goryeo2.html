@@ -288,12 +288,28 @@ const ZONES = {
     img: 'assets/scenes/goryeo2_ganghwa.png', label: '강화 임시 도읍',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:240, y1:460 },  // 토성과 울성
+      { x0:0, y0:440, x1:310, y1:768 },  // 토성과 울성
+      { x0:280, y0:0, x1:935, y1:150 },  // 임시 궁궐
+      { x0:195, y0:155, x1:505, y1:335 },  // 초가 창고
+      { x0:170, y0:330, x1:335, y1:485 },  // 초가 창고
+      { x0:315, y0:350, x1:465, y1:575 },  // 기와 창고
+      { x0:180, y0:480, x1:320, y1:575 },  // 가마니
+      { x0:420, y0:480, x1:505, y1:570 },  // 항아리
+      { x0:925, y0:0, x1:1376, y1:205 },  // 나무 골조와 목재
+      { x0:970, y0:230, x1:1376, y1:335 },  // 판각소
+      { x0:1000, y0:330, x1:1376, y1:530 },  // 작업대
+      { x0:1085, y0:415, x1:1376, y1:625 },  // 물통
+      { x0:890, y0:585, x1:1010, y1:710 },  // 배
+      { x0:830, y0:600, x1:1376, y1:768 },  // 갯벌
+      { x0:500, y0:690, x1:830, y1:768 },  // 갯벌
+      { x0:230, y0:725, x1:500, y1:768 },  // 갯벌
     ],
     npcs: [
-      { id:'seohui', name:'서희', x:300, y:250, img:'assets/portraits/seohui.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'seohui', name:'서희', x:520, y:250, img:'assets/portraits/seohui.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'yungwan', name:'윤관', x:680, y:230, img:'assets/portraits/yungwan.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
-      { id:'choechunghyeon', name:'최충헌', x:1060, y:280, img:'assets/portraits/choechunghyeon.png', look:{ role:'general', body:'#3d3d4a', accent:'#c9a24a' } },
-      { id:'sambyeolcho', name:'삼별초 장수', x:688, y:640, img:'assets/portraits/sambyeolcho.png', look:{ role:'general', body:'#5c2f2f', accent:'#8a6d3b' } },
+      { id:'choechunghyeon', name:'최충헌', x:960, y:420, img:'assets/portraits/choechunghyeon.png', look:{ role:'general', body:'#3d3d4a', accent:'#c9a24a' } },
+      { id:'sambyeolcho', name:'삼별초 장수', x:688, y:600, img:'assets/portraits/sambyeolcho.png', look:{ role:'general', body:'#5c2f2f', accent:'#8a6d3b' } },
     ],
     exits: [],
   },
