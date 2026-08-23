@@ -70,6 +70,8 @@ SHEETS = {
         'sinrip', 'haengju_yeoin', 'useen', None, None]),
     # 묘청/서경(고려2화)·삼전도비 석공(후기1화) 무대 분할에서 새로 필요해진 사람들.
     'sheet9': (3, 1, ['myocheong', 'gimbusik', 'seokgong']),
+    # 근초고왕/한성(고대1화 새 무대)·성왕(관산성 전사, 기존 무대에 추가)
+    'sheet10': (2, 1, ['geunchogo', 'seongwang']),
 }
 
 
