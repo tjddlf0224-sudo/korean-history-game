@@ -53,7 +53,10 @@ def patch(zone_id, barriers=None, spawn=None, npcs=None, note=None, path=SRC):
                 if depth == 0:
                     break
             i += 1
-        head = (f"\n   # {note}\n   " if note else '')
+        # note가 여러 줄이면 모든 줄에 #을 붙여야 한다 — 안 그러면 둘째 줄부터
+        # 파이썬 코드로 읽혀 문법 오류가 난다(실제로 이렇게 깨진 적이 있다:
+        # author_specs.py가 조용히 실패해 spec이 갱신 안 된 걸 모르고 넘어갔었다).
+        head = ('\n   ' + '\n   '.join('# ' + ln for ln in note.split('\n')) + '\n   ') if note else ''
         seg = seg[:b.start()] + head + "'barriers':" + _fmt(barriers) + seg[i + 1:]
     s = s[:start] + seg + s[end:]
 
