@@ -924,7 +924,12 @@ const Quiz = {
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
 function drawChart(c){
   if (c.type === 'bar'){
-    const max = Math.max.apply(null, c.bars.map(b => b.v));
+    // 데이터가 이미 퍼센트(예: 인구 비율)면 c.max:100을 준다 — 안 주면 이
+    // 묶음 안에서 제일 큰 값을 기준으로 상대 비교한다(예: 경공업 대 중화학
+    // 처럼 절대치가 아니라 서로 견주는 게 목적인 데이터). c.max를 빠뜨리면
+    // '70%'가 이 데이터의 최댓값이라는 이유만으로 막대가 꽉 차 버려서,
+    // 마치 70%가 100%인 것처럼 보이는 오해가 생긴다(실제로 지적받은 문제).
+    const max = c.max || Math.max.apply(null, c.bars.map(b => b.v));
     return c.bars.map(b =>
       '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
       + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'

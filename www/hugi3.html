@@ -759,7 +759,7 @@ const NPC_DATA = {
 '억지로 빌려주고 이자를 붙임',
 ],
 ], note: '셋 중 <b>환곡이 가장 심했습니다</b>. 구휼 제도가 고리대로 변한 것이지요.' }, t:'삼정이라는 게 뭐가 뭔지 헷갈리시지요. 셋을 갈라 보면 간단합니다.' },
-      { who:'npc', chart:{ type: 'bar', bars: [
+      { who:'npc', chart:{ type: 'bar', max: 100, bars: [
 { label: '1690년', v: 9, text: '양반 9%' },
 { label: '1729년', v: 19, text: '19%' },
 { label: '1783년', v: 38, text: '38%' },
@@ -895,7 +895,12 @@ const Quiz = {
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
 function drawChart(c){
   if (c.type === 'bar'){
-    const max = Math.max.apply(null, c.bars.map(b => b.v));
+    // 데이터가 이미 퍼센트(예: 인구 비율)면 c.max:100을 준다 — 안 주면 이
+    // 묶음 안에서 제일 큰 값을 기준으로 상대 비교한다(예: 경공업 대 중화학
+    // 처럼 절대치가 아니라 서로 견주는 게 목적인 데이터). c.max를 빠뜨리면
+    // '70%'가 이 데이터의 최댓값이라는 이유만으로 막대가 꽉 차 버려서,
+    // 마치 70%가 100%인 것처럼 보이는 오해가 생긴다(실제로 지적받은 문제).
+    const max = c.max || Math.max.apply(null, c.bars.map(b => b.v));
     return c.bars.map(b =>
       '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
       + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'
