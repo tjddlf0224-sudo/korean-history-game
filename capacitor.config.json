@@ -1,6 +1,6 @@
 {
   "appId": "com.yunsis.koreanhistorygame",
-  "appName": "한국사 게임",
+  "appName": "타임슬립 한국사",
   "webDir": "www",
   "server": {
     "androidScheme": "https"

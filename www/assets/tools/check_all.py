@@ -15,6 +15,7 @@
   좌표 정합       — 배경을 바꾸고 배리어만 고쳤다가 도착 지점이 벽 안이라 갇힘
   그림 존재       — 없으면 오류가 아니라 '생성 대기' 목록으로 뽑는다
   안 쓰는 배경    — 0화 인트로 배경 CSS를 빠뜨려 파일만 남고 화면은 까맸던 적 있음
+  화자 초상       — 연산군이 말하는데 김일손 얼굴이 떠 있던 적 있음
 """
 import json
 import os
@@ -87,6 +88,18 @@ def check_assets(f, s):
     return miss
 
 
+def check_alt_speaker_portrait(f, s):
+    """대사 중간에 화자가 바뀌는데 초상만 안 바뀌는 것을 잡는다.
+
+    5화에서 연산군이 말하는 칸에 김일손 얼굴이 그대로 떠 있었다.
+    name만 주고 img를 안 주면 앞 사람 초상이 그대로 남는다.
+    """
+    for i, line in enumerate(s.split('\n'), 1):
+        m = re.search(r"\{\s*who:'npc',\s*name:'([^']+)'", line)
+        if m and 'img:' not in line:
+            fails.append(f"{f}:{i}  '{m.group(1)}'이 말하는데 초상이 안 바뀜 (img 누락)")
+
+
 def check_unused_scenes(used):
     """아무 챕터도 안 쓰는 배경 — 대개 참조가 사라진 것이다.
 
@@ -147,6 +160,7 @@ def main():
         nq += check_quiz_src(f, s)
         check_links(f, s)
         check_spawn_inside_barrier(f, s)
+        check_alt_speaker_portrait(f, s)
         allmiss |= set(check_assets(f, s))
         used |= set(re.findall(r"assets/scenes/[\w.\-]+\.png", s))
     idx = open(os.path.join(WWW, 'index.html'), encoding='utf-8').read()

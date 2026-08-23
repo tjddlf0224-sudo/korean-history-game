@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>한국사 게임 — 챕터 목록</title>
+<title>타임슬립 한국사 · 한능검 심화 1급 기출 — 챕터 목록</title>
+<meta name="description" content="한국사능력검정시험(한능검) 심화 1급 대비 게임. 선사부터 현대까지 33화를 걸어다니며, 기출 361문항을 이야기로 푼다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -45,9 +46,7 @@
 
   .era-head { text-align:center; margin-bottom: 10px; flex:none; }
   .era-title { font-size: 15px; font-weight: bold; display:block; }
-  .era-badge { display:inline-block; font-size: 10px; padding: 2px 8px; border-radius: 999px; margin-top:4px; }
-  .badge-live { background:#2f5d3a; color:#c9f0d0; }
-  .badge-partial { background:#4a4020; color:#f0dca0; }
+  .subtitle { margin:2px 0 0; font-size:12px; color:#b8a888; letter-spacing:.02em; }
   .badge-plan { background:#3a2c1a; color:#d8c9a3; border:1px solid #6a5636; }
   .era-pct { display:block; font-size: 10px; opacity:.5; margin-top:3px; }
 
@@ -75,13 +74,13 @@
   <div id="scroller">
     <div id="app">
       <div class="topbar">
-        <h1>한국사 게임</h1>
+        <h1>타임슬립 한국사</h1>
+        <p class="subtitle">한능검 심화 1급 기출 · 선사부터 현대까지 33화</p>
       </div>
       <div id="timeline">
         <div class="timeline-line"></div>
         <div class="eras-row" id="eras-row"></div>
       </div>
-      <p class="plan-note">기획 중인 시대는 실제 기출 750문항(15개 회차) 분석을 바탕으로 챕터 구조와 NPC 대사까지 미리 설계되어 있습니다. 완성되는 대로 순서대로 추가됩니다.</p>
     </div>
   </div>
 </div>
@@ -197,19 +196,15 @@ const row = document.getElementById('eras-row');
 ERAS.forEach(e => {
   const col = document.createElement('div');
   col.className = 'era-col';
-  // 배경 그림이 아직 없는 챕터도 대사·퀴즈는 전부 동작한다(폴백 렌더링).
-  const isFull = ['조선 전기'].includes(e.title);
+  // 배지는 뺐다 — 모든 시대가 그림까지 다 들어와서 '준비 중'이라 할 게 없다.
   const hasCards = !!e.cards;
-  const badge = isFull ? '<span class="era-badge badge-live">플레이 가능 · 전 7화</span>'
-    : hasCards ? '<span class="era-badge badge-partial">플레이 가능 · 그림 준비 중</span>'
-    : '<span class="era-badge badge-plan">기획 완료 · 구현 예정</span>';
-  const dotClass = (isFull || hasCards) ? 'era-dot' : 'era-dot plan';
+  const badge = '';
+  const dotClass = hasCards ? 'era-dot' : 'era-dot plan';
   const pctLine = e.pct ? `<span class="era-pct">기출 ${e.pct}</span>` : '';
   let html = `
     <div class="era-marker-wrap"><div class="${dotClass}"></div><div class="era-year">${e.year}</div></div>
     <div class="era-head">
       <span class="era-title">${e.title}</span>
-      ${badge}
       ${pctLine}
     </div>`;
   if (e.cards){
