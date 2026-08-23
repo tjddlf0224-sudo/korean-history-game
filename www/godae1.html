@@ -342,12 +342,19 @@ const ZONES = {
     img: 'assets/scenes/godae1_hanseong.png', label: '한성 위례성',
     spawn: { x: 688, y: 600 },
     barriers: [
+      { x0:0, y0:0, x1:1376, y1:175 },  // 토성과 목책
+      { x0:0, y0:175, x1:230, y1:260 },  // 강
+      { x0:0, y0:400, x1:230, y1:768 },  // 강
+      { x0:1130, y0:90, x1:1376, y1:350 },  // 병장기 거치대와 깃발
+      { x0:1130, y0:395, x1:1376, y1:530 },  // 병장기 거치대와 깃발
+      { x0:800, y0:570, x1:1376, y1:768 },  // 대장간
+      { x0:180, y0:460, x1:570, y1:768 },  // 버드나무
     ],
     npcs: [
       { id:'geunchogo', name:'근초고왕', x:688, y:400, img:'assets/portraits/geunchogo.png', look:{ role:'king', body:'#7a3a3a', accent:'#e0b94a' } },
     ],
     exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'samguk', spawn:{x:688,y:220}, label:'한강 아래로' },
+      { rect:{x0:0,y0:260,x1:60,y1:400}, to:'samguk', spawn:{x:688,y:220}, label:'배를 타고 한강 아래로' },
     ],
   },
   samguk: {
