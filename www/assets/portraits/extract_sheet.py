@@ -68,14 +68,17 @@ SHEETS = {
     'sheet8': (5, 2, [
         'seonjo', 'hwangyungil', 'gimseongil', 'jeongcheol', 'gunjol',
         'sinrip', 'haengju_yeoin', 'useen', None, None]),
-    # 묘청/서경(고려2화)·삼전도비 석공(후기1화) 무대 분할에서 새로 필요해진 사람들.
-    'sheet9': (3, 1, ['myocheong', 'gimbusik', 'seokgong']),
-    # 근초고왕/한성(고대1화 새 무대)·성왕(관산성 전사, 기존 무대에 추가)
-    'sheet10': (2, 1, ['geunchogo', 'seongwang']),
-    # 대조영·문왕/발해 상경성(고대4화 새 무대) — 청해진에 얹혀 있던 발해사신 대신
-    'sheet11': (2, 1, ['daejoyeong', 'munwang']),
-    # 신숭겸·경순왕/공산·고창 벌판(고대5화 새 무대) — 통일 전쟁 과정 보강
-    'sheet12': (2, 1, ['sinsunggyeom', 'gyeongsunwang']),
+    # 단일맵→2~3맵 확장 작업에서 새로 필요해진 사람들을 모아 5x3 한 장으로.
+    # (묘청·김부식·석공: 고려2화/후기1화 / 근초고왕·성왕: 고대1화 /
+    #  대조영·문왕: 고대4화 / 신숭겸·경순왕: 고대5화 / 유형원·이익: 후기3화)
+    # 인원이 적을 때마다 낱장·소수 그리드로 따로 뽑으면 화질·명도가 튀어서
+    # (3명 이하 그리드는 유독 선명하게 나오는 경향) 5x3 15칸으로 통일한다.
+    # 다음에 또 몇 명 추가될 때는 이 시트의 빈 칸(11~15)부터 채울 것 —
+    # 새 sheet13 같은 걸 만들지 말 것.
+    'sheet9': (5, 3, [
+        'myocheong', 'gimbusik', 'seokgong', 'geunchogo', 'seongwang',
+        'daejoyeong', 'munwang', 'sinsunggyeom', 'gyeongsunwang', 'yuhyeongwon',
+        'iik', None, None, None, None]),
 }
 
 
