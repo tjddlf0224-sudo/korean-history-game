@@ -160,8 +160,8 @@
     {
      "id": "gimyusin",
      "name": "김유신",
-     "x": 1060,
-     "y": 280,
+     "x": 650,
+     "y": 560,
      "look": {
       "role": "general",
       "body": "#4f5d75",
@@ -172,7 +172,7 @@
      "id": "munmu",
      "name": "문무왕",
      "x": 500,
-     "y": 640,
+     "y": 560,
      "look": {
       "role": "king",
       "body": "#7a2f3d",
@@ -183,7 +183,7 @@
      "id": "sinmun",
      "name": "신문왕",
      "x": 900,
-     "y": 640,
+     "y": 560,
      "look": {
       "role": "king",
       "body": "#5a2f4a",

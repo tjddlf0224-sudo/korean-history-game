@@ -152,8 +152,8 @@
     {
      "id": "gyeonhwon",
      "name": "견훤",
-     "x": 470,
-     "y": 300,
+     "x": 688,
+     "y": 330,
      "look": {
       "role": "king",
       "body": "#5c2f2f",
@@ -163,8 +163,8 @@
     {
      "id": "gungye",
      "name": "궁예",
-     "x": 900,
-     "y": 260,
+     "x": 950,
+     "y": 300,
      "look": {
       "role": "king",
       "body": "#3d3d4a",
