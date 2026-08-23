@@ -83,7 +83,7 @@ SHEETS = {
     # 이미 있음(일제 2화 한인애국단 콘텐츠가 중복이라 국민대표회의로 교체됨).
     # 다음 몇 명이 필요해지면 여기(sheet10) 빈 칸부터 채울 것.
     'sheet10': (5, 3, [
-        'sinchaeho', None, None, None, None,
+        'sinchaeho', 'yugwansun', 'siwon1', 'siwon2', None,
         None, None, None, None, None,
         None, None, None, None, None]),
 }
