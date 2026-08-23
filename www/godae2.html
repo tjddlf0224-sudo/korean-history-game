@@ -371,6 +371,7 @@ const ZONES = {
     npcs: [
       { id:'jangbogo', name:'장보고', x:320, y:260, img:'assets/portraits/jangbogo.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'uisang', name:'의상', x:700, y:230, img:'assets/portraits/uisang.png', look:{ role:'scholar', body:'#8a6d3b', accent:'#e0b94a' } },
+      { id:'cheoyong', name:'처용', x:950, y:300, img:'assets/portraits/cheoyong.png', look:{ role:'commoner', body:'#6b7a5a', accent:'#c9a24a' } },
       { id:'minjeong', name:'촌주', x:560, y:300, img:'assets/portraits/minjeong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
     ],
     exits: [
@@ -506,6 +507,7 @@ function updateHudGoal(){
       ['munwang', '발해 문왕과 대화하기'],
       ['jangbogo', '청해진으로 가서 장보고와 대화하기'],
       ['uisang', '의상과 대화하기'],
+      ['cheoyong', '처용과 대화하기'],
       ['minjeong', '촌주와 대화하기']
     ];
     for (const [id, goal] of order){
@@ -743,13 +745,25 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'나는 장보고일세. 당에서 군인으로 지내다 돌아와, 흥덕왕께 청하여 이 완도에 진을 세웠네.' },
       { who:'npc', t:'해적이 우리 백성을 잡아다 팔던 시절이었지. 그 길목을 끊었네. 그러고 나니 신라·당·일본을 잇는 바닷길이 통째로 이리로 모이더군.' },
-      { who:'npc', t:'신라 헌강왕 때 이야기라네 — 내가 죽고도 한참 뒤 일이지만, 워낙 유명해 전해 들었지. 처용이라는 이가 밤늦게 집에 돌아와 보니, 아내 곁에 웬 다리가 넷이었다네. 아내가 딴 사내와 정을 통했구나, 처용도 처음엔 그리 여겼겠지.' },
-      { who:'npc', t:'그런데 처용은 그 자리에서 화를 내는 대신 노래를 부르며 춤을 추다 물러났다네. 알고 보니 그 사내는 사람이 아니라 돌림병을 옮기는 역신이었어 — 처용의 그 너그러움에 감복한 역신이 무릎을 꿇고 항복했지. "이제부터 공의 얼굴이 그려진 곳에는 얼씬도 않겠다"고. 그래서 사람들이 대문에 처용의 얼굴을 그려 붙이는 풍속이 생겼다네.' },
     ],
     quizSeq: [
       { q:'완도에 설치되어 해적을 소탕하고 신라·당·일본을 잇는 해상 무역을 장악한 군사 기지는?',
         opts:['청해진','벽란도'], answer:0, src:[15, 20, 46, 53, 59, 62, 66, 74, 77],
         feedback:['벽란도는 고려의 국제 무역항이에요.','정답! 청해진입니다. 장보고가 흥덕왕의 허락을 받아 세웠어요.'] },
+    ]
+  },
+  cheoyong_0: {
+    name: '처용', icon: '🎭', img: 'assets/portraits/cheoyong.png',
+    beats: [
+      { who:'npc', t:'나는 처용이라 하오. 헌강왕 때 사람이니, 장보고 어른보다는 한참 뒤요.' },
+      { who:'npc', t:'어느 날 밤늦게 집에 돌아와 보니, 아내 곁에 웬 다리가 넷이더군. 딴 사내와 정을 통했구나, 처음엔 그리 여겼소.' },
+      { who:'npc', t:'허나 나는 그 자리에서 화를 내는 대신 노래를 부르며 춤을 추다 물러났소. 알고 보니 그 사내는 사람이 아니라 돌림병을 옮기는 역신이었지.' },
+      { who:'npc', t:'내 너그러움에 감복한 역신이 무릎을 꿇고 항복했소. "이제부터 공의 얼굴이 그려진 곳에는 얼씬도 않겠다"고. 그래서 사람들이 대문에 내 얼굴을 그려 붙이는 풍속이 생겼다오.' },
+    ],
+    quizSeq: [
+      { q:'훗날 처용의 설화에서 비롯되어, 궁중에서 나쁜 기운을 쫓는 뜻으로 전해 내려온 춤은?',
+        opts:['처용무','처용가'], answer:0, src:[71],
+        feedback:['처용가는 처용이 불렀다고 전하는 노래(향가)예요.','정답! 처용무입니다. 지금도 국가무형유산으로 전해져요.'] },
     ]
   },
   uisang_0: {
@@ -794,6 +808,7 @@ const Stage = {
     if (id === 'munwang') return 'munwang_0';
     if (id === 'jangbogo') return 'jangbogo_0';
     if (id === 'uisang') return 'uisang_0';
+    if (id === 'cheoyong') return 'cheoyong_0';
     if (id === 'minjeong') return 'minjeong_0';
     return null;
   },
