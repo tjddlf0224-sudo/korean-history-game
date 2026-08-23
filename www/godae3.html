@@ -325,7 +325,7 @@ setTimeout(applyOrientation, 800);
 applyOrientation();
 
 /* ============ 구역(zone): 실사 배경 이미지 + 충돌/NPC ============
-   무대는 후백제 진영. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
+   무대는 후백제 진영 / 공산·고창 벌판. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
    재서 스펙에 적어 둔다 — 배경을 바꾸면 스펙의 좌표도 같이 고쳐야 한다. */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 /* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
@@ -334,6 +334,11 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
    틀렸던 문제의 재발 방지용). */
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
+  /* 견훤·궁예가 나라를 세우는 데서 끝나 있었다 — 정작 후삼국이 하나로
+     합쳐지는 927~936년의 실제 전쟁 과정(공산전투·고창전투·견훤 귀부·
+     경순왕 항복·일리천전투)은 엔딩 자막 두 줄로 뭉뚱그려지고 대사에는
+     전혀 없었다. 퀴즈도 4문항으로 챕터 중 가장 적었다. 진영 남쪽
+     정문을 열어 그 격전지를 새 무대로 세웠다. */
   husamguk: {
     img: 'assets/scenes/godae3_husamguk.png', label: '후백제 진영',
     spawn: { x: 688, y: 470 },
@@ -355,14 +360,28 @@ const ZONES = {
       { x0:1225, y0:445, x1:1275, y1:625 },  // 여물통
       { x0:505, y0:540, x1:565, y1:768 },  // 망루
       { x0:790, y0:540, x1:850, y1:768 },  // 망루
-      { x0:580, y0:540, x1:765, y1:605 },  // 정문
     ],
     npcs: [
       { id:'gyeonhwon', name:'견훤', x:470, y:300, img:'assets/portraits/gyeonhwon.png', look:{ role:'king', body:'#5c2f2f', accent:'#c9a24a' } },
       { id:'gungye', name:'궁예', x:900, y:260, img:'assets/portraits/gungye.png', look:{ role:'king', body:'#3d3d4a', accent:'#8a6d3b' } },
       { id:'choechiwon', name:'최치원', x:688, y:510, img:'assets/portraits/choechiwon.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#e0b94a' } },
     ],
-    exits: [],
+    exits: [
+      { rect:{x0:580,y0:700,x1:765,y1:768}, to:'gongsan', spawn:{x:688,y:80}, label:'전장으로' },
+    ],
+  },
+  gongsan: {
+    img: 'assets/scenes/godae3_gongsan.png', label: '공산·고창 벌판',
+    spawn: { x: 688, y: 600 },
+    barriers: [
+    ],
+    npcs: [
+      { id:'sinsunggyeom', name:'신숭겸', x:520, y:400, img:'assets/portraits/sinsunggyeom.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'gyeongsunwang', name:'경순왕', x:860, y:400, img:'assets/portraits/gyeongsunwang.png', look:{ role:'king', body:'#5a2f4a', accent:'#e0b94a' } },
+    ],
+    exits: [
+      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'husamguk', spawn:{x:688,y:650}, label:'진영으로' },
+    ],
   },
 };
 const zoneImgs = {};
@@ -491,7 +510,9 @@ function updateHudGoal(){
     const order = [
       ['gyeonhwon', '견훤과 대화하기'],
       ['gungye', '궁예와 대화하기'],
-      ['choechiwon', '최치원과 대화하기']
+      ['choechiwon', '최치원과 대화하기'],
+      ['sinsunggyeom', '전장에서 신숭겸과 대화하기'],
+      ['gyeongsunwang', '경순왕과 대화하기']
     ];
     for (const [id, goal] of order){
       const k = Stage.keyFor(id);
@@ -729,6 +750,47 @@ const NPC_DATA = {
       { q:'신라 하대에 6두품 지식인들이 정치에서 밀려난 근본 원인이 된 제도는?',
         opts:['골품제','과거제'], answer:0, src:[37, 43, 55, 66, 67, 76],
         feedback:['과거제는 고려 광종 때 처음 실시돼요.','정답! 골품제입니다. 6두품은 능력이 뛰어나도 오를 수 있는 자리에 한계가 있었어요.'] },
+    ]
+  },
+  sinsunggyeom_0: {
+    name: '신숭겸', icon: '🛡️', img: 'assets/portraits/sinsunggyeom.png',
+    beats: [
+      { who:'npc', t:'나는 신숭겸이라 하오. 왕건 폐하를 뫼시는 장수요.' },
+      { who:'npc', t:'927년, 견훤이 신라 경주까지 쳐들어가 경애왕을 죽이자 폐하께서 신라를 구하러 내려오셨소. 헌데 견훤이 이곳 공산에서 되레 기다리고 있었지.' },
+      { who:'npc', t:'크게 졌소. 폐하께서 포위되시자 내가 갑옷을 바꿔 입고 대신 나서 싸우다 죽었소. 그래서 폐하는 살아 돌아가셨소.' },
+      { who:'npc', chart:{ type: 'flow', steps: [
+{ t: '927', s: '공산 전투 · 견훤 승' },
+{ t: '930', s: '고창 전투 · 왕건 승' },
+{ t: '935', s: '신라 항복·견훤 귀부' },
+{ t: '936', s: '일리천 전투 · 통일' },
+], note: '견훤에게 밀리던 흐름이 <b>고창 전투(930)</b>부터 뒤집힙니다.' }, t:'허나 3년 뒤, 고창(안동)에서는 전세가 뒤집혔소. 그 싸움에서 크게 이기며 주도권이 우리 쪽으로 넘어왔지.' },
+    ],
+    quizSeq: [
+      { q:'927년 견훤이 신라 경주를 침공하자 왕건이 구원에 나섰다가 견훤에게 크게 패해 신숭겸이 대신 전사한 싸움은?',
+        opts:['공산 전투','고창 전투'], answer:0, src:[51],
+        feedback:['고창 전투는 3년 뒤 왕건이 크게 승리하며 전세를 뒤집은 싸움이에요.','정답! 공산 전투입니다. 927년, 왕건이 크게 패하고 신숭겸이 대신 전사했어요.'] },
+      { q:'930년 안동에서 벌어져 왕건이 크게 승리하며 후삼국 통일의 주도권을 쥐게 된 싸움은?',
+        opts:['고창 전투','공산 전투'], answer:0, src:[73],
+        feedback:['공산 전투는 그보다 앞서 왕건이 크게 패한 싸움이에요.','정답! 고창 전투입니다. 이 승리로 왕건이 후삼국의 주도권을 잡았어요.'] },
+    ]
+  },
+  gyeongsunwang_0: {
+    name: '경순왕', icon: '👑', img: 'assets/portraits/gyeongsunwang.png',
+    beats: [
+      { who:'npc', t:'나는 경순왕, 신라의 마지막 임금이오.' },
+      { who:'npc', t:'견훤이 경주까지 쳐들어와 경애왕을 시해하고 나를 세웠으니, 처음부터 온전한 왕이 아니었소.' },
+      { who:'npc', t:'935년, 후백제에 큰 변고가 있었소. 견훤의 아들 신검이 아비를 금산사에 가두고 스스로 왕위에 올랐다더군.' },
+      { who:'npc', t:'견훤은 그 아들을 피해 우리 쪽도 아니고 고려로 도망쳐 왕건에게 몸을 맡겼소. 아비가 아들에게 쫓겨 원수의 나라로 간 셈이오.' },
+      { who:'npc', t:'나 또한 나라를 더는 지킬 수 없다 여겨, 그해 겨울 신하들과 의논 끝에 나라를 들어 왕건에게 바쳤소.' },
+      { who:'npc', t:'이듬해, 견훤까지 앞장세운 왕건의 군대가 일리천에서 신검을 무찔렀소. 그렇게 후삼국이 하나가 되었소.' },
+    ],
+    quizSeq: [
+      { q:'견훤을 금산사에 가두고 왕위를 빼앗아 견훤이 고려로 도망치게 만든 후백제의 인물은?',
+        opts:['신검','양검'], answer:0, src:[44, 67],
+        feedback:['양검은 신검과 함께 정변에 가담한 동생이에요.','정답! 신검입니다. 이 사건으로 견훤은 고려에 귀부했어요.'] },
+      { q:'나라를 더는 지탱할 수 없다고 판단해 935년 스스로 나라를 들어 고려에 항복한 신라의 마지막 왕은?',
+        opts:['경순왕','진성여왕'], answer:0, src:[74],
+        feedback:['진성여왕은 이보다 앞서 최치원의 개혁안을 받아들이지 않은 왕이에요.','정답! 경순왕입니다. 이로써 신라는 막을 내렸어요.'] },
     ],
     endsChapter: true
   },
@@ -739,6 +801,8 @@ const Stage = {
     if (id === 'gyeonhwon') return 'gyeonhwon_' + Math.min(Stage.state.talkStage, 0);
     if (id === 'gungye') return 'gungye_0';
     if (id === 'choechiwon') return 'choechiwon_0';
+    if (id === 'sinsunggyeom') return 'sinsunggyeom_0';
+    if (id === 'gyeongsunwang') return 'gyeongsunwang_0';
     return null;
   },
   interact(){
