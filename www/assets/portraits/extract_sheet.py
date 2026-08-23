@@ -72,6 +72,8 @@ SHEETS = {
     'sheet9': (3, 1, ['myocheong', 'gimbusik', 'seokgong']),
     # 근초고왕/한성(고대1화 새 무대)·성왕(관산성 전사, 기존 무대에 추가)
     'sheet10': (2, 1, ['geunchogo', 'seongwang']),
+    # 대조영·문왕/발해 상경성(고대4화 새 무대) — 청해진에 얹혀 있던 발해사신 대신
+    'sheet11': (2, 1, ['daejoyeong', 'munwang']),
 }
 
 
