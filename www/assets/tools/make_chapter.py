@@ -173,10 +173,20 @@ def build(spec):
     sub(r"Stage\.state\.talkStage = Math\.min\(Stage\.state\.talkStage \+ 1, \d+\)",
         f"Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, {main['stages']-1})", 'talkStage')
 
-    goal_else = others[0]['goal'] if others else main['goal']
+    # 목표는 '아직 말 안 걸어 본 사람'을 차례로 가리켜야 한다. talkStage만 보고
+    # 정하면 여러 명 있는 챕터에서 첫 사람과 대화한 뒤로 영영 안 바뀐다
+    # (한산도에서 곽재우와 말을 끝내도 계속 곽재우를 가리키던 버그).
+    # 여러 단계짜리 인물은 단계마다 키가 달라지므로 Stage.keyFor로 물어본다.
+    pairs = ',\n      '.join("['%s', '%s']" % (t['id'], t['goal']) for t in spec['talkers'])
     sub(r"const t = done \? '다음 목표: 다음 화로 넘어가기'[\s\S]*?;\n",
-        "const t = done ? '다음 목표: 다음 화로 넘어가기'\n"
-        f"    : '다음 목표: ' + (Stage.state.talkStage < {main['stages']-1} ? '{main['goal']}' : '{goal_else}');\n", '목표')
+        "const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){\n"
+        "    const order = [\n      " + pairs + "\n    ];\n"
+        "    for (const [id, goal] of order){\n"
+        "      const k = Stage.keyFor(id);\n"
+        "      if (k && !seenDialogKeys.has(k)) return '다음 목표: ' + goal;\n"
+        "    }\n"
+        "    return '다음 목표: 다음 화로 넘어가기';\n"
+        "  })();\n", '목표')
     sub(r"document\.getElementById\('dlg-tag'\)\.textContent = '[^']*';",
         f"document.getElementById('dlg-tag').textContent = '{spec['tag']}';", 'dlg-tag')
 

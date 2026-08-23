@@ -481,8 +481,21 @@ function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
   const done = document.getElementById('next-chapter-btn').classList.contains('show');
-  const t = done ? '다음 목표: 다음 화로 넘어가기'
-    : '다음 목표: ' + (Stage.state.talkStage < 2 ? '정도전과 대화하기' : '인부와 대화하기');
+  // 아직 말 안 걸어 본 사람을 차례로 가리킨다. talkStage만 보고 정하면 첫 사람과
+  // 대화한 뒤로 영영 안 바뀐다(한산도에서 곽재우와 말을 끝내도 계속 곽재우를
+  // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
+  const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
+    const wa = (w) => { const c = w.charCodeAt(w.length-1) - 0xAC00;
+      return (c >= 0 && c <= 11171 && c % 28 !== 0) ? '과' : '와'; };
+    const order = [
+      ['jeongdojeon', '정도전']
+    ];
+    for (const [id, name] of order){
+      const k = Stage.keyFor(id);
+      if (k && !seenDialogKeys.has(k)) return '다음 목표: ' + name + wa(name) + ' 대화하기';
+    }
+    return '다음 목표: 다음 화로 넘어가기';
+  })();
   if (el.textContent !== t) el.textContent = t;
 }
 

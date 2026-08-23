@@ -33,7 +33,10 @@
   .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
-  #intro-overlay { background: #0c0f14; }
+  /* 인트로 뒤로 그 챕터의 맵이 비치게 둔다. 까맣게 덮으면 화면이 텅 비어
+     보이고, 어디에 서 있는지도 알 수 없다. */
+  #intro-overlay { background: linear-gradient(rgba(8,6,4,.55), rgba(8,6,4,.78)); }
+  #intro-panel { max-width: 520px; }
 
   #dlg-panel, #intro-panel {
     width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26ee; border: 2px solid #6a6a8a;
@@ -478,8 +481,21 @@ function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
   const done = document.getElementById('next-chapter-btn').classList.contains('show');
-  const t = done ? '다음 목표: 다음 화로 넘어가기'
-    : '다음 목표: ' + (Stage.state.talkStage < 0 ? '이순신과 대화하기' : '곽재우와 대화하기');
+  const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
+    const order = [
+      ['yisunsin', '이순신과 대화하기'],
+      ['gwakjaeu', '곽재우와 대화하기'],
+      ['gimsimin', '김시민과 대화하기'],
+      ['gwonyul', '권율과 대화하기'],
+      ['johun', '조헌과 대화하기'],
+      ['nongae', '논개와 대화하기']
+    ];
+    for (const [id, goal] of order){
+      const k = Stage.keyFor(id);
+      if (k && !seenDialogKeys.has(k)) return '다음 목표: ' + goal;
+    }
+    return '다음 목표: 다음 화로 넘어가기';
+  })();
   if (el.textContent !== t) el.textContent = t;
 }
 
@@ -754,10 +770,12 @@ const NPC_DATA = {
   nongae_0: {
     name: '논개', icon: '🌸', img: 'assets/portraits/nongae.png',
     beats: [
-      { who:'npc', t:'1593년 6월, 진주성이 두 번째로 에워싸였습니다. 이번에는 버티지 못했지요.' },
-      { who:'npc', t:'성이 무너지고 왜장들이 촉석루에서 잔치를 벌였습니다. 저는 그 자리에 나갔습니다.' },
-      { who:'npc', t:'열 손가락에 가락지를 끼웠습니다. 손이 풀리지 않도록요.' },
-      { who:'npc', t:'남강은 그날도 그대로 흘렀습니다.' },
+      { who:'npc', t:'1593년 6월, 진주성이 두 번째로 에워싸였습니다. 이레를 버텼지만 끝내 무너졌지요. 성 안 사람이 모두 죽었습니다. 제가 모시던 최경회 장군도 남강에 몸을 던지셨고요.' },
+      { who:'npc', t:'왜군은 그 성에서 승전 잔치를 벌였습니다. 촉석루에 상을 차리고, 기생을 불렀지요. 저는 스스로 그 자리에 나갔습니다.' },
+      { who:'npc', t:'열 손가락 마디마다 가락지를 끼웠습니다. 한 번 깍지를 끼면 절대 풀리지 않도록요.' },
+      { who:'npc', t:'술이 오른 왜장 하나를 강가 바위 끝으로 꾀어냈습니다. 웃으며 다가가, 두 팔로 목을 감아 깍지를 끼고… 그대로 뒤로 넘어졌습니다.' },
+      { who:'npc', t:'남강은 깊었습니다. 그자는 제 팔을 풀려고 발버둥쳤지만, 가락지가 걸려 손이 빠지지 않았지요. 둘 다 떠오르지 않았습니다.' },
+      { who:'npc', t:'사람들이 그 바위를 의암(義巖)이라 부른다더군요. …저는 이름도 성도 제대로 남지 않은 사람입니다. 그저 그날 할 수 있는 일이 그것뿐이었습니다.' },
     ],
     quizSeq: [
       { q:'임진왜란 중 두 차례 큰 싸움이 벌어졌고, 촉석루와 남강이 있는 경상도의 성은?',

@@ -33,7 +33,10 @@
   .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
-  #intro-overlay { background: #0c0f14; }
+  /* 인트로 뒤로 그 챕터의 맵이 비치게 둔다. 까맣게 덮으면 화면이 텅 비어
+     보이고, 어디에 서 있는지도 알 수 없다. */
+  #intro-overlay { background: linear-gradient(rgba(8,6,4,.55), rgba(8,6,4,.78)); }
+  #intro-panel { max-width: 520px; }
 
   #dlg-panel, #intro-panel {
     width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26ee; border: 2px solid #6a6a8a;
@@ -474,8 +477,18 @@ function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
   const done = document.getElementById('next-chapter-btn').classList.contains('show');
-  const t = done ? '다음 목표: 다음 화로 넘어가기'
-    : '다음 목표: ' + (Stage.state.talkStage < 0 ? '견훤과 대화하기' : '궁예와 대화하기');
+  const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
+    const order = [
+      ['gyeonhwon', '견훤과 대화하기'],
+      ['gungye', '궁예와 대화하기'],
+      ['choechiwon', '최치원과 대화하기']
+    ];
+    for (const [id, goal] of order){
+      const k = Stage.keyFor(id);
+      if (k && !seenDialogKeys.has(k)) return '다음 목표: ' + goal;
+    }
+    return '다음 목표: 다음 화로 넘어가기';
+  })();
   if (el.textContent !== t) el.textContent = t;
 }
 
