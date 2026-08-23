@@ -244,7 +244,7 @@
   <div id="end-screen">
     <div>
       <h2>일제 2화 · 끝</h2>
-      <p>국내에서는 물산장려와 신간회로,<br>국외에서는 봉오동과 청산리에서.</p>
+      <p>국내에서는 물산장려와 신간회로,<br>국외에서는 봉오동과 청산리, 상하이에서.</p>
       <p>싸움의 방식은 달라도 목적은 하나였다.</p>
       <p style="margin-top:18px; opacity:.7;">일제 7화 「임정의 부활」에서 계속됩니다.</p>
       <div><a href="ilje_ch7.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
@@ -325,7 +325,7 @@ setTimeout(applyOrientation, 800);
 applyOrientation();
 
 /* ============ 구역(zone): 실사 배경 이미지 + 충돌/NPC ============
-   무대는 경성 종로. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
+   무대는 경성 종로 / 상하이 임시정부 청사. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
    재서 스펙에 적어 둔다 — 배경을 바꾸면 스펙의 좌표도 같이 고쳐야 한다. */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 /* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
@@ -334,6 +334,10 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
    틀렸던 문제의 재발 방지용). */
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
+  /* 한인애국단(김구, 이봉창·윤봉길 의거)이 의열단 대사 속 오답
+     피드백으로만 스쳐 지나가고 정작 NPC가 없었다 — 기출 한인애국단
+     11회·김구 8회로 이 챕터 안에서도 손꼽히게 높은데 빠져 있었다.
+     활동 장소(상하이 임시정부)가 경성 종로와 다른 곳이라 새 무대로 세웠다. */
   gyeongseong: {
     img: 'assets/scenes/ilje2_gyeongseong.png', label: '경성 종로',
     spawn: { x: 688, y: 470 },
@@ -361,7 +365,22 @@ const ZONES = {
       { id:'cheongsanri', name:'독립군 대장', x:900, y:700, img:'assets/portraits/cheongsanri.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
       { id:'eohakhoe', name:'조선어학회 회원', x:700, y:330, img:'assets/portraits/eohakhoe.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
     ],
-    exits: [],
+    exits: [
+      { rect:{x0:1345,y0:650,x1:1370,y1:725}, to:'sanghai', spawn:{x:688,y:690}, label:'상하이 임시정부로' },
+    ],
+  },
+  sanghai: {
+    img: 'assets/scenes/ilje2_sanghai.png', label: '상하이 임시정부 청사',
+    spawn: { x: 688, y: 600 },
+    barriers: [
+    ],
+    npcs: [
+      { id:'gimgu', name:'김구', x:500, y:400, img:'assets/portraits/gimgu.png', look:{ role:'scholar', body:'#3d3d4a', accent:'#c9a24a' } },
+      { id:'yunbonggil', name:'윤봉길', x:900, y:400, img:'assets/portraits/yunbonggil.png', look:{ role:'commoner', body:'#4a5a3a', accent:'#8a7a5a' } },
+    ],
+    exits: [
+      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'gyeongseong', spawn:{x:1332,y:660}, label:'경성으로' },
+    ],
   },
 };
 const zoneImgs = {};
@@ -491,6 +510,8 @@ function updateHudGoal(){
       ['mulsan', '물산장려회 회원과 대화하기'],
       ['singanhoe', '신간회 간부와 대화하기'],
       ['uiyeoldan', '의열단원과 대화하기'],
+      ['gimgu', '상하이로 가서 김구와 대화하기'],
+      ['yunbonggil', '윤봉길과 대화하기'],
       ['cheongsanri', '독립군 대장과 대화하기'],
       ['eohakhoe', '조선어학회 회원과 대화하기']
     ];
@@ -767,6 +788,40 @@ const NPC_DATA = {
         feedback:['한국광복군은 1940년 충칭에서 임시정부가 창설한 군대예요.','정답! 조선의용대입니다.'] },
     ]
   },
+  gimgu_0: {
+    name: '김구', icon: '✊', img: 'assets/portraits/gimgu.png',
+    beats: [
+      { who:'npc', t:'나는 김구일세. 상하이 임시정부에서 경무국장, 뒷날 국무령까지 지냈네.' },
+      { who:'npc', t:'1930년대 들어 임시정부가 힘을 잃어 갈 때, 나는 결심했네. 의열 투쟁으로 다시 불을 지피자고 — 1931년 한인애국단을 만들었지.' },
+      { who:'npc', t:'이봉창 의사를 도쿄로 보냈네. 1932년 1월, 일왕의 행렬에 폭탄을 던졌지. 비록 빗나갔지만 그 담대함이 온 세상에 알려졌네.' },
+      { who:'npc', t:'석 달 뒤, 저기 있는 윤봉길 의사가 상하이에서 다시 거사를 치렀네. 그 일로 중국 정부가 우리 임시정부를 눈여겨보기 시작했지.' },
+    ],
+    quizSeq: [
+      { q:'1931년 상하이에서 김구가 조직해 이봉창·윤봉길의 의거를 이끈 단체는?',
+        opts:['한인애국단','의열단'], answer:0, src:[20, 23, 24, 32, 38, 42, 51, 60, 73, 79],
+        feedback:['의열단은 1919년 김원봉이 만주에서 조직한 단체예요.','정답! 한인애국단입니다.'] },
+      { q:'1932년 1월 도쿄에서 일왕의 행렬에 폭탄을 던진 한인애국단 소속 의사는?',
+        opts:['이봉창','윤봉길'], answer:0, src:[20, 23, 24, 32, 38, 42, 51, 60, 73, 79],
+        feedback:['윤봉길은 같은 해 4월 상하이 훙커우공원에서 거사를 치렀어요.','정답! 이봉창입니다.'] },
+    ]
+  },
+  yunbonggil_0: {
+    name: '윤봉길', icon: '💥', img: 'assets/portraits/yunbonggil.png',
+    beats: [
+      { who:'npc', t:'나는 윤봉길이라 하오. 고향 예산에서 농민 계몽 운동을 하다가, 그것만으론 부족하다 여겨 상하이로 건너왔소.' },
+      { who:'npc', t:'1932년 4월 29일, 훙커우공원에서 일왕의 생일과 상하이 사변 승전을 기념하는 행사가 열렸소. 그 자리에 물통 폭탄을 던졌소.' },
+      { who:'npc', t:'일본군 대장과 고관들이 그 자리에서 죽거나 다쳤소. 거사 전 김구 선생과 시계를 바꿔 찼지 — "이제 내 시계는 필요 없으니."' },
+      { who:'npc', t:'이 일로 중국 국민당 정부가 우리를 다시 보기 시작했다 하오. 훗날 임시정부를 돕는 발판이 되었다더군.' },
+    ],
+    quizSeq: [
+      { q:'1932년 4월 상하이 훙커우공원에서 일본군 장성과 고관들에게 폭탄을 던진 한인애국단 소속 의사는?',
+        opts:['윤봉길','이봉창'], answer:0, src:[20, 23, 24, 32, 38, 42, 51, 60, 73, 79],
+        feedback:['이봉창은 같은 해 1월 도쿄에서 일왕의 행렬에 폭탄을 던졌어요.','정답! 윤봉길입니다.'] },
+      { q:'이봉창·윤봉길 의거 이후 대한민국 임시정부를 눈여겨보고 지원하기 시작한 나라는?',
+        opts:['중국(국민당 정부)','소련'], answer:0, src:[20, 23, 24, 32, 38, 42, 51, 60, 73, 79],
+        feedback:['소련은 이 사건과 직접 관련이 없어요.','정답! 중국입니다. 이후 한국광복군 창설에도 도움을 주었어요.'] },
+    ]
+  },
   cheongsanri_0: {
     name: '독립군 대장', icon: '🏔️', img: 'assets/portraits/cheongsanri.png',
     beats: [
@@ -816,6 +871,8 @@ const Stage = {
     if (id === 'mulsan') return 'mulsan_' + Math.min(Stage.state.talkStage, 0);
     if (id === 'singanhoe') return 'singanhoe_0';
     if (id === 'uiyeoldan') return 'uiyeoldan_0';
+    if (id === 'gimgu') return 'gimgu_0';
+    if (id === 'yunbonggil') return 'yunbonggil_0';
     if (id === 'cheongsanri') return 'cheongsanri_0';
     if (id === 'eohakhoe') return 'eohakhoe_0';
     return null;

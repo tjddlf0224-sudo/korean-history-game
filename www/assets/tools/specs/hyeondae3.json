@@ -24,8 +24,8 @@
    "label": "광화문에서 판문점까지",
    "img": "assets/scenes/hyeondae3_panmunjeom.png",
    "spawn": [
-    688,
-    400
+    610,
+    440
    ],
    "barriers": [
     [
