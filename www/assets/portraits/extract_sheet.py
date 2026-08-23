@@ -65,9 +65,6 @@ SHEETS = {
         'seollal', 'dano', None, 'chuseok', 'dongji']),
     # 6화 확장(통신사 보고)과 임진왜란 무대 분할(신립·행주 아낙)에서
     # 새로 필요해진 사람들. 5x2로 두고 마지막 칸은 비워 로고를 피한다.
-    'sheet8': (5, 2, [
-        'seonjo', 'hwangyungil', 'gimseongil', 'jeongcheol', 'gunjol',
-        'sinrip', 'haengju_yeoin', 'useen', None, None]),
     # 단일맵→2~3맵 확장 작업에서 새로 필요해진 사람들을 모아 5x3 한 장으로.
     # (묘청·김부식·석공: 고려2화/후기1화 / 근초고왕·성왕: 고대1화 /
     #  대조영·문왕: 고대4화 / 신숭겸·경순왕: 고대5화 / 유형원·이익: 후기3화)
@@ -82,10 +79,11 @@ SHEETS = {
     # gimgu·yunbonggil는 뺐다 — ilje_ch7.html에 이미 있는 사람들이고 초상도
     # 이미 있음(일제 2화 한인애국단 콘텐츠가 중복이라 국민대표회의로 교체됨).
     # 다음 몇 명이 필요해지면 여기(sheet10) 빈 칸부터 채울 것.
-    'sheet10': (5, 3, [
-        'sinchaeho', 'yugwansun', 'siwon1', 'siwon2', None,
-        None, None, None, None, None,
-        None, None, None, None, None]),
+    # sheet8(뒤섞여서 못 씀) + 통신사·독립운동 인물 + 엑스트라 3명을 합친 15명.
+    'sheet11': (5, 3, [
+        'seonjo', 'hwangyungil', 'gimseongil', 'jeongcheol', 'gunjol',
+        'sinrip', 'haengju_yeoin', 'useen', 'sinchaeho', 'yugwansun',
+        'siwon1', 'siwon2', 'extra_nam', 'extra_yeo', 'extra_gunsa']),
 }
 
 
