@@ -650,14 +650,11 @@ const World = {
     if (this.nearNpcShown){
       const n = this.nearNpcShown;
       const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
-      ctx.fillStyle = '#d98c6b';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.textAlign = 'center';
       if (n === this.nearNpcClose){
-        ctx.fillText(n.name, sx, sy - 66);
+        drawNpcLabel(n.name, sx, sy - 66, '#d98c6b');
       } else {
         const key = Stage.keyFor(n.id);
-        if (!key || !seenDialogKeys.has(key)) ctx.fillText('!', sx, sy - 66);
+        if (!key || !seenDialogKeys.has(key)) drawNpcLabel('!', sx, sy - 66, '#d98c6b');
       }
     }
     if (DEBUG_GRID){
@@ -914,6 +911,32 @@ function drawChart(c){
     + '</tr></thead><tbody>'
     + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
     + '</tbody></table>';
+}
+
+/* NPC 이름표. 예전에는 글자만 챕터 색으로 찍었는데, 흙바닥이나 마루처럼
+   비슷한 밝기 위에서는 읽히지가 않았다(5화 서원 마당에서 붉은 글씨가
+   묻혀 버렸다). 어두운 알약을 깔고 밝은 글씨를 올려 배경을 안 탄다. */
+function drawNpcLabel(text, sx, sy, accent){
+  ctx.font = 'bold 15px "Gowun Batang", -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const padX = 9, h = 24, w = Math.max(h, ctx.measureText(text).width + padX * 2);
+  const x = sx - w / 2, y = sy - h / 2, r = h / 2;
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(18,14,10,.78)';
+  ctx.fill();
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = accent;
+  ctx.stroke();
+  ctx.fillStyle = '#f5ecd8';
+  ctx.fillText(text, sx, sy + 0.5);
+  ctx.textBaseline = 'alphabetic';
 }
 
 const Dialog = {
