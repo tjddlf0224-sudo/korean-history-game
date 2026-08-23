@@ -52,16 +52,17 @@ SHEETS = {
     'sheet5': (5, 2, [
         'yeounhyeong', 'sintak', 'yukio', 'jeju', 'nongji',
         'sasaoip', 'yusin', 'gwangju', 'yuwol', 'tongil']),
-    # 맨 오른쪽 아래 칸은 일부러 비운다 — 제미나이 로고가 늘 그 자리(모서리에서
-    # 128,117픽셀)에 찍혀서, 인물을 두면 옷 위에 별이 얹힌다. 비워 두면 아예 안 겹친다.
+    # '마지막 칸을 비워 두라'고 했지만 제미나이가 무시하고 15칸을 다 채웠다.
+    # 13번 자리에 중복 인물을 하나씩 그려 넣어 뒤가 한 칸씩 밀렸다.
+    # 실제로 받은 그림에 맞춰 13번을 건너뛴다(None).
     'sheet6': (5, 3, [
         'suro', 'ureuk', 'cheolsang', 'wae', 'gyebaek',
         'gwanchang', 'gimyusin', 'munmu', 'sinmun', 'jeonsigwa',
-        'songsang', 'arabsang', 'jujeon', 'yisunsin', None]),
+        'songsang', 'arabsang', None, 'jujeon', 'yisunsin']),
     'sheet7': (5, 3, [
         'gwakjaeu', 'gimsimin', 'gwonyul', 'johun', 'nongae',
         'hanil', 'veteran', 'saemaul', 'olympic', 'gimdaejung',
-        'seollal', 'dano', 'chuseok', 'dongji', None]),
+        'seollal', 'dano', None, 'chuseok', 'dongji']),
 }
 
 
@@ -75,6 +76,29 @@ def measure_bg(arr):
     """네 모서리 8x8 중앙값 — 배경이 (255,0,255)라는 가정을 하지 않는다."""
     c = [arr[:8, :8], arr[:8, -8:], arr[-8:, :8], arr[-8:, -8:]]
     return np.median(np.concatenate([p.reshape(-1, 3) for p in c]), axis=0)
+
+
+def despill(rgb, a, bg):
+    """테두리에 남은 배경색 기운을 걷어낸다.
+
+    가장자리 픽셀은 인물색과 배경 마젠타가 섞인 값이라, 잘라내고 나면 분홍
+    테두리로 남는다. 실루엣 가장자리 몇 픽셀 안에서만, 초록보다 튀어나온
+    빨강·파랑(=마젠타 성분)을 깎는다. 옷 안쪽은 건드리지 않으므로 자주색
+    관복 같은 색은 그대로 살아 있는다.
+    """
+    if bg[1] >= min(bg[0], bg[2]):     # 배경이 마젠타 계열이 아니면 손대지 않는다
+        return rgb
+    solid = ndimage.binary_erosion(a > 0.8, np.ones((3, 3)), iterations=3)
+    band = (a > 0.02) & ~solid
+    if not band.any():
+        return rgb
+    r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
+    m = np.clip((r + b) / 2.0 - g, 0, None)     # 마젠타 성분
+    k = 0.9 * band
+    out = rgb.copy()
+    out[..., 0] = np.clip(r - k * m, 0, 255)
+    out[..., 2] = np.clip(b - k * m, 0, 255)
+    return out
 
 
 def extract(cell, out):
@@ -104,6 +128,7 @@ def extract(cell, out):
     rgb = np.zeros((h0, w0, 3))
     rgb[keep] = np.clip(pm_s[keep] / a_s[keep][:, None], 0, 255)
 
+    rgb = despill(rgb, a_s, bg)
     rgba = np.dstack([rgb, a_s * 255]).astype(np.uint8)
     im = Image.fromarray(rgba, 'RGBA')
 
