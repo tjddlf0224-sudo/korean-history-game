@@ -525,6 +525,7 @@ const World = {
   moving: false,
   nearNpc: null,
   lastT: 0,
+  transitioning: false,
 
   canStand(x, y){
     const pad = 16;
@@ -535,7 +536,7 @@ const World = {
   },
 
   update(dt){
-    if (this.paused || overlayOpen()) return;
+    if (this.paused || this.transitioning || overlayOpen()) return;
     let vx = this.stick.dx, vy = this.stick.dy;
     if (this.keys.l) vx -= 1;
     if (this.keys.r) vx += 1;
@@ -552,7 +553,39 @@ const World = {
       if (this.canStand(nx, this.py)) this.px = nx;
       if (this.canStand(this.px, ny)) this.py = ny;
     }
+    this.checkExit();
     this.checkNpc();
+  },
+
+  /* 구역 경계(exits) 사각형에 들어가면 다음 구역으로 페이드 전환(젤다식 화면 전환).
+     6화 자체는 단일 구역이라 exits가 항상 비어 있어 이 메서드는 6화에서는
+     실행되지 않지만, make_chapter.py가 이 틀로 다구역 챕터를 찍어내므로
+     여기 있어야 그 챕터들에서 실제로 동작한다(이게 빠져 있던 게 실제 버그였다 —
+     출구가 미니맵엔 보이지만 걸어 들어가도 아무 반응이 없었다). */
+  checkExit(){
+    for (const e of (ZONES[this.zone].exits || [])){
+      const r = e.rect;
+      if (this.px >= r.x0 && this.px <= r.x1 && this.py >= r.y0 && this.py <= r.y1){
+        this.goToZone(e.to, e.spawn);
+        return;
+      }
+    }
+  },
+  goToZone(zoneId, spawn){
+    this.transitioning = true;
+    const fadeEl = document.getElementById('fade');
+    fadeEl.classList.add('show');
+    setTimeout(() => {
+      this.zone = zoneId;
+      this.px = spawn.x; this.py = spawn.y;
+      showZoneBanner(ZONES[zoneId].label);
+      this.nearNpc = null;
+      document.getElementById('act-btn').classList.remove('show');
+      setTimeout(() => {
+        fadeEl.classList.remove('show');
+        this.transitioning = false;
+      }, 60);
+    }, 600);
   },
 
   checkNpc(){

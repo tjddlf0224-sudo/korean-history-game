@@ -202,7 +202,7 @@ godae1 = {
    ],
    'npcs':[
      {'id':'geunchogo','name':'근초고왕','x':688,'y':400,'look':{'role':'king','body':'#7a3a3a','accent':'#e0b94a'}},
-   ],'exits':[{'rect':[0,260,60,400],'to':'samguk','spawn':[688,220],'label':'배를 타고 한강 아래로'}]},
+   ],'exits':[{'rect':[0,260,230,400],'to':'samguk','spawn':[688,220],'label':'배를 타고 한강 아래로'}]},
   {'id':'samguk','label':'한강 유역 성터','img':'assets/scenes/godae1_hangang.png',
    'spawn':[688,470],
    # 성벽·전각·석축은 measure_barriers.py로 실측, 소나무와 비석 단은 격자 그림에서 읽었다.
