@@ -325,7 +325,7 @@ setTimeout(applyOrientation, 800);
 applyOrientation();
 
 /* ============ 구역(zone): 실사 배경 이미지 + 충돌/NPC ============
-   무대는 강화 임시 도읍. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
+   무대는 서경 / 강화 임시 도읍. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
    재서 스펙에 적어 둔다 — 배경을 바꾸면 스펙의 좌표도 같이 고쳐야 한다. */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 /* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
@@ -334,6 +334,21 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
    틀렸던 문제의 재발 방지용). */
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
+  /* 묘청의 서경 천도 운동(1135)이 거란(993)~삼별초(1270) 사이
+     한복판인데 무대가 아니었다. 서경을 앞선 시대의 무대로 새로 세웠다. */
+  seogyeong: {
+    img: 'assets/scenes/goryeo2_seogyeong.png', label: '서경',
+    spawn: { x: 688, y: 600 },
+    barriers: [
+    ],
+    npcs: [
+      { id:'myocheong', name:'묘청', x:500, y:400, img:'assets/portraits/myocheong.png', look:{ role:'scholar', body:'#4a3a5a', accent:'#e0b94a' } },
+      { id:'gimbusik', name:'김부식', x:900, y:400, img:'assets/portraits/gimbusik.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
+    ],
+    exits: [
+      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'ganghwa', spawn:{x:688,y:470}, label:'개경으로' },
+    ],
+  },
   ganghwa: {
     img: 'assets/scenes/goryeo2_ganghwa.png', label: '강화 임시 도읍',
     spawn: { x: 688, y: 470 },
@@ -361,7 +376,9 @@ const ZONES = {
       { id:'choechunghyeon', name:'최충헌', x:960, y:420, img:'assets/portraits/choechunghyeon.png', look:{ role:'general', body:'#3d3d4a', accent:'#c9a24a' } },
       { id:'sambyeolcho', name:'삼별초 장수', x:688, y:600, img:'assets/portraits/sambyeolcho.png', look:{ role:'general', body:'#5c2f2f', accent:'#8a6d3b' } },
     ],
-    exits: [],
+    exits: [
+      { rect:{x0:610,y0:400,x1:690,y1:450}, to:'seogyeong', spawn:{x:688,y:690}, label:'서경으로' },
+    ],
   },
 };
 const zoneImgs = {};
@@ -488,6 +505,8 @@ function updateHudGoal(){
   // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
+      ['myocheong', '서경에서 묘청과 대화하기'],
+      ['gimbusik', '서경에서 김부식과 대화하기'],
       ['seohui', '서희와 대화하기'],
       ['yungwan', '윤관과 대화하기'],
       ['choechunghyeon', '최충헌과 대화하기'],
@@ -503,7 +522,7 @@ function updateHudGoal(){
 }
 
 const World = {
-  zone: 'ganghwa', px: ZONES.ganghwa.spawn.x, py: ZONES.ganghwa.spawn.y,
+  zone: 'seogyeong', px: ZONES.seogyeong.spawn.x, py: ZONES.seogyeong.spawn.y,
   facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
@@ -687,6 +706,39 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  myocheong_0: {
+    name: '묘청', icon: '🔮', img: 'assets/portraits/myocheong.png',
+    beats: [
+      { who:'npc', t:'나는 서경(평양) 사람이오. 풍수를 보니 개경의 기운은 다했고, 서경에 왕기가 서려 있소.' },
+      { who:'npc', t:'전하께 아뢰었소 — 서경으로 도읍을 옮기면 주변 삼십육국이 스스로 조공을 바치러 올 것이라고.' },
+      { who:'npc', t:'금이 세워지고 우리에게 사대하라 요구하니 조정이 술렁였소. 나는 칭제건원(황제를 칭하고 독자 연호를 씀)과 금 정벌까지 주장했소.' },
+      { who:'npc', t:'전하께서 서경 행차를 몇 번이나 하셨으나, 끝내 천도는 이루어지지 않았소. 나는 1135년 서경에서 나라를 세우고 대위(大爲)라 이름 지었소 — 국호까지 세운 반란이었소.' },
+      { who:'npc', t:'연호도 천개(天開)라 정했소. 하지만… 김부식이 이끄는 관군이 몰려왔고, 나는 그 안에서 살해되었다 하오. 성은 일 년을 버티다 무너졌소.' },
+    ],
+    quizSeq: [
+      { q:'묘청이 풍수도참을 내세워 서경(평양) 천도와 칭제건원, 금국 정벌을 주장하며 일으킨 사건은?',
+        opts:['묘청의 난(서경 천도 운동)','무신정변'], answer:0, src:[13, 27, 29, 33, 35, 36, 45, 47, 78],
+        feedback:['무신정변은 그로부터 35년 뒤, 문신을 홀대한 데 반발해 일어난 사건이에요.','정답! 묘청의 난입니다. 1135년 서경에서 국호를 대위, 연호를 천개로 정하고 일어났어요.'] },
+      { q:'묘청의 서경 천도 운동을 진압하는 데 앞장선, 「삼국사기」를 편찬한 문신은?',
+        opts:['김부식','최승로'], answer:0, src:[20, 25, 27, 28, 29, 35, 36, 45, 47, 72, 77, 78],
+        feedback:['최승로는 고려 초 성종에게 시무 28조를 올린 문신이에요.','정답! 김부식입니다. 관군을 이끌어 서경성을 함락시켰어요.'] },
+    ]
+  },
+  gimbusik_0: {
+    name: '김부식', icon: '📚', img: 'assets/portraits/gimbusik.png',
+    beats: [
+      { who:'npc', t:'나는 개경의 문신이오. 묘청 저 사람의 서경 천도 주장에는 처음부터 동의하지 않았소.' },
+      { who:'npc', t:'도읍을 옮긴다고 하늘의 뜻이 바뀌겠소? 금과 맞서 싸우자는 것도 무모한 일이오. 사대를 통해 나라의 안정을 지키는 것이 우선이오.' },
+      { who:'npc', t:'결국 묘청이 서경에서 반란을 일으키니, 내가 관군을 이끌고 가 일 년 만에 성을 무너뜨렸소.' },
+      { who:'npc', t:'훗날 나는 임금의 명으로 「삼국사기」를 지었소. 우리 역사상 남아 있는 가장 오래된 정사(正史)요 — 유교적 합리주의로 편년체에 따라 적었소.' },
+      { who:'npc', t:'…신채호라는 후대의 사람은 나를 두고, 이 서경 천도 운동의 진압을 사대주의가 자주 정신을 꺾은 사건이라 크게 비판했다고 들었소. 그의 말이 아주 틀렸다고는 못 하겠소.' },
+    ],
+    quizSeq: [
+      { q:'김부식이 왕명을 받아 편찬한, 현존하는 우리나라 최고(最古)의 역사서는?',
+        opts:['삼국사기','삼국유사'], answer:0, src:[20, 25, 28, 34, 45, 54, 66, 72, 73, 77],
+        feedback:['삼국유사는 훗날 승려 일연이 지은 역사서예요.','정답! 삼국사기입니다. 기전체가 아니라 편년체 정사로, 유교적 합리주의 사관이 담겨 있어요.'] },
+    ]
+  },
   seohui_0: {
     name: '서희', icon: '🗣️', img: 'assets/portraits/seohui.png',
     beats: [
@@ -769,7 +821,9 @@ const NPC_DATA = {
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
-    if (id === 'seohui') return 'seohui_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'myocheong') return 'myocheong_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'gimbusik') return 'gimbusik_0';
+    if (id === 'seohui') return 'seohui_0';
     if (id === 'yungwan') return 'yungwan_0';
     if (id === 'choechunghyeon') return 'choechunghyeon_0';
     if (id === 'sambyeolcho') return 'sambyeolcho_0';
@@ -992,7 +1046,7 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
-    if (this.npc.id === 'seohui'){
+    if (this.npc.id === 'myocheong'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 0);
     }
     if (this.data.endsChapter){
