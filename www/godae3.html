@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>한국사 게임 - 고대 3화 후삼국</title>
+<title>한국사 게임 - 고대 5화 후삼국</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -136,7 +136,7 @@
   <canvas id="game"></canvas>
 
   <div id="hud">
-    <div>고대 3화 · 후삼국</div>
+    <div>고대 5화 · 후삼국</div>
     <div class="sub">892~936년, 후백제·후고구려·신라</div>
     <div class="sub" id="hud-goal"></div>
   </div>
@@ -193,7 +193,7 @@
 
   <div id="end-screen">
     <div>
-      <h2>고대 3화 · 끝</h2>
+      <h2>고대 5화 · 끝</h2>
       <p>견훤은 아들에게 갇히고, 궁예는 신하에게 쫓겨났다.</p>
       <p>남은 것은 송악의 왕건이었다.</p>
       <p style="margin-top:18px; opacity:.7;">고려 1화 「왕건의 나라」에서 계속됩니다.</p>
@@ -297,10 +297,6 @@ const ZONES = {
     exits: [],
   },
 };
-// 배경은 같은 이름의 .webp를 먼저 찾고, 없으면 스펙에 적힌 .png로 되돌아간다.
-// 게임은 배경을 ZOOM(1.6)배에 기기 픽셀비까지 곱해 그리므로 1376폭 원본은
-// 화면에서 최대 4.8배로 늘어나 뿌옇다. 2배 해상도 webp는 그 뿌연 정도를
-// 줄이면서도 png보다 파일이 작다. 아직 변환하지 않은 그림은 png 그대로 뜬다.
 const zoneImgs = {};
 for (const id in ZONES){
   const png = ZONES[id].img, im = new Image();

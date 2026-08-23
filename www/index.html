@@ -144,13 +144,16 @@ const ERAS = [
   ] },
   { title: '고대', year: 'BC57 ~ 918', pct: '14.4%', range: '삼국시대 ~ 남북국시대', cards: [
     { href: 'godae1.html', num: '고대 1화', name: '세 나라의 겨룸', who: '무령왕 · 진흥왕' },
-    { href: 'godae2.html', num: '고대 2화', name: '통일과 발해', who: '장보고 · 의상 · 발해' },
-    { href: 'godae3.html', num: '고대 3화', name: '후삼국', who: '견훤 · 궁예 · 최치원' },
+    { href: 'gaya.html', num: '고대 2화', name: '낙동강의 철', who: '금관가야 · 대가야 · 우륵' },
+    { href: 'tongil.html', num: '고대 3화', name: '통일 전쟁', who: '계백 · 김유신 · 문무왕 · 신문왕' },
+    { href: 'godae2.html', num: '고대 4화', name: '통일과 발해', who: '장보고 · 의상 · 발해' },
+    { href: 'godae3.html', num: '고대 5화', name: '후삼국', who: '견훤 · 궁예 · 최치원' },
   ] },
   { title: '고려', year: '918 ~ 1392', pct: '14.4%', range: '918 ~ 1392', cards: [
     { href: 'goryeo1.html', num: '고려 1화', name: '왕건의 나라', who: '태조 · 광종 · 최승로' },
     { href: 'goryeo2.html', num: '고려 2화', name: '무신과 몽골', who: '서희 · 최충헌 · 삼별초' },
-    { href: 'goryeo3.html', num: '고려 3화', name: '원 간섭기와 공민왕', who: '공민왕 · 지눌 · 의천' },
+    { href: 'byeokrando.html', num: '고려 3화', name: '벽란도의 바닷길', who: '전시과 · 해동통보 · 대외무역' },
+    { href: 'goryeo3.html', num: '고려 4화', name: '원 간섭기와 공민왕', who: '공민왕 · 지눌 · 의천' },
   ] },
   { title: '조선 전기', year: '1392 ~ 1592', pct: '8.2%', range: null, cards: [
     { href: 'ch0.html', num: '0화', name: '새 나라의 설계자', who: '태조 · 정도전' },
@@ -162,9 +165,10 @@ const ERAS = [
     { href: 'ch6.html', num: '6화', name: '폭풍 전야', who: '선조' },
   ] },
   { title: '조선 후기', year: '1592 ~ 1863', pct: '15.3%', range: '1592 ~ 1863', cards: [
-    { href: 'hugi1.html', num: '후기 1화', name: '두 번의 전란', who: '광해군 · 병자호란' },
-    { href: 'hugi2.html', num: '후기 2화', name: '실학과 저잣거리', who: '정약용 · 정조' },
-    { href: 'hugi3.html', num: '후기 3화', name: '세도와 봉기', who: '홍경래 · 최제우' },
+    { href: 'imjin.html', num: '후기 1화', name: '한산도의 학익진', who: '이순신 · 권율 · 곽재우' },
+    { href: 'hugi1.html', num: '후기 2화', name: '광해군과 두 호란', who: '광해군 · 병자호란' },
+    { href: 'hugi2.html', num: '후기 3화', name: '실학과 저잣거리', who: '정약용 · 정조' },
+    { href: 'hugi3.html', num: '후기 4화', name: '세도와 봉기', who: '홍경래 · 최제우' },
   ] },
   { title: '근대·개항기', year: '1863 ~ 1910', pct: '12.8%', range: '1863 ~ 1910', cards: [
     { href: 'gaehang1.html', num: '개항 1화', name: '강화도의 대포', who: '흥선대원군 · 최익현' },
@@ -181,8 +185,13 @@ const ERAS = [
   { title: '현대', year: '1945 ~ 현재', pct: '9.7%', range: '1945 ~ 현재', cards: [
     { href: 'hyeondae1.html', num: '현대 1화', name: '해방, 그리고 갈라짐', who: '여운형 · 6·25' },
     { href: 'hyeondae2.html', num: '현대 2화', name: '광장의 사람들', who: '4·19 · 5·18 · 6월항쟁' },
+    { href: 'hyeondae3.html', num: '현대 3화', name: '두 정부와 판문점', who: '새마을 · 7·4 · 6·15' },
+  ] },
+  { title: '시대 통합', year: '해마다', pct: '5.3%', range: '세시풍속 · 문화유산', cards: [
+    { href: 'sesi.html', num: '시대통합 1화', name: '열두 달 세시풍속', who: '설날 · 단오 · 추석 · 동지' },
   ] },
 ];
+
 
 const row = document.getElementById('eras-row');
 ERAS.forEach(e => {

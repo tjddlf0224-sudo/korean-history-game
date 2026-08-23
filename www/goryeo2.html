@@ -197,7 +197,7 @@
       <p>왕은 강화도로 옮겨 갔고, 백성은 육지에 남았다.</p>
       <p>결국 강화가 맺어졌으나, 삼별초는 끝내 무릎 꿇지 않았다.</p>
       <p style="margin-top:18px; opacity:.7;">고려 3화 「원 간섭기와 공민왕」에서 계속됩니다.</p>
-      <div><a href="goryeo3.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
+      <div><a href="byeokrando.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
     </div>
   </div>
   <div id="zone-banner"></div>
@@ -298,10 +298,6 @@ const ZONES = {
     exits: [],
   },
 };
-// 배경은 같은 이름의 .webp를 먼저 찾고, 없으면 스펙에 적힌 .png로 되돌아간다.
-// 게임은 배경을 ZOOM(1.6)배에 기기 픽셀비까지 곱해 그리므로 1376폭 원본은
-// 화면에서 최대 4.8배로 늘어나 뿌옇다. 2배 해상도 webp는 그 뿌연 정도를
-// 줄이면서도 png보다 파일이 작다. 아직 변환하지 않은 그림은 png 그대로 뜬다.
 const zoneImgs = {};
 for (const id in ZONES){
   const png = ZONES[id].img, im = new Image();

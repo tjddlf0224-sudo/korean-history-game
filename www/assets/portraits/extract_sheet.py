@@ -48,10 +48,10 @@ SHEETS = {
         'eulmi', 'gojong', 'seojaepil', 'maeil', 'sinminhoe',
         'jeongmi', 'mudan', 'samil', 'bakeunsik', 'gwangbokhoe',
         'mulsan', 'eohakhoe', 'singanhoe', 'uiyeoldan', 'cheongsanri']),
-    'sheet5': (5, 3, [
+    # 시트5는 10명이라 제미나이가 5열 2행으로 그려 왔다. 실제로 받은 대로 맞춘다.
+    'sheet5': (5, 2, [
         'yeounhyeong', 'sintak', 'yukio', 'jeju', 'nongji',
-        'sasaoip', 'yusin', 'gwangju', 'yuwol', 'tongil',
-        None, None, None, None, None]),
+        'sasaoip', 'yusin', 'gwangju', 'yuwol', 'tongil']),
 }
 
 

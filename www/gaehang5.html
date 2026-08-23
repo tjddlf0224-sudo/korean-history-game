@@ -299,10 +299,6 @@ const ZONES = {
     exits: [],
   },
 };
-// 배경은 같은 이름의 .webp를 먼저 찾고, 없으면 스펙에 적힌 .png로 되돌아간다.
-// 게임은 배경을 ZOOM(1.6)배에 기기 픽셀비까지 곱해 그리므로 1376폭 원본은
-// 화면에서 최대 4.8배로 늘어나 뿌옇다. 2배 해상도 webp는 그 뿌연 정도를
-// 줄이면서도 png보다 파일이 작다. 아직 변환하지 않은 그림은 png 그대로 뜬다.
 const zoneImgs = {};
 for (const id in ZONES){
   const png = ZONES[id].img, im = new Image();

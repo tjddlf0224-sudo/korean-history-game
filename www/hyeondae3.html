@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>한국사 게임 - 현대 3화 두 정부와 판문점</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; background: #000; font-family: "Gowun Batang", -apple-system, "Malgun Gothic", serif; }
+  #wrap { position: fixed; top: 0; left: 0; touch-action: none; transform-origin: top left; }
+  body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
+  #game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+
+  #hud { position: absolute; top: calc(10px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left));
+    color: #f5f0e6; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.8); z-index: 5; }
+  #hud .sub { font-size: 11px; opacity: .75; margin-top: 2px; }
+
+  #stick-zone { position: absolute; left: calc(18px + env(safe-area-inset-left)); bottom: calc(18px + env(safe-area-inset-bottom));
+    width: 130px; height: 130px; z-index: 6; touch-action: none; }
+  #stick-base { position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25); }
+  #stick-knob { position: absolute; width: 52px; height: 52px; left: 39px; top: 39px; border-radius: 50%; background: rgba(255,255,255,0.55); transition: transform .05s linear; }
+
+  #act-btn { position: absolute; right: calc(22px + env(safe-area-inset-right)); bottom: calc(34px + env(safe-area-inset-bottom));
+    width: 68px; height: 68px; border-radius: 50%; border: none; touch-action: none;
+    background: #d9a441; color: #2b1d0e; box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 6; }
+  #act-btn.show { opacity: 1; pointer-events: auto; }
+
+  .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
+  .ov.show { display: flex; }
+  .ov.center { align-items: center; }
+  #intro-overlay { background: #0c0f14; }
+
+  #dlg-panel, #intro-panel {
+    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26ee; border: 2px solid #6a6a8a;
+    border-radius: 14px; padding: 16px 18px; color: #eae6f2; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    max-height: 80%; overflow-y: auto;
+  }
+  .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #4a4560; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
+  .dlg-name { font-weight: bold; font-size: 15px; color: #c9b8f0; }
+  .dlg-tag { font-size: 11px; opacity: .7; }
+  .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
+  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
+  .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
+  @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
+
+  #intro-panel { }
+  #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
+  #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
+
+  #quiz-panel { position: relative; width: 100%; max-width: 640px;
+    margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26f2;
+    border: 2px solid #6a6a8a; border-radius: 14px; padding: 16px 18px; color: #eae6f2;
+    box-shadow: 0 8px 24px rgba(0,0,0,.5); max-height: 80%; overflow-y: auto; }
+  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2; font-size: 14px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .quiz-tag { font-size: 12px; color: #c9b8f0; margin-bottom: 6px; }
+  .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-opt { padding: 12px 14px; border-radius: 10px; border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2;
+    font-size: 14px; text-align: left; }
+  .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
+  .quiz-opt.wrong { background: #5d2f3f; border-color: #bf5f7f; }
+  .quiz-opt:disabled { opacity: .55; cursor: default; }
+  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #cfc7de; min-height: 20px; }
+  .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
+  .quiz-next.show { opacity: .85; }
+  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #8d86a4; letter-spacing: .02em; }
+  .quiz-src:empty { display: none; }
+
+  #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
+  #fade.show { opacity: 1; pointer-events: auto; }
+
+  #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
+    background: linear-gradient(rgba(5,8,14,.5), rgba(5,8,14,.8)), url('assets/scenes/ch6_busan_ending.png') center/cover no-repeat, #000;
+    color: #c9b8f0; text-align: center; padding: 24px; }
+  #end-screen.show { display: flex; }
+  #end-screen h2 { font-size: 20px; margin-bottom: 10px; }
+  #end-screen p { color: #cfc7de; font-size: 14px; line-height: 1.7; }
+  #end-screen a { display: inline-block; margin-top: 22px; color: #0c0f14; background: #c9b8f0; text-decoration: none;
+    padding: 10px 22px; border-radius: 999px; font-size: 14px; font-weight: bold; }
+
+  /* 미니맵: 반드시 #wrap 안에 둬야 한다. #wrap의 rotate(90deg)를 같이 물려받아야
+     플레이어가 폰을 돌려서 보는 시야 기준으로 똑바로, 우상단에 놓이기 때문.
+     (밖으로 빼서 position:fixed로 "물리적 화면 우상단"에 고정하면, 폰을 돌려
+     보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
+     미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
+  #minimap-canvas { position: absolute; top: calc(32px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 4;
+    box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
+
+  /* 마지막 대사까지 다 들어도 곧장 챕터가 끝나지 않고, 이 버튼을
+     눌러야만 끝난다 — 그 전까지는 계속 돌아다니며 다른 NPC와 대화 가능. */
+  #next-chapter-btn { position: absolute; left: 50%; top: calc(14px + env(safe-area-inset-top)); transform: translateX(-50%);
+    background: #d9a441; color: #2b1d0e; border: none; border-radius: 999px; padding: 10px 20px;
+    font-size: 14px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,.4);
+    opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 7; }
+  #next-chapter-btn.show { opacity: 1; pointer-events: auto; }
+
+  /* 구역 이름 배너: 새 맵에 도착하면 화면 상단 가운데에 잠깐 떠서 '여기가 어디인지'를
+     알려준다(맵만 바뀌고 이름이 없어 어딘지 모르겠다는 문제). #wrap 안에 두어야
+     세로모드 90도 회전을 같이 물려받아 플레이어 시야 기준으로 똑바로 보인다. */
+  #zone-banner { position: absolute; left: 50%; top: calc(64px + env(safe-area-inset-top));
+    transform: translateX(-50%); z-index: 8; pointer-events: none;
+    padding: 8px 22px; border-radius: 999px; white-space: nowrap;
+    background: rgba(20,14,8,.62); border: 1px solid rgba(217,164,65,.55);
+    color: #f0c96b; font-size: 15px; letter-spacing: .06em;
+    text-shadow: 0 1px 4px rgba(0,0,0,.9);
+    opacity: 0; transition: opacity .45s ease; }
+  #zone-banner.show { opacity: 1; }
+
+  /* 현재 장소 이름 — 미니맵 바로 위에 상시 표시(어느 맵인지 항상 알 수 있게).
+     미니맵은 그만큼 아래로 내렸다. 도착 순간의 큰 배너(#zone-banner)와 역할이 다르다. */
+  #zone-label { position: absolute; top: calc(10px + env(safe-area-inset-top));
+    right: calc(10px + env(safe-area-inset-right)); width: 160px; text-align: center;
+    z-index: 4; color: #f0c96b; font-size: 12px; letter-spacing: .04em;
+    text-shadow: 0 1px 3px rgba(0,0,0,.9); pointer-events: none; }
+
+  /* 대화 중에 다른 인물이 끼어들면(beat에 name이 따로 붙은 경우) 대화창 색을
+     통째로 바꿔 '말하는 사람이 바뀌었다'를 한눈에 보이게 한다. 이름만 바뀌면
+     존댓말/반말이 갑자기 뒤섞여 읽히는 것처럼 어색해진다(5화 조식↔이황).
+     챕터마다 기본 팔레트가 따뜻한 계열이라, 끼어드는 쪽은 차가운 계열로 잡았다. */
+  #dlg-panel.alt-speaker { background: #17222bee; border-color: #6f9bb5; }
+  #dlg-panel.alt-speaker .dlg-name { color: #9fd0e8; }
+  #dlg-panel.alt-speaker .dlg-portrait { box-shadow: 0 0 0 2px #6f9bb5; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game"></canvas>
+
+  <div id="hud">
+    <div>현대 3화 · 두 정부와 판문점</div>
+    <div class="sub">1960~2000년대, 박정희~김대중</div>
+    <div class="sub" id="hud-goal"></div>
+  </div>
+
+  <div id="stick-zone">
+    <div id="stick-base"><div id="stick-knob"></div></div>
+  </div>
+  <button id="act-btn" onclick="Stage.interact()">
+    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v9c0 .83-.67 1.5-1.5 1.5H9.8l-3.9 3.4c-.5.44-1.27.08-1.27-.58V16h-.13C3.67 16 3 15.33 3 14.5v-9C3 4.67 3.67 4 4.5 4"
+        stroke="#2b1d0e" stroke-width="1.6" stroke-linejoin="round" fill="#2b1d0e" fill-opacity="0.06"/>
+      <circle cx="8.3" cy="9.8" r="1.15" fill="#2b1d0e"/>
+      <circle cx="12" cy="9.8" r="1.15" fill="#2b1d0e"/>
+      <circle cx="15.7" cy="9.8" r="1.15" fill="#2b1d0e"/>
+    </svg>
+  </button>
+
+  <div class="ov show" id="intro-overlay">
+    <div id="intro-panel">
+      <div id="intro-text"></div>
+      <div id="intro-next">탭하여 계속 ▶</div>
+    </div>
+  </div>
+
+  <div class="ov" id="dlg-overlay">
+    <div id="dlg-panel">
+      <div class="dlg-top">
+        <div class="dlg-portrait" id="dlg-portrait">👤</div>
+        <div>
+          <div class="dlg-tag" id="dlg-tag"></div>
+          <div class="dlg-name" id="dlg-name"></div>
+        </div>
+      </div>
+      <div class="dlg-box" id="dlg-text"></div>
+      <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+    </div>
+  </div>
+
+  <div class="ov center" id="quiz-overlay">
+    <div id="quiz-panel">
+      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
+      <div class="quiz-q" id="quiz-q"></div>
+      <div class="quiz-opts" id="quiz-opts"></div>
+      <div class="quiz-fb" id="quiz-fb"></div>
+      <div class="quiz-next" id="quiz-next">계속 <span class="arrow">▶</span></div>
+      <div class="quiz-src" id="quiz-src"></div>
+    </div>
+  </div>
+
+  <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
+
+  <div id="fade"></div>
+
+  <div id="end-screen">
+    <div>
+      <h2>현대 3화 · 끝</h2>
+      <p>정부가 바뀔 때마다 이 나라가 무엇을 택했는지가 바뀌었다.<br>공장을 세우고, 광장을 채우고, 손을 내밀었다.</p>
+      <p>선은 아직 거기 있다. 그러나 넘어가 본 적은 몇 번 있었다.</p>
+      <p style="margin-top:18px; opacity:.7;">시대통합 1화 「열두 달 세시풍속」에서 계속됩니다.</p>
+      <div><a href="sesi.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
+    </div>
+  </div>
+  <div id="zone-banner"></div>
+  <div id="zone-label"></div>
+  <canvas id="minimap-canvas"></canvas>
+</div>
+
+<script>
+/* ============ 기본 설정 ============ */
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케일 전)
+/* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
+   초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
+   (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
+const ART_V = '?v=2';
+
+const wrapEl = document.getElementById('wrap');
+/* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
+   한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
+   그쪽이 실제 보이는 영역을 더 정확히 반영하므로 우선 사용한다. */
+function getViewportSize(){
+  const vv = window.visualViewport;
+  // 핀치줌이 걸리면 vv.width/height가 확대 배율만큼 줄어든다. 그 값을 그대로 쓰면
+  // #wrap이 축소되면서 화면이 "확대된 채로" 굳어 되돌릴 수 없었다(실제 발생).
+  // 줌이 걸린 동안은 레이아웃 뷰포트를 써서 레이아웃이 줌을 따라가지 않게 한다.
+  if (vv && (vv.scale || 1) <= 1.01) return { w: vv.width, h: vv.height };
+  return { w: window.innerWidth, h: window.innerHeight };
+}
+
+/* ============ 확대(핀치줌·더블탭줌) 차단 ============
+   iOS Safari는 접근성 정책상 viewport meta의 user-scalable=no를 무시하므로
+   JS로 직접 막는다. 위 getViewportSize의 폴백과 2중 방어. */
+['gesturestart','gesturechange','gestureend'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); }, { passive: false });
+});
+document.addEventListener('touchmove', function(e){
+  if (e.touches.length > 1) e.preventDefault();          // 두 손가락 = 핀치
+}, { passive: false });
+var __lastTouchEnd = 0;
+document.addEventListener('touchend', function(e){
+  var now = Date.now();
+  if (now - __lastTouchEnd <= 300) e.preventDefault();   // 더블탭 줌
+  __lastTouchEnd = now;
+}, { passive: false });
+function applyOrientation(){
+  const { w: iw, h: ih } = getViewportSize();
+  const portrait = ih > iw;
+  document.body.classList.toggle('rot', portrait);
+  const w = portrait ? ih : iw;
+  const h = portrait ? iw : ih;
+  wrapEl.style.width = w + 'px';
+  wrapEl.style.height = h + 'px';
+  // 디스플레이 배율(DPR) 대응: 백킹 스토어를 물리 픽셀만큼 키우고 컨텍스트를 그만큼
+  // 스케일해 둔다. 이걸 빼면 캔버스가 논리 픽셀 1배로 그려진 뒤 브라우저가 2~3배로
+  // 늘려서 배경/NPC/주인공이 전부 뭉개진다(Phaser의 resolution 옵션과 같은 취지 — 다만 그 옵션은 Phaser 3.16에서 제거돼 실제로는 동작하지 않았고, 그래서 0화도 이 방식으로 옮겼다).
+  // 이후 드로잉 코드는 전부 논리 픽셀(VIEW_W/VIEW_H)만 쓰면 된다.
+  const dpr = Math.min(3, window.devicePixelRatio || 1);
+  VIEW_W = w; VIEW_H = h;
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+}
+window.addEventListener('resize', applyOrientation);
+window.addEventListener('orientationchange', () => setTimeout(applyOrientation, 80));
+if (window.visualViewport){
+  window.visualViewport.addEventListener('resize', applyOrientation);
+  window.visualViewport.addEventListener('scroll', applyOrientation);
+}
+// 일부 모바일 브라우저는 주소창이 애니메이션으로 늦게 접혀서, 로드 직후 한 번 더 재확인한다.
+setTimeout(applyOrientation, 300);
+setTimeout(applyOrientation, 800);
+applyOrientation();
+
+/* ============ 구역(zone): 실사 배경 이미지 + 충돌/NPC ============
+   무대는 광화문에서 판문점까지. 좌표(배리어·출구·NPC 위치)는 배경 그림을 격자로
+   재서 스펙에 적어 둔다 — 배경을 바꾸면 스펙의 좌표도 같이 고쳐야 한다. */
+const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
+/* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
+   빨간 점 격자로 표시해서 눈으로 바로 확인할 수 있다(책상 등 가구
+   배리어를 배경 그림과 맞춰 잡을 때, 좌표를 눈대중으로 추측하다 계속
+   틀렸던 문제의 재발 방지용). */
+const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
+const ZONES = {
+  /* 광화문 네거리에서 판문점으로 이어지는 길. 정부별 정책과 통일 노력을
+     한 줄로 세웠다 — 기출은 늘 "어느 정부 때인가"를 묻기 때문이다. */
+  gwanghwamun: {
+    img: 'assets/scenes/hyeondae3_panmunjeom.png', label: '광화문에서 판문점까지',
+    spawn: { x: 688, y: 470 },
+    barriers: [
+    ],
+    npcs: [
+      { id:'hanil', name:'한일 회담 반대 학생', x:320, y:250, img:'assets/portraits/hanil.png', look:{ role:'commoner', body:'#2f2f38', accent:'#d8c48a' } },
+      { id:'veteran', name:'베트남 파병 군인', x:700, y:230, img:'assets/portraits/veteran.png', look:{ role:'general', body:'#5a6b4a', accent:'#8a7a5a' } },
+      { id:'saemaul', name:'새마을 지도자', x:1060, y:280, img:'assets/portraits/saemaul.png', look:{ role:'commoner', body:'#6b8a4a', accent:'#e8e4d8' } },
+      { id:'olympic', name:'서울올림픽 자원봉사자', x:500, y:640, img:'assets/portraits/olympic.png', look:{ role:'commoner', body:'#3f5a8a', accent:'#e0b94a' } },
+      { id:'gimdaejung', name:'김대중', x:900, y:640, img:'assets/portraits/gimdaejung.png', look:{ role:'king', body:'#2f3a4a', accent:'#c9a24a' } },
+    ],
+    exits: [],
+  },
+};
+const zoneImgs = {};
+for (const id in ZONES){
+  const png = ZONES[id].img, im = new Image();
+  im.onerror = () => { if (im.src.endsWith('.webp')) { im.onerror = null; im.src = png; } };
+  im.src = png.replace(/\.png$/, '.webp');
+  zoneImgs[id] = im;
+}
+
+function isBarrierPx(zoneId, x, y){
+  if (x < 6 || y < 6 || x >= BG_W-6 || y >= BG_H-6) return true;
+  for (const b of ZONES[zoneId].barriers){ if (x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1) return true; }
+  return false;
+}
+const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
+
+/* ============ 주인공 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용
+   (NPC는 아직 초상화가 없어 drawCharacter() 실루엣을 그대로 유지) ============ */
+/* 주의(재발 방지): assets/player/left_*.png·right_*.png 원본 파일 자체가 좌우
+   내용이 뒤바뀌어 있음(0화에서 처음 발견/수정된 문제, DIR_SRC로 보정).
+   여기서도 동일하게 보정하지 않으면 왼쪽으로 이동 시 오른쪽을 보는 등 반대로 렌더됨. */
+const DIR_SRC = { down:'down', up:'up', left:'right', right:'left' };
+const PLAYER_SPRITES = {};
+['down','up','left','right'].forEach(dir => {
+  const src = DIR_SRC[dir];
+  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${src}_${i}.png` + ART_V; return im; });
+});
+const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
+function drawPlayerSprite(px, py, facing, moving){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const dir = DIR_NAME[facing] || 'down';
+  const frames = PLAYER_SPRITES[dir];
+  const seq = [0, 1, 0, 2];
+  const idx = moving ? seq[Math.floor(performance.now()/140) % seq.length] : 0;
+  const img = frames[idx];
+  if (!img.complete || !img.naturalWidth) return;
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight); // 전 챕터 공통으로 화면상 크기(73.6*줌1.2=88px)로 맞춤
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+
+/* ============ NPC 실사 초상 스프라이트: 초상화가 있는 NPC는 프로시저럴
+   실루엣 대신 실제 이미지를 필드에도 그린다(0화 Phaser판와 동일하게). */
+const NPC_SPRITE_CACHE = {};
+function getNpcImg(path){
+  if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path + ART_V; NPC_SPRITE_CACHE[path] = im; }
+  return NPC_SPRITE_CACHE[path];
+}
+function drawNpcSprite(px, py, imgPath, look){
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
+  const img = getNpcImg(imgPath);
+  if (!img.complete || !img.naturalWidth){
+    // 초상이 아직 없거나(신규 챕터) 로딩 중이면 프로시저럴 실루엣으로 대신 그린다.
+    // 예전엔 그냥 return이라 NPC가 통째로 안 보였고, 그림이 준비되기 전에는
+    // 대사·퀴즈가 멀쩡한데도 챕터를 검증할 수가 없었다.
+    drawCharacter(px, py, 'd', look);
+    return;
+  }
+  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
+  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+}
+
+function drawCharacter(px, py, facing, look){
+  const role = (look && look.role) || 'commoner';
+  const body = (look && look.body) || '#8a6d3b';
+  const accent = (look && look.accent) || '#c9a24a';
+  const eo = facing === 'l' ? -2 : facing === 'r' ? 2 : 0;
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.fillStyle = 'rgba(0,0,0,.25)';
+  ctx.beginPath(); ctx.ellipse(0, 16, 12, 5, 0, 0, Math.PI*2); ctx.fill();
+
+  if (role === 'scholar'){
+    ctx.fillStyle = body;
+    ctx.beginPath();
+    ctx.moveTo(-5,-8); ctx.lineTo(5,-8); ctx.lineTo(10,14); ctx.lineTo(-10,14); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = accent;
+    ctx.fillRect(-10,4,20,3);
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#1c1a16';
+    ctx.beginPath(); ctx.ellipse(0,-21,8,5,0,Math.PI,0); ctx.fill();
+    ctx.fillRect(-8,-22,16,4);
+    ctx.fillRect(-14,-19,6,2);
+    ctx.fillRect(8,-19,6,2);
+  } else {
+    ctx.fillStyle = body;
+    ctx.fillRect(-9,-6,18,20);
+    ctx.strokeStyle = accent; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-9,-6); ctx.lineTo(0,2); ctx.lineTo(9,-6); ctx.stroke();
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+  }
+
+  ctx.fillStyle = '#2b2015';
+  ctx.beginPath(); ctx.arc(eo-3,-14,1.4,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(eo+3,-14,1.4,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+
+function overlayOpen(){
+  return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show');
+}
+
+/* 구역 이름 배너 — goToZone()과 최초 진입에서 부른다. */
+function showZoneBanner(text){
+  const el = document.getElementById('zone-banner');
+  if (!el || !text) return;
+  el.textContent = text;
+  el.classList.add('show');
+  clearTimeout(el.__t);
+  el.__t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function updateHudGoal(){
+  const el = document.getElementById('hud-goal');
+  if (!el) return;
+  const done = document.getElementById('next-chapter-btn').classList.contains('show');
+  const t = done ? '다음 목표: 다음 화로 넘어가기'
+    : '다음 목표: ' + (Stage.state.talkStage < 0 ? '한일 회담 반대 학생과 대화하기' : '베트남 파병 군인과 대화하기');
+  if (el.textContent !== t) el.textContent = t;
+}
+
+const World = {
+  zone: 'gwanghwamun', px: ZONES.gwanghwamun.spawn.x, py: ZONES.gwanghwamun.spawn.y,
+  facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
+  stick: { active: false, dx: 0, dy: 0 },
+  keys: { l:false, r:false, u:false, d:false },
+  paused: false,
+  moving: false,
+  nearNpc: null,
+  lastT: 0,
+
+  canStand(x, y){
+    const pad = 16;
+    if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
+        isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
+    for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
+    return true;
+  },
+
+  update(dt){
+    if (this.paused || overlayOpen()) return;
+    let vx = this.stick.dx, vy = this.stick.dy;
+    if (this.keys.l) vx -= 1;
+    if (this.keys.r) vx += 1;
+    if (this.keys.u) vy -= 1;
+    if (this.keys.d) vy += 1;
+    const len = Math.hypot(vx, vy);
+    this.moving = len > 0.05;
+    if (this.moving){
+      vx /= len; vy /= len;
+      if (Math.abs(vx) > Math.abs(vy)) this.facing = vx > 0 ? 'r' : 'l';
+      else this.facing = vy > 0 ? 'd' : 'u';
+      const nx = this.px + vx * this.speed * dt;
+      const ny = this.py + vy * this.speed * dt;
+      if (this.canStand(nx, this.py)) this.px = nx;
+      if (this.canStand(this.px, ny)) this.py = ny;
+    }
+    this.checkNpc();
+  },
+
+  checkNpc(){
+    // 전 챕터 공통으로 2단계 거리(멀면 !, 가까우면 이름)로 통일
+    const SHOW_RANGE = 192, INTERACT_RANGE = 108.8;
+    let shown = null, best = SHOW_RANGE;
+    for (const n of ZONES[this.zone].npcs){
+      const d = Math.hypot(n.x - this.px, n.y - this.py);
+      if (d < best){ best = d; shown = n; }
+    }
+    this.nearNpcShown = shown;
+    this.nearNpcClose = (shown && best < INTERACT_RANGE) ? shown : null;
+    const found = this.nearNpcClose;
+    if (found !== this.nearNpc){
+      this.nearNpc = found;
+      const btn = document.getElementById('act-btn');
+      if (found) btn.classList.add('show'); else btn.classList.remove('show');
+    }
+  },
+
+  render(){
+    const img = zoneImgs[this.zone];
+    const viewW = VIEW_W / ZOOM, viewH = VIEW_H / ZOOM;
+    const camX = Math.max(0, Math.min(Math.max(0, BG_W - viewW), this.px - viewW/2));
+    const camY = Math.max(0, Math.min(Math.max(0, BG_H - viewH), this.py - viewH/2));
+    ctx.fillStyle = '#242030';
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    if (img && img.complete && img.naturalWidth){
+      const srcW = Math.min(viewW, BG_W), srcH = Math.min(viewH, BG_H);
+      // 배경 그림이 BG_W보다 클 수 있다(2배 webp). 잘라낼 구간도 같은 배로 키운다 —
+      // 안 그러면 그림의 왼쪽 위 1/4만 확대돼서 나온다.
+      const s = img.naturalWidth / BG_W;
+      ctx.drawImage(img, camX*s, camY*s, srcW*s, srcH*s, 0, 0, srcW*ZOOM, srcH*ZOOM);
+    } else {
+      // 배경 그림이 아직 없는 구역 — 격자 바닥과 안내를 대신 그려서, 그림이
+      // 준비되기 전에도 대사·퀴즈·이동을 그대로 확인할 수 있게 한다.
+      ctx.save(); ctx.scale(ZOOM, ZOOM);
+      ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1;
+      for (let gx = -(camX % 64); gx < viewW; gx += 64){ ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, viewH); ctx.stroke(); }
+      for (let gy = -(camY % 64); gy < viewH; gy += 64){ ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(viewW, gy); ctx.stroke(); }
+      ctx.fillStyle = 'rgba(240,201,107,.5)';
+      ctx.font = 'bold 13px "Gowun Batang", serif'; ctx.textAlign = 'center';
+      ctx.fillText('배경 그림 준비 중 — ' + (ZONES[this.zone].label || ''), viewW/2, 26);
+      ctx.restore();
+    }
+    const zone = ZONES[this.zone];
+    ctx.save();
+    ctx.scale(ZOOM, ZOOM);
+    for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
+    ctx.restore();
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
+    drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
+    if (this.nearNpcShown){
+      const n = this.nearNpcShown;
+      const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
+      ctx.fillStyle = '#c9b8f0';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      if (n === this.nearNpcClose){
+        ctx.fillText(n.name, sx, sy - 66);
+      } else {
+        const key = Stage.keyFor(n.id);
+        if (!key || !seenDialogKeys.has(key)) ctx.fillText('!', sx, sy - 66);
+      }
+    }
+    if (DEBUG_GRID){
+      const step = 16;
+      for (let gx = 0; gx < BG_W; gx += step){
+        for (let gy = 0; gy < BG_H; gy += step){
+          if (!isBarrierPx(this.zone, gx, gy)) continue;
+          const sx2 = (gx - camX) * ZOOM, sy2 = (gy - camY) * ZOOM;
+          if (sx2 < -step*ZOOM || sx2 > VIEW_W || sy2 < -step*ZOOM || sy2 > VIEW_H) continue;
+          ctx.fillStyle = 'rgba(255,40,40,0.45)';
+          ctx.fillRect(sx2 - 2, sy2 - 2, 4, 4);
+        }
+      }
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
+      ctx.fillText(`DEBUG px:(${Math.round(this.px)},${Math.round(this.py)}) zone:${this.zone}`, 6, VIEW_H - 8);
+    }
+    const vg = ctx.createRadialGradient(VIEW_W/2, VIEW_H/2, VIEW_H*0.3, VIEW_W/2, VIEW_H/2, VIEW_H*0.8);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, 'rgba(0,0,0,.4)');
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+  }
+};
+
+(function bindStick(){
+  const zone = document.getElementById('stick-zone');
+  const knob = document.getElementById('stick-knob');
+  let activeId = null, cx = 0, cy = 0;
+  const R = 44;
+  zone.addEventListener('pointerdown', e=>{
+    if (activeId !== null) return;
+    activeId = e.pointerId;
+    try { zone.setPointerCapture(activeId); } catch(err) {}
+    const r = zone.getBoundingClientRect();
+    cx = r.left + r.width/2; cy = r.top + r.height/2;
+    World.stick.active = true;
+    move(e);
+  });
+  zone.addEventListener('pointermove', move);
+  zone.addEventListener('pointerup', end);
+  zone.addEventListener('pointercancel', end);
+  function move(e){
+    if (e.pointerId !== activeId) return;
+    let dx = e.clientX - cx, dy = e.clientY - cy;
+    const d = Math.hypot(dx, dy);
+    if (d > R){ dx = dx/d*R; dy = dy/d*R; }
+    let wx = dx, wy = dy;
+    if (document.body.classList.contains('rot')){ wx = dy; wy = -dx; }
+    // 조이스틱 손잡이는 #wrap 안에 있어서 translate가 '회전된' 좌표계로
+    // 해석된다. 화면 델타(dx,dy)를 그대로 주면 손잡이만 90도 틀어져
+    // 보인다(이동은 멀쩡한데 손잡이만 오른쪽으로 꺾이던 문제). 이동에
+    // 쓰는 값과 똑같은 wx,wy로 그려서 손가락·주인공·손잡이를 일치시킨다.
+    knob.style.transform = `translate(${wx}px,${wy}px)`;
+    World.stick.dx = wx / R; World.stick.dy = wy / R;
+  }
+  function end(e){
+    if (e.pointerId !== activeId) return;
+    activeId = null;
+    World.stick.active = false; World.stick.dx = 0; World.stick.dy = 0;
+    knob.style.transform = 'translate(0,0)';
+  }
+})();
+
+window.addEventListener('keydown', e=>{
+  if (e.key === ' ' || e.key === 'Enter'){
+    e.preventDefault();
+    if (document.getElementById('intro-overlay').classList.contains('show')) { introNext(); return; }
+    if (document.getElementById('dlg-overlay').classList.contains('show')) { Dialog.next(); return; }
+    Stage.interact();
+    return;
+  }
+  if (overlayOpen()) return;
+  if (['ArrowLeft','a','A'].includes(e.key)) World.keys.l = true;
+  if (['ArrowRight','d','D'].includes(e.key)) World.keys.r = true;
+  if (['ArrowUp','w','W'].includes(e.key)) World.keys.u = true;
+  if (['ArrowDown','s','S'].includes(e.key)) World.keys.d = true;
+});
+window.addEventListener('keyup', e=>{
+  if (['ArrowLeft','a','A'].includes(e.key)) World.keys.l = false;
+  if (['ArrowRight','d','D'].includes(e.key)) World.keys.r = false;
+  if (['ArrowUp','w','W'].includes(e.key)) World.keys.u = false;
+  if (['ArrowDown','s','S'].includes(e.key)) World.keys.d = false;
+});
+
+/* ============ 대화 데이터 (사료 근거: hm_077_0070 정여립 모반, hm_077_0080 동서 붕당 발생.
+   아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
+   보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
+const NPC_DATA = {
+  hanil_0: {
+    name: '한일 회담 반대 학생', icon: '✊', img: 'assets/portraits/hanil.png',
+    beats: [
+      { who:'npc', t:'1964년입니다. 정부가 일본과 국교를 맺겠다며 회담을 밀어붙이고 있습니다.' },
+      { who:'npc', t:'식민 지배에 대한 사과도, 배상도 흐지부지인 채 돈만 받는 모양새입니다. 그래서 거리로 나왔습니다 — 사람들은 6·3 시위라고 부릅니다.' },
+      { who:'npc', t:'정부는 계엄령으로 눌렀고, 이듬해 협정은 맺어졌습니다. 청구권 자금이 들어와 포항제철과 경부고속도로에 쓰였다고 하더군요.' },
+      { who:'npc', t:'경제가 자란 건 맞습니다. 다만 그때 덮어 둔 문제가 아직도 남아 있습니다.' },
+    ],
+    quizSeq: [
+      { q:'1964년 학생과 시민이 굴욕적 대일 외교에 반대하며 일으킨 시위는?',
+        opts:['6·3 시위','4·19 혁명'], answer:0, src:[22, 34, 40, 43, 45, 57, 58, 60, 62, 63, 64],
+        feedback:['4·19 혁명은 1960년 3·15 부정 선거에 항의해 일어난 혁명이에요.','정답! 6·3 시위입니다. 이듬해 한일 협정이 체결돼요.'] },
+    ]
+  },
+  veteran_0: {
+    name: '베트남 파병 군인', icon: '🪖', img: 'assets/portraits/veteran.png',
+    beats: [
+      { who:'npc', t:'1965년부터 부대가 나갔습니다. 맹호, 청룡, 백마 — 이름은 들어 보셨을 겁니다.' },
+      { who:'npc', t:'파병 대가로 미국이 국군 현대화와 차관, 기술 이전을 약속했습니다. 그 각서를 브라운 각서라 부릅니다.' },
+      { who:'npc', t:'건설 회사들이 따라 들어가 외화를 벌었지요. 그 돈이 경부고속도로 같은 데로 흘러갔습니다.' },
+      { who:'npc', t:'다만 돌아오지 못한 사람도, 돌아왔어도 병을 안고 온 사람도 많습니다. 그쪽 민간인 피해도 있었고요.' },
+    ],
+    quizSeq: [
+      { q:'베트남 파병의 대가로 미국이 국군 현대화와 차관 제공 등을 약속한 1966년의 문서는?',
+        opts:['브라운 각서','한미 상호 방위 조약'], answer:0, src:[22, 34, 41, 43, 57, 58, 60, 62, 63, 64],
+        feedback:['한미 상호 방위 조약은 1953년 정전 협정 직후에 맺어졌어요.','정답! 브라운 각서입니다. 파병은 1964년부터 1973년까지 이어졌어요.'] },
+    ]
+  },
+  saemaul_0: {
+    name: '새마을 지도자', icon: '🌾', img: 'assets/portraits/saemaul.png',
+    beats: [
+      { who:'npc', t:'1970년부터입니다. 마을마다 지붕을 갈고 길을 넓혔지요. 근면·자조·협동, 이 여섯 글자를 아침마다 외웠습니다.' },
+      { who:'npc', t:'경제 개발 5개년 계획도 한창이었습니다. 1·2차에는 신발이나 가발 같은 경공업, 3·4차에는 철강과 조선, 화학 같은 중화학 공업으로 갔지요.' },
+      { who:'npc', t:'1972년에는 남북이 처음으로 한목소리를 냈습니다 — 자주·평화·민족 대단결, 7·4 남북 공동 성명입니다.' },
+      { who:'npc', t:'그런데 그해 10월, 유신 헌법이 나왔습니다. 대통령을 통일주체국민회의에서 뽑고, 임기 제한도 없앴지요. 긴급조치라는 것도 그때 생겼습니다.' },
+    ],
+    quizSeq: [
+      { q:'1972년 남북이 자주·평화·민족 대단결의 3대 통일 원칙에 처음 합의한 문서는?',
+        opts:['7·4 남북 공동 성명','남북 기본 합의서'], answer:0, src:[21, 22, 32, 34, 39, 43, 57, 58, 60, 62, 63, 64],
+        feedback:['남북 기본 합의서는 1991년 노태우 정부 때 채택되었어요.','정답! 7·4 남북 공동 성명입니다. 서울과 평양에서 동시에 발표되었어요.'] },
+      { q:'1972년 제정되어 대통령을 통일주체국민회의에서 뽑고 임기 제한을 없앤 헌법 체제는?',
+        opts:['유신 체제','제3공화국 체제'], answer:0, src:[8, 16, 22, 34, 43, 45, 57, 58, 60, 62, 63, 64],
+        feedback:['제3공화국은 1963년부터 유신 이전까지의 시기예요.','정답! 유신 체제입니다. 긴급조치로 국민의 기본권을 크게 제한했어요.'] },
+      { q:'1970년부터 근면·자조·협동을 내걸고 농촌 환경 개선을 추진한 운동은?',
+        opts:['새마을 운동','물산 장려 운동'], answer:0, src:[22, 34, 43, 53, 57, 58, 60, 62, 63, 64],
+        feedback:['물산 장려 운동은 1920년대 일제강점기에 국산품 애용을 외친 운동이에요.','정답! 새마을 운동입니다.'] },
+    ]
+  },
+  olympic_0: {
+    name: '서울올림픽 자원봉사자', icon: '🕊️', img: 'assets/portraits/olympic.png',
+    beats: [
+      { who:'npc', t:'1988년입니다. 온 세계가 서울에 왔습니다. 동유럽 나라들까지 왔지요 — 그게 큰일이었습니다.' },
+      { who:'npc', t:'이 기회에 정부가 소련, 중국 같은 사회주의 나라와 국교를 텄습니다. 북방 외교라고 합니다.' },
+      { who:'npc', t:'1991년에는 남북이 유엔에 함께 들어갔고, 그해 말 남북 기본 합의서를 채택했습니다. 서로를 나라 대 나라가 아닌 특수 관계로 규정했지요.' },
+      { who:'npc', t:'이 올림픽 자체가 1981년에 정해졌는데, 그 무렵 광주에서 있었던 일을 세계는 잘 몰랐습니다.' },
+    ],
+    quizSeq: [
+      { q:'1991년 남북이 화해와 불가침, 교류·협력을 약속하며 채택한 문서는?',
+        opts:['남북 기본 합의서','6·15 남북 공동 선언'], answer:0, src:[20, 23, 35, 37, 51, 60, 63, 70, 79],
+        feedback:['6·15 남북 공동 선언은 2000년 첫 남북 정상 회담의 결과예요.','정답! 남북 기본 합의서입니다. 같은 해 남북이 유엔에 동시 가입했어요.'] },
+      { q:'서울 올림픽을 계기로 소련·중국 등 사회주의 국가와 국교를 맺은 노태우 정부의 외교 정책은?',
+        opts:['북방 외교','실리 외교'], answer:0, src:[23, 37, 51, 60, 63, 70, 71, 79],
+        feedback:['실리 외교는 특정 시기를 가리키는 용어가 아니에요.','정답! 북방 외교입니다. 1990년 소련, 1992년 중국과 수교했어요.'] },
+    ]
+  },
+  gimdaejung_0: {
+    name: '김대중', icon: '🤝', img: 'assets/portraits/gimdaejung.png',
+    beats: [
+      { who:'npc', t:'내가 취임하던 1998년, 나라는 외환위기 한복판이었습니다. 금 모으기 운동을 기억하는 분이 많겠지요.' },
+      { who:'npc', t:'북에 대해서는 화해와 협력을 앞세웠습니다. 사람들은 햇볕 정책이라 불렀습니다.' },
+      { who:'npc', t:'2000년 6월, 평양에서 처음으로 남북 정상이 마주 앉았습니다. 그 자리에서 6·15 남북 공동 선언이 나왔지요.' },
+      { who:'npc', t:'그 뒤로 이산가족이 다시 만났고, 금강산 관광길이 열렸고, 개성에 공단이 들어섰습니다.' },
+      { who:'npc', t:'전임 김영삼 정부의 금융실명제와 지방자치 부활도 이어받았습니다. 나라 살림은 그렇게 조금씩 이어지는 것이더군요.' },
+    ],
+    quizSeq: [
+      { q:'2000년 첫 남북 정상 회담에서 발표되어 이산가족 상봉과 개성 공단으로 이어진 선언은?',
+        opts:['6·15 남북 공동 선언','7·4 남북 공동 성명'], answer:0, src:[22, 36, 38, 49, 58, 59, 61, 64, 70],
+        feedback:['7·4 남북 공동 성명은 1972년 박정희 정부 때 발표되었어요.','정답! 6·15 남북 공동 선언입니다.'] },
+      { q:'김대중 정부가 북한에 대해 화해와 협력을 앞세워 편 정책을 무엇이라 부르나요?',
+        opts:['햇볕 정책','북진 통일론'], answer:0, src:[12, 38, 49, 58, 59, 61, 64, 70],
+        feedback:['북진 통일론은 이승만 정부가 내세운 주장이에요.','정답! 햇볕 정책입니다. 금강산 관광과 개성 공단이 그 결과예요.'] },
+      { q:'1997년 말 우리나라가 국제통화기금(IMF)에 구제 금융을 요청하게 된 사태는?',
+        opts:['외환위기','오일 쇼크'], answer:0, src:[21, 22, 27, 38, 39, 61],
+        feedback:['오일 쇼크는 1970년대 두 차례 있었던 국제 유가 급등 사태예요.','정답! 외환위기입니다. 금 모으기 운동과 기업 구조조정이 뒤따랐어요.'] },
+    ],
+    endsChapter: true
+  },
+};
+const Stage = {
+  state: { talkStage: 0 },
+  keyFor(id){
+    if (id === 'hanil') return 'hanil_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'veteran') return 'veteran_0';
+    if (id === 'saemaul') return 'saemaul_0';
+    if (id === 'olympic') return 'olympic_0';
+    if (id === 'gimdaejung') return 'gimdaejung_0';
+    return null;
+  },
+  interact(){
+    if (document.querySelector('.ov.show')) return;
+    const n = World.nearNpc;
+    if (!n) return;
+    const key = Stage.keyFor(n.id);
+    if (key) Dialog.open(key, n);
+  }
+};
+
+const seenDialogKeys = new Set();
+/* 기출 출처 표기: src에 회차 배열을 넣으면 2개까지 나열, 3개 이상은 축약. */
+function formatQuizSrc(src){
+  if (!src) return '';
+  if (typeof src === 'string') return '기출 출처 · ' + src;
+  const rounds = [...src].sort((a, b) => a - b);
+  if (!rounds.length) return '';
+  const body = rounds.length <= 2
+    ? rounds.join(', ') + '회'
+    : `${rounds[0]}회 등 ${rounds.length}개 회차`;
+  return '기출 출처 · ' + body;
+}
+
+/* Quiz 엔진 — 다른 챕터(ch2)와 동일 동작: 보기 섞기 + 오답 재시도 + 연속 퀴즈. */
+const Quiz = {
+  data: null, onDone: null, answered: false, optButtons: [],
+  seq: null, seqIdx: 0, seqScore: 0, seqOnDone: null,
+  open(data, onDone){ this.seq = null; this._openOne(data, onDone); },
+  openSequence(list, onAllDone){
+    this.seq = list; this.seqIdx = 0; this.seqScore = 0; this.seqOnDone = onAllDone;
+    this._openOne(this.seq[0], () => this._seqAdvance());
+  },
+  _seqAdvance(){
+    // 마지막 문항을 끝낸 뒤 한 번 더 불리면 this.seq가 null이라 터진다.
+    // 실제로 자동 점검(_smoke.html)에서 잡혔다.
+    if (!this.seq) return;
+    this.seqIdx++;
+    if (this.seqIdx >= this.seq.length){
+      const score = this.seqScore, total = this.seq.length;
+      this.seq = null;
+      this.seqOnDone && this.seqOnDone(score, total);
+      return;
+    }
+    this._openOne(this.seq[this.seqIdx], () => this._seqAdvance());
+  },
+  _openOne(data, onDone){
+    this.data = data; this.onDone = onDone; this.answered = false;
+    document.getElementById('quiz-overlay').classList.add('show');
+    document.getElementById('quiz-tag').textContent = this.seq ? `${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
+    document.getElementById('quiz-q').textContent = data.q;
+    document.getElementById('quiz-fb').textContent = '';
+    document.getElementById('quiz-next').classList.remove('show');
+    document.getElementById('quiz-src').textContent = formatQuizSrc(data.src);
+    this.order = data.opts.map((_, i) => i);
+    for (let i = this.order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.order[i], this.order[j]] = [this.order[j], this.order[i]];
+    }
+    const opts = document.getElementById('quiz-opts');
+    opts.innerHTML = '';
+    this.optButtons = this.order.map((origIdx, i) => {
+      const b = document.createElement('button');
+      b.className = 'quiz-opt';
+      b.textContent = (i+1) + '. ' + data.opts[origIdx];
+      b.onclick = () => this.pick(i);
+      opts.appendChild(b);
+      return b;
+    });
+  },
+  pick(i){
+    if (this.answered) return;
+    const correct = this.order[i] === this.data.answer;
+    if (correct){
+      this.answered = true;
+      if (this.seq) this.seqScore++;
+      this.optButtons[i].classList.add('correct');
+      this.optButtons.forEach(b => b.disabled = true);
+      document.getElementById('quiz-fb').textContent = this.data.feedback[1];
+      const next = document.getElementById('quiz-next');
+      next.classList.add('show');
+      next.onclick = () => this.confirmIfReady();
+    } else {
+      this.optButtons[i].classList.add('wrong');
+      this.optButtons[i].disabled = true;
+      document.getElementById('quiz-fb').textContent = this.data.feedback[0];
+    }
+  },
+  confirmIfReady(){
+    if (!this.answered) return;
+    // 콜백을 먼저 떼어 놓는다 — 떼지 않으면 같은 콜백이 두 번 불릴 수 있다.
+    this.answered = false;
+    const done = this.onDone; this.onDone = null;
+    document.getElementById('quiz-overlay').classList.remove('show');
+    done && done();
+  },
+  abort(){
+    document.getElementById('quiz-overlay').classList.remove('show');
+    this.seq = null; this.data = null; this.onDone = null; this.seqOnDone = null;
+    World.paused = false;
+  }
+};
+
+const Dialog = {
+  key: null, npc: null, idx: 0, data: null,
+  open(key, npc){
+    this.key = key; this.npc = npc; this.idx = 0;
+    this.data = NPC_DATA[key];
+    seenDialogKeys.add(key);
+    World.paused = true;
+    document.getElementById('dlg-overlay').classList.add('show');
+    document.getElementById('dlg-name').textContent = this.data.name;
+    document.getElementById('dlg-tag').textContent = '현대 · 광화문에서 판문점까지';
+    const portraitEl = document.getElementById('dlg-portrait');
+    if (this.data.img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${this.data.img}')`; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = this.data.icon; }
+    this.render();
+  },
+  render(){
+    const beat = this.data.beats[this.idx];
+    // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
+    // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
+    const interjecting = !!beat.name && beat.name !== this.data.name;
+    document.getElementById('dlg-panel').classList.toggle('alt-speaker', interjecting);
+    const nameEl = document.getElementById('dlg-name');
+    if (nameEl) nameEl.textContent = beat.name || this.data.name;
+    const portraitEl = document.getElementById('dlg-portrait');
+    if (portraitEl){
+      const img = beat.img || (beat.name ? null : this.data.img);
+      if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
+      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
+    }
+    document.getElementById('dlg-text').textContent = beat.t;
+  },
+  next(){
+    this.idx++;
+    if (this.idx >= this.data.beats.length){
+      this.finish();
+      return;
+    }
+    this.render();
+  },
+  finish(){
+    document.getElementById('dlg-overlay').classList.remove('show');
+    if (this.data.quizSeq){
+      Quiz.openSequence(this.data.quizSeq, () => this.afterQuiz());
+    } else if (this.data.quiz){
+      Quiz.open(this.data.quiz, () => this.afterQuiz());
+    } else {
+      this.afterQuiz();
+    }
+  },
+  afterQuiz(){
+    World.paused = false;
+    if (this.npc.id === 'hanil'){
+      Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 0);
+    }
+    if (this.data.endsChapter){
+      document.getElementById('next-chapter-btn').classList.add('show');
+    }
+  }
+};
+document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
+
+/* ============ 모던 인트로 ============ */
+const INTRO_LINES = [
+  '길가에 현수막이 걸려 있다. 글씨가 바뀌고, 또 바뀐다.',
+  '누군가는 팻말을 들고 서 있고, 누군가는 군복 차림으로 배에 오른다.',
+  '그 길 끝에 낮은 건물 몇 채가 보인다. 파란 지붕. 가운데 선 하나.',
+];
+let introIdx = 0;
+function renderIntro(){
+  document.getElementById('intro-text').textContent = INTRO_LINES[introIdx];
+}
+function introNext(){
+  introIdx++;
+  if (introIdx >= INTRO_LINES.length){
+    const fade = document.getElementById('fade');
+    fade.classList.add('show');
+    setTimeout(() => {
+      document.getElementById('intro-overlay').classList.remove('show');
+    // 인트로가 걷히고 첫 무대가 드러나는 순간에도 구역 이름을 띄운다
+    // (이동할 때만 띄우면 시작 지점이 어딘지 끝내 알 수 없다).
+    showZoneBanner(ZONES[World.zone] && ZONES[World.zone].label);
+      fade.classList.remove('show');
+    }, 600);
+    return;
+  }
+  renderIntro();
+}
+document.getElementById('intro-panel').addEventListener('click', introNext);
+renderIntro();
+
+Stage.endChapter = function(){
+  document.getElementById('end-screen').classList.add('show');
+};
+
+/* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다
+   (Phaser 카메라나 게임 캔버스와 별개). 구역이 바뀌면 현재 구역의 배경
+   이미지를 그대로 축소해서 보여준다. */
+const miniCanvas = document.getElementById('minimap-canvas');
+const miniCtx = miniCanvas.getContext('2d');
+function sizeMinimapCanvas(){
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  miniCanvas.width = Math.round(160 * dpr);
+  miniCanvas.height = Math.round(90 * dpr);
+}
+sizeMinimapCanvas();
+window.addEventListener('resize', sizeMinimapCanvas);
+function drawMinimap(){
+  const w = miniCanvas.width, h = miniCanvas.height;
+  const img = zoneImgs[World.zone];
+  const sx = w / BG_W, sy = h / BG_H;
+  miniCtx.clearRect(0, 0, w, h);
+  if (img.complete && img.naturalWidth){ miniCtx.drawImage(img, 0, 0, w, h); }
+  // 구역 전환 출구(문)를 미니맵에도 표시 — 어디로 나가야 다음 구역인지 한눈에 보이게.
+  // (이모지 폰트 미지원 환경에서도 항상 똑같이 보이도록 직접 그린 문 아이콘 사용)
+  for (const ex of (ZONES[World.zone].exits || [])){
+    const pad = 8;
+    const cx = Math.max(pad, Math.min(w-pad, (ex.rect.x0 + ex.rect.x1) / 2 * sx));
+    const cy = Math.max(pad, Math.min(h-pad, (ex.rect.y0 + ex.rect.y1) / 2 * sy));
+    const dw = 7, dh = 9;
+    miniCtx.fillStyle = '#c9a24a';
+    miniCtx.strokeStyle = '#3a2c1a';
+    miniCtx.lineWidth = 1;
+    miniCtx.beginPath();
+    miniCtx.roundRect(cx - dw/2, cy - dh/2, dw, dh, 1.5);
+    miniCtx.fill();
+    miniCtx.stroke();
+    miniCtx.fillStyle = '#3a2c1a';
+    miniCtx.beginPath();
+    miniCtx.arc(cx + dw/2 - 2, cy + 1, 0.9, 0, Math.PI*2);
+    miniCtx.fill();
+  }
+  for (const n of ZONES[World.zone].npcs){
+    miniCtx.fillStyle = '#8a2f2f';
+    miniCtx.beginPath();
+    miniCtx.arc(n.x*sx, n.y*sy, 3, 0, Math.PI*2);
+    miniCtx.fill();
+  }
+  miniCtx.fillStyle = '#2f6fbf';
+  miniCtx.strokeStyle = '#ffffff';
+  miniCtx.lineWidth = 1;
+  miniCtx.beginPath();
+  miniCtx.arc(World.px*sx, World.py*sy, 4, 0, Math.PI*2);
+  miniCtx.fill();
+  miniCtx.stroke();
+}
+
+function loop(t){
+  if (!World.lastT) World.lastT = t;
+  const dt = Math.min(0.05, (t - World.lastT) / 1000);
+  World.lastT = t;
+  World.update(dt);
+  World.render();
+  drawMinimap();
+  updateHudGoal();
+  { const zl = document.getElementById('zone-label');
+    const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
+    if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+</script>
+</body>
+</html>
