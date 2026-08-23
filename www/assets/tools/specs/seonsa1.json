@@ -265,8 +265,8 @@
     {
      "id": "cheongdonggi",
      "name": "송국리 군장",
-     "x": 1010,
-     "y": 330,
+     "x": 900,
+     "y": 500,
      "look": {
       "role": "general",
       "body": "#5c4a2f",

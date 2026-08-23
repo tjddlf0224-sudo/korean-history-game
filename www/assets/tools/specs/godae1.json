@@ -200,8 +200,8 @@
     {
      "id": "hwarang",
      "name": "화랑",
-     "x": 688,
-     "y": 545,
+     "x": 1090,
+     "y": 430,
      "look": {
       "role": "general",
       "body": "#3d5a6b",
