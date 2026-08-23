@@ -132,6 +132,20 @@
   #dlg-panel.alt-speaker { background: #17222bee; border-color: #6f9bb5; }
   #dlg-panel.alt-speaker .dlg-name { color: #9fd0e8; }
   #dlg-panel.alt-speaker .dlg-portrait { box-shadow: 0 0 0 2px #6f9bb5; }
+  /* 대화창 위에 띄우는 작은 표. 사화처럼 '이름이 넷인데 왕이 누구였나'가
+     엉키는 것들은 글로만 읽어서는 안 남아서, 표로 한 번 보여 준다. */
+  .dlg-chart { margin: 2px 0 10px; border: 1px solid rgba(255,255,255,.22); border-radius: 8px; overflow: hidden; }
+  .dlg-chart[hidden] { display: none; }
+  .dlg-chart table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .dlg-chart th, .dlg-chart td { padding: 4px 7px; text-align: left; line-height: 1.35;
+    border-bottom: 1px solid rgba(255,255,255,.12); }
+  .dlg-chart th { background: rgba(255,255,255,.10); font-weight: bold; white-space: nowrap; }
+  .dlg-chart td:first-child { font-weight: bold; white-space: nowrap; }
+  .dlg-chart tr:last-child td { border-bottom: 0; }
+  .dlg-chart .chart-note { padding: 6px 8px; font-size: 11.5px; line-height:1.45;
+    background: rgba(255,255,255,.07); border-top: 1px solid rgba(255,255,255,.12); }
+  /* 표가 뜬 칸에서는 대사가 짧아야 한 화면에 다 들어온다. */
+  #dlg-panel.has-chart .dlg-box { font-size: 15px; min-height: 0; }
 </style>
 </head>
 <body>
@@ -168,6 +182,7 @@
           <div class="dlg-name" id="dlg-name"></div>
         </div>
       </div>
+      <div class="dlg-chart" id="dlg-chart" hidden></div>
       <div class="dlg-box" id="dlg-text"></div>
       <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
     </div>
@@ -765,6 +780,15 @@ const NPC_DATA = {
       { who:'npc', t:'내가 쓴 「조의제문」이 빌미가 되어, 많은 사림 인사가 목숨을 잃었네 — 무오사화였지.' },
       { who:'npc', t:'몇 년 뒤, 연산군은 자신의 생모 폐비 윤씨의 죽음에 관련된 이들을 찾아내 대규모로 숙청했네. 갑자사화 — 조선 전기 사화 중 가장 많은 희생자를 냈지.' },
       { who:'npc', t:'그렇게 폭정이 극에 달하자, 결국 신하들이 힘을 모아 연산군을 몰아내고 새 임금을 세웠네 — 중종반정이라 부르는 사건이었지.' },
+      { who:'npc', chart:{
+          head:['사화','연도','왕','불씨'],
+          rows:[['무오','1498','연산군','김일손의 사초 — 조의제문'],
+                ['갑자','1504','연산군','폐비 윤씨 사사 사건'],
+                ['기묘','1519','중종','주초위왕 — 조광조 제거'],
+                ['을사','1545','명종','외척 다툼 — 대윤과 소윤']],
+          note:'순서는 <b>“무오년에 갑자기 기묘하게 을씨년스럽다”</b>.<br>왕은 <b>연·연·중·명</b> — 앞의 둘이 연산군인 것만 잡으면 절반은 끝일세.'
+        },
+        t:'네 번의 사화를 한 눈에 놓고 보게. 이름만 외우면 반드시 엉키네.' },
       { who:'npc', t:'…이제 네가 이 비극의 흐름을 얼마나 아는지 보여다오.' },
     ],
     quiz: null,
@@ -777,11 +801,11 @@ const NPC_DATA = {
     ],
     quizSeq: [
       { q:'갑자사화는 어느 왕 때 일어났는가?', opts:['연산군','중종'], answer:0, src:[31,34,38,42,48,54,59,61,66,73],
-        feedback:['중종 때는 기묘사화가 일어나요.','정답! 연산군입니다. 무오사화와 갑자사화, 둘 다 연산군 대의 일이었지.'] },
+        feedback:['중종 때는 기묘사화가 일어나요.','정답! 연산군입니다. 무오·갑자는 연산군, 기묘는 중종, 을사는 명종 — 연·연·중·명일세.'] },
       { q:'조의제문을 사초에 실어 무오사화의 빌미를 제공한 인물은?', opts:['김일손','조광조'], answer:0, src:[10,12,13,14,26,29,31,38,45,47,48,57,59,63,66,73,76],
         feedback:['조광조는 훗날 기묘사화의 중심 인물이에요.','정답! 바로 나, 김일손일세.'] },
       { q:'갑자사화의 빌미가 된 사건은?', opts:['폐비 윤씨 사사 사건','소격서 폐지 주장'], answer:0, src:[31,34,38,42,48,54,59,61,66,73],
-        feedback:['소격서 폐지 주장은 훗날 조광조 무렵의 일이에요.','정답! 연산군의 생모, 폐비 윤씨 사사 사건이었네.'] }
+        feedback:['소격서 폐지 주장은 훗날 조광조 무렵의 일이에요.','정답! 연산군의 생모, 폐비 윤씨 사사 사건이었네. 갑(甲)자에 걸어 두게 — 갑자기 어머니 이야기.'] }
     ],
     finishesRevisit: 1
   },
@@ -796,6 +820,9 @@ const NPC_DATA = {
       { who:'npc', t:'연산군을 몰아내고 새 임금을 세운 중종반정, 그 덕에 저 같은 사람도 이렇게 조정에 설 수 있었지요.' },
       { who:'npc', t:'하지만 반정으로 왕이 바뀌었어도, 이 나라엔 아직 고칠 게 산더미입니다. 소격서부터 없애야 합니다 — 도교 제사를 지내는 그런 곳에, 나라 살림을 쓸 이유가 없지요.' },
       { who:'npc', t:'현량과로 인재를 천거해서 뽑으면, 시험만으로는 알 수 없는 사람의 됨됨이까지 볼 수 있습니다.' },
+      { who:'npc', t:'그런데 어느 날, 궁궐 뜰의 나뭇잎에 글자가 돋아났다는 소문이 돌았습니다. 走肖爲王 — 주초가 왕이 된다. 走(주)와 肖(초)를 위아래로 붙이면 趙(조), 제 성씨입니다.' },
+      { who:'npc', t:'나뭇잎에 꿀로 그 넉 자를 써 두면 벌레가 단맛을 따라 갉아먹어 글자 모양이 남지요. 누군가 그렇게 해 두고는, 하늘이 낸 조짐이라며 임금께 가져갔다고 합니다.' },
+      { who:'npc', t:'…후대의 기록에 전하는 이야기라 정말 그랬는지는 알 수 없습니다. 다만 그런 이야기가 만들어질 만큼, 저를 치우고 싶어 한 이들이 많았다는 뜻이겠지요.' },
       { who:'npc', t:'…내 개혁은 너무 빨랐습니다. 오래된 공신들이 위기감을 느꼈고, 결국 저를 비롯한 사림들을 몰아냈지요 — 기묘사화. 저는 유배지에서 사약을 받았습니다.' },
       { who:'npc', t:'…내 뜻이 헛되지 않았기를. 자네가 기억해주게.' },
     ],
@@ -811,7 +838,7 @@ const NPC_DATA = {
       { q:'연산군을 몰아내고 중종을 세운 사건은?', opts:['중종반정','계유정난'], answer:0, src:[27,46,47,59,61],
         feedback:['계유정난은 훨씬 앞선 세조 즉위 관련 사건이에요.','정답! 중종반정입니다. 그 뒤에 제가 조정에 나섰지요.'] },
       { q:'중종 때 조광조의 개혁이 실패로 끝난 사건은?', opts:['기묘사화','갑자사화'], answer:0, src:[11,14,27,32,34,38,42,46,48,49,61,64,66,69,75],
-        feedback:['갑자사화는 앞서 연산군 대의 사건이에요.','정답! 기묘사화입니다. 제가 유배지에서 사약을 받은 그 사건이지요.'] }
+        feedback:['갑자사화는 앞서 연산군 대의 사건이에요.','정답! 기묘사화입니다. 순서는 “무오년에 갑자기 기묘하게 을씨년스럽다” — 세 번째지요.'] }
     ],
     finishesRevisit: 2
   },
@@ -1011,6 +1038,17 @@ const Dialog = {
     const img = beat.img || this.data.img;
     if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
     else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
+    const chartEl = document.getElementById('dlg-chart');
+    if (beat.chart){
+      const c = beat.chart;
+      chartEl.innerHTML = '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
+        + '</tr></thead><tbody>'
+        + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
+        + '</tbody></table>'
+        + (c.note ? '<div class="chart-note">' + c.note + '</div>' : '');
+      chartEl.hidden = false;
+    } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
+    document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
     document.getElementById('dlg-text').textContent = beat.t;
   },
   next(){
