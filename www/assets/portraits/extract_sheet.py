@@ -68,6 +68,8 @@ SHEETS = {
     'sheet8': (5, 2, [
         'seonjo', 'hwangyungil', 'gimseongil', 'jeongcheol', 'gunjol',
         'sinrip', 'haengju_yeoin', 'useen', None, None]),
+    # 묘청/서경(고려2화)·삼전도비 석공(후기1화) 무대 분할에서 새로 필요해진 사람들.
+    'sheet9': (3, 1, ['myocheong', 'gimbusik', 'seokgong']),
 }
 
 
