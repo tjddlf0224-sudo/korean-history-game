@@ -21,20 +21,7 @@ MD = os.path.join(ROOT, '제미나이_프롬프트.md')
 OUT = os.path.join(ROOT, '그림_작업목록.html')
 
 # 커버리지 점검에서 나온, 아직 챕터가 없는 무대들. 프롬프트는 챕터를 만든 뒤에 쓴다.
-PLANNED = [
-    ('임진왜란', '한산도 통제영 · 행주산성', '이순신 · 권율 · 곽재우 · 김시민 · 조헌 · 논개', 22,
-     '기출 22문항으로 병자호란(20)보다 높은데 지금은 훈련도감 한 문항뿐'),
-    ('삼국 통일 전쟁과 가야', '황산벌 · 백강 · 매소성', '계백 · 관창 · 김유신 · 문무왕 · 의자왕', 47,
-     '황산벌 7 · 백강 5 · 나당전쟁 5 + 금관가야 18 · 대가야 12 — 가야가 통째로 없다'),
-    ('통일신라의 정치', '경주 국학과 관청', '신문왕 · 원효 · 혜초 · 설총', 31,
-     '신문왕 16 · 국학 5 · 부흥운동 10'),
-    ('고려의 경제와 무역', '벽란도 포구', '송 상인 · 아라비아 상인 · 전시과 담당 관리', 29,
-     '전시과 13 · 해동통보 8 · 대외무역 8'),
-    ('현대 정부별 정책과 통일 노력', '청와대 앞 · 판문점', '박정희 · 김대중 · 남북회담 대표', 63,
-     '김대중정부 11 · 통일노력 10 · 남북협상 9 · 박정희 9 · 유신체제 5'),
-    ('세시풍속·문화유산 도감', '(챕터가 아니라 별도 콘텐츠)', '—', 128,
-     '문화유산 39 · 지역사 34 · 답사 19 · 세시풍속 19 · 생활상 17 — 출제 유형 자체가 빠져 있다'),
-]
+PLANNED = []   # 여섯 챕터 모두 프롬프트가 생겨 1부·2부로 옮겼다.
 
 
 def parse():
@@ -126,11 +113,19 @@ def build(scenes, sheets):
         sheet_left=sheet_left, scene_total=len(scenes),
         npc_total=sum(x['n'] for x in sheets),
         scene_done=len(scenes) - scene_left, npc_done=sum(x['done'] for x in sheets),
-        cards=''.join(cards), planned=''.join(planned),
-        planned_q=sum(p[3] for p in PLANNED),
+        cards=''.join(cards),
     )
     vals['pct'] = round((vals['scene_done'] + vals['npc_done'])
                         / (vals['scene_total'] + vals['npc_total']) * 100)
+    vals['planned_section'] = ('''  <h2 class="sec">아직 프롬프트가 없는 것 — 다음에 만들 무대</h2>
+  <p class="lede">챕터를 먼저 짜야 무대와 등장인물이 정해지므로, 프롬프트는 그때 이 목록에 추가한다.</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>만들 챕터</th><th>무대</th><th>NPC</th><th>기출</th><th>왜</th></tr></thead>
+      <tbody>''' + ''.join(planned) + '''
+      </tbody>
+    </table>
+  </div>''') if PLANNED else ''
     # CSS에 중괄호가 가득해서 str.format을 못 쓴다. 자리표시자를 따로 둔다.
     out = TEMPLATE
     for k, v in vals.items():
@@ -304,19 +299,7 @@ TEMPLATE = r'''<meta charset="utf-8">
   <div class="grid" id="grid">⟦cards⟧
   </div>
 
-  <h2 class="sec">아직 프롬프트가 없는 것 — 다음에 만들 무대</h2>
-  <p class="lede">기출 3,700문항을 게임과 대조해 찾은 구멍이다. 챕터를 먼저 짜야
-    무대와 등장인물이 정해지므로, 프롬프트는 그때 이 목록에 추가한다.
-    다 합쳐 <b>⟦planned_q⟧문항</b>어치다.</p>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr><th>만들 챕터</th><th>무대</th><th>NPC</th><th>기출</th><th>왜</th></tr>
-      </thead>
-      <tbody>⟦planned⟧
-      </tbody>
-    </table>
-  </div>
+⟦planned_section⟧
 
   <footer>
     이 페이지는 <code>제미나이_프롬프트.md</code>에서 자동으로 만들어진다.
@@ -385,8 +368,12 @@ TEMPLATE = r'''<meta charset="utf-8">
 
 def main():
     scenes, sheets = parse()
-    assert len(scenes) == 17, f'배경 프롬프트를 {len(scenes)}개만 읽었다'
-    assert len(sheets) == 5, f'시트 프롬프트를 {len(sheets)}개만 읽었다'
+    import sys as _s
+    _s.path.insert(0, os.path.join(WWW, 'assets', 'portraits'))
+    import extract_sheet
+    assert len(scenes) >= 17, f'배경 프롬프트를 {len(scenes)}개만 읽었다'
+    assert len(sheets) == len(extract_sheet.SHEETS), \
+        f'프롬프트 {len(sheets)}장 vs SHEETS {len(extract_sheet.SHEETS)}장 — 어긋났다'
     open(OUT, 'w', encoding='utf-8').write(build(scenes, sheets))
     left = sum(1 for s in scenes if not s['done']) + sum(s['n'] - s['done'] for s in sheets)
     print(f'{OUT}\n  배경 {len(scenes)} · 시트 {len(sheets)}장({sum(s["n"] for s in sheets)}명) · 남은 그림 {left}장')

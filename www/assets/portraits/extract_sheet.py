@@ -52,6 +52,14 @@ SHEETS = {
     'sheet5': (5, 2, [
         'yeounhyeong', 'sintak', 'yukio', 'jeju', 'nongji',
         'sasaoip', 'yusin', 'gwangju', 'yuwol', 'tongil']),
+    'sheet6': (5, 3, [
+        'suro', 'ureuk', 'cheolsang', 'wae', 'gyebaek',
+        'gwanchang', 'gimyusin', 'munmu', 'sinmun', 'jeonsigwa',
+        'songsang', 'arabsang', 'jujeon', 'yisunsin', 'gwakjaeu']),
+    'sheet7': (5, 3, [
+        'gimsimin', 'gwonyul', 'johun', 'nongae', 'hanil',
+        'veteran', 'saemaul', 'olympic', 'gimdaejung', 'seollal',
+        'dano', 'chuseok', 'dongji', None, None]),
 }
 
 
