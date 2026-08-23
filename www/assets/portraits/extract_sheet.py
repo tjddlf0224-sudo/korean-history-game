@@ -74,6 +74,8 @@ SHEETS = {
     'sheet10': (2, 1, ['geunchogo', 'seongwang']),
     # 대조영·문왕/발해 상경성(고대4화 새 무대) — 청해진에 얹혀 있던 발해사신 대신
     'sheet11': (2, 1, ['daejoyeong', 'munwang']),
+    # 신숭겸·경순왕/공산·고창 벌판(고대5화 새 무대) — 통일 전쟁 과정 보강
+    'sheet12': (2, 1, ['sinsunggyeom', 'gyeongsunwang']),
 }
 
 
