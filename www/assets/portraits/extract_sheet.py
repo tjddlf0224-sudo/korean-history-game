@@ -83,10 +83,12 @@ SHEETS = {
         'seonjo', 'hwangyungil', 'gimseongil', 'jeongcheol', 'gunjol',
         'sinrip', 'haengju_yeoin', 'useen', 'sinchaeho', 'yugwansun',
         'siwon1', 'siwon2', 'extra_nam', 'extra_yeo', 'extra_gunsa']),
-    # 커버리지 보강으로 새로 생긴 5명. 5열 1행 — 5명뿐이라 3행을 채우지
-    # 않았다(억지로 엑스트라를 끼워 넣느니 실제로 필요한 사람만 뽑는다).
-    'sheet10': (5, 1, [
-        'ijagyeom', 'ijehyeon', 'hyojong', 'hyeonjong', 'sukjong']),
+    # 커버리지 보강으로 새로 생긴 사람 11명(당장 코드에 들어간 5명 +
+    # 다음에 필요해질 6명) + 범용 엑스트라 4명 = 15명.
+    'sheet12': (5, 3, [
+        'ijagyeom', 'ijehyeon', 'hyojong', 'hyeonjong', 'sukjong',
+        'songsiyeol', 'janghuibin', 'anyongbok', 'heojeok', 'yunhyu',
+        'gimmanjung', 'extra_gungnyeo', 'extra_naegwan', 'extra_munsin', 'extra_musin']),
 }
 
 
