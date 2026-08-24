@@ -391,6 +391,18 @@ const ZONES = {
     img: 'assets/scenes/seonsa1_chogiguk.png', label: '초기 국가 마을',
     spawn: { x: 688, y: 470 },
     barriers: [
+      { x0:0, y0:0, x1:620, y1:95 },  // 숲과 목책
+      { x0:700, y0:0, x1:965, y1:150 },  // 초가집
+      { x0:0, y0:155, x1:260, y1:330 },  // 마구간
+      { x0:0, y0:310, x1:95, y1:420 },  // 헛간
+      { x0:10, y0:400, x1:230, y1:560 },  // 활과 화살 걸이
+      { x0:1075, y0:170, x1:1245, y1:330 },  // 그물걸이
+      { x0:1245, y0:295, x1:1345, y1:375 },  // 바구니와 항아리
+      { x0:1245, y0:370, x1:1376, y1:560 },  // 가마솥
+      { x0:1150, y0:610, x1:1376, y1:768 },  // 못과 갈대
+      { x0:330, y0:580, x1:570, y1:768 },  // 자작나무
+      { x0:648, y0:615, x1:748, y1:715 },  // 북
+      { x0:758, y0:495, x1:815, y1:705 },  // 솟대
     ],
     npcs: [
       { id:'buyeo', name:'부여 사람', x:400, y:350, img:'assets/portraits/buyeo.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
@@ -399,7 +411,7 @@ const ZONES = {
       { id:'dongye', name:'동예 사람', x:688, y:560, img:'assets/portraits/dongye.png', look:{ role:'commoner', body:'#6b5a44', accent:'#c9a24a' } },
     ],
     exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'seonsa', spawn:{x:688,y:690}, label:'선사의 강가로' },
+      { rect:{x0:630,y0:0,x1:700,y1:58}, to:'seonsa', spawn:{x:688,y:690}, label:'선사의 강가로' },
     ],
   },
 };
