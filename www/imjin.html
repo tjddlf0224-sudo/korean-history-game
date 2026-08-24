@@ -480,8 +480,10 @@ const ZONES = {
      진주·의령·행주로 이어지는 순서다. */
   tangeumdae: {
     img: 'assets/scenes/imjin_tangeumdae.png', label: '충주 탄금대',
-    spawn: { x: 688, y: 600 },
+    spawn: { x: 750, y: 240 },
     barriers: [
+      { x0:0, y0:175, x1:210, y1:420 },  // 깃발과 병장기
+      { x0:0, y0:440, x1:1376, y1:768 },  // 남한강
     ],
     npcs: [
       { id:'sinrip', name:'신립', x:688, y:350, img:'assets/portraits/sinrip.png', look:{ role:'general', body:'#4a3a3a', accent:'#8a6d3b' } },
@@ -520,8 +522,14 @@ const ZONES = {
   },
   jinju: {
     img: 'assets/scenes/imjin_jinju.png', label: '진주성 촉석루',
-    spawn: { x: 688, y: 220 },
+    spawn: { x: 688, y: 300 },
     barriers: [
+      { x0:15, y0:0, x1:155, y1:660 },  // 성벽 원형 포루
+      { x0:140, y0:395, x1:330, y1:560 },  // 포대
+      { x0:180, y0:295, x1:260, y1:395 },  // 창 시렁
+      { x0:310, y0:430, x1:420, y1:510 },  // 검 시렁
+      { x0:1090, y0:0, x1:1230, y1:510 },  // 성벽 누각
+      { x0:0, y0:560, x1:1376, y1:768 },  // 남강
     ],
     npcs: [
       { id:'gimsimin', name:'김시민', x:430, y:400, img:'assets/portraits/gimsimin.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
@@ -529,34 +537,54 @@ const ZONES = {
     ],
     exits: [
       { rect:{x0:600,y0:0,x1:790,y1:55}, to:'hansan', spawn:{x:688,y:350}, label:'한산도로' },
-      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'uibyeong', spawn:{x:688,y:170}, label:'의병 진영으로' },
+      { rect:{x0:600,y0:440,x1:790,y1:500}, to:'uibyeong', spawn:{x:688,y:170}, label:'의병 진영으로' },
     ],
   },
   uibyeong: {
     img: 'assets/scenes/imjin_uibyeong.png', label: '의병 진영',
     spawn: { x: 688, y: 220 },
     barriers: [
+      { x0:90, y0:230, x1:330, y1:490 },  // 창검 시렁
+      { x0:390, y0:170, x1:545, y1:290 },  // 검 시렁
+      { x0:815, y0:175, x1:995, y1:300 },  // 지도 탁자
+      { x0:1025, y0:85, x1:1290, y1:460 },  // 막사
+      { x0:1140, y0:480, x1:1290, y1:650 },  // 막사
+      { x0:745, y0:545, x1:895, y1:650 },  // 수레와 쌀가마
+      { x0:930, y0:535, x1:1075, y1:650 },  // 우물
+      { x0:0, y0:650, x1:565, y1:768 },  // 담장
+      { x0:640, y0:650, x1:1376, y1:768 },  // 담장
     ],
     npcs: [
       { id:'gwakjaeu', name:'곽재우', x:430, y:400, img:'assets/portraits/gwakjaeu.png', look:{ role:'general', body:'#8a3a3a', accent:'#e0b94a' } },
       { id:'johun', name:'조헌', x:940, y:400, img:'assets/portraits/johun.png', look:{ role:'scholar', body:'#e8e4d8', accent:'#6b5636' } },
     ],
     exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'jinju', spawn:{x:688,y:690}, label:'진주성으로' },
-      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'haengju', spawn:{x:688,y:170}, label:'행주산성으로' },
+      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'jinju', spawn:{x:688,y:460}, label:'진주성으로' },
+      { rect:{x0:565,y0:660,x1:635,y1:730}, to:'haengju', spawn:{x:688,y:300}, label:'행주산성으로' },
     ],
   },
   haengju: {
     img: 'assets/scenes/imjin_haengju.png', label: '행주산성',
-    spawn: { x: 688, y: 220 },
+    spawn: { x: 688, y: 300 },
     barriers: [
+      { x0:0, y0:0, x1:1376, y1:100 },  // 목책
+      { x0:430, y0:80, x1:500, y1:230 },  // 무기 거치대
+      { x0:855, y0:80, x1:930, y1:230 },  // 무기 거치대
+      { x0:515, y0:95, x1:640, y1:175 },  // 돌무더기
+      { x0:985, y0:110, x1:1105, y1:190 },  // 돌무더기
+      { x0:50, y0:265, x1:240, y1:455 },  // 초가 지붕
+      { x0:245, y0:415, x1:280, y1:565 },  // 깃대
+      { x0:1115, y0:265, x1:1295, y1:415 },  // 돌무더기
+      { x0:1000, y0:465, x1:1295, y1:565 },  // 목재와 통
+      { x0:0, y0:680, x1:1180, y1:768 },  // 강물
+      { x0:1350, y0:680, x1:1376, y1:768 },  // 강물
     ],
     npcs: [
       { id:'gwonyul', name:'권율', x:460, y:420, img:'assets/portraits/gwonyul.png', look:{ role:'general', body:'#5a4a4a', accent:'#c9a24a' } },
       { id:'haengju_yeoin', name:'행주산성 아낙', x:920, y:420, img:'assets/portraits/haengju_yeoin.png', look:{ role:'commoner', body:'#6b8a4a', accent:'#e8e4d8' } },
     ],
     exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'uibyeong', spawn:{x:688,y:690}, label:'의병 진영으로' },
+      { rect:{x0:1180,y0:670,x1:1350,y1:768}, to:'uibyeong', spawn:{x:600,y:610}, label:'나룻배로 돌아가기' },
     ],
   },
 };

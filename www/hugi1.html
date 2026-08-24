@@ -503,20 +503,25 @@ const ZONES = {
       { id:'daedong', name:'선혜청 서리', x:688, y:640, img:'assets/portraits/daedong.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
     ],
     exits: [
-      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'samjeondo', spawn:{x:688,y:170}, label:'삼전도로' },
+      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'samjeondo', spawn:{x:430,y:260}, label:'삼전도로' },
     ],
   },
   samjeondo: {
     img: 'assets/scenes/hugi1_samjeondo.png', label: '삼전도',
-    spawn: { x: 688, y: 220 },
+    spawn: { x: 430, y: 260 },
     barriers: [
+      { x0:645, y0:10, x1:720, y1:200 },  // 삼전도비
+      { x0:10, y0:170, x1:265, y1:425 },  // 수항단
+      { x0:735, y0:170, x1:900, y1:270 },  // 석공 작업대
+      { x0:0, y0:500, x1:1125, y1:768 },  // 강물
+      { x0:1300, y0:500, x1:1376, y1:768 },  // 강물
     ],
     npcs: [
       { id:'seokgong', name:'삼전도비 석공', x:688, y:400, img:'assets/portraits/seokgong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
     ],
     exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'namhan', spawn:{x:688,y:690}, label:'남한산성으로' },
-      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'pyeonjeon', spawn:{x:688,y:280}, label:'궁궐 편전으로' },
+      { rect:{x0:800,y0:0,x1:990,y1:55}, to:'namhan', spawn:{x:688,y:690}, label:'남한산성으로' },
+      { rect:{x0:1150,y0:465,x1:1300,y1:545}, to:'pyeonjeon', spawn:{x:1050,y:420}, label:'나루터에서 배로 건너기' },
     ],
   },
   pyeonjeon: {
@@ -547,7 +552,7 @@ const ZONES = {
       { id:'sukjong', name:'숙종', x:930, y:400, img:'assets/portraits/sukjong.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
     ],
     exits: [
-      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'samjeondo', spawn:{x:688,y:200}, label:'삼전도로' },
+      { rect:{x0:600,y0:715,x1:790,y1:768}, to:'samjeondo', spawn:{x:1050,y:420}, label:'삼전도로' },
     ],
   },
 };
