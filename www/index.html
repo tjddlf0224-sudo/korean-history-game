@@ -73,7 +73,7 @@
   body.short .plan-note { display:none; }
 
   /* 왕조 계보 모달 — 시대 제목을 누르면 그 시대 나라들의 왕 계보를 기출
-     언급 빈도와 함께 보여준다. #wrap 안에 둬야 세로모드 회전 트릭을 그대로
+     출제 횟수와 함께 보여준다. #wrap 안에 둬야 세로모드 회전 트릭을 그대로
      따라간다(미니맵과 같은 이유). */
   .era-title.clk { cursor:pointer; border-bottom:1px dotted #d9a441; padding-bottom:1px; }
   #kings-modal { position:absolute; inset:0; z-index:40; display:none;
@@ -239,8 +239,8 @@ const ERAS = [
   ] },
 ];
 
-/* 왕조 계보 데이터 — 한능검 기출(6~79회, 5,500여 개 태그)에서 왕 이름 언급
-   횟수를 집계한 것. 고려·조선 공통 묘호와 백제·발해 공통 '무왕'은 태그에
+/* 왕조 계보 데이터 — 한능검 기출(6~79회, 5,500여 개 태그)에서 왕 이름이 나온
+   출제 횟수를 집계한 것. 고려·조선 공통 묘호와 백제·발해 공통 '무왕'은 태그에
    딸린 세부 사건을 직접 읽어 시대별로 갈랐다(기출_왕조_지도.html과 같은 데이터). */
 const KINGS_DATA = [["선사·초기국가","고조선",[{"name":"단군왕검","year":"(건국)","n":3},{"name":"위만","year":"BC194","n":0},{"name":"우거왕","year":"~BC108","n":1}]],["고대","고구려",[{"name":"동명성왕","year":"BC37","n":0},{"name":"유리왕","year":"BC19","n":0},{"name":"대무신왕","year":"18","n":0},{"name":"태조왕","year":"53","n":0},{"name":"고국천왕","year":"179","n":0},{"name":"미천왕","year":"300","n":0},{"name":"고국원왕","year":"331","n":1},{"name":"소수림왕","year":"371","n":6},{"name":"광개토대왕","year":"391","n":6},{"name":"장수왕","year":"413","n":5},{"name":"문자명왕","year":"491","n":0},{"name":"안장왕","year":"519","n":0},{"name":"양원왕","year":"545","n":0},{"name":"평원왕","year":"559","n":0},{"name":"영양왕","year":"590","n":0},{"name":"영류왕","year":"618","n":0},{"name":"보장왕","year":"642","n":0}]],["고대","백제",[{"name":"온조왕","year":"BC18","n":0},{"name":"고이왕","year":"234","n":0},{"name":"책계왕","year":"286","n":0},{"name":"근초고왕","year":"346","n":2},{"name":"근구수왕","year":"375","n":0},{"name":"침류왕","year":"384","n":0},{"name":"아신왕","year":"392","n":0},{"name":"전지왕","year":"405","n":0},{"name":"비유왕","year":"427","n":0},{"name":"개로왕","year":"455","n":3},{"name":"문주왕","year":"475","n":0},{"name":"삼근왕","year":"477","n":1},{"name":"동성왕","year":"479","n":0},{"name":"무령왕","year":"501","n":6},{"name":"성왕","year":"523","n":8},{"name":"위덕왕","year":"554","n":0},{"name":"무왕","year":"600","n":2},{"name":"의자왕","year":"641","n":1}]],["고대","신라·통일신라",[{"name":"박혁거세","year":"BC57","n":0},{"name":"탈해이사금","year":"57","n":0},{"name":"파사이사금","year":"80","n":0},{"name":"내물마립간","year":"356","n":0},{"name":"눌지마립간","year":"417","n":1},{"name":"소지마립간","year":"479","n":0},{"name":"지증왕","year":"500","n":6},{"name":"법흥왕","year":"514","n":5},{"name":"진흥왕","year":"540","n":11},{"name":"진지왕","year":"576","n":0},{"name":"진평왕","year":"579","n":0},{"name":"선덕여왕","year":"632","n":0},{"name":"진덕여왕","year":"647","n":0},{"name":"무열왕","year":"654","n":0},{"name":"문무왕","year":"661","n":4},{"name":"신문왕","year":"681","n":15},{"name":"성덕왕","year":"702","n":0},{"name":"경덕왕","year":"742","n":1},{"name":"혜공왕","year":"765","n":0},{"name":"원성왕","year":"785","n":2},{"name":"헌덕왕","year":"809","n":0},{"name":"흥덕왕","year":"826","n":1},{"name":"진성여왕","year":"887","n":2},{"name":"경순왕","year":"927","n":1}]],["고대","가야",[{"name":"김수로왕","year":"42","n":1},{"name":"이진아시왕","year":"(대가야 시조)","n":1}]],["고대","발해",[{"name":"대조영","year":"698","n":1},{"name":"무왕","year":"719","n":7},{"name":"문왕","year":"737","n":4},{"name":"선왕","year":"818","n":0}]],["고려","고려",[{"name":"태조","year":"918","n":17},{"name":"혜종","year":"943","n":0},{"name":"정종","year":"945","n":0},{"name":"광종","year":"949","n":15},{"name":"경종","year":"975","n":0},{"name":"성종","year":"981","n":15},{"name":"목종","year":"997","n":0},{"name":"현종","year":"1009","n":3},{"name":"덕종","year":"1031","n":0},{"name":"정종","year":"1034","n":0},{"name":"문종","year":"1046","n":2},{"name":"순종","year":"1083","n":0},{"name":"선종","year":"1083","n":6},{"name":"헌종","year":"1094","n":0},{"name":"숙종","year":"1095","n":11},{"name":"예종","year":"1105","n":5},{"name":"인종","year":"1122","n":3},{"name":"의종","year":"1146","n":0},{"name":"명종","year":"1170","n":0},{"name":"신종","year":"1197","n":0},{"name":"희종","year":"1204","n":0},{"name":"강종","year":"1211","n":0},{"name":"고종","year":"1213","n":0},{"name":"원종","year":"1259","n":2},{"name":"충렬왕","year":"1274","n":1},{"name":"충선왕","year":"1298","n":0},{"name":"충숙왕","year":"1313","n":0},{"name":"충혜왕","year":"1330","n":0},{"name":"충목왕","year":"1344","n":0},{"name":"충정왕","year":"1348","n":0},{"name":"공민왕","year":"1351","n":16},{"name":"우왕","year":"1374","n":0},{"name":"창왕","year":"1388","n":0},{"name":"공양왕","year":"1389","n":0}]],["조선 전기","조선",[{"name":"태조","year":"1392","n":1},{"name":"정종","year":"1398","n":0},{"name":"태종","year":"1400","n":16},{"name":"세종","year":"1418","n":24},{"name":"문종","year":"1450","n":0},{"name":"단종","year":"1452","n":3},{"name":"세조","year":"1455","n":10},{"name":"예종","year":"1468","n":0},{"name":"성종","year":"1469","n":12},{"name":"연산군","year":"1494","n":2},{"name":"중종","year":"1506","n":3},{"name":"인종","year":"1544","n":0},{"name":"명종","year":"1545","n":8}]],["조선 후기","조선",[{"name":"선조","year":"1567","n":4},{"name":"광해군","year":"1608","n":5},{"name":"인조","year":"1623","n":3},{"name":"효종","year":"1649","n":4},{"name":"현종","year":"1659","n":1},{"name":"숙종","year":"1674","n":10},{"name":"경종","year":"1720","n":2},{"name":"영조","year":"1724","n":20},{"name":"정조","year":"1776","n":27},{"name":"순조","year":"1800","n":4},{"name":"헌종","year":"1834","n":0},{"name":"철종","year":"1849","n":2}]],["근대·개항기","대한제국",[{"name":"고종","year":"1863","n":1},{"name":"순종","year":"1907","n":0}]]]
 ;
@@ -276,7 +276,7 @@ function openKingsModal(era){
   if (!groups) return;
   document.getElementById('kp-title').textContent = era + ' 왕 계보';
   const totalKings = groups.reduce((s, [,ks]) => s + ks.length, 0);
-  document.getElementById('kp-sub').textContent = `${groups.map(g => g[0]).join(' · ')} · 왕 ${totalKings}명 · 원 안 숫자 = 기출 언급 횟수`;
+  document.getElementById('kp-sub').textContent = `${groups.map(g => g[0]).join(' · ')} · 왕 ${totalKings}명 · 원 안 숫자 = 기출 출제 횟수`;
   const body = document.getElementById('kings-body');
   let html = `<div class="kp-legend">
     <span><i style="opacity:.4"></i>0회</span><span><i style="border-color:#a3894f"></i>1~3회</span>
@@ -286,7 +286,7 @@ function openKingsModal(era){
   </div>`;
   groups.forEach(([country, kings]) => {
     const total = kings.reduce((s, k) => s + k.n, 0);
-    html += `<div class="kp-country"><span class="kp-cname">${country}<span class="kp-ccount">· 왕 ${kings.length}명 · 언급 합계 ${total}회</span></span>
+    html += `<div class="kp-country"><span class="kp-cname">${country}<span class="kp-ccount">· 왕 ${kings.length}명 · 출제 합계 ${total}회</span></span>
       <div class="kp-strip">` + kings.map(k => `
         <div class="kp-king" data-t="${kingsTier(k.n)}">
           <div class="kp-badge">${k.n}${kingsDupDot(k.name, era, country, k.year)}</div>

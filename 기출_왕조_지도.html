@@ -178,8 +178,8 @@
 <div class="wrap">
   <header class="page">
     <h1>기출 왕조 지도</h1>
-    <p class="lede">한국사능력검정시험 기출문제(6~79회)에 등장한 <b>왕 이름 언급 횟수</b>를 시대·나라별 계보로 펼쳐 봅니다. 원 안의 숫자가 클수록, 색이 붉을수록 자주 나온 왕입니다.</p>
-    <p class="note">데이터는 게임 제작용으로 쌓아 온 기출 태그 색인(6~79회, 5,500여 개 태그)에서 왕 이름을 추려 집계했습니다. 고려·조선이 함께 쓴 묘호(태조·성종·현종·문종·숙종·예종·인종·명종·경종·고종 등)와 백제·발해가 함께 쓴 '무왕'은 태그에 딸린 세부 사건(예: 훈요십조→고려, 한양천도→조선)을 직접 읽어 시대별로 갈랐습니다. 다만 세부 사건이 안 달린 일부 언급은 어느 쪽인지 가려낼 수 없어 계산에서 제외했으므로, 실제보다 약간 적게 잡혔을 수 있습니다. 이렇게 <b>이름이 겹치는 왕</b>에는 <span class="dupmark" style="cursor:default;">동명이인</span> 표시(계보 원에는 작은 점)를 달아, 다른 시대·나라의 동명이인과 헷갈리지 않도록 했습니다.</p>
+    <p class="lede">한국사능력검정시험 기출문제(6~79회)에 등장한 <b>왕 이름 출제 횟수</b>를 시대·나라별 계보로 펼쳐 봅니다. 원 안의 숫자가 클수록, 색이 붉을수록 자주 나온 왕입니다.</p>
+    <p class="note">데이터는 게임 제작용으로 쌓아 온 기출 태그 색인(6~79회, 5,500여 개 태그)에서 왕 이름을 추려 집계했습니다. 고려·조선이 함께 쓴 묘호(태조·성종·현종·문종·숙종·예종·인종·명종·경종·고종 등)와 백제·발해가 함께 쓴 '무왕'은 태그에 딸린 세부 사건(예: 훈요십조→고려, 한양천도→조선)을 직접 읽어 시대별로 갈랐습니다. 다만 세부 사건이 안 달린 일부 경우는 어느 쪽인지 가려낼 수 없어 계산에서 제외했으므로, 실제보다 약간 적게 잡혔을 수 있습니다. 이렇게 <b>이름이 겹치는 왕</b>에는 <span class="dupmark" style="cursor:default;">동명이인</span> 표시(계보 원에는 작은 점)를 달아, 다른 시대·나라의 동명이인과 헷갈리지 않도록 했습니다.</p>
   </header>
 
   <nav class="tabs" id="tabs"></nav>
@@ -187,7 +187,7 @@
   <section class="view" id="view-rank">
     <div class="rank-head">
       <h2>전체 랭킹 · 기출에 가장 많이 나온 왕</h2>
-      <span class="sub">129명 중 언급 상위 30명 · 총 언급 366회</span>
+      <span class="sub">129명 중 출제 상위 30명 · 총 출제 366회</span>
     </div>
     <div class="ranklist" id="ranklist"></div>
   </section>
@@ -307,7 +307,7 @@ ERA_ORDER.slice(1).forEach(era => {
     const lineage = document.createElement('div');
     lineage.className = 'lineage';
     lineage.innerHTML = `
-      <div class="country"><span class="dot"></span><span class="cname">${country}</span><span class="ccount">· 왕 ${kings.length}명 · 언급 합계 ${total}회</span></div>
+      <div class="country"><span class="dot"></span><span class="cname">${country}</span><span class="ccount">· 왕 ${kings.length}명 · 출제 합계 ${total}회</span></div>
       <div class="strip-outer"><div class="strip"></div></div>
     `;
     const strip = lineage.querySelector('.strip');
