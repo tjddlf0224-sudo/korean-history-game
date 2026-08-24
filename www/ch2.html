@@ -390,8 +390,8 @@
       <h2>2화 · 끝</h2>
       <p>세종: (늙고 지친 목소리로)<br>"…다음 왕위는 문종, 그리고 어린 세손에게 이어지겠지.<br>부디 이 아이가 무사히 왕좌를 지킬 수 있기를…"</p>
       <div id="end-score"></div>
-      <p style="margin-top:18px; opacity:.7;">3화 「피의 계승」에서 계속됩니다.</p>
-      <div><a href="ch3.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
+      <p style="margin-top:18px; opacity:.7;">3화 「들녘과 국경」에서 계속됩니다.</p>
+      <div><a href="ch2b.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
     </div>
   </div>
   <div id="zone-banner"></div>
@@ -545,76 +545,12 @@ const ZONES = {
       { id: 'sejong', name: '세종', x: 590, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
       { id: 'sinsukju', name: '신숙주', x: 790, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
-    // 출구는 12시 방향(북쪽) 정문 — 실제로 배경에 여닫이문이 그려진 자리로 옮김.
-    // 국경으로 나가기 전에 지도를 띄워, 압록강·두만강 위치를 직접 확인하고
-    // 김종서가 있는 국경의 끝(두만강 6진)을 짚게 한다.
-    exits: [ { rect:{x0:645,y0:0,x1:728,y1:35}, to:'gukgyeong', spawn:{x:688,y:700}, label:'국경 진영으로',
-      viaMap: {
-        key: 'gukgyeong',
-        title: '북방 국경으로',
-        era: 'early',
-        focus: 'north',
-        caption: '해가 저물었다. 길을 나서기 전, 지도를 펴 북방의 두 강을 확인한다. 김종서 장군이 6진을 개척한 곳은 어디인가?',
-        markers: ['amnok', 'baekdu', 'hamgil'],
-        answer: 'hamgil',
-        wrongMsg: '그쪽이 아닐세. 6진은 두만강 유역, 함길도 쪽이라네.',
-      },
-      // 12시 문은 궁궐 밖으로 나가는 유일한 문이다. 처음 한 번은 위 viaMap 퀴즈로
-      // 6진 위치를 직접 짚게 하고, 그 뒤부터는 이 hub를 띄워 지도에서 갈 곳을
-      // 고르게 한다(장소가 늘어나면 destinations에 한 줄씩 추가하면 된다).
-      hub: {
-        title: '궁궐 밖으로',
-        era: 'early',
-        focus: 'north',
-        caption: '어디로 가시겠습니까?',
-        destinations: [
-          { marker: 'hamgil',  label: '6진 진영으로', to: 'gukgyeong', spawn: { x:688, y:700 } },
-          { marker: 'hanyang', label: '권농 들녘으로', to: 'gwonnong', spawn: { x:700, y:300 } },
-        ],
-      } },
-      // 6시 방향 창호지 문 → 밖의 간의대(천문 관측대)로 나간다
+    // 출구는 6시 방향 창호지 문 → 밖의 간의대(천문 관측대)로 나간다.
+    // (원래 있던 12시 정문은 권농 들녘·국경 진영으로 가는 문이었으나, 2화
+    // 분리 후 그 두 무대가 3화(ch2b.html)로 옮겨가면서 정문도 함께 없앴다.)
+    exits: [
       { rect:{x0:630,y0:735,x1:740,y1:768}, to:'ganuidae', spawn:{x:680,y:600}, label:'간의대로' },
     ],
-  },
-  /* 권농 들녘 — 농사직설(기출 11문항, 7·9·18·19·20·39·43·54·55·58·66회)을
-     위한 무대. 조선전기 문화 항목 중 게임에 통째로 빠져 있던 최대 공백이었다.
-     기출 지문(58회)이 "나이든 농부들의 경험을 모으고 정초에게 정리하게 하여"
-     라고 쓰는 그대로, 노농과 정초 두 사람을 세워 그 과정을 재현한다.
-     배리어는 배경 그림을 100px 격자로 직접 읽어 잡았다 — 논·밭·개울은 못 걷고
-     가운데 흙마당과 아래로 난 길만 열려 있다. */
-  gwonnong: {
-    img: 'assets/scenes/ch2_gwonnong.png', label: '권농 들녘',
-    spawn: { x: 700, y: 300 },
-    barriers: [
-      { x0:0, y0:0, x1:440, y1:400 },        // 물 댄 논(위쪽)
-      { x0:0, y0:380, x1:560, y1:BG_H },     // 물 댄 논(아래쪽)
-      { x0:455, y0:0, x1:840, y1:115 },      // 약초밭·건조대
-      { x0:895, y0:0, x1:1320, y1:435 },     // 밭고랑·조밭(소가 있는 곳)
-      { x0:815, y0:480, x1:1120, y1:700 },   // 초가집·장독
-      { x0:725, y0:550, x1:845, y1:625 },    // 쟁기·농기구
-      { x0:1110, y0:495, x1:1190, y1:590 },  // 집 옆 나무
-      { x0:1295, y0:0, x1:BG_W, y1:BG_H },   // 개울
-    ],
-    npcs: [
-      { id: 'jeongcho', name: '정초', x: 700, y: 190, img: 'assets/portraits/jeongcho.png', look: { role: 'scholar', body: '#8a2f2f', accent: '#c9a24a' } },
-      { id: 'nonong', name: '늙은 농부', x: 620, y: 470, img: 'assets/portraits/nonong.png', look: { role: 'commoner', body: '#d8d2c2', accent: '#8a7a5a' } },
-    ],
-    exits: [ { rect:{x0:600,y0:700,x1:790,y1:760}, to:'jiphyeonjeon', spawn:{x:688,y:135}, label:'집현전으로' } ],
-  },
-  gukgyeong: {
-    img: 'assets/scenes/ch2_gukgyeong.png', label: '국경 진영',
-    barriers: [
-      { x0:0, y0:0, x1:BG_W, y1:30 },
-      { x0:0, y0:738, x1:625, y1:BG_H }, { x0:740, y0:738, x1:BG_W, y1:BG_H }, // 아래쪽 울타리(6시 방향 관문 앞은 비워둠)
-      { x0:0, y0:0, x1:30, y1:BG_H }, { x0:1346, y0:0, x1:BG_W, y1:BG_H },
-      { x0:1090, y0:60, x1:BG_W, y1:250 }, // 우상단 망루/건물
-    ],
-    npcs: [
-      { id: 'choeyundeok', name: '최윤덕', x: 430, y: 430, img: 'assets/portraits/choeyundeok.png', look: { role: 'general', body: '#4f5d75', accent: '#8a6d3b' } },
-      { id: 'kimjongseo', name: '김종서', x: 688, y: 420, img: 'assets/portraits/kimjongseo.png', look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
-    ],
-    // 출구는 6시 방향(남쪽) 관문 — 실제로 배경에 지붕 있는 관문이 그려진 자리로 옮김.
-    exits: [ { rect:{x0:625,y0:735,x1:740,y1:768}, to:'jiphyeonjeon', spawn:{x:688,y:120}, label:'집현전으로' } ],
   },
   ganuidae: {
     // 간의대 — 세종의 천문 관측대. 기출 2위 개념(세종 문화·과학 53문항/45회차)인데
@@ -1323,128 +1259,17 @@ const NPC_DATA = {
         feedback:['앙부일구는 해시계예요.','정답! 측우기입니다. 각 고을에 보급해 강우량을 재어 보고하게 했어요.'] },
     ]
   },
-  /* 최윤덕 — 4군(기출 4문항, 6·26·46·75회). 그동안 김종서 문항의 오답 보기로만
-     등장해서, 압록강 쪽을 실제로 개척한 사람을 만날 수가 없었다. */
-  /* 권농 들녘 두 사람 — 농사직설(기출 11문항: 7·9·18·19·20·39·43·54·55·58·66회).
-     58회 지문이 "나이든 농부들의 경험을 모으고 정초에게 정리하게 하여"라고 쓰는
-     그대로, 노농이 경험을 말하고 정초가 그것을 책으로 묶는 구도로 짰다. */
-  nonong_0: {
-    name: '늙은 농부', icon: '🌾', img: 'assets/portraits/nonong.png',
-    beats: [
-      { who:'npc', t:'예순 해를 이 땅에서 농사지었소이다. 얼마 전 감사 어른이 사람을 보내, 우리가 어떻게 씨를 고르고 언제 물을 대는지 하나하나 물어 적어 가더이다.' },
-      { who:'npc', t:'중국 책에 적힌 대로 하면 이 땅에선 안 되는 게 많소. 논이 다르고 비가 다르고 흙이 다르니까요. 그걸 나라에서 이제야 물어봐 주니 반갑습디다.' },
-    ],
-    quizSeq: [
-      { q:'세종이 각 도 감사에게 명해 나이 든 농부들의 경험을 조사하게 한 뒤, 그것을 바탕으로 펴낸 농서는?',
-        opts:['농사직설','금양잡록'], answer:0, src:[7,9,18,19,20,39,43,54,55,58,66],
-        feedback:['금양잡록은 성종 대에 강희맹이 지은 농서예요.','정답! 농사직설입니다. 우리 풍토에 맞는 농법을 처음으로 정리했어요.'] },
-    ]
-  },
-  jeongcho_0: {
-    name: '정초', icon: '📗', img: 'assets/portraits/jeongcho.png',
-    beats: [
-      { who:'npc', t:'나는 정초일세. 전하의 명을 받아 변효문과 함께 이 조사들을 한 권으로 묶고 있네.' },
-      { who:'npc', t:'그동안 농사는 중국 농서를 베껴 가르쳤네. 허나 오방의 풍토가 다르니 곡식을 심고 가꾸는 법도 각기 마땅함이 있는 법이지.' },
-      { who:'npc', t:'씨앗을 고르고 갈무리하는 법, 논밭 가는 법, 벼와 기장과 조와 수수와 콩과 팥과 보리와 밀 기르는 법 — 우리 땅에서 실제로 되는 것만 적었네.' },
-    ],
-    quizSeq: [
-      { q:'세종의 명으로 농사직설을 편찬한 인물은?',
-        opts:['정초와 변효문','정인지와 권제'], answer:0, src:[20,58],
-        feedback:['정인지와 권제는 용비어천가를 지은 사람들이에요.','정답! 정초와 변효문입니다.'] },
-      { q:'농사직설이 이전의 농서와 결정적으로 달랐던 점은?',
-        opts:['우리나라 풍토에 맞는 농법을 정리했다','중국의 농서를 그대로 번역했다'], answer:0, src:[20,55,58],
-        feedback:['오히려 중국 농서를 그대로 따르는 데서 벗어난 것이 핵심이에요.','정답! 오방의 풍토가 다르니 농법도 달라야 한다는 생각에서 나온 책이에요.'] },
-    ]
-  },
-  choeyundeok_0: {
-    name: '최윤덕', icon: '🛡️', img: 'assets/portraits/choeyundeok.png',
-    beats: [
-      // 최윤덕은 평안도(압록강) 사람인데 여기는 두만강 진영이다. 억지로 붙여둔 게
-      // 아니라 실제 이력이 있다 — 1413년(태종 13) 경성등처절제사로 이 일대에
-      // 부임해 동맹가첩목아를 복속시켰다. 4군보다 20년 앞선 일이다.
-      { who:'npc', t:'나는 원래 압록강 쪽 사람일세. 오늘은 김 대감과 의논할 일이 있어 잠시 들렀네.' },
-      { who:'npc', t:'허나 이 땅이 낯설지는 않아. 젊어서 경성절제사로 바로 이 근방에 있었거든 — 그때 여진의 동맹가첩목아를 달래 복속시켰지. 벌써 스무 해 전 일일세.' },
-      { who:'npc', t:'김 대감이 두만강 쪽을 맡았다면, 압록강 쪽은 내가 맡았네. 전하의 명을 받아 여진의 이만주를 치러 올라산성까지 올라갔지.' },
-      { who:'npc', t:'그 싸움 끝에 압록강 상류에 네 고을을 새로 두었네. 여연·자성·무창·우예 — 이것이 4군일세.' },
-      { who:'npc', t:'다만 무력만으로는 끝나지 않아. 국경에 무역소를 두어 저들이 우리와 물건을 바꾸게도 했네. 치되 달래는 것, 둘을 함께 써야 국경이 조용하지.' },
-    ],
-    quizSeq: [
-      { q:'세종의 명으로 여진을 정벌하고 압록강 유역을 개척한 장군은?',
-        opts:['최윤덕','이종무'], answer:0, src:[46],
-        feedback:['이종무는 남쪽 대마도를 정벌한 장군이에요.','정답! 최윤덕입니다. 두만강 쪽 6진은 김종서가 맡았어요.'] },
-      { q:'최윤덕이 압록강 유역에 설치한 네 고을(4군)의 이름은?',
-        opts:['여연·자성·무창·우예','종성·온성·회령·경원'], answer:0, src:[6,26,46],
-        feedback:['그건 두만강 유역 6진에 속한 고을들이에요.','정답! 여연·자성·무창·우예입니다.'] },
-    ]
-  },
-  kim_0: {
-    name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
-    beats: [
-      { who:'npc', t:'여기가 우리 국경의 끝일세. 압록강과 두만강까지 우리 땅으로 확실히 그어놓아야, 후손들이 다시는 이 땅을 두고 다투지 않을 것이야.' },
-      { who:'npc', t:'내가 여기 여섯 곳에 진(鎭)을 두었네. 종성·온성·회령·경원·경흥·부령 — 강을 따라 늘어세운 여섯 개의 군사 거점이지. 진마다 성을 쌓고 군사를 두어, 여진이 강을 건너오면 곧바로 막게 했네.' },
-      { who:'npc', t:'이 여섯을 묶어 뭐라 부르는지 아나?' },
-    ],
-    quizSeq: [
-      { q:'김종서가 두만강 일대를 개척해 설치한 국경 방어 거점은?', opts:['6진','4군'], answer:0, src:[6,26,34,39,59,67,70,75],
-        feedback:['4군은 압록강 방면에 최윤덕이 개척한 곳이에요.','정답! 김종서는 두만강 일대에 6진을 설치했습니다.'] }
-    ]
-  },
-  kim_1: {
-    name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
-    beats: [
-      { who:'npc', t:'그저 땅만 넓힌다고 되는 일이 아닐세. 사람이 살아야 진짜 우리 땅이 되는 것이야.' },
-      { who:'npc', t:'그래서 삼남 — 충청·전라·경상의 백성들을 뽑아 이곳으로 옮겨 살게 하고 있네. 집과 땅을 주고 세금도 얼마간 덜어주지. 군사만 있는 땅은 지킬 뿐이지만, 백성이 농사짓고 아이를 낳는 땅은 비로소 우리 땅이 되는 걸세.' },
-      { who:'npc', t:'이렇게 백성을 옮겨 심는 정책을 무엇이라 하는지 아나?' },
-    ],
-    quizSeq: [
-      { q:'조선이 새로 개척한 북방 지역에 남쪽 백성을 옮겨 살게 한 정책은?', opts:['사민정책','호패법'], answer:0, src:[6],
-        feedback:['호패법은 신분증(호패)을 차게 해 인구를 파악하던 제도예요.','정답! 사민정책으로 남쪽 백성들을 북방에 이주시켜 실질적인 영토로 만들었습니다.'] },
-      { q:'조선이 명나라에 사신을 보내 유지한 외교 형식은?', opts:['사대외교(하정사·천추사 파견)','책봉을 거부하는 독자 외교'], answer:0, src:[73],
-        feedback:['조선은 건국 초부터 명과 사대 관계를 맺었어요.','정답! 정기적으로 사신을 보내는 사대외교를 유지했습니다.'] },
-      { q:'세종 대 여진과의 관계에서 조선이 취한 정책은?', opts:['회유책으로 국경에 무역소를 설치했다','전면적으로 교류를 단절했다'], answer:0, src:[19,39,75],
-        feedback:['완전한 단절이 아니라 회유와 정벌을 병행했어요.','정답! 무역소를 설치해 회유하면서도 필요하면 정벌했습니다.'] }
-    ]
-  },
-  kim_2: {
-    name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
-    beats: [
-      { who:'npc', t:'왜구가 남쪽 바다를 계속 노략질한다더군. 전하께서 곧 큰 결단을 내리실 걸세.' },
-      { who:'npc', t:'허나 치는 것만으로는 끝나지 않네. 결국 저들이 굶주려 노략질하는 것이니, 길을 아주 막지는 않되 드나드는 배의 수를 못 박는 약조를 맺었지.' },
-      { who:'npc', t:'자, 그럼 내가 아는 걸 좀 시험해보겠나?' },
-    ],
-    quizSeq: [
-      { q:'이종무가 왜구의 근거지를 정벌한 사건은?', opts:['대마도 정벌','진주성 전투'], answer:0, src:[33],
-        feedback:['진주성 전투는 훗날 임진왜란 때의 전투예요.','정답! 이종무가 이끈 대마도 정벌입니다.'] },
-      { q:'대마도 정벌 이후, 왜인이 드나드는 무역선의 수를 제한하며 대마도주와 맺은 조약은?',
-        opts:['계해약조','강화도 조약'], answer:0, src:[26,46,58],
-        feedback:['강화도 조약은 훨씬 뒷날인 1876년에 일본과 맺은 조약이에요.','정답! 계해약조입니다. 세견선의 수를 정해 무역을 허용하되 제한했어요.'] },
-      { q:'신숙주가 일본에 다녀와서 지은, 일본의 지리·풍속을 기록한 책은?', opts:['해동제국기','동국여지승람'], answer:0, src:[15,62,78],
-        feedback:['동국여지승람은 조선 전체의 지리를 다룬 책이에요.','정답! 해동제국기입니다.'] },
-      { q:'두만강 유역에 6진을, 압록강 유역에 4군을 각각 개척한 인물의 조합으로 옳은 것은?', opts:['김종서(6진)·최윤덕(4군)','최윤덕(6진)·김종서(4군)'], answer:0, src:[34,39,46,59,67,70],
-        feedback:['방향이 바뀌었어요 — 6진은 김종서, 4군은 최윤덕입니다.','정답! 나(김종서)는 두만강 쪽 6진을, 최윤덕 장군은 압록강 쪽 4군을 맡았지.'] }
-    ],
-    finishesBossB: true
-  },
-  kim_repeat: {
-    name: '김종서', icon: '🗡️', img: 'assets/portraits/kimjongseo.png',
-    beats: [ { who:'npc', t:'전하께서 계신 집현전에도 들러보게. 요즘 편찮으시다는 소문이 있어 걱정이군.' } ],
-    quiz: null
-  }
 };
 
 const Stage = {
-  state: { sejongStage: 0, kimStage: 0, bossADone: false, bossBDone: false,
-    sejongScore: 0, sejongTotal: 0, kimScore: 0, kimTotal: 0,
+  state: { sejongStage: 0, bossADone: false,
+    sejongScore: 0, sejongTotal: 0,
     // 지도를 거쳐야 하는 출구는 처음 한 번만 지도를 띄운다(key별 통과 여부)
     mapDone: {} },
   keyFor(id){
     if (id === 'sejong') return Stage.state.bossADone ? 'sejong_repeat' : 'sejong_' + Math.min(Stage.state.sejongStage, 3);
-    if (id === 'kimjongseo') return Stage.state.bossBDone ? 'kim_repeat' : 'kim_' + Math.min(Stage.state.kimStage, 2);
     if (id === 'sinsukju') return 'sinsukju_0';
     if (id === 'jangyeongsil') return 'jangyeongsil_0';
-    if (id === 'choeyundeok') return 'choeyundeok_0';
-    if (id === 'jeongcho') return 'jeongcho_0';
-    if (id === 'nonong') return 'nonong_0';
     return null;
   },
   interact(){
@@ -1590,19 +1415,14 @@ const Dialog = {
   afterQuizSeq(score, total){
     if (this.npc.id === 'sejong'){
       Stage.state.sejongScore += score; Stage.state.sejongTotal += total;
-    } else if (this.npc.id === 'kimjongseo'){
-      Stage.state.kimScore += score; Stage.state.kimTotal += total;
     }
     if (this.data.finishesBossA){ Stage.finishBoss('A', Stage.state.sejongScore, Stage.state.sejongTotal); return; }
-    if (this.data.finishesBossB){ Stage.finishBoss('B', Stage.state.kimScore, Stage.state.kimTotal); return; }
     this.afterQuiz();
   },
   afterQuiz(){
     World.paused = false;
     if (this.npc.id === 'sejong'){
       Stage.state.sejongStage = Math.min(Stage.state.sejongStage + 1, 3);
-    } else if (this.npc.id === 'kimjongseo'){
-      Stage.state.kimStage = Math.min(Stage.state.kimStage + 1, 2);
     }
     playFanfare('대화 완료');
   }
@@ -1763,23 +1583,18 @@ function introNext(){
 document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
 
-/* ============ 챕터 진행 / 종료 (두 구역 보스전 모두 끝나야 종료) ============ */
+/* ============ 챕터 진행 / 종료 (집현전 보스전이 끝나면 종료) ============ */
 function updateHudGoal(){
   const el = document.getElementById('hud-goal');
-  if (Stage.state.bossADone && Stage.state.bossBDone){ el.textContent = ''; return; }
-  if (!Stage.state.bossADone){ el.textContent = '다음 목표: 집현전에서 세종과 대화하기'; }
-  else { el.textContent = '다음 목표: 국경 진영에서 김종서와 대화하기'; }
+  if (Stage.state.bossADone){ el.textContent = ''; return; }
+  el.textContent = '다음 목표: 집현전에서 세종과 대화하기';
 }
 Stage.finishBoss = function(id, score, total){
-  if (id === 'A'){ Stage.state.bossADone = true; Stage.state.bossAScore = `${score}/${total}`; }
-  else { Stage.state.bossBDone = true; Stage.state.bossBScore = `${score}/${total}`; }
+  Stage.state.bossADone = true; Stage.state.bossAScore = `${score}/${total}`;
   World.paused = false;
   updateHudGoal();
-  if (Stage.state.bossADone && Stage.state.bossBDone){
-    document.getElementById('end-score').textContent =
-      `집현전: ${Stage.state.bossAScore} 정답\n국경: ${Stage.state.bossBScore} 정답`;
-    document.getElementById('next-chapter-btn').classList.add('show');
-  }
+  document.getElementById('end-score').textContent = `집현전: ${Stage.state.bossAScore} 정답`;
+  document.getElementById('next-chapter-btn').classList.add('show');
 };
 Stage.endChapter = function(){
   document.getElementById('end-screen').classList.add('show');
