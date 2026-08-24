@@ -1277,13 +1277,18 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    const prevKey = this.key;
     if (this.npc.id === 'wanggeon'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 1);
     }
     if (this.data.endsChapter){
       document.getElementById('next-chapter-btn').classList.add('show');
       playFanfare('챕터 완료!');
-    } else {
+    } else if (Stage.keyFor(this.npc.id) === prevKey){
+      // 다음에 다시 말을 걸어도 같은 내용이 나올 때만 "대화 완료"를 띄운다
+      // — 아직 이어질 이야기(다음 단계)가 남아 있으면 띄우지 않는다.
+      // (왕건처럼 여러 단계로 나뉜 인물에게 매번 "완료"가 뜨면, 사실은
+      // 더 들을 말이 남아 있는데도 끝난 줄 알고 다시 말을 걸지 않는 신고가 있었다.)
       playFanfare('대화 완료');
     }
   }
