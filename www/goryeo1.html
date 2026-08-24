@@ -38,21 +38,33 @@
   #intro-overlay { background: linear-gradient(rgba(8,6,4,.55), rgba(8,6,4,.78)); }
   #intro-panel { max-width: 520px; }
 
-  #dlg-panel, #intro-panel {
+  /* 대화창 — 초상화가 상자 밖으로 위·왼쪽으로 살짝 튀어나와 앞에 겹쳐
+     보이게 한다(디자인 가이드의 VN식 레이아웃). #dlg-frame이 기준점,
+     초상화는 그 안에서 absolute로 떠 있고 본문은 왼쪽에 초상화 너비만큼
+     padding을 줘서 겹치지 않게 비워 둔다. */
+  #dlg-frame { position: relative; width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); }
+  #dlg-panel {
+    width: 100%; box-sizing: border-box; background: #241c12ee; border: 1px solid #51432c;
+    border-radius: 16px; padding: 16px 18px 16px 132px; color: #f5ecd8; box-shadow: 0 12px 40px rgba(0,0,0,.4);
+    max-height: 80%; overflow-y: auto; min-height: 110px;
+  }
+  #intro-panel {
     width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241c12ee; border: 1px solid #51432c;
     border-radius: 16px; padding: 16px 18px; color: #f5ecd8; box-shadow: 0 12px 40px rgba(0,0,0,.4);
     max-height: 80%; overflow-y: auto;
   }
-  .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #3a2f1a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
-  .dlg-name { font-weight: bold; font-size: 15px; color: #f0c96b; }
+  .dlg-top { margin-bottom: 6px; }
+  .dlg-portrait { position: absolute; left: 14px; top: -44px; width: 100px; height: 132px; border-radius: 14px;
+    background: #3a2f1a; flex: none; display:flex; align-items:center; justify-content:center; font-size:34px;
+    background-size: cover; background-position: center top; border: 2px solid #51432c;
+    box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
+  .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; color: #afa38f; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
-  #intro-panel { }
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; color: #d8ccb5; }
 
@@ -227,9 +239,9 @@
      통째로 바꿔 '말하는 사람이 바뀌었다'를 한눈에 보이게 한다. 이름만 바뀌면
      존댓말/반말이 갑자기 뒤섞여 읽히는 것처럼 어색해진다(5화 조식↔이황).
      챕터마다 기본 팔레트가 따뜻한 계열이라, 끼어드는 쪽은 차가운 계열로 잡았다. */
-  #dlg-panel.alt-speaker { background: #17222bee; border-color: #6f9bb5; }
-  #dlg-panel.alt-speaker .dlg-name { color: #9fd0e8; }
-  #dlg-panel.alt-speaker .dlg-portrait { box-shadow: 0 0 0 2px #6f9bb5; }
+  #dlg-frame.alt-speaker #dlg-panel { background: #17222bee; border-color: #6f9bb5; }
+  #dlg-frame.alt-speaker .dlg-name { color: #9fd0e8; }
+  #dlg-frame.alt-speaker .dlg-portrait { border-color: #6f9bb5; box-shadow: 0 10px 22px rgba(0,0,0,.5), 0 0 0 2px #6f9bb5; }
   /* 대화창 위에 띄우는 작은 표. 사화처럼 '이름이 넷인데 왕이 누구였나'가
      엉키는 것들은 글로만 읽어서는 안 남아서, 표로 한 번 보여 준다. */
   .dlg-chart { margin: 2px 0 10px; border: 1px solid rgba(255,255,255,.22); border-radius: 8px; overflow: hidden; }
@@ -309,17 +321,17 @@
   </div>
 
   <div class="ov" id="dlg-overlay">
-    <div id="dlg-panel">
-      <div class="dlg-top">
-        <div class="dlg-portrait" id="dlg-portrait">👤</div>
-        <div>
+    <div id="dlg-frame">
+      <div class="dlg-portrait" id="dlg-portrait">👤</div>
+      <div id="dlg-panel">
+        <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
           <div class="dlg-name" id="dlg-name"></div>
         </div>
+        <div class="dlg-chart" id="dlg-chart" hidden></div>
+        <div class="dlg-box" id="dlg-text"></div>
+        <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
       </div>
-      <div class="dlg-chart" id="dlg-chart" hidden></div>
-      <div class="dlg-box" id="dlg-text"></div>
-      <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
     </div>
   </div>
 
@@ -1221,7 +1233,7 @@ const Dialog = {
     // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
     // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
     const interjecting = !!beat.name && beat.name !== this.data.name;
-    document.getElementById('dlg-panel').classList.toggle('alt-speaker', interjecting);
+    document.getElementById('dlg-frame').classList.toggle('alt-speaker', interjecting);
     const nameEl = document.getElementById('dlg-name');
     if (nameEl) nameEl.textContent = beat.name || this.data.name;
     const portraitEl = document.getElementById('dlg-portrait');

@@ -33,13 +33,20 @@
      보이고, 어디에 서 있는지도 알 수 없다. */
   #intro-overlay { background: linear-gradient(rgba(8,6,4,.55), rgba(8,6,4,.78)); }
   #intro-panel { max-width: 520px; }
-  #dlg-panel, #quiz-panel, #intro-panel {
+  #dlg-frame { position: relative; width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); }
+  #dlg-panel { width: 100%; box-sizing: border-box; background: #14202aee; border: 2px solid #4a6a82;
+    border-radius: 16px; padding: 16px 18px 16px 132px; color: #dce8f0; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    max-height: 80%; overflow-y: auto; min-height: 110px; }
+  #quiz-panel, #intro-panel {
     width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #14202aee; border: 2px solid #4a6a82;
-    border-radius: 14px; padding: 16px 18px; color: #dce8f0; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    border-radius: 16px; padding: 16px 18px; color: #dce8f0; box-shadow: 0 8px 24px rgba(0,0,0,.5);
     max-height: 80%; overflow-y: auto;
   }
-  .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #2a3a4a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
+  .dlg-top { margin-bottom: 6px; }
+  .dlg-portrait { position: absolute; left: 14px; top: -44px; width: 100px; height: 132px; border-radius: 14px;
+    background: #2a3a4a; flex: none; display:flex; align-items:center; justify-content:center; font-size:34px;
+    background-size: cover; background-position: center top; border: 2px solid #4a6a82;
+    box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
   .dlg-name { font-weight: bold; font-size: 15px; color: #9dc3e0; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
@@ -197,9 +204,9 @@
      통째로 바꿔 '말하는 사람이 바뀌었다'를 한눈에 보이게 한다. 이름만 바뀌면
      존댓말/반말이 갑자기 뒤섞여 읽히는 것처럼 어색해진다(5화 조식↔이황).
      챕터마다 기본 팔레트가 따뜻한 계열이라, 끼어드는 쪽은 차가운 계열로 잡았다. */
-  #dlg-panel.alt-speaker { background: #2e2410ee; border-color: #c9a24a; }
-  #dlg-panel.alt-speaker .dlg-name { color: #f0c96b; }
-  #dlg-panel.alt-speaker .dlg-portrait { box-shadow: 0 0 0 2px #c9a24a; }
+  #dlg-frame.alt-speaker #dlg-panel { background: #2e2410ee; border-color: #c9a24a; }
+  #dlg-frame.alt-speaker .dlg-name { color: #f0c96b; }
+  #dlg-frame.alt-speaker .dlg-portrait { border-color: #c9a24a; box-shadow: 0 10px 22px rgba(0,0,0,.5), 0 0 0 2px #c9a24a; }
   #quiz-panel { position: relative; }
   .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
     border: 1px solid #4a6a82; background: #223140; color: #f5ecd8; font-size: 14px; line-height: 1;
@@ -285,14 +292,16 @@
     <div id="intro-panel"><div id="intro-text"></div><div id="intro-next">탭하여 계속 ▶</div></div>
   </div>
   <div class="ov" id="dlg-overlay">
-    <div id="dlg-panel">
-      <div class="dlg-top">
-        <div class="dlg-portrait" id="dlg-portrait">👤</div>
-        <div><div class="dlg-tag" id="dlg-tag"></div><div class="dlg-name" id="dlg-name"></div></div>
+    <div id="dlg-frame">
+      <div class="dlg-portrait" id="dlg-portrait">👤</div>
+      <div id="dlg-panel">
+        <div class="dlg-top">
+          <div class="dlg-tag" id="dlg-tag"></div><div class="dlg-name" id="dlg-name"></div>
+        </div>
+        <div class="dlg-chart" id="dlg-chart" hidden></div>
+        <div class="dlg-box" id="dlg-text"></div>
+        <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
       </div>
-      <div class="dlg-chart" id="dlg-chart" hidden></div>
-      <div class="dlg-box" id="dlg-text"></div>
-      <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
     </div>
   </div>
   <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
@@ -961,7 +970,7 @@ const Dialog = {
     // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
     // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
     const interjecting = !!beat.name && beat.name !== this.data.name;
-    document.getElementById('dlg-panel').classList.toggle('alt-speaker', interjecting);
+    document.getElementById('dlg-frame').classList.toggle('alt-speaker', interjecting);
     const nameEl = document.getElementById('dlg-name');
     if (nameEl) nameEl.textContent = beat.name || this.data.name;
     const portraitEl = document.getElementById('dlg-portrait');
