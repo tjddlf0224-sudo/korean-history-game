@@ -320,6 +320,15 @@ document.getElementById('kings-body').addEventListener('click', (ev) => {
 });
 
 const row = document.getElementById('eras-row');
+// 막대는 '가장 비중이 큰 시대'를 꽉 찬 막대(100%)로 잡고 나머지를 거기에
+// 견준다 — 절댓값(전체 중 비중)을 그대로 막대 폭에 쓰면 최댓값도 15%
+// 안팎이라 막대가 죄다 짧아 보여 시대 간 비교가 잘 안 됐다. 예전엔 이
+// 최댓값을 15.3으로 박아 놨었는데, 라벨 숫자(예: "기출 8.2%")는 절댓값을
+// 그대로 쓰면서 막대만 몰래 상대값으로 그려서 "숫자는 작은데 막대는 거의
+// 꽉 차 보이는" 앞뒤가 안 맞는 모습이 됐다. 라벨도 막대와 같은 상대값을
+// 쓰게 맞추고, 최댓값도 ERAS에서 매번 직접 계산해서 데이터가 바뀌어도
+// 안 어긋나게 한다.
+const maxEraPct = Math.max(...ERAS.filter(e => e.pct).map(e => parseFloat(e.pct)));
 ERAS.forEach(e => {
   const col = document.createElement('div');
   col.className = 'era-col';
@@ -327,11 +336,11 @@ ERAS.forEach(e => {
   const hasCards = !!e.cards;
   const badge = '';
   const dotClass = hasCards ? 'era-dot' : 'era-dot plan';
-  // 15.3%가 최대라 그것을 꽉 찬 막대로 잡고 나머지를 견준다.
   const pctNum = e.pct ? parseFloat(e.pct) : 0;
+  const relPct = pctNum ? Math.round(pctNum / maxEraPct * 100) : 0;
   const pctLine = e.pct
-    ? `<span class="era-pct">기출 ${e.pct}</span>`
-      + `<div class="pct-bar" title="기출 ${e.pct}"><i style="width:${Math.round(pctNum / 15.3 * 100)}%"></i></div>`
+    ? `<span class="era-pct" title="전체 기출 중 비중 ${e.pct}">기출 비중 ${relPct}%</span>`
+      + `<div class="pct-bar" title="전체 기출 중 비중 ${e.pct}"><i style="width:${relPct}%"></i></div>`
     : '';
   const hasKings = !!KINGS_BY_ERA[e.title];
   let html = `
