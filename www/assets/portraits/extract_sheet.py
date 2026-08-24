@@ -89,6 +89,12 @@ SHEETS = {
         'ijagyeom', 'ijehyeon', 'hyojong', 'hyeonjong', 'sukjong',
         'songsiyeol', 'janghuibin', 'anyongbok', 'heojeok', 'yunhyu',
         'gimmanjung', 'extra_gungnyeo', 'extra_naegwan', 'extra_munsin', 'extra_musin']),
+    # 선사1 새 구역(초기 국가 마을)용. 1~4번은 코드에 이미 들어간 부여·고구려·
+    # 옥저·동예, 5번(삼한 천군)은 예비, 6~15번은 범용 엑스트라.
+    'sheet13': (5, 3, [
+        'buyeo', 'gogurin', 'okjeo', 'dongye', 'samhan_cheongun',
+        'extra_musa0', 'extra_yeoin0', 'extra_eobu', 'extra_daejanggan', 'extra_sangin',
+        'extra_jikjo', 'extra_sanyang', 'extra_chonjang', 'extra_mokdong', 'extra_nopa']),
 }
 
 
