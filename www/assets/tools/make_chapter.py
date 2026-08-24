@@ -25,6 +25,16 @@ WWW = os.path.abspath(os.path.join(HERE, '..', '..'))
 TEMPLATE = os.path.join(WWW, 'ch6.html')
 SPEC_DIR = os.path.join(HERE, 'specs')
 
+# 메뉴의 '왕조 계보 보기'가 기본으로 열어 줄 시대. index.html의 KINGS_DATA와
+# 같은 6개 시대 이름만 쓸 수 있다(그 밖은 왕이 없어 null — 탭에서 고르게 둔다).
+CHAPTER_ERA_MAP = {
+    'seonsa1': '선사·초기국가',
+    'godae1': '고대', 'godae2': '고대', 'godae3': '고대', 'gaya': '고대', 'tongil': '고대',
+    'goryeo1': '고려', 'goryeo2': '고려', 'goryeo3': '고려', 'byeokrando': '고려',
+    'hugi1': '조선 후기', 'hugi2': '조선 후기', 'hugi3': '조선 후기', 'imjin': '조선 후기',
+    'gaehang1': '근대·개항기', 'gaehang4': '근대·개항기', 'gaehang5': '근대·개항기',
+}
+
 
 def js(o, indent=6):
     """파이썬 값을 읽기 좋은 JS 리터럴로."""
@@ -151,6 +161,10 @@ def build(spec):
     first = spec['zones'][0]['id']
     s = re.sub(r"zone: '\w+', px: ZONES\.\w+\.spawn\.x, py: ZONES\.\w+\.spawn\.y",
                lambda m: f"zone: '{first}', px: ZONES.{first}.spawn.x, py: ZONES.{first}.spawn.y", s)
+
+    chapter_era = CHAPTER_ERA_MAP.get(spec['id'])
+    era_lit = f"'{chapter_era}'" if chapter_era else 'null'
+    sub(r"const CHAPTER_ERA = '[^']*';", f"const CHAPTER_ERA = {era_lit};", 'CHAPTER_ERA')
 
     sub(r'<title>.*?</title>', f"<title>한국사 게임 - {spec['num']} {spec['name']}</title>", 'title')
     sub(r'<div id="hud">\n(?:.*\n)*?  </div>',

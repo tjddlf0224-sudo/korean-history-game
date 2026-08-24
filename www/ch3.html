@@ -116,6 +116,61 @@
     100% { opacity: 0; transform: scale(1) translateY(-10px); }
   }
 
+  /* 미니맵 위 작은 메뉴 버튼 — 맵을 하다가 언제든 챕터 목록으로 나가고
+     싶어질 수 있으니, 눌러서 나가기·다시 시작·왕조 계보를 바로 쓴다. */
+  #menu-btn { position: absolute; top: calc(4px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
+    width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid #d9a441; touch-action: none;
+    background: rgba(26,20,12,.8); color: #f0c96b; box-shadow: 0 2px 6px rgba(0,0,0,.4);
+    display: flex; align-items: center; justify-content: center; font-size: 13px; z-index: 5; cursor: pointer; padding: 0; }
+  #menu-btn:active { transform: scale(.92); }
+  #game-menu-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 14px; min-width: 250px;
+    max-width: 80vw; padding: 18px; display: flex; flex-direction: column; gap: 9px; }
+  #game-menu-panel h3 { margin: 0 0 4px; font-size: 15px; color: #f0c96b; text-align: center; font-family: "Gowun Batang", serif; }
+  #game-menu-panel a, #game-menu-panel button { display: block; width: 100%; box-sizing: border-box; text-align: center;
+    text-decoration: none; background: #2a2013; border: 1px solid #4a3c26; color: #f5ecd8; border-radius: 10px;
+    padding: 12px; font-size: 14px; font-family: "Gowun Batang", serif; cursor: pointer; }
+  #game-menu-panel a:active, #game-menu-panel button:active { transform: scale(.97); }
+  #menu-close-btn { margin-top: 2px; background: transparent !important; border: none !important; color: #8d86a4; font-size: 12px; padding: 4px !important; }
+
+  /* 왕조 계보 모달(index.html과 같은 데이터) — 시대 탭을 눌러 바로 다른
+     시대로 넘어갈 수 있게 여기서는 탭을 달았다(챕터 목록에서는 시대 글자를
+     눌러 들어오니 탭이 필요 없었지만, 여기는 한 화 안에서 계속 봐야 한다). */
+  #kings-modal { position: absolute; inset: 0; z-index: 45; display: none; background: rgba(8,6,4,.72);
+    align-items: center; justify-content: center; padding: 14px; }
+  #kings-modal.show { display: flex; }
+  #kings-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 14px;
+    width: 100%; height: 100%; max-width: 1040px; display: flex; flex-direction: column; overflow: hidden; }
+  #kings-panel .kp-head { flex: none; display: flex; align-items: baseline; justify-content: space-between;
+    gap: 10px; padding: 12px 16px 8px; border-bottom: 1px solid #3a2c1a; }
+  #kings-panel .kp-head h2 { margin: 0; font-size: 15px; color: #f0c96b; font-family: "Gowun Batang", serif; }
+  #kings-close { flex: none; background: #2a2013; border: 1px solid #4a3c26; color: #f5ecd8;
+    border-radius: 999px; width: 26px; height: 26px; font-size: 13px; cursor: pointer; line-height: 1; }
+  .kp-tabs { flex: none; display: flex; gap: 5px; flex-wrap: wrap; padding: 8px 16px 0; }
+  .kp-tabs button { font-family: inherit; font-weight: bold; font-size: 11px; color: #cbb999; background: #2a2013;
+    border: 1px solid #4a3c26; border-radius: 999px; padding: 5px 10px; cursor: pointer; }
+  .kp-tabs button.active { background: #d9a441; color: #241c12; border-color: #d9a441; }
+  #kings-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 10px 16px 16px; }
+  .kp-country { margin-bottom: 16px; }
+  .kp-country .kp-cname { font-family: "Gowun Batang", serif; font-weight: 700; font-size: 12.5px; color: #e9c979; margin-bottom: 5px; }
+  .kp-country .kp-ccount { font-size: 10px; opacity: .55; margin-left: 6px; font-weight: 400; }
+  .kp-strip { display: flex; gap: 0; overflow-x: auto; padding: 4px 2px 8px; align-items: flex-end; -webkit-overflow-scrolling: touch; }
+  .kp-king { flex: none; width: 72px; display: flex; flex-direction: column; align-items: center; padding: 0 3px; position: relative; }
+  .kp-king .kp-badge { position: relative; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; background: #241b10; border: 2px solid #4a3c26; font-weight: 700; font-size: 10px; color: #8a7c63; margin-bottom: 5px; }
+  .kp-king .kp-nm { font-size: 10px; text-align: center; white-space: nowrap; line-height: 1.2; }
+  .kp-king .kp-yr { font-size: 8px; opacity: .5; margin-top: 1px; }
+  .kp-king[data-t="0"] .kp-badge { opacity: .4; }
+  .kp-king[data-t="1"] .kp-badge { border-color: #a3894f; color: #c9ac6e; }
+  .kp-king[data-t="2"] .kp-badge { border-color: #d9a441; color: #f0c96b; background: #332411; }
+  .kp-king[data-t="3"] .kp-badge { border-color: #c9622e; color: #f0a56b; background: #3a2210; width: 32px; height: 32px; font-size: 11px; }
+  .kp-king[data-t="4"] .kp-badge { border-color: #d9542a; color: #fff; background: #a23b1e; width: 35px; height: 35px; font-size: 12px; box-shadow: 0 0 0 3px rgba(162,59,30,.3); }
+  .kp-dupdot { position: absolute; top: -2px; right: -2px; width: 11px; height: 11px; border-radius: 50%; font-size: 6px;
+    line-height: 11px; text-align: center; font-weight: 900; color: #1b150e; background: #7fb0a0; border: 1.5px solid #1b150e; }
+  #kp-tapinfo { display: none; flex: none; margin: 0 16px 8px; padding: 7px 10px; font-size: 10.5px; line-height: 1.5;
+    background: #332411; border: 1px solid #d9a441; border-radius: 8px; color: #f0d9a0; }
+  #kp-tapinfo.show { display: block; }
+  .kp-noera { padding: 30px 10px; text-align: center; color: #8d86a4; font-size: 13px; line-height: 1.8; }
+
   #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
     background: #000; color: #d98c6b; text-align: center; padding: 24px; }
   #end-screen.show { display: flex; }
@@ -290,6 +345,27 @@
   <div id="zone-banner"></div>
   <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
+  <button id="menu-btn" aria-label="메뉴">☰</button>
+  <div class="ov" id="game-menu-overlay">
+    <div id="game-menu-panel">
+      <h3>메뉴</h3>
+      <a href="index.html">챕터 목록으로 나가기</a>
+      <button id="menu-restart">이 화 처음부터 다시 시작</button>
+      <button id="menu-kings">왕조 계보 보기</button>
+      <button id="menu-close-btn">닫기</button>
+    </div>
+  </div>
+  <div id="kings-modal">
+    <div id="kings-panel">
+      <div class="kp-head">
+        <h2 id="kp-title">왕조 계보</h2>
+        <button id="kings-close" aria-label="닫기">✕</button>
+      </div>
+      <div class="kp-tabs" id="kp-tabs"></div>
+      <div id="kp-tapinfo"></div>
+      <div id="kings-body"></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -583,6 +659,110 @@ function playFanfare(text){
   clearTimeout(el.__t);
   el.__t = setTimeout(() => el.classList.remove('show'), 1300);
 }
+
+
+/* 왕조 계보 모달 — 미니맵 위 메뉴에서 '왕조 계보 보기'로 연다. 데이터는
+   기출_왕조_지도.html·index.html과 같다(한능검 기출 6~79회에서 왕 이름이
+   나온 출제 횟수). CHAPTER_ERA는 이 챕터의 시대로 기본 선택되고,
+   시대 탭을 눌러 다른 시대도 바로 볼 수 있다. */
+const CHAPTER_ERA = '조선 전기';
+const KINGS_DATA = [["선사·초기국가","고조선",[{"name":"단군왕검","year":"(건국)","n":3},{"name":"위만","year":"BC194","n":0},{"name":"우거왕","year":"~BC108","n":1}]],["고대","고구려",[{"name":"동명성왕","year":"BC37","n":0},{"name":"유리왕","year":"BC19","n":0},{"name":"대무신왕","year":"18","n":0},{"name":"태조왕","year":"53","n":0},{"name":"고국천왕","year":"179","n":0},{"name":"미천왕","year":"300","n":0},{"name":"고국원왕","year":"331","n":1},{"name":"소수림왕","year":"371","n":6},{"name":"광개토대왕","year":"391","n":6},{"name":"장수왕","year":"413","n":5},{"name":"문자명왕","year":"491","n":0},{"name":"안장왕","year":"519","n":0},{"name":"양원왕","year":"545","n":0},{"name":"평원왕","year":"559","n":0},{"name":"영양왕","year":"590","n":0},{"name":"영류왕","year":"618","n":0},{"name":"보장왕","year":"642","n":0}]],["고대","백제",[{"name":"온조왕","year":"BC18","n":0},{"name":"고이왕","year":"234","n":0},{"name":"책계왕","year":"286","n":0},{"name":"근초고왕","year":"346","n":2},{"name":"근구수왕","year":"375","n":0},{"name":"침류왕","year":"384","n":0},{"name":"아신왕","year":"392","n":0},{"name":"전지왕","year":"405","n":0},{"name":"비유왕","year":"427","n":0},{"name":"개로왕","year":"455","n":3},{"name":"문주왕","year":"475","n":0},{"name":"삼근왕","year":"477","n":1},{"name":"동성왕","year":"479","n":0},{"name":"무령왕","year":"501","n":6},{"name":"성왕","year":"523","n":8},{"name":"위덕왕","year":"554","n":0},{"name":"무왕","year":"600","n":2},{"name":"의자왕","year":"641","n":1}]],["고대","신라·통일신라",[{"name":"박혁거세","year":"BC57","n":0},{"name":"탈해이사금","year":"57","n":0},{"name":"파사이사금","year":"80","n":0},{"name":"내물마립간","year":"356","n":0},{"name":"눌지마립간","year":"417","n":1},{"name":"소지마립간","year":"479","n":0},{"name":"지증왕","year":"500","n":6},{"name":"법흥왕","year":"514","n":5},{"name":"진흥왕","year":"540","n":11},{"name":"진지왕","year":"576","n":0},{"name":"진평왕","year":"579","n":0},{"name":"선덕여왕","year":"632","n":0},{"name":"진덕여왕","year":"647","n":0},{"name":"무열왕","year":"654","n":0},{"name":"문무왕","year":"661","n":4},{"name":"신문왕","year":"681","n":15},{"name":"성덕왕","year":"702","n":0},{"name":"경덕왕","year":"742","n":1},{"name":"혜공왕","year":"765","n":0},{"name":"원성왕","year":"785","n":2},{"name":"헌덕왕","year":"809","n":0},{"name":"흥덕왕","year":"826","n":1},{"name":"진성여왕","year":"887","n":2},{"name":"경순왕","year":"927","n":1}]],["고대","가야",[{"name":"김수로왕","year":"42","n":1},{"name":"이진아시왕","year":"(대가야 시조)","n":1}]],["고대","발해",[{"name":"대조영","year":"698","n":1},{"name":"무왕","year":"719","n":7},{"name":"문왕","year":"737","n":4},{"name":"선왕","year":"818","n":0}]],["고려","고려",[{"name":"태조","year":"918","n":17},{"name":"혜종","year":"943","n":0},{"name":"정종","year":"945","n":0},{"name":"광종","year":"949","n":15},{"name":"경종","year":"975","n":0},{"name":"성종","year":"981","n":15},{"name":"목종","year":"997","n":0},{"name":"현종","year":"1009","n":3},{"name":"덕종","year":"1031","n":0},{"name":"정종","year":"1034","n":0},{"name":"문종","year":"1046","n":2},{"name":"순종","year":"1083","n":0},{"name":"선종","year":"1083","n":6},{"name":"헌종","year":"1094","n":0},{"name":"숙종","year":"1095","n":11},{"name":"예종","year":"1105","n":5},{"name":"인종","year":"1122","n":3},{"name":"의종","year":"1146","n":0},{"name":"명종","year":"1170","n":0},{"name":"신종","year":"1197","n":0},{"name":"희종","year":"1204","n":0},{"name":"강종","year":"1211","n":0},{"name":"고종","year":"1213","n":0},{"name":"원종","year":"1259","n":2},{"name":"충렬왕","year":"1274","n":1},{"name":"충선왕","year":"1298","n":0},{"name":"충숙왕","year":"1313","n":0},{"name":"충혜왕","year":"1330","n":0},{"name":"충목왕","year":"1344","n":0},{"name":"충정왕","year":"1348","n":0},{"name":"공민왕","year":"1351","n":16},{"name":"우왕","year":"1374","n":0},{"name":"창왕","year":"1388","n":0},{"name":"공양왕","year":"1389","n":0}]],["조선 전기","조선",[{"name":"태조","year":"1392","n":1},{"name":"정종","year":"1398","n":0},{"name":"태종","year":"1400","n":16},{"name":"세종","year":"1418","n":24},{"name":"문종","year":"1450","n":0},{"name":"단종","year":"1452","n":3},{"name":"세조","year":"1455","n":10},{"name":"예종","year":"1468","n":0},{"name":"성종","year":"1469","n":12},{"name":"연산군","year":"1494","n":2},{"name":"중종","year":"1506","n":3},{"name":"인종","year":"1544","n":0},{"name":"명종","year":"1545","n":8}]],["조선 후기","조선",[{"name":"선조","year":"1567","n":4},{"name":"광해군","year":"1608","n":5},{"name":"인조","year":"1623","n":3},{"name":"효종","year":"1649","n":4},{"name":"현종","year":"1659","n":1},{"name":"숙종","year":"1674","n":10},{"name":"경종","year":"1720","n":2},{"name":"영조","year":"1724","n":20},{"name":"정조","year":"1776","n":27},{"name":"순조","year":"1800","n":4},{"name":"헌종","year":"1834","n":0},{"name":"철종","year":"1849","n":2}]],["근대·개항기","대한제국",[{"name":"고종","year":"1863","n":1},{"name":"순종","year":"1907","n":0}]]];
+const KINGS_ERA_ORDER = ["선사·초기국가","고대","고려","조선 전기","조선 후기","근대·개항기"];
+const KINGS_BY_ERA = {};
+KINGS_DATA.forEach(([era, country, kings]) => {
+  (KINGS_BY_ERA[era] = KINGS_BY_ERA[era] || []).push([country, kings]);
+});
+const KINGS_NAME_GROUPS = {};
+KINGS_DATA.forEach(([era, country, kings]) => {
+  kings.forEach(k => { (KINGS_NAME_GROUPS[k.name] = KINGS_NAME_GROUPS[k.name] || []).push({ ...k, era, country }); });
+});
+let kingsCurrentEra = null;
+function kingsTier(n){ return n === 0 ? 0 : n <= 3 ? 1 : n <= 8 ? 2 : n <= 15 ? 3 : 4; }
+function kingsJosa(word, withB, noB){
+  const code = word.charCodeAt(word.length - 1) - 0xAC00;
+  if (code < 0 || code > 11171) return word + noB;
+  return word + (code % 28 ? withB : noB);
+}
+function kingsDupOthers(name, era, country, year){
+  const group = KINGS_NAME_GROUPS[name];
+  if (!group || group.length < 2) return null;
+  const others = group.filter(o => !(o.era === era && o.country === country && o.year === year));
+  return others.length ? others : null;
+}
+function kingsDupDot(name, era, country, year){
+  const others = kingsDupOthers(name, era, country, year);
+  if (!others) return '';
+  const list = others.map(o => `${o.country} ${o.name}(${o.year}, ${o.n}회)`).join(' / ');
+  const title = (kingsJosa(name, '과', '와') + ` 같은 이름의 다른 왕이 있습니다: ${list}`).replace(/"/g, '&quot;');
+  return `<span class="kp-dupdot" title="${title}" data-tip="${title}">동</span>`;
+}
+function selectKingsEra(era){
+  kingsCurrentEra = era;
+  document.querySelectorAll('#kp-tabs button').forEach(b => b.classList.toggle('active', b.dataset.era === era));
+  document.getElementById('kp-title').textContent = era + ' 왕 계보';
+  const body = document.getElementById('kings-body');
+  const groups = KINGS_BY_ERA[era];
+  if (!groups){
+    body.innerHTML = '<div class="kp-noera">이 시대는 왕이 없습니다.<br>(일제강점기·현대처럼 왕조가 아닌 시대예요)</div>';
+    return;
+  }
+  let html = '';
+  groups.forEach(([country, kings]) => {
+    const total = kings.reduce((s, k) => s + k.n, 0);
+    html += `<div class="kp-country"><span class="kp-cname">${country}<span class="kp-ccount">· 왕 ${kings.length}명 · 출제 합계 ${total}회</span></span>
+      <div class="kp-strip">` + kings.map(k => `
+        <div class="kp-king" data-t="${kingsTier(k.n)}">
+          <div class="kp-badge">${k.n}${kingsDupDot(k.name, era, country, k.year)}</div>
+          <div class="kp-nm">${k.name}</div>
+          <div class="kp-yr">${k.year}</div>
+        </div>`).join('') + `</div></div>`;
+  });
+  body.innerHTML = html;
+}
+function openKingsModal(){
+  const tabs = document.getElementById('kp-tabs');
+  if (!tabs.__built){
+    KINGS_ERA_ORDER.forEach(era => {
+      const b = document.createElement('button');
+      b.textContent = era; b.dataset.era = era;
+      b.addEventListener('click', () => selectKingsEra(era));
+      tabs.appendChild(b);
+    });
+    tabs.__built = true;
+  }
+  document.getElementById('kp-tapinfo').classList.remove('show');
+  selectKingsEra(KINGS_BY_ERA[CHAPTER_ERA] ? CHAPTER_ERA : KINGS_ERA_ORDER[0]);
+  document.getElementById('kings-modal').classList.add('show');
+}
+function closeKingsModal(){
+  document.getElementById('kings-modal').classList.remove('show');
+}
+document.getElementById('kings-body').addEventListener('click', (ev) => {
+  const dot = ev.target.closest('.kp-dupdot');
+  const info = document.getElementById('kp-tapinfo');
+  if (dot && dot.dataset.tip){ info.textContent = dot.dataset.tip; info.classList.add('show'); }
+  else { info.classList.remove('show'); }
+});
+document.getElementById('kings-close').addEventListener('click', closeKingsModal);
+document.getElementById('kings-modal').addEventListener('click', (ev) => {
+  if (ev.target.id === 'kings-modal') closeKingsModal();
+});
+
+/* 미니맵 위 작은 메뉴 — 나가기·다시 시작·왕조 계보. */
+document.getElementById('menu-btn').addEventListener('click', () => {
+  document.getElementById('game-menu-overlay').classList.add('show');
+});
+document.getElementById('menu-close-btn').addEventListener('click', () => {
+  document.getElementById('game-menu-overlay').classList.remove('show');
+});
+document.getElementById('game-menu-overlay').addEventListener('click', (ev) => {
+  if (ev.target.id === 'game-menu-overlay') document.getElementById('game-menu-overlay').classList.remove('show');
+});
+document.getElementById('menu-restart').addEventListener('click', () => location.reload());
+document.getElementById('menu-kings').addEventListener('click', () => {
+  document.getElementById('game-menu-overlay').classList.remove('show');
+  openKingsModal();
+});
 
 function updateHudGoal(){
   const el = document.getElementById('hud-goal');
