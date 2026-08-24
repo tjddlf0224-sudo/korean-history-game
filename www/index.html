@@ -42,31 +42,31 @@
   .era-dot { width:13px; height:13px; border-radius:50%; background:#d9a441; border:3px solid #15110c;
     box-shadow: 0 0 0 1px #6a5636; margin-top: calc(var(--line-y, 32px) - 6px); }
   .era-dot.plan { background:#5a4c36; }
-  .era-year { font-size:10px; opacity:.55; margin-top:6px; white-space:nowrap; }
+  .era-year { font-size:11px; color:#afa38f; margin-top:6px; white-space:nowrap; }
 
-  .era-head { text-align:center; margin-bottom: 10px; flex:none; }
-  .era-title { font-size: 15px; font-weight: bold; display:block; }
+  .era-head { text-align:center; margin-bottom: 12px; flex:none; }
+  .era-title { font-size: 18px; font-weight: bold; display:block; color:#f0c96b; }
   .subtitle { margin:2px 0 0; font-size:12px; color:#b8a888; letter-spacing:.02em; }
   .badge-plan { background:#3a2c1a; color:#d8c9a3; border:1px solid #6a5636; }
   /* 기출 비중을 숫자만 쓰지 않고 막대로도 보여 준다 — 어느 시대가 무거운지
      한눈에 보여야 공부 순서를 정할 수 있다. */
   .pct-bar { height:5px; border-radius:99px; background:rgba(255,255,255,.10); margin:5px 0 2px; overflow:hidden; }
-  .pct-bar i { display:block; height:100%; background:#c9a24a; }
-  .era-pct { display:block; font-size: 10px; opacity:.5; margin-top:3px; }
+  .pct-bar i { display:block; height:100%; background:#d9a441; }
+  .era-pct { display:block; font-size: 11px; color:#c9a24a; margin-top:3px; }
 
   /* flex:1이어야 남은 세로 공간을 채우고, min-height:0이어야 넘칠 때 부모(페이지)가
      아니라 이 안에서만 overflow-y:auto로 스크롤된다(플렉스 자식의 흔한 함정). */
-  .cards { display:grid; grid-template-columns: repeat(2, 1fr); gap: 7px; align-content:start;
+  .cards { display:grid; grid-template-columns: repeat(2, 1fr); gap: 9px; align-content:start;
     flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-bottom: 4px; }
-  .card { display:block; text-decoration:none; color:inherit; background:#241b10; border:1px solid #4a3c26;
+  .card { display:block; text-decoration:none; color:inherit; background:#241c12; border:1px solid #51432c;
     border-radius: 10px; padding: 8px 9px; transition: border-color .15s, transform .1s; }
   .card:active { transform: scale(0.96); }
-  .card.live { border-color:#c9a24a; }
+  .card.live { border-color:#d9a441; }
   .card .num { font-size:9.5px; color:#f0c96b; opacity:.85; }
   .card .name { font-size: 12px; margin-top: 2px; line-height:1.3; }
-  .card .who { font-size: 9.5px; opacity:.6; margin-top: 3px; }
+  .card .who { font-size: 9.5px; color:#afa38f; margin-top: 3px; }
 
-  .plan-note { font-size: 11px; opacity:.55; line-height:1.5; text-align:center; padding-top: 4px; flex:none; margin:6px 0 0; }
+  .plan-note { font-size: 11px; color:#afa38f; line-height:1.5; text-align:center; padding-top: 4px; flex:none; margin:6px 0 0; }
   /* 가로모드 폰처럼 화면이 낮을 땐 카드 영역을 최대한 확보하려고 안내문을 숨긴다.
      회전 트릭 때문에 CSS 미디어쿼리로는 실제 게임 화면 높이를 알 수 없어서
      JS가 body에 .short 클래스를 붙여준다. */
@@ -79,12 +79,12 @@
   #kings-modal { position:absolute; inset:0; z-index:40; display:none;
     background:rgba(8,6,4,.72); align-items:center; justify-content:center; padding:18px; }
   #kings-modal.show { display:flex; }
-  #kings-panel { background:#1b150e; border:1px solid #4a3c26; border-radius:14px;
+  #kings-panel { background:#1b150e; border:1px solid #4a3c26; border-radius:16px;
     width:100%; height:100%; max-width:1040px; display:flex; flex-direction:column; overflow:hidden; }
   #kings-panel .kp-head { flex:none; display:flex; align-items:baseline; justify-content:space-between;
     gap:10px; padding:14px 18px 10px; border-bottom:1px solid #3a2c1a; }
   #kings-panel .kp-head h2 { margin:0; font-size:17px; color:#f0c96b; }
-  #kings-panel .kp-head .kp-sub { font-size:11px; opacity:.6; }
+  #kings-panel .kp-head .kp-sub { font-size:11px; color:#afa38f; }
   #kings-close { flex:none; background:#2a2013; border:1px solid #4a3c26; color:#f5ecd8;
     border-radius:999px; width:30px; height:30px; font-size:15px; cursor:pointer; line-height:1; }
   #kings-body { flex:1 1 auto; min-height:0; overflow-y:auto; padding:14px 18px 20px; }
@@ -94,23 +94,29 @@
   #kp-tapinfo { display:none; flex:none; margin:0 18px; padding:8px 12px; font-size:11.5px; line-height:1.5;
     background:#332411; border:1px solid #d9a441; border-radius:8px; color:#f0d9a0; }
   #kp-tapinfo.show { display:block; }
-  .kp-country { margin-bottom:20px; }
+  .kp-country { margin-bottom:28px; }
   .kp-country .kp-cname { font-family:"Gowun Batang", serif; font-weight:700; font-size:13.5px; color:#e9c979; margin-bottom:6px; }
-  .kp-country .kp-ccount { font-size:10.5px; opacity:.55; margin-left:6px; font-weight:400; }
-  .kp-strip { display:flex; gap:0; overflow-x:auto; padding:4px 2px 10px; align-items:flex-end; }
-  .kp-king { flex:none; width:82px; display:flex; flex-direction:column; align-items:center; padding:0 4px; position:relative; }
+  .kp-country .kp-ccount { font-size:10.5px; color:#afa38f; margin-left:6px; font-weight:400; }
+  /* 왕들을 잇는 가로 계보선 — 배지를 다 같은 크기로 통일해서 선이
+     삐뚤빼뚤하지 않게 하고, 배지 뒤로 지나가게 z-index를 낮춘다
+     (게임 챕터 안 왕조 계보 모달과 같은 디자인으로 맞췄다). */
+  .kp-strip { display:flex; gap:0; overflow-x:auto; padding:8px 8px 10px; align-items:flex-start; position:relative; }
+  .kp-strip::before { content:''; position:absolute; left:24px; right:24px; top:24px; height:2px;
+    background: linear-gradient(90deg, transparent, #5a4a30 6%, #5a4a30 94%, transparent); z-index:0; }
+  .kp-king { flex:none; width:82px; display:flex; flex-direction:column; align-items:center; padding:0 4px; position:relative; z-index:1; }
   .kp-king .kp-badge { position:relative; width:32px; height:32px; border-radius:50%; display:flex; align-items:center;
-    justify-content:center; background:#241b10; border:2px solid #4a3c26; font-weight:700; font-size:11px; color:#8a7c63; margin-bottom:6px; }
-  .kp-king .kp-nm { font-size:11px; text-align:center; white-space:nowrap; line-height:1.25; }
-  .kp-king .kp-yr { font-size:9px; opacity:.5; margin-top:1px; }
-  .kp-king[data-t="0"] .kp-badge{ opacity:.4; }
-  .kp-king[data-t="1"] .kp-badge{ border-color:#a3894f; color:#c9ac6e; }
-  .kp-king[data-t="2"] .kp-badge{ border-color:#d9a441; color:#f0c96b; background:#332411; }
-  .kp-king[data-t="3"] .kp-badge{ border-color:#c9622e; color:#f0a56b; background:#3a2210; width:36px; height:36px; font-size:12px; }
-  .kp-king[data-t="4"] .kp-badge{ border-color:#d9542a; color:#fff; background:#a23b1e; width:40px; height:40px; font-size:13px; box-shadow:0 0 0 3px rgba(162,59,30,.3); }
+    justify-content:center; font-weight:700; font-size:11.5px; margin-bottom:7px;
+    background:#2a2013; border:2px solid #4a3c26; color:#9c8d70; }
+  .kp-king .kp-nm { font-size:12px; font-weight:500; text-align:center; white-space:nowrap; line-height:1.3; color:#f0e6d2; }
+  .kp-king .kp-yr { font-size:10px; color:#a89878; margin-top:2px; font-variant-numeric: tabular-nums; }
+  .kp-king[data-t="0"] .kp-badge{ background:#221a10; border-color:#3a2f1e; color:#6a5c48; }
+  .kp-king[data-t="1"] .kp-badge{ background:#3a2f1a; border-color:#8a744a; color:#dcc48f; }
+  .kp-king[data-t="2"] .kp-badge{ background:#4a3512; border-color:#d9a441; color:#f5d488; }
+  .kp-king[data-t="3"] .kp-badge{ background:#5a3411; border-color:#e0883a; color:#ffd29c; }
+  .kp-king[data-t="4"] .kp-badge{ background:#7a3512; border-color:#ff9a4a; color:#fff; box-shadow:0 0 9px rgba(255,144,64,.55); }
   .kp-dupdot{ position:absolute; top:-2px; right:-2px; width:12px; height:12px; border-radius:50%; font-size:7px;
     line-height:12px; text-align:center; font-weight:900; color:#1b150e; background:#7fb0a0; border:1.5px solid #1b150e; }
-  .kp-legend{ display:flex; gap:12px; flex-wrap:wrap; font-size:10px; opacity:.6; margin-bottom:10px; }
+  .kp-legend{ display:flex; gap:12px; flex-wrap:wrap; font-size:10px; color:#afa38f; margin-bottom:10px; }
   .kp-legend i{ display:inline-block; width:8px; height:8px; border-radius:50%; border:2px solid #4a3c26; margin-right:3px; vertical-align:middle; }
 </style>
 </head>
@@ -286,9 +292,9 @@ function openKingsModal(era){
   document.getElementById('kp-sub').textContent = `${groups.map(g => g[0]).join(' · ')} · 왕 ${totalKings}명 · 원 안 숫자 = 기출 출제 횟수`;
   const body = document.getElementById('kings-body');
   let html = `<div class="kp-legend">
-    <span><i style="opacity:.4"></i>0회</span><span><i style="border-color:#a3894f"></i>1~3회</span>
-    <span><i style="border-color:#d9a441"></i>4~8회</span><span><i style="border-color:#c9622e"></i>9~15회</span>
-    <span><i style="border-color:#d9542a; background:#a23b1e"></i>16회+</span>
+    <span><i style="background:#221a10; border-color:#3a2f1e"></i>0회</span><span><i style="background:#3a2f1a; border-color:#8a744a"></i>1~3회</span>
+    <span><i style="background:#4a3512; border-color:#d9a441"></i>4~8회</span><span><i style="background:#5a3411; border-color:#e0883a"></i>9~15회</span>
+    <span><i style="background:#7a3512; border-color:#ff9a4a"></i>16회+</span>
     <span><span class="kp-dupdot" style="position:static; display:inline-flex; align-items:center; justify-content:center;">동</span> 다른 시대·나라에 같은 이름의 왕이 또 있음(눌러서 확인)</span>
   </div>`;
   groups.forEach(([country, kings]) => {

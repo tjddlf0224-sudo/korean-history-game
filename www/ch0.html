@@ -48,42 +48,42 @@
   }
 
   #dlg-panel, #intro-panel {
-    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26ee; border: 2px solid #6a6a8a;
-    border-radius: 14px; padding: 16px 18px; color: #eae6f2; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241c12ee; border: 1px solid #51432c;
+    border-radius: 16px; padding: 16px 18px; color: #f5ecd8; box-shadow: 0 12px 40px rgba(0,0,0,.4);
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #4a4560; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
-  .dlg-name { font-weight: bold; font-size: 15px; color: #c9b8f0; }
-  .dlg-tag { font-size: 11px; opacity: .7; }
+  .dlg-portrait { width: 44px; height: 44px; border-radius: 50%; background: #3a2f1a; flex: none; display:flex; align-items:center; justify-content:center; font-size:20px; background-size: cover; background-position: center 15%; }
+  .dlg-name { font-weight: bold; font-size: 15px; color: #f0c96b; }
+  .dlg-tag { font-size: 11px; color: #afa38f; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
-  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
+  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
   #intro-panel { }
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
-  #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
+  #intro-next { margin-top: 14px; font-size: 13px; color: #d8ccb5; }
 
   #quiz-panel { position: relative; width: 100%; max-width: 640px;
-    margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26f2;
-    border: 2px solid #6a6a8a; border-radius: 14px; padding: 16px 18px; color: #eae6f2;
-    box-shadow: 0 8px 24px rgba(0,0,0,.5); max-height: 80%; overflow-y: auto; }
+    margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241c12f2;
+    border: 1px solid #51432c; border-radius: 16px; padding: 16px 18px; color: #f5ecd8;
+    box-shadow: 0 12px 40px rgba(0,0,0,.4); max-height: 80%; overflow-y: auto; }
   .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2; font-size: 14px; line-height: 1;
+    border: 1px solid #51432c; background: #2a2013; color: #f5ecd8; font-size: 14px; line-height: 1;
     display: flex; align-items: center; justify-content: center; cursor: pointer; }
-  .quiz-tag { font-size: 12px; color: #c9b8f0; margin-bottom: 6px; }
+  .quiz-tag { font-size: 12px; color: #e9c979; margin-bottom: 6px; }
   .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
   .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
-  .quiz-opt { padding: 12px 14px; border-radius: 10px; border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2;
+  .quiz-opt { padding: 12px 14px; border-radius: 12px; border: 1px solid #51432c; background: #2a2013; color: #f5ecd8;
     font-size: 14px; text-align: left; }
-  .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
-  .quiz-opt.wrong { background: #5d2f3f; border-color: #bf5f7f; }
+  .quiz-opt.correct { background: #253d2c; border-color: #7faf8b; }
+  .quiz-opt.wrong { background: #3d2622; border-color: #d96b5f; }
   .quiz-opt:disabled { opacity: .55; cursor: default; }
-  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #cfc7de; min-height: 20px; }
+  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #d8ccb5; min-height: 20px; }
   .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
   .quiz-next.show { opacity: .85; }
-  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #8d86a4; letter-spacing: .02em; }
+  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #afa38f; letter-spacing: .02em; }
   .quiz-src:empty { display: none; }
 
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
@@ -133,7 +133,7 @@
     background: transparent; color: rgba(255,255,255,.9); text-shadow: 0 1px 3px rgba(0,0,0,.7);
     display: flex; align-items: center; justify-content: center; font-size: 15px; z-index: 5; cursor: pointer; padding: 0; }
   #menu-btn:active { color: rgba(255,255,255,.6); }
-  #game-menu-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 14px; min-width: 250px;
+  #game-menu-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 16px; min-width: 250px;
     max-width: 80vw; padding: 18px; display: flex; flex-direction: column; gap: 9px; }
   #game-menu-panel h3 { margin: 0 0 4px; font-size: 15px; color: #f0c96b; text-align: center; font-family: "Gowun Batang", serif; }
   #game-menu-panel a, #game-menu-panel button { display: block; width: 100%; box-sizing: border-box; text-align: center;
@@ -148,7 +148,7 @@
   #kings-modal { position: absolute; inset: 0; z-index: 45; display: none; background: rgba(8,6,4,.72);
     align-items: center; justify-content: center; padding: 14px; }
   #kings-modal.show { display: flex; }
-  #kings-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 14px;
+  #kings-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 16px;
     width: 100%; height: 100%; max-width: 1040px; display: flex; flex-direction: column; overflow: hidden; }
   #kings-panel .kp-head { flex: none; display: flex; align-items: baseline; justify-content: space-between;
     gap: 10px; padding: 12px 16px 8px; border-bottom: 1px solid #3a2c1a; }
@@ -202,7 +202,7 @@
      보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
      미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
   #minimap-canvas { position: absolute; top: calc(32px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
-    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 4;
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 8px; z-index: 4;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
 
   /* 마지막 대사까지 다 들어도 곧장 챕터가 끝나지 않고, 이 버튼을

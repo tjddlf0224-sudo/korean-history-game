@@ -95,7 +95,7 @@
     background: transparent; color: rgba(255,255,255,.9); text-shadow: 0 1px 3px rgba(0,0,0,.7);
     display: flex; align-items: center; justify-content: center; font-size: 15px; z-index: 5; cursor: pointer; padding: 0; }
   #menu-btn:active { color: rgba(255,255,255,.6); }
-  #game-menu-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 14px; min-width: 250px;
+  #game-menu-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 16px; min-width: 250px;
     max-width: 80vw; padding: 18px; display: flex; flex-direction: column; gap: 9px; }
   #game-menu-panel h3 { margin: 0 0 4px; font-size: 15px; color: #f0c96b; text-align: center; font-family: "Gowun Batang", serif; }
   #game-menu-panel a, #game-menu-panel button { display: block; width: 100%; box-sizing: border-box; text-align: center;
@@ -110,7 +110,7 @@
   #kings-modal { position: absolute; inset: 0; z-index: 45; display: none; background: rgba(8,6,4,.72);
     align-items: center; justify-content: center; padding: 14px; }
   #kings-modal.show { display: flex; }
-  #kings-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 14px;
+  #kings-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 16px;
     width: 100%; height: 100%; max-width: 1040px; display: flex; flex-direction: column; overflow: hidden; }
   #kings-panel .kp-head { flex: none; display: flex; align-items: baseline; justify-content: space-between;
     gap: 10px; padding: 12px 16px 8px; border-bottom: 1px solid #3a2c1a; }
@@ -163,7 +163,7 @@
      보는 순간 그 지점은 시야의 좌상단이 되고 게임 화면만 회전돼 있어서
      미니맵만 90도 틀어져 보인다 — 실제로 그렇게 만들었다가 되돌린 부분.) */
   #minimap-canvas { position: absolute; top: calc(32px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
-    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 6px; z-index: 4;
+    width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 8px; z-index: 4;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
 
   /* 마지막 대사까지 다 들어도 곧장 챕터가 끝나지 않고, 이 버튼을
@@ -197,28 +197,25 @@
      통째로 바꿔 '말하는 사람이 바뀌었다'를 한눈에 보이게 한다. 이름만 바뀌면
      존댓말/반말이 갑자기 뒤섞여 읽히는 것처럼 어색해진다(5화 조식↔이황).
      챕터마다 기본 팔레트가 따뜻한 계열이라, 끼어드는 쪽은 차가운 계열로 잡았다. */
-  #dlg-panel.alt-speaker { background: #17222bee; border-color: #6f9bb5; }
-  #dlg-panel.alt-speaker .dlg-name { color: #9fd0e8; }
-  #dlg-panel.alt-speaker .dlg-portrait { box-shadow: 0 0 0 2px #6f9bb5; }
-  #quiz-panel { position: relative; width: 100%; max-width: 640px;
-    margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #201c26f2;
-    border: 2px solid #6a6a8a; border-radius: 14px; padding: 16px 18px; color: #eae6f2;
-    box-shadow: 0 8px 24px rgba(0,0,0,.5); max-height: 80%; overflow-y: auto; }
+  #dlg-panel.alt-speaker { background: #2e2410ee; border-color: #c9a24a; }
+  #dlg-panel.alt-speaker .dlg-name { color: #f0c96b; }
+  #dlg-panel.alt-speaker .dlg-portrait { box-shadow: 0 0 0 2px #c9a24a; }
+  #quiz-panel { position: relative; }
   .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2; font-size: 14px; line-height: 1;
+    border: 1px solid #4a6a82; background: #223140; color: #f5ecd8; font-size: 14px; line-height: 1;
     display: flex; align-items: center; justify-content: center; cursor: pointer; }
-  .quiz-tag { font-size: 12px; color: #c9b8f0; margin-bottom: 6px; }
+  .quiz-tag { font-size: 12px; color: #9dc3e0; margin-bottom: 6px; }
   .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
   .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
-  .quiz-opt { padding: 12px 14px; border-radius: 10px; border: 1px solid #6a6a8a; background: #2e2838; color: #eae6f2;
+  .quiz-opt { padding: 12px 14px; border-radius: 12px; border: 1px solid #4a6a82; background: #223140; color: #f5ecd8;
     font-size: 14px; text-align: left; }
-  .quiz-opt.correct { background: #2f5d3a; border-color: #5fbf76; }
-  .quiz-opt.wrong { background: #5d2f3f; border-color: #bf5f7f; }
+  .quiz-opt.correct { background: #253d2c; border-color: #7faf8b; }
+  .quiz-opt.wrong { background: #3d2622; border-color: #d96b5f; }
   .quiz-opt:disabled { opacity: .55; cursor: default; }
-  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #cfc7de; min-height: 20px; }
+  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #b8ccd8; min-height: 20px; }
   .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
   .quiz-next.show { opacity: .85; }
-  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #8d86a4; letter-spacing: .02em; }
+  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #7c96a8; letter-spacing: .02em; }
   .quiz-src:empty { display: none; }
   /* 대화창 위에 띄우는 작은 표. 사화처럼 '이름이 넷인데 왕이 누구였나'가
      엉키는 것들은 글로만 읽어서는 안 남아서, 표로 한 번 보여 준다. */
