@@ -78,12 +78,15 @@ SHEETS = {
         'iik', 'yangheonsu', 'eojaeyeon', 'uibyeongbu', 'anchangho']),
     # gimgu·yunbonggil는 뺐다 — ilje_ch7.html에 이미 있는 사람들이고 초상도
     # 이미 있음(일제 2화 한인애국단 콘텐츠가 중복이라 국민대표회의로 교체됨).
-    # 다음 몇 명이 필요해지면 여기(sheet10) 빈 칸부터 채울 것.
     # sheet8(뒤섞여서 못 씀) + 통신사·독립운동 인물 + 엑스트라 3명을 합친 15명.
     'sheet11': (5, 3, [
         'seonjo', 'hwangyungil', 'gimseongil', 'jeongcheol', 'gunjol',
         'sinrip', 'haengju_yeoin', 'useen', 'sinchaeho', 'yugwansun',
         'siwon1', 'siwon2', 'extra_nam', 'extra_yeo', 'extra_gunsa']),
+    # 커버리지 보강으로 새로 생긴 5명. 5열 1행 — 5명뿐이라 3행을 채우지
+    # 않았다(억지로 엑스트라를 끼워 넣느니 실제로 필요한 사람만 뽑는다).
+    'sheet10': (5, 1, [
+        'ijagyeom', 'ijehyeon', 'hyojong', 'hyeonjong', 'sukjong']),
 }
 
 
