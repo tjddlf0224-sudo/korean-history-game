@@ -3153,8 +3153,8 @@ imjin = {
             {'id':'yisunsin','goal':'한산도에서 이순신과 대화하기'},
             {'id':'gimsimin','goal':'진주성에서 김시민과 대화하기'},
             {'id':'nongae','goal':'진주성에서 논개와 대화하기'},
-            {'id':'gwakjaeu','goal':'의병 진영에서 곽재우와 대화하기'},
             {'id':'johun','goal':'의병 진영에서 조헌과 대화하기'},
+            {'id':'gwakjaeu','goal':'의병 진영에서 곽재우와 대화하기'},
             {'id':'gwonyul','goal':'행주산성에서 권율과 대화하기'},
             {'id':'haengju_yeoin','goal':'행주산성에서 아낙과 대화하기'}],
  'npcData':dict([
