@@ -342,6 +342,7 @@ const ZONES = {
     barriers: [
     ],
     npcs: [
+      { id:'ijagyeom', name:'이자겸', x:688, y:250, img:'assets/portraits/ijagyeom.png', look:{ role:'scholar', body:'#5a3a3a', accent:'#e0b94a' } },
       { id:'myocheong', name:'묘청', x:500, y:400, img:'assets/portraits/myocheong.png', look:{ role:'scholar', body:'#4a3a5a', accent:'#e0b94a' } },
       { id:'gimbusik', name:'김부식', x:900, y:400, img:'assets/portraits/gimbusik.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
     ],
@@ -505,6 +506,7 @@ function updateHudGoal(){
   // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
+      ['ijagyeom', '서경에서 이자겸과 대화하기'],
       ['myocheong', '서경에서 묘청과 대화하기'],
       ['gimbusik', '서경에서 김부식과 대화하기'],
       ['seohui', '서희와 대화하기'],
@@ -739,6 +741,23 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  ijagyeom_0: {
+    name: '이자겸', icon: '👑', img: 'assets/portraits/ijagyeom.png',
+    beats: [
+      { who:'npc', t:'나는 경원 이씨 가문 사람이오. 내 딸들을 예종과 인종, 두 임금께 잇달아 시집보냈으니 — 나는 인종의 외할아비이자 장인이기도 하오.' },
+      { who:'npc', t:'조정의 벼슬이란 벼슬은 우리 집안과 그 편에 선 이들 차지였소. "십팔자(十八子)가 왕이 된다"는 말까지 나돌았지 — 十八子를 합치면 오얏 리(李)가 되니, 내가 왕이 될 것이라는 뜻이었소.' },
+      { who:'npc', t:'어린 인종께서 나를 없애려 하시기에, 나는 척준경과 함께 궁궐에 불을 지르고 맞섰소. 1126년의 일이오. 한동안은 내가 이겼다고 여겼지.' },
+      { who:'npc', t:'허나 나는 척준경마저 홀대했소. 결국 인종께서 척준경을 구슬려 나를 쳤고, 나는 유배지에서 죽었소. 왕실의 위엄은 이미 땅에 떨어진 뒤였지.' },
+    ],
+    quizSeq: [
+      { q:'예종·인종 두 임금에게 딸을 시집보내 외척으로 권력을 독점하다가, 1126년 척준경과 함께 반란을 일으킨 인물은?',
+        opts:['이자겸','최충헌'], answer:0, src:[60, 67],
+        feedback:['최충헌은 이보다 수십 년 뒤, 무신정변 이후 최씨 무신정권을 연 인물이에요.','정답! 이자겸입니다. 이자겸의 난으로 왕실의 권위가 크게 흔들렸어요.'] },
+      { q:'이자겸의 난으로 왕실 권위가 흔들린 틈을 타, 서경 천도와 칭제건원을 주장하며 등장한 인물은?',
+        opts:['묘청','신돈'], answer:0, src:[27, 29, 35, 36, 45, 47, 60, 67, 78],
+        feedback:['신돈은 훗날 공민왕 때 개혁을 이끌다 실각한 승려예요.','정답! 묘청입니다. 바로 저기 있는 저 사람이오 — 가서 이야기를 들어 보시게.'] },
+    ]
+  },
   myocheong_0: {
     name: '묘청', icon: '🔮', img: 'assets/portraits/myocheong.png',
     beats: [
@@ -817,6 +836,7 @@ const NPC_DATA = {
       { who:'npc', t:'교정도감을 두어 나랏일을 여기서 결정했다. 왕은 있으나, 정사는 내 손에서 나갔다.' },
       { who:'npc', t:'무신정변이 왜 일어났는지 아나. 김부식의 아들 김돈중이 젊은 시절, 촛불로 정중부의 수염을 태운 일이 있었네.' },
       { who:'npc', t:'무신은 잔치에서 춤이나 추게 하고, 수염까지 태워도 벌 하나 없었지. 그 쌓인 것이 1170년에 터졌네. 문신의 관을 쓴 자는 씨도 남기지 말라 — 그 말이 그때 나왔지.' },
+      { who:'npc', t:'이 자리는 내 아들 최우가 이어받을 걸세. 나는 관직에 오를 사람을 정하는 정방까지는 못 두었지만, 그 아이가 두어 인사권마저 완전히 손아귀에 넣을 것이야. 몽골이 쳐들어오면 강화도로 도읍을 옮기자 한 것도 그 아이지.' },
     ],
     quizSeq: [
       { q:'무신들이 문신에 대한 차별에 반발해 정권을 잡은 1170년의 사건은?',
@@ -828,6 +848,9 @@ const NPC_DATA = {
       { q:'무신 집권기에 공주 명학소에서 신분 차별에 반발해 일어난 봉기는?',
         opts:['망이·망소이의 난','홍경래의 난'], answer:0, src:[53, 73],
         feedback:['홍경래의 난은 훨씬 뒤인 조선 후기 평안도에서 일어나요.','정답! 망이·망소이의 난입니다. 소(所)에 대한 차별이 원인이었어요.'] },
+      { q:'최충헌의 아들로 정방을 두어 인사권을 완전히 장악하고, 몽골 침입에 맞서 강화 천도를 주도한 인물은?',
+        opts:['최우','최영'], answer:0, src:[39, 60, 76],
+        feedback:['최영은 훨씬 뒤인 고려 말에 활약한 장군이에요.','정답! 최우입니다. 강화도로 도읍을 옮기고 몽골에 맞섰어요.'] },
     ]
   },
   sambyeolcho_0: {
@@ -854,7 +877,8 @@ const NPC_DATA = {
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
-    if (id === 'myocheong') return 'myocheong_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'ijagyeom') return 'ijagyeom_' + Math.min(Stage.state.talkStage, 0);
+    if (id === 'myocheong') return 'myocheong_0';
     if (id === 'gimbusik') return 'gimbusik_0';
     if (id === 'seohui') return 'seohui_0';
     if (id === 'yungwan') return 'yungwan_0';
@@ -1079,7 +1103,7 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
-    if (this.npc.id === 'myocheong'){
+    if (this.npc.id === 'ijagyeom'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 0);
     }
     if (this.data.endsChapter){
