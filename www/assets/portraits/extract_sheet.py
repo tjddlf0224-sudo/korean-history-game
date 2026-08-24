@@ -95,10 +95,6 @@ SHEETS = {
         'buyeo', 'gogurin', 'okjeo', 'dongye', 'samhan_cheongun',
         'extra_musa0', 'extra_yeoin0', 'extra_eobu', 'extra_daejanggan', 'extra_sangin',
         'extra_jikjo', 'extra_sanyang', 'extra_chonjang', 'extra_mokdong', 'extra_nopa']),
-    # 안내자 도깨비 몽당이 — 그리드가 아니라 인물 한 명뿐인 단일 컷이라
-    # 1열1행으로 등록한다. extract()가 알아서 bbox로 잘라내므로 인물 주변
-    # 여백이 많아도 상관없다.
-    'sheet_mongdangi': (1, 1, ['mongdangi']),
 }
 
 
