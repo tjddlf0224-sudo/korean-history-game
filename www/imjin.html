@@ -820,13 +820,13 @@ function updateHudGoal(){
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
       ['sinrip', '탄금대에서 신립과 대화하기'],
-      ['yisunsin', '한산도에서 이순신과 대화하기'],
-      ['gimsimin', '진주성에서 김시민과 대화하기'],
-      ['nongae', '진주성에서 논개와 대화하기'],
-      ['johun', '의병 진영에서 조헌과 대화하기'],
       ['gwakjaeu', '의병 진영에서 곽재우와 대화하기'],
+      ['yisunsin', '한산도에서 이순신과 대화하기'],
+      ['johun', '의병 진영에서 조헌과 대화하기'],
+      ['gimsimin', '진주성에서 김시민과 대화하기'],
       ['gwonyul', '행주산성에서 권율과 대화하기'],
-      ['haengju_yeoin', '행주산성에서 아낙과 대화하기']
+      ['haengju_yeoin', '행주산성에서 아낙과 대화하기'],
+      ['nongae', '진주성에서 논개와 대화하기']
     ];
     for (const [id, goal] of order){
       const k = Stage.keyFor(id);
@@ -1200,13 +1200,13 @@ const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
     if (id === 'sinrip') return 'sinrip_' + Math.min(Stage.state.talkStage, 0);
-    if (id === 'yisunsin') return 'yisunsin_0';
-    if (id === 'gimsimin') return 'gimsimin_0';
-    if (id === 'nongae') return 'nongae_0';
-    if (id === 'johun') return 'johun_0';
     if (id === 'gwakjaeu') return 'gwakjaeu_0';
+    if (id === 'yisunsin') return 'yisunsin_0';
+    if (id === 'johun') return 'johun_0';
+    if (id === 'gimsimin') return 'gimsimin_0';
     if (id === 'gwonyul') return 'gwonyul_0';
     if (id === 'haengju_yeoin') return 'haengju_yeoin_0';
+    if (id === 'nongae') return 'nongae_0';
     return null;
   },
   interact(){
