@@ -181,6 +181,10 @@ def build(spec):
     # 예전처럼 '첫 ;\n까지'로 비탐욕 매치하면 IIFE 중간에서 잘린다(실제로
     # imjin.html이 그렇게 깨졌다 — ch6 전용 코드 잔해가 그대로 붙어 나왔다).
     # 뒤에 오는 고정된 줄(el.textContent 갱신)을 종료 지점으로 삼는다.
+    # 목표 인물이 지금 있는 구역이 아니라 다른 구역에 있으면, '~와 대화하기'가
+    # 아니라 그 구역으로 가는 출구 라벨을 먼저 보여준다 — 안 그러면 플레이어가
+    # 없는 사람을 찾아 지금 구역을 헤매게 된다(고대1에서 실제로 신고받은 문제:
+    # 무열왕이 다른 구역에 있는데 목표는 그냥 '무열왕과 대화하기'였다).
     pairs = ',\n      '.join("['%s', '%s']" % (t['id'], t['goal']) for t in spec['talkers'])
     sub(r"const t = done \? '다음 목표: 다음 화로 넘어가기'[\s\S]*?"
         r"\n  if \(el\.textContent !== t\) el\.textContent = t;\n",
@@ -188,7 +192,15 @@ def build(spec):
         "    const order = [\n      " + pairs + "\n    ];\n"
         "    for (const [id, goal] of order){\n"
         "      const k = Stage.keyFor(id);\n"
-        "      if (k && !seenDialogKeys.has(k)) return '다음 목표: ' + goal;\n"
+        "      if (k && !seenDialogKeys.has(k)){\n"
+        "        let npcZone = null;\n"
+        "        for (const zid in ZONES){ if (ZONES[zid].npcs.some(n => n.id === id)){ npcZone = zid; break; } }\n"
+        "        if (npcZone && npcZone !== World.zone){\n"
+        "          const ex = (ZONES[World.zone].exits || []).find(e => e.to === npcZone);\n"
+        "          if (ex) return '다음 목표: ' + ex.label;\n"
+        "        }\n"
+        "        return '다음 목표: ' + goal;\n"
+        "      }\n"
         "    }\n"
         "    return '다음 목표: 다음 화로 넘어가기';\n"
         "  })();\n"
