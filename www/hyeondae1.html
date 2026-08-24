@@ -80,6 +80,43 @@
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
   #fade.show { opacity: 1; pointer-events: auto; }
 
+  /* 대화 완료 팡파레 — 대화(+퀴즈까지) 끝에 한 번 터뜨려서 "여기서 더
+     들을 말이 없다"를 분명히 알려준다. 신호가 없으니 끝난 건지 몰라
+     같은 사람에게 자꾸 다시 말을 거는 일이 잦다는 신고를 받았다. */
+  #fanfare { position: absolute; inset: 0; z-index: 32; display: flex; align-items: center; justify-content: center;
+    pointer-events: none; opacity: 0; }
+  #fanfare.show { opacity: 1; }
+  #fanfare .fc-glow { position: absolute; width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(240,201,107,.55), rgba(240,201,107,0) 70%); }
+  #fanfare.show .fc-glow { animation: fc-glow .9s ease-out forwards; }
+  @keyframes fc-glow { 0%{ transform:scale(.3); opacity:0; } 30%{ opacity:1; } 100%{ transform:scale(2.4); opacity:0; } }
+  #fanfare .fc-spark { position: absolute; width: 7px; height: 7px; background: #f0c96b; opacity: 0;
+    clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    transform: rotate(var(--a)) translate(0,0) scale(.4); }
+  #fanfare.show .fc-spark { animation: fc-spark 1s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes fc-spark {
+    0% { opacity: 0; transform: rotate(var(--a)) translate(0,0) scale(.3); }
+    15% { opacity: 1; }
+    100% { opacity: 0; transform: rotate(var(--a)) translate(72px,0) scale(1) rotate(180deg); }
+  }
+  #fanfare .fc-spark:nth-child(1){ --a:0deg; } #fanfare .fc-spark:nth-child(2){ --a:45deg; animation-delay:.03s; }
+  #fanfare .fc-spark:nth-child(3){ --a:90deg; } #fanfare .fc-spark:nth-child(4){ --a:135deg; animation-delay:.03s; }
+  #fanfare .fc-spark:nth-child(5){ --a:180deg; } #fanfare .fc-spark:nth-child(6){ --a:225deg; animation-delay:.03s; }
+  #fanfare .fc-spark:nth-child(7){ --a:270deg; } #fanfare .fc-spark:nth-child(8){ --a:315deg; animation-delay:.03s; }
+  #fanfare .fc-label { position: relative; z-index: 1; font-family: "Gowun Batang", serif; font-weight: bold;
+    font-size: 17px; color: #fff7e6; padding: 10px 22px; border-radius: 999px; white-space: nowrap;
+    background: rgba(40,28,10,.55); border: 1px solid rgba(240,201,107,.5);
+    text-shadow: 0 2px 8px rgba(0,0,0,.6), 0 0 16px rgba(240,201,107,.8);
+    opacity: 0; transform: scale(.6) translateY(6px); }
+  #fanfare.show .fc-label { animation: fc-label 1.15s cubic-bezier(.34,1.56,.64,1) forwards; }
+  @keyframes fc-label {
+    0% { opacity: 0; transform: scale(.6) translateY(6px); }
+    35% { opacity: 1; transform: scale(1.08) translateY(0); }
+    55% { transform: scale(1) translateY(0); }
+    82% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1) translateY(-10px); }
+  }
+
   #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
     background: linear-gradient(rgba(5,8,14,.5), rgba(5,8,14,.8)), url('assets/scenes/ch6_busan_ending.png') center/cover no-repeat, #000;
     color: #c9b8f0; text-align: center; padding: 24px; }
@@ -240,6 +277,12 @@
   <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
 
   <div id="fade"></div>
+  <div id="fanfare">
+    <div class="fc-glow"></div>
+    <div class="fc-spark"></div><div class="fc-spark"></div><div class="fc-spark"></div><div class="fc-spark"></div>
+    <div class="fc-spark"></div><div class="fc-spark"></div><div class="fc-spark"></div><div class="fc-spark"></div>
+    <div class="fc-label" id="fc-label">대화 완료</div>
+  </div>
 
   <div id="end-screen">
     <div>
@@ -475,6 +518,21 @@ function showZoneBanner(text){
   el.classList.add('show');
   clearTimeout(el.__t);
   el.__t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+/* 대화(+퀴즈) 끝에 한 번 터뜨리는 팡파레. Dialog.afterQuiz()에서 부른다.
+   재입장해도(재방문 시 같은 대화가 다시 나오므로) 매번 같은 신호를
+   줘서 "여기서 더 들을 말이 없다"를 분명히 알린다. */
+function playFanfare(text){
+  const el = document.getElementById('fanfare');
+  if (!el) return;
+  const label = document.getElementById('fc-label');
+  if (label) label.textContent = text || '대화 완료';
+  el.classList.remove('show');
+  void el.offsetWidth; // 애니메이션 재시작을 위한 강제 리플로우
+  el.classList.add('show');
+  clearTimeout(el.__t);
+  el.__t = setTimeout(() => el.classList.remove('show'), 1300);
 }
 
 function updateHudGoal(){
@@ -1047,6 +1105,9 @@ const Dialog = {
     }
     if (this.data.endsChapter){
       document.getElementById('next-chapter-btn').classList.add('show');
+      playFanfare('챕터 완료!');
+    } else {
+      playFanfare('대화 완료');
     }
   }
 };
