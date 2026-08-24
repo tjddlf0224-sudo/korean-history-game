@@ -31,7 +31,7 @@ CHAPTER_ERA_MAP = {
     'seonsa1': '선사·초기국가',
     'godae1': '고대', 'godae2': '고대', 'godae3': '고대', 'gaya': '고대', 'tongil': '고대',
     'goryeo1': '고려', 'goryeo2': '고려', 'goryeo3': '고려', 'byeokrando': '고려',
-    'hugi1': '조선 후기', 'hugi2': '조선 후기', 'hugi3': '조선 후기', 'imjin': '조선 후기',
+    'hugi1': '조선 후기', 'hugi2': '조선 후기', 'hugi3': '조선 후기', 'imjin': '조선 후기', 'imjin2': '조선 후기',
     'gaehang1': '근대·개항기', 'gaehang4': '근대·개항기', 'gaehang5': '근대·개항기',
 }
 
