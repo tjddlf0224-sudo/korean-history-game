@@ -173,6 +173,13 @@
   .legend i.t4{ border-color:var(--accent); background:var(--accent); }
 
   footer.credit{ margin-top: 40px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:11.5px; line-height:1.7; }
+
+  /* title 툴팁은 손가락 터치로는 안 뜨니, 눌렀을 때 여기 하단 토스트로 보여준다. */
+  #kp-tapinfo{ position:fixed; left:16px; right:16px; bottom:16px; max-width:640px; margin:0 auto;
+    background:var(--card-bg); border:1px solid var(--accent); border-radius:10px; padding:10px 14px;
+    font-size:12.5px; line-height:1.5; color:var(--ink); box-shadow:0 4px 20px rgba(0,0,0,.25);
+    display:none; z-index:50; }
+  #kp-tapinfo.show{ display:block; }
 </style>
 
 <div class="wrap">
@@ -193,6 +200,7 @@
   </section>
 
   <div id="era-views"></div>
+  <div id="kp-tapinfo"></div>
 
   <footer class="credit">기출 왕조 지도 · 한능검 1급 대비 게임 「타임슬립 한국사」 제작 참고자료</footer>
 </div>
@@ -241,12 +249,14 @@ function dupTitleText(name, others){
 function dupBadge(name, era, country, year){
   const others = dupOthers(name, era, country, year);
   if (!others) return '';
-  return `<span class="dupmark" title="${dupTitleText(name, others)}">동명이인</span>`;
+  const tip = dupTitleText(name, others);
+  return `<span class="dupmark" title="${tip}" data-tip="${tip}">동명이인</span>`;
 }
 function dupDot(name, era, country, year){
   const others = dupOthers(name, era, country, year);
   if (!others) return '';
-  return `<span class="dupdot" title="${dupTitleText(name, others)}">동</span>`;
+  const tip = dupTitleText(name, others);
+  return `<span class="dupdot" title="${tip}" data-tip="${tip}">동</span>`;
 }
 
 // ---- tabs ----
@@ -298,7 +308,7 @@ ERA_ORDER.slice(1).forEach(era => {
       <span class="sw"><i class="t2"></i>4~8회</span>
       <span class="sw"><i class="t3"></i>9~15회</span>
       <span class="sw"><i class="t4"></i>16회+</span>
-      <span class="sw"><span class="dupdot" style="position:static; display:inline-flex; align-items:center; justify-content:center;">동</span>다른 시대·나라에 같은 이름의 왕이 또 있음(가리키면 확인)</span>
+      <span class="sw"><span class="dupdot" style="position:static; display:inline-flex; align-items:center; justify-content:center;">동</span>다른 시대·나라에 같은 이름의 왕이 또 있음(누르면 확인)</span>
     </div>
   `;
 
@@ -337,4 +347,15 @@ function selectEra(era){
   document.getElementById(id).classList.add('active');
 }
 selectEra('전체 랭킹');
+
+document.body.addEventListener('click', (ev) => {
+  const tip = ev.target.closest('.dupdot, .dupmark');
+  const info = document.getElementById('kp-tapinfo');
+  if (tip && tip.dataset.tip){
+    info.textContent = tip.dataset.tip;
+    info.classList.add('show');
+  } else if (!ev.target.closest('#kp-tapinfo')) {
+    info.classList.remove('show');
+  }
+});
 </script>

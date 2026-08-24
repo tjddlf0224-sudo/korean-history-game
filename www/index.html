@@ -88,6 +88,12 @@
   #kings-close { flex:none; background:#2a2013; border:1px solid #4a3c26; color:#f5ecd8;
     border-radius:999px; width:30px; height:30px; font-size:15px; cursor:pointer; line-height:1; }
   #kings-body { flex:1 1 auto; min-height:0; overflow-y:auto; padding:14px 18px 20px; }
+  /* 동명이인 점은 hover가 안 되는 손가락 터치로도 봐야 해서, title 툴팁 대신
+     눌렀을 때 여기에 문구를 띄운다(회전 트릭 중엔 좌표 계산이 꼬이기 쉬워
+     점 옆에 말풍선을 띄우는 대신 이 고정 배너로 대신한다). */
+  #kp-tapinfo { display:none; flex:none; margin:0 18px; padding:8px 12px; font-size:11.5px; line-height:1.5;
+    background:#332411; border:1px solid #d9a441; border-radius:8px; color:#f0d9a0; }
+  #kp-tapinfo.show { display:block; }
   .kp-country { margin-bottom:20px; }
   .kp-country .kp-cname { font-family:"Gowun Batang", serif; font-weight:700; font-size:13.5px; color:#e9c979; margin-bottom:6px; }
   .kp-country .kp-ccount { font-size:10.5px; opacity:.55; margin-left:6px; font-weight:400; }
@@ -128,6 +134,7 @@
         <div><h2 id="kp-title"></h2><span class="kp-sub" id="kp-sub"></span></div>
         <button id="kings-close" aria-label="닫기">✕</button>
       </div>
+      <div id="kp-tapinfo"></div>
       <div id="kings-body"></div>
     </div>
   </div>
@@ -268,8 +275,8 @@ function kingsDupDot(name, era, country, year){
   const others = kingsDupOthers(name, era, country, year);
   if (!others) return '';
   const list = others.map(o => `${o.country} ${o.name}(${o.year}, ${o.n}회)`).join(' / ');
-  const title = (kingsJosa(name, '과', '와') + ` 같은 이름의 다른 왕이 있습니다: ${list}`).replace(/"/g, '&quot;');
-  return `<span class="kp-dupdot" title="${title}">동</span>`;
+  const tip = (kingsJosa(name, '과', '와') + ` 같은 이름의 다른 왕이 있습니다: ${list}`).replace(/"/g, '&quot;');
+  return `<span class="kp-dupdot" title="${tip}" data-tip="${tip}">동</span>`;
 }
 function openKingsModal(era){
   const groups = KINGS_BY_ERA[era];
@@ -295,11 +302,22 @@ function openKingsModal(era){
         </div>`).join('') + `</div></div>`;
   });
   body.innerHTML = html;
+  document.getElementById('kp-tapinfo').classList.remove('show');
   document.getElementById('kings-modal').classList.add('show');
 }
 function closeKingsModal(){
   document.getElementById('kings-modal').classList.remove('show');
 }
+document.getElementById('kings-body').addEventListener('click', (ev) => {
+  const dot = ev.target.closest('.kp-dupdot');
+  const info = document.getElementById('kp-tapinfo');
+  if (dot && dot.dataset.tip){
+    info.textContent = dot.dataset.tip;
+    info.classList.add('show');
+  } else {
+    info.classList.remove('show');
+  }
+});
 
 const row = document.getElementById('eras-row');
 ERAS.forEach(e => {
