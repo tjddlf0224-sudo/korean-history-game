@@ -50,15 +50,35 @@
     transition: transform .2s ease; }
   .era-section.open .era-chevron { transform: rotate(90deg); color: #d9a441; }
 
+  /* 시대 진행선 — 시작(금색 점) → 현재(최근 학습한 챕터, 빛나는 고리) →
+     끝(빈 점). 카드 목록 위, 헤더 아래 가로선으로 "이 시대의 어디쯤"을
+     보여준다. 최근 학습한 챕터가 없는 시대는 고리 없이 선만 보인다. */
+  .era-track { position: relative; height: 16px; margin: 2px 10px 8px 4px; flex: none; }
+  .era-track-line { position: absolute; left: 4px; right: 4px; top: 50%; height: 2px;
+    background: #3a2f1e; transform: translateY(-50%); }
+  .era-track-dot { position: absolute; top: 50%; width: 8px; height: 8px; border-radius: 50%;
+    transform: translate(-50%,-50%); }
+  .era-track-dot.start { left: 4px; background: #d9a441; }
+  .era-track-dot.end { left: calc(100% - 4px); background: #15110c; border: 2px solid #4a3c26; }
+  .era-track-dot.current { width: 15px; height: 15px; background: #1b150e; border: 3px solid #f0c96b;
+    box-shadow: 0 0 10px 2px rgba(240,201,107,.65); }
+
   /* 펼친 시대의 챕터 카드 — 가로 한 줄, 큼직하게. 제목이 가장 크고,
      인물/키워드는 보조, 기출 비중은 맨 아래로 낮춰서 위계를 준다. */
-  .era-cards-row { display: flex; gap: 14px; overflow-x: auto; padding: 2px 10px 18px 4px;
+  .era-cards-row { display: flex; gap: 14px; overflow-x: auto; padding: 14px 10px 18px 4px;
     -webkit-overflow-scrolling: touch; }
-  .chapter-card { flex: 0 0 auto; width: 176px; display: flex; flex-direction: column; gap: 7px;
+  .chapter-card { position: relative; flex: 0 0 auto; width: 176px; display: flex; flex-direction: column; gap: 7px;
     text-decoration: none; color: inherit; background: #241c12; border: 1px solid #3a2f1e;
     border-radius: 16px; padding: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.22);
     transition: border-color .15s, transform .1s; }
   .chapter-card:active { transform: scale(0.97); }
+  /* 최근 학습한 챕터 — 말풍선 꼭지처럼 위에 삼각형을 달고 금색으로 빛나게
+     해서 "이어서 할 곳"이 목록에서 바로 눈에 띄게 한다. */
+  .chapter-card.recent { border-color: #f0c96b;
+    box-shadow: 0 0 0 2px #f0c96b, 0 0 22px 5px rgba(240,201,107,.55), 0 4px 16px rgba(0,0,0,.22); }
+  .chapter-card.recent::before { content: ''; position: absolute; top: -9px; left: 50%;
+    transform: translateX(-50%); width: 0; height: 0;
+    border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 9px solid #f0c96b; }
   .chapter-card .ccard-num { font-size: 10.5px; color: #c9a24a; font-weight: 600; letter-spacing: .02em; }
   .chapter-card .ccard-title { font-size: 16px; font-weight: bold; line-height: 1.35; color: #f5ecd8; }
   .chapter-card .ccard-who { font-size: 11.5px; color: #afa38f; line-height: 1.4; }
@@ -319,10 +339,21 @@ document.getElementById('kings-body').addEventListener('click', (ev) => {
   }
 });
 
+// 최근 학습한 챕터 — 각 챕터가 열릴 때 자기 파일명을 기억해 둔 것을 읽어
+// 온다. 있으면 그 챕터가 있는 시대를 기본으로 펼치고, 카드에 빛나는
+// 표시를 단다("이어서 하기"를 한눈에 찾게).
+let lastChapterHref = null;
+try { lastChapterHref = localStorage.getItem('khg_lastChapter'); } catch(e){}
+
 const eraListEl = document.getElementById('era-list');
 // 시대 아코디언 — 한 번에 한 시대만 펼친다(디자인 가이드의 레이아웃
-// 제안). 기본으로는 첫 시대(선사·초기국가)를 펼쳐 둔다.
+// 제안). 기본으로는 최근 학습한 챕터가 있는 시대를, 없으면 첫 시대
+// (선사·초기국가)를 펼쳐 둔다.
 let openEraTitle = ERAS[0].title;
+if (lastChapterHref){
+  const eraWithRecent = ERAS.find(e => e.cards && e.cards.some(c => c.href === lastChapterHref));
+  if (eraWithRecent) openEraTitle = eraWithRecent.title;
+}
 
 function renderEraList(){
   eraListEl.innerHTML = '';
@@ -342,10 +373,24 @@ function renderEraList(){
         <span class="era-chevron">▶</span>
       </div>`;
     if (isOpen && e.cards){
+      const recentIdx = e.cards.findIndex(c => c.href === lastChapterHref);
+
+      // 가로선 + 시작/현재/끝 점 — 현재 점은 최근 학습한 챕터가 이 시대
+      // 안에서 몇 번째인지(0~100%)에 맞춰 둔다. 최근 챕터가 없는 시대는
+      // 밋밋한 선(시작·끝 점만)만 보여준다.
+      const track = document.createElement('div');
+      track.className = 'era-track';
+      const pct = (recentIdx >= 0 && e.cards.length > 1) ? (recentIdx / (e.cards.length - 1) * 100) : null;
+      track.innerHTML = `<div class="era-track-line"></div>
+        <div class="era-track-dot start"></div>
+        ${pct !== null ? `<div class="era-track-dot current" style="left:${pct}%"></div>` : ''}
+        <div class="era-track-dot end"></div>`;
+      section.appendChild(track);
+
       const cardsRow = document.createElement('div');
       cardsRow.className = 'era-cards-row';
-      cardsRow.innerHTML = e.cards.map(c =>
-        `<a class="chapter-card" href="${c.href}">
+      cardsRow.innerHTML = e.cards.map((c, i) =>
+        `<a class="chapter-card${i === recentIdx ? ' recent' : ''}" href="${c.href}">
           <div class="ccard-num">${c.num}</div>
           <div class="ccard-title">${c.name}</div>
           <div class="ccard-who">${c.who}</div>

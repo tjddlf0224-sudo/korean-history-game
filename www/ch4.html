@@ -387,6 +387,9 @@
 </div>
 
 <script>
+/* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
+try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
+
 /* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');

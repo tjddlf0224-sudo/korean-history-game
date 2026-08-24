@@ -364,6 +364,9 @@
 </div>
 
 <script>
+/* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
+try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
+
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케일 전)

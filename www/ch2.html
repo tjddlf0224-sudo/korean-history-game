@@ -91,20 +91,30 @@
   .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #a89372; letter-spacing: .02em; }
   .quiz-src:empty { display: none; }
 
-  /* 조선 8도 지도 오버레이(전 챕터 공용 — assets/map/map_component.js) */
-  #map-overlay { z-index: 36; background: rgba(0,0,0,.72); }
-  #map-panel { display: flex; gap: 14px; align-items: stretch; width: 100%; max-width: 760px;
-    margin: 0 14px; background: #2b2015f2; border: 2px solid #c9a24a; border-radius: 14px;
-    padding: 12px 14px; color: #f5ecd8; box-shadow: 0 8px 24px rgba(0,0,0,.6); max-height: 96%; }
-  .map-side { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
-  .map-title { font-size: 16px; color: #f0c96b; font-weight: bold; margin-bottom: 8px; }
+  /* 조선 8도 지도 오버레이(전 챕터 공용 — assets/map/map_component.js).
+     제목/지도/설명을 세로로 쌓고 패널 자체를 화면 가운데 두는 구조 —
+     전에는 지도와 설명을 가로로 나란히 두어(canvas가 고정폭) 좁은 화면에서
+     지도가 왼쪽에 붙어 보이는 문제가 있었다. */
+  #map-overlay { z-index: 36; background: rgba(0,0,0,.78); }
+  #map-panel { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    width: 100%; max-width: 620px; margin: 0 16px; background: #2b2015f2; border: 2px solid #c9a24a;
+    border-radius: 14px; padding: 18px 20px; color: #f5ecd8; box-shadow: 0 8px 24px rgba(0,0,0,.6);
+    max-height: 96%; overflow-y: auto; box-sizing: border-box; }
+  #map-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid #6b5636; background: #241a10; color: #f5ecd8; font-size: 14px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1; }
+  .map-title { font-size: 18px; color: #f0c96b; font-weight: bold; text-align: center; padding: 0 26px;
+    font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
   /* 지도는 가로 폭에 맞춰 확대해 일부만 보여주고 위아래로 스크롤한다 */
-  #map-canvas { display: block; border-radius: 8px; cursor: grab; flex: none;
+  #map-canvas { display: block; border-radius: 8px; cursor: grab; flex: none; max-width: 100%;
     background: #1a140c; border: 1px solid #6b5636; touch-action: none; }
   #map-canvas:active { cursor: grabbing; }
-  .map-caption { font-size: 13.5px; line-height: 1.6; color: #d8c9a3; margin-top: 10px; }
-  .map-fb { font-size: 13px; line-height: 1.5; margin-top: 6px; min-height: 18px; }
+  .map-caption { font-size: 15px; line-height: 1.7; color: #e8dcc0; text-align: center;
+    font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
+  .map-fb { font-size: 14px; line-height: 1.6; min-height: 18px; text-align: center;
+    font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
   .map-fb.wrong { color: #e6a3a3; }
+  #map-cancel { font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
 
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
   #fade.show { opacity: 1; pointer-events: auto; }
@@ -424,8 +434,11 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=6"></script>
+<script src="assets/map/map_component.js?v=7"></script>
 <script>
+/* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
+try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
+
 /* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');

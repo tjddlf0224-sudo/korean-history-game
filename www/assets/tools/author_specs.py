@@ -829,12 +829,12 @@ goryeo2 = {
  # 동북 9성은 정확한 범위가 학계에서도 논쟁 중이라 교과서 통설인
  # 함흥평야 일대로 표시).
  'glossary':{
-   '강동 6주':{'map':{'title':'강동 6주', 'era':'early', 'focus':'gangdong6ju',
+   '강동 6주':{'map':{'title':'강동 6주', 'era':'early', 'focus':'tongju',
      'caption':'서희가 993년 거란 소손녕과의 담판으로 확보한 여섯 고을 — 흥화진·용주·통주·철주·귀주·곽주. 압록강 동쪽 길목이 고려 땅이 되었다.',
-     'markers':['gangdong6ju']}},
-   '동북 9성':{'map':{'title':'동북 9성', 'era':'early', 'focus':'donbuk9seong',
-     'caption':'윤관이 1107년 별무반으로 여진을 몰아내고 쌓은 아홉 성. 정확한 범위는 학계에서도 논쟁 중이며, 교과서는 통상 함흥평야 일대로 본다.',
-     'markers':['donbuk9seong']}},
+     'markers':['heunghwajin','gwiju','tongju','yongju','cheolju','gwakju']}},
+   '동북 9성':{'map':{'title':'동북 9성', 'era':'early', 'focus':'hamju',
+     'caption':'윤관이 1107년 별무반으로 여진을 몰아내고 쌓은 아홉 성 — 함주·영주·웅주·길주·복주·공험진·통태진·진양진·숭녕진. 정확한 범위는 학계에서도 논쟁 중이며, 교과서는 통상 함흥평야 일대로 본다.',
+     'markers':['hamju','yeongju9','ungju','gilju','bokju','gonghyeomjin','tongtaejin','jinyangjin','sungnyeongjin']}},
  },
  'zones':[{'id':'seogyeong','label':'서경','img':'assets/scenes/goryeo2_seogyeong.png',
    'spawn':[688,600],

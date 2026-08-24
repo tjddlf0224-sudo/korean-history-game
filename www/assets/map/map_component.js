@@ -35,13 +35,13 @@ async function loadMapPoints(){
   if (PROVINCES.length) return;
   // 지도를 다시 그리면 좌표가 통째로 바뀐다. 캐시된 옛 JSON을 쓰면 라벨이
   // 엉뚱한 자리에 찍히므로 버전 쿼리를 붙여 확실히 새로 받는다.
-  const res = await fetch('assets/map/map_points.json?v=3');
+  const res = await fetch('assets/map/map_points.json?v=4');
   const d = await res.json();
   MAP_W = d.size[0]; MAP_H = d.size[1];
   PROVINCES = d.provinces.map(p => ({ id:p.id, x:p.x, y:p.y,
     name: { early: p.early, late: p.late } }));
   MAP_MARKERS = {};
-  for (const m of d.markers) MAP_MARKERS[m.id] = { x:m.x, y:m.y, label:m.label };
+  for (const m of d.markers) MAP_MARKERS[m.id] = { x:m.x, y:m.y, label:m.label, loff:m.loff };
   ISLANDS = d.islands || [];
   COUNTRIES = d.countries || [];
   CITIES = d.cities || [];
@@ -59,20 +59,24 @@ const GameMap = {
     ov.id = 'map-overlay';
     ov.innerHTML = `
       <div id="map-panel">
+        <button id="map-close" aria-label="닫기">✕</button>
+        <div class="map-title" id="map-title"></div>
         <canvas id="map-canvas"></canvas>
-        <div class="map-side">
-          <div class="map-title" id="map-title"></div>
-          <div class="map-caption" id="map-caption"></div>
-          <div class="map-fb" id="map-fb"></div>
-          <div id="map-cancel" style="display:none;margin-top:12px;align-self:flex-start;
-               padding:8px 16px;border-radius:999px;border:1px solid #c9a24a;
-               background:#3a2c1a;color:#f5ecd8;font-size:13px;cursor:pointer">돌아가기</div>
-        </div>
+        <div class="map-caption" id="map-caption"></div>
+        <div class="map-fb" id="map-fb"></div>
+        <div id="map-cancel" style="display:none;
+             padding:8px 16px;border-radius:999px;border:1px solid #c9a24a;
+             background:#3a2c1a;color:#f5ecd8;font-size:13px;cursor:pointer">돌아가기</div>
       </div>`;
     (document.getElementById('wrap') || document.body).appendChild(ov);
     this.el = ov;
     this.canvas = ov.querySelector('#map-canvas');
     this.ctx = this.canvas.getContext('2d');
+    // 패널 바깥(어두운 배경)을 누르거나 우측 상단 X를 누르면 닫는다 — 정답을
+    // 꼭 짚어야 하는 퀴즈 모드(허브의 onCancel이 없는 경우)에서는 막아 둔다.
+    const dismiss = () => { if (this.opts && this.opts.onCancel){ this.close(); this.opts.onCancel(); } };
+    ov.addEventListener('click', (e) => { if (e.target === ov) dismiss(); });
+    ov.querySelector('#map-close').addEventListener('click', dismiss);
     this.canvas.addEventListener('click', (e) => this._onClick(e));
     this.canvas.addEventListener('mousemove', (e) => this._onMove(e));
     this.canvas.addEventListener('wheel', (e) => {
@@ -109,6 +113,7 @@ const GameMap = {
     const cancel = document.getElementById('map-cancel');
     cancel.style.display = this.opts.onCancel ? 'block' : 'none';
     cancel.onclick = () => { this.close(); this.opts.onCancel && this.opts.onCancel(); };
+    document.getElementById('map-close').style.display = this.opts.onCancel ? 'flex' : 'none';
 
     if (!this.img){
       this.img = new Image();
@@ -130,10 +135,13 @@ const GameMap = {
   _resize(){
     // 지도를 '가로 폭에 맞춰' 확대한다 → 지명과 강 이름이 읽을 만큼 커진다.
     // 세로는 화면에 담기지 않으므로 잘라 보여주고 위아래로 스크롤한다.
+    // 패널이 제목/캡션과 함께 세로로 쌓이는 구조라, 캔버스는 패널 폭
+    // 전체를 쓰고(전에는 절반만 써서 왼쪽에 붙어 보였다), 높이는 화면의
+    // 절반 남짓으로 잡아 캡션이 들어갈 자리를 남긴다.
     const panel = this.el.querySelector('#map-panel');
     const wrap = document.getElementById('wrap') || document.body;
-    const viewW = Math.max(180, Math.round(panel.clientWidth * 0.56));
-    const viewH = Math.max(140, wrap.clientHeight - 44);
+    const viewW = Math.max(180, Math.round(panel.clientWidth));
+    const viewH = Math.max(140, Math.round(wrap.clientHeight * 0.46));
     const dpr = Math.min(2, window.devicePixelRatio || 1);
 
     this.viewW = viewW; this.viewH = viewH;
@@ -201,10 +209,14 @@ const GameMap = {
     /* 라벨이 캔버스 밖으로 잘리지 않게 x를 안쪽으로 당긴다. 지도 가장자리에
        놓이는 라벨(요동의 '명' 등)은 원래 위치가 맞는데도 절반이 잘려 나간다. */
     const clampX = (x, w) => Math.max(w / 2 + 2, Math.min(this.canvas.width - w / 2 - 2, x));
+    // 지도 전용 폰트: 챕터 본문의 장식체(Gowun Batang) 대신 작은 크기에서도
+    //또렷이 읽히는 시스템 고딕체를 쓴다("글씨가 너무 작다"는 지적을 받고
+    // 폰트와 함께 아래 각 크기 상수도 전반적으로 키웠다).
+    const MAP_FONT = '-apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif';
     const label = (t, x, y, fs, fill, halo) => {
-      ctx.font = `bold ${fs}px "Gowun Batang", serif`;
+      ctx.font = `bold ${fs}px ${MAP_FONT}`;
       const cx = clampX(x, ctx.measureText(t).width);
-      ctx.lineWidth = Math.max(2, fs * 0.3);
+      ctx.lineWidth = Math.max(2.5, fs * 0.32);
       ctx.strokeStyle = halo;
       ctx.strokeText(t, cx, y);
       ctx.fillStyle = fill;
@@ -213,7 +225,7 @@ const GameMap = {
 
     // 주변국 이름 — 조선 땅 이름보다 크고 흐리게 깔아 '남의 나라'로 읽히게 한다.
     // 시대에 맞는 이름만 그린다(세종 대라면 명·여진, 조선 후기라면 청).
-    const cf = Math.max(11, Math.round(19 * s));
+    const cf = Math.max(14, Math.round(23 * s));
     for (const c of COUNTRIES){
       const t = c[era];
       if (!t) continue;
@@ -225,16 +237,16 @@ const GameMap = {
     // (PROVINCES 데이터는 남겨뒀으니 필요해지면 여기서 다시 그리면 된다)
 
     // 강 이름 — 어느 물줄기가 압록강이고 두만강인지 바로 읽히게 한다.
-    const rf = Math.max(9, Math.round(14 * s));
+    const rf = Math.max(12, Math.round(17 * s));
     for (const r of RIVERS){
       label(r.name, r.x * s, r.y * s, rf, '#2c5a7a', 'rgba(250,244,230,.95)');
     }
 
     // 주요 고을 — 작은 점 + 이름. 한양·평양은 조금 크게.
-    const gf = Math.max(8, Math.round(11 * s));
+    const gf = Math.max(11, Math.round(14 * s));
     for (const c of CITIES){
       const x = c.x * s, y = c.y * s;
-      const r = (c.big ? 3.4 : 2.3) * Math.max(1, s * 0.9);
+      const r = (c.big ? 3.6 : 2.6) * Math.max(1, s * 0.9);
       ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
       ctx.fillStyle = '#6b3a3a'; ctx.fill();
       ctx.lineWidth = Math.max(1, s); ctx.strokeStyle = 'rgba(250,244,230,.9)'; ctx.stroke();
@@ -245,48 +257,48 @@ const GameMap = {
     }
 
     // 섬 이름 — 도 이름보다 작게. 독도·울릉도·제주도는 반드시 표기한다.
-    const isf = Math.max(8, Math.round(11 * s));
-    ctx.font = `bold ${isf}px "Gowun Batang", serif`;
+    const isf = Math.max(10, Math.round(14 * s));
+    ctx.font = `bold ${isf}px ${MAP_FONT}`;
     for (const it of ISLANDS){
       const x = it.x * s, y = it.y * s;
-      ctx.lineWidth = Math.max(2, isf * 0.3);
+      ctx.lineWidth = Math.max(2.5, isf * 0.32);
       ctx.strokeStyle = 'rgba(250,244,230,.95)';
       ctx.strokeText(it.name, x, y);
       ctx.fillStyle = '#3f3020';
       ctx.fillText(it.name, x, y);
     }
 
-    // 선택 가능한 지점
+    // 선택 가능한 지점. 여러 지점을 한꺼번에 늘어놓는 경우(강동 6주·동북 9성
+    // 같은)가 많아져, 게임풍 금색 원+반짝임 대신 참고 지도처럼 또렷한 빨간
+    // 원 + 라벨로 통일했다. loff가 있으면 그 자리에, 없으면 원 위쪽에 라벨을 단다.
     this.hotspots = [];
-    const t = Date.now() / 500;
-    const pulse = 1 + Math.sin(t) * 0.12;
     for (const m of this._activeMarkers()){
       const x = m.x * s, y = m.y * s;
-      const r = Math.max(7, 11 * s) * (this.hover === m.id ? 1.25 : pulse);
-      this.hotspots.push({ id:m.id, x, y: y + oy, r: Math.max(r, 16 * s) });
+      const r = Math.max(6, 8 * s) * (this.hover === m.id ? 1.3 : 1);
+      this.hotspots.push({ id:m.id, x, y: y + oy, r: Math.max(r, 15 * s) });
 
-      // 백두산은 지도 그림에 이미 초록 산으로 그려져 있다. 그 위에 금색 원을
+      // 백두산은 지도 그림에 이미 초록 산으로 그려져 있다. 그 위에 원을
       // 덮으면 산이 가려지므로, 산 지점은 원 없이 은은한 강조 링만 얹는다.
       if (m.id === 'baekdu'){
-        ctx.beginPath(); ctx.arc(x, y, r * 1.7, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(217,164,65,.16)'; ctx.fill();
-        ctx.lineWidth = Math.max(1.5, 2*s);
-        ctx.strokeStyle = 'rgba(217,164,65,.75)'; ctx.stroke();
-      } else {
         ctx.beginPath(); ctx.arc(x, y, r * 1.9, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(217,164,65,.22)'; ctx.fill();
+        ctx.fillStyle = 'rgba(200,40,40,.16)'; ctx.fill();
+        ctx.lineWidth = Math.max(1.5, 2*s);
+        ctx.strokeStyle = 'rgba(200,40,40,.8)'; ctx.stroke();
+      } else {
         ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
-        ctx.fillStyle = '#d9a441'; ctx.fill();
-        ctx.lineWidth = Math.max(1.5, 2*s); ctx.strokeStyle = '#3a2c1a'; ctx.stroke();
+        ctx.fillStyle = '#d43a2f'; ctx.fill();
+        ctx.lineWidth = Math.max(1.8, 2.2*s); ctx.strokeStyle = '#2a1810'; ctx.stroke();
       }
 
-      const lf = Math.max(9, Math.round(13 * s));
-      ctx.font = `bold ${lf}px "Gowun Batang", serif`;
-      ctx.lineWidth = Math.max(2, lf * 0.3);
-      ctx.strokeStyle = 'rgba(20,14,8,.75)';
-      ctx.strokeText(m.label, x, y - r - lf * 0.75);
+      const lf = Math.max(12, Math.round(15 * s));
+      const [lox, loy] = m.loff ? [m.loff[0]*s, m.loff[1]*s] : [0, -r - lf * 0.75];
+      const lx = x + lox, ly = y + loy;
+      ctx.font = `bold ${lf}px ${MAP_FONT}`;
+      ctx.lineWidth = Math.max(2.5, lf * 0.32);
+      ctx.strokeStyle = 'rgba(20,14,8,.8)';
+      ctx.strokeText(m.label, lx, ly);
       ctx.fillStyle = '#f5ecd8';
-      ctx.fillText(m.label, x, y - r - lf * 0.75);
+      ctx.fillText(m.label, lx, ly);
     }
 
     ctx.restore();
