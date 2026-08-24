@@ -130,6 +130,17 @@ def npcdata_block(spec):
     return '\n'.join(out)
 
 
+def glossary_block(spec):
+    gloss = spec.get('glossary', {})
+    if not gloss:
+        return 'const GLOSSARY = {};'
+    out = ['const GLOSSARY = {']
+    for term, val in gloss.items():
+        out.append(f'  {js(term, 0)}: {js(val, 0)},')
+    out.append('};')
+    return '\n'.join(out)
+
+
 def build(spec):
     s = open(TEMPLATE, encoding='utf-8').read()
     L = s.split('\n')
@@ -148,6 +159,7 @@ def build(spec):
 
     cut(lambda l: l.startswith('const ZONES = {'), lambda l: l.startswith('const zoneImgs'), zones_block(spec))
     cut(lambda l: l.startswith('const NPC_DATA = {'), lambda l: l.startswith('const Stage = {'), npcdata_block(spec))
+    cut(lambda l: l.startswith('const GLOSSARY = {'), lambda l: l.startswith('function escapeHtml'), glossary_block(spec))
     a = find(lambda l: l.startswith('const INTRO_LINES'))
     b = find(lambda l: l.startswith('let introIdx'), a)
     L = L[:a] + ['const INTRO_LINES = ['] + [f'  {js(x,0)},' for x in spec['intro']] + ['];'] + L[b:]

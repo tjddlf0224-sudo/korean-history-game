@@ -71,13 +71,17 @@
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; color: #d8ccb5; }
 
-  #quiz-panel { position: relative; width: 100%; max-width: 640px;
+  #quiz-panel, #gloss-panel { position: relative; width: 100%; max-width: 640px;
     margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241c12f2;
     border: 1px solid #51432c; border-radius: 16px; padding: 16px 18px; color: #f5ecd8;
     box-shadow: 0 12px 40px rgba(0,0,0,.4); max-height: 80%; overflow-y: auto; }
-  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+  .quiz-close, .gloss-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
     border: 1px solid #51432c; background: #2a2013; color: #f5ecd8; font-size: 14px; line-height: 1;
     display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  #gloss-panel { max-width: 320px; }
+  .gloss-title { font-size: 15px; color: #f0c96b; margin-bottom: 8px; padding-right: 24px; }
+  .gloss-body { font-size: 13.5px; line-height: 1.7; color: #f5ecd8; }
+  .gloss-term { color: #f0c96b; text-decoration: underline dotted; text-underline-offset: 3px; cursor: pointer; }
   .quiz-tag { font-size: 12px; color: #e9c979; margin-bottom: 6px; }
   .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
   .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
@@ -351,6 +355,15 @@
     </div>
   </div>
 
+  <!-- 용어 설명: 대사 속 낯선 용어를 누르면 뜬다(GLOSSARY에 지도 링크가 있으면 지도가 뜬다) -->
+  <div class="ov center" id="gloss-overlay" onclick="if(event.target===this) closeGlossary()">
+    <div id="gloss-panel">
+      <button class="gloss-close" onclick="closeGlossary()">✕</button>
+      <div class="gloss-title" id="gloss-term"></div>
+      <div class="gloss-body" id="gloss-body"></div>
+    </div>
+  </div>
+
   <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
 
   <div id="fade"></div>
@@ -396,6 +409,7 @@
   </div>
 </div>
 
+<script src="assets/map/map_component.js?v=6"></script>
 <script>
 /* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
@@ -476,21 +490,23 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
   /* 묘청의 서경 천도 운동(1135)이 거란(993)~삼별초(1270) 사이
-     한복판인데 무대가 아니었다. 서경을 앞선 시대의 무대로 새로 세웠다. */
+     한복판인데 무대가 아니었다. 서경을 앞선 시대의 무대로 새로 세웠다.
+     서경은 배리어가 비어 있었고 개경(ganghwa)으로 가는 출구가 12시
+     방향(전각 지붕 위)에 있었다 — 격자로 실측해 배리어를 채우고 출구를
+     6시 방향 강가로 옮겼다. 강화는 서경으로 가는 출구가 마당 한복판에
+     있었던 것을 5시 방향 나룻배 자리로 옮기고, 서희가 나무 더미에 걸쳐
+     서 있던 것을 옆으로 옮겼다. */
   seogyeong: {
     img: 'assets/scenes/goryeo2_seogyeong.png', label: '서경',
     spawn: { x: 688, y: 600 },
-    // 배리어가 비어 있었고, 개경으로 가는 출구가 12시 방향(전각 지붕 위)에
-    // 있었다 — 그림을 격자로 실측하니 위쪽은 통째로 전각과 담장이고, 걸을
-    // 곳은 가운데 마당과 아래쪽 강가 둔치뿐이었다. 출구를 강가(6시 방향,
-    // ganghwa 쪽에서 들어올 때 쓰던 자리와 같은 곳)로 옮기고 배리어를 채웠다.
     barriers: [
-      { x0:0, y0:0, x1:1376, y1:40 },     // 담장 위 기와지붕
-      { x0:455, y0:0, x1:905, y1:215 },   // 전각과 계단
-      { x0:0, y0:70, x1:60, y1:545 },     // 돌 등롱
+      { x0:0, y0:0, x1:1376, y1:40 },  // 담장 위 기와지붕
+      { x0:455, y0:0, x1:905, y1:215 },  // 전각과 계단
+      { x0:0, y0:70, x1:60, y1:545 },  // 돌 등롱
       { x0:55, y0:170, x1:295, y1:550 },  // 지도 탁자
-      { x0:955, y0:90, x1:1300, y1:460 }, // 병장기 시렁과 깃대
-      { x0:0, y0:700, x1:600, y1:768 }, { x0:790, y0:700, x1:1376, y1:768 }, // 강(출구 자리만 비움)
+      { x0:955, y0:90, x1:1300, y1:460 },  // 병장기 시렁과 깃대
+      { x0:0, y0:700, x1:600, y1:768 },  // 강
+      { x0:790, y0:700, x1:1376, y1:768 },  // 강
     ],
     npcs: [
       { id:'ijagyeom', name:'이자겸', x:688, y:250, img:'assets/portraits/ijagyeom.png', look:{ role:'scholar', body:'#5a3a3a', accent:'#e0b94a' } },
@@ -504,9 +520,6 @@ const ZONES = {
   ganghwa: {
     img: 'assets/scenes/goryeo2_ganghwa.png', label: '강화 임시 도읍',
     spawn: { x: 688, y: 470 },
-    // 서경으로 가는 출구가 마당 한복판(문도 없는 자리)에 있었다 — 5시 방향
-    // 강가의 나룻배로 옮겼다(배를 막던 배리어 자리를 그대로 출구로 바꿈).
-    // 서희도 초가 창고 옆에 세워둔 긴 나무 더미에 걸쳐 서 있어 옆으로 옮겼다.
     barriers: [
       { x0:0, y0:0, x1:240, y1:460 },  // 토성과 울성
       { x0:0, y0:440, x1:310, y1:768 },  // 토성과 울성
@@ -520,7 +533,8 @@ const ZONES = {
       { x0:970, y0:230, x1:1376, y1:335 },  // 판각소
       { x0:1000, y0:330, x1:1376, y1:530 },  // 작업대
       { x0:1085, y0:415, x1:1376, y1:625 },  // 물통
-      { x0:830, y0:600, x1:890, y1:768 }, { x0:1010, y0:600, x1:1376, y1:768 },  // 갯벌(나룻배 자리만 비움)
+      { x0:830, y0:600, x1:890, y1:768 },  // 갯벌
+      { x0:1010, y0:600, x1:1376, y1:768 },  // 갯벌(나룻배 자리만 비움)
       { x0:500, y0:690, x1:830, y1:768 },  // 갯벌
       { x0:230, y0:725, x1:500, y1:768 },  // 갯벌
     ],
@@ -1100,7 +1114,7 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'여진은 말을 타고 오는데 우리는 걸어서 맞섰소. 이길 수가 없었지.' },
       { who:'npc', t:'그래서 새 군대를 만들자 청했소. 기병인 신기군, 보병인 신보군, 승려로 짜인 항마군 — 별무반이오.' },
-      { who:'npc', t:'그 군사로 여진을 몰아내고 동북쪽에 아홉 성을 쌓았소. 다만 지키기가 어려워 이내 돌려주고 말았지만.' },
+      { who:'npc', t:'그 군사로 여진을 몰아내고 동북 9성을 쌓았소. 다만 지키기가 어려워 이내 돌려주고 말았지만.' },
     ],
     quizSeq: [
       { q:'여진 정벌을 위해 윤관의 건의로 만들어진, 신기군·신보군·항마군으로 짜인 부대는?',
@@ -1176,6 +1190,43 @@ const Stage = {
 };
 
 const seenDialogKeys = new Set();
+
+/* ============ 용어 설명(글로서리): 대사 속 낯선 용어나 지명을 눌러 설명을
+   보거나(문자열) 지도를 띄운다(map 필드). GLOSSARY에 추가하기만 하면 별도
+   코드 수정 없이 대사 어디서든 자동으로 링크된다. ============ */
+const GLOSSARY = {
+  '강동 6주': { map: { title: '강동 6주', era: 'early', focus: 'gangdong6ju', caption: '서희가 993년 거란 소손녕과의 담판으로 확보한 여섯 고을 — 흥화진·용주·통주·철주·귀주·곽주. 압록강 동쪽 길목이 고려 땅이 되었다.', markers: [
+'gangdong6ju',
+] } },
+  '동북 9성': { map: { title: '동북 9성', era: 'early', focus: 'donbuk9seong', caption: '윤관이 1107년 별무반으로 여진을 몰아내고 쌓은 아홉 성. 정확한 범위는 학계에서도 논쟁 중이며, 교과서는 통상 함흥평야 일대로 본다.', markers: [
+'donbuk9seong',
+] } },
+};
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function glossarize(text){
+  let out = escapeHtml(text);
+  for (const term in GLOSSARY){
+    out = out.split(term).join(`<span class="gloss-term" onclick="event.stopPropagation();openGlossary('${term}')">${term}</span>`);
+  }
+  return out;
+}
+function openGlossary(term){
+  const g = GLOSSARY[term];
+  if (!g) return;
+  if (g.map){
+    GameMap.open(Object.assign({ onCancel(){} }, g.map));
+    return;
+  }
+  document.getElementById('gloss-term').textContent = term;
+  document.getElementById('gloss-body').textContent = g;
+  document.getElementById('gloss-overlay').classList.add('show');
+}
+function closeGlossary(){
+  document.getElementById('gloss-overlay').classList.remove('show');
+}
+
 /* 기출 출처 표기: src에 회차 배열을 넣으면 2개까지 나열, 3개 이상은 축약. */
 function formatQuizSrc(src){
   if (!src) return '';
@@ -1362,7 +1413,7 @@ const Dialog = {
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
     document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
-    document.getElementById('dlg-text').textContent = beat.t;
+    document.getElementById('dlg-text').innerHTML = glossarize(beat.t);
   },
   next(){
     this.idx++;
@@ -1384,13 +1435,17 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    const prevKey = this.key;
     if (this.npc.id === 'ijagyeom'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 0);
     }
     if (this.data.endsChapter){
       document.getElementById('next-chapter-btn').classList.add('show');
       playFanfare('챕터 완료!');
-    } else {
+    } else if (Stage.keyFor(this.npc.id) === prevKey){
+      // 다음에 다시 말을 걸어도 같은 내용이 나올 때(정말 더 할 말이 없을
+      // 때)만 "대화 완료"를 띄운다 — 여러 단계로 나뉜 인물에게 매번 뜨면
+      // 아직 이어질 이야기가 남아 있는데도 끝난 줄 알고 다시 안 걸게 된다.
       playFanfare('대화 완료');
     }
   }

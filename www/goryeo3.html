@@ -71,13 +71,17 @@
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
   #intro-next { margin-top: 14px; font-size: 13px; color: #d8ccb5; }
 
-  #quiz-panel { position: relative; width: 100%; max-width: 640px;
+  #quiz-panel, #gloss-panel { position: relative; width: 100%; max-width: 640px;
     margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241c12f2;
     border: 1px solid #51432c; border-radius: 16px; padding: 16px 18px; color: #f5ecd8;
     box-shadow: 0 12px 40px rgba(0,0,0,.4); max-height: 80%; overflow-y: auto; }
-  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+  .quiz-close, .gloss-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
     border: 1px solid #51432c; background: #2a2013; color: #f5ecd8; font-size: 14px; line-height: 1;
     display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  #gloss-panel { max-width: 320px; }
+  .gloss-title { font-size: 15px; color: #f0c96b; margin-bottom: 8px; padding-right: 24px; }
+  .gloss-body { font-size: 13.5px; line-height: 1.7; color: #f5ecd8; }
+  .gloss-term { color: #f0c96b; text-decoration: underline dotted; text-underline-offset: 3px; cursor: pointer; }
   .quiz-tag { font-size: 12px; color: #e9c979; margin-bottom: 6px; }
   .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
   .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
@@ -351,6 +355,15 @@
     </div>
   </div>
 
+  <!-- 용어 설명: 대사 속 낯선 용어를 누르면 뜬다(GLOSSARY에 지도 링크가 있으면 지도가 뜬다) -->
+  <div class="ov center" id="gloss-overlay" onclick="if(event.target===this) closeGlossary()">
+    <div id="gloss-panel">
+      <button class="gloss-close" onclick="closeGlossary()">✕</button>
+      <div class="gloss-title" id="gloss-term"></div>
+      <div class="gloss-body" id="gloss-body"></div>
+    </div>
+  </div>
+
   <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
 
   <div id="fade"></div>
@@ -396,6 +409,7 @@
   </div>
 </div>
 
+<script src="assets/map/map_component.js?v=6"></script>
 <script>
 /* ============ 기본 설정 ============ */
 const canvas = document.getElementById('game');
@@ -1136,6 +1150,36 @@ const Stage = {
 };
 
 const seenDialogKeys = new Set();
+
+/* ============ 용어 설명(글로서리): 대사 속 낯선 용어나 지명을 눌러 설명을
+   보거나(문자열) 지도를 띄운다(map 필드). GLOSSARY에 추가하기만 하면 별도
+   코드 수정 없이 대사 어디서든 자동으로 링크된다. ============ */
+const GLOSSARY = {};
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function glossarize(text){
+  let out = escapeHtml(text);
+  for (const term in GLOSSARY){
+    out = out.split(term).join(`<span class="gloss-term" onclick="event.stopPropagation();openGlossary('${term}')">${term}</span>`);
+  }
+  return out;
+}
+function openGlossary(term){
+  const g = GLOSSARY[term];
+  if (!g) return;
+  if (g.map){
+    GameMap.open(Object.assign({ onCancel(){} }, g.map));
+    return;
+  }
+  document.getElementById('gloss-term').textContent = term;
+  document.getElementById('gloss-body').textContent = g;
+  document.getElementById('gloss-overlay').classList.add('show');
+}
+function closeGlossary(){
+  document.getElementById('gloss-overlay').classList.remove('show');
+}
+
 /* 기출 출처 표기: src에 회차 배열을 넣으면 2개까지 나열, 3개 이상은 축약. */
 function formatQuizSrc(src){
   if (!src) return '';
@@ -1322,7 +1366,7 @@ const Dialog = {
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
     document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
-    document.getElementById('dlg-text').textContent = beat.t;
+    document.getElementById('dlg-text').innerHTML = glossarize(beat.t);
   },
   next(){
     this.idx++;
@@ -1344,13 +1388,17 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    const prevKey = this.key;
     if (this.npc.id === 'gongmin'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 1);
     }
     if (this.data.endsChapter){
       document.getElementById('next-chapter-btn').classList.add('show');
       playFanfare('챕터 완료!');
-    } else {
+    } else if (Stage.keyFor(this.npc.id) === prevKey){
+      // 다음에 다시 말을 걸어도 같은 내용이 나올 때(정말 더 할 말이 없을
+      // 때)만 "대화 완료"를 띄운다 — 여러 단계로 나뉜 인물에게 매번 뜨면
+      // 아직 이어질 이야기가 남아 있는데도 끝난 줄 알고 다시 안 걸게 된다.
       playFanfare('대화 완료');
     }
   }

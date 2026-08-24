@@ -153,8 +153,8 @@
     {
      "id": "arabsang",
      "name": "대식국 상인",
-     "x": 1040,
-     "y": 300,
+     "x": 688,
+     "y": 555,
      "look": {
       "role": "commoner",
       "body": "#6b5a44",
@@ -164,8 +164,8 @@
     {
      "id": "jujeon",
      "name": "주전도감 장인",
-     "x": 688,
-     "y": 555,
+     "x": 1040,
+     "y": 300,
      "look": {
       "role": "commoner",
       "body": "#5a5a4a",
