@@ -54,6 +54,9 @@
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { margin-bottom: 6px; }
+  .dlg-close { position: absolute; top: 10px; right: 12px; width: 26px; height: 26px; border-radius: 50%;
+    border: 1px solid #51432c; background: #2a2013; color: #f5ecd8; font-size: 13px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 3; }
   .dlg-portrait { position: absolute; left: 14px; top: -44px; width: 100px; height: 132px; border-radius: 14px;
     background: #3a2f1a; flex: none; display:flex; align-items:center; justify-content:center; font-size:34px;
     background-size: cover; background-position: center top; border: 2px solid #51432c;
@@ -134,7 +137,7 @@
   #menu-btn { position: absolute; top: calc(4px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right));
     width: 26px; height: 26px; border-radius: 50%; border: none; touch-action: none;
     background: transparent; color: rgba(255,255,255,.9); text-shadow: 0 1px 3px rgba(0,0,0,.7);
-    display: flex; align-items: center; justify-content: center; font-size: 15px; z-index: 5; cursor: pointer; padding: 0; }
+    display: flex; align-items: center; justify-content: center; font-size: 15px; z-index: 25; cursor: pointer; padding: 0; }
   #menu-btn:active { color: rgba(255,255,255,.6); }
   #game-menu-panel { background: #1b150e; border: 1px solid #4a3c26; border-radius: 16px; min-width: 250px;
     max-width: 80vw; padding: 18px; display: flex; flex-direction: column; gap: 9px; }
@@ -323,6 +326,7 @@
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
       <div class="dlg-portrait" id="dlg-portrait">👤</div>
+      <button class="dlg-close" onclick="Dialog.close()">✕</button>
       <div id="dlg-panel">
         <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
@@ -1254,6 +1258,7 @@ function drawNpcLabel(text, sx, sy, accent){
 
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
+  close(){ document.getElementById('dlg-overlay').classList.remove('show'); World.paused = false; },
   open(key, npc){
     this.key = key; this.npc = npc; this.idx = 0;
     this.data = NPC_DATA[key];
@@ -1323,6 +1328,7 @@ const Dialog = {
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
+document.getElementById('dlg-portrait').addEventListener('click', () => Dialog.next());
 
 /* ============ 모던 인트로 ============ */
 const INTRO_LINES = [
