@@ -1454,14 +1454,14 @@ function drawMinimap(){
   for (const n of ZONES[World.zone].npcs){
     miniCtx.fillStyle = '#8a2f2f';
     miniCtx.beginPath();
-    miniCtx.arc(n.x*sx, n.y*sy, 3, 0, Math.PI*2);
+    miniCtx.arc(n.x*sx, n.y*sy, 5, 0, Math.PI*2);
     miniCtx.fill();
   }
   miniCtx.fillStyle = '#2f6fbf';
   miniCtx.strokeStyle = '#ffffff';
   miniCtx.lineWidth = 1;
   miniCtx.beginPath();
-  miniCtx.arc(World.px*sx, World.py*sy, 4, 0, Math.PI*2);
+  miniCtx.arc(World.px*sx, World.py*sy, 6, 0, Math.PI*2);
   miniCtx.fill();
   miniCtx.stroke();
 }

@@ -1166,14 +1166,14 @@ function drawMinimap(){
   for (const n of NPCS){
     miniCtx.fillStyle = '#c23b3b';
     miniCtx.beginPath();
-    miniCtx.arc(n.x*sx, n.y*sy, 4, 0, Math.PI*2);
+    miniCtx.arc(n.x*sx, n.y*sy, 5, 0, Math.PI*2);
     miniCtx.fill();
   }
   miniCtx.fillStyle = '#3d84e6';
   miniCtx.strokeStyle = '#ffffff';
   miniCtx.lineWidth = 1.2;
   miniCtx.beginPath();
-  miniCtx.arc(World.px*sx, World.py*sy, 5, 0, Math.PI*2);
+  miniCtx.arc(World.px*sx, World.py*sy, 6, 0, Math.PI*2);
   miniCtx.fill();
   miniCtx.stroke();
 }
