@@ -1223,7 +1223,10 @@ const seenDialogKeys = new Set();
 /* ============ 용어 설명(글로서리): 대사 속 낯선 용어나 지명을 눌러 설명을
    보거나(문자열) 지도를 띄운다(map 필드). GLOSSARY에 추가하기만 하면 별도
    코드 수정 없이 대사 어디서든 자동으로 링크된다. ============ */
-const GLOSSARY = {};
+const GLOSSARY = {
+  '웅진': '지금의 충청남도 공주. 475년 백제가 고구려에 한성(서울)을 빼앗기고 문주왕 때 이곳으로 도읍을 옮겼다.',
+  '사비': '지금의 충청남도 부여. 538년 성왕이 웅진에서 이곳으로 도읍을 옮기고 국호를 남부여로 고쳤다.',
+};
 function escapeHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
