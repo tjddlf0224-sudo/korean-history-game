@@ -330,6 +330,7 @@
     background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); }
   .dlg-chart .king-badge.active { background:rgba(240,201,107,.20); border-color:#f0c96b;
     box-shadow:0 0 0 1px #f0c96b, 0 0 10px rgba(240,201,107,.45); }
+  .dlg-chart .king-badge.kb-spacer { background:none; border-color:transparent; }
   .dlg-chart .kb-dynasty { font-size:9px; opacity:.7; margin-bottom:1px; }
   .dlg-chart .kb-name { font-size:12px; font-weight:bold; }
   .dlg-chart .king-badge.active .kb-name { color:#f0c96b; }
@@ -342,7 +343,7 @@
 
   <div id="hud">
     <div>조선후기 3화 · 광해군과 두 호란</div>
-    <div class="sub">1592~1720년, 선조~숙종</div>
+    <div class="sub">1592~1776년, 선조~영조</div>
     <div class="sub" id="hud-goal"></div>
   </div>
 
@@ -536,7 +537,14 @@ const ZONES = {
      71년이 통째로 빠져 있었다 — 그래서 나선정벌·예송논쟁·환국·
      백두산정계비도 다 같이 없었다. 세 왕을 위한 세 번째 무대(편전)를
      새로 세웠다. barriers는 배경 그림이 온 뒤 격자 스크린샷으로 실측해
-     채웠다(편전·회랑·품계석 8개·합문 지붕·담장까지). */
+     채웠다(편전·회랑·품계석 8개·합문 지붕·담장까지).
+     영조도 처음엔 균역법(daedong 대사)·사도세자 뒤주(hugi2 정조 대사)
+     로만 남 얘기하듯 스쳐 지나갔지, 정작 자기 목소리로 말하는 자리가
+     없었다 — 탕평책도 게임 어디에도 없었다. 편전의 네 번째 왕으로 세워
+     자기 입으로 탕평책·이인좌의 난·균역법(다른 각도)·신문고를 말하고,
+     사도세자 이야기도 정조 쪽과는 다른 시각(자신의 후회)에서 들려주게
+     했다. 이제 편전의 endsChapter는 숙종이 아니라 마지막 순서인 영조가
+     맡는다. */
   namhan: {
     img: 'assets/scenes/hugi1_namhan.png', label: '남한산성',
     spawn: { x: 688, y: 470 },
@@ -612,6 +620,7 @@ const ZONES = {
       { id:'hyojong', name:'효종', x:450, y:400, img:'assets/portraits/hyojong.png', look:{ role:'king', body:'#4a4a58', accent:'#e0b94a' } },
       { id:'hyeonjong', name:'현종', x:688, y:400, img:'assets/portraits/hyeonjong.png', look:{ role:'king', body:'#5a3a4a', accent:'#c9a24a' } },
       { id:'sukjong', name:'숙종', x:930, y:400, img:'assets/portraits/sukjong.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
+      { id:'yeongjo', name:'영조', x:1120, y:400, img:'assets/portraits/yeongjo.png', look:{ role:'king', body:'#3a4a3a', accent:'#e0b94a' } },
     ],
     exits: [
       { rect:{x0:600,y0:715,x1:790,y1:768}, to:'samjeondo', spawn:{x:1050,y:420}, label:'삼전도로' },
@@ -868,7 +877,8 @@ function updateHudGoal(){
       ['daedong', '선혜청 서리와 대화하기'],
       ['hyojong', '편전에서 효종과 대화하기'],
       ['hyeonjong', '편전에서 현종과 대화하기'],
-      ['sukjong', '편전에서 숙종과 대화하기']
+      ['sukjong', '편전에서 숙종과 대화하기'],
+      ['yeongjo', '편전에서 영조와 대화하기']
     ];
     for (const [id, goal] of order){
       const k = Stage.keyFor(id);
@@ -1271,6 +1281,30 @@ const NPC_DATA = {
       { q:'1712년 숙종 때 청과 담판해 "서쪽은 압록강, 동쪽은 토문강"으로 국경을 새겨 백두산에 세운 비석은?',
         opts:['백두산정계비','삼전도비'], answer:0, src:[6, 30, 58, 71],
         feedback:['삼전도비는 병자호란 항복을 기려 청의 요구로 세운 비석이에요.','정답! 백두산정계비입니다. 훗날 토문강의 위치를 두고 간도 귀속 문제가 불거져요.'] },
+    ]
+  },
+  yeongjo_0: {
+    name: '영조', icon: '👑', img: 'assets/portraits/yeongjo.png',
+    beats: [
+      { who:'npc', t:'나는 숙종의 아들이나, 무수리 출신 어머니를 두었다 하여 왕위에 올라서도 정통성을 의심받았네. 즉위 이듬해 이인좌 등이 "이 왕은 가짜다"라며 군사를 일으켰지 — 무신년(1728)의 일이라 이인좌의 난, 또는 무신난이라 부르네.' },
+      { who:'npc', t:'그런 의심을 씻고자 나는 노론과 소론을 가리지 않고 고루 등용하려 애썼네 — 탕평책일세. 성균관 입구에 비석까지 세워 새겨 두었지. "두루 사귀되 편을 가르지 않는 것이 군자의 마음이다"라고.' },
+      { who:'npc', t:'아버님 숙종 때부터 군포가 백성을 짓눌렀네. 그래서 군포를 두 필에서 한 필로 줄여주었지 — 균역법일세. 대신 모자란 곳간은 땅 가진 이에게 결작이라는 세를, 놀고먹던 양반가 자제에게는 선무군관포를 물려 메웠네.' },
+      { who:'npc', t:'한양 한복판 개천이 자꾸 넘쳐 저잣거리를 덮쳤네. 준천사를 두어 그 바닥을 파내게 했지 — 준천사업일세. 그리고 태종 때 있다 사라진 신문고도 다시 달았네. 억울한 일이 있으면 누구든 북을 울리라 했지.' },
+      { who:'npc', t:'…내 아들 이야기도 해야겠군. 사도세자, 내 뒤를 이을 아이였네. 헌데 그 아이를 둘러싼 무고와 광증이 겹쳐, 나는 그예 뒤주에 가두라 명했네. 여드레 만에 숨을 거두었지 — 임오년(1762)의 일이라 임오화변이라 부르네. …그 아이의 아들이 훗날 왕이 되어, 제 아비를 그리 만든 나를 얼마나 원망했을지.' },
+    ],
+    quizSeq: [
+      { q:'노론과 소론을 가리지 않고 고루 등용해 붕당의 다툼을 가라앉히려 한 영조의 정책은?',
+        opts:['탕평책','환국'], answer:0, src:[8, 13, 15, 20, 46, 66, 68],
+        feedback:['환국은 오히려 집권 붕당을 통째로 갈아치우는 것으로, 이 정책과는 반대에 가까워요.','정답! 탕평책입니다. 성균관에 탕평비까지 세워 그 뜻을 새겼어요.'] },
+      { q:'영조 즉위 초, 왕의 정통성을 문제 삼아 일어난 반란은?',
+        opts:['이인좌의 난','홍경래의 난'], answer:0, src:[14, 60, 75],
+        feedback:['홍경래의 난은 훨씬 뒤 순조 때 일어난 사건이에요.','정답! 이인좌의 난입니다. 무신년(1728)에 일어나 무신난이라고도 해요.'] },
+      { q:'균역법으로 줄어든 재정을 메우기 위해 영조가 토지 1결마다 쌀 2두씩 더 거둔 부가세는?',
+        opts:['결작','선무군관포'], answer:0, src:[18, 32, 47, 54, 69, 73],
+        feedback:['선무군관포는 군역을 지지 않던 양반가 자제에게 물린 것이에요.','정답! 결작입니다. 토지를 가진 이가 부담을 나눠 졌어요.'] },
+      { q:'태종 때 처음 설치되었다가 흐지부지된 뒤, 영조 때 다시 설치되어 백성이 억울한 일을 호소할 수 있게 한 것은?',
+        opts:['신문고','격쟁'], answer:0, src:[31],
+        feedback:['격쟁은 임금의 행차 때 꽹과리를 쳐서 억울함을 호소하던 방법이에요.','정답! 신문고입니다. 태종 때 처음 달았다가 흐지부지된 걸 영조가 다시 달았어요.'] },
     ],
     endsChapter: true
   },
@@ -1286,6 +1320,7 @@ const Stage = {
     if (id === 'hyojong') return 'hyojong_0';
     if (id === 'hyeonjong') return 'hyeonjong_0';
     if (id === 'sukjong') return 'sukjong_0';
+    if (id === 'yeongjo') return 'yeongjo_0';
     return null;
   },
   interact(){
@@ -1448,7 +1483,10 @@ function drawChart(c){
     // 왕위 계승 띠 — 지금 이 대사가 누구·어느 왕(들) 이야기인지 금색
     // 테두리로 짚어 준다. main은 한 나라(왕조)의 계승 순서, cross는
     // 같은 시기 다른 나라 왕(있을 때만 따로 한 줄 더).
-    const badge = (k) => '<div class="king-badge' + (k.active ? ' active' : '') + '">'
+    // cross 항목이 null이면(main의 특정 칸과 짝을 맞추려고 비워 둔 자리)
+    // 자리만 차지하고 안 보이는 빈 칸으로 그린다.
+    const badge = (k) => !k ? '<div class="king-badge kb-spacer"></div>' :
+      '<div class="king-badge' + (k.active ? ' active' : '') + '">'
       + (k.dynasty ? '<div class="kb-dynasty">' + k.dynasty + '</div>' : '')
       + '<div class="kb-name">' + k.name + '</div>'
       + (k.note ? '<div class="kb-note">' + k.note + '</div>' : '') + '</div>';
