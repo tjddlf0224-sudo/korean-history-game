@@ -619,6 +619,12 @@ function renderEraList(){
     eraListEl.appendChild(section);
   });
 }
+// 디버그용 — ?unlockall=1로 접속하면 전 챕터를 완료 처리해 마스코트가
+// 전부 컬러로 바뀐 모습을 폰에서도 바로 확인할 수 있다. 메뉴의 진행
+// 초기화로 언제든 되돌릴 수 있다.
+if (new URLSearchParams(location.search).get('unlockall') === '1' && window.Badges){
+  ERAS.forEach(e => (e.cards || []).forEach(c => Badges.earn('ch_complete_' + c.href)));
+}
 renderEraList();
 
 document.getElementById('kings-close').addEventListener('click', closeKingsModal);
