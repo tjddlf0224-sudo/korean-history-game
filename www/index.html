@@ -7,7 +7,7 @@
 <meta name="description" content="한국사능력검정시험(한능검) 심화 대비 게임. 선사부터 현대까지 36화를 걸어다니며, 기출 415문항을 이야기로 푼다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gugi&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; word-break: keep-all; overflow-wrap: break-word; }
   html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; overscroll-behavior:none;
@@ -36,8 +36,12 @@
     display:flex; align-items:center; justify-content:center; transform:rotate(-6deg);
     box-shadow:0 1px 3px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,235,210,.25);
     align-self:flex-start; margin-top:1px; }
-  h1 { font-size: 21px; margin: 0; white-space:nowrap; letter-spacing:.05em;
-    font-weight:700; line-height:1.1;
+  /* Gugi — 절 현판·전통 간판에 쓰이는 붓글씨 느낌의 한글 폰트. 임금이
+     친필로 써준 현판 같은 인상을 주려고 본문 세리프(Gowun Batang) 대신
+     제목만 이걸로 바꾼다. 붓글씨체라 자간은 넓히지 않고 오히려 살짝
+     좁혀야 획이 이어지는 느낌이 산다. */
+  h1 { font-size: 23px; margin: 0; white-space:nowrap; letter-spacing:-.01em;
+    font-family:"Gugi", "Gowun Batang", serif; font-weight:400; line-height:1.1;
     background:linear-gradient(180deg, #fbe6ad 0%, #e0ac48 55%, #c98f34 100%);
     -webkit-background-clip:text; background-clip:text; color:transparent;
     text-shadow:0 1px 0 rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.3); }
