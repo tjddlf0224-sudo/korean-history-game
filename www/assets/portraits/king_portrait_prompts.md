@@ -1,10 +1,16 @@
-# 왕 계보용 초상화 제미나이 프롬프트 (신규 36명)
+# 왕 계보용 초상화 제미나이 프롬프트 (신규 37명)
 
 왕 계보 모달에 이미지가 들어가면 학생들이 왕을 "장면"이 아니라 "얼굴"로
 기억할 수 있다는 아이디어에서 시작. 기출에 나오는 왕(원 안 숫자>0) 62명
-중 **이미 게임 NPC 초상화가 있는 23명은 재사용**하고(아래 "재사용 목록"),
-**새로 없는 39명만** 뽑으면 된다. 고려 태조는 왕건 NPC 초상화
+중 **이미 게임 NPC 초상화가 있는 25명은 재사용**하고(아래 "재사용 목록"),
+**새로 없는 37명만** 뽑으면 된다. 고려 태조는 왕건 NPC 초상화
 (`wanggeon.png`)를 그대로 쓰므로 여기 포함하지 않았다.
+
+영조는 hugi1.html에 NPC로 새로 들어갔는데 아직 초상화가 없다 — 아래
+"그리드 EFG"에 포함했다. 이 프롬프트로 나온 그림은 `assets/portraits/
+yeongjo.png`로 저장해서 NPC 대화와 왕 계보 모달(`'p':'yeongjo'`) 양쪽에
+같이 쓰면 된다(재사용 23→25명이 된 것도 이번에 단종·고종 초상화가
+이미 있다는 걸 다시 확인해서다).
 
 ## 공통 스타일 (전 그리드 공통, 프롬프트 맨 앞에 붙일 것)
 
@@ -185,19 +191,28 @@ A grid sheet of 4 royal figures, evenly spaced, same scale:
 Each figure clearly separated with visible margin for easy cropping.
 ```
 
-## 그리드 E — 고려 전기 (4명)
+## 그리드 EFG — 고려 후기~조선 후기 (15명, 영조 포함)
 
 ⚠ 확인 결과 정정: 고려 성종·현종·숙종은 조선의 같은 묘호 왕과 이름이
-겹칠 뿐 실제로는 게임에 초상화가 없다(조선 성종·현종·숙종만 있음).
-아래 4명 모두 신규로 뽑아야 한다.
-
-공통 배경: 고려 관복(자색·홍색 등 품계에 따른 색상 관복), 왕은 통천관·
-곤룡포 계열. 이 시기는 문치·제도 정비의 시대라 온화한 문관풍.
+겹칠 뿐 실제로는 게임에 초상화가 없다(조선 성종·현종·숙종만 있음) —
+아래 고려 세 왕은 신규다. 그리고 단종·고종은 원래 각각 별도 그리드에
+있었는데, 확인해보니 이미 게임 NPC 초상화(`danjong.png`·`gojong.png`)
+가 있어 재사용으로 옮기고 이 그리드에서는 뺐다(그만큼 자리가 남아
+영조까지 넣어 정확히 15명을 맞췄다). 시대(고려/조선)가 섞여 있지만
+그림체(치비 스타일)는 전 그리드 공통이니, 인물별로 그 시대에 맞는
+복식만 정확히 설명해 넣었다 — 한 이미지 안에서 뽑아야 해상도·명도가
+서로 안 튀고 다른 캐릭터들과도 위화감이 없다.
 
 ```
 [공통 스타일 문단 붙이기]
 
-A grid sheet of 4 early-Goryeo royal figures, evenly spaced, same scale:
+A grid sheet of 15 royal figures, evenly spaced, same scale, arranged
+in a clean grid (e.g. 5 columns × 3 rows) with generous margin around
+each for easy cropping. Each figure wears clothing correct for THEIR
+OWN era as noted individually below — do not mix eras on one figure.
+
+고려 관복(자색·홍색 계열 관복, 통천관·곤룡포) — 문치·제도 정비 시대라
+온화한 문관풍:
 
 1. 성종(Seongjong, Goryeo) — id: seongjong_goryeo_king. Late-10th-century
    Goryeo king who adopted Choe Seung-no's 28-point reform memorial and
@@ -211,129 +226,73 @@ A grid sheet of 4 early-Goryeo royal figures, evenly spaced, same scale:
    court robe, resilient/steady expression, a small woodblock or
    sutra-scroll motif nearby.
 
-3. 문종(Munjong, Goryeo) — id: munjong_goryeo_king. 11th-century Goryeo
-   king, era of cultural peak — refined dark-purple royal robe with
-   gold trim, tall black official's hat (tongcheongwan-style), serene
-   prosperous-era expression.
+3. 선종(Seonjong, Goryeo) — id: seonjong_goryeo_king. Late-11th-century
+   Goryeo king — purple/gold court robe, calm unremarkable expression
+   (a quiet transitional reign).
 
-4. 선종(Seonjong, Goryeo) — id: seonjong_goryeo_king. Late-11th-century
-   Goryeo king — similar purple/gold court robe, calm unremarkable
-   expression (a quiet transitional reign).
-
-Each figure clearly separated with visible margin for easy cropping.
-```
-
-## 그리드 E2 — 고려 후기 (5명)
-
-```
-[공통 스타일 문단 붙이기]
-
-A grid sheet of 5 Goryeo royal figures, evenly spaced, same scale:
-
-1. 숙종(Sukjong, Goryeo) — id: sukjong_goryeo_king. Late-11th-century
+4. 숙종(Sukjong, Goryeo) — id: sukjong_goryeo_king. Late-11th-century
    Goryeo king who organized the Byeolmuban special army (on Yun
    Gwan's advice) and minted Haedong-tongbo coinage — court robe,
    holding a coin or a spear motif referencing the new army, resolute
    military-minded expression.
 
-2. 예종(Yejong, Goryeo) — id: yejong_goryeo_king. Early-12th-century
+5. 예종(Yejong, Goryeo) — id: yejong_goryeo_king. Early-12th-century
    Goryeo king who sponsored Yun Gwan's Jurchen campaign — court robe,
    holding or gesturing toward a small map/scroll referencing the
    Nine Fortresses of the northeast.
 
-3. 인종(Injong, Goryeo) — id: injong_goryeo_king. Goryeo king during Yi
+6. 인종(Injong, Goryeo) — id: injong_goryeo_king. Goryeo king during Yi
    Jagyeom's rebellion and Myocheong's Seogyeong movement — court robe,
    slightly anxious/embattled expression reflecting political turmoil.
 
-4. 원종(Wonjong, Goryeo) — id: wonjong_goryeo_king. Goryeo king who
-   returned the court from Ganghwa Island to Gaegyeong, ending the
-   Mongol-war relocation — court robe with a subtle early Mongol-
-   influenced sash, weary but resolute expression.
-
-5. 충렬왕(Chungnyeol, Goryeo) — id: chungnyeol_king. First of the
+7. 충렬왕(Chungnyeol, Goryeo) — id: chungnyeol_king. First of the
    "Chung-" era Goryeo kings, married a Yuan Mongol princess — Goryeo
    royal robe now blended with visible Mongol-style details (a
    Mongol-influenced hat/hairstyle called byeonbal partially shown,
    Yuan-style belt ornament), signaling the start of Mongol
    interference — conflicted, dignified-but-uneasy expression.
 
-Each figure clearly separated with visible margin for easy cropping.
-```
+조선 왕 특유의 익선관(翼蟬冠)+곤룡포(용포), 홍룡포로 통일하되 나이·
+표정으로 개인차를 준다:
 
-## 그리드 F — 조선 (6명)
-
-공통 배경: 조선 왕 특유의 익선관(翼蟬冠)+곤룡포(용포). 시기별로 용포
-색은 보통 붉은색(홍룡포)으로 통일해 "조선 왕"이라는 느낌을 주되, 나이·
-표정으로 개인차를 준다.
-
-```
-[공통 스타일 문단 붙이기]
-
-A grid sheet of 6 Joseon royal figures, evenly spaced, same scale, each
-wearing the iconic Joseon royal outfit: red silk robe (gonryongpo) with
-a gold dragon roundel on the chest, and the black wing-shaped official
-crown (ikseongwan):
-
-1. 태조 이성계(Taejo Yi Seong-gye, founder of Joseon) — id: taejo_yi_king.
+8. 태조 이성계(Taejo Yi Seong-gye, founder of Joseon) — id: taejo_yi_king.
    Founder of Joseon — sturdy warrior-turned-king build, dignified
    founding-father expression, perhaps a subtle military bearing under
    the royal robe (he was a general before founding the dynasty).
 
-2. 단종(Danjong) — id: danjong_king. Very young Joseon king, deposed by
-   his uncle Sejo — youthful, smaller build, a sorrowful/vulnerable
-   expression.
-
-3. 중종(Jungjong) — id: jungjong_king. Joseon king installed by the
+9. 중종(Jungjong) — id: jungjong_king. Joseon king installed by the
    Jungjong coup — composed but somewhat uncertain expression
    (reflects a reign shaped by factional pressure, e.g. Jo Gwang-jo's
    rise and fall).
 
-4. 명종(Myeongjong) — id: myeongjong_king. Joseon king during the Eulsa
-   sahwa purge and Im Kkeok-jeong's uprising — youthful-to-middle-aged,
-   somewhat weary/overshadowed expression (his mother Queen Munjeong
-   held real power during his reign).
+10. 명종(Myeongjong) — id: myeongjong_king. Joseon king during the Eulsa
+    sahwa purge and Im Kkeok-jeong's uprising — youthful-to-middle-aged,
+    somewhat weary/overshadowed expression (his mother Queen Munjeong
+    held real power during his reign).
 
-5. 인조(Injo) — id: injo_king. Joseon king during the Manchu invasions
-   (Jeongmyo/Byeongja horan) — troubled, humbled expression, robe
-   slightly disheveled at the edges (references his humiliating
-   surrender at Namhansanseong).
+11. 인조(Injo) — id: injo_king. Joseon king during the Manchu invasions
+    (Jeongmyo/Byeongja horan) — troubled, humbled expression, robe
+    slightly disheveled at the edges (references his humiliating
+    surrender at Namhansanseong).
 
-6. 경종(Gyeongjong) — id: gyeongjong_king. Joseon king during the
-   Sinim-oksa factional purge (Noron vs Soron) — frail, sickly-looking
-   build, anxious expression.
+12. 경종(Gyeongjong) — id: gyeongjong_king. Joseon king during the
+    Sinim-oksa factional purge (Noron vs Soron) — frail, sickly-looking
+    build, anxious expression.
 
-Each figure clearly separated with visible margin for easy cropping.
-```
+13. 영조(Yeongjo) — id: yeongjo. Long-reigning 18th-century Joseon
+    king known for Tangpyeong (factional balance) policy — elderly but
+    vigorous, stern fair-minded expression, perhaps holding a small
+    drum motif referencing his revival of the Sinmun-go petition drum.
+    (이 캐릭터는 게임 NPC로도 쓰인다 — 파일명을 반드시 yeongjo로.)
 
-## 그리드 G — 조선 후기·대한제국 (4명)
+14. 순조(Sunjo) — id: sunjo_king. Young Joseon king at the start of
+    Sedo (in-law clan) politics — youthful, somewhat overshadowed/
+    passive expression.
 
-```
-[공통 스타일 문단 붙이기]
-
-A grid sheet of 4 royal figures, evenly spaced, same scale, wearing the
-red gonryongpo + ikseongwan (except the last, see note):
-
-1. 영조(Yeongjo) — id: yeongjo_king. Long-reigning 18th-century Joseon
-   king known for Tangpyeong (factional balance) policy — elderly but
-   vigorous, stern fair-minded expression, perhaps holding a small
-   drum motif referencing his revival of the Sinmun-go petition drum.
-
-2. 순조(Sunjo) — id: sunjo_king. Young Joseon king at the start of
-   Sedo (in-law clan) politics — youthful, somewhat overshadowed/
-   passive expression.
-
-3. 철종(Cheoljong) — id: cheoljong_king. Joseon king plucked from a
-   common upbringing into the throne during Sedo politics era — simple,
-   slightly bewildered everyman quality beneath the royal robe,
-   uneasy expression (era of the 1862 Imsul peasant uprisings).
-
-4. 고종(Gojong, later Emperor Gwangmu of the Korean Empire) — id:
-   gojong_king. Show him in the LATER imperial style rather than
-   standard Joseon royal dress — a Western-influenced gold-braided
-   imperial uniform / imperial court robe with a tall black Western-
-   style imperial crown (as adopted after the 1897 Daehan Jeguk
-   proclamation), composed but determined expression reflecting the
-   push for modernization and sovereignty.
+15. 철종(Cheoljong) — id: cheoljong_king. Joseon king plucked from a
+    common upbringing into the throne during Sedo politics era — simple,
+    slightly bewildered everyman quality beneath the royal robe,
+    uneasy expression (era of the 1862 Imsul peasant uprisings).
 
 Each figure clearly separated with visible margin for easy cropping.
 ```
@@ -367,6 +326,8 @@ Each figure clearly separated with visible margin for easy cropping.
 - 경순왕 → `gyeongsunwang.png`
 - 대조영 → `daejoyeong.png`
 - 문왕(발해) → `munwang.png`
+- 단종 → `danjong.png`
+- 고종 → `gojong.png`
 
 ⚠ 성종·현종·숙종은 고려와 조선에 같은 묘호를 쓰는 왕이 있는데, 실제로
 게임에 있는 초상화(`seongjong.png`·`hyeonjong.png`·`sukjong.png`)는

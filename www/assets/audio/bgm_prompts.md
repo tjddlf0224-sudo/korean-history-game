@@ -33,12 +33,15 @@ tied to one specific era, inviting the player to explore thousands
 of years of history. Gentle dynamics, no big swells.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: title_theme
 ```
@@ -60,12 +63,15 @@ Minimal, spacious, unhurried — nothing that feels "civilized" or
 courtly yet.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_prehistoric
 ```
@@ -82,12 +88,15 @@ and a little austere, evoking the Three Kingdoms / Balhae era
 rather than the more ornate later Joseon court.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_ancient_court
 ```
@@ -104,12 +113,15 @@ steady tempo suitable for looping under exploration, not a one-off
 battle cue.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_ancient_war
 ```
@@ -127,12 +139,15 @@ through its ports — with a faint sense of unease appropriate to an
 era of invasions and power struggles.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_goryeo
 ```
@@ -149,12 +164,15 @@ sound authoritative and orderly, like the well-run bureaucratic
 heart of the dynasty — not martial, not sad, just dignified.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_joseon_palace
 ```
@@ -171,12 +189,15 @@ focused and calm, evoking scholars bent over books and debating
 philosophy, not courtly ceremony.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_seowon
 ```
@@ -192,12 +213,15 @@ long silences. Should feel lonely and unjust rather than
 tragic-grand; this is quiet suffering, not a dramatic death scene.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_exile
 ```
@@ -214,12 +238,15 @@ the march. Should be usable both for open battlefields and for a
 grim last-stand fortress.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_invasion_war
 ```
@@ -237,12 +264,15 @@ darken slightly for hugi3's famine/uprising chapters if needed as
 a variant.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_marketplace
 ```
@@ -258,12 +288,15 @@ weapons arriving in an old world. Should feel like a losing fight
 against overwhelming odds — determined but doomed, not triumphant.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_gaehang_war
 ```
@@ -281,12 +314,15 @@ anything that sounds militaristic or triumphant; this is grief
 carrying quiet determination.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_colonial_era
 ```
@@ -304,12 +340,15 @@ division-era border scene) with the same core instrumentation, just
 different dynamics.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_modern
 ```
@@ -327,12 +366,15 @@ celebratory, era-agnostic (folk customs spanning all of Korean
 history, not tied to one dynasty).
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_folk_festival
 ```
@@ -362,12 +404,15 @@ before the loop repeats. No vocals, no percussion hits that sound
 like violence — this is a peaceful crowd's defiance, not a battle.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_colonial_uprising
 ```
@@ -380,17 +425,26 @@ id: bgm_colonial_uprising
 퀴즈 정답 시 뜨는 `#fanfare` 연출에 맞춰 아주 짧게 흐르는 소리.
 
 ```
-A very short (1–2 second) bright, satisfying success chime using
-traditional Korean percussion — a single warm kkwaenggwari (small
-gong) hit or a quick buk roll ending on a bright accent. No melody
-needed, just a clear "correct!" feeling. Not loud or startling —
-this plays constantly throughout a quiz-heavy game, so it should
-stay pleasant on repeat.
+A bright, satisfying success-chime figure using traditional Korean
+percussion — a single warm kkwaenggwari (small gong) hit or a quick
+buk roll ending on a bright accent. No melody needed, just a clear
+"correct!" feeling. Not loud or startling — this plays constantly
+throughout a quiz-heavy game, so it should stay pleasant on repeat.
+Only the first second or two of this clip will actually be used in
+the game (trimmed down after generation), so keep that opening
+instant strong and clean on its own even though the full clip below
+will run longer.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). This is a one-shot sting, not a loop —
-mixed to sit quietly under UI sound effects and speech-bubble text,
-no sudden loud stabs.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: sfx_fanfare
 ```
@@ -399,17 +453,24 @@ id: sfx_fanfare
 매 챕터 시작 시 대사가 탭으로 넘어가는 인트로 화면에 깔리는 짧은 곡.
 
 ```
-A short (15–25 second, can loop if the player reads slowly) somber,
-scene-setting cue — sparse solo instrument (haegeum or daegeum)
-playing a slow rubato phrase with no fixed rhythm, like a narrator
-taking a breath before telling a story. Should work under any of
-the era-specific tones above without clashing — keep it neutral and
-atmospheric rather than tied to one specific mood.
+A somber, scene-setting cue — sparse solo instrument (haegeum or
+daegeum) playing a slow rubato phrase with no fixed rhythm, like a
+narrator taking a breath before telling a story. Should work under
+any of the era-specific tones above without clashing — keep it
+neutral and atmospheric rather than tied to one specific mood. Some
+players read slowly, so this may need to loop while they finish the
+intro text.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). This is a one-shot sting, not a loop —
-mixed to sit quietly under UI sound effects and speech-bubble text,
-no sudden loud stabs.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_intro_sting
 ```
@@ -425,12 +486,15 @@ countdown. Should feel like a final challenge without being scary —
 this is an exam-under-pressure feeling, not a horror cue.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_boss_quiz
 ```
@@ -439,15 +503,23 @@ id: bgm_boss_quiz
 `#end-screen`에서 흐르는 짧은 마무리 곡.
 
 ```
-A short (20–30 second) resolving, reflective cue that feels like
-closing a book chapter — warm strings or gayageum settling into a
-final held chord, calm and a little wistful, giving a sense of
-"this chapter is complete, more to come."
+A resolving, reflective cue that feels like closing a book chapter —
+warm strings or gayageum settling into a final held chord partway
+through, calm and a little wistful, giving a sense of "this chapter
+is complete, more to come." It's fine for the piece to settle and
+go quiet/still for the remainder of the 30 seconds after that final
+chord rather than starting something new.
 
 Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). This is a one-shot stinger that plays
-once and then fades, not a seamless loop — mixed to sit quietly
-under UI sound effects and speech-bubble text, no sudden loud stabs.
+screen so vocals would clash). Generate exactly 30 seconds long —
+always request the full 30 seconds regardless of how the clip will
+actually be used in-game (Gemini renders very short direct requests
+and sound-effect-length clips poorly); this will be trimmed down or
+looped afterward as needed. Keep it loop-friendly — no hard stop or
+big one-shot finale right at the very end — so a 30-second segment
+can repeat smoothly if it ends up used as a loop. Mixed to sit
+quietly under UI sound effects and speech-bubble text — no sudden
+loud stabs.
 
 id: bgm_chapter_end
 ```
