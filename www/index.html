@@ -96,8 +96,12 @@
      (풀리자마자 한 번은 자동 재생). 프레임 수·캔버스 크기는 스프라이트
      시트마다 달라 --frames와 인라인 width/height로 개별 지정한다.
      재생 속도는 프레임 수에 비례(프레임당 0.22초)해 프레임이 많은
-     스프라이트가 더 빨리 지나가 버리지 않게 한다. */
-  .era-mascot { margin-left:auto; flex:none; align-self:center; height:112px;
+     스프라이트가 더 빨리 지나가 버리지 않게 한다.
+     캐릭터가 커서(112px) 문서 흐름에 그대로 두면 그만큼 헤더가 높아져
+     아래 진행선·카드가 밀려 내려간다 — position:absolute로 흐름에서
+     빼서 시대 블록(.era-section) 위에 겹쳐 띄우고, z-index로 맨 앞에
+     오게 해 진행선·카드를 밀어내지 않고 그 위를 덮게 한다. */
+  .era-mascot { position: absolute; right: 10px; top: 4px; z-index: 2; height:112px;
     background-repeat:no-repeat; background-size: calc(var(--frames, 6) * 100%) 100%;
     background-position: 0 0; image-rendering:-webkit-optimize-contrast;
     filter: grayscale(1) brightness(.5); opacity:.5;
