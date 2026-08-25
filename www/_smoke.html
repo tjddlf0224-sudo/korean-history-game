@@ -109,23 +109,25 @@ function reachable(w, zoneId){
   }};
 }
 
-/** 대사 하나를 끝까지 넘기고, 퀴즈가 붙어 있으면 정답으로 끝낸다. */
+/** 대사를 끝까지 넘기고, 퀴즈가 나오면 정답으로 답한다. 대사 중간에
+    { quiz:{...} } 형태로 퀴즈가 끼어드는 챕터(대사→그 자리 퀴즈→다음
+    대사)도 있으므로, dlg-overlay와 quiz-overlay 중 열려 있는 쪽을 매
+    스텝마다 다시 확인해 번갈아 처리한다(둘 다 닫힐 때까지). */
 function playDialog(w, key, npc, problems, tag){
   const D = w.Dialog, doc = w.document;
   D.open(key, npc);
   const data = w.NPC_DATA[key];
   if (!data){ problems.push(`${tag} NPC_DATA에 ${key} 없음`); return; }
-  for (let i = 0; i < data.beats.length + 2; i++){
-    if (!doc.getElementById('dlg-overlay').classList.contains('show')) break;
-    D.next();
-  }
-  if (doc.getElementById('dlg-overlay').classList.contains('show'))
-    problems.push(`${tag} ${key} 대사가 끝나지 않음`);
-
+  const dlgOv = doc.getElementById('dlg-overlay');
   const quizOv = doc.getElementById('quiz-overlay');
+  const maxSteps = (data.beats.length + 2) * 3 + 40;
   let guard = 0;
-  while (quizOv && quizOv.classList.contains('show')){
-    if (++guard > 60){ problems.push(`${tag} ${key} 퀴즈가 끝나지 않음`); break; }
+  while ((dlgOv.classList.contains('show') || quizOv.classList.contains('show')) && guard < maxSteps){
+    guard++;
+    if (dlgOv.classList.contains('show')){
+      D.next();
+      continue;
+    }
     const btns = [...doc.querySelectorAll('#quiz-opts button')];
     if (!btns.length){ problems.push(`${tag} ${key} 퀴즈에 보기가 없음`); break; }
     // 보기는 섞이므로 화면 순서가 아니라 원래 정답 위치를 찾아 누른다.
@@ -136,6 +138,8 @@ function playDialog(w, key, npc, problems, tag){
     w.Quiz.confirmIfReady();   // 채점
     w.Quiz.confirmIfReady();   // 다음 문항 또는 닫기
   }
+  if (dlgOv.classList.contains('show') || quizOv.classList.contains('show'))
+    problems.push(`${tag} ${key} 대사/퀴즈가 끝나지 않음`);
 }
 
 async function runOne(file){
@@ -187,7 +191,10 @@ async function runOne(file){
       if (!w.NPC_DATA[k]) { problems.push(`[${zid}] keyFor가 없는 대사 ${k}를 가리킴`); break; }
       if (played.has(k)) break;              // 더 안 올라가면 마지막 단계
       played.add(k); seenKeys.add(k);
-      quizCount += (w.NPC_DATA[k].quizSeq || []).length + (w.NPC_DATA[k].quiz ? 1 : 0);
+      // 대사 끝에 붙는 quizSeq/quiz뿐 아니라, beats 중간에 { quiz:{...} }로
+      // 끼워 넣은 퀴즈(대사→그 자리 퀴즈→다음 대사)도 센다.
+      const inlineQuizCount = (w.NPC_DATA[k].beats || []).filter(b => b.quiz).length;
+      quizCount += (w.NPC_DATA[k].quizSeq || []).length + (w.NPC_DATA[k].quiz ? 1 : 0) + inlineQuizCount;
       playDialog(w, k, n, problems, `[${zid}]`);
     }
   }
