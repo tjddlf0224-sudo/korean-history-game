@@ -193,9 +193,12 @@
   .kp-king.kp-stag .kp-label { margin-top:49px; }
   .kp-king .kp-nm { font-size:12px; font-weight:500; text-align:center; white-space:nowrap; line-height:1.3; color:#f0e6d2; }
   .kp-king .kp-yr { font-size:10px; color:#a89878; margin-top:2px; font-variant-numeric: tabular-nums; }
-  /* 업적 한 줄 — 왕 이름 아래 짧게 붙여 이미지처럼 기억하기 좋게(외우기용). */
-  .kp-king .kp-achv { font-size:9.5px; color:#c9b896; margin-top:4px; text-align:center; line-height:1.35;
-    white-space:normal; word-break:keep-all; }
+  /* 업적 — 쉼표로 이어지는 한 줄 산문 대신, 항목별로 줄을 나눠 점으로
+     찍어서 외우기 쉽게 스캔되도록 한다(왕 이름 아래, 이미지처럼 기억). */
+  .kp-king .kp-achv-list { list-style:none; margin:4px 0 0; padding:0; font-size:9.5px; color:#c9b896;
+    text-align:center; line-height:1.45; }
+  .kp-king .kp-achv-list li { white-space:normal; word-break:keep-all; }
+  .kp-king .kp-achv-list li::before { content:'· '; color:#8a7c63; }
   /* background 축약형을 쓰면 안 된다 — has-p 뱃지의 background-image/size/cover를
      덮어써서(같은 시각적 우선순위·나중에 나오는 규칙이 이김) 초상화가 있어도
      이 색만 보이고 그림은 40x40 안 왼쪽 위 한 귀퉁이만 잘려 보이는 버그가 있었다.
@@ -400,6 +403,13 @@ function kingsDupDot(name, era, country, year){
   const tip = (kingsJosa(name, '과', '와') + ` 같은 이름의 다른 왕이 있습니다: ${list}`).replace(/"/g, '&quot;');
   return `<span class="kp-dupdot" title="${tip}" data-tip="${tip}">동</span>`;
 }
+/* 업적 문자열("왕자의 난, 사병 혁파, 호패법")을 쉼표로 나눠 항목별 줄로.
+   쉼표는 항목 구분자, 가운뎃점(·)은 한 항목 안에서 쓰는 구분자라 그대로 둔다
+   (예: "국호 신라·왕 칭호 확정, 우산국 정벌" → 2항목, 첫 항목 안엔 · 유지). */
+function kingsAchvList(a){
+  return a.split(',').map(s => s.trim()).filter(Boolean)
+    .map(s => `<li>${s}</li>`).join('');
+}
 /* 왕 연도 문자열 → 숫자(정렬·가로 위치 계산용). "BC194"·"~BC108" 같은
    기원전 표기는 음수로, 건국 설화처럼 연도가 없는 항목은 관례적으로
    쓰이는 대략의 해를 대신 쓴다(표시 위치를 잡기 위한 것일 뿐, 그 해가
@@ -472,7 +482,7 @@ function openKingsModal(era){
           <div class="kp-label">
             <div class="kp-nm">${k.name}</div>
             <div class="kp-yr">${k.year}</div>
-            ${k.a ? `<div class="kp-achv">${k.a}</div>` : ''}
+            ${k.a ? `<ul class="kp-achv-list">${kingsAchvList(k.a)}</ul>` : ''}
           </div>
         </div>`).join('') + `</div></div>`;
   }).join('') + `</div>`;
