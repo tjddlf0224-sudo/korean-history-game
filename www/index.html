@@ -416,15 +416,21 @@ function openKingsModal(era){
   const pxPerYear = Math.max(2.4, 900 / span);
   let trackW = 640;
 
-  // 자리(가로 좌표)는 오직 실제 연도로만 정한다 — 나라별로 밀어서
-  // 옮기면(예전 방식) 나라마다 어긋난 만큼 누적돼, 같은 시기인데도
-  // 세로줄이 완전히 뒤죽박죽이 됐다(실제로 지적받은 문제). 그 대신
-  // 같은 줄 안에서 연도가 너무 가까워 라벨이 겹칠 것 같으면(kp-stag)
-  // 라벨만 한 단 내려서 피한다 — 배지 자리는 절대 안 바뀐다.
+  // 나라(줄)가 하나뿐이면 다른 줄과 맞출 일이 없으니, 배지끼리 겹치지만
+  // 않게 최소 간격만 지키며 민다(예전 방식 — 안전하고 자리도 안 넘친다).
+  // 나라가 여럿이면(지금은 고대만) 자리를 실제 연도로 고정해야 같은 해가
+  // 나라를 넘나들어도 같은 세로줄에 온다 — 그 대신 같은 줄에서 연도가
+  // 너무 가까우면 라벨만(배지는 그대로 두고) 한 단 내려 겹침을 피한다.
+  const singleRow = groups.length === 1;
   const rows = groups.map(([country, kings]) => {
     let lastX = -Infinity, tier = 0;
     const positioned = kings.map(k => {
-      const x = 40 + (kingsYearNum(k.year) - minY) * pxPerYear;
+      let x = 40 + (kingsYearNum(k.year) - minY) * pxPerYear;
+      if (singleRow){
+        if (x < lastX + 100) x = lastX + 100;
+        lastX = x;
+        return { k, x, stagger: false };
+      }
       tier = (x - lastX < 100) ? (tier === 0 ? 1 : 0) : 0;
       lastX = x;
       return { k, x, stagger: tier === 1 };
