@@ -162,12 +162,16 @@
      스크롤되면 안 되므로, 한 시대의 모든 나라 줄을 kp-hscroll 하나가
      함께 가로 스크롤한다(줄마다 스크롤이 있으면 다시 어긋난다). */
   .kp-hscroll { overflow-x:auto; }
-  .kp-strip { position:relative; height:112px; padding:8px 8px 10px; }
-  .kp-strip::before { content:''; position:absolute; left:20px; right:20px; top:24px; height:2px;
-    background: linear-gradient(90deg, transparent, #5a4a30 6%, #5a4a30 94%, transparent); z-index:0; }
+  .kp-strip { position:relative; height:156px; padding:8px 8px 10px; }
+  /* 예전엔 ::before로 줄 전체 폭(20px~right:20px)에 선을 그렸는데, 그러면
+     나라가 일찍 멸망해도 선이 트랙 끝까지 이어져 마치 그 뒤로도 왕조가
+     계속되는 것처럼 보였다. 이제 실제 엘리먼트로 그려서, 그 나라의
+     마지막 왕(=멸망 시점) 자리에서 선이 끝나도록 폭을 JS에서 정한다. */
+  .kp-line { position:absolute; left:20px; top:24px; height:2px; z-index:0;
+    background: linear-gradient(90deg, transparent, #5a4a30 8%, #5a4a30 100%); }
   .kp-king { position:absolute; top:8px; width:108px; display:flex; flex-direction:column; align-items:center; padding:0 5px; z-index:1; }
   .kp-king .kp-badge { position:relative; width:40px; height:40px; border-radius:50%; display:flex; align-items:center;
-    justify-content:center; font-weight:700; font-size:11.5px; margin-bottom:7px;
+    justify-content:center; font-weight:700; font-size:11.5px;
     background:#2a2013; border:2px solid #4a3c26; color:#9c8d70;
     background-size:cover; background-position:center top; }
   /* 초상화가 있는 왕은 얼굴을 배지 전체에 채우고, 출제 횟수는 오른쪽
@@ -175,6 +179,12 @@
   .kp-king .kp-badge.has-p .kp-n { position:absolute; bottom:-4px; right:-6px; min-width:16px; height:16px;
     padding:0 3px; border-radius:9px; background:#1b150e; border:1.5px solid #4a3c26; color:#f0d9a0;
     font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  /* 이름·연도·업적 묶음. 같은 줄에서 왕들이 몰려 있으면(연도가 실제로
+     가까움) 자리(가로 좌표)는 절대 옮기지 않고 — 다른 나라와 같은
+     해가 늘 같은 세로줄에 오게 하기 위해서다 — 이 라벨만 아래로
+     한 단 내려서(.kp-king.kp-stag) 글자가 서로 안 겹치게 한다. */
+  .kp-king .kp-label { margin-top:7px; }
+  .kp-king.kp-stag .kp-label { margin-top:49px; }
   .kp-king .kp-nm { font-size:12px; font-weight:500; text-align:center; white-space:nowrap; line-height:1.3; color:#f0e6d2; }
   .kp-king .kp-yr { font-size:10px; color:#a89878; margin-top:2px; font-variant-numeric: tabular-nums; }
   /* 업적 한 줄 — 왕 이름 아래 짧게 붙여 이미지처럼 기억하기 좋게(외우기용). */
@@ -406,27 +416,39 @@ function openKingsModal(era){
   const pxPerYear = Math.max(2.4, 900 / span);
   let trackW = 640;
 
+  // 자리(가로 좌표)는 오직 실제 연도로만 정한다 — 나라별로 밀어서
+  // 옮기면(예전 방식) 나라마다 어긋난 만큼 누적돼, 같은 시기인데도
+  // 세로줄이 완전히 뒤죽박죽이 됐다(실제로 지적받은 문제). 그 대신
+  // 같은 줄 안에서 연도가 너무 가까워 라벨이 겹칠 것 같으면(kp-stag)
+  // 라벨만 한 단 내려서 피한다 — 배지 자리는 절대 안 바뀐다.
   const rows = groups.map(([country, kings]) => {
-    let lastX = -Infinity;
+    let lastX = -Infinity, tier = 0;
     const positioned = kings.map(k => {
-      let x = 40 + (kingsYearNum(k.year) - minY) * pxPerYear;
-      if (x < lastX + 100) x = lastX + 100;   // 같은 줄 안에서 배지·업적 텍스트끼리 안 겹치게 최소 간격
+      const x = 40 + (kingsYearNum(k.year) - minY) * pxPerYear;
+      tier = (x - lastX < 100) ? (tier === 0 ? 1 : 0) : 0;
       lastX = x;
-      return { k, x };
+      return { k, x, stagger: tier === 1 };
     });
-    trackW = Math.max(trackW, lastX + 80);
-    return { country, kings, positioned };
+    const rowEndX = positioned.length ? positioned[positioned.length - 1].x : 40;
+    trackW = Math.max(trackW, rowEndX + 80);
+    return { country, kings, positioned, rowEndX };
   });
 
-  html += `<div class="kp-hscroll">` + rows.map(({ country, kings, positioned }) => {
+  html += `<div class="kp-hscroll">` + rows.map(({ country, kings, positioned, rowEndX }) => {
     const total = kings.reduce((s, k) => s + k.n, 0);
+    // 이 나라의 마지막 왕(=멸망 또는 이 왕조 목록의 끝) 자리에서 선이
+    // 끝나게 한다 — 트랙 전체 폭(trackW)까지 죽 이어지지 않는다.
+    const lineW = Math.max(0, rowEndX - 20);
     return `<div class="kp-country"><span class="kp-cname">${country}<span class="kp-ccount">· 왕 ${kings.length}명 · 출제 합계 ${total}회</span></span>
-      <div class="kp-strip" style="width:${trackW}px">` + positioned.map(({ k, x }) => `
-        <div class="kp-king" data-t="${kingsTier(k.n)}" style="left:${x}px">
+      <div class="kp-strip" style="width:${trackW}px">
+        <div class="kp-line" style="width:${lineW}px"></div>` + positioned.map(({ k, x, stagger }) => `
+        <div class="kp-king${stagger ? ' kp-stag' : ''}" data-t="${kingsTier(k.n)}" style="left:${x}px">
           <div class="kp-badge${k.p ? ' has-p' : ''}"${k.p ? ` style="background-image:url('assets/portraits/${k.p}.png')"` : ''}>${k.p ? `<span class="kp-n">${k.n}</span>` : k.n}${kingsDupDot(k.name, era, country, k.year)}</div>
-          <div class="kp-nm">${k.name}</div>
-          <div class="kp-yr">${k.year}</div>
-          ${k.a ? `<div class="kp-achv">${k.a}</div>` : ''}
+          <div class="kp-label">
+            <div class="kp-nm">${k.name}</div>
+            <div class="kp-yr">${k.year}</div>
+            ${k.a ? `<div class="kp-achv">${k.a}</div>` : ''}
+          </div>
         </div>`).join('') + `</div></div>`;
   }).join('') + `</div>`;
 
