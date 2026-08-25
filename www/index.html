@@ -91,19 +91,20 @@
   .era-pct { font-size: 11px; color: #c9a24a; white-space: nowrap; }
 
   /* 시대 마스코트 — 헤더 오른쪽 끝. 이 시대 챕터를 다 깨기 전엔 회색
-     실루엣으로 가만히 서 있다가, 다 깨면 색이 들어오면서 스프라이트
-     시트를 순환시켜 제자리 동작(칼 휘두르기 등)을 재생한다. 프레임 수·
-     캔버스 크기는 스프라이트 시트마다 다르므로 --frames와 인라인
-     width/height로 개별 지정한다. 컬러가 된 뒤엔 눌러서 언제든
-     재생(팝 효과 다시 재생)할 수 있다. */
-  .era-mascot { margin-left:auto; flex:none; align-self:center; height:56px;
+     실루엣으로 가만히 서 있다가, 다 깨면 색이 들어온다. 평소엔 정지된
+     첫 프레임으로 가만히 있고, 눌러야만 동작(칼 휘두르기 등)을 재생한다
+     (풀리자마자 한 번은 자동 재생). 프레임 수·캔버스 크기는 스프라이트
+     시트마다 달라 --frames와 인라인 width/height로 개별 지정한다.
+     재생 속도는 프레임 수에 비례(프레임당 0.22초)해 프레임이 많은
+     스프라이트가 더 빨리 지나가 버리지 않게 한다. */
+  .era-mascot { margin-left:auto; flex:none; align-self:center; height:112px;
     background-repeat:no-repeat; background-size: calc(var(--frames, 6) * 100%) 100%;
     background-position: 0 0; image-rendering:-webkit-optimize-contrast;
     filter: grayscale(1) brightness(.5); opacity:.5;
     transition: filter .8s ease, opacity .8s ease; }
-  .era-mascot.unlocked { filter:none; opacity:1; cursor: pointer;
-    animation: era-mascot-play 1s steps(calc(var(--frames, 6) - 1)) infinite; }
-  .era-mascot.unlocked.pop { animation: era-mascot-play 1s steps(calc(var(--frames, 6) - 1)) infinite,
+  .era-mascot.unlocked { filter:none; opacity:1; cursor: pointer; }
+  .era-mascot.unlocked.playing {
+    animation: era-mascot-play calc(var(--frames, 6) * 0.22s) steps(calc(var(--frames, 6) - 1)) 2,
                era-mascot-pop .7s cubic-bezier(.2,1.6,.4,1); }
   @keyframes era-mascot-play { from { background-position-x: 0%; } to { background-position-x: 100%; } }
   @keyframes era-mascot-pop { 0% { transform:scale(.6); } 55% { transform:scale(1.18); } 100% { transform:scale(1); } }
@@ -345,23 +346,23 @@ applyOrientation();
 
 /* ============ 시대순(왼쪽=과거 → 오른쪽=현재) 타임라인 데이터 ============ */
 const ERAS = [
-  { title: '선사·초기국가', year: '~ BC108', pct: '4.7%', range: '구석기 ~ 고조선·초기국가', mascot: 'dangun', mascotFrames: 6, mascotW: 54, mascotH: 56, cards: [
+  { title: '선사·초기국가', year: '~ BC108', pct: '4.7%', range: '구석기 ~ 고조선·초기국가', mascot: 'dangun', mascotFrames: 6, mascotW: 108, mascotH: 112, cards: [
     { href: 'seonsa1.html', num: '선사 1화', name: '뗀석기에서 고인돌까지', who: '구석기~고조선', bg: 'assets/scenes/seonsa1_river.webp' },
   ] },
-  { title: '고대', year: 'BC57 ~ 918', pct: '14.4%', range: '삼국시대 ~ 남북국시대', mascot: 'gwanggaeto', mascotFrames: 8, mascotW: 39, mascotH: 56, cards: [
+  { title: '고대', year: 'BC57 ~ 918', pct: '14.4%', range: '삼국시대 ~ 남북국시대', mascot: 'gwanggaeto', mascotFrames: 8, mascotW: 78, mascotH: 112, cards: [
     { href: 'godae1.html', num: '고대 1화', name: '세 나라의 겨룸', who: '무령왕 · 진흥왕', bg: 'assets/scenes/godae1_hanseong.webp' },
     { href: 'gaya.html', num: '고대 2화', name: '낙동강의 철', who: '금관가야 · 대가야 · 우륵', bg: 'assets/scenes/gaya_gimhae.webp' },
     { href: 'tongil.html', num: '고대 3화', name: '통일 전쟁', who: '계백 · 김유신 · 문무왕 · 신문왕', bg: 'assets/scenes/tongil_hwangsanbeol.webp' },
     { href: 'godae2.html', num: '고대 4화', name: '통일과 발해', who: '장보고 · 의상 · 발해', bg: 'assets/scenes/godae2_sanggyeong.webp' },
     { href: 'godae3.html', num: '고대 5화', name: '후삼국', who: '견훤 · 궁예 · 최치원', bg: 'assets/scenes/godae3_husamguk.webp' },
   ] },
-  { title: '고려', year: '918 ~ 1392', pct: '14.4%', range: '918 ~ 1392', mascot: 'taejo_goryeo', mascotFrames: 6, mascotW: 50, mascotH: 56, cards: [
+  { title: '고려', year: '918 ~ 1392', pct: '14.4%', range: '918 ~ 1392', mascot: 'taejo_goryeo', mascotFrames: 6, mascotW: 100, mascotH: 112, cards: [
     { href: 'goryeo1.html', num: '고려 1화', name: '왕건의 나라', who: '태조 · 광종 · 최승로', bg: 'assets/scenes/goryeo1_gaegyeong.webp' },
     { href: 'goryeo2.html', num: '고려 2화', name: '무신과 몽골', who: '서희 · 최충헌 · 삼별초', bg: 'assets/scenes/goryeo2_seogyeong.webp' },
     { href: 'byeokrando.html', num: '고려 3화', name: '벽란도의 바닷길', who: '전시과 · 해동통보 · 대외무역', bg: 'assets/scenes/goryeo_byeokrando.webp' },
     { href: 'goryeo3.html', num: '고려 4화', name: '원 간섭기와 공민왕', who: '공민왕 · 지눌 · 의천', bg: 'assets/scenes/goryeo3_gaegyeong.webp' },
   ] },
-  { title: '조선 전기', year: '1392 ~ 1592', pct: '8.2%', range: null, mascot: 'sejong', mascotFrames: 7, mascotW: 38, mascotH: 56, cards: [
+  { title: '조선 전기', year: '1392 ~ 1592', pct: '8.2%', range: null, mascot: 'sejong', mascotFrames: 7, mascotW: 76, mascotH: 112, cards: [
     { href: 'ch0.html', num: '0화', name: '새 나라의 설계자', who: '태조 · 정도전', bg: 'assets/scenes/ch0_bg.webp' },
     { href: 'ch1.html', num: '1화', name: '왕권의 기틀', who: '태종', bg: 'assets/scenes/ch1_naejeon.webp' },
     { href: 'ch2.html', num: '2화', name: '황금시대', who: '세종 · 훈민정음', bg: 'assets/scenes/ch2_jiphyeonjeon.webp' },
@@ -372,31 +373,31 @@ const ERAS = [
     { href: 'ch5b.html', num: '7화', name: '서원과 학맥', who: '주세붕 · 조식 · 이황', bg: 'assets/scenes/ch5_seowon.webp' },
     { href: 'ch6.html', num: '8화', name: '폭풍 전야', who: '선조', bg: 'assets/scenes/ch6_jojeong.webp' },
   ] },
-  { title: '조선 후기', year: '1592 ~ 1863', pct: '15.3%', range: '1592 ~ 1863', mascot: 'yisunsin', mascotFrames: 6, mascotW: 47, mascotH: 56, cards: [
+  { title: '조선 후기', year: '1592 ~ 1863', pct: '15.3%', range: '1592 ~ 1863', mascot: 'yisunsin', mascotFrames: 6, mascotW: 93, mascotH: 112, cards: [
     { href: 'imjin.html', num: '후기 1화', name: '한산도의 학익진', who: '신립 · 이순신 · 김시민', bg: 'assets/scenes/imjin_tangeumdae.webp' },
     { href: 'imjin2.html', num: '후기 2화', name: '행주산성의 반격', who: '곽재우 · 조헌 · 권율', bg: 'assets/scenes/imjin_uibyeong.webp' },
     { href: 'hugi1.html', num: '후기 3화', name: '광해군과 두 호란', who: '광해군 · 병자호란', bg: 'assets/scenes/hugi1_namhan.webp' },
     { href: 'hugi2.html', num: '후기 4화', name: '실학과 저잣거리', who: '정약용 · 정조', bg: 'assets/scenes/hugi2_seongho.webp' },
     { href: 'hugi3.html', num: '후기 5화', name: '세도와 봉기', who: '홍경래 · 최제우', bg: 'assets/scenes/hugi3_jeongju.webp' },
   ] },
-  { title: '근대·개항기', year: '1863 ~ 1910', pct: '12.8%', range: '1863 ~ 1910', mascot: 'jeonbongjun', mascotFrames: 6, mascotW: 51, mascotH: 56, cards: [
+  { title: '근대·개항기', year: '1863 ~ 1910', pct: '12.8%', range: '1863 ~ 1910', mascot: 'jeonbongjun', mascotFrames: 6, mascotW: 102, mascotH: 112, cards: [
     { href: 'gaehang1.html', num: '개항 1화', name: '강화도의 대포', who: '흥선대원군 · 최익현', bg: 'assets/scenes/gaehang1_gwangseong.webp' },
     { href: 'gaehang_ch2.html', num: '개항 2화', name: '군인들의 함성', who: '임오군란', bg: 'assets/scenes/gaehang_ch2_barracks.webp' },
     { href: 'gaehang_ch3.html', num: '개항 3화', name: '삼일천하의 꿈', who: '갑신정변 · 김옥균', bg: 'assets/scenes/gaehang_ch3_ujeongchongguk.webp' },
     { href: 'gaehang4.html', num: '개항 4화', name: '우금치의 함성', who: '전봉준 · 갑오개혁', bg: 'assets/scenes/gaehang4_ugeumchi.webp' },
     { href: 'gaehang5.html', num: '개항 5화', name: '대한제국과 국권피탈', who: '고종 · 신민회', bg: 'assets/scenes/gaehang5_hwangudan.webp' },
   ] },
-  { title: '일제강점기', year: '1910 ~ 1945', pct: '15.1%', range: '1910 ~ 1945', mascot: 'yugwansun', mascotFrames: 6, mascotW: 38, mascotH: 56, cards: [
+  { title: '일제강점기', year: '1910 ~ 1945', pct: '15.1%', range: '1910 ~ 1945', mascot: 'yugwansun', mascotFrames: 6, mascotW: 77, mascotH: 112, cards: [
     { href: 'ilje1.html', num: '일제 1화', name: '만세 소리', who: '3·1 운동 · 박은식', bg: 'assets/scenes/ilje1_tapgol.webp' },
     { href: 'ilje2.html', num: '일제 2화', name: '실력을 기르자', who: '신간회 · 의열단 · 청산리', bg: 'assets/scenes/ilje2_gyeongseong.webp' },
     { href: 'ilje_ch7.html', num: '일제 7화', name: '임정의 부활', who: '김구 · 윤봉길', bg: 'assets/scenes/ilje_ch7_imjeong.webp' },
   ] },
-  { title: '현대', year: '1945 ~ 현재', pct: '9.7%', range: '1945 ~ 현재', mascot: 'dove', mascotFrames: 6, mascotW: 58, mascotH: 56, cards: [
+  { title: '현대', year: '1945 ~ 현재', pct: '9.7%', range: '1945 ~ 현재', mascot: 'dove', mascotFrames: 6, mascotW: 117, mascotH: 112, cards: [
     { href: 'hyeondae1.html', num: '현대 1화', name: '해방, 그리고 갈라짐', who: '여운형 · 6·25', bg: 'assets/scenes/hyeondae1_haebang.webp' },
     { href: 'hyeondae2.html', num: '현대 2화', name: '광장의 사람들', who: '4·19 · 5·18 · 6월항쟁', bg: 'assets/scenes/hyeondae2_gwangjang.webp' },
     { href: 'hyeondae3.html', num: '현대 3화', name: '두 정부와 판문점', who: '새마을 · 7·4 · 6·15', bg: 'assets/scenes/hyeondae3_panmunjeom.webp' },
   ] },
-  { title: '시대 통합', year: '해마다', pct: '5.3%', range: '세시풍속 · 문화유산', mascot: 'seollal', mascotFrames: 7, mascotW: 43, mascotH: 56, cards: [
+  { title: '시대 통합', year: '해마다', pct: '5.3%', range: '세시풍속 · 문화유산', mascot: 'seollal', mascotFrames: 7, mascotW: 86, mascotH: 112, cards: [
     { href: 'sesi.html', num: '시대통합 1화', name: '열두 달 세시풍속', who: '설날 · 단오 · 추석 · 동지', bg: 'assets/scenes/sesi_maeul.webp' },
   ] },
 ];
@@ -565,9 +566,9 @@ function renderEraList(){
     // 이 시대 챕터를 전부 깼는지 — 마스코트를 회색에서 컬러로 바꾸는 기준.
     const eraComplete = !!(e.mascot && e.cards && e.cards.length &&
       e.cards.every(c => window.Badges && Badges.has('ch_complete_' + c.href)));
-    const mascotHtml = e.mascot ? `<div class="era-mascot${eraComplete ? ' unlocked pop' : ''}"
+    const mascotHtml = e.mascot ? `<div class="era-mascot${eraComplete ? ' unlocked' : ''}"
         style="background-image:url('assets/mascots/${e.mascot}.png'); --frames:${e.mascotFrames || 6};
-        width:${e.mascotW || 56}px; height:${e.mascotH || 56}px"
+        width:${e.mascotW || 112}px; height:${e.mascotH || 112}px"
         title="${eraComplete ? '이 시대 전 챕터 완료! 눌러보세요' : '이 시대 챕터를 모두 깨면 색이 들어와요'}"></div>` : '';
     section.innerHTML = `
       <div class="era-dot"></div>
@@ -610,11 +611,16 @@ function renderEraList(){
     }
     const mascotEl = section.querySelector('.era-mascot.unlocked');
     if (mascotEl){
-      mascotEl.addEventListener('click', () => {
-        mascotEl.classList.remove('pop');
+      const replay = () => {
+        mascotEl.classList.remove('playing');
         void mascotEl.offsetWidth; // 리플로우를 강제해 애니메이션을 처음부터 다시 재생
-        mascotEl.classList.add('pop');
+        mascotEl.classList.add('playing');
+      };
+      mascotEl.addEventListener('animationend', (ev) => {
+        if (ev.animationName === 'era-mascot-play') mascotEl.classList.remove('playing');
       });
+      mascotEl.addEventListener('click', replay);
+      requestAnimationFrame(replay); // 컬러가 된 첫 화면에서 한 번은 자동 재생
     }
     eraListEl.appendChild(section);
   });
