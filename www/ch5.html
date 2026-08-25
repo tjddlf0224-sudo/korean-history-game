@@ -302,7 +302,7 @@
   <div id="stick-zone">
     <div id="stick-base"><div id="stick-knob"></div></div>
   </div>
-  <button id="act-btn" onclick="Stage.interact()">💬</button>
+  <button id="act-btn" onclick="Stage.interact()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V5z"/></svg></button>
 
   <!-- 인트로 -->
   <div class="ov show" id="intro-overlay">
@@ -315,8 +315,8 @@
   <!-- 대화 -->
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
-      <div class="dlg-portrait" id="dlg-portrait">👤</div>
-      <button class="dlg-close" onclick="Dialog.close()">✕</button>
+      <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
+      <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
         <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
@@ -332,7 +332,7 @@
   <!-- 확인 퀴즈 / 보스전 -->
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
-      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <button class="quiz-close" onclick="Quiz.abort()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -364,14 +364,14 @@
   <div id="zone-banner"></div>
   <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
-  <button id="menu-btn" aria-label="메뉴">☰</button>
+  <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <div class="ov center" id="game-menu-overlay">
     <div id="game-menu-panel">
       <h3>메뉴</h3>
       <a href="index.html">챕터 목록으로 나가기</a>
       <button id="menu-restart">이 화 처음부터 다시 시작</button>
       <button id="menu-kings">왕조 계보 보기</button>
-      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
+      <button id="bgm-mute-toggle"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg> 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -379,7 +379,7 @@
     <div id="kings-panel">
       <div class="kp-head">
         <h2 id="kp-title">왕조 계보</h2>
-        <button id="kings-close" aria-label="닫기">✕</button>
+        <button id="kings-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       </div>
       <div class="kp-tabs" id="kp-tabs"></div>
       <div id="kp-tapinfo"></div>
@@ -1039,10 +1039,10 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
   kimilson_0: {
-    name: '김일손', icon: '📜', img: 'assets/portraits/kimilson.png',
+    name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
     beats: [
       { who:'npc', t:'무오사화의 서막이었지.' },
-      { who:'npc', name:'연산군', icon:'👑', img:'assets/portraits/yeonsangun.png', t:'김일손, 네놈이 쓴 사초에 무슨 내용이 있는지 내가 모를 줄 알았느냐. 세조 할아버님을 비방하는 글이라니!' },
+      { who:'npc', name:'연산군', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img:'assets/portraits/yeonsangun.png', t:'김일손, 네놈이 쓴 사초에 무슨 내용이 있는지 내가 모를 줄 알았느냐. 세조 할아버님을 비방하는 글이라니!' },
       { who:'npc', t:'신은 역사를 있는 그대로 기록했을 뿐입니다…' },
       { who:'npc', t:'내가 쓴 「조의제문」이 빌미가 되어, 많은 사림 인사가 목숨을 잃었네 — 무오사화였지.' },
       { who:'npc', t:'몇 년 뒤, 연산군은 자신의 생모 폐비 윤씨의 죽음에 관련된 이들을 찾아내 대규모로 숙청했네. 갑자사화 — 조선 전기 사화 중 가장 많은 희생자를 냈지.' },
@@ -1063,7 +1063,7 @@ const NPC_DATA = {
     startsMini: 1
   },
   kimilson_1: {
-    name: '김일손', icon: '📜', img: 'assets/portraits/kimilson.png',
+    name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
     beats: [
       { who:'npc', t:'다시 왔군. 무오사화와 갑자사화, 두 사건이 자꾸 뒤섞이지 않는가? 하나씩 정리해보세.' }
     ],
@@ -1078,12 +1078,12 @@ const NPC_DATA = {
     finishesRevisit: 1
   },
   kimilson_repeat: {
-    name: '김일손', icon: '📜', img: 'assets/portraits/kimilson.png',
+    name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
     beats: [ { who:'npc', t:'…이미 지나간 일이네. 다른 이들의 이야기도 들어보게.' } ],
     quiz: null
   },
   jogwangjo_0: {
-    name: '조광조', icon: '📖', img: 'assets/portraits/jogwangjo.png',
+    name: '조광조', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.8-1.3-4-2-8-2v13c4 0 6.2.7 8 2 1.8-1.3 4-2 8-2V4c-4 0-6.2.7-8 2z"/><line x1="12" y1="6" x2="12" y2="19"/></svg>', img: 'assets/portraits/jogwangjo.png',
     beats: [
       { who:'npc', t:'연산군을 몰아내고 새 임금을 세운 중종반정, 그 덕에 저 같은 사람도 이렇게 조정에 설 수 있었지요.' },
       { who:'npc', t:'하지만 반정으로 왕이 바뀌었어도, 이 나라엔 아직 고칠 게 산더미입니다. 소격서부터 없애야 합니다 — 도교 제사를 지내는 그런 곳에, 나라 살림을 쓸 이유가 없지요.' },
@@ -1098,7 +1098,7 @@ const NPC_DATA = {
     startsMini: 2
   },
   jogwangjo_1: {
-    name: '조광조', icon: '📖', img: 'assets/portraits/jogwangjo.png',
+    name: '조광조', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.8-1.3-4-2-8-2v13c4 0 6.2.7 8 2 1.8-1.3 4-2 8-2V4c-4 0-6.2.7-8 2z"/><line x1="12" y1="6" x2="12" y2="19"/></svg>', img: 'assets/portraits/jogwangjo.png',
     beats: [
       { who:'npc', t:'다시 오셨군요. 제 이야기가 앞서 들으신 무오사화와 헷갈리실 법도 하지요.' }
     ],
@@ -1111,12 +1111,12 @@ const NPC_DATA = {
     finishesRevisit: 2
   },
   jogwangjo_repeat: {
-    name: '조광조', icon: '📖', img: 'assets/portraits/jogwangjo.png',
+    name: '조광조', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.8-1.3-4-2-8-2v13c4 0 6.2.7 8 2 1.8-1.3 4-2 8-2V4c-4 0-6.2.7-8 2z"/><line x1="12" y1="6" x2="12" y2="19"/></svg>', img: 'assets/portraits/jogwangjo.png',
     beats: [ { who:'npc', t:'…이미 지나간 일입니다. 다른 이들의 이야기도 들어보시지요.' } ],
     quiz: null
   },
   commoner1_0: {
-    name: '나인', icon: '🎐', img: 'assets/portraits/gungnyeo.png',
+    name: '나인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><path d="M7.5 6h9l-1.2 7H8.7z"/><line x1="12" y1="13" x2="12" y2="16"/><line x1="9" y1="16" x2="9" y2="21"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="15" y1="16" x2="15" y2="21"/></svg>', img: 'assets/portraits/gungnyeo.png',
     beats: [
       { who:'npc', t:'인종 임금께서 즉위 1년도 안 되어 세상을 떠나시니, 어린 명종을 대신해 문정왕후께서 수렴청정을 시작하셨지.' },
       { who:'npc', t:'이번엔 윤임 대감 쪽 사람들이 쫓겨났다더군… 다음엔 또 누가 화를 입을지.' },
@@ -1126,7 +1126,7 @@ const NPC_DATA = {
     startsMini: 3
   },
   commoner1_1: {
-    name: '나인', icon: '🎐', img: 'assets/portraits/gungnyeo.png',
+    name: '나인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><path d="M7.5 6h9l-1.2 7H8.7z"/><line x1="12" y1="13" x2="12" y2="16"/><line x1="9" y1="16" x2="9" y2="21"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="15" y1="16" x2="15" y2="21"/></svg>', img: 'assets/portraits/gungnyeo.png',
     beats: [
       { who:'npc', t:'또 왔는가? 을사사화 이야기, 좀 더 짚어볼까.' }
     ],
@@ -1139,7 +1139,7 @@ const NPC_DATA = {
     finishesRevisit: 3
   },
   commoner1_repeat: {
-    name: '나인', icon: '🎐', img: 'assets/portraits/gungnyeo.png',
+    name: '나인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><path d="M7.5 6h9l-1.2 7H8.7z"/><line x1="12" y1="13" x2="12" y2="16"/><line x1="9" y1="16" x2="9" y2="21"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="15" y1="16" x2="15" y2="21"/></svg>', img: 'assets/portraits/gungnyeo.png',
     beats: [ { who:'npc', t:'…나야 그저 소문으로 들었을 뿐이네.' } ],
     quiz: null
   }
@@ -1279,7 +1279,7 @@ const Dialog = {
     const portraitEl = document.getElementById('dlg-portrait');
     const img = beat.img || this.data.img;
     if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon; }
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
@@ -1570,12 +1570,15 @@ requestAnimationFrame(loop);
 
 </script>
 <script src="assets/badges.js"></script>
+<script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
+const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
+</script>
 
 <script>
 (function(){
   const btn = document.getElementById('bgm-mute-toggle');
   if (!btn) return;
-  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  function render(){ btn.innerHTML = BGM.isMuted() ? (ICON_MUTE + ' 배경음악 켜기') : (ICON_SOUND + ' 배경음악 끄기'); }
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();

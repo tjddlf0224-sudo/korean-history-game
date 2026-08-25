@@ -331,8 +331,8 @@
 
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
-      <div class="dlg-portrait" id="dlg-portrait">👤</div>
-      <button class="dlg-close" onclick="Dialog.close()">✕</button>
+      <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
+      <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
         <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
@@ -347,7 +347,7 @@
 
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
-      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <button class="quiz-close" onclick="Quiz.abort()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -378,14 +378,14 @@
   <div id="zone-banner"></div>
   <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
-  <button id="menu-btn" aria-label="메뉴">☰</button>
+  <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <div class="ov center" id="game-menu-overlay">
     <div id="game-menu-panel">
       <h3>메뉴</h3>
       <a href="index.html">챕터 목록으로 나가기</a>
       <button id="menu-restart">이 화 처음부터 다시 시작</button>
       <button id="menu-kings">왕조 계보 보기</button>
-      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
+      <button id="bgm-mute-toggle"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg> 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -393,7 +393,7 @@
     <div id="kings-panel">
       <div class="kp-head">
         <h2 id="kp-title">왕조 계보</h2>
-        <button id="kings-close" aria-label="닫기">✕</button>
+        <button id="kings-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       </div>
       <div class="kp-tabs" id="kp-tabs"></div>
       <div id="kp-tapinfo"></div>
@@ -956,7 +956,7 @@ window.addEventListener('keyup', e=>{
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
   jeongdojeon_0: {
-    name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
+    name:'정도전', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img:'assets/portraits/jeongdojeon.png',
     beats: [
       { t:'어이, 거기 자네. 처음 보는 얼굴인데 — 그냥 구경하러 온 겐가?' },
       { t:'(씩 웃으며) 맞네, 삼봉 정도전일세. 이 새 궁궐 이름도 내가 지었지 — 경복궁(景福宮), \'큰 복을 누리라\'는 뜻으로.' },
@@ -980,7 +980,7 @@ const NPC_DATA = {
     // 주제 하나가 끝나면 그 자리에서 바로 그 주제의 퀴즈를 묻고, 풀면
     // 다음 주제 대사로 이어진다(대사→퀴즈→대사→퀴즈 …). 정몽주 단심가
     // 대목은 딸린 퀴즈가 없는 순수 이야기라 퀴즈 없이 그대로 흘러간다.
-    name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
+    name:'정도전', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img:'assets/portraits/jeongdojeon.png',
     beats: [
       { t:'궁궐만 짓는다고 나라가 서는 게 아닐세. 도읍 자리부터 제대로 골라야지.' },
       { t:'전하께서 몸소 무악(毋岳)<sup>1)</sup> 땅까지 살피러 다니셨다네. 결국 어디로 정해졌는지 아나?\n1) 무악: 지금의 서울 서대문구 신촌·연희동 일대(안산 자락)' },
@@ -1001,7 +1001,7 @@ const NPC_DATA = {
     ],
   },
   jeongdojeon_2: {
-    name:'정도전', icon:'📜', img:'assets/portraits/jeongdojeon.png',
+    name:'정도전', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img:'assets/portraits/jeongdojeon.png',
     beats: [
       { t:'(성벽 너머 어딘가를 바라보며) …그나저나, 요즘 이방원 나리가 부쩍 날 찾아오시더군.' },
       { t:'전하의 다섯째 아드님일세. 건국에 누구보다 공이 컸는데, 세자 자리는 막내인 방석 아기씨에게 돌아갔지.' },
@@ -1015,7 +1015,7 @@ const NPC_DATA = {
     endsChapter: true
   },
   worker_0: {
-    name:'인부', icon:'🧱', img:'assets/portraits/commoner1.png',
+    name:'인부', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="1"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="9" y1="7" x2="9" y2="12"/><line x1="15" y1="12" x2="15" y2="17"/></svg>', img:'assets/portraits/commoner1.png',
     beats: [
       { t:'허리 한번 못 펴고 돌을 나르는 중이네. 이 궁궐이 다 지어지면 장관이겠지.' },
       { t:'궁궐만 짓는 게 아닐세. 도읍 둘레로 성벽도 쌓고 있지 — 백악·낙산·남산·인왕, 네 산을 이어서 빙 두르는 걸세.' },
@@ -1211,7 +1211,7 @@ const Dialog = {
     document.getElementById('dlg-tag').textContent = '1392년 · 한양';
     const portraitEl = document.getElementById('dlg-portrait');
     if (this.data.img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${this.data.img}')`; }
-    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = this.data.icon; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = this.data.icon; }
     this.render();
   },
   render(){
@@ -1226,7 +1226,7 @@ const Dialog = {
     if (portraitEl){
       const img = beat.img || (beat.name ? null : this.data.img);
       if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
+      else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon || '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg>'; }
     }
     // 0화 대사에는 "무악(毋岳)<sup>1)</sup>" 같은 각주 표시와, 그 각주 본문이
     // 별도 줄("1) 무악: …")로 붙어 있다. NPC가 실제로 하는 말이 아니라 참고용
@@ -1412,12 +1412,15 @@ requestAnimationFrame(loop);
 
 </script>
 <script src="assets/badges.js"></script>
+<script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
+const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
+</script>
 
 <script>
 (function(){
   const btn = document.getElementById('bgm-mute-toggle');
   if (!btn) return;
-  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  function render(){ btn.innerHTML = BGM.isMuted() ? (ICON_MUTE + ' 배경음악 켜기') : (ICON_SOUND + ' 배경음악 끄기'); }
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();

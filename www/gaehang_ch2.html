@@ -296,8 +296,8 @@
   </div>
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
-      <div class="dlg-portrait" id="dlg-portrait">👤</div>
-      <button class="dlg-close" onclick="Dialog.close()">✕</button>
+      <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
+      <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
         <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div><div class="dlg-name" id="dlg-name"></div>
@@ -312,7 +312,7 @@
 
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
-      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <button class="quiz-close" onclick="Quiz.abort()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -340,14 +340,14 @@
   <div id="zone-banner"></div>
   <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
-  <button id="menu-btn" aria-label="메뉴">☰</button>
+  <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <div class="ov center" id="game-menu-overlay">
     <div id="game-menu-panel">
       <h3>메뉴</h3>
       <a href="index.html">챕터 목록으로 나가기</a>
       <button id="menu-restart">이 화 처음부터 다시 시작</button>
       <button id="menu-kings">왕조 계보 보기</button>
-      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
+      <button id="bgm-mute-toggle"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg> 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -355,7 +355,7 @@
     <div id="kings-panel">
       <div class="kp-head">
         <h2 id="kp-title">왕조 계보</h2>
-        <button id="kings-close" aria-label="닫기">✕</button>
+        <button id="kings-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       </div>
       <div class="kp-tabs" id="kp-tabs"></div>
       <div id="kp-tapinfo"></div>
@@ -853,7 +853,7 @@ window.addEventListener('keyup', e=>{
    다수 하급 군인이 주도한 봉기였음을 반영). */
 const NPC_DATA = {
   daewongun_0: {
-    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+    name:'흥선대원군', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img:'assets/portraits/daewongun.png',
     beats: [
       { t:'…내가 하야한 지 몇 해 되지도 않았는데, 벌써 이 나라 꼴이 말이 아니로군.' },
       { t:'별기군이라는 신식 군대는 매달 급료를 꼬박꼬박 받는다지. 그런데 저 무위영 구식 군인들은 열세 달째 급료가 밀렸다는군.' },
@@ -867,7 +867,7 @@ const NPC_DATA = {
     ],
   },
   daewongun_1: {
-    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+    name:'흥선대원군', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img:'assets/portraits/daewongun.png',
     beats: [
       { t:'(창덕궁, 며칠 뒤) 결국 일이 터졌군. 무위영 군인들이 선혜청 당상의 집을 부수고, 일본 공사관까지 들이쳤다고 하네.' },
       { t:'그들이 나를 다시 찾아왔어. "대감께서 다시 나서주십시오"라고 하더군.' },
@@ -881,7 +881,7 @@ const NPC_DATA = {
     ],
   },
   daewongun_2: {
-    name:'흥선대원군', icon:'⚔️', img:'assets/portraits/daewongun.png',
+    name:'흥선대원군', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img:'assets/portraits/daewongun.png',
     beats: [
       { t:'청나라 군대가 한성에 들어왔다는 소식을 들었을 땐, 이미 늦었다는 걸 직감했네.' },
       { t:'오장경이 이끄는 군사들이 나를 청군 진영으로 초대하더군. 가서 보니, 그건 초대가 아니라 나포였어.' },
@@ -899,7 +899,7 @@ const NPC_DATA = {
     endsChapter: true
   },
   soldier_0: {
-    name:'무위영 병사', icon:'🍚', img:'assets/portraits/muwiyeong_soldier.png',
+    name:'무위영 병사', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11c0 4.3 3.6 7.5 8 7.5s8-3.2 8-7.5"/><path d="M5.5 11a6.5 3.2 0 0113 0c0 1.8-2.9 3.2-6.5 3.2s-6.5-1.4-6.5-3.2z" fill="currentColor" stroke="none"/></svg>', img:'assets/portraits/muwiyeong_soldier.png',
     beats: [
       { t:'이보게, 이 쌀 좀 보게. 겨하고 모래가 반이야. 이걸 먹으라고 준 건가, 말라 죽으라고 준 건가.' },
       { t:'별기군 놈들은 신식 총 들고 매달 꼬박꼬박 급료를 받는데, 우리는 열세 달째 코빼기도 못 봤네.' },
@@ -994,7 +994,7 @@ const Dialog = {
     document.getElementById('dlg-overlay').classList.add('show');
     document.getElementById('dlg-name').textContent = this.data.name;
     document.getElementById('dlg-tag').textContent = '1882년 · 한양';
-    document.getElementById('dlg-portrait').textContent = this.data.icon;
+    document.getElementById('dlg-portrait').innerHTML = this.data.icon;
     this.render();
   },
   render(){
@@ -1009,7 +1009,7 @@ const Dialog = {
     if (portraitEl){
       const img = beat.img || (beat.name ? null : this.data.img);
       if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
+      else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon || '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg>'; }
     }
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
@@ -1218,12 +1218,15 @@ requestAnimationFrame(loop);
 
 </script>
 <script src="assets/badges.js"></script>
+<script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
+const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
+</script>
 
 <script>
 (function(){
   const btn = document.getElementById('bgm-mute-toggle');
   if (!btn) return;
-  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  function render(){ btn.innerHTML = BGM.isMuted() ? (ICON_MUTE + ' 배경음악 켜기') : (ICON_SOUND + ' 배경음악 끄기'); }
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();

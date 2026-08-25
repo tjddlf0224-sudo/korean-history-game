@@ -302,7 +302,7 @@
   <div id="stick-zone">
     <div id="stick-base"><div id="stick-knob"></div></div>
   </div>
-  <button id="act-btn" onclick="Stage.interact()">💬</button>
+  <button id="act-btn" onclick="Stage.interact()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V5z"/></svg></button>
 
   <!-- 인트로 -->
   <div class="ov show" id="intro-overlay">
@@ -315,8 +315,8 @@
   <!-- 대화 -->
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
-      <div class="dlg-portrait" id="dlg-portrait">👤</div>
-      <button class="dlg-close" onclick="Dialog.close()">✕</button>
+      <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
+      <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
         <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
@@ -332,7 +332,7 @@
   <!-- 확인 퀴즈 / 보스전 -->
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
-      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <button class="quiz-close" onclick="Quiz.abort()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -364,14 +364,14 @@
   <div id="zone-banner"></div>
   <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
-  <button id="menu-btn" aria-label="메뉴">☰</button>
+  <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <div class="ov center" id="game-menu-overlay">
     <div id="game-menu-panel">
       <h3>메뉴</h3>
       <a href="index.html">챕터 목록으로 나가기</a>
       <button id="menu-restart">이 화 처음부터 다시 시작</button>
       <button id="menu-kings">왕조 계보 보기</button>
-      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
+      <button id="bgm-mute-toggle"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg> 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -379,7 +379,7 @@
     <div id="kings-panel">
       <div class="kp-head">
         <h2 id="kp-title">왕조 계보</h2>
-        <button id="kings-close" aria-label="닫기">✕</button>
+        <button id="kings-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       </div>
       <div class="kp-tabs" id="kp-tabs"></div>
       <div id="kp-tapinfo"></div>
@@ -1008,7 +1008,7 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
   josik_0: {
-    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
+    name: '조식', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18l6-10 4 5.5"/><path d="M9 18l7-12 6 12"/></svg>', img: 'assets/portraits/josik.png',
     beats: [
       { who:'npc', t:'나는 벼슬길에 나가지 않았네. 조정이 네 차례나 피로 물드는 걸 보았거든 — 그런 곳에 나가느니, 여기서 제자를 기르는 게 낫다 여겼지.' },
       { who:'npc', t:'요즘 송도에 황진이라는 이가 있다더군. 시와 노래가 빼어나 사대부들이 줄을 선다지.' },
@@ -1022,14 +1022,14 @@ const NPC_DATA = {
     ]
   },
   josik_repeat: {
-    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
+    name: '조식', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18l6-10 4 5.5"/><path d="M9 18l7-12 6 12"/></svg>', img: 'assets/portraits/josik.png',
     beats: [ { who:'npc', t:'산은 늘 그 자리에 있네. 급할 것 없지.' } ],
     quiz: null
   },
   /* 주세붕 — 서원의 시작(백운동서원 8문항, 사액 6문항). 5화가 서원을 다루면서
      정작 '최초의 서원을 누가 어디에 세웠나'가 비어 있었다. */
   juseboong_0: {
-    name: '주세붕', icon: '🏫', img: 'assets/portraits/juseboong.png',
+    name: '주세붕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2.5" x2="12" y2="9"/><path d="M12 2.5l3.2 1.6-3.2 1.6z" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="1"/><line x1="4" y1="14.5" x2="20" y2="14.5"/><rect x="10.5" y="16" width="3" height="5"/><circle cx="7.5" cy="11.7" r="0.6" fill="currentColor" stroke="none"/><circle cx="16.5" cy="11.7" r="0.6" fill="currentColor" stroke="none"/></svg>', img: 'assets/portraits/juseboong.png',
     beats: [
       { who:'npc', t:'나는 풍기 군수로 있던 주세붕일세. 이런 곳을 처음 세울 때는 사람들이 다들 의심했지 — 나라의 향교가 있는데 굳이 왜 따로 짓느냐고.' },
       { who:'npc', t:'허나 나는 안향 선생이 살던 그 고을에 사당을 세우고 싶었네. 이 땅에 성리학을 처음 들여온 분이니까. 그 사당에 글 읽는 집을 붙인 것이 시작일세.' },
@@ -1051,7 +1051,7 @@ const NPC_DATA = {
     ]
   },
   yihwang_0: {
-    name: '이황', icon: '📗', img: 'assets/portraits/yihwang.png',
+    name: '이황', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><line x1="7.5" y1="3" x2="7.5" y2="21"/></svg>', img: 'assets/portraits/yihwang.png',
     beats: [
       { who:'npc', t:'어서 오시게. 여기가 서원일세. 앞쪽은 글을 배우는 강당과 기숙하는 동재·서재요, 뒤쪽 담 안은 선현의 위패를 모신 사당이라네.' },
       { who:'npc', t:'조정이 네 차례나 피로 물드는 걸 보았네. 우리 사림은 조정에서 밀려날 때마다 향촌으로 물러나 이런 곳을 세웠지.' },
@@ -1075,7 +1075,7 @@ const NPC_DATA = {
     ]
   },
   yihwang_repeat: {
-    name: '이황', icon: '📗', img: 'assets/portraits/yihwang.png',
+    name: '이황', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><line x1="7.5" y1="3" x2="7.5" y2="21"/></svg>', img: 'assets/portraits/yihwang.png',
     beats: [ { who:'npc', t:'…이 서원이 자네 눈에도 익숙해졌겠군. 다른 이들의 이야기도 들어보시게.' } ],
     quiz: null
   }
@@ -1185,7 +1185,7 @@ const Dialog = {
     const portraitEl = document.getElementById('dlg-portrait');
     const img = beat.img || this.data.img;
     if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon; }
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
@@ -1446,12 +1446,15 @@ requestAnimationFrame(loop);
 
 </script>
 <script src="assets/badges.js"></script>
+<script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
+const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
+</script>
 
 <script>
 (function(){
   const btn = document.getElementById('bgm-mute-toggle');
   if (!btn) return;
-  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  function render(){ btn.innerHTML = BGM.isMuted() ? (ICON_MUTE + ' 배경음악 켜기') : (ICON_SOUND + ' 배경음악 끄기'); }
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();

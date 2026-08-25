@@ -302,7 +302,7 @@
   <div id="stick-zone">
     <div id="stick-base"><div id="stick-knob"></div></div>
   </div>
-  <button id="act-btn" onclick="Stage.interact()">💬</button>
+  <button id="act-btn" onclick="Stage.interact()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-4 4V5z"/></svg></button>
 
   <!-- 회상 인트로 -->
   <div class="ov show" id="intro-overlay">
@@ -315,8 +315,8 @@
   <!-- 대화 -->
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
-      <div class="dlg-portrait" id="dlg-portrait">👤</div>
-      <button class="dlg-close" onclick="Dialog.close()">✕</button>
+      <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
+      <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
         <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
@@ -332,7 +332,7 @@
   <!-- 확인 퀴즈 / 보스전 -->
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
-      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <button class="quiz-close" onclick="Quiz.abort()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -364,14 +364,14 @@
   <div id="zone-banner"></div>
   <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
-  <button id="menu-btn" aria-label="메뉴">☰</button>
+  <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <div class="ov center" id="game-menu-overlay">
     <div id="game-menu-panel">
       <h3>메뉴</h3>
       <a href="index.html">챕터 목록으로 나가기</a>
       <button id="menu-restart">이 화 처음부터 다시 시작</button>
       <button id="menu-kings">왕조 계보 보기</button>
-      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
+      <button id="bgm-mute-toggle"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg> 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -379,7 +379,7 @@
     <div id="kings-panel">
       <div class="kp-head">
         <h2 id="kp-title">왕조 계보</h2>
-        <button id="kings-close" aria-label="닫기">✕</button>
+        <button id="kings-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       </div>
       <div class="kp-tabs" id="kp-tabs"></div>
       <div id="kp-tapinfo"></div>
@@ -1074,7 +1074,7 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
   seogeojeong_0: {
-    name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
+    name: '서거정', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="18" height="4" rx="1"/><rect x="4" y="9" width="16" height="4" rx="1"/><rect x="5.5" y="4" width="13" height="4" rx="1"/></svg>', img: 'assets/portraits/seogeojeong.png',
     beats: [
       { who:'npc', t:'오, 자네가 그 여행자로군. 마침 잘 왔네 — 이게 뭔지 아나? 『경국대전』일세.' },
       { who:'npc', t:'세조 대에 시작한 걸, 지금 전하(성종)께서 마침내 완성하셨지. 이전·호전·예전·병전·형전·공전, 여섯 갈래로 나라의 모든 법을 정리했네.' },
@@ -1087,7 +1087,7 @@ const NPC_DATA = {
     ]
   },
   seogeojeong_1: {
-    name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
+    name: '서거정', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="18" height="4" rx="1"/><rect x="4" y="9" width="16" height="4" rx="1"/><rect x="5.5" y="4" width="13" height="4" rx="1"/></svg>', img: 'assets/portraits/seogeojeong.png',
     beats: [
       { who:'npc', t:'이참에 궁궐의 여러 관청이 뭘 하는 곳인지 하나씩 짚어보세. 사헌부, 사간원, 홍문관, 의금부, 승정원, 유향소, 경재소까지 — 전부 헷갈리기 딱 좋지.' },
       { who:'npc', t:'사헌부, 사간원, 홍문관 — 이 셋을 합쳐 삼사(三司)라 부르네. 모두 임금에게 직언하는 자리이니, 아무리 왕이라도 이들 앞에서는 함부로 할 수 없다네.' },
@@ -1119,7 +1119,7 @@ const NPC_DATA = {
     ]
   },
   seogeojeong_2: {
-    name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
+    name: '서거정', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="18" height="4" rx="1"/><rect x="4" y="9" width="16" height="4" rx="1"/><rect x="5.5" y="4" width="13" height="4" rx="1"/></svg>', img: 'assets/portraits/seogeojeong.png',
     beats: [
       { who:'npc', t:'좋아, 삼사는 잘 아는군. 아직 몇 군데 더 남았네 — 의금부, 승정원, 유향소, 경재소까지 마저 짚어보세.' },
       { who:'npc', t:'아, 관청 이야기만 하다 보니 정작 사람을 길러내는 곳을 빼먹었군. 나도 젊은 시절 그곳에서 공부했지.' },
@@ -1147,7 +1147,7 @@ const NPC_DATA = {
     finishesBossA: true
   },
   seogeojeong_repeat: {
-    name: '서거정', icon: '📚', img: 'assets/portraits/seogeojeong.png',
+    name: '서거정', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="18" height="4" rx="1"/><rect x="4" y="9" width="16" height="4" rx="1"/><rect x="5.5" y="4" width="13" height="4" rx="1"/></svg>', img: 'assets/portraits/seogeojeong.png',
     beats: [
       // 전에는 "동쪽 고을에 계신 전하께 가보게"였는데 두 군데가 틀렸다. 성종은
       // 고을이 아니라 아래층 경국대전 편찬실에 있고(6시 문), 지방 고을은 북쪽
@@ -1160,7 +1160,7 @@ const NPC_DATA = {
     quiz: null
   },
   seongjong_0: {
-    name: '성종', icon: '👑', img: 'assets/portraits/seongjong.png',
+    name: '성종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/seongjong.png',
     beats: [
       { who:'npc', t:'직전법을 시행한 지 오래됐지만, 문제가 생겼네. 관리들이 정해진 것보다 더 많은 곡식을 거둬가는 일이 잦아졌어.' },
       { who:'npc', t:'그래서 내가 새로운 방법을 궁리했지. 관청이 직접 세금을 걷어서 관리에게 나눠주도록 말일세. 이 제도의 이름을 아나?' },
@@ -1172,7 +1172,7 @@ const NPC_DATA = {
     ]
   },
   seongjong_1: {
-    name: '성종', icon: '👑', img: 'assets/portraits/seongjong.png',
+    name: '성종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/seongjong.png',
     beats: [
       { who:'npc', t:'법전만으로는 부족하지. 음악도, 예법도 정비해야 나라의 격이 갖춰지는 법이네.' },
       { who:'npc', t:'성현 등에게 명해 궁중 음악의 이론까지 책으로 정리하게 했지.' },
@@ -1189,12 +1189,12 @@ const NPC_DATA = {
     finishesBossB: true
   },
   seongjong_repeat: {
-    name: '성종', icon: '👑', img: 'assets/portraits/seongjong.png',
+    name: '성종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/seongjong.png',
     beats: [ { who:'npc', t:'서거정도 잘 만나보았는가? 그가 이 법전에 얼마나 공을 들였는지 모른다네.' } ],
     quiz: null
   },
   suryeong_0: {
-    name: '사또', icon: '🪭', img: 'assets/portraits/suryeong.png',
+    name: '사또', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a10 10 0 0116 0"/><line x1="12" y1="21" x2="4" y2="9"/><line x1="12" y1="21" x2="8" y2="7.5"/><line x1="12" y1="21" x2="12" y2="6.5"/><line x1="12" y1="21" x2="16" y2="7.5"/><line x1="12" y1="21" x2="20" y2="9"/><circle cx="12" cy="21" r="0.8" fill="currentColor" stroke="none"/></svg>', img: 'assets/portraits/suryeong.png',
     beats: [
       { who:'npc', t:'나는 이 고을의 수령일세. 임금께서 팔도의 부·목·군·현마다 나 같은 사람을 내려보내시지 — 고려 때처럼 향리에게 고을을 맡겨두지 않는다는 뜻이야.' },
       { who:'npc', t:'수령이 할 일은 경국대전에 일곱 가지로 못 박혀 있네. 농사와 누에치기를 일으키고, 호구를 늘리고, 학교를 일으키고, 군정을 닦고, 부역을 고르게 하고, 소송을 간소히 하고, 간사한 무리를 없애는 것 — 이를 수령칠사라 하지.' },
@@ -1216,7 +1216,7 @@ const NPC_DATA = {
     ]
   },
   hyangni_0: {
-    name: '호방', icon: '🖋️', img: 'assets/portraits/hyangni.png',
+    name: '호방', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3l3 3-9.5 9.5-4 1 1-4L18 3z"/><line x1="4" y1="20" x2="7.5" y2="16.5"/></svg>', img: 'assets/portraits/hyangni.png',
     beats: [
       { who:'npc', t:'소인은 이 고을 관아의 호방이올시다. 호적과 세금을 맡고 있지요. 사또께서는 몇 해 있다 떠나시지만, 저희는 대대로 이 고을 사람입니다.' },
       { who:'npc', t:'…그래서 저희를 두고 말이 많습지요. 경국대전에는 아예 향리가 수령을 농락하거나 뇌물을 받으면 어찌 벌한다는 조문까지 실려 있으니까요.' },
@@ -1234,7 +1234,7 @@ const NPC_DATA = {
   // 3화(들녘과 국경)에서 늙은 농부 이야기를 끝까지 들어준 적이 있으면,
   // 그 손자뻘 되는 이 호방이 알아본다(assets/badges.js의 Bonds/Badges).
   hyangni_bond: {
-    name: '호방', icon: '🖋️', img: 'assets/portraits/hyangni.png',
+    name: '호방', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3l3 3-9.5 9.5-4 1 1-4L18 3z"/><line x1="4" y1="20" x2="7.5" y2="16.5"/></svg>', img: 'assets/portraits/hyangni.png',
     beats: [
       { who:'npc', t:'소인은 이 고을 관아의 호방이올시다. 호적과 세금을 맡고 있지요. 사또께서는 몇 해 있다 떠나시지만, 저희는 대대로 이 고을 사람입니다.' },
       { who:'npc', t:'…그런데 자네, 어딘가 낯이 익구려. 그러고 보니 제 할아버님께서 살아생전 늘 하시던 말씀이 있습니다.' },
@@ -1251,7 +1251,7 @@ const NPC_DATA = {
     ]
   },
   hundo_0: {
-    name: '훈도', icon: '📖', img: 'assets/portraits/hundo.png',
+    name: '훈도', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.8-1.3-4-2-8-2v13c4 0 6.2.7 8 2 1.8-1.3 4-2 8-2V4c-4 0-6.2.7-8 2z"/><line x1="12" y1="6" x2="12" y2="19"/></svg>', img: 'assets/portraits/hundo.png',
     beats: [
       { who:'npc', t:'여기가 우리 고을 향교일세. 나라에서 부·목·군·현마다 하나씩 세웠지 — 아무리 작은 현이라도 학교 하나는 두게 되어 있네.' },
       { who:'npc', t:'담 안은 두 구역으로 나뉘네. 뒤쪽 대성전에는 공자를 비롯한 성현의 위패를 모시고, 앞쪽 명륜당에서 경전을 강의하지. 양옆의 동재·서재는 학생들이 묵는 곳일세.' },
@@ -1273,7 +1273,7 @@ const NPC_DATA = {
     ]
   },
   yusaeng_0: {
-    name: '유생', icon: '📜', img: 'assets/portraits/yusaeng.png',
+    name: '유생', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/yusaeng.png',
     beats: [
       { who:'npc', t:'저는 이 고을 향교에서 글을 읽습니다. 어릴 적엔 서당에서 천자문과 동몽선습을 뗐지요.' },
       { who:'npc', t:'한양 아이들은 향교 대신 4부 학당에 들어갑니다. 성균관 아래 동·서·남·중 넷을 두었지요.' },
@@ -1289,7 +1289,7 @@ const NPC_DATA = {
     ]
   },
   jwasu_0: {
-    name: '김 좌수', icon: '🎋', img: 'assets/portraits/jwasu.png',
+    name: '김 좌수', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 22c0-8 1-14 3-19"/><line x1="9.7" y1="14.5" x2="12.4" y2="14.2"/><line x1="10.6" y1="9" x2="13.1" y2="8.5"/><path d="M12 12.5c2-.5 4-2 4.5-4M11 7.5c1.8-.3 3.3-1.5 3.8-3.3"/></svg>', img: 'assets/portraits/jwasu.png',
     beats: [
       { who:'npc', t:'어허, 궁궐에서 온 손님이구먼. 나는 이 고을 유향소의 좌수일세 — 나이 많고 덕망 있는 자를 향회에서 뽑아 좌수로 세운다네.' },
       { who:'npc', t:'우리 유향소가 하는 일은 간단하네. 사또를 보좌하고, 향리들이 백성을 함부로 대하지 않는지 감찰하고, 고을 풍속을 바로잡는 것이지.' },
@@ -1421,7 +1421,7 @@ const Dialog = {
     const portraitEl = document.getElementById('dlg-portrait');
     const img = beat.img || this.data.img;
     if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon; }
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
@@ -1697,12 +1697,15 @@ requestAnimationFrame(loop);
 
 </script>
 <script src="assets/badges.js"></script>
+<script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
+const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
+</script>
 
 <script>
 (function(){
   const btn = document.getElementById('bgm-mute-toggle');
   if (!btn) return;
-  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  function render(){ btn.innerHTML = BGM.isMuted() ? (ICON_MUTE + ' 배경음악 켜기') : (ICON_SOUND + ' 배경음악 끄기'); }
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();

@@ -369,8 +369,8 @@
 
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
-      <div class="dlg-portrait" id="dlg-portrait">👤</div>
-      <button class="dlg-close" onclick="Dialog.close()">✕</button>
+      <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
+      <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
         <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
@@ -385,7 +385,7 @@
 
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
-      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <button class="quiz-close" onclick="Quiz.abort()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -398,7 +398,7 @@
   <!-- 용어 설명: 대사 속 낯선 용어를 누르면 뜬다(GLOSSARY에 지도 링크가 있으면 지도가 뜬다) -->
   <div class="ov center" id="gloss-overlay" onclick="if(event.target===this) closeGlossary()">
     <div id="gloss-panel">
-      <button class="gloss-close" onclick="closeGlossary()">✕</button>
+      <button class="gloss-close" onclick="closeGlossary()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="gloss-title" id="gloss-term"></div>
       <div class="gloss-body" id="gloss-body"></div>
     </div>
@@ -426,14 +426,14 @@
   <div id="zone-banner"></div>
   <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
-  <button id="menu-btn" aria-label="메뉴">☰</button>
+  <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <div class="ov center" id="game-menu-overlay">
     <div id="game-menu-panel">
       <h3>메뉴</h3>
       <a href="index.html">챕터 목록으로 나가기</a>
       <button id="menu-restart">이 화 처음부터 다시 시작</button>
       <button id="menu-kings">왕조 계보 보기</button>
-      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
+      <button id="bgm-mute-toggle"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg> 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -441,7 +441,7 @@
     <div id="kings-panel">
       <div class="kp-head">
         <h2 id="kp-title">왕조 계보</h2>
-        <button id="kings-close" aria-label="닫기">✕</button>
+        <button id="kings-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       </div>
       <div class="kp-tabs" id="kp-tabs"></div>
       <div id="kp-tapinfo"></div>
@@ -1122,7 +1122,7 @@ window.addEventListener('keyup', e=>{
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
   seokgong_0: {
-    name: '삼전도비 석공', icon: '🪨', img: 'assets/portraits/seokgong.png',
+    name: '삼전도비 석공', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 17c-1-1.5-1-3.5.5-5s2-3 4-3.5 3 .5 4.5-.5 4-1 5.5.5 2 3.5 1 5-2.5 3-5 3.5-3-.5-5 .5-4-.5-5.5-.5z"/></svg>', img: 'assets/portraits/seokgong.png',
     beats: [
       { who:'npc', t:'나리, 저 비석 새기는 일이 제 몫이 되었습니다. 대청황제공덕비 — 그리 부르라 하더군요.' },
       { who:'npc', t:'청이 시킨 대로 만주 글자, 몽골 글자, 한자 셋으로 같은 내용을 새겨야 했습니다. 우리 스스로 우리 왕이 무릎 꿇은 일을 돌에 새겨 두는 노릇이지요.' },
@@ -1139,7 +1139,7 @@ const NPC_DATA = {
     ]
   },
   gwanghae_0: {
-    name: '광해군', icon: '⚖️', img: 'assets/portraits/gwanghae.png',
+    name: '광해군', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5v19"/><path d="M5 21h14"/><path d="M3.5 6.5h17"/><path d="M3.5 6.5L1.5 11a2.5 2.5 0 005 0z"/><path d="M20.5 6.5L18.5 11a2.5 2.5 0 005 0z"/></svg>', img: 'assets/portraits/gwanghae.png',
     beats: [
       { who:'npc', t:'왜란이 끝난 나라를 물려받았네. 토지대장과 호적을 다시 만들고, 허준에게 명해 의서를 짓게 했지 — 「동의보감」일세.' },
       { who:'npc', t:'명이 기울고 후금이 일어서던 때였네. 명은 군사를 보내라 하고, 후금과는 척지고 싶지 않았지.' },
@@ -1155,7 +1155,7 @@ const NPC_DATA = {
     ]
   },
   hullyeon_0: {
-    name: '훈련도감 포수', icon: '🔫', img: 'assets/portraits/hullyeon.png',
+    name: '훈련도감 포수', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14.5V12a1 1 0 011-1h13.5l3-3.5v4l-2 2.5H12l-1.5 3.5H7l-1-2.5H4a1 1 0 01-1-1.5z"/><path d="M9 11V8.5a1 1 0 011-1h3"/></svg>', img: 'assets/portraits/hullyeon.png',
     beats: [
       { who:'npc', t:'왜란 때 우리는 활로 조총을 당해내지 못했소. 그래서 새 군영을 만들었지 — 훈련도감이오.' },
       { who:'npc', t:'포수·살수·사수 셋으로 나누어 뽑았소. 우리는 급료를 받는 직업 군인이오. 농사짓다 불려 나오는 군사와는 다르지.' },
@@ -1168,7 +1168,7 @@ const NPC_DATA = {
     ]
   },
   injo_0: {
-    name: '척화 대신', icon: '🏔️', img: 'assets/portraits/injo.png',
+    name: '척화 대신', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l8.5 16h-17z"/><path d="M8.7 10l1.6 1.6L12 9l2 3 1.7-2 2 4"/></svg>', img: 'assets/portraits/injo.png',
     beats: [
       { who:'npc', t:'후금이 청이라 이름을 고치고 군신의 예를 요구했소. 오랑캐에게 무릎을 꿇으란 말이오?' },
       { who:'npc', t:'전하께서 이 산성으로 드셨소. 사십칠 일을 버텼으나 양식이 떨어졌고, 강화도가 먼저 무너졌다는 소식이 왔소.' },
@@ -1212,7 +1212,7 @@ const NPC_DATA = {
     ]
   },
   daedong_0: {
-    name: '선혜청 서리', icon: '🌾', img: 'assets/portraits/daedong.png',
+    name: '선혜청 서리', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="21" x2="12" y2="5"/><path d="M12 6c0-2 1.5-3.5 4-4"/><path d="M12 9c0-2-1.5-3.5-4-4"/><path d="M12 12c0-2 1.5-3.5 4-4"/><path d="M12 15c0-2-1.5-3.5-4-4"/></svg>', img: 'assets/portraits/daedong.png',
     beats: [
       { who:'npc', t:'예전에는 고을마다 특산물을 바치게 했습니다. 없는 물건을 사서 바쳐야 하니 백성이 못 견뎠지요.' },
       { who:'npc', t:'그래서 광해군 때 경기도부터 바꿨습니다. 특산물 대신 토지 결수에 따라 쌀로 내게 한 것입니다 — 대동법이지요.' },
@@ -1239,7 +1239,7 @@ const NPC_DATA = {
     ]
   },
   hyojong_0: {
-    name: '효종', icon: '⚔️', img: 'assets/portraits/hyojong.png',
+    name: '효종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img: 'assets/portraits/hyojong.png',
     beats: [
       { who:'npc', t:'나는 봉림대군이라 불리던 시절, 형님 소현세자와 함께 청에 볼모로 여덟 해를 지냈네. 그 설움을 잊지 못해 왕위에 오르자 북벌을 도모했지.' },
       { who:'npc', t:'어영청과 훈련도감을 다시 정비하고 성곽을 고쳤네. 청을 치기 위한 준비였지.' },
@@ -1256,7 +1256,7 @@ const NPC_DATA = {
     ]
   },
   hyeonjong_0: {
-    name: '현종', icon: '📜', img: 'assets/portraits/hyeonjong.png',
+    name: '현종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/hyeonjong.png',
     beats: [
       { who:'npc', t:'나는 효종의 아들일세. 아버님이 돌아가셨을 때, 계모이신 자의대비께서 상복을 몇 해 입어야 하느냐를 놓고 조정이 크게 다투었네 — 1659년의 기해예송일세.' },
       { who:'npc', t:'서인은 일 년을, 남인은 삼 년을 입어야 한다고 맞섰지. 왕가의 예법을 사대부와 같이 볼지 다르게 볼지의 문제였네. 결국 서인의 뜻대로 일 년으로 정해졌지.' },
@@ -1273,7 +1273,7 @@ const NPC_DATA = {
     ]
   },
   sukjong_0: {
-    name: '숙종', icon: '👑', img: 'assets/portraits/sukjong.png',
+    name: '숙종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sukjong.png',
     beats: [
       { who:'npc', t:'나는 열네 살에 왕위에 올랐네. 어린 나이에도 신하들에게 휘둘리지 않으려 했지 — 그래서 쓴 방법이 환국이었네.' },
       { who:'npc', t:'경신년(1680)엔 남인을 몰아내고 서인을 썼고, 기사년(1689)엔 다시 서인을 몰아내고 남인을 썼지. 갑술년(1694)엔 또 뒤집어 남인을 내치고 서인을 세웠네. 장희빈의 운명도 그 물결을 따라 오르내렸지.' },
@@ -1290,7 +1290,7 @@ const NPC_DATA = {
     ]
   },
   yeongjo_0: {
-    name: '영조', icon: '👑', img: 'assets/portraits/yeongjo.png',
+    name: '영조', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/yeongjo.png',
     beats: [
       { who:'npc', t:'나는 숙종의 아들이나, 무수리 출신 어머니를 두었다 하여 왕위에 올라서도 정통성을 의심받았네. 즉위 이듬해 이인좌 등이 "이 왕은 가짜다"라며 군사를 일으켰지 — 무신년(1728)의 일이라 이인좌의 난, 또는 무신난이라 부르네.' },
       { who:'npc', t:'그런 의심을 씻고자 나는 노론과 소론을 가리지 않고 고루 등용하려 애썼네 — 탕평책일세. 성균관 입구에 비석까지 세워 새겨 두었지. "두루 사귀되 편을 가르지 않는 것이 군자의 마음이다"라고.' },
@@ -1547,7 +1547,7 @@ const Dialog = {
     document.getElementById('dlg-tag').textContent = '조선 후기 · 전란기';
     const portraitEl = document.getElementById('dlg-portrait');
     if (this.data.img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${this.data.img}')`; }
-    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = this.data.icon; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = this.data.icon; }
     this.render();
   },
   render(){
@@ -1562,7 +1562,7 @@ const Dialog = {
     if (portraitEl){
       const img = beat.img || (beat.name ? null : this.data.img);
       if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
+      else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon || '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg>'; }
     }
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
@@ -1715,12 +1715,15 @@ requestAnimationFrame(loop);
 
 </script>
 <script src="assets/badges.js"></script>
+<script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
+const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
+</script>
 
 <script>
 (function(){
   const btn = document.getElementById('bgm-mute-toggle');
   if (!btn) return;
-  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  function render(){ btn.innerHTML = BGM.isMuted() ? (ICON_MUTE + ' 배경음악 켜기') : (ICON_SOUND + ' 배경음악 끄기'); }
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();

@@ -25,7 +25,7 @@ window.Badges = {
     // 챕터 안에서 획득했다면(playFanfare가 있는 화면) 바로 알려준다.
     if (typeof playFanfare === 'function'){
       const def = BADGE_DEFS[id];
-      playFanfare('🏅 배지 획득: ' + (def ? def.name : id));
+      playFanfare('<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3l4 6 4-6"/><circle cx="12" cy="15" r="6"/><circle cx="12" cy="15" r="2.5"/></svg> 배지 획득: ' + (def ? def.name : id));
     }
     return true;
   },
@@ -58,6 +58,6 @@ window.Bonds = {
    데이터로 직접 만들어 쓰므로(제목·화 번호가 이미 거기 있음) 여기엔
    안 담는다 — 여기엔 그 외의 배지(인연 등)만 정의한다. */
 const BADGE_DEFS = {
-  bond_nonong: { name: '잊지 않은 은혜', icon: '🌾',
+  bond_nonong: { name: '잊지 않은 은혜', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="21" x2="12" y2="5"/><path d="M12 6c0-2 1.5-3.5 4-4"/><path d="M12 9c0-2-1.5-3.5-4-4"/><path d="M12 12c0-2 1.5-3.5 4-4"/><path d="M12 15c0-2-1.5-3.5-4-4"/></svg>',
     desc: '들녘에서 만난 늙은 농부와의 인연이, 세월이 지나 그 손자뻘 되는 이에게 닿았다.' },
 };

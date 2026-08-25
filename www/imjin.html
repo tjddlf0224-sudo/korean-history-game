@@ -368,8 +368,8 @@
 
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
-      <div class="dlg-portrait" id="dlg-portrait">👤</div>
-      <button class="dlg-close" onclick="Dialog.close()">✕</button>
+      <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
+      <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
         <div class="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
@@ -384,7 +384,7 @@
 
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
-      <button class="quiz-close" onclick="Quiz.abort()">✕</button>
+      <button class="quiz-close" onclick="Quiz.abort()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="quiz-tag" id="quiz-tag">확인 퀴즈</div>
       <div class="quiz-q" id="quiz-q"></div>
       <div class="quiz-opts" id="quiz-opts"></div>
@@ -397,7 +397,7 @@
   <!-- 용어 설명: 대사 속 낯선 용어를 누르면 뜬다(GLOSSARY에 지도 링크가 있으면 지도가 뜬다) -->
   <div class="ov center" id="gloss-overlay" onclick="if(event.target===this) closeGlossary()">
     <div id="gloss-panel">
-      <button class="gloss-close" onclick="closeGlossary()">✕</button>
+      <button class="gloss-close" onclick="closeGlossary()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div class="gloss-title" id="gloss-term"></div>
       <div class="gloss-body" id="gloss-body"></div>
     </div>
@@ -425,14 +425,14 @@
   <div id="zone-banner"></div>
   <div id="zone-label"></div>
   <canvas id="minimap-canvas"></canvas>
-  <button id="menu-btn" aria-label="메뉴">☰</button>
+  <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <div class="ov center" id="game-menu-overlay">
     <div id="game-menu-panel">
       <h3>메뉴</h3>
       <a href="index.html">챕터 목록으로 나가기</a>
       <button id="menu-restart">이 화 처음부터 다시 시작</button>
       <button id="menu-kings">왕조 계보 보기</button>
-      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
+      <button id="bgm-mute-toggle"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg> 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -440,7 +440,7 @@
     <div id="kings-panel">
       <div class="kp-head">
         <h2 id="kp-title">왕조 계보</h2>
-        <button id="kings-close" aria-label="닫기">✕</button>
+        <button id="kings-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       </div>
       <div class="kp-tabs" id="kp-tabs"></div>
       <div id="kp-tapinfo"></div>
@@ -1090,7 +1090,7 @@ window.addEventListener('keyup', e=>{
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
   sinrip_0: {
-    name: '신립', icon: '🐎', img: 'assets/portraits/sinrip.png',
+    name: '신립', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21l1-6"/><path d="M5 15c-1.5-2-1.5-4.5 0-6.5C7 6 9 5 12 5h1l2-2 1.5 2.5L18 5l1 3-2 1"/><path d="M17 9v3.5c0 2-1 3.5-3 4.5"/><path d="M14 17l-1 4"/><path d="M9 15l-1.5 6"/><path d="M9 9.5c1 0 2 .3 2.5 1"/><circle cx="15.3" cy="8.3" r=".4" fill="currentColor" stroke="none"/></svg>', img: 'assets/portraits/sinrip.png',
     beats: [
       { who:'npc', t:'나는 신립일세. 조정에서 제일가는 기병 장수라 불렸지.' },
       { who:'npc', t:'조령을 지키라는 말도 있었네. 산세가 험해 지키기는 좋았지. 허나 나는 문경 새재를 버리고 이곳, 탄금대로 내려왔네.' },
@@ -1108,7 +1108,7 @@ const NPC_DATA = {
     ]
   },
   yisunsin_0: {
-    name: '이순신', icon: '⚓', img: 'assets/portraits/yisunsin.png',
+    name: '이순신', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.8"/><path d="M12 6.3V19"/><path d="M8 9.5h8"/><path d="M4 13a8 8 0 007.2 8"/><path d="M20 13a8 8 0 01-7.2 8"/></svg>', img: 'assets/portraits/yisunsin.png',
     beats: [
       { who:'npc', t:'왜군이 부산에 닿은 것이 4월이었네. 뭍에서는 손쓸 새도 없이 밀렸지. 신립 장군이 탄금대에서 무너지고, 임금께서는 의주까지 가셨네.' },
       { who:'npc', t:'그날부터 나는 매일 있었던 일을 적어두었네. 임진년엔 임진일기, 계사년엔 계사일기 — 그해그해 이름을 따로 붙였지. 훗날 후손들이 이 일곱 해치를 한데 모아 엮으며 「난중일기」라 부르게 되었다더군.' },
@@ -1127,7 +1127,7 @@ const NPC_DATA = {
     ]
   },
   gimsimin_0: {
-    name: '김시민', icon: '🏯', img: 'assets/portraits/gimsimin.png',
+    name: '김시민', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l3.5 3H8.5z"/><path d="M6 6.5h12l1.5 3H4.5z"/><path d="M7 9.5v4h10v-4"/><path d="M4.5 13.5h15l1.5 3H3z"/><path d="M6.5 16.5v4.5h11v-4.5"/><path d="M10.5 21v-3h3v3"/></svg>', img: 'assets/portraits/gimsimin.png',
     beats: [
       { who:'npc', t:'나는 진주 목사였네. 1592년 10월, 왜군 이만이 성을 에워쌌지. 성 안의 군사는 사천도 되지 않았네.' },
       { who:'npc', t:'엿새를 버텼네. 성 밖에서는 곽재우 같은 의병들이 뒤를 흔들어 주었고.' },
@@ -1141,7 +1141,7 @@ const NPC_DATA = {
     ]
   },
   nongae_0: {
-    name: '논개', icon: '🌸', img: 'assets/portraits/nongae.png',
+    name: '논개', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="7" r="2.6"/><circle cx="17" cy="10.5" r="2.6"/><circle cx="15" cy="16.5" r="2.6"/><circle cx="9" cy="16.5" r="2.6"/><circle cx="7" cy="10.5" r="2.6"/><circle cx="12" cy="12" r="2"/></svg>', img: 'assets/portraits/nongae.png',
     beats: [
       { who:'npc', t:'1593년 6월, 진주성이 두 번째로 에워싸였습니다. 이레를 버텼지만 끝내 무너졌지요. 성 안 사람이 모두 죽었습니다. 제가 모시던 최경회 장군도 남강에 몸을 던지셨고요.' },
       { who:'npc', t:'왜군은 그 성에서 승전 잔치를 벌였습니다. 촉석루에 상을 차리고, 기생을 불렀지요. 저는 스스로 그 자리에 나갔습니다.' },
@@ -1382,7 +1382,7 @@ const Dialog = {
     document.getElementById('dlg-tag').textContent = '임진왜란 · 한산도 통제영';
     const portraitEl = document.getElementById('dlg-portrait');
     if (this.data.img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${this.data.img}')`; }
-    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = this.data.icon; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = this.data.icon; }
     this.render();
   },
   render(){
@@ -1397,7 +1397,7 @@ const Dialog = {
     if (portraitEl){
       const img = beat.img || (beat.name ? null : this.data.img);
       if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
+      else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon || '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg>'; }
     }
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
@@ -1550,12 +1550,15 @@ requestAnimationFrame(loop);
 
 </script>
 <script src="assets/badges.js"></script>
+<script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
+const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
+</script>
 
 <script>
 (function(){
   const btn = document.getElementById('bgm-mute-toggle');
   if (!btn) return;
-  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  function render(){ btn.innerHTML = BGM.isMuted() ? (ICON_MUTE + ' 배경음악 켜기') : (ICON_SOUND + ' 배경음악 끄기'); }
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();

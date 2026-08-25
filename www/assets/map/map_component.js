@@ -59,7 +59,7 @@ const GameMap = {
     ov.id = 'map-overlay';
     ov.innerHTML = `
       <div id="map-panel">
-        <button id="map-close" aria-label="닫기">✕</button>
+        <button id="map-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
         <div class="map-title" id="map-title"></div>
         <canvas id="map-canvas"></canvas>
         <div class="map-caption" id="map-caption"></div>
