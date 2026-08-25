@@ -6,28 +6,15 @@
 묶었다 — 예를 들어 조선 전기 궁궐은 챕터가 여러 개(1화·3화·6화 등)라도
 음악은 하나만 있으면 된다.
 
-## 공통 요청 사항 (모든 프롬프트 끝에 붙일 것)
-
-```
-Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
-screen so vocals would clash). Must loop seamlessly — no clear
-beginning/end flourish, steady tempo throughout, avoid one-shot
-crescendos so it can repeat indefinitely while the player walks
-around and reads dialogue. Mixed to sit quietly under UI sound
-effects and speech-bubble text — no sudden loud stabs. Length: about
-60–90 seconds per loop.
-```
-
-배경음악(B, C 섹션의 "루프")은 위 공통 요청을 반드시 붙이고, 팡파레·스팅
-류(D 섹션)는 루프가 아니라 1회성이므로 길이 요청만 각 프롬프트에 따로
-적었다(공통 요청 중 "loop" 관련 문장은 빼고 쓸 것).
+각 항목의 코드블록은 그대로 통째로 복붙해서 쓰면 된다(공통 요청사항이
+이미 각 블록 안에 들어있음).
 
 ## 작업 방식
 
 1. 한 그룹씩 순서대로 뽑아서 저장해 보내주면, 파일명(`id: ...`)에 맞춰
    `assets/audio/{id}.mp3`로 저장하고 게임에 연결한다.
 2. 존 전환 시 크로스페이드로 자연스럽게 바뀌도록 구현할 예정이니, 곡 시작과
-   끝이 너무 튀지 않게(공통 요청대로) 나오는지 확인해서 알려주면 손본다.
+   끝이 너무 튀지 않게 나오는지 확인해서 알려주면 손본다.
 
 ---
 
@@ -44,6 +31,14 @@ daegeum flute) with a small warm string ensemble, no percussion or
 very sparse soft percussion only. Should feel timeless rather than
 tied to one specific era, inviting the player to explore thousands
 of years of history. Gentle dynamics, no big swells.
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: title_theme
 ```
@@ -64,6 +59,14 @@ melody, occasional natural sounds implied through instrumentation
 Minimal, spacious, unhurried — nothing that feels "civilized" or
 courtly yet.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
+
 id: bgm_prehistoric
 ```
 
@@ -78,6 +81,14 @@ over a light janggu (hourglass drum) pulse. Should feel ceremonial
 and a little austere, evoking the Three Kingdoms / Balhae era
 rather than the more ornate later Joseon court.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
+
 id: bgm_ancient_court
 ```
 
@@ -91,6 +102,14 @@ insistent buk (barrel drum) and jing (gong) hits marking a marching
 rhythm. Should feel urgent and martial without being chaotic —
 steady tempo suitable for looping under exploration, not a one-off
 battle cue.
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: bgm_ancient_war
 ```
@@ -107,6 +126,14 @@ than the Three Kingdoms court theme — Goryeo traded with the world
 through its ports — with a faint sense of unease appropriate to an
 era of invasions and power struggles.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
+
 id: bgm_goryeo
 ```
 
@@ -120,6 +147,14 @@ Piri and daegeum carrying a stately melody, gayageum arpeggios
 underneath, steady janggu rhythm giving it quiet grandeur. Should
 sound authoritative and orderly, like the well-run bureaucratic
 heart of the dynasty — not martial, not sad, just dignified.
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: bgm_joseon_palace
 ```
@@ -135,6 +170,14 @@ occasional soft wood-block ticks like a study bell. Should feel
 focused and calm, evoking scholars bent over books and debating
 philosophy, not courtly ceremony.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
+
 id: bgm_seowon
 ```
 
@@ -147,6 +190,14 @@ Solo haegeum playing a slow, mournful sliding melody, very sparse
 accompaniment — a single low drone or occasional soft gong,
 long silences. Should feel lonely and unjust rather than
 tragic-grand; this is quiet suffering, not a dramatic death scene.
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: bgm_exile
 ```
@@ -161,6 +212,14 @@ but darker and heavier — slower tempo, minor mode, more dissonant
 gong hits, a sense of a kingdom under siege rather than an army on
 the march. Should be usable both for open battlefields and for a
 grim last-stand fortress.
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: bgm_invasion_war
 ```
@@ -177,6 +236,14 @@ everyday — merchants haggling, farmers working — with room to
 darken slightly for hugi3's famine/uprising chapters if needed as
 a variant.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
+
 id: bgm_marketplace
 ```
 
@@ -189,6 +256,14 @@ Korean instrumentation (taepyeongso, buk, jing) but with a hint of
 encroaching Western brass in the harmony, suggesting modern
 weapons arriving in an old world. Should feel like a losing fight
 against overwhelming odds — determined but doomed, not triumphant.
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: bgm_gaehang_war
 ```
@@ -205,6 +280,14 @@ and the quiet resolve of an independence movement office. Avoid
 anything that sounds militaristic or triumphant; this is grief
 carrying quiet determination.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
+
 id: bgm_colonial_era
 ```
 
@@ -220,6 +303,14 @@ and civic (a public square) as well as tense (a protest or
 division-era border scene) with the same core instrumentation, just
 different dynamics.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
+
 id: bgm_modern
 ```
 
@@ -234,6 +325,14 @@ small gong) in an upbeat samul-nori-flavored rhythm, taepyeongso or
 piri carrying a joyful folk melody on top. Should feel communal and
 celebratory, era-agnostic (folk customs spanning all of Korean
 history, not tied to one dynasty).
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: bgm_folk_festival
 ```
@@ -253,12 +352,22 @@ id: bgm_folk_festival
   받아두면 그 장면의 임팩트가 커진다.
 
 ```
-Same instrumentation and mood as bgm_colonial_era (id above), but
-building in intensity over the loop — strings layering up, subtle
-crescendo suggesting a crowd's voice rising together, then settling
-back down before the loop repeats (must still loop cleanly). No
-vocals, no percussion hits that sound like violence — this is a
-peaceful crowd's defiance, not a battle.
+Same instrumentation and mood as the colonial-era street loop
+(bgm_colonial_era) — melancholic hybrid of early-20th-century
+Western strings and traditional Korean melodic ornamentation
+(haegeum or daegeum voice weaving through) — but building in
+intensity over the loop: strings layering up, a subtle crescendo
+suggesting a crowd's voice rising together, then settling back down
+before the loop repeats. No vocals, no percussion hits that sound
+like violence — this is a peaceful crowd's defiance, not a battle.
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: bgm_colonial_uprising
 ```
@@ -278,6 +387,11 @@ needed, just a clear "correct!" feeling. Not loud or startling —
 this plays constantly throughout a quiz-heavy game, so it should
 stay pleasant on repeat.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). This is a one-shot sting, not a loop —
+mixed to sit quietly under UI sound effects and speech-bubble text,
+no sudden loud stabs.
+
 id: sfx_fanfare
 ```
 
@@ -292,6 +406,11 @@ taking a breath before telling a story. Should work under any of
 the era-specific tones above without clashing — keep it neutral and
 atmospheric rather than tied to one specific mood.
 
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). This is a one-shot sting, not a loop —
+mixed to sit quietly under UI sound effects and speech-bubble text,
+no sudden loud stabs.
+
 id: bgm_intro_sting
 ```
 
@@ -303,8 +422,15 @@ Tense, focused loop for a climactic multi-question quiz sequence —
 faster tempo than the zone loops, a steady insistent janggu rhythm,
 short repeating gayageum or piri phrase creating urgency, like a
 countdown. Should feel like a final challenge without being scary —
-this is an exam-under-pressure feeling, not a horror cue. Must
-still loop cleanly since some players take a while to answer.
+this is an exam-under-pressure feeling, not a horror cue.
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). Must loop seamlessly — no clear
+beginning/end flourish, steady tempo throughout, avoid one-shot
+crescendos so it can repeat indefinitely while the player walks
+around and reads dialogue. Mixed to sit quietly under UI sound
+effects and speech-bubble text — no sudden loud stabs. Length: about
+60–90 seconds per loop.
 
 id: bgm_boss_quiz
 ```
@@ -316,8 +442,12 @@ id: bgm_boss_quiz
 A short (20–30 second) resolving, reflective cue that feels like
 closing a book chapter — warm strings or gayageum settling into a
 final held chord, calm and a little wistful, giving a sense of
-"this chapter is complete, more to come." Should work as a stinger
-that plays once and then fades, not as a seamless loop.
+"this chapter is complete, more to come."
+
+Instrumental only, no vocals, no lyrics (dialogue text is overlaid on
+screen so vocals would clash). This is a one-shot stinger that plays
+once and then fades, not a seamless loop — mixed to sit quietly
+under UI sound effects and speech-bubble text, no sudden loud stabs.
 
 id: bgm_chapter_end
 ```
