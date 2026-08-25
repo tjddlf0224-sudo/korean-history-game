@@ -46,7 +46,7 @@
   #dlg-panel {
     width: 100%; box-sizing: border-box; background: #241c12ee; border: 1px solid #51432c;
     border-radius: 16px; padding: 16px 18px 16px 132px; color: #f5ecd8; box-shadow: 0 12px 40px rgba(0,0,0,.4);
-    max-height: 80%; overflow-y: auto; min-height: 110px;
+    max-height: var(--dlg-max-h, 80%); overflow-y: auto; min-height: 110px;
   }
   #intro-panel {
     width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241c12ee; border: 1px solid #51432c;
@@ -500,6 +500,7 @@ function applyOrientation(){
   const h = portrait ? iw : ih;
   wrapEl.style.width = w + 'px';
   wrapEl.style.height = h + 'px';
+  document.documentElement.style.setProperty('--dlg-max-h', Math.round(h * 0.8) + 'px');
   // 디스플레이 배율(DPR) 대응: 백킹 스토어를 물리 픽셀만큼 키우고 컨텍스트를 그만큼
   // 스케일해 둔다. 이걸 빼면 캔버스가 논리 픽셀 1배로 그려진 뒤 브라우저가 2~3배로
   // 늘려서 배경/NPC/주인공이 전부 뭉개진다(Phaser의 resolution 옵션과 같은 취지 — 다만 그 옵션은 Phaser 3.16에서 제거돼 실제로는 동작하지 않았고, 그래서 0화도 이 방식으로 옮겼다).
