@@ -314,8 +314,11 @@ def main():
             {'id': 'sungnyeongjin', 'lonlat': [127.05, 39.85], 'label': '숭녕진', 'loff': [-18, 4]},
             {'id': 'bokju',       'lonlat': [127.30, 39.72], 'label': '복주',   'loff': [-10, 18]},
             {'id': 'hamju',       'lonlat': [127.55, 39.92], 'label': '함주',   'loff': [0, 18]},
-            {'id': 'ungju',       'lonlat': [127.80, 39.80], 'label': '웅주',   'loff': [14, 4]},
-            {'id': 'tongtaejin',  'lonlat': [127.95, 39.65], 'label': '통태진', 'loff': [16, 18]},
+            # 웅주·통태진은 원래 좌표가 바다 위였다(간이 해안선과 실제 위치
+            # 추정 사이 오차). 웅주는 홍원(함경남도), 통태진은 사서 속 척준경
+            # 이동 경로상 '길주 이남' 서술을 참고해 해안선 안쪽 육지로 다시 잡음.
+            {'id': 'ungju',       'lonlat': [127.85, 40.08], 'label': '웅주',   'loff': [14, 4]},
+            {'id': 'tongtaejin',  'lonlat': [127.75, 39.95], 'label': '통태진', 'loff': [16, 14]},
         ],
     }
     for group in ('provinces', 'markers', 'islands', 'countries', 'cities', 'rivers'):

@@ -320,6 +320,20 @@
     border:1px solid rgba(255,255,255,.16); margin-bottom:4px; }
   .dlg-chart .tree-node b { font-size:12px; }
   .dlg-chart .tree-node span { display:block; opacity:.8; font-size:10.5px; }
+  /* 왕위 계승 띠 — 지금 대사가 누구(들) 이야기인지 금색으로 짚어 준다.
+     main(같은 왕조 계승 순서)과 cross(같은 시기 다른 나라 왕)를 줄을
+     나눠 보여준다 — 다른 나라를 같은 줄에 섞으면 마치 왕위를 이은
+     것처럼 오해할 수 있어서 의도적으로 갈랐다. */
+  .dlg-chart .kings-row { display:flex; flex-wrap:wrap; gap:5px; padding:8px; }
+  .dlg-chart .kings-row.kings-cross { padding-top:0; border-top:1px dashed rgba(255,255,255,.18); margin-top:-2px; }
+  .dlg-chart .king-badge { flex:1 1 0; min-width:56px; padding:5px 4px; border-radius:6px; text-align:center;
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); }
+  .dlg-chart .king-badge.active { background:rgba(240,201,107,.20); border-color:#f0c96b;
+    box-shadow:0 0 0 1px #f0c96b, 0 0 10px rgba(240,201,107,.45); }
+  .dlg-chart .kb-dynasty { font-size:9px; opacity:.7; margin-bottom:1px; }
+  .dlg-chart .kb-name { font-size:12px; font-weight:bold; }
+  .dlg-chart .king-badge.active .kb-name { color:#f0c96b; }
+  .dlg-chart .kb-note { font-size:9.5px; opacity:.8; line-height:1.3; margin-top:2px; }
 </style>
 </head>
 <body>
@@ -1264,6 +1278,20 @@ function drawChart(c){
       + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
           '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
         ).join('') + '</div>').join('') + '</div></div>';
+  }
+  if (c.type === 'kings'){
+    // 왕위 계승 띠 — 지금 이 대사가 누구·어느 왕(들) 이야기인지 금색
+    // 테두리로 짚어 준다. main은 한 나라(왕조)의 계승 순서, cross는
+    // 같은 시기 다른 나라 왕(있을 때만 따로 한 줄 더).
+    const badge = (k) => '<div class="king-badge' + (k.active ? ' active' : '') + '">'
+      + (k.dynasty ? '<div class="kb-dynasty">' + k.dynasty + '</div>' : '')
+      + '<div class="kb-name">' + k.name + '</div>'
+      + (k.note ? '<div class="kb-note">' + k.note + '</div>' : '') + '</div>';
+    let out = '<div class="kings-row">' + c.main.map(badge).join('') + '</div>';
+    if (c.cross && c.cross.length){
+      out += '<div class="kings-row kings-cross">' + c.cross.map(badge).join('') + '</div>';
+    }
+    return out;
   }
   return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
     + '</tr></thead><tbody>'

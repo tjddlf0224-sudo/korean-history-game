@@ -322,7 +322,7 @@
     </svg>
   </button>
 
-  <div class="ov show" id="intro-overlay">
+  <div class="ov" id="intro-overlay">
     <div id="intro-panel">
       <div id="intro-text"></div>
       <div id="intro-next">탭하여 계속 ▶</div>
@@ -1301,6 +1301,19 @@ function introNext(){
 }
 document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
+// 독서실(잠들어 시간을 거슬러 오는) 인트로는 이 게임을 정말 처음 시작할
+// 때만 보여준다 — 고려에서 '다음 화로'를 눌러 조선전기로 넘어올 때도
+// 매번 뜨는 건 이상하다는 지적을 반영. 한 번 본 뒤로는 곧장 게임 화면으로.
+(function(){
+  let seen = false;
+  try { seen = !!localStorage.getItem('khg_seenIntro'); } catch(e){}
+  if (seen){
+    showZoneBanner(ZONES[World.zone] && ZONES[World.zone].label);
+  } else {
+    document.getElementById('intro-overlay').classList.add('show');
+    try { localStorage.setItem('khg_seenIntro', '1'); } catch(e){}
+  }
+})();
 
 Stage.endChapter = function(){
   document.getElementById('end-screen').classList.add('show');
