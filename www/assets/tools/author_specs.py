@@ -47,15 +47,25 @@ def npc(key, name, portrait, icon, beats, quiz=None, ends=False, note=None):
     return key, d
 
 
-def kings_row(base, *active_names, cross=None):
-    """왕위 계승 띠 차트 하나를 만든다. base는 기본 목록(공용, 안 건드림),
+def kings_row(base, *active_names, cross=None, cross_at=None):
+    """왕위 계승 띠 차트 하나를 만든다. base는 이 대사에서 실제로 보여줄
+    목록(대화 흐름에 안 맞는 왕까지 다 넣으면 줄바꿈이 생겨 둘째 줄로
+    밀려나므로, 지금 이야기와 상관있는 구간만 골라 넘긴다).
     active_names에 준 이름만 그 대사에서 금색으로 짚는다. cross는 같은
-    시기 다른 왕조 왕(있을 때만) — [{'name':.., 'dynasty':.., 'active':True}]."""
+    시기 다른 왕조 왕(있을 때만) — [{'name':.., 'dynasty':.., 'active':True}].
+    cross_at을 주면 base 안에서 그 왕과 짝지을 왕의 인덱스를 가리켜, 그
+    자리 바로 아래(둘째 줄의 같은 칸)에 오도록 나머지 칸은 빈 칸으로
+    채운다."""
     row = [dict(k) for k in base]
     for k in row:
         if k['name'] in active_names:
             k['active'] = True
-    return {'type': 'kings', 'main': row, 'cross': cross or []}
+    cross_list = list(cross) if cross else []
+    if cross_at is not None and cross_list:
+        padded = [None] * len(row)
+        padded[cross_at] = cross_list[0]
+        cross_list = padded
+    return {'type': 'kings', 'main': row, 'cross': cross_list}
 
 
 def write(spec):
@@ -285,6 +295,11 @@ BAEKJE_KINGS = [
     {'name':'법왕'},
     {'name':'무왕', 'note':'서동요'},
 ]
+# 8명을 한 줄에 다 놓으면 폭이 넘쳐 마지막 왕(무왕)만 둘째 줄로 밀려나
+# 붕 떠 보였다 — 대화가 실제로 다루는 구간만 잘라서 쓴다.
+BAEKJE_KINGS_EARLY = BAEKJE_KINGS[:4]     # 문주왕~성왕 (무령왕 즉위 무렵)
+BAEKJE_KINGS_MUWANG = BAEKJE_KINGS[2:]    # 무령왕~무왕 (서동요 대목)
+BAEKJE_KINGS_NO_MUWANG = BAEKJE_KINGS[:-1]  # 문주왕~법왕 (무왕은 성왕보다 한참 뒤라 성왕 얘기엔 안 나옴)
 
 # ══════════════════════════════════════════════════════════════════
 # 고대 (기출 14.4% · 533문항) — 3화
@@ -381,15 +396,15 @@ godae1 = {
        '백제 근초고왕 업적')]),
   npc('muryeong_0','무령왕','muryeong','👑',[
     {'t':'나는 백제의 무령왕일세. 고구려에 한성을 빼앗기고 남쪽으로 밀려난 뒤, 다시 나라를 일으켜 세우던 때였지.',
-     'chart':kings_row(BAEKJE_KINGS, '무령왕')},
+     'chart':kings_row(BAEKJE_KINGS_EARLY, '무령왕')},
     {'t':'지방을 다잡아야 했네. 그래서 스물두 곳에 왕족을 보내 다스리게 했지 — 담로라 하네.',
-     'chart':kings_row(BAEKJE_KINGS, '무령왕')},
+     'chart':kings_row(BAEKJE_KINGS_EARLY, '무령왕')},
     {'t':'내 무덤은 벽돌로 쌓았다네. 중국 남조의 방식을 들여온 것일세. 지석에 내 이름과 죽은 해까지 새겨 두었지.',
-     'chart':kings_row(BAEKJE_KINGS, '무령왕')},
+     'chart':kings_row(BAEKJE_KINGS_EARLY, '무령왕')},
     {'t':'내 뒤로 백 년쯤 지난 이야기지만, 재미난 게 있네. 훗날 무왕이 될 서동이 신라 진평왕의 딸 선화공주를 마음에 두었다지.',
-     'chart':kings_row(BAEKJE_KINGS, '무왕', cross=[{'name':'진평왕','dynasty':'신라','active':True}])},
+     'chart':kings_row(BAEKJE_KINGS_MUWANG, '무왕', cross=[{'name':'진평왕','dynasty':'신라','active':True}], cross_at=5)},
     {'t':'서동은 아이들에게 마를 나눠 주며 노래를 가르쳤네. "선화공주가 밤마다 서동을 만난다"고. 그 노래가 온 서라벌에 퍼져 공주가 쫓겨났고, 서동이 기다렸다가 아내로 맞았다는 게야 — 서동요일세.',
-     'chart':kings_row(BAEKJE_KINGS, '무왕')},
+     'chart':kings_row(BAEKJE_KINGS_MUWANG, '무왕')},
     ],
     [Q('백제 무령왕이 지방 통제를 위해 왕족을 보내 다스리게 한 22개 행정 구역은?',
        '22담로','9주 5소경',
@@ -427,15 +442,15 @@ godae1 = {
        '고구려 고분벽화')]),
   npc('seongwang_0','백제 성왕','seongwang','👑',[
     {'t':'나는 백제 성왕일세. 즉위하고 얼마 지나지 않아 도읍을 웅진에서 사비로 옮겼네 — 좁은 웅진으로는 나라를 다시 일으키기 어려웠거든.',
-     'chart':kings_row(BAEKJE_KINGS, '성왕')},
+     'chart':kings_row(BAEKJE_KINGS_NO_MUWANG, '성왕')},
     {'t':'나라 이름도 남부여로 고쳤네. 부여의 정통을 잇는다는 뜻을 담았지. 중앙에는 22부를, 지방에는 5방을 두어 다스림도 새로 짰네.',
-     'chart':kings_row(BAEKJE_KINGS, '성왕')},
+     'chart':kings_row(BAEKJE_KINGS_NO_MUWANG, '성왕')},
     {'t':'신라 진흥왕과 손을 잡았네. 힘을 합쳐 고구려를 밀어내고, 백여 년 만에 한강 하류를 되찾았지.',
-     'chart':kings_row(BAEKJE_KINGS, '성왕', cross=[{'name':'진흥왕','dynasty':'신라','active':True}])},
+     'chart':kings_row(BAEKJE_KINGS_NO_MUWANG, '성왕', cross=[{'name':'진흥왕','dynasty':'신라','active':True}], cross_at=3)},
     {'t':'허나 진흥왕이 그 땅을 통째로 삼켜 버렸네. 나·제 동맹이 그렇게 깨졌지.',
-     'chart':kings_row(BAEKJE_KINGS, '성왕', cross=[{'name':'진흥왕','dynasty':'신라','active':True}])},
+     'chart':kings_row(BAEKJE_KINGS_NO_MUWANG, '성왕', cross=[{'name':'진흥왕','dynasty':'신라','active':True}], cross_at=3)},
     {'t':'분을 참지 못해 신라를 쳤으나, 관산성에서 매복에 걸려 이 목숨을 잃었네. 554년의 일일세.',
-     'chart':kings_row(BAEKJE_KINGS, '성왕')}],
+     'chart':kings_row(BAEKJE_KINGS_NO_MUWANG, '성왕')}],
     [Q('웅진에서 사비로 도읍을 옮기고 나라 이름을 남부여로 고친 백제의 왕은?',
        '성왕','문주왕',
        '문주왕은 한성이 함락된 뒤 웅진으로 도읍을 옮긴 왕이에요.',

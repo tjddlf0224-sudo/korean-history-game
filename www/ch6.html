@@ -330,6 +330,7 @@
     background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); }
   .dlg-chart .king-badge.active { background:rgba(240,201,107,.20); border-color:#f0c96b;
     box-shadow:0 0 0 1px #f0c96b, 0 0 10px rgba(240,201,107,.45); }
+  .dlg-chart .king-badge.kb-spacer { background:none; border-color:transparent; }
   .dlg-chart .kb-dynasty { font-size:9px; opacity:.7; margin-bottom:1px; }
   .dlg-chart .kb-name { font-size:12px; font-weight:bold; }
   .dlg-chart .king-badge.active .kb-name { color:#f0c96b; }
@@ -1392,7 +1393,10 @@ function drawChart(c){
     // 왕위 계승 띠 — 지금 이 대사가 누구·어느 왕(들) 이야기인지 금색
     // 테두리로 짚어 준다. main은 한 나라(왕조)의 계승 순서, cross는
     // 같은 시기 다른 나라 왕(있을 때만 따로 한 줄 더).
-    const badge = (k) => '<div class="king-badge' + (k.active ? ' active' : '') + '">'
+    // cross 항목이 null이면(main의 특정 칸과 짝을 맞추려고 비워 둔 자리)
+    // 자리만 차지하고 안 보이는 빈 칸으로 그린다.
+    const badge = (k) => !k ? '<div class="king-badge kb-spacer"></div>' :
+      '<div class="king-badge' + (k.active ? ' active' : '') + '">'
       + (k.dynasty ? '<div class="kb-dynasty">' + k.dynasty + '</div>' : '')
       + '<div class="kb-name">' + k.name + '</div>'
       + (k.note ? '<div class="kb-note">' + k.note + '</div>' : '') + '</div>';
