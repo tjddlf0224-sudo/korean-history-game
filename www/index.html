@@ -219,6 +219,7 @@
       <button id="menu-back">◀ 이전으로</button>
       <button id="menu-badges-open">🏅 배지함 보기</button>
       <button id="menu-reset">진행 기록 초기화</button>
+      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -243,8 +244,10 @@
   </div>
 </div>
 
+<script src="assets/audio.js"></script>
 <script src="assets/badges.js"></script>
 <script>
+BGM.play('title_theme');
 /* 가로모드 고정 (게임 챕터들과 동일 로직) */
 const wrapEl = document.getElementById('wrap');
 function getViewportSize(){
@@ -619,6 +622,16 @@ document.addEventListener('keydown', (ev) => {
   if (ev.key !== 'Escape') return;
   closeKingsModal(); closeBadges(); closeMenu();
 });
+</script>
+
+<script>
+(function(){
+  const btn = document.getElementById('bgm-mute-toggle');
+  if (!btn) return;
+  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
+  render();
+})();
 </script>
 </body>
 </html>

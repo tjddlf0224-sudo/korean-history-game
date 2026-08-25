@@ -371,6 +371,7 @@
       <a href="index.html">챕터 목록으로 나가기</a>
       <button id="menu-restart">이 화 처음부터 다시 시작</button>
       <button id="menu-kings">왕조 계보 보기</button>
+      <button id="bgm-mute-toggle">🔊 배경음악 끄기</button>
       <button id="menu-close-btn">닫기</button>
     </div>
   </div>
@@ -387,6 +388,7 @@
   </div>
 </div>
 
+<script src="assets/audio.js"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -532,6 +534,8 @@ const ZONES = {
 // 게임은 배경을 ZOOM(1.6)배에 기기 픽셀비까지 곱해 그리므로 1376폭 원본은
 // 화면에서 최대 4.8배로 늘어나 뿌옇다. 2배 해상도 webp는 그 뿌연 정도를
 // 줄이면서도 png보다 파일이 작다. 아직 변환하지 않은 그림은 png 그대로 뜬다.
+const ZONE_BGM = { pokjeong: 'bgm_joseon_palace', sago: 'bgm_exile', yubae: 'bgm_exile', default: 'bgm_joseon_palace' };
+BGM.play('bgm_intro_sting');
 const zoneImgs = {};
 for (const id in ZONES){
   const png = ZONES[id].img, im = new Image();
@@ -687,6 +691,7 @@ function showZoneBanner(text){
    재입장해도(재방문 시 같은 대화가 다시 나오므로) 매번 같은 신호를
    줘서 "여기서 더 들을 말이 없다"를 분명히 알린다. */
 function playFanfare(text){
+  BGM.playOnce('sfx_fanfare');
   const el = document.getElementById('fanfare');
   if (!el) return;
   const label = document.getElementById('fc-label');
@@ -874,6 +879,7 @@ const World = {
     fade.classList.add('show');
     setTimeout(() => {
       this.zone = zoneId;
+      BGM.play(ZONE_BGM[zoneId] || ZONE_BGM.default);
       this.px = spawn.x; this.py = spawn.y;
       showZoneBanner(ZONES[zoneId].label);
       this.nearNpc = null;
@@ -1445,6 +1451,7 @@ function introNext(){
     // 인트로가 걷히고 첫 무대가 드러나는 순간에도 구역 이름을 띄운다
     // (이동할 때만 띄우면 시작 지점이 어딘지 끝내 알 수 없다).
     showZoneBanner(ZONES[World.zone] && ZONES[World.zone].label);
+    BGM.play(ZONE_BGM[World.zone] || ZONE_BGM.default);
       fade.classList.remove('show');
     }, 600);
     return;
@@ -1489,6 +1496,7 @@ Stage.finishFinal = function(score, total){
   World.paused = false;
 };
 Stage.endChapter = function(){
+  BGM.play('bgm_chapter_end', {fadeMs:700});
   if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop());
   document.getElementById('end-screen').classList.add('show');
 };
@@ -1562,5 +1570,15 @@ requestAnimationFrame(loop);
 
 </script>
 <script src="assets/badges.js"></script>
+
+<script>
+(function(){
+  const btn = document.getElementById('bgm-mute-toggle');
+  if (!btn) return;
+  function render(){ btn.textContent = BGM.isMuted() ? '🔇 배경음악 켜기' : '🔊 배경음악 끄기'; }
+  btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
+  render();
+})();
+</script>
 </body>
 </html>
