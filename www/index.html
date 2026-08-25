@@ -80,15 +80,11 @@
   .era-section:last-child { border-bottom: none; }
   .era-dot { position: absolute; left: -22px; top: 20px; width: 12px; height: 12px; border-radius: 50%;
     background: #d9a441; border: 3px solid #15110c; box-shadow: 0 0 0 1px #3a2f1e; z-index: 1; }
-  .era-header { display: flex; align-items: baseline; gap: 10px; padding: 14px 10px 14px 4px; cursor: pointer; }
-  .era-header:active { background: rgba(255,255,255,.03); }
+  .era-header { display: flex; align-items: baseline; gap: 10px; padding: 14px 10px 14px 4px; }
   .era-title { font-size: 18px; font-weight: bold; color: #f0c96b; }
   .era-title.clk { cursor: pointer; border-bottom: 1px dotted #d9a441; padding-bottom: 1px; }
   .era-year { font-size: 11px; color: #afa38f; white-space: nowrap; }
   .era-pct { font-size: 11px; color: #c9a24a; white-space: nowrap; }
-  .era-chevron { margin-left: auto; flex: none; color: #8a7c63; font-size: 13px;
-    transition: transform .2s ease; }
-  .era-section.open .era-chevron { transform: rotate(90deg); color: #d9a441; }
 
   /* 시대 진행선 — 시작(금색 점) → 현재(최근 학습한 챕터, 빛나는 고리) →
      끝(빈 점). 카드 목록 위, 헤더 아래 가로선으로 "이 시대의 어디쯤"을
@@ -107,8 +103,9 @@
      인물/키워드는 보조, 기출 비중은 맨 아래로 낮춰서 위계를 준다. */
   .era-cards-row { display: flex; gap: 14px; overflow-x: auto; padding: 14px 10px 18px 4px;
     -webkit-overflow-scrolling: touch; }
-  .chapter-card { position: relative; flex: 0 0 auto; width: 176px; display: flex; flex-direction: column; gap: 7px;
-    text-decoration: none; color: inherit; background: #241c12; border: 1px solid #3a2f1e;
+  .chapter-card { position: relative; flex: 0 0 auto; width: 176px; min-height: 176px; display: flex;
+    flex-direction: column; gap: 7px; text-decoration: none; color: inherit; background: #241c12;
+    background-size: cover; background-position: center; border: 1px solid #3a2f1e;
     border-radius: 16px; padding: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.22);
     transition: border-color .15s, transform .1s; }
   .chapter-card:active { transform: scale(0.97); }
@@ -119,11 +116,17 @@
   .chapter-card.recent::before { content: ''; position: absolute; top: -9px; left: 50%;
     transform: translateX(-50%); width: 0; height: 0;
     border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 9px solid #f0c96b; }
-  .chapter-card .ccard-num { font-size: 10.5px; color: #c9a24a; font-weight: 600; letter-spacing: .02em; }
-  .chapter-card .ccard-title { font-size: 16px; font-weight: bold; line-height: 1.35; color: #f5ecd8; }
-  .chapter-card .ccard-who { font-size: 11.5px; color: #afa38f; line-height: 1.4; }
-  .chapter-card .ccard-pct { margin-top: auto; font-size: 10.5px; color: #8a7c63; padding-top: 4px;
-    border-top: 1px solid #2a2013; }
+  /* 배경에 챕터 무대 그림을 깔고(아래 background-image 인라인), 그 위에
+     글씨가 늘 읽히도록 어두운 그러데이션을 얹는다 — 위는 그림이 좀 더
+     보이게 연하게, 아래(출제 비중 줄)로 갈수록 짙게. */
+  .chapter-card .ccard-num { position:relative; font-size: 10.5px; color: #e9c979; font-weight: 600;
+    letter-spacing: .02em; text-shadow: 0 1px 4px rgba(0,0,0,.85); }
+  .chapter-card .ccard-title { position:relative; font-size: 16px; font-weight: bold; line-height: 1.35;
+    color: #fff; text-shadow: 0 1px 5px rgba(0,0,0,.9); }
+  .chapter-card .ccard-who { position:relative; font-size: 11.5px; color: #e5dcc8; line-height: 1.4;
+    text-shadow: 0 1px 4px rgba(0,0,0,.85); }
+  .chapter-card .ccard-pct { position:relative; margin-top: auto; font-size: 10.5px; color: #e0d4b8;
+    padding-top: 4px; border-top: 1px solid rgba(255,255,255,.18); text-shadow: 0 1px 3px rgba(0,0,0,.85); }
 
   .plan-note { font-size: 11px; color:#afa38f; line-height:1.5; text-align:center; padding-top: 4px; flex:none; margin:6px 0 0; }
   /* 가로모드 폰처럼 화면이 낮을 땐 카드 영역을 최대한 확보하려고 안내문을 숨긴다.
@@ -317,58 +320,58 @@ applyOrientation();
 /* ============ 시대순(왼쪽=과거 → 오른쪽=현재) 타임라인 데이터 ============ */
 const ERAS = [
   { title: '선사·초기국가', year: '~ BC108', pct: '4.7%', range: '구석기 ~ 고조선·초기국가', cards: [
-    { href: 'seonsa1.html', num: '선사 1화', name: '뗀석기에서 고인돌까지', who: '구석기~고조선' },
+    { href: 'seonsa1.html', num: '선사 1화', name: '뗀석기에서 고인돌까지', who: '구석기~고조선', bg: 'assets/scenes/seonsa1_river.webp' },
   ] },
   { title: '고대', year: 'BC57 ~ 918', pct: '14.4%', range: '삼국시대 ~ 남북국시대', cards: [
-    { href: 'godae1.html', num: '고대 1화', name: '세 나라의 겨룸', who: '무령왕 · 진흥왕' },
-    { href: 'gaya.html', num: '고대 2화', name: '낙동강의 철', who: '금관가야 · 대가야 · 우륵' },
-    { href: 'tongil.html', num: '고대 3화', name: '통일 전쟁', who: '계백 · 김유신 · 문무왕 · 신문왕' },
-    { href: 'godae2.html', num: '고대 4화', name: '통일과 발해', who: '장보고 · 의상 · 발해' },
-    { href: 'godae3.html', num: '고대 5화', name: '후삼국', who: '견훤 · 궁예 · 최치원' },
+    { href: 'godae1.html', num: '고대 1화', name: '세 나라의 겨룸', who: '무령왕 · 진흥왕', bg: 'assets/scenes/godae1_hanseong.webp' },
+    { href: 'gaya.html', num: '고대 2화', name: '낙동강의 철', who: '금관가야 · 대가야 · 우륵', bg: 'assets/scenes/gaya_gimhae.webp' },
+    { href: 'tongil.html', num: '고대 3화', name: '통일 전쟁', who: '계백 · 김유신 · 문무왕 · 신문왕', bg: 'assets/scenes/tongil_hwangsanbeol.webp' },
+    { href: 'godae2.html', num: '고대 4화', name: '통일과 발해', who: '장보고 · 의상 · 발해', bg: 'assets/scenes/godae2_sanggyeong.webp' },
+    { href: 'godae3.html', num: '고대 5화', name: '후삼국', who: '견훤 · 궁예 · 최치원', bg: 'assets/scenes/godae3_husamguk.webp' },
   ] },
   { title: '고려', year: '918 ~ 1392', pct: '14.4%', range: '918 ~ 1392', cards: [
-    { href: 'goryeo1.html', num: '고려 1화', name: '왕건의 나라', who: '태조 · 광종 · 최승로' },
-    { href: 'goryeo2.html', num: '고려 2화', name: '무신과 몽골', who: '서희 · 최충헌 · 삼별초' },
-    { href: 'byeokrando.html', num: '고려 3화', name: '벽란도의 바닷길', who: '전시과 · 해동통보 · 대외무역' },
-    { href: 'goryeo3.html', num: '고려 4화', name: '원 간섭기와 공민왕', who: '공민왕 · 지눌 · 의천' },
+    { href: 'goryeo1.html', num: '고려 1화', name: '왕건의 나라', who: '태조 · 광종 · 최승로', bg: 'assets/scenes/goryeo1_gaegyeong.webp' },
+    { href: 'goryeo2.html', num: '고려 2화', name: '무신과 몽골', who: '서희 · 최충헌 · 삼별초', bg: 'assets/scenes/goryeo2_seogyeong.webp' },
+    { href: 'byeokrando.html', num: '고려 3화', name: '벽란도의 바닷길', who: '전시과 · 해동통보 · 대외무역', bg: 'assets/scenes/goryeo_byeokrando.webp' },
+    { href: 'goryeo3.html', num: '고려 4화', name: '원 간섭기와 공민왕', who: '공민왕 · 지눌 · 의천', bg: 'assets/scenes/goryeo3_gaegyeong.webp' },
   ] },
   { title: '조선 전기', year: '1392 ~ 1592', pct: '8.2%', range: null, cards: [
-    { href: 'ch0.html', num: '0화', name: '새 나라의 설계자', who: '태조 · 정도전' },
-    { href: 'ch1.html', num: '1화', name: '왕권의 기틀', who: '태종' },
-    { href: 'ch2.html', num: '2화', name: '황금시대', who: '세종 · 훈민정음' },
-    { href: 'ch2b.html', num: '3화', name: '들녘과 국경', who: '정초 · 김종서' },
-    { href: 'ch3.html', num: '4화', name: '피의 계승', who: '세조 · 단종' },
-    { href: 'ch4.html', num: '5화', name: '법과 제도의 완성', who: '성종' },
-    { href: 'ch5.html', num: '6화', name: '사림과 피바람', who: '연산군~명종' },
-    { href: 'ch5b.html', num: '7화', name: '서원과 학맥', who: '주세붕 · 조식 · 이황' },
-    { href: 'ch6.html', num: '8화', name: '폭풍 전야', who: '선조' },
+    { href: 'ch0.html', num: '0화', name: '새 나라의 설계자', who: '태조 · 정도전', bg: 'assets/scenes/ch0_bg.webp' },
+    { href: 'ch1.html', num: '1화', name: '왕권의 기틀', who: '태종', bg: 'assets/scenes/ch1_naejeon.webp' },
+    { href: 'ch2.html', num: '2화', name: '황금시대', who: '세종 · 훈민정음', bg: 'assets/scenes/ch2_jiphyeonjeon.webp' },
+    { href: 'ch2b.html', num: '3화', name: '들녘과 국경', who: '정초 · 김종서', bg: 'assets/scenes/ch2_gwonnong.webp' },
+    { href: 'ch3.html', num: '4화', name: '피의 계승', who: '세조 · 단종', bg: 'assets/scenes/ch3_gungya.webp' },
+    { href: 'ch4.html', num: '5화', name: '법과 제도의 완성', who: '성종', bg: 'assets/scenes/ch4_hongmungwan.webp' },
+    { href: 'ch5.html', num: '6화', name: '사림과 피바람', who: '연산군~명종', bg: 'assets/scenes/ch5_pokjeong.webp' },
+    { href: 'ch5b.html', num: '7화', name: '서원과 학맥', who: '주세붕 · 조식 · 이황', bg: 'assets/scenes/ch5_seowon.webp' },
+    { href: 'ch6.html', num: '8화', name: '폭풍 전야', who: '선조', bg: 'assets/scenes/ch6_jojeong.webp' },
   ] },
   { title: '조선 후기', year: '1592 ~ 1863', pct: '15.3%', range: '1592 ~ 1863', cards: [
-    { href: 'imjin.html', num: '후기 1화', name: '한산도의 학익진', who: '신립 · 이순신 · 김시민' },
-    { href: 'imjin2.html', num: '후기 2화', name: '행주산성의 반격', who: '곽재우 · 조헌 · 권율' },
-    { href: 'hugi1.html', num: '후기 3화', name: '광해군과 두 호란', who: '광해군 · 병자호란' },
-    { href: 'hugi2.html', num: '후기 4화', name: '실학과 저잣거리', who: '정약용 · 정조' },
-    { href: 'hugi3.html', num: '후기 5화', name: '세도와 봉기', who: '홍경래 · 최제우' },
+    { href: 'imjin.html', num: '후기 1화', name: '한산도의 학익진', who: '신립 · 이순신 · 김시민', bg: 'assets/scenes/imjin_tangeumdae.webp' },
+    { href: 'imjin2.html', num: '후기 2화', name: '행주산성의 반격', who: '곽재우 · 조헌 · 권율', bg: 'assets/scenes/imjin_uibyeong.webp' },
+    { href: 'hugi1.html', num: '후기 3화', name: '광해군과 두 호란', who: '광해군 · 병자호란', bg: 'assets/scenes/hugi1_namhan.webp' },
+    { href: 'hugi2.html', num: '후기 4화', name: '실학과 저잣거리', who: '정약용 · 정조', bg: 'assets/scenes/hugi2_seongho.webp' },
+    { href: 'hugi3.html', num: '후기 5화', name: '세도와 봉기', who: '홍경래 · 최제우', bg: 'assets/scenes/hugi3_jeongju.webp' },
   ] },
   { title: '근대·개항기', year: '1863 ~ 1910', pct: '12.8%', range: '1863 ~ 1910', cards: [
-    { href: 'gaehang1.html', num: '개항 1화', name: '강화도의 대포', who: '흥선대원군 · 최익현' },
-    { href: 'gaehang_ch2.html', num: '개항 2화', name: '군인들의 함성', who: '임오군란' },
-    { href: 'gaehang_ch3.html', num: '개항 3화', name: '삼일천하의 꿈', who: '갑신정변 · 김옥균' },
-    { href: 'gaehang4.html', num: '개항 4화', name: '우금치의 함성', who: '전봉준 · 갑오개혁' },
-    { href: 'gaehang5.html', num: '개항 5화', name: '대한제국과 국권피탈', who: '고종 · 신민회' },
+    { href: 'gaehang1.html', num: '개항 1화', name: '강화도의 대포', who: '흥선대원군 · 최익현', bg: 'assets/scenes/gaehang1_gwangseong.webp' },
+    { href: 'gaehang_ch2.html', num: '개항 2화', name: '군인들의 함성', who: '임오군란', bg: 'assets/scenes/gaehang_ch2_barracks.webp' },
+    { href: 'gaehang_ch3.html', num: '개항 3화', name: '삼일천하의 꿈', who: '갑신정변 · 김옥균', bg: 'assets/scenes/gaehang_ch3_ujeongchongguk.webp' },
+    { href: 'gaehang4.html', num: '개항 4화', name: '우금치의 함성', who: '전봉준 · 갑오개혁', bg: 'assets/scenes/gaehang4_ugeumchi.webp' },
+    { href: 'gaehang5.html', num: '개항 5화', name: '대한제국과 국권피탈', who: '고종 · 신민회', bg: 'assets/scenes/gaehang5_hwangudan.webp' },
   ] },
   { title: '일제강점기', year: '1910 ~ 1945', pct: '15.1%', range: '1910 ~ 1945', cards: [
-    { href: 'ilje1.html', num: '일제 1화', name: '만세 소리', who: '3·1 운동 · 박은식' },
-    { href: 'ilje2.html', num: '일제 2화', name: '실력을 기르자', who: '신간회 · 의열단 · 청산리' },
-    { href: 'ilje_ch7.html', num: '일제 7화', name: '임정의 부활', who: '김구 · 윤봉길' },
+    { href: 'ilje1.html', num: '일제 1화', name: '만세 소리', who: '3·1 운동 · 박은식', bg: 'assets/scenes/ilje1_tapgol.webp' },
+    { href: 'ilje2.html', num: '일제 2화', name: '실력을 기르자', who: '신간회 · 의열단 · 청산리', bg: 'assets/scenes/ilje2_gyeongseong.webp' },
+    { href: 'ilje_ch7.html', num: '일제 7화', name: '임정의 부활', who: '김구 · 윤봉길', bg: 'assets/scenes/ilje_ch7_imjeong.webp' },
   ] },
   { title: '현대', year: '1945 ~ 현재', pct: '9.7%', range: '1945 ~ 현재', cards: [
-    { href: 'hyeondae1.html', num: '현대 1화', name: '해방, 그리고 갈라짐', who: '여운형 · 6·25' },
-    { href: 'hyeondae2.html', num: '현대 2화', name: '광장의 사람들', who: '4·19 · 5·18 · 6월항쟁' },
-    { href: 'hyeondae3.html', num: '현대 3화', name: '두 정부와 판문점', who: '새마을 · 7·4 · 6·15' },
+    { href: 'hyeondae1.html', num: '현대 1화', name: '해방, 그리고 갈라짐', who: '여운형 · 6·25', bg: 'assets/scenes/hyeondae1_haebang.webp' },
+    { href: 'hyeondae2.html', num: '현대 2화', name: '광장의 사람들', who: '4·19 · 5·18 · 6월항쟁', bg: 'assets/scenes/hyeondae2_gwangjang.webp' },
+    { href: 'hyeondae3.html', num: '현대 3화', name: '두 정부와 판문점', who: '새마을 · 7·4 · 6·15', bg: 'assets/scenes/hyeondae3_panmunjeom.webp' },
   ] },
   { title: '시대 통합', year: '해마다', pct: '5.3%', range: '세시풍속 · 문화유산', cards: [
-    { href: 'sesi.html', num: '시대통합 1화', name: '열두 달 세시풍속', who: '설날 · 단오 · 추석 · 동지' },
+    { href: 'sesi.html', num: '시대통합 1화', name: '열두 달 세시풍속', who: '설날 · 단오 · 추석 · 동지', bg: 'assets/scenes/sesi_maeul.webp' },
   ] },
 ];
 
@@ -515,18 +518,11 @@ const eraListEl = document.getElementById('era-list');
 // 시대 아코디언 — 한 번에 한 시대만 펼친다(디자인 가이드의 레이아웃
 // 제안). 기본으로는 최근 학습한 챕터가 있는 시대를, 없으면 첫 시대
 // (선사·초기국가)를 펼쳐 둔다.
-let openEraTitle = ERAS[0].title;
-if (lastChapterHref){
-  const eraWithRecent = ERAS.find(e => e.cards && e.cards.some(c => c.href === lastChapterHref));
-  if (eraWithRecent) openEraTitle = eraWithRecent.title;
-}
-
 function renderEraList(){
   eraListEl.innerHTML = '';
   ERAS.forEach(e => {
     const section = document.createElement('div');
-    const isOpen = e.title === openEraTitle;
-    section.className = 'era-section' + (isOpen ? ' open' : '');
+    section.className = 'era-section';
 
     const hasKings = !!KINGS_BY_ERA[e.title];
     const pctLine = e.pct ? `<span class="era-pct">기출 ${e.pct}</span>` : '';
@@ -536,9 +532,8 @@ function renderEraList(){
         <span class="era-title${hasKings ? ' clk' : ''}"${hasKings ? ` title="누르면 이 시대 왕 계보 보기"` : ''}>${e.title}</span>
         <span class="era-year">${e.year}</span>
         ${pctLine}
-        <span class="era-chevron">▶</span>
       </div>`;
-    if (isOpen && e.cards){
+    if (e.cards){
       const recentIdx = e.cards.findIndex(c => c.href === lastChapterHref);
 
       // 가로선 + 시작/현재/끝 점 — 현재 점은 최근 학습한 챕터가 이 시대
@@ -556,7 +551,7 @@ function renderEraList(){
       const cardsRow = document.createElement('div');
       cardsRow.className = 'era-cards-row';
       cardsRow.innerHTML = e.cards.map((c, i) =>
-        `<a class="chapter-card${i === recentIdx ? ' recent' : ''}" href="${c.href}">
+        `<a class="chapter-card${i === recentIdx ? ' recent' : ''}" href="${c.href}"${c.bg ? ` style="background-image:linear-gradient(180deg, rgba(20,15,10,.32) 0%, rgba(20,15,10,.58) 45%, rgba(15,11,7,.92) 100%), url('${c.bg}')"` : ''}>
           <div class="ccard-num">${c.num}</div>
           <div class="ccard-title">${c.name}</div>
           <div class="ccard-who">${c.who}</div>
@@ -569,10 +564,6 @@ function renderEraList(){
     if (hasKings){
       titleEl.addEventListener('click', (ev) => { ev.stopPropagation(); openKingsModal(e.title); });
     }
-    section.querySelector('.era-header').addEventListener('click', () => {
-      openEraTitle = isOpen ? null : e.title;
-      renderEraList();
-    });
     eraListEl.appendChild(section);
   });
 }
