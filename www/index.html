@@ -36,15 +36,11 @@
     display:flex; align-items:center; justify-content:center; transform:rotate(-6deg);
     box-shadow:0 1px 3px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,235,210,.25);
     align-self:flex-start; margin-top:1px; }
-  /* Gugi — 절 현판·전통 간판에 쓰이는 붓글씨 느낌의 한글 폰트. 임금이
-     친필로 써준 현판 같은 인상을 주려고 본문 세리프(Gowun Batang) 대신
-     제목만 이걸로 바꾼다. 붓글씨체라 자간은 넓히지 않고 오히려 살짝
-     좁혀야 획이 이어지는 느낌이 산다. */
-  h1 { font-size: 23px; margin: 0; white-space:nowrap; letter-spacing:-.01em;
-    font-family:"Gugi", "Gowun Batang", serif; font-weight:400; line-height:1.1;
-    background:linear-gradient(180deg, #fbe6ad 0%, #e0ac48 55%, #c98f34 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    text-shadow:0 1px 0 rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.3); }
+  /* 실제 붓글씨 로고 이미지(assets/title_logo.png) — 마젠타 배경을 지우고
+     먹색 획을 금색으로 다시 칠한 것. 세로 공간이 빠듯해 높이로만 제어하고
+     폭은 원본 비율(2.68:1)대로 따라가게 둔다. */
+  h1 { margin: 0; line-height:0; flex:none; }
+  h1 img { display:block; height:30px; width:auto; }
 
   .subtitle { margin:2px 0 0; font-size:12px; color:#b8a888; letter-spacing:.02em; }
 
@@ -248,7 +244,7 @@
     <div id="app">
       <div class="topbar">
         <span class="title-seal" aria-hidden="true">史</span>
-        <h1>타임슬립 한국사</h1>
+        <h1><img src="assets/title_logo.png" alt="타임슬립 한국사"></h1>
         <p class="subtitle">한능검 심화 기출 · 선사부터 현대까지 36화</p>
         <button id="menu-btn" aria-label="메뉴">☰</button>
       </div>
