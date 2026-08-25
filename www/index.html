@@ -336,6 +336,12 @@ setTimeout(applyOrientation, 300);
 setTimeout(applyOrientation, 800);
 applyOrientation();
 
+/* 마스코트 이미지 파일을 같은 이름으로 교체할 때마다 브라우저·CDN 캐시가
+   예전 파일을 계속 물고 있는 문제(예: 예전 스프라이트 시트가 좁게
+   찌그러져 보임)를 막기 위한 캐시 버스팅 버전 — 마스코트 그림을 바꿀
+   때마다 이 숫자를 올린다. */
+const MASCOT_V = 2;
+
 /* ============ 시대순(왼쪽=과거 → 오른쪽=현재) 타임라인 데이터 ============ */
 const ERAS = [
   { title: '선사·초기국가', year: '~ BC108', pct: '4.7%', range: '구석기 ~ 고조선·초기국가', mascot: 'dangun', mascotW: 116, mascotH: 112, cards: [
@@ -556,7 +562,7 @@ function renderEraList(){
     const hasKings = !!KINGS_BY_ERA[e.title];
     const pctLine = e.pct ? `<span class="era-pct">기출 ${e.pct}</span>` : '';
     const mascotHtml = e.mascot ? `<div class="era-mascot"
-        style="background-image:url('assets/mascots/${e.mascot}.png');
+        style="background-image:url('assets/mascots/${e.mascot}.png?v=${MASCOT_V}');
         width:${e.mascotW || 112}px; height:${e.mascotH || 112}px"
         title="${e.title}"></div>` : '';
     section.innerHTML = `
