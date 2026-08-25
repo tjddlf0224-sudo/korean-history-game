@@ -1121,6 +1121,7 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'예순 해를 이 땅에서 농사지었소이다. 얼마 전 감사 어른이 사람을 보내, 우리가 어떻게 씨를 고르고 언제 물을 대는지 하나하나 물어 적어 가더이다.' },
       { who:'npc', t:'중국 책에 적힌 대로 하면 이 땅에선 안 되는 게 많소. 논이 다르고 비가 다르고 흙이 다르니까요. 그걸 나라에서 이제야 물어봐 주니 반갑습디다.' },
+      { who:'npc', t:'…이렇게 이야기를 들어주는 이가 또 있을 줄은 몰랐구려. 늙은이 넋두리를 끝까지 들어주니 고맙소. 이 고마움, 잊지 않으리다.' },
     ],
     quizSeq: [
       { q:'세종이 각 도 감사에게 명해 나이 든 농부들의 경험을 조사하게 한 뒤, 그것을 바탕으로 펴낸 농서는?',
@@ -1384,6 +1385,9 @@ const Dialog = {
     if (this.npc.id === 'kimjongseo'){
       Stage.state.kimStage = Math.min(Stage.state.kimStage + 1, 2);
     }
+    // 늙은 농부의 이야기를 끝까지 들어준 인연 — 훗날 5화에서 그 손자뻘
+    // 되는 호방이 이 인연을 알아본다(assets/badges.js의 Bonds).
+    if (this.npc.id === 'nonong' && window.Bonds) Bonds.set('nonong');
     playFanfare('대화 완료');
   }
 };
@@ -1558,6 +1562,7 @@ Stage.finishBoss = function(id, score, total){
   document.getElementById('next-chapter-btn').classList.add('show');
 };
 Stage.endChapter = function(){
+  if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop());
   document.getElementById('end-screen').classList.add('show');
 };
 updateHudGoal();
@@ -1629,5 +1634,6 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
+<script src="assets/badges.js"></script>
 </body>
 </html>

@@ -1,0 +1,63 @@
+/* ============ 배지 시스템 (전 챕터 + 챕터 목록 화면 공용) ============
+   localStorage에 저장되고, 챕터 완주·인연 재회 등 다양한 곳에서
+   Badges.earn()으로 준다. 챕터 목록 화면(index.html)의 배지함에서
+   전체 목록을 보여준다. 이 파일 하나를 모든 챕터 + index.html이
+   똑같이 불러 쓴다(assets/map/map_component.js와 같은 방식). */
+// window.Badges로 명시해서 대입한다 — 최상위 const/let 선언은 window의
+// 프로퍼티가 되지 않으므로(전 챕터에서 `if (window.Badges)`로 존재를
+// 확인하는 방어 코드를 쓰고 있어, const로 선언하면 그 확인이 항상
+// false가 되어버린다 — 실제로 이 때문에 배지가 전혀 안 쌓이는 버그가
+// 났었다).
+window.Badges = {
+  STORAGE_KEY: 'khg_badges',
+  load(){
+    try { return JSON.parse(localStorage.getItem(Badges.STORAGE_KEY) || '{}'); }
+    catch(e){ return {}; }
+  },
+  has(id){ return !!Badges.load()[id]; },
+  earn(id, meta){
+    if (!id || Badges.has(id)) return false;
+    try {
+      const all = Badges.load();
+      all[id] = Object.assign({ at: Date.now() }, meta || {});
+      localStorage.setItem(Badges.STORAGE_KEY, JSON.stringify(all));
+    } catch(e){}
+    // 챕터 안에서 획득했다면(playFanfare가 있는 화면) 바로 알려준다.
+    if (typeof playFanfare === 'function'){
+      const def = BADGE_DEFS[id];
+      playFanfare('🏅 배지 획득: ' + (def ? def.name : id));
+    }
+    return true;
+  },
+  count(){ return Object.keys(Badges.load()).length; },
+  clear(){ try { localStorage.removeItem(Badges.STORAGE_KEY); } catch(e){} }
+};
+
+/* 인연(재회) 플래그 — 배지 자체는 아니고 "이 사람을 만났다/도왔다"는
+   가벼운 표시. 다른(대개 나중) 챕터에서 그 인연의 결실로 배지가 된다.
+   예: ch2b에서 농부를 만나면 Bonds.set('nonong') → ch4에서 그 손자뻘
+   호방을 만났을 때 Bonds.has('nonong')이면 특별한 대사+배지가 열린다. */
+window.Bonds = {
+  STORAGE_KEY: 'khg_bonds',
+  load(){
+    try { return JSON.parse(localStorage.getItem(Bonds.STORAGE_KEY) || '{}'); }
+    catch(e){ return {}; }
+  },
+  has(id){ return !!Bonds.load()[id]; },
+  set(id){
+    try {
+      const all = Bonds.load();
+      all[id] = true;
+      localStorage.setItem(Bonds.STORAGE_KEY, JSON.stringify(all));
+    } catch(e){}
+  },
+  clear(){ try { localStorage.removeItem(Bonds.STORAGE_KEY); } catch(e){} }
+};
+
+/* 배지 도감(챕터 완주 배지 제외). 챕터 완주 배지는 index.html이 ERAS
+   데이터로 직접 만들어 쓰므로(제목·화 번호가 이미 거기 있음) 여기엔
+   안 담는다 — 여기엔 그 외의 배지(인연 등)만 정의한다. */
+const BADGE_DEFS = {
+  bond_nonong: { name: '잊지 않은 은혜', icon: '🌾',
+    desc: '들녘에서 만난 늙은 농부와의 인연이, 세월이 지나 그 손자뻘 되는 이에게 닿았다.' },
+};

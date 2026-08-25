@@ -1488,6 +1488,7 @@ Stage.finishFinal = function(score, total){
   World.paused = false;
 };
 Stage.endChapter = function(){
+  if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop());
   document.getElementById('end-screen').classList.add('show');
 };
 
@@ -1559,5 +1560,6 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
+<script src="assets/badges.js"></script>
 </body>
 </html>

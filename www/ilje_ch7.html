@@ -540,7 +540,7 @@ function drawCharacter(px, py, facing, look){
     ctx.strokeStyle = accent; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(-9,-6); ctx.lineTo(0,2); ctx.lineTo(9,-6); ctx.stroke();
     ctx.fillStyle = '#f1c79a'; ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
-    if (look.headband){ ctx.fillStyle = accent; ctx.fillRect(-10,-18,20,3); }
+    if (look && look.headband){ ctx.fillStyle = accent; ctx.fillRect(-10,-18,20,3); }
   }
   ctx.fillStyle = '#2b2015';
   ctx.beginPath(); ctx.arc(eo-3,-14,1.4,0,Math.PI*2); ctx.fill();
@@ -764,7 +764,7 @@ const World = {
     ctx.save(); ctx.scale(ZOOM, ZOOM);
     for (const n of NPCS){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
-    for (const n of NPCS){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
+    for (const n of NPCS){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img, n.look); }
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     if (this.nearNpcShown){
       const n = this.nearNpcShown;
@@ -1127,7 +1127,7 @@ function introNext(){
 }
 document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
-Stage.endChapter = function(){ document.getElementById('end-screen').classList.add('show'); };
+Stage.endChapter = function(){ if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop()); document.getElementById('end-screen').classList.add('show'); };
 
 /* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다
    (Phaser 카메라나 게임 캔버스와 별개). 타일맵(MAP/TILE_COLOR)을 그대로 축소해서 사용. */
@@ -1194,5 +1194,6 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
+<script src="assets/badges.js"></script>
 </body>
 </html>

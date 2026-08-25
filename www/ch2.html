@@ -1617,6 +1617,7 @@ Stage.finishBoss = function(id, score, total){
   document.getElementById('next-chapter-btn').classList.add('show');
 };
 Stage.endChapter = function(){
+  if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop());
   document.getElementById('end-screen').classList.add('show');
 };
 updateHudGoal();
@@ -1688,5 +1689,6 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
+<script src="assets/badges.js"></script>
 </body>
 </html>

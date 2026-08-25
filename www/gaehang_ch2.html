@@ -1145,7 +1145,7 @@ function introNext(){
 }
 document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
-Stage.endChapter = function(){ document.getElementById('end-screen').classList.add('show'); };
+Stage.endChapter = function(){ if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop()); document.getElementById('end-screen').classList.add('show'); };
 
 /* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다.
    현재 구역의 배경 이미지를 그대로 축소해서 사용. */
@@ -1212,5 +1212,6 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
+<script src="assets/badges.js"></script>
 </body>
 </html>

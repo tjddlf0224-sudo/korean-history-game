@@ -1225,6 +1225,25 @@ const NPC_DATA = {
         feedback:['경재소는 한양에 두고 유향소를 관리·감독한 기구예요.','정답! 유향소입니다. 성종 대에 김종직 등의 건의로 다시 세워졌어요.'] },
     ]
   },
+  // 3화(들녘과 국경)에서 늙은 농부 이야기를 끝까지 들어준 적이 있으면,
+  // 그 손자뻘 되는 이 호방이 알아본다(assets/badges.js의 Bonds/Badges).
+  hyangni_bond: {
+    name: '호방', icon: '🖋️', img: 'assets/portraits/hyangni.png',
+    beats: [
+      { who:'npc', t:'소인은 이 고을 관아의 호방이올시다. 호적과 세금을 맡고 있지요. 사또께서는 몇 해 있다 떠나시지만, 저희는 대대로 이 고을 사람입니다.' },
+      { who:'npc', t:'…그런데 자네, 어딘가 낯이 익구려. 그러고 보니 제 할아버님께서 살아생전 늘 하시던 말씀이 있습니다.' },
+      { who:'npc', t:'"들녘에서 만난 젊은이 하나가, 늙은이 넋두리를 끝까지 들어주었다. 그 고마움을 잊지 않으마." 하고요. 설마… 그 이야기 속 젊은이가 지금도 이 모습 그대로일 리는 없겠지요. 허나 꼭 닮았습니다.' },
+      { who:'npc', t:'할아버님 말씀을 기억하며 이걸 드리고 싶었습니다. 대대로 전해 들은 고마움이니, 받아 주십시오.' },
+    ],
+    quizSeq: [
+      { q:'지방 관아에서 수령을 보좌하며 행정 실무를 맡았고, 조선에서는 외역전을 지급받지 못한 계층은?',
+        opts:['향리','유향소 좌수'], answer:0, src:[8,24,42],
+        feedback:['좌수는 유향소를 이끄는 고을 사족이에요.','정답! 향리입니다. 고려와 달리 조선의 향리는 보수로 줄 토지를 받지 못했어요.'] },
+      { q:'향리의 불법 행위를 규찰하고 고을 풍속을 바로잡던 향촌 자치 기구는?',
+        opts:['유향소','경재소'], answer:0, src:[57,67],
+        feedback:['경재소는 한양에 두고 유향소를 관리·감독한 기구예요.','정답! 유향소입니다. 성종 대에 김종직 등의 건의로 다시 세워졌어요.'] },
+    ]
+  },
   hundo_0: {
     name: '훈도', icon: '📖', img: 'assets/portraits/hundo.png',
     beats: [
@@ -1299,7 +1318,10 @@ const Stage = {
     if (id === 'seongjong') return Stage.state.bossBDone ? 'seongjong_repeat' : 'seongjong_' + Math.min(Stage.state.seongjongStage, 1);
     if (id === 'jwasu') return 'jwasu_0';
     if (id === 'suryeong') return 'suryeong_0';
-    if (id === 'hyangni') return 'hyangni_0';
+    if (id === 'hyangni'){
+      if (window.Bonds && Bonds.has('nonong') && !Badges.has('bond_nonong')) return 'hyangni_bond';
+      return 'hyangni_0';
+    }
     if (id === 'hundo') return 'hundo_0';
     if (id === 'yusaeng') return 'yusaeng_0';
     return null;
@@ -1435,6 +1457,7 @@ const Dialog = {
     } else if (this.npc.id === 'seongjong'){
       Stage.state.seongjongStage = Math.min(Stage.state.seongjongStage + 1, 1);
     }
+    if (prevKey === 'hyangni_bond' && window.Badges) Badges.earn('bond_nonong');
     if (Stage.keyFor(this.npc.id) === prevKey) playFanfare('대화 완료');
   }
 };
@@ -1593,6 +1616,7 @@ Stage.finishBoss = function(id, score, total){
   }
 };
 Stage.endChapter = function(){
+  if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop());
   document.getElementById('end-screen').classList.add('show');
 };
 
@@ -1664,5 +1688,6 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
+<script src="assets/badges.js"></script>
 </body>
 </html>

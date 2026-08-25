@@ -1389,6 +1389,7 @@ Stage.finishBoss = function(score, total){
   World.paused = false; // 보스전 직후에도 곧장 끝내지 않으므로 이동을 다시 풀어줘야 함
 };
 Stage.endChapter = function(){
+  if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop());
   document.getElementById('end-screen').classList.add('show');
 };
 
@@ -1461,5 +1462,6 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
+<script src="assets/badges.js"></script>
 </body>
 </html>
