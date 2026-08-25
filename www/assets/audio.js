@@ -116,5 +116,61 @@ window.BGM = (function(){
     window.addEventListener(ev, unlock, { once: true, passive: true });
   });
 
+  /* 잠금화면/제어센터 Now Playing 잔존 방지(전산회계 오락실 bgmguard.js와
+     같은 대응). iOS는 <audio>가 pause()해도 미디어가 로드돼 있는 한
+     Now Playing 위젯을 계속 띄운다 — 화면이 숨겨지면(백그라운드/잠금/
+     탭 이탈) src를 아예 내려 리소스를 해제해야 위젯이 사라진다. 다시
+     보이면 src를 복원(HTTP 캐시라 재로드 빠름)하고 재생 중이었다면
+     이어서 재생한다(자동재생이 막히면 다음 터치에서 재개). */
+  function resumeOnGesture(el){
+    const h = () => {
+      document.removeEventListener('touchstart', h, true);
+      document.removeEventListener('click', h, true);
+      const p = el.play();
+      if (p && p.catch) p.catch(() => {});
+    };
+    document.addEventListener('touchstart', h, true);
+    document.addEventListener('click', h, true);
+  }
+  function guardUnload(){
+    [chA, chB, sfxEl].forEach(el => {
+      try {
+        const src = el.getAttribute('src');
+        if (src){
+          el.__guardSrc = src;
+          el.__guardWasPlaying = !el.paused && !el.ended;
+          el.pause();
+          el.removeAttribute('src');
+          el.load();
+        }
+      } catch (e) {}
+    });
+    if ('mediaSession' in navigator){
+      try { navigator.mediaSession.metadata = null; navigator.mediaSession.playbackState = 'none'; } catch (e) {}
+    }
+  }
+  function guardRestore(){
+    [chA, chB, sfxEl].forEach(el => {
+      try {
+        if (!el.getAttribute('src') && el.__guardSrc){
+          el.setAttribute('src', el.__guardSrc);
+          el.__guardSrc = null;
+          el.load();
+          if (el.__guardWasPlaying){
+            el.__guardWasPlaying = false;
+            const p = el.play();
+            if (p && p.catch) p.catch(() => resumeOnGesture(el));
+          }
+        }
+      } catch (e) {}
+    });
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') guardUnload(); else guardRestore();
+  });
+  window.addEventListener('pagehide', guardUnload);
+  window.addEventListener('pageshow', guardRestore);
+  window.__bgmGuardRestore = guardRestore;
+
   return { play, stop, playOnce, setMuted, isMuted, toggleMuted, setVolume, getVolume, unlock };
 })();
