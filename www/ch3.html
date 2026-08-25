@@ -1267,6 +1267,7 @@ const Dialog = {
   },
   afterQuiz(){
     if (this.data.startsBoss){
+      BGM.play('bgm_boss_quiz', {fadeMs:500});
       Quiz.openSequence(BOSS_QUESTIONS, (score, total) => Stage.finishBoss(score, total));
       return;
     }

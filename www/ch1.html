@@ -1238,6 +1238,7 @@ const Dialog = {
   },
   afterQuiz(){
     if (this.data.startsBoss){
+      BGM.play('bgm_boss_quiz', {fadeMs:500});
       Quiz.openSequence(BOSS_QUESTIONS, (score, total) => Stage.finishBoss(score, total));
       return; // World.paused 유지 — 보스전도 오버레이라 어차피 막히지만 명시적으로 유지
     }
