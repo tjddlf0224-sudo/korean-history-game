@@ -95,8 +95,10 @@
      첫 프레임으로 가만히 있고, 눌러야만 동작(칼 휘두르기 등)을 재생한다
      (풀리자마자 한 번은 자동 재생). 프레임 수·캔버스 크기는 스프라이트
      시트마다 달라 --frames와 인라인 width/height로 개별 지정한다.
-     재생 속도는 프레임 수에 비례(프레임당 0.22초)해 프레임이 많은
-     스프라이트가 더 빨리 지나가 버리지 않게 한다.
+     재생 속도는 프레임 수에 비례(프레임당 0.09초)해 프레임이 많은
+     스프라이트가 더 빨리 지나가 버리지 않게 한다 — 낮은 프레임 수
+     스프라이트는 느리게 재생하면 포즈가 오래 머물러 끊기는 게 더
+     도드라져 보여서, 오히려 빠르게 돌려 잔상처럼 뭉개 보이게 한다.
      캐릭터가 커서(112px) 문서 흐름에 그대로 두면 그만큼 헤더가 높아져
      아래 진행선·카드가 밀려 내려간다 — position:absolute로 흐름에서
      빼서 시대 블록(.era-section) 위에 겹쳐 띄우고, z-index로 맨 앞에
@@ -108,7 +110,7 @@
     transition: filter .8s ease, opacity .8s ease; }
   .era-mascot.unlocked { filter:none; opacity:1; cursor: pointer; }
   .era-mascot.unlocked.playing {
-    animation: era-mascot-play calc(var(--frames, 6) * 0.22s) steps(calc(var(--frames, 6) - 1)) 2,
+    animation: era-mascot-play calc(var(--frames, 6) * 0.09s) steps(calc(var(--frames, 6) - 1)) 3,
                era-mascot-pop .7s cubic-bezier(.2,1.6,.4,1); }
   @keyframes era-mascot-play { from { background-position-x: 0%; } to { background-position-x: 100%; } }
   @keyframes era-mascot-pop { 0% { transform:scale(.6); } 55% { transform:scale(1.18); } 100% { transform:scale(1); } }
