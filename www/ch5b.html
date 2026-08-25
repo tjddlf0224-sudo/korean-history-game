@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>타임슬립 한국사 - 8화 폭풍 전야</title>
+<title>타임슬립 한국사 - 7화 서원과 학맥</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; word-break: keep-all; overflow-wrap: break-word; }
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; background: #000; font-family: "Gowun Batang", -apple-system, "Malgun Gothic", serif; }
+  /* 가로모드 고정: 세로로 들면 #wrap 전체를 90도 회전시켜 강제로 가로 화면처럼 사용한다.
+     (전산회계오락실 stage1_cost.html과 동일한 트릭 — 회전 상태에서 vh 단위는 실제 뷰포트 기준으로
+     어긋나므로 절대 쓰지 않고, 크기는 항상 JS로 계산한 px 값을 쓴다.) */
   #wrap { position: fixed; top: 0; left: 0; touch-action: none; transform-origin: top left; }
   body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
   #game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
@@ -17,40 +20,33 @@
   #hud { position: absolute; top: calc(10px + env(safe-area-inset-top)); left: calc(12px + env(safe-area-inset-left));
     color: #f5f0e6; font-size: 14px; text-shadow: 0 1px 3px rgba(0,0,0,.8); z-index: 5; }
   #hud .sub { font-size: 11px; opacity: .75; margin-top: 2px; }
+  #hud .progress { font-size: 11px; opacity: .9; margin-top: 4px; color: #c96b5a; }
 
+  /* 조이스틱 */
   #stick-zone { position: absolute; left: calc(18px + env(safe-area-inset-left)); bottom: calc(18px + env(safe-area-inset-bottom));
     width: 130px; height: 130px; z-index: 6; touch-action: none; }
   #stick-base { position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25); }
   #stick-knob { position: absolute; width: 52px; height: 52px; left: 39px; top: 39px; border-radius: 50%; background: rgba(255,255,255,0.55); transition: transform .05s linear; }
 
+  /* 대화 버튼 */
   #act-btn { position: absolute; right: calc(22px + env(safe-area-inset-right)); bottom: calc(34px + env(safe-area-inset-bottom));
     width: 68px; height: 68px; border-radius: 50%; border: none; touch-action: none;
-    background: #d9a441; color: #2b1d0e; box-shadow: 0 4px 10px rgba(0,0,0,.4);
-    display: flex; align-items: center; justify-content: center;
+    background: #a85a3e; color: #f5ecd8; font-size: 26px; box-shadow: 0 4px 10px rgba(0,0,0,.4);
     opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 6; }
   #act-btn.show { opacity: 1; pointer-events: auto; }
 
-  .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
+  /* 공통 오버레이 */
+  .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.55); }
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
-  /* 인트로 뒤로 그 챕터의 맵이 비치게 둔다. 까맣게 덮으면 화면이 텅 비어
-     보이고, 어디에 서 있는지도 알 수 없다. */
-  #intro-overlay { background: linear-gradient(rgba(8,6,4,.55), rgba(8,6,4,.78)); }
-  #intro-panel { max-width: 520px; }
 
-  /* 대화창 — 초상화가 상자 밖으로 위·왼쪽으로 살짝 튀어나와 앞에 겹쳐
-     보이게 한다(디자인 가이드의 VN식 레이아웃). #dlg-frame이 기준점,
-     초상화는 그 안에서 absolute로 떠 있고 본문은 왼쪽에 초상화 너비만큼
-     padding을 줘서 겹치지 않게 비워 둔다. */
   #dlg-frame { position: relative; width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); }
-  #dlg-panel {
-    width: 100%; box-sizing: border-box; background: #241c12ee; border: 1px solid #51432c;
-    border-radius: 16px; padding: 16px 18px 16px 132px; color: #f5ecd8; box-shadow: 0 12px 40px rgba(0,0,0,.4);
-    max-height: var(--dlg-max-h, 80%); overflow-y: auto; min-height: 110px;
-  }
-  #intro-panel {
-    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241c12ee; border: 1px solid #51432c;
-    border-radius: 16px; padding: 16px 18px; color: #f5ecd8; box-shadow: 0 12px 40px rgba(0,0,0,.4);
+  #dlg-panel { width: 100%; box-sizing: border-box; background: #150c0cee; border: 2px solid #6b2f2f;
+    border-radius: 16px; padding: 16px 18px 16px 132px; color: #e8dcd0; box-shadow: 0 8px 24px rgba(0,0,0,.7);
+    max-height: var(--dlg-max-h, 80%); overflow-y: auto; min-height: 110px; }
+  #quiz-panel, #intro-panel {
+    width: 100%; max-width: 640px; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #150c0cee; border: 2px solid #6b2f2f;
+    border-radius: 16px; padding: 16px 18px; color: #e8dcd0; box-shadow: 0 8px 24px rgba(0,0,0,.7);
     max-height: 80%; overflow-y: auto;
   }
   .dlg-top { margin-bottom: 6px; }
@@ -58,67 +54,37 @@
     border: 1px solid #51432c; background: #2a2013; color: #f5ecd8; font-size: 13px; line-height: 1;
     display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 3; }
   .dlg-portrait { position: absolute; left: 14px; top: -44px; width: 100px; height: 132px; border-radius: 14px;
-    background: #3a2f1a; flex: none; display:flex; align-items:center; justify-content:center; font-size:34px;
-    background-size: cover; background-position: center top; border: 2px solid #51432c;
+    background: #3a2222; flex: none; display:flex; align-items:center; justify-content:center; font-size:34px;
+    background-size: cover; background-position: center top; border: 2px solid #6b2f2f;
     box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
-  .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
-  .dlg-tag { font-size: 11px; color: #afa38f; }
+  .dlg-name { font-weight: bold; font-size: 15px; color: #c96b5a; }
+  .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
-  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
+  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
+  #intro-panel { }
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
-  #intro-next { margin-top: 14px; font-size: 13px; color: #d8ccb5; }
+  #intro-next { margin-top: 14px; font-size: 13px; opacity: .8; }
 
-  #quiz-panel, #gloss-panel { position: relative; width: 100%; max-width: 640px;
-    margin: 0 16px calc(16px + env(safe-area-inset-bottom)); background: #241c12f2;
-    border: 1px solid #51432c; border-radius: 16px; padding: 16px 18px; color: #f5ecd8;
-    box-shadow: 0 12px 40px rgba(0,0,0,.4); max-height: 80%; overflow-y: auto; }
-  .quiz-close, .gloss-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid #51432c; background: #2a2013; color: #f5ecd8; font-size: 14px; line-height: 1;
+  #quiz-panel { position: relative; }
+  .quiz-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid #6b2f2f; background: #241615; color: #e8dcd0; font-size: 14px; line-height: 1;
     display: flex; align-items: center; justify-content: center; cursor: pointer; }
-  #gloss-panel { max-width: 320px; }
-  .gloss-title { font-size: 15px; color: #f0c96b; margin-bottom: 8px; padding-right: 24px; }
-  .gloss-body { font-size: 13.5px; line-height: 1.7; color: #f5ecd8; }
-  .gloss-term { color: #f0c96b; text-decoration: underline dotted; text-underline-offset: 3px; cursor: pointer; }
-
-  /* 조선 8도 지도 오버레이(전 챕터 공용 — assets/map/map_component.js).
-     제목/지도/설명을 세로로 쌓고 패널 자체를 화면 가운데 두는 구조 —
-     전에는 지도와 설명을 가로로 나란히 두어(canvas가 고정폭) 좁은 화면에서
-     지도가 왼쪽에 붙어 보이는 문제가 있었다. */
-  #map-overlay { z-index: 36; background: rgba(0,0,0,.78); }
-  #map-panel { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px;
-    width: 100%; max-width: 620px; margin: 0 16px calc(16px + env(safe-area-inset-bottom));
-    background: #241c12f5; border: 1px solid #51432c; border-radius: 16px;
-    padding: 18px 20px; color: #f5ecd8; box-shadow: 0 12px 40px rgba(0,0,0,.5);
-    max-height: 92%; overflow-y: auto; box-sizing: border-box; }
-  #map-close { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
-    border: 1px solid #51432c; background: #2a2013; color: #f5ecd8; font-size: 14px; line-height: 1;
-    display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1; }
-  .map-title { font-size: 18px; color: #f0c96b; font-weight: bold; text-align: center; padding: 0 26px;
-    font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
-  #map-canvas { display: block; border-radius: 10px; cursor: grab; flex: none; max-width: 100%;
-    background: #1a140c; border: 1px solid #6b5636; touch-action: none; }
-  #map-canvas:active { cursor: grabbing; }
-  .map-caption { font-size: 15px; line-height: 1.7; color: #e8dcc0; text-align: center;
-    font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
-  .map-fb { font-size: 14px; line-height: 1.6; min-height: 18px; text-align: center;
-    font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
-  .map-fb.wrong { color: #e6a3a3; }
-  #map-cancel { font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
-  .quiz-tag { font-size: 12px; color: #e9c979; margin-bottom: 6px; }
+  .quiz-tag { font-size: 12px; color: #c96b5a; margin-bottom: 6px; }
   .quiz-q { font-size: 15px; line-height: 1.5; margin-bottom: 14px; }
   .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
-  .quiz-opt { padding: 12px 14px; border-radius: 12px; border: 1px solid #51432c; background: #2a2013; color: #f5ecd8;
+  .quiz-opt { padding: 12px 14px; border-radius: 12px; border: 1px solid #6b2f2f; background: #241615; color: #e8dcd0;
     font-size: 14px; text-align: left; }
   .quiz-opt.correct { background: #253d2c; border-color: #7faf8b; }
   .quiz-opt.wrong { background: #3d2622; border-color: #d96b5f; }
   .quiz-opt:disabled { opacity: .55; cursor: default; }
-  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #d8ccb5; min-height: 20px; }
+  .quiz-fb { margin-top: 10px; font-size: 13px; line-height: 1.5; color: #d8c3b3; min-height: 20px; }
   .quiz-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: 0; cursor: pointer; }
   .quiz-next.show { opacity: .85; }
-  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #afa38f; letter-spacing: .02em; }
+  /* 기출 출처 배지: 이 문항이 몇 회 몇 번 기출에서 온 것인지 표시(퀴즈 우측 하단). */
+  .quiz-src { margin-top: 8px; text-align: right; font-size: 11px; color: #a89372; letter-spacing: .02em; }
   .quiz-src:empty { display: none; }
 
   #fade { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; transition: opacity .6s; z-index: 30; }
@@ -223,13 +189,13 @@
   .kp-noera { padding: 30px 10px; text-align: center; color: #8d86a4; font-size: 13px; line-height: 1.8; }
 
   #end-screen { position: absolute; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center;
-    background: linear-gradient(rgba(5,8,14,.5), rgba(5,8,14,.8)), url('assets/scenes/ch6_busan_ending.png') center/cover no-repeat, #000;
-    color: #c9b8f0; text-align: center; padding: 24px; }
+    background: #000; color: #c96b5a; text-align: center; padding: 24px; }
   #end-screen.show { display: flex; }
   #end-screen h2 { font-size: 20px; margin-bottom: 10px; }
-  #end-screen p { color: #cfc7de; font-size: 14px; line-height: 1.7; }
-  #end-screen a { display: inline-block; margin-top: 22px; color: #0c0f14; background: #c9b8f0; text-decoration: none;
+  #end-screen p { color: #d8c3b3; font-size: 14px; line-height: 1.7; }
+  #end-screen a { display: inline-block; margin: 10px 8px 0; color: #1a1408; background: #d9a441; text-decoration: none;
     padding: 10px 22px; border-radius: 999px; font-size: 14px; font-weight: bold; }
+  #end-score { color: #c96b5a; font-size: 14px; margin-top: 14px; white-space: pre-wrap; }
 
   /* 미니맵: 반드시 #wrap 안에 둬야 한다. #wrap의 rotate(90deg)를 같이 물려받아야
      플레이어가 폰을 돌려서 보는 시야 기준으로 똑바로, 우상단에 놓이기 때문.
@@ -240,7 +206,7 @@
     width: 160px; height: 90px; border: 2px solid #d9a441; border-radius: 8px; z-index: 4;
     box-shadow: 0 2px 8px rgba(0,0,0,.4); background: #1a140c; }
 
-  /* 마지막 대사까지 다 들어도 곧장 챕터가 끝나지 않고, 이 버튼을
+  /* 마지막 대사/보스전까지 다 마쳐도 곧장 챕터가 끝나지 않고, 이 버튼을
      눌러야만 끝난다 — 그 전까지는 계속 돌아다니며 다른 NPC와 대화 가능. */
   #next-chapter-btn { position: absolute; left: 50%; top: calc(14px + env(safe-area-inset-top)); transform: translateX(-50%);
     background: #d9a441; color: #2b1d0e; border: none; border-radius: 999px; padding: 10px 20px;
@@ -320,20 +286,6 @@
     border:1px solid rgba(255,255,255,.16); margin-bottom:4px; }
   .dlg-chart .tree-node b { font-size:12px; }
   .dlg-chart .tree-node span { display:block; opacity:.8; font-size:10.5px; }
-  /* 왕위 계승 띠 — 지금 대사가 누구(들) 이야기인지 금색으로 짚어 준다.
-     main(같은 왕조 계승 순서)과 cross(같은 시기 다른 나라 왕)를 줄을
-     나눠 보여준다 — 다른 나라를 같은 줄에 섞으면 마치 왕위를 이은
-     것처럼 오해할 수 있어서 의도적으로 갈랐다. */
-  .dlg-chart .kings-row { display:flex; flex-wrap:wrap; gap:5px; padding:8px; }
-  .dlg-chart .kings-row.kings-cross { padding-top:0; border-top:1px dashed rgba(255,255,255,.18); margin-top:-2px; }
-  .dlg-chart .king-badge { flex:1 1 0; min-width:56px; padding:5px 4px; border-radius:6px; text-align:center;
-    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); }
-  .dlg-chart .king-badge.active { background:rgba(240,201,107,.20); border-color:#f0c96b;
-    box-shadow:0 0 0 1px #f0c96b, 0 0 10px rgba(240,201,107,.45); }
-  .dlg-chart .kb-dynasty { font-size:9px; opacity:.7; margin-bottom:1px; }
-  .dlg-chart .kb-name { font-size:12px; font-weight:bold; }
-  .dlg-chart .king-badge.active .kb-name { color:#f0c96b; }
-  .dlg-chart .kb-note { font-size:9.5px; opacity:.8; line-height:1.3; margin-top:2px; }
 </style>
 </head>
 <body>
@@ -341,24 +293,18 @@
   <canvas id="game"></canvas>
 
   <div id="hud">
-    <div>8화 · 폭풍 전야</div>
-    <div class="sub">1583년, 선조</div>
+    <div>7화 · 서원과 학맥</div>
+    <div class="sub">1543~1570년경, 주세붕~이황</div>
     <div class="sub" id="hud-goal"></div>
+    <div class="progress" id="hud-progress"></div>
   </div>
 
   <div id="stick-zone">
     <div id="stick-base"><div id="stick-knob"></div></div>
   </div>
-  <button id="act-btn" onclick="Stage.interact()">
-    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4 5.5C4 4.67 4.67 4 5.5 4h13C19.33 4 20 4.67 20 5.5v9c0 .83-.67 1.5-1.5 1.5H9.8l-3.9 3.4c-.5.44-1.27.08-1.27-.58V16h-.13C3.67 16 3 15.33 3 14.5v-9C3 4.67 3.67 4 4.5 4"
-        stroke="#2b1d0e" stroke-width="1.6" stroke-linejoin="round" fill="#2b1d0e" fill-opacity="0.06"/>
-      <circle cx="8.3" cy="9.8" r="1.15" fill="#2b1d0e"/>
-      <circle cx="12" cy="9.8" r="1.15" fill="#2b1d0e"/>
-      <circle cx="15.7" cy="9.8" r="1.15" fill="#2b1d0e"/>
-    </svg>
-  </button>
+  <button id="act-btn" onclick="Stage.interact()">💬</button>
 
+  <!-- 인트로 -->
   <div class="ov show" id="intro-overlay">
     <div id="intro-panel">
       <div id="intro-text"></div>
@@ -366,6 +312,7 @@
     </div>
   </div>
 
+  <!-- 대화 -->
   <div class="ov" id="dlg-overlay">
     <div id="dlg-frame">
       <div class="dlg-portrait" id="dlg-portrait">👤</div>
@@ -375,13 +322,14 @@
           <div class="dlg-tag" id="dlg-tag"></div>
           <div class="dlg-name" id="dlg-name"></div>
         </div>
-        <div class="dlg-chart" id="dlg-chart" hidden></div>
-        <div class="dlg-box" id="dlg-text"></div>
-        <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
-      </div>
+      <div class="dlg-chart" id="dlg-chart" hidden></div>
+      <div class="dlg-box" id="dlg-text"></div>
+      <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+    </div>
     </div>
   </div>
 
+  <!-- 확인 퀴즈 / 보스전 -->
   <div class="ov center" id="quiz-overlay">
     <div id="quiz-panel">
       <button class="quiz-close" onclick="Quiz.abort()">✕</button>
@@ -391,15 +339,6 @@
       <div class="quiz-fb" id="quiz-fb"></div>
       <div class="quiz-next" id="quiz-next">계속 <span class="arrow">▶</span></div>
       <div class="quiz-src" id="quiz-src"></div>
-    </div>
-  </div>
-
-  <!-- 용어 설명: 대사 속 낯선 용어를 누르면 뜬다(GLOSSARY에 지도 링크가 있으면 지도가 뜬다) -->
-  <div class="ov center" id="gloss-overlay" onclick="if(event.target===this) closeGlossary()">
-    <div id="gloss-panel">
-      <button class="gloss-close" onclick="closeGlossary()">✕</button>
-      <div class="gloss-title" id="gloss-term"></div>
-      <div class="gloss-body" id="gloss-body"></div>
     </div>
   </div>
 
@@ -415,13 +354,11 @@
 
   <div id="end-screen">
     <div>
-      <h2>조선 전기 — 끝</h2>
-      <p>이이는 이듬해 세상을 떠났다. 양쪽을 함께 세우려던 그의 뜻도 함께 저물었다.<br>1589년, 정여립이 반역을 꾀했다는 고변이 올라온다.<br>기축옥사 — 그 조사 과정에서 동인 수백 명이 화를 입으며, 골은 되돌릴 수 없이 깊어졌다.</p>
-      <p style="margin-top:14px;">200년, 이 나라는 많은 것을 이루었다.<br>새 문자를 만들었고, 법전을 완성했고, 국경을 넓혔다.<br>그리고 그만큼 많은 피를 흘리며 스스로를 시험했다.</p>
-      <p style="margin-top:14px;">하지만 바다 저편에서는, 아무도 모르는 사이<br>전혀 다른 이야기가 시작되고 있었다.</p>
-      <p style="margin-top:14px; opacity:.75;">1592년. 조선은 아직, 그 함대가 무엇을 의미하는지 알지 못했다.</p>
-      <p style="margin-top:18px; opacity:.6;">조선후기 1화 「한산도의 학익진」에서 계속됩니다.</p>
-      <a href="imjin.html">다음 화로</a><a href="index.html">챕터 목록</a>
+      <h2>7화 · 끝</h2>
+      <p>서원과 향약으로 향촌에 뿌리내린 사림은, 마침내 조정의 중심 세력으로 자리 잡았다.<br>하지만 그 사림마저, 이제 스스로 편을 갈라 다투기 시작한다…</p>
+      <div id="end-score"></div>
+      <p style="margin-top:18px; opacity:.7;">8화 「폭풍 전야」에서 계속됩니다.</p>
+      <div><a href="ch6.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
     </div>
   </div>
   <div id="zone-banner"></div>
@@ -450,7 +387,6 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=7"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -464,6 +400,8 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
 const ART_V = '?v=2';
 
+/* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
+   #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
@@ -524,10 +462,14 @@ setTimeout(applyOrientation, 300);
 setTimeout(applyOrientation, 800);
 applyOrientation();
 
-/* ============ 구역(zone): 실사 배경 이미지 + 충돌/NPC ============
-   6화는 조정 회의장 하나뿐인 단일 구역이라 exits(화면 전환)는 없다 —
-   ch1/ch2의 다중 구역 구조를 그대로 따르되 ZONES에 항목이 하나뿐이고
-   World.zone은 항상 'jojeong'으로 고정된다. */
+/* ============ 구역(zone): 실사 배경 이미지 + 구역별 충돌/NPC/출구 ============
+   원래는 하나의 타일맵을 네 사분면(사초각/유배지/저잣거리/산림)으로 나눠 썼지만,
+   실사 배경이 부족해 저잣거리(떠도는 백성)와 산림(조식)을 "궁궐(폭정)"에 임시로
+   함께 배치했었다. 이후 서원 배경이 준비되어 조식을 제 무대로 옮기고, 이황도
+   함께 세웠다(서원은 교육기관 기출 최다 개념 — 21회차). 남아 있던 '떠도는
+   백성'도 궁궐 안에 저잣거리 백성이 서 있는 꼴이라, 같은 대사를 할 만한
+   나인(궁녀)으로 바꿔 임시 배치를 완전히 정리했다.
+   pokjeong을 허브로 두고 나머지 구역(사초 사고/유배지/서원)은 그리로만 돌아간다. */
 const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
 /* 배리어 디버그 격자: URL에 ?debug=1 붙이면 isBarrierPx()가 막힌 곳을
    빨간 점 격자로 표시해서 눈으로 바로 확인할 수 있다(책상 등 가구
@@ -535,61 +477,32 @@ const BG_W = 1376, BG_H = 768, ZOOM = 1.6;
    틀렸던 문제의 재발 방지용). */
 const DEBUG_GRID = new URLSearchParams(location.search).get('debug') === '1';
 const ZONES = {
-  jojeong: {
-    img: 'assets/scenes/ch6_jojeong.png', label: '조정 회의장',
-    spawn: { x: 690, y: 650 },
+  seowon: {
+    // 서원 — 교육기관 기출 최다 개념(21회차). 사화로 조정에서 밀려난 사림이
+    // 향촌에 뿌리내린 근거지라 6화에서 분리해 독립된 챕터로 다룬다.
+    // 전학후묘 배치(앞 강학공간, 뒤 사당). 단일 구역이라 exits는 없다.
+    img: 'assets/scenes/ch5_seowon.png', label: '서원',
+    spawn: { x: 688, y: 560 },
     barriers: [
-      { x0:560, y0:0, x1:815, y1:215 },     // 어좌 단상(병풍·옥좌·계단)
-      { x0:290, y0:10, x1:370, y1:150 },    // 상단 좌측 기둥
-      { x0:505, y0:10, x1:585, y1:150 },    // 상단 기둥(단상 좌)
-      { x0:800, y0:10, x1:880, y1:150 },    // 상단 기둥(단상 우)
-      { x0:1000, y0:10, x1:1080, y1:150 },  // 상단 우측 기둥
-      { x0:260, y0:600, x1:340, y1:705 },   // 하단 좌측 기둥
-      { x0:520, y0:600, x1:600, y1:705 },   // 하단 기둥
-      { x0:775, y0:600, x1:855, y1:705 },   // 하단 기둥
-      { x0:1035, y0:600, x1:1115, y1:705 }, // 하단 우측 기둥
-      { x0:0, y0:0, x1:95, y1:BG_H },       // 좌측 창호벽
-      { x0:1281, y0:0, x1:BG_W, y1:BG_H },  // 우측 창호벽
-      { x0:165, y0:250, x1:600, y1:345 },   // 좌측 상단 방석·서안 열
-      { x0:780, y0:250, x1:1205, y1:345 },  // 우측 상단 방석·서안 열
-      { x0:165, y0:475, x1:600, y1:590 },   // 좌측 하단 방석·서안 열
-      { x0:780, y0:475, x1:1205, y1:590 },  // 우측 하단 방석·서안 열
+      { x0:0, y0:0, x1:280, y1:BG_H },        // 좌측 바깥(개울·숲)
+      { x0:1100, y0:0, x1:BG_W, y1:BG_H },    // 우측 바깥(숲)
+      { x0:0, y0:700, x1:BG_W, y1:BG_H },     // 하단 바깥
+      { x0:500, y0:0, x1:1080, y1:200 },      // 사당 영역(담장 포함)
+      { x0:280, y0:205, x1:1100, y1:240 },    // 강학공간 북쪽 담
+      { x0:280, y0:205, x1:320, y1:650 },     // 서쪽 담
+      { x0:1060, y0:205, x1:1100, y1:650 },   // 동쪽 담
+      { x0:280, y0:610, x1:610, y1:650 },     // 남쪽 담(좌) — 정문 앞은 비움
+      { x0:770, y0:610, x1:1100, y1:650 },    // 남쪽 담(우)
+      { x0:515, y0:205, x1:860, y1:395 },     // 강당
+      { x0:330, y0:300, x1:440, y1:560 },     // 서재
+      { x0:925, y0:300, x1:1035, y1:560 },    // 동재
     ],
     npcs: [
-      { id: 'yiyi', name: '이이', x: 640, y: 280, img: 'assets/portraits/yiyi.png', look: { role: 'scholar', body: '#3a4a6a', accent: '#c9b8f0' } },
-      { id: 'yuseongryong', name: '유성룡', x: 740, y: 280, img: 'assets/portraits/scholar.png', look: { role: 'scholar', body: '#3a5a5a', accent: '#c9b8f0' } },
-      { id: 'jeongcheol', name: '정철', x: 430, y: 420, img: 'assets/portraits/jeongcheol.png', look: { role: 'scholar', body: '#4a3a5a', accent: '#c9b8f0' } },
+      { id: 'juseboong', name: '주세붕', x: 690, y: 450, img: 'assets/portraits/juseboong.png', look: { role: 'scholar', body: '#3d4a6b', accent: '#c9a24a' } },
+      { id: 'josik', name: '조식', x: 560, y: 490, img: 'assets/portraits/josik.png', look: { role: 'scholar', body: '#4a4030', accent: '#7a9a5a' } },
+      { id: 'yihwang', name: '이황', x: 820, y: 490, img: 'assets/portraits/yihwang.png', look: { role: 'scholar', body: '#4a3a5a', accent: '#c9b8f0' } },
     ],
-    exits: [
-      { rect:{x0:620,y0:715,x1:770,y1:BG_H}, to:'apttul', spawn:{x:688,y:150}, label:'근정전 앞뜰로' },
-    ],
-  },
-  // 1591년 3월, 통신사가 돌아와 어전에서 보고를 마치고 물러난 자리.
-  // 회의장(실내) → 앞뜰 → 도성 거리로 이어지며 시야가 넓어지게 짰다.
-  apttul: {
-    img: 'assets/scenes/ch6_apttul.png', label: '근정전 앞뜰',
-    spawn: { x: 688, y: 200 },
-    barriers: [],
-    npcs: [
-      { id: 'seonjo', name: '선조', x: 688, y: 330, img: 'assets/portraits/seonjo.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
-      { id: 'hwangyungil', name: '황윤길', x: 400, y: 470, img: 'assets/portraits/hwangyungil.png', look: { role: 'scholar', body: '#5a3a3a', accent: '#d8c48a' } },
-      { id: 'gimseongil', name: '김성일', x: 960, y: 470, img: 'assets/portraits/gimseongil.png', look: { role: 'scholar', body: '#3a4a6a', accent: '#d8c48a' } },
-    ],
-    exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:60}, to:'jojeong', spawn:{x:690,y:660}, label:'회의장으로' },
-      { rect:{x0:600,y0:710,x1:790,y1:BG_H}, to:'doseong', spawn:{x:688,y:160}, label:'도성 거리로' },
-    ],
-  },
-  doseong: {
-    img: 'assets/scenes/ch6_doseong.png', label: '한양 도성 거리',
-    spawn: { x: 688, y: 200 },
-    barriers: [],
-    npcs: [
-      { id: 'gunjol', name: '늙은 군졸', x: 688, y: 440, img: 'assets/portraits/gunjol.png', look: { role: 'commoner', body: '#5a5a4a', accent: '#8a7a5a' } },
-    ],
-    exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:60}, to:'apttul', spawn:{x:688,y:660}, label:'앞뜰로' },
-    ],
+    exits: [],
   },
 };
 // 배경은 같은 이름의 .webp를 먼저 찾고, 없으면 스펙에 적힌 .png로 되돌아간다.
@@ -611,8 +524,8 @@ function isBarrierPx(zoneId, x, y){
 }
 const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
 
-/* ============ 주인공 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용
-   (NPC는 아직 초상화가 없어 drawCharacter() 실루엣을 그대로 유지) ============ */
+/* ============ 주인공(학생) 스프라이트: 프로시저럴 실루엣 대신 실사 이미지 사용.
+   전 챕터 공통으로 4방향 걷기 시트를 그대로 재사용(같은 인물이므로 전 챕터 공통). */
 /* 주의(재발 방지): assets/player/left_*.png·right_*.png 원본 파일 자체가 좌우
    내용이 뒤바뀌어 있음(0화에서 처음 발견/수정된 문제, DIR_SRC로 보정).
    여기서도 동일하게 보정하지 않으면 왼쪽으로 이동 시 오른쪽을 보는 등 반대로 렌더됨. */
@@ -624,7 +537,7 @@ const PLAYER_SPRITES = {};
 });
 const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
 function drawPlayerSprite(px, py, facing, moving){
-  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.fillStyle = 'rgba(0,0,0,.32)';
   ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
   const dir = DIR_NAME[facing] || 'down';
   const frames = PLAYER_SPRITES[dir];
@@ -659,6 +572,7 @@ function drawNpcSprite(px, py, imgPath, look){
   ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
 }
 
+/* ============ 캐릭터 드로잉 (역할별 실루엣) ============ */
 function drawCharacter(px, py, facing, look){
   const role = (look && look.role) || 'commoner';
   const body = (look && look.body) || '#8a6d3b';
@@ -666,10 +580,39 @@ function drawCharacter(px, py, facing, look){
   const eo = facing === 'l' ? -2 : facing === 'r' ? 2 : 0;
   ctx.save();
   ctx.translate(px, py);
-  ctx.fillStyle = 'rgba(0,0,0,.25)';
+  ctx.fillStyle = 'rgba(0,0,0,.35)';
   ctx.beginPath(); ctx.ellipse(0, 16, 12, 5, 0, 0, Math.PI*2); ctx.fill();
 
-  if (role === 'scholar'){
+  if (role === 'king'){
+    ctx.fillStyle = body;
+    ctx.beginPath();
+    ctx.moveTo(-6,-8); ctx.lineTo(6,-8); ctx.lineTo(13,14); ctx.lineTo(-13,14); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = accent; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-6,-8); ctx.lineTo(0,3); ctx.lineTo(6,-8); ctx.stroke();
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#1c1a16';
+    ctx.beginPath(); ctx.ellipse(0,-21,9,5,0,Math.PI,0); ctx.fill();
+    ctx.fillRect(-9,-22,18,4);
+    ctx.beginPath(); ctx.ellipse(-12,-17,5,2,-0.4,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(12,-17,5,2,0.4,0,Math.PI*2); ctx.fill();
+  } else if (role === 'general'){
+    ctx.fillStyle = body;
+    ctx.fillRect(-9,-6,18,20);
+    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.lineWidth = 1;
+    for (let i=-3;i<=11;i+=4){ ctx.beginPath(); ctx.moveTo(-9,i); ctx.lineTo(9,i); ctx.stroke(); }
+    ctx.fillStyle = accent;
+    ctx.fillRect(-12,-7,6,6); ctx.fillRect(6,-7,6,6);
+    ctx.fillStyle = '#f1c79a';
+    ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#565a5e';
+    ctx.beginPath(); ctx.arc(0,-16,10,Math.PI,0); ctx.fill();
+    ctx.fillRect(-10,-16,20,4);
+    ctx.fillStyle = accent;
+    ctx.beginPath(); ctx.moveTo(0,-27); ctx.lineTo(-2,-32); ctx.lineTo(2,-32); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#6b5636'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(13,-18); ctx.lineTo(13,14); ctx.stroke();
+  } else if (role === 'scholar'){
     ctx.fillStyle = body;
     ctx.beginPath();
     ctx.moveTo(-5,-8); ctx.lineTo(5,-8); ctx.lineTo(10,14); ctx.lineTo(-10,14); ctx.closePath(); ctx.fill();
@@ -689,6 +632,10 @@ function drawCharacter(px, py, facing, look){
     ctx.beginPath(); ctx.moveTo(-9,-6); ctx.lineTo(0,2); ctx.lineTo(9,-6); ctx.stroke();
     ctx.fillStyle = '#f1c79a';
     ctx.beginPath(); ctx.arc(0,-14,10,0,Math.PI*2); ctx.fill();
+    if (look && look.headband){
+      ctx.fillStyle = accent;
+      ctx.fillRect(-10,-18,20,3);
+    }
   }
 
   ctx.fillStyle = '#2b2015';
@@ -697,10 +644,12 @@ function drawCharacter(px, py, facing, look){
   ctx.restore();
 }
 
+/* ============ 오버레이 상태 통합 체크 ============ */
 function overlayOpen(){
   return !!document.querySelector('.ov.show') || document.getElementById('end-screen').classList.contains('show');
 }
 
+/* ============ World: 이동/카메라/충돌/구역 전환 ============ */
 /* 구역 이름 배너 — goToZone()과 최초 진입에서 부른다. */
 function showZoneBanner(text){
   const el = document.getElementById('zone-banner');
@@ -834,40 +783,20 @@ function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
   const done = document.getElementById('next-chapter-btn').classList.contains('show');
-  // 아직 말 안 걸어 본 사람을 차례로 가리킨다. talkStage만 보고 정하면 첫 사람과
-  // 대화한 뒤로 영영 안 바뀐다(한산도에서 곽재우와 말을 끝내도 계속 곽재우를
-  // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
-  const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
-    const wa = (w) => { const c = w.charCodeAt(w.length-1) - 0xAC00;
-      return (c >= 0 && c <= 11171 && c % 28 !== 0) ? '과' : '와'; };
-    const order = [
-      ['yiyi', '이이'],
-      ['yuseongryong', '유성룡'],
-      ['jeongcheol', '정철'],
-      ['seonjo', '선조'],
-      ['hwangyungil', '황윤길'],
-      ['gimseongil', '김성일'],
-      ['gunjol', '늙은 군졸']
-    ];
-    for (const [id, name] of order){
-      const k = Stage.keyFor(id);
-      if (k && !seenDialogKeys.has(k)) return '다음 목표: ' + name + wa(name) + ' 대화하기';
-    }
-    return '다음 목표: 다음 화로 넘어가기';
-  })();
+  const t = done ? '다음 목표: 다음 화로 넘어가기' : '다음 목표: 이황과 대화하기';
   if (el.textContent !== t) el.textContent = t;
 }
 
 const World = {
-  zone: 'jojeong', px: ZONES.jojeong.spawn.x, py: ZONES.jojeong.spawn.y,
+  zone: 'seowon', px: ZONES.seowon.spawn.x, py: ZONES.seowon.spawn.y,
   facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
   paused: false,
+  transitioning: false,
   moving: false,
   nearNpc: null,
   lastT: 0,
-  transitioning: false,
 
   canStand(x, y){
     const pad = 16;
@@ -899,13 +828,8 @@ const World = {
     this.checkNpc();
   },
 
-  /* 구역 경계(exits) 사각형에 들어가면 다음 구역으로 페이드 전환(젤다식 화면 전환).
-     6화 자체는 단일 구역이라 exits가 항상 비어 있어 이 메서드는 6화에서는
-     실행되지 않지만, make_chapter.py가 이 틀로 다구역 챕터를 찍어내므로
-     여기 있어야 그 챕터들에서 실제로 동작한다(이게 빠져 있던 게 실제 버그였다 —
-     출구가 미니맵엔 보이지만 걸어 들어가도 아무 반응이 없었다). */
   checkExit(){
-    for (const e of (ZONES[this.zone].exits || [])){
+    for (const e of ZONES[this.zone].exits){
       const r = e.rect;
       if (this.px >= r.x0 && this.px <= r.x1 && this.py >= r.y0 && this.py <= r.y1){
         this.goToZone(e.to, e.spawn);
@@ -915,8 +839,8 @@ const World = {
   },
   goToZone(zoneId, spawn){
     this.transitioning = true;
-    const fadeEl = document.getElementById('fade');
-    fadeEl.classList.add('show');
+    const fade = document.getElementById('fade');
+    fade.classList.add('show');
     setTimeout(() => {
       this.zone = zoneId;
       this.px = spawn.x; this.py = spawn.y;
@@ -924,7 +848,7 @@ const World = {
       this.nearNpc = null;
       document.getElementById('act-btn').classList.remove('show');
       setTimeout(() => {
-        fadeEl.classList.remove('show');
+        fade.classList.remove('show');
         this.transitioning = false;
       }, 60);
     }, 600);
@@ -953,7 +877,7 @@ const World = {
     const viewW = VIEW_W / ZOOM, viewH = VIEW_H / ZOOM;
     const camX = Math.max(0, Math.min(Math.max(0, BG_W - viewW), this.px - viewW/2));
     const camY = Math.max(0, Math.min(Math.max(0, BG_H - viewH), this.py - viewH/2));
-    ctx.fillStyle = '#242030';
+    ctx.fillStyle = '#1a140c';
     ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     if (img && img.complete && img.naturalWidth){
       const srcW = Math.min(viewW, BG_W), srcH = Math.min(viewH, BG_H);
@@ -984,10 +908,10 @@ const World = {
       const n = this.nearNpcShown;
       const sx = (n.x - camX) * ZOOM, sy = (n.y - camY) * ZOOM;
       if (n === this.nearNpcClose){
-        drawNpcLabel(n.name, sx, sy - 66, '#c9b8f0');
+        drawNpcLabel(n.name, sx, sy - 66, '#c96b5a');
       } else {
         const key = Stage.keyFor(n.id);
-        if (!key || !seenDialogKeys.has(key)) drawNpcLabel('!', sx, sy - 66, '#c9b8f0');
+        if (!key || !seenDialogKeys.has(key)) drawNpcLabel('!', sx, sy - 66, '#c96b5a');
       }
     }
     if (DEBUG_GRID){
@@ -1004,14 +928,15 @@ const World = {
       ctx.fillStyle = '#fff'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'left';
       ctx.fillText(`DEBUG px:(${Math.round(this.px)},${Math.round(this.py)}) zone:${this.zone}`, 6, VIEW_H - 8);
     }
-    const vg = ctx.createRadialGradient(VIEW_W/2, VIEW_H/2, VIEW_H*0.3, VIEW_W/2, VIEW_H/2, VIEW_H*0.8);
+    const vg = ctx.createRadialGradient(VIEW_W/2, VIEW_H/2, VIEW_H*0.22, VIEW_W/2, VIEW_H/2, VIEW_H*0.8);
     vg.addColorStop(0, 'rgba(0,0,0,0)');
-    vg.addColorStop(1, 'rgba(0,0,0,.4)');
+    vg.addColorStop(1, 'rgba(0,0,0,.45)');
     ctx.fillStyle = vg;
     ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
 };
 
+/* 조이스틱 입력 (Pointer Events 통일) */
 (function bindStick(){
   const zone = document.getElementById('stick-zone');
   const knob = document.getElementById('stick-knob');
@@ -1051,11 +976,13 @@ const World = {
   }
 })();
 
+/* 키보드 입력 */
 window.addEventListener('keydown', e=>{
   if (e.key === ' ' || e.key === 'Enter'){
     e.preventDefault();
     if (document.getElementById('intro-overlay').classList.contains('show')) { introNext(); return; }
     if (document.getElementById('dlg-overlay').classList.contains('show')) { Dialog.next(); return; }
+    if (document.getElementById('quiz-overlay').classList.contains('show')) { Quiz.confirmIfReady(); return; }
     Stage.interact();
     return;
   }
@@ -1072,168 +999,99 @@ window.addEventListener('keyup', e=>{
   if (['ArrowDown','s','S'].includes(e.key)) World.keys.d = false;
 });
 
-/* ============ 대화 데이터 (사료 근거: hm_077_0070 정여립 모반, hm_077_0080 동서 붕당 발생.
-   아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
-   보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
+/* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
-  jeongcheol_0: {
-    name: '정철', icon: '🖌️', img: 'assets/portraits/jeongcheol.png',
+  josik_0: {
+    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
     beats: [
-      { who:'npc', t:'나는 서인이오. 이이 대감처럼 양쪽을 아우르자는 말은, 듣기에는 좋으나 조정에서는 통하지 않소.' },
-      { who:'npc', t:'1589년, 정여립이 반역을 꾀했다는 고변이 올라왔소. 나라를 뒤엎고 왕이 되려 했다는 것이었지. 나는 그 옥사를 다스리는 자리에 앉았소 — 기축옥사요.' },
-      { who:'npc', t:'…삼 년을 끌었고, 천 명 가까이 죽거나 귀양 갔소. 대부분 동인이었지. 사람들은 나를 두고 원한을 갚았다 하더군.' },
-      { who:'npc', t:'허나 나는 붓을 든 사람이기도 하오. 강원 감사로 있을 때 금강산과 관동 팔경을 돌며 「관동별곡」을 지었고, 임금을 그리는 마음을 여인의 목소리에 빗대 「사미인곡」과 「속미인곡」을 썼소.' },
-      { who:'npc', t:'가사(歌辭)라 하오. 시조보다 길게 늘여 풀어내는 노래지. …정치로는 남을 베었고, 글로는 사랑을 노래했으니, 나도 내가 무엇인지 모르겠소.' },
+      { who:'npc', t:'나는 벼슬길에 나가지 않았네. 조정이 네 차례나 피로 물드는 걸 보았거든 — 그런 곳에 나가느니, 여기서 제자를 기르는 게 낫다 여겼지.' },
+      { who:'npc', t:'요즘 송도에 황진이라는 이가 있다더군. 시와 노래가 빼어나 사대부들이 줄을 선다지.' },
+      { who:'npc', t:'왕족 벽계수가 자기는 절대 흔들리지 않는다 큰소리쳤는데, 달밤에 그이가 부른 시조 한 수에 그만 나귀에서 떨어졌다는 이야기가 파다하네.' },
+      { who:'npc', t:'허나 서경덕 선생만은 끝내 흔들리지 않으셨다지. 그이가 스스로 선생을 스승으로 모시고, 박연폭포와 함께 셋을 송도삼절이라 불렀다더군.' },
+      { who:'npc', t:'경(敬)과 의(義), 이 두 글자를 늘 몸에 새기고 살았네. 학문은 반드시 행동으로 이어져야 하지.' },
     ],
     quizSeq: [
-      { q:'1589년 정여립 모반 사건을 계기로 동인이 대거 화를 입은 옥사는?',
-        opts:['기축옥사','무오사화'], answer:0, src:[55],
-        feedback:['무오사화는 연산군 대 사초 문제로 일어난 사건이오.','정답! 기축옥사요. 이 일로 동인과 서인의 골이 되돌릴 수 없이 깊어졌소.'] },
-      { q:'정철이 관동 팔경을 유람하며 지은, 조선 전기 가사 문학의 대표작은?',
-        opts:['관동별곡','청구영언'], answer:0, src:[55],
-        feedback:['청구영언은 훗날 김천택이 엮은 시조집이오.','정답! 「관동별곡」이오. 「사미인곡」·「속미인곡」도 내 것이지.'] }
+      { q:"지리산 자락 산천재에서 제자를 기르며 '경(敬)과 의(義)'를 강조한 학자는?", opts:['조식','이이'], answer:0, src:[8,31,68],
+        feedback:['이이는 성학집요·격몽요결을 지은 학자로, 현실 개혁론을 많이 폈어요.','정답! 남명 조식입니다. 실천을 앞세운 학풍으로 훗날 의병장을 여럿 배출했어요.'] }
     ]
   },
-  seonjo_0: {
-    name: '선조', icon: '👑', img: 'assets/portraits/seonjo.png',
+  josik_repeat: {
+    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
+    beats: [ { who:'npc', t:'산은 늘 그 자리에 있네. 급할 것 없지.' } ],
+    quiz: null
+  },
+  /* 주세붕 — 서원의 시작(백운동서원 8문항, 사액 6문항). 5화가 서원을 다루면서
+     정작 '최초의 서원을 누가 어디에 세웠나'가 비어 있었다. */
+  juseboong_0: {
+    name: '주세붕', icon: '🏫', img: 'assets/portraits/juseboong.png',
     beats: [
-      { who:'npc', t:'과인이 즉위한 뒤로 조정은 사림의 것이 되었다. 훈구는 저물었지. 헌데 이제는 그 사림이 저희끼리 갈라섰구나.' },
-      { who:'npc', chart:{
-          head:['','동인','서인'],
-          rows:[['시작','김효원 · 한양 동쪽','심의겸 · 한양 서쪽'],
-                ['뿌리','이황 · 조식 문인','이이 · 성혼 문인'],
-                ['기축옥사','화를 입음','다스린 쪽'],
-                ['통신사 보고','김성일 — 오지 않는다','황윤길 — 반드시 온다']],
-          note:'같은 사림에서 갈렸는데, 이제는 <b>왜적이 오느냐 마느냐</b>까지 편에 따라 갈리는구나.'
-        },
-        t:'보아라. 한 가지 일을 두고도 이렇게 갈린다.' },
-      { who:'npc', t:'일본에 사신을 보낸 것이 재작년이다. 정사에 황윤길, 부사에 김성일을 세웠지. 하나는 서인이고 하나는 동인이니, 서로 견제하라는 뜻이었다.' },
-      { who:'npc', t:'…돌아와 하는 말이 정반대였다. 과인은 어느 쪽을 믿어야 하느냐.' },
+      { who:'npc', t:'나는 풍기 군수로 있던 주세붕일세. 이런 곳을 처음 세울 때는 사람들이 다들 의심했지 — 나라의 향교가 있는데 굳이 왜 따로 짓느냐고.' },
+      { who:'npc', t:'허나 나는 안향 선생이 살던 그 고을에 사당을 세우고 싶었네. 이 땅에 성리학을 처음 들여온 분이니까. 그 사당에 글 읽는 집을 붙인 것이 시작일세.' },
+      { who:'npc', t:'훗날 퇴계(이황)가 그 뒤를 이어 풍기 군수가 되더니, 임금께 편액과 토지·노비를 내려달라 청했다더군. 그리하여 이름을 새로 받았지.' },
     ],
     quizSeq: [
-      { q:'1590년 조선이 일본의 정세를 살피려 파견한 사절단은?',
-        opts:['통신사','연행사'], answer:0, src:[13,25,30,53,72],
-        feedback:['연행사는 청에 보내던 사절이다.','정답! 통신사다. 정사 황윤길, 부사 김성일이 다녀왔지.'] },
-      { q:'선조 대에 사림이 갈라져 형성된 두 붕당은?',
-        opts:['동인과 서인','훈구와 사림'], answer:0, src:[9,30,44,63],
-        feedback:['훈구와 사림의 대립은 그보다 앞선 시대의 일이다.','정답! 동인과 서인이다. 이조전랑 자리를 두고 갈라섰지.'] }
+      { q:'우리나라 최초의 서원을 세운 인물은?',
+        opts:['주세붕','이황'], answer:0, src:[9,12,24,39,46],
+        feedback:['이황은 그 서원에 사액을 청한 사람이에요.','정답! 풍기 군수 주세붕입니다.'] },
+      { q:'주세붕이 세운 우리나라 최초의 서원 이름은?',
+        opts:['백운동서원','도산서원'], answer:0, src:[9,12,24,46],
+        feedback:['도산서원은 훗날 이황을 기려 세운 서원이에요.','정답! 백운동서원입니다.'] },
+      { q:'백운동서원에서 제사한, 이 땅에 성리학을 처음 들여온 고려의 인물은?',
+        opts:['안향','정몽주'], answer:0, src:[24,46],
+        feedback:['정몽주는 고려 말의 충신으로 성리학자이지만, 성리학을 처음 들여온 사람은 따로 있어요.','정답! 안향(문성공)입니다.'] },
+      { q:'백운동서원이 임금에게 편액과 토지·노비를 받아 최초의 사액서원이 되면서 바뀐 이름은?',
+        opts:['소수서원','도동서원'], answer:0, src:[9,46],
+        feedback:['도동서원은 김굉필을 기린 다른 서원이에요.','정답! 소수서원입니다. 이황의 건의로 사액을 받았어요.'] },
     ]
   },
-  hwangyungil_0: {
-    name: '황윤길', icon: '⚠️', img: 'assets/portraits/hwangyungil.png',
+  yihwang_0: {
+    name: '이황', icon: '📗', img: 'assets/portraits/yihwang.png',
     beats: [
-      { who:'npc', t:'나는 정사로 갔소. 일 년 가까이 일본에 머물며 보았소.' },
-      { who:'npc', t:'도요토미 히데요시는 이미 저 나라를 하나로 묶었소. 군사는 놀고 있고, 성은 새로 쌓고 있었소. 그자가 나를 만난 자리에서 명을 치겠다며 길을 빌려 달라 하더이다.' },
-      { who:'npc', t:'돌아와 아뢰었소. "반드시 병화(兵禍)가 있을 것이옵니다." 부산에 닿자마자 장계부터 올렸소.' },
-      { who:'npc', t:'…허나 조정은 부사의 말을 따랐소. 내가 서인이라 겁을 주어 민심을 흔든다는 것이었지.' },
+      { who:'npc', t:'어서 오시게. 여기가 서원일세. 앞쪽은 글을 배우는 강당과 기숙하는 동재·서재요, 뒤쪽 담 안은 선현의 위패를 모신 사당이라네.' },
+      { who:'npc', t:'조정이 네 차례나 피로 물드는 걸 보았네. 우리 사림은 조정에서 밀려날 때마다 향촌으로 물러나 이런 곳을 세웠지.' },
+      { who:'npc', t:'이 서원의 시작은 풍기 군수 주세붕 어른이셨네. 고려의 유학자 안향을 기리며 백운동에 처음 세우셨지.' },
+      { who:'npc', t:'내가 임금께 청을 올려, 그 서원에 임금의 친필 현판과 토지·노비를 내려주십사 했네. 그리하여 나라가 공인한 첫 서원이 되었지.' },
+      { who:'npc', t:'글만으로는 부족하네. 나는 고을 사람들이 지킬 약속도 따로 만들어 시행했지 — 내가 사는 예안 고을의 이름을 붙였다네.' },
     ],
     quizSeq: [
-      { q:'1590년 통신사 정사로 다녀와 "반드시 병화가 있을 것"이라 보고한 인물은?',
-        opts:['황윤길','김성일'], answer:0, src:[13,25,30,53,72],
-        feedback:['김성일은 그와 정반대로 보고했소.','정답! 정사 황윤길이오. 서인이었소.'] }
+      { q:'사림이 지방에 세운 사설 교육기관으로, 선현에 제사를 지내고 유학을 가르친 곳은?',
+        opts:['서원','향교'], answer:0, src:[6,7,9,12,14,15,21,23,24,31,32,35,36,39,43,46,51,56,69,71,74],
+        feedback:['향교는 나라가 고을마다 세운 관학이에요.','정답! 서원입니다. 사림의 향촌 기반이자 학문의 중심이 되었어요.'] },
+      { q:'풍기 군수 주세붕이 안향을 기리며 세운, 우리나라 최초의 서원은?',
+        opts:['백운동 서원','도산 서원'], answer:0, src:[9,12,24,35,39,43,46,56],
+        feedback:['도산 서원은 이황 사후에 그의 제자들이 세운 서원이에요.','정답! 백운동 서원(1543)입니다.'] },
+      { q:'이황의 건의로 백운동 서원이 임금의 현판과 토지·노비를 받으며 얻게 된 이름은?',
+        opts:['소수 서원','성균관'], answer:0, src:[9,12,24,35,39,43,46,56],
+        feedback:['성균관은 한양의 국립 최고 교육기관이에요.','정답! 소수 서원입니다. 나라가 공인한 최초의 사액 서원이 되었어요.'] },
+      { q:'이황이 자신이 살던 고을에서 시행한, 향촌 교화를 위한 자치 규약은?',
+        opts:['예안향약','두레'], answer:0, src:[43,52,74],
+        feedback:['두레는 농사일을 함께하던 마을 공동 노동 조직이에요.','정답! 예안향약입니다.'] },
     ]
   },
-  gimseongil_0: {
-    name: '김성일', icon: '🕊️', img: 'assets/portraits/gimseongil.png',
-    beats: [
-      { who:'npc', t:'나는 부사로 갔소. 같은 것을 보고 다르게 아뢰었소 — "그러한 정형은 보지 못하였사옵니다."' },
-      { who:'npc', t:'변명을 하자는 게 아니오. 다만 유성룡 대감이 뒤에 나를 따로 불러 물었을 때, 나는 이렇게 답했소.' },
-      { who:'npc', t:'"황윤길의 말대로 아뢰면 온 나라가 놀라 흔들릴 것이오. 그것이 두려웠소." …나는 백성이 먼저 무너질까 걱정했소.' },
-      { who:'npc', t:'2년 뒤 왜적이 왔소. 나는 경상우도 초유사로 내려가 의병을 모으고, 진주성을 지키는 일을 도왔소. 그리고 그 성에서 병으로 죽었소.' },
-      { who:'npc', t:'…내 말이 틀렸다는 것은 내가 제일 먼저 알았소. 그래서 남은 목숨을 그 땅에 두고 왔소.' },
-    ],
-    quizSeq: [
-      { q:'1590년 통신사 부사로 다녀와 "그러한 조짐은 없다"고 보고한 인물은?',
-        opts:['김성일','황윤길'], answer:0, src:[13,25,30,53,72],
-        feedback:['황윤길은 그와 정반대로 침략을 예고했소.','정답! 부사 김성일이오. 동인이었소.'] },
-      { q:'통신사의 엇갈린 보고가 보여주는 당시 조정의 문제는?',
-        opts:['붕당에 따라 판단이 갈렸다','왕이 사신을 보내지 않았다'],
-        answer:0, src:[9,30,44,63],
-        feedback:['사신은 분명히 다녀왔소. 문제는 그 뒤였지.','정답이오. 같은 것을 보고도 편에 따라 다르게 아뢴 것이오.'] }
-    ]
-  },
-  gunjol_0: {
-    name: '늙은 군졸', icon: '🪖', img: 'assets/portraits/gunjol.png',
-    beats: [
-      { who:'npc', t:'나리, 이 도성에 군사가 몇이나 있는 줄 아시오? 장부에는 가득한데, 막상 부르면 반도 안 나오오.' },
-      { who:'npc', t:'군역을 지기 싫은 자들이 베를 바치고 빠지오. 그 베를 받은 관아는 다른 사람을 사서 대신 세우지. 그마저도 돈이 없으면 늙은 나 같은 자가 두 몫, 세 몫을 서게 되오.' },
-      { who:'npc', t:'율곡 대감이 십만 군사를 미리 길러 두자 하셨다지요. 조정에서는 태평한 때에 군사를 늘려 백성을 괴롭힌다며 물리쳤다 들었소.' },
-      { who:'npc', t:'…나는 글을 모르오. 다만 창을 삼십 년 쥐어 본 사람으로서 하는 말이오. 저 바다 건너에서 사람이 오면, 이 도성은 사흘을 못 버티오.' },
-    ],
-    quizSeq: [
-      { q:'군역을 져야 할 사람이 베를 내고 빠지면, 관아가 그 베로 다른 사람을 사서 대신 세우던 폐단은?',
-        opts:['방군수포와 대립','환곡의 문란'], answer:0, src:[18,33,41,55],
-        feedback:['환곡은 봄에 곡식을 빌려주고 가을에 받는 제도요.','정답이오. 이 때문에 장부의 군사와 실제 군사가 크게 어긋났소.'] },
-      { q:'전쟁에 대비해 십만 군사를 미리 길러 두자고 건의했다고 전해지는 인물은?',
-        opts:['이이','정도전'], answer:0, src:[37,51],
-        feedback:['정도전은 조선을 세울 무렵의 사람이오.','정답이오. 다만 이 이야기는 뒷사람의 기록에 전하는 것이라 그대로 믿기는 어렵다 하오.'] }
-    ]
-  },
-  yiyi_0: {
-    name: '이이', icon: '📖', img: 'assets/portraits/yiyi.png',
-    beats: [
-      { who:'npc', t:'우리가 그렇게 많은 벗을 잃어가며 지켜온 조정인데… 이제는 우리끼리 다시 갈라서고 있으니, 마음이 무겁습니다.' },
-      { who:'npc', t:'발단은 이조전랑 자리였습니다. 낮은 품계지만 후임을 스스로 천거하고 삼사의 인사를 좌우하니, 누가 앉느냐가 곧 조정의 향방이었지요.' },
-      { who:'npc', t:'그 자리를 두고 심의겸과 김효원이 부딪쳤습니다. 김효원은 한양 동쪽 건천동에, 심의겸은 서쪽 정릉동에 살았지요. 그래서 사람들이 동인이다, 서인이다 부르기 시작한 겁니다.' },
-      { who:'npc', chart:{
-          type:'tree', root:'사림 (선조 대)',
-          cols:[[{t:'동인', s:'김효원 · 한양 동쪽'},
-                 {t:'└ 남인', s:'이황 계열 · 온건'},
-                 {t:'└ 북인', s:'조식 계열 · 강경'}],
-                [{t:'서인', s:'심의겸 · 한양 서쪽'},
-                 {t:'└ 노론', s:'송시열 · 뒷날 집권'},
-                 {t:'└ 소론', s:'윤증 · 소수'}]],
-          note:'<b>동인이 먼저 남·북으로</b>(정여립 사건 뒤), <b>서인이 나중에 노·소로</b> 갈라집니다. 동인이 이황·조식 제자들이라는 것만 잡으면 됩니다.'
-        },
-        t:'이 갈래가 앞으로 200년을 좌우합니다. 한 번 그려 보지요.' },
-      { who:'npc', t:'저는 어느 쪽도 옳다 그르다 하지 않았습니다. 양쪽을 조제하여 함께 세우려 했지요. 그 뜻을 담아 임금께 글도 올렸습니다.' },
-    ],
-    quizSeq: [
-      { q:'사림이 동인과 서인으로 갈라지는 계기가 된, 삼사의 인사를 좌우하던 관직은?',
-        opts:['이조전랑','영의정'], answer:0, src:[14,18],
-        feedback:['영의정은 의정부의 최고 관직으로, 이 다툼의 초점은 아니었어요.','정답! 이조전랑입니다. 품계는 낮았지만 후임 천거권과 삼사 인사권을 쥐어 다툼의 핵심이 되었어요.'] },
-      { q:'이조전랑 자리를 두고 대립하며 사림이 갈라진 두 세력의 이름은?',
-        opts:['동인과 서인','훈구와 사림'], answer:0, src:[8,12,14,17,18,33,37,39,52,55,56,79],
-        feedback:['훈구와 사림의 대립은 앞선 사화의 시대 이야기예요.','정답! 동인과 서인입니다. 김효원이 한양 동쪽에, 심의겸이 서쪽에 살아 붙은 이름이에요.'] },
-      { q:'이이가 임금에게 올린, 성리학의 요체를 정리해 군주의 학문을 논한 저술은?',
-        opts:['성학집요','성학십도'], answer:0, src:[39,51,63],
-        feedback:['성학십도는 이황이 올린 열 폭의 그림과 해설이에요.','정답! 성학집요입니다. 이이는 이 밖에 동호문답·격몽요결도 남겼어요.'] },
-    ]
-  },
-  yiyi_1: {
-    name: '이이', icon: '📖', img: 'assets/portraits/yiyi.png',
-    beats: [
-      { who:'npc', t:'…권력을 다루는 자리에 사람이 모이면, 결국 이런 일이 반복되는 걸지도 모르겠습니다.' },
-      { who:'npc', t:'다만 이번만큼은, 칼부림 없이 말로 다투는 세상이 되었으면 합니다. 사화의 시절로 돌아가서는 안 되니까요.' },
-      { who:'npc', t:'…그리고 하나 더. 북쪽과 남쪽 모두 조용하지 않습니다. 군사를 미리 길러 두어야 한다고 여러 번 아뢰었으나, 조정은 아직 한가롭기만 하군요.' },
-    ],
-    endsChapter: true
-  },
-  yuseongryong_0: {
-    name: '유성룡', icon: '📗', img: 'assets/portraits/scholar.png',
-    beats: [
-      { who:'npc', t:'사화의 시절엔 목숨을 걸고 지켜야 할 게 분명했지. 그런데 지금은… 무엇을 두고 다투는지조차 흐릿해질 때가 있네.' },
-      { who:'npc', t:'나는 퇴계 선생 문하에서 배웠네. 그러니 사람들은 나를 동인이라 부르지. 허나 스승께 배운 건 편을 가르는 법이 아니었네.' },
-      { who:'npc', t:'그래도 이이 저 사람처럼, 양쪽 모두를 다독이려는 이가 아직 남아있다는 게 다행이라면 다행일세.' },
-    ]
+  yihwang_repeat: {
+    name: '이황', icon: '📗', img: 'assets/portraits/yihwang.png',
+    beats: [ { who:'npc', t:'…이 서원이 자네 눈에도 익숙해졌겠군. 다른 이들의 이야기도 들어보시게.' } ],
+    quiz: null
   }
 };
 
+/* 이황과의 대화(서원 종합)를 마치면 짧은 통합 퀴즈로 챕터를 마무리한다
+   (주세붕·조식은 순서 상관없이 자유롭게 만날 수 있는 보조 NPC). */
+const FINAL_SYNTHESIS_QUESTIONS = [
+  { q:'서원이 사림의 향촌 기반으로 자리 잡으며 함께 퍼진, 향촌 자치 규약은?', opts:['향약','두레'], answer:0, src:[43,52,74],
+    feedback:['두레는 농사일을 함께하던 마을 공동 노동 조직이에요.','정답! 향약입니다. 서원(교육)과 향약(교화)이 짝을 이뤄 사림의 향촌 기반이 되었어요.'] },
+  { q:'서원과 향약으로 향촌에 뿌리를 내린 뒤, 결국 조정의 중심 세력이 된 이들은?', opts:['사림','훈구'], answer:0, src:[6,7,12,13,14,15,20,24,26,29,31,33],
+    feedback:['훈구는 세조의 즉위를 도운 공신 계열로, 사림과 대립한 기존 세력이에요.','정답! 사림입니다. 사화로 조정에서 밀려날 때마다 서원으로 물러나 힘을 기른 끝에, 마침내 조정의 중심에 섰습니다.'] }
+];
 
 const Stage = {
-  state: { talkStage: 0 },
+  state: { bossDone: false, bossScore: 0, bossTotal: 0 },
   keyFor(id){
-    if (id === 'yiyi') return 'yiyi_' + Math.min(Stage.state.talkStage, 1);
-    if (id === 'yuseongryong') return 'yuseongryong_0';
-    if (id === 'jeongcheol') return 'jeongcheol_0';
-    if (id === 'seonjo') return 'seonjo_0';
-    if (id === 'hwangyungil') return 'hwangyungil_0';
-    if (id === 'gimseongil') return 'gimseongil_0';
-    if (id === 'gunjol') return 'gunjol_0';
-    return null;
+    if (id === 'yihwang') return Stage.state.bossDone ? 'yihwang_repeat' : 'yihwang_0';
+    return NPC_DATA[id + '_0'] ? id + '_0' : null;
   },
   interact(){
-    if (document.querySelector('.ov.show')) return;
+    if (overlayOpen()) return;
     const n = World.nearNpc;
     if (!n) return;
     const key = Stage.keyFor(n.id);
@@ -1241,128 +1099,8 @@ const Stage = {
   }
 };
 
+/* ============ Dialog 엔진 (beat별 화자 override 지원) ============ */
 const seenDialogKeys = new Set();
-
-/* ============ 용어 설명(글로서리): 대사 속 낯선 용어나 지명을 눌러 설명을
-   보거나(문자열) 지도를 띄운다(map 필드). GLOSSARY에 추가하기만 하면 별도
-   코드 수정 없이 대사 어디서든 자동으로 링크된다. ============ */
-const GLOSSARY = {};
-function escapeHtml(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function glossarize(text){
-  let out = escapeHtml(text);
-  for (const term in GLOSSARY){
-    out = out.split(term).join(`<span class="gloss-term" onclick="event.stopPropagation();openGlossary('${term}')">${term}</span>`);
-  }
-  return out;
-}
-function openGlossary(term){
-  const g = GLOSSARY[term];
-  if (!g) return;
-  if (g.map){
-    GameMap.open(Object.assign({ onCancel(){} }, g.map));
-    return;
-  }
-  document.getElementById('gloss-term').textContent = term;
-  document.getElementById('gloss-body').textContent = g;
-  document.getElementById('gloss-overlay').classList.add('show');
-}
-function closeGlossary(){
-  document.getElementById('gloss-overlay').classList.remove('show');
-}
-
-/* 기출 출처 표기: src에 회차 배열을 넣으면 2개까지 나열, 3개 이상은 축약. */
-function formatQuizSrc(src){
-  if (!src) return '';
-  if (typeof src === 'string') return '기출 출처 · ' + src;
-  const rounds = [...src].sort((a, b) => a - b);
-  if (!rounds.length) return '';
-  const body = rounds.length <= 2
-    ? rounds.join(', ') + '회'
-    : `${rounds[0]}회 등 ${rounds.length}개 회차`;
-  return '기출 출처 · ' + body;
-}
-
-/* Quiz 엔진 — 다른 챕터(ch2)와 동일 동작: 보기 섞기 + 오답 재시도 + 연속 퀴즈. */
-const Quiz = {
-  data: null, onDone: null, answered: false, optButtons: [],
-  seq: null, seqIdx: 0, seqScore: 0, seqOnDone: null,
-  open(data, onDone){ this.seq = null; this._openOne(data, onDone); },
-  openSequence(list, onAllDone){
-    this.seq = list; this.seqIdx = 0; this.seqScore = 0; this.seqOnDone = onAllDone;
-    this._openOne(this.seq[0], () => this._seqAdvance());
-  },
-  _seqAdvance(){
-    // 마지막 문항을 끝낸 뒤 한 번 더 불리면 this.seq가 null이라 터진다.
-    // 실제로 자동 점검(_smoke.html)에서 잡혔다.
-    if (!this.seq) return;
-    this.seqIdx++;
-    if (this.seqIdx >= this.seq.length){
-      const score = this.seqScore, total = this.seq.length;
-      this.seq = null;
-      this.seqOnDone && this.seqOnDone(score, total);
-      return;
-    }
-    this._openOne(this.seq[this.seqIdx], () => this._seqAdvance());
-  },
-  _openOne(data, onDone){
-    this.data = data; this.onDone = onDone; this.answered = false;
-    document.getElementById('quiz-overlay').classList.add('show');
-    document.getElementById('quiz-tag').textContent = this.seq ? `${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
-    document.getElementById('quiz-q').textContent = data.q;
-    document.getElementById('quiz-fb').textContent = '';
-    document.getElementById('quiz-next').classList.remove('show');
-    document.getElementById('quiz-src').textContent = formatQuizSrc(data.src);
-    this.order = data.opts.map((_, i) => i);
-    for (let i = this.order.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [this.order[i], this.order[j]] = [this.order[j], this.order[i]];
-    }
-    const opts = document.getElementById('quiz-opts');
-    opts.innerHTML = '';
-    this.optButtons = this.order.map((origIdx, i) => {
-      const b = document.createElement('button');
-      b.className = 'quiz-opt';
-      b.textContent = (i+1) + '. ' + data.opts[origIdx];
-      b.onclick = () => this.pick(i);
-      opts.appendChild(b);
-      return b;
-    });
-  },
-  pick(i){
-    if (this.answered) return;
-    const correct = this.order[i] === this.data.answer;
-    if (correct){
-      this.answered = true;
-      if (this.seq) this.seqScore++;
-      this.optButtons[i].classList.add('correct');
-      this.optButtons.forEach(b => b.disabled = true);
-      document.getElementById('quiz-fb').textContent = this.data.feedback[1];
-      const next = document.getElementById('quiz-next');
-      next.classList.add('show');
-      next.onclick = () => this.confirmIfReady();
-    } else {
-      this.optButtons[i].classList.add('wrong');
-      this.optButtons[i].disabled = true;
-      document.getElementById('quiz-fb').textContent = this.data.feedback[0];
-    }
-  },
-  confirmIfReady(){
-    if (!this.answered) return;
-    // 콜백을 먼저 떼어 놓는다 — 떼지 않으면 같은 콜백이 두 번 불릴 수 있다.
-    this.answered = false;
-    const done = this.onDone; this.onDone = null;
-    document.getElementById('quiz-overlay').classList.remove('show');
-    done && done();
-  },
-  abort(){
-    document.getElementById('quiz-overlay').classList.remove('show');
-    this.seq = null; this.data = null; this.onDone = null; this.seqOnDone = null;
-    World.paused = false;
-  }
-};
-
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
 function drawChart(c){
   if (c.type === 'bar'){
@@ -1387,20 +1125,6 @@ function drawChart(c){
       + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
           '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
         ).join('') + '</div>').join('') + '</div></div>';
-  }
-  if (c.type === 'kings'){
-    // 왕위 계승 띠 — 지금 이 대사가 누구·어느 왕(들) 이야기인지 금색
-    // 테두리로 짚어 준다. main은 한 나라(왕조)의 계승 순서, cross는
-    // 같은 시기 다른 나라 왕(있을 때만 따로 한 줄 더).
-    const badge = (k) => '<div class="king-badge' + (k.active ? ' active' : '') + '">'
-      + (k.dynasty ? '<div class="kb-dynasty">' + k.dynasty + '</div>' : '')
-      + '<div class="kb-name">' + k.name + '</div>'
-      + (k.note ? '<div class="kb-note">' + k.note + '</div>' : '') + '</div>';
-    let out = '<div class="kings-row">' + c.main.map(badge).join('') + '</div>';
-    if (c.cross && c.cross.length){
-      out += '<div class="kings-row kings-cross">' + c.cross.map(badge).join('') + '</div>';
-    }
-    return out;
   }
   return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
     + '</tr></thead><tbody>'
@@ -1443,27 +1167,19 @@ const Dialog = {
     seenDialogKeys.add(key);
     World.paused = true;
     document.getElementById('dlg-overlay').classList.add('show');
-    document.getElementById('dlg-name').textContent = this.data.name;
-    document.getElementById('dlg-tag').textContent = '1589년 · 조정';
-    const portraitEl = document.getElementById('dlg-portrait');
-    if (this.data.img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${this.data.img}')`; }
-    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = this.data.icon; }
+    document.getElementById('dlg-tag').textContent = '1543~1570년경 · 조선';
     this.render();
   },
   render(){
     const beat = this.data.beats[this.idx];
-    // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
-    // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
+    // 이 beat만 다른 인물이 말하는가? (beats에 name이 따로 붙어 있으면 끼어든 것)
     const interjecting = !!beat.name && beat.name !== this.data.name;
     document.getElementById('dlg-frame').classList.toggle('alt-speaker', interjecting);
-    const nameEl = document.getElementById('dlg-name');
-    if (nameEl) nameEl.textContent = beat.name || this.data.name;
+    document.getElementById('dlg-name').textContent = beat.name || this.data.name;
     const portraitEl = document.getElementById('dlg-portrait');
-    if (portraitEl){
-      const img = beat.img || (beat.name ? null : this.data.img);
-      if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
-      else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon || '👤'; }
-    }
+    const img = beat.img || this.data.img;
+    if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
+    else { portraitEl.style.backgroundImage = 'none'; portraitEl.textContent = beat.icon || this.data.icon; }
     const chartEl = document.getElementById('dlg-chart');
     if (beat.chart){
       const c = beat.chart;
@@ -1472,58 +1188,154 @@ const Dialog = {
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
     document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
-    document.getElementById('dlg-text').innerHTML = glossarize(beat.t);
+    document.getElementById('dlg-text').textContent = beat.t;
   },
   next(){
     this.idx++;
-    if (this.idx >= this.data.beats.length){
-      this.finish();
-      return;
-    }
+    if (this.idx >= this.data.beats.length){ this.finish(); return; }
     this.render();
   },
   finish(){
     document.getElementById('dlg-overlay').classList.remove('show');
     if (this.data.quizSeq){
-      Quiz.openSequence(this.data.quizSeq, () => this.afterQuiz());
+      Quiz.openSequence(this.data.quizSeq, (score, total) => this.afterQuizSeq(score, total));
     } else if (this.data.quiz){
       Quiz.open(this.data.quiz, () => this.afterQuiz());
     } else {
       this.afterQuiz();
     }
   },
+  afterQuizSeq(score, total){
+    if (this.npc.id === 'yihwang' && !Stage.state.bossDone){
+      Quiz.openSequence(FINAL_SYNTHESIS_QUESTIONS, (fScore, fTotal) => Stage.finishBoss(score + fScore, total + fTotal));
+      return;
+    }
+    World.paused = false;
+  },
   afterQuiz(){
     World.paused = false;
-    const prevKey = this.key;
-    if (this.npc.id === 'yiyi'){
-      Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 1);
-    }
-    if (this.data.endsChapter){
-      document.getElementById('next-chapter-btn').classList.add('show');
-      playFanfare('챕터 완료!');
-    } else if (Stage.keyFor(this.npc.id) === prevKey){
-      // 다음에 다시 말을 걸어도 같은 내용이 나올 때(정말 더 할 말이 없을
-      // 때)만 "대화 완료"를 띄운다 — 여러 단계로 나뉜 인물에게 매번 뜨면
-      // 아직 이어질 이야기가 남아 있는데도 끝난 줄 알고 다시 안 걸게 된다.
-      playFanfare('대화 완료');
-    }
+    // 다음에 다시 말을 걸어도 같은 내용이 나올 때(정말 더 할 말이 없을
+    // 때)만 띄운다 — 재방문 단계가 남아 있는데도 뜨면 끝난 줄 알고
+    // 다시 안 찾아가게 된다.
+    if (Stage.keyFor(this.npc.id) === this.key) playFanfare('대화 완료');
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
 document.getElementById('dlg-portrait').addEventListener('click', () => Dialog.next());
 
-/* ============ 모던 인트로 ============ */
+/* 기출 출처 표기: data.src에 회차 번호 배열(예: [51,55])을 넣으면
+   2개까지는 그대로 나열하고, 3개 이상이면 "51회 등 6개 회차"로 줄인다
+   (사화처럼 15개 회차에 걸친 개념을 다 나열하면 읽을 수 없기 때문).
+   문자열을 넣으면 그대로 출력한다. */
+function formatQuizSrc(src){
+  if (!src) return '';
+  if (typeof src === 'string') return '기출 출처 · ' + src;
+  const rounds = [...src].sort((a, b) => a - b);
+  if (!rounds.length) return '';
+  const body = rounds.length <= 2
+    ? rounds.join(', ') + '회'
+    : `${rounds[0]}회 등 ${rounds.length}개 회차`;
+  return '기출 출처 · ' + body;
+}
+
+/* ============ Quiz 엔진 (단일 확인퀴즈 + 보스전 연속퀴즈 공용) ============ */
+const Quiz = {
+  data: null, onDone: null, answered: false, optButtons: [],
+  seq: null, seqIdx: 0, seqScore: 0, seqOnDone: null, seqLabel: null,
+
+  open(data, onDone){
+    this.seq = null;
+    this._openOne(data, onDone);
+  },
+  openSequence(list, onAllDone, label){
+    this.seq = list; this.seqIdx = 0; this.seqScore = 0; this.seqOnDone = onAllDone; this.seqLabel = label || null;
+    this._openOne(this.seq[0], () => this._seqAdvance());
+  },
+  abort(){
+    // 연전/통합전 퀴즈를 중간에 그만두고 싶을 때(우상단 X) — 점수 집계 없이 그냥 닫는다.
+    document.getElementById('quiz-overlay').classList.remove('show');
+    this.seq = null; this.data = null; this.onDone = null; this.seqOnDone = null;
+    World.paused = false;
+  },
+  _seqAdvance(){
+    // 마지막 문항을 끝낸 뒤 한 번 더 불리면 this.seq가 null이라 터진다.
+    // 실제로 자동 점검(_smoke.html)에서 잡혔다.
+    if (!this.seq) return;
+    this.seqIdx++;
+    if (this.seqIdx >= this.seq.length){
+      const score = this.seqScore, total = this.seq.length;
+      this.seq = null;
+      this.seqOnDone && this.seqOnDone(score, total);
+      return;
+    }
+    this._openOne(this.seq[this.seqIdx], () => this._seqAdvance());
+  },
+  _openOne(data, onDone){
+    this.data = data; this.onDone = onDone; this.answered = false;
+    document.getElementById('quiz-overlay').classList.add('show');
+    document.getElementById('quiz-tag').textContent = this.seq
+      ? (this.seqLabel ? `${this.seqLabel} · ${this.seqIdx+1}/${this.seq.length}` : `${this.seqIdx+1}/${this.seq.length}`)
+      : '확인 퀴즈';
+    document.getElementById('quiz-q').textContent = data.q;
+    document.getElementById('quiz-fb').textContent = '';
+    document.getElementById('quiz-next').classList.remove('show');
+    document.getElementById('quiz-src').textContent = formatQuizSrc(data.src);
+    // 모든 퀴즈 데이터가 answer:0(첫 번째 보기)으로 통일 작성돼 있어서
+    // 화면에 그대로 노출하면 정답이 항상 1번으로 예측 가능해짐 — 매번
+    // 보기 순서를 섞어서 표시하고, order[화면순서]=원본인덱스로 매핑해둔다.
+    this.order = data.opts.map((_, i) => i);
+    for (let i = this.order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.order[i], this.order[j]] = [this.order[j], this.order[i]];
+    }
+    const opts = document.getElementById('quiz-opts');
+    opts.innerHTML = '';
+    this.optButtons = this.order.map((origIdx, i) => {
+      const b = document.createElement('button');
+      b.className = 'quiz-opt';
+      b.textContent = (i+1) + '. ' + data.opts[origIdx];
+      b.onclick = () => this.pick(i);
+      opts.appendChild(b);
+      return b;
+    });
+  },
+  pick(i){
+    if (this.answered) return;
+    const origIdx = this.order[i];
+    const correct = origIdx === this.data.answer;
+    if (correct){
+      // 정답을 고르면 확정하고 다음 문제로 넘어갈 수 있게 한다.
+      this.answered = true;
+      if (this.seq) this.seqScore++;
+      this.optButtons[i].classList.add('correct');
+      this.optButtons.forEach(b => b.disabled = true);
+      document.getElementById('quiz-fb').textContent = this.data.feedback[1];
+      const next = document.getElementById('quiz-next');
+      next.classList.add('show');
+      next.onclick = () => this.confirmIfReady();
+    } else {
+      // 오답이면 그 보기만 비활성화하고, 정답을 맞힐 때까지 다시 고를 기회를 준다
+      // (다음 문제로는 못 넘어감 — 정답 공개도 하지 않음).
+      this.optButtons[i].classList.add('wrong');
+      this.optButtons[i].disabled = true;
+      document.getElementById('quiz-fb').textContent = this.data.feedback[0];
+    }
+  },
+  confirmIfReady(){
+    if (!this.answered) return;
+    document.getElementById('quiz-overlay').classList.remove('show');
+    this.onDone && this.onDone();
+  }
+};
+
+/* ============ 인트로 ============ */
 const INTRO_LINES = [
-  '사림의 시대는 많은 죽음을 치르고서야 조정의 중심에 섰다.',
-  '연산군의 폭정도, 을사사화의 피바람도 지나갔다.',
-  '이제 조정에는 사림 출신의 신하들이 가득하다 — 그런데 어느 순간부터, 그들 사이에서도 균열이 시작되고 있었다.',
-  '1575년, 이조전랑 자리를 두고 벌어진 다툼이 조정을 둘로 갈랐다.',
-  '동인과 서인. 같은 스승 밑에서 배운 이들이 어느새 서로 다른 편에 서 있다.'
+  '연산군의 폭정에서 명종 대까지, 반세기에 걸친 네 번의 사화가 지나갔다.',
+  '조정에서 밀려날 때마다, 사림은 고향으로 물러나 힘을 길렀다.',
+  '그 자리에 세운 것이 서원이다 — 학문을 가르치고, 스승을 기리는 곳.'
 ];
 let introIdx = 0;
-function renderIntro(){
-  document.getElementById('intro-text').textContent = INTRO_LINES[introIdx];
-}
+function renderIntro(){ document.getElementById('intro-text').textContent = INTRO_LINES[introIdx]; }
 function introNext(){
   introIdx++;
   if (introIdx >= INTRO_LINES.length){
@@ -1543,13 +1355,21 @@ function introNext(){
 document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
 
+/* ============ 챕터 진행 표시 / 종료 (이황과의 대화+통합 퀴즈가 끝나면 종료) ============ */
+Stage.finishBoss = function(score, total){
+  Stage.state.bossDone = true;
+  Stage.state.bossScore = `${score}/${total}`;
+  document.getElementById('end-score').textContent = `서원 통합전: ${Stage.state.bossScore} 정답`;
+  document.getElementById('next-chapter-btn').classList.add('show');
+  World.paused = false;
+  updateHudGoal();
+};
 Stage.endChapter = function(){
   document.getElementById('end-screen').classList.add('show');
 };
 
-/* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다
-   (Phaser 카메라나 게임 캔버스와 별개). 구역이 바뀌면 현재 구역의 배경
-   이미지를 그대로 축소해서 보여준다. */
+/* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다.
+   현재 구역의 배경 이미지를 그대로 축소해서 사용(구역이 바뀌면 자동 반영). */
 const miniCanvas = document.getElementById('minimap-canvas');
 const miniCtx = miniCanvas.getContext('2d');
 function sizeMinimapCanvas(){
@@ -1585,20 +1405,21 @@ function drawMinimap(){
     miniCtx.fill();
   }
   for (const n of ZONES[World.zone].npcs){
-    miniCtx.fillStyle = '#8a2f2f';
+    miniCtx.fillStyle = '#c23b3b';
     miniCtx.beginPath();
     miniCtx.arc(n.x*sx, n.y*sy, 5, 0, Math.PI*2);
     miniCtx.fill();
   }
-  miniCtx.fillStyle = '#2f6fbf';
+  miniCtx.fillStyle = '#3d84e6';
   miniCtx.strokeStyle = '#ffffff';
-  miniCtx.lineWidth = 1;
+  miniCtx.lineWidth = 1.2;
   miniCtx.beginPath();
   miniCtx.arc(World.px*sx, World.py*sy, 6, 0, Math.PI*2);
   miniCtx.fill();
   miniCtx.stroke();
 }
 
+/* ============ 메인 루프 ============ */
 function loop(t){
   if (!World.lastT) World.lastT = t;
   const dt = Math.min(0.05, (t - World.lastT) / 1000);

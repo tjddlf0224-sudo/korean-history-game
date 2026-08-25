@@ -355,10 +355,10 @@
   <div id="end-screen">
     <div>
       <h2>6화 · 끝</h2>
-      <p>이 반복된 비극 속에서도, 조선은 무너지지 않았다.<br>오히려 이 시기를 거치며 사림은 조정의 중심 세력으로 자리 잡아갔다.<br>하지만 그 사림마저, 이제 스스로 편을 갈라 다투기 시작한다…</p>
+      <p>이 반복된 비극 속에서도, 조선은 무너지지 않았다.<br>조정에서 밀려날 때마다, 사림은 향촌으로 물러나 다시 힘을 길렀다.</p>
       <div id="end-score"></div>
-      <p style="margin-top:18px; opacity:.7;">7화 「폭풍 전야」에서 계속됩니다.</p>
-      <div><a href="ch6.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
+      <p style="margin-top:18px; opacity:.7;">7화 「서원과 학맥」에서 계속됩니다.</p>
+      <div><a href="ch5b.html">다음 화로</a><a href="index.html">챕터 목록</a></div>
     </div>
   </div>
   <div id="zone-banner"></div>
@@ -491,8 +491,6 @@ const ZONES = {
     exits: [
       { rect:{x0:0,y0:340,x1:60,y1:460}, to:'sago', spawn:{x:1290,y:390}, label:'사초 사고로' },
       { rect:{x0:1316,y0:340,x1:1376,y1:460}, to:'yubae', spawn:{x:688,y:560}, label:'유배지로' },
-      // 조식·이황은 이제 서원에 있다(전엔 배경이 없어 궁궐에 임시로 세워뒀음)
-      { rect:{x0:600,y0:700,x1:780,y1:747}, to:'seowon', spawn:{x:688,y:560}, label:'서원으로' },
     ],
   },
   sago: {
@@ -528,32 +526,6 @@ const ZONES = {
       { id: 'jogwangjo', name: '조광조', x: 900, y: 600, img: 'assets/portraits/jogwangjo.png', look: { role: 'scholar', body: '#3a5040', accent: '#c9a24a' } },
     ],
     exits: [ { rect:{x0:625,y0:665,x1:750,y1:760}, to:'pokjeong', spawn:{x:1300,y:400}, label:'궁궐로' } ],
-  },
-  seowon: {
-    // 서원 — 교육기관 기출 최다 개념(21회차). 사림이 향촌에 뿌리내린 근거지라
-    // 조식·향약과 한 무대로 묶인다. 전학후묘 배치(앞 강학공간, 뒤 사당).
-    img: 'assets/scenes/ch5_seowon.png', label: '서원',
-    spawn: { x: 688, y: 560 },
-    barriers: [
-      { x0:0, y0:0, x1:280, y1:BG_H },        // 좌측 바깥(개울·숲)
-      { x0:1100, y0:0, x1:BG_W, y1:BG_H },    // 우측 바깥(숲)
-      { x0:0, y0:700, x1:BG_W, y1:BG_H },     // 하단 바깥
-      { x0:500, y0:0, x1:1080, y1:200 },      // 사당 영역(담장 포함)
-      { x0:280, y0:205, x1:1100, y1:240 },    // 강학공간 북쪽 담
-      { x0:280, y0:205, x1:320, y1:650 },     // 서쪽 담
-      { x0:1060, y0:205, x1:1100, y1:650 },   // 동쪽 담
-      { x0:280, y0:610, x1:610, y1:650 },     // 남쪽 담(좌) — 정문 앞은 비움
-      { x0:770, y0:610, x1:1100, y1:650 },    // 남쪽 담(우)
-      { x0:515, y0:205, x1:860, y1:395 },     // 강당
-      { x0:330, y0:300, x1:440, y1:560 },     // 서재
-      { x0:925, y0:300, x1:1035, y1:560 },    // 동재
-    ],
-    npcs: [
-      { id: 'juseboong', name: '주세붕', x: 690, y: 450, img: 'assets/portraits/juseboong.png', look: { role: 'scholar', body: '#3d4a6b', accent: '#c9a24a' } },
-      { id: 'josik', name: '조식', x: 560, y: 490, img: 'assets/portraits/josik.png', look: { role: 'scholar', body: '#4a4030', accent: '#7a9a5a' } },
-      { id: 'yihwang', name: '이황', x: 820, y: 490, img: 'assets/portraits/yihwang.png', look: { role: 'scholar', body: '#4a3a5a', accent: '#c9b8f0' } },
-    ],
-    exits: [ { rect:{x0:615,y0:652,x1:770,y1:698}, to:'pokjeong', spawn:{x:688,y:600}, label:'궁궐로' } ],
   },
 };
 // 배경은 같은 이름의 .webp를 먼저 찾고, 없으면 스펙에 적힌 .png로 되돌아간다.
@@ -835,13 +807,14 @@ function updateHudGoal(){
   if (!el) return;
   const done = document.getElementById('next-chapter-btn').classList.contains('show');
   const t = done ? '다음 목표: 다음 화로 넘어가기' : '다음 목표: ' + ((function(){
-        const n = ['사초 사고의 김일손','유배지의 조광조','궁궐의 나인','서원의 조식'];
+        const n = ['사초 사고의 김일손','유배지의 조광조','궁궐의 나인'];
         // 받침 유무에 따라 '과/와'를 고른다. 이름이 끝에 오도록 '장소의 이름'
         // 순서로 적었다 — '조광조(유배지)'처럼 괄호로 끝나면 받침 판정이 안 된다.
         const wa = (w) => { const c = w.charCodeAt(w.length-1) - 0xAC00;
           return (c >= 0 && c <= 11171 && c % 28 !== 0) ? '과' : '와'; };
-        for (let i=0;i<4;i++) if (!Stage.state.mini[i+1]) return n[i] + wa(n[i]) + ' 대화하기';
-        return '이황과 대화하기'; })());
+        for (let i=0;i<3;i++) if (!Stage.state.mini[i+1]) return n[i] + wa(n[i]) + ' 대화하기';
+        for (let i=0;i<3;i++) if (!Stage.state.revisit[i+1]) return n[i] + wa(n[i]) + ' 다시 이야기하기';
+        return '통합 퀴즈 결과 확인하기'; })());
   if (el.textContent !== t) el.textContent = t;
 }
 
@@ -1162,87 +1135,6 @@ const NPC_DATA = {
     name: '나인', icon: '🎐', img: 'assets/portraits/gungnyeo.png',
     beats: [ { who:'npc', t:'…나야 그저 소문으로 들었을 뿐이네.' } ],
     quiz: null
-  },
-  josik_0: {
-    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
-    beats: [
-      { who:'npc', t:'나는 벼슬길에 나가지 않았네. 이 어지러운 조정에 나가느니, 여기서 제자를 기르는 게 낫다 여겼지.' },
-      { who:'npc', t:'요즘 송도에 황진이라는 이가 있다더군. 시와 노래가 빼어나 사대부들이 줄을 선다지.' },
-      { who:'npc', t:'왕족 벽계수가 자기는 절대 흔들리지 않는다 큰소리쳤는데, 달밤에 그이가 부른 시조 한 수에 그만 나귀에서 떨어졌다는 이야기가 파다하네.' },
-      { who:'npc', t:'허나 서경덕 선생만은 끝내 흔들리지 않으셨다지. 그이가 스스로 선생을 스승으로 모시고, 박연폭포와 함께 셋을 송도삼절이라 불렀다더군.' },
-      { who:'npc', t:'경(敬)과 의(義), 이 두 글자를 늘 몸에 새기고 살았네.' },
-      // 이황은 자기 대화(yihwang_0)에서 '어서 오시게' 하게체를 쓰는데 여기만
-      // 합쇼체라 같은 사람 말투가 오락가락했다. 하게체로 통일한다.
-      { who:'npc', name:'이황', icon:'📗', img:'assets/portraits/yihwang.png', t:'나는 향약을 만들어 마을 사람들이 서로 돕고 잘못을 바로잡게 했네. 조정이 흔들려도 마을은 스스로 바로 설 수 있어야 하지 않겠나.' },
-      { who:'npc', t:'…자, 이제 반세기에 걸친 이 참극의 흐름을 되짚어볼 차례일세.' },
-    ],
-    quiz: null,
-    startsMini: 4
-  },
-  josik_1: {
-    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
-    beats: [
-      { who:'npc', t:'돌아왔군. 나는 벼슬을 마다하고 지리산 자락에 들어와 제자를 길렀네.' },
-      { who:'npc', t:'내가 평생 붙든 두 글자가 있네. 안으로 마음을 밝히는 경(敬), 밖으로 옳음을 실천하는 의(義)일세. 학문은 반드시 행동으로 이어져야 하지.' }
-    ],
-    quizSeq: [
-      { q:"지리산 자락 산천재에서 제자를 기르며 '경(敬)과 의(義)'를 강조한 학자는?", opts:['조식','이이'], answer:0, src:[8,31,68],
-        feedback:['이이는 성학집요·격몽요결을 지은 학자로, 현실 개혁론을 많이 폈어요.','정답! 남명 조식입니다. 실천을 앞세운 학풍으로 훗날 의병장을 여럿 배출했어요.'] }
-    ],
-    finishesRevisit: 4
-  },
-  josik_repeat: {
-    name: '조식', icon: '⛰️', img: 'assets/portraits/josik.png',
-    beats: [ { who:'npc', t:'산은 늘 그 자리에 있네. 급할 것 없지.' } ],
-    quiz: null
-  },
-  /* 주세붕 — 서원의 시작(백운동서원 8문항, 사액 6문항). 5화가 서원을 다루면서
-     정작 '최초의 서원을 누가 어디에 세웠나'가 비어 있었다. */
-  juseboong_0: {
-    name: '주세붕', icon: '🏫', img: 'assets/portraits/juseboong.png',
-    beats: [
-      { who:'npc', t:'나는 풍기 군수로 있던 주세붕일세. 이런 곳을 처음 세울 때는 사람들이 다들 의심했지 — 나라의 향교가 있는데 굳이 왜 따로 짓느냐고.' },
-      { who:'npc', t:'허나 나는 안향 선생이 살던 그 고을에 사당을 세우고 싶었네. 이 땅에 성리학을 처음 들여온 분이니까. 그 사당에 글 읽는 집을 붙인 것이 시작일세.' },
-      { who:'npc', t:'훗날 퇴계(이황)가 그 뒤를 이어 풍기 군수가 되더니, 임금께 편액과 토지·노비를 내려달라 청했다더군. 그리하여 이름을 새로 받았지.' },
-    ],
-    quizSeq: [
-      { q:'우리나라 최초의 서원을 세운 인물은?',
-        opts:['주세붕','이황'], answer:0, src:[9,12,24,39,46],
-        feedback:['이황은 그 서원에 사액을 청한 사람이에요.','정답! 풍기 군수 주세붕입니다.'] },
-      { q:'주세붕이 세운 우리나라 최초의 서원 이름은?',
-        opts:['백운동서원','도산서원'], answer:0, src:[9,12,24,46],
-        feedback:['도산서원은 훗날 이황을 기려 세운 서원이에요.','정답! 백운동서원입니다.'] },
-      { q:'백운동서원에서 제사한, 이 땅에 성리학을 처음 들여온 고려의 인물은?',
-        opts:['안향','정몽주'], answer:0, src:[24,46],
-        feedback:['정몽주는 고려 말의 충신으로 성리학자이지만, 성리학을 처음 들여온 사람은 따로 있어요.','정답! 안향(문성공)입니다.'] },
-      { q:'백운동서원이 임금에게 편액과 토지·노비를 받아 최초의 사액서원이 되면서 바뀐 이름은?',
-        opts:['소수서원','도동서원'], answer:0, src:[9,46],
-        feedback:['도동서원은 김굉필을 기린 다른 서원이에요.','정답! 소수서원입니다. 이황의 건의로 사액을 받았어요.'] },
-    ]
-  },
-  yihwang_0: {
-    name: '이황', icon: '📗', img: 'assets/portraits/yihwang.png',
-    beats: [
-      { who:'npc', t:'어서 오시게. 여기가 서원일세. 앞쪽은 글을 배우는 강당과 기숙하는 동재·서재요, 뒤쪽 담 안은 선현의 위패를 모신 사당이라네.' },
-      { who:'npc', t:'조정이 네 차례나 피로 물드는 걸 보았네. 우리 사림은 조정에서 밀려날 때마다 향촌으로 물러나 이런 곳을 세웠지.' },
-      { who:'npc', t:'이 서원의 시작은 풍기 군수 주세붕 어른이셨네. 고려의 유학자 안향을 기리며 백운동에 처음 세우셨지.' },
-      { who:'npc', t:'내가 임금께 청을 올려, 그 서원에 임금의 친필 현판과 토지·노비를 내려주십사 했네. 그리하여 나라가 공인한 첫 서원이 되었지.' },
-      { who:'npc', t:'글만으로는 부족하네. 나는 고을 사람들이 지킬 약속도 따로 만들어 시행했지 — 내가 사는 예안 고을의 이름을 붙였다네.' },
-    ],
-    quizSeq: [
-      { q:'사림이 지방에 세운 사설 교육기관으로, 선현에 제사를 지내고 유학을 가르친 곳은?',
-        opts:['서원','향교'], answer:0, src:[6,7,9,12,14,15,21,23,24,31,32,35,36,39,43,46,51,56,69,71,74],
-        feedback:['향교는 나라가 고을마다 세운 관학이에요.','정답! 서원입니다. 사림의 향촌 기반이자 학문의 중심이 되었어요.'] },
-      { q:'풍기 군수 주세붕이 안향을 기리며 세운, 우리나라 최초의 서원은?',
-        opts:['백운동 서원','도산 서원'], answer:0, src:[9,12,24,35,39,43,46,56],
-        feedback:['도산 서원은 이황 사후에 그의 제자들이 세운 서원이에요.','정답! 백운동 서원(1543)입니다.'] },
-      { q:'이황의 건의로 백운동 서원이 임금의 현판과 토지·노비를 받으며 얻게 된 이름은?',
-        opts:['소수 서원','성균관'], answer:0, src:[9,12,24,35,39,43,46,56],
-        feedback:['성균관은 한양의 국립 최고 교육기관이에요.','정답! 소수 서원입니다. 나라가 공인한 최초의 사액 서원이 되었어요.'] },
-      { q:'이황이 자신이 살던 고을에서 시행한, 향촌 교화를 위한 자치 규약은?',
-        opts:['예안향약','두레'], answer:0, src:[43,52,74],
-        feedback:['두레는 농사일을 함께하던 마을 공동 노동 조직이에요.','정답! 예안향약입니다.'] },
-    ]
   }
 };
 
@@ -1270,27 +1162,21 @@ const MINI_QUESTIONS = {
       feedback:['노론과 소론은 훨씬 후대(숙종 무렵)에 갈라진 붕당이에요.','정답! 대윤(윤임)과 소윤(윤원형)입니다.'] },
     { q:'을사사화로 화를 입은 인물로 옳은 것은?', opts:['윤임','이황'], answer:0, src:[30,34,52,54,65,71,72],
       feedback:['이황은 이 시기 화를 입지 않고 학문에 힘썼어요.','정답! 대윤의 중심 인물 윤임입니다.'] }
-  ],
-  4: [
-    { q:"지리산 산천재에서 제자를 기르며 '경'과 '의'를 강조한 학자는?", opts:['조식','이이'], answer:0, src:[8,31,68],
-      feedback:['이이는 이 시기보다 조금 뒤, 해주향약 등으로 활동한 인물이에요.','정답! 조식입니다.'] },
-    { q:'예안향약을 시행해 향촌 교화에 힘쓴 학자는?', opts:['이황','조광조'], answer:0, src:[43,52,74],
-      feedback:['조광조는 앞선 기묘사화의 주인공이에요.','정답! 이황입니다.'] }
   ]
 };
 
 const FINAL_SYNTHESIS_QUESTIONS = [
   { q:'다음 중 가장 먼저 일어난 사화는?', opts:['무오사화','을사사화'], answer:0, src:[48],
     feedback:['을사사화는 가장 나중에 일어났어요.','정답! 무오사화(1498)가 가장 먼저입니다.'] },
-  { q:'사화를 거치며 향촌에서 서원과 향약을 기반으로 세력을 키워, 끝내 조정의 중심이 된 세력은?', opts:['사림','훈구'], answer:0, src:[6,7,12,13,14,15,20,24,26,29,31,33],
-    feedback:['훈구는 세조의 즉위를 도운 공신 계열로, 사림과 대립한 기존 세력이에요.','정답! 사림입니다. 서원과 향약으로 향촌에 뿌리를 내린 뒤 조정을 장악하지요. 하지만 이제 사림은 스스로 편을 갈라 다투기 시작합니다…'] }
+  { q:'네 번의 사화를 거치며 조정에서 거듭 밀려난 세력은?', opts:['사림','훈구'], answer:0, src:[6,7,12,13,14,15,20,24,26,29,31,33],
+    feedback:['훈구는 세조의 즉위를 도운 공신 계열로, 사림과 대립한 기존 세력이에요.','정답! 사림입니다. 하지만 이들은 여기서 무너지지 않고, 향촌으로 물러나 다시 힘을 기르게 됩니다…'] }
 ];
 
 const Stage = {
-  state: { mini: {1:false,2:false,3:false,4:false}, revisit: {1:false,2:false,3:false,4:false}, finalDone: false },
+  state: { mini: {1:false,2:false,3:false}, revisit: {1:false,2:false,3:false}, finalDone: false },
   keyFor(id){
-    // 미니보스 4인은 진행 단계에 따라 대사가 바뀌고, 그 외 NPC(이황)는 고정 대사.
-    const map = { kimilson:1, jogwangjo:2, commoner1:3, josik:4 };
+    // 미니보스 3인은 진행 단계에 따라 대사가 바뀐다.
+    const map = { kimilson:1, jogwangjo:2, commoner1:3 };
     const idx = map[id];
     if (!idx) return NPC_DATA[id + '_0'] ? id + '_0' : null;
     if (!Stage.state.mini[idx]) return id + '_0';
@@ -1596,7 +1482,7 @@ Stage.finishRevisit = function(id, score, total){
 
 Stage.finishFinal = function(score, total){
   Stage.state.finalDone = true;
-  const lines = [1,2,3,4].map(i => `연전${i}: ${Stage.state['miniScore'+i]} · 정리: ${Stage.state['revisitScore'+i]}`).join(' · ');
+  const lines = [1,2,3].map(i => `연전${i}: ${Stage.state['miniScore'+i]} · 정리: ${Stage.state['revisitScore'+i]}`).join(' · ');
   document.getElementById('end-score').textContent = `${lines}\n사화 통합전: ${score}/${total} 정답`;
   document.getElementById('next-chapter-btn').classList.add('show');
   World.paused = false;
