@@ -1424,7 +1424,10 @@ const Dialog = {
       return;
     }
     World.paused = false;
-    playFanfare('대화 완료');
+    // 다음에 다시 말을 걸어도 같은 내용이 나올 때(정말 더 할 말이 없을
+    // 때)만 띄운다 — 재방문 단계가 남아 있는데도 뜨면 끝난 줄 알고
+    // 다시 안 찾아가게 된다.
+    if (Stage.keyFor(this.npc.id) === this.key) playFanfare('대화 완료');
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());

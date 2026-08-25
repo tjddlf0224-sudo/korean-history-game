@@ -116,13 +116,16 @@
   .kp-country { margin-bottom:28px; }
   .kp-country .kp-cname { font-family:"Gowun Batang", serif; font-weight:700; font-size:13.5px; color:#e9c979; margin-bottom:6px; }
   .kp-country .kp-ccount { font-size:10.5px; color:#afa38f; margin-left:6px; font-weight:400; }
-  /* 왕들을 잇는 가로 계보선 — 배지를 다 같은 크기로 통일해서 선이
-     삐뚤빼뚤하지 않게 하고, 배지 뒤로 지나가게 z-index를 낮춘다
-     (게임 챕터 안 왕조 계보 모달과 같은 디자인으로 맞췄다). */
-  .kp-strip { display:flex; gap:0; overflow-x:auto; padding:8px 8px 10px; align-items:flex-start; position:relative; }
-  .kp-strip::before { content:''; position:absolute; left:24px; right:24px; top:24px; height:2px;
+  /* 시대 하나를 볼 때, 나라가 달라도 같은 시기의 왕은 같은 가로 위치에
+     오도록 실제 재위 연도로 자리를 계산한다(전엔 그냥 순서대로 나열해
+     나라별로 스크롤 위치가 서로 어긋났다). 그러려면 나라별로 따로
+     스크롤되면 안 되므로, 한 시대의 모든 나라 줄을 kp-hscroll 하나가
+     함께 가로 스크롤한다(줄마다 스크롤이 있으면 다시 어긋난다). */
+  .kp-hscroll { overflow-x:auto; }
+  .kp-strip { position:relative; height:78px; padding:8px 8px 10px; }
+  .kp-strip::before { content:''; position:absolute; left:20px; right:20px; top:24px; height:2px;
     background: linear-gradient(90deg, transparent, #5a4a30 6%, #5a4a30 94%, transparent); z-index:0; }
-  .kp-king { flex:none; width:82px; display:flex; flex-direction:column; align-items:center; padding:0 4px; position:relative; z-index:1; }
+  .kp-king { position:absolute; top:8px; width:82px; display:flex; flex-direction:column; align-items:center; padding:0 4px; z-index:1; }
   .kp-king .kp-badge { position:relative; width:32px; height:32px; border-radius:50%; display:flex; align-items:center;
     justify-content:center; font-weight:700; font-size:11.5px; margin-bottom:7px;
     background:#2a2013; border:2px solid #4a3c26; color:#9c8d70; }
@@ -298,6 +301,18 @@ function kingsDupDot(name, era, country, year){
   const tip = (kingsJosa(name, '과', '와') + ` 같은 이름의 다른 왕이 있습니다: ${list}`).replace(/"/g, '&quot;');
   return `<span class="kp-dupdot" title="${tip}" data-tip="${tip}">동</span>`;
 }
+/* 왕 연도 문자열 → 숫자(정렬·가로 위치 계산용). "BC194"·"~BC108" 같은
+   기원전 표기는 음수로, 건국 설화처럼 연도가 없는 항목은 관례적으로
+   쓰이는 대략의 해를 대신 쓴다(표시 위치를 잡기 위한 것일 뿐, 그 해가
+   확정된 사실이라는 뜻은 아니다). */
+function kingsYearNum(y){
+  if (y === '(건국)') return -2333;       // 단군신화 속 고조선 건국 연대
+  if (y === '(대가야 시조)') return 42;    // 같은 가야권 김수로왕과 비슷한 시기
+  const m = y.match(/~?\s*(BC)?\s*(\d+)/);
+  if (!m) return 0;
+  const n = parseInt(m[2], 10);
+  return m[1] ? -n : n;
+}
 function openKingsModal(era){
   const groups = KINGS_BY_ERA[era];
   if (!groups) return;
@@ -311,16 +326,39 @@ function openKingsModal(era){
     <span><i style="background:#7a3512; border-color:#ff9a4a"></i>16회+</span>
     <span><span class="kp-dupdot" style="position:static; display:inline-flex; align-items:center; justify-content:center;">동</span> 다른 시대·나라에 같은 이름의 왕이 또 있음(눌러서 확인)</span>
   </div>`;
-  groups.forEach(([country, kings]) => {
+
+  // 이 시대 전체(모든 나라 통틀어)의 연도 범위로 가로 축척을 하나 정해서
+  // 나라가 달라도 같은 해가 같은 x좌표에 오게 한다.
+  const allYears = [];
+  groups.forEach(([, kings]) => kings.forEach(k => allYears.push(kingsYearNum(k.year))));
+  const minY = Math.min.apply(null, allYears), maxY = Math.max.apply(null, allYears);
+  const span = Math.max(1, maxY - minY);
+  const pxPerYear = Math.max(2.4, 900 / span);
+  let trackW = 640;
+
+  const rows = groups.map(([country, kings]) => {
+    let lastX = -Infinity;
+    const positioned = kings.map(k => {
+      let x = 40 + (kingsYearNum(k.year) - minY) * pxPerYear;
+      if (x < lastX + 72) x = lastX + 72;   // 같은 줄 안에서 배지끼리 안 겹치게 최소 간격
+      lastX = x;
+      return { k, x };
+    });
+    trackW = Math.max(trackW, lastX + 60);
+    return { country, kings, positioned };
+  });
+
+  html += `<div class="kp-hscroll">` + rows.map(({ country, kings, positioned }) => {
     const total = kings.reduce((s, k) => s + k.n, 0);
-    html += `<div class="kp-country"><span class="kp-cname">${country}<span class="kp-ccount">· 왕 ${kings.length}명 · 출제 합계 ${total}회</span></span>
-      <div class="kp-strip">` + kings.map(k => `
-        <div class="kp-king" data-t="${kingsTier(k.n)}">
+    return `<div class="kp-country"><span class="kp-cname">${country}<span class="kp-ccount">· 왕 ${kings.length}명 · 출제 합계 ${total}회</span></span>
+      <div class="kp-strip" style="width:${trackW}px">` + positioned.map(({ k, x }) => `
+        <div class="kp-king" data-t="${kingsTier(k.n)}" style="left:${x}px">
           <div class="kp-badge">${k.n}${kingsDupDot(k.name, era, country, k.year)}</div>
           <div class="kp-nm">${k.name}</div>
           <div class="kp-yr">${k.year}</div>
         </div>`).join('') + `</div></div>`;
-  });
+  }).join('') + `</div>`;
+
   body.innerHTML = html;
   document.getElementById('kp-tapinfo').classList.remove('show');
   document.getElementById('kings-modal').classList.add('show');

@@ -1261,10 +1261,11 @@ const Dialog = {
       return;
     }
     World.paused = false;
+    const prevKey = this.key;
     if (this.npc.id === 'sejo'){
       Stage.state.sejoStage = Math.min(Stage.state.sejoStage + 1, 3);
     }
-    playFanfare('대화 완료');
+    if (Stage.keyFor(this.npc.id) === prevKey) playFanfare('대화 완료');
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());

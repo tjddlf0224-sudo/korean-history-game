@@ -1427,12 +1427,13 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    const prevKey = this.key;
     if (this.npc.id === 'seogeojeong'){
       Stage.state.seogeojeongStage = Math.min(Stage.state.seogeojeongStage + 1, 2);
     } else if (this.npc.id === 'seongjong'){
       Stage.state.seongjongStage = Math.min(Stage.state.seongjongStage + 1, 1);
     }
-    playFanfare('대화 완료');
+    if (Stage.keyFor(this.npc.id) === prevKey) playFanfare('대화 완료');
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());

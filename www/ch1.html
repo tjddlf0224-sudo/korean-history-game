@@ -1234,10 +1234,11 @@ const Dialog = {
       return; // World.paused 유지 — 보스전도 오버레이라 어차피 막히지만 명시적으로 유지
     }
     World.paused = false;
+    const prevKey = this.key;
     if (this.npc.id === 'taejong'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 2);
     }
-    playFanfare('대화 완료');
+    if (Stage.keyFor(this.npc.id) === prevKey) playFanfare('대화 완료');
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());

@@ -1118,13 +1118,14 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    const prevKey = this.key;
     if (this.npc.id === 'gimokgyun'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 3);
     }
     if (this.data.endsChapter){
       document.getElementById('next-chapter-btn').classList.add('show');
       playFanfare('챕터 완료!');
-    } else {
+    } else if (Stage.keyFor(this.npc.id) === prevKey){
       playFanfare('대화 완료');
     }
   }
