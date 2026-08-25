@@ -25,8 +25,22 @@
   #app { min-height:100%; width:100%; padding: calc(14px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right))
     calc(16px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left)); display:flex; flex-direction:column; }
 
-  .topbar { display:flex; align-items:baseline; gap:10px; margin-bottom: 10px; flex: none; }
-  h1 { font-size: 17px; margin: 0; color:#f0c96b; white-space:nowrap; }
+  .topbar { display:flex; align-items:center; gap:10px; margin-bottom: 10px; flex: none; }
+  /* 제목 옆 낙관(도장) — 옛 문서 표지 느낌을 내는 작은 장식. 살짝 기울여
+     손도장처럼, 질감은 미세한 얼룩(radial-gradient)으로 잉크 눌린 자국을
+     흉내낸다. 그림 없이 CSS만으로. */
+  .title-seal { flex:none; width:23px; height:23px; border-radius:6px; background:
+      radial-gradient(circle at 30% 25%, rgba(255,255,255,.16), transparent 55%),
+      linear-gradient(155deg, #b5432f, #7e2a1c);
+    color:#fbe9d8; font-family:"Gowun Batang", serif; font-size:13px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; transform:rotate(-6deg);
+    box-shadow:0 1px 3px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,235,210,.25);
+    align-self:flex-start; margin-top:1px; }
+  h1 { font-size: 21px; margin: 0; white-space:nowrap; letter-spacing:.05em;
+    font-weight:700; line-height:1.1;
+    background:linear-gradient(180deg, #fbe6ad 0%, #e0ac48 55%, #c98f34 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 1px 0 rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.3); }
 
   .subtitle { margin:2px 0 0; font-size:12px; color:#b8a888; letter-spacing:.02em; }
 
@@ -229,6 +243,7 @@
   <div id="scroller">
     <div id="app">
       <div class="topbar">
+        <span class="title-seal" aria-hidden="true">史</span>
         <h1>타임슬립 한국사</h1>
         <p class="subtitle">한능검 심화 기출 · 선사부터 현대까지 36화</p>
         <button id="menu-btn" aria-label="메뉴">☰</button>
