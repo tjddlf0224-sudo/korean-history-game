@@ -105,9 +105,11 @@
      z-index를 쓴다. 마스코트 폭이 시대마다 달라서(65~116px) right 오프셋을
      인라인 스타일로 개별 계산해 넣는다. 테두리·배경 없이 글씨만 — 실제
      가로 진행선(era-track-line)이 뒤로 그대로 지나간다. */
-  .era-exam-btn { position: absolute; top: 8px; z-index: 3; width: 74px;
+  .era-exam-btn { position: absolute; top: 4px; z-index: 3; width: 74px;
     cursor: pointer; text-decoration: none; display: block; text-align: center;
     font-family: "Gowun Batang", serif; text-shadow: 0 2px 6px rgba(0,0,0,.7); }
+  .era-exam-btn .eb-icon { display: block; width: 18px; height: 18px; margin: 0 auto 2px; color: #d9a441;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
   .era-exam-btn .eb-title { display: block; font-size: 15px; font-weight: 700; color: #f0c96b; }
   .era-exam-btn .eb-sub { display: block; font-size: 11px; color: #f5ecd8; margin-top: 2px; }
   .era-exam-btn:active { transform: translateY(1px); }
@@ -498,13 +500,14 @@ function openKingsModal(era){
   // 너무 가까우면 라벨만(배지는 그대로 두고) 한 단 내려 겹침을 피한다.
   const singleRow = groups.length === 1;
   // 왕들이 몰려 있으면(재위 기간이 짧아 연도차가 작으면) 배지는 안
-  // 겹쳐도 그 아래 이름·연도 라벨(.kp-king 폭 108px)끼리 부딪혀 뒤죽박죽
-  // 보인다(고구려 초기 왕들에서 실제 발생). 초상화 유무와 무관하게
-  // 라벨이 숨 쉴 만큼 넉넉한 최소 폭을 쓰고, 초상화가 있으면(최대 84px
-  // 그림) 그만큼 더 얹는다.
-  const kingBadgeW = k => k.p ? 92 : 76;
+  // 겹쳐도 그 아래 이름·연도 라벨(.kp-king 폭 108px)끼리 부딪힌다(고구려
+  // 초기 왕들에서 실제 발생). 처음엔 라벨을 한 단씩 번갈아 내리는
+  // 지그재그로 피해 봤는데, 위아래로 들쭉날쭉해서 오히려 더 산만하다는
+  // 지적을 받았다 — 지그재그 없이 한 줄로 두되, 최소 간격 자체를 라벨
+  // 폭(108px)에 가깝게 넉넉히 벌려서 겹치지 않게 한다.
+  const kingBadgeW = k => k.p ? 100 : 88;
   const rows = groups.map(([country, kings]) => {
-    let lastX = -Infinity, lastW = 0, tier = 0;
+    let lastX = -Infinity, lastW = 0;
     const positioned = kings.map((k, i) => {
       // 나라가 하나뿐이면 다른 시대·나라와 맞출 일이 없다. 연도差 그대로
       // 쓰면(예: 단군왕검~위만처럼 왕 수는 적은데 연도差는 수천 년) 화면
@@ -520,12 +523,11 @@ function openKingsModal(era){
       // 다른 나라의 같은 해와 맞추려고 이 최소 간격보다 더 멀어지는 건
       // 그대로 둔다.
       const curW = kingBadgeW(k);
-      const minGap = lastW / 2 + curW / 2 + 8;
+      const minGap = lastW / 2 + curW / 2 + 10;
       if (x < lastX + minGap) x = lastX + minGap;
-      tier = (x - lastX < 100) ? (tier === 0 ? 1 : 0) : 0;
       lastX = x;
       lastW = curW;
-      return { k, x, stagger: tier === 1 };
+      return { k, x, stagger: false };
     });
     const rowEndX = positioned.length ? positioned[positioned.length - 1].x : 40;
     trackW = Math.max(trackW, rowEndX + 80);
@@ -593,6 +595,7 @@ function renderEraList(){
         title="${e.title}"></div>` : '';
     const examBtnHtml = `<a class="era-exam-btn" href="exam_practice.html?era=${eraIdx}"
         style="right:${mascotW + 24}px" title="${e.title} 기출문제 풀이">
+        <svg class="eb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
         <span class="eb-title">기출문제</span><span class="eb-sub">풀어보기</span>
       </a>`;
     section.innerHTML = `
