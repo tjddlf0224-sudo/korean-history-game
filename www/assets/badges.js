@@ -30,7 +30,24 @@ window.Badges = {
     return true;
   },
   count(){ return Object.keys(Badges.load()).length; },
-  clear(){ try { localStorage.removeItem(Badges.STORAGE_KEY); } catch(e){} }
+  clear(){ try { localStorage.removeItem(Badges.STORAGE_KEY); } catch(e){} },
+
+  /* 누적 정답 수 — 챕터 안 퀴즈든 기출문제 풀이든, 문제 하나를 맞힐 때마다
+     +1. 한 판을 잘했는지가 아니라 "그동안 꾸준히 쌓아온 실력"을 보여주는
+     숫자라 리셋되지 않고 계속 쌓인다(스트릭과는 다른 종류의 성취감). */
+  CORRECT_KEY: 'khg_correct_count',
+  correctCount(){
+    try { return parseInt(localStorage.getItem(Badges.CORRECT_KEY) || '0', 10) || 0; }
+    catch(e){ return 0; }
+  },
+  addCorrect(){
+    let n = Badges.correctCount() + 1;
+    try { localStorage.setItem(Badges.CORRECT_KEY, String(n)); } catch(e){}
+    if (n >= 50) Badges.earn('correct_50');
+    if (n >= 200) Badges.earn('correct_200');
+    if (n >= 500) Badges.earn('correct_500');
+    return n;
+  }
 };
 
 /* 인연(재회) 플래그 — 배지 자체는 아니고 "이 사람을 만났다/도왔다"는
@@ -60,9 +77,14 @@ window.Bonds = {
 const BADGE_DEFS = {
   bond_nonong: { name: '잊지 않은 은혜', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="21" x2="12" y2="5"/><path d="M12 6c0-2 1.5-3.5 4-4"/><path d="M12 9c0-2-1.5-3.5-4-4"/><path d="M12 12c0-2 1.5-3.5 4-4"/><path d="M12 15c0-2-1.5-3.5-4-4"/></svg>',
     desc: '들녘에서 만난 늙은 농부와의 인연이, 세월이 지나 그 손자뻘 되는 이에게 닿았다.' },
+  streak_3: { name: '사흘의 시작', desc: '3일 연속 학습 — 이제 막 리듬이 붙기 시작했다.' },
   streak_7: { name: '이레의 다짐', desc: '7일 동안 하루도 거르지 않고 역사와 만났다.' },
   streak_30: { name: '서른 밤의 약속', desc: '30일 연속 학습 — 한 달을 꼬박 역사와 함께했다.' },
+  streak_100: { name: '백일의 기록', desc: '100일 연속 학습 — 습관을 넘어 삶의 일부가 되었다.' },
   exam_perfect: { name: '만점 급제', desc: '기출문제 풀이에서 단 한 문제도 틀리지 않았다.' },
   exam_allera: { name: '전 시대를 통달하다', desc: '아홉 시대 모두 기출문제 풀이를 마쳤다.' },
   all_chapters: { name: '시간여행 완주', desc: '타임슬립 한국사, 서른여섯 화를 모두 마쳤다.' },
+  correct_50: { name: '처음 세운 탑', desc: '문제 50개를 맞혔다 — 작은 답들이 쌓여 탑이 되기 시작했다.' },
+  correct_200: { name: '흔들리지 않는 실력', desc: '문제 200개를 맞혔다 — 이제 웬만해선 헷갈리지 않는다.' },
+  correct_500: { name: '역사를 꿰뚫다', desc: '문제 500개를 맞혔다 — 이 정도면 한 시대를 통째로 꿰고 있다는 뜻이다.' },
 };

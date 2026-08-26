@@ -1457,6 +1457,7 @@ const Quiz = {
     if (correct){
       this.answered = true;
       if (this.seq) this.seqScore++;
+      if (window.Badges) Badges.addCorrect();
       this.optButtons[i].classList.add('correct');
       this.optButtons.forEach(b => b.disabled = true);
       document.getElementById('quiz-fb').textContent = this.data.feedback[1];

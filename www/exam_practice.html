@@ -255,6 +255,7 @@ function pick(i){
   const correct = order[i] === data.answer;
   if (correct){
     answered = true;
+    if (window.Badges) Badges.addCorrect();
     optButtons[i].classList.add('correct');
     optButtons.forEach(b => b.disabled = true);
     els.qFb.textContent = data.feedback[1];

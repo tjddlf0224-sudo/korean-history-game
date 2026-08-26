@@ -1569,6 +1569,7 @@ const Quiz = {
       // 정답을 고르면 확정하고 다음 문제로 넘어갈 수 있게 한다.
       this.answered = true;
       if (this.seq) this.seqScore++;
+      if (window.Badges) Badges.addCorrect();
       this.optButtons[i].classList.add('correct');
       this.optButtons.forEach(b => b.disabled = true);
       document.getElementById('quiz-fb').innerHTML = glossarize(this.data.feedback[1]);
