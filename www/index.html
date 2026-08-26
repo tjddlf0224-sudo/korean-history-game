@@ -37,7 +37,12 @@
   /* 스트릭(연속 학습) 알약 — 헤더에 항상 보이게. 오늘 아직 활동이 없어
      끊기기 직전이면(스트릭 0일 때는 표시 안 함) 살짝 다른 색으로 눈에
      띄게 한다. */
-  #streak-pill { margin-left:auto; flex:none; align-self:flex-start; display:none;
+  /* 스트릭 알약이 숨겨져 있을 때(스트릭 0)도 메뉴 버튼이 항상 우측
+     끝에 오도록, 둘을 한 그룹으로 묶고 그룹 자체에 margin-left:auto를
+     준다 — 개별 요소에 각각 주면 알약이 display:none일 때 그 auto
+     마진이 사라져서 메뉴 버튼이 화면 중간으로 끌려온다(실제 발생). */
+  #topbar-actions { margin-left:auto; flex:none; align-self:flex-start; display:flex; align-items:center; gap:8px; }
+  #streak-pill { flex:none; display:none;
     align-items:center; gap:5px; background:#241c12; border:1px solid #4a3512;
     border-radius:999px; padding:4px 10px 4px 6px; cursor:pointer; font-family:inherit; }
   #streak-pill.show { display:flex; }
@@ -73,7 +78,7 @@
   @keyframes streak-pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(224,136,58,.35);} 50%{ box-shadow:0 0 0 5px rgba(224,136,58,0);} }
 
   /* 우측 상단 메뉴 버튼 — 동그라미 없이 가로줄 3개(햄버거 아이콘)만. */
-  #menu-btn { margin-left:8px; flex:none; align-self:flex-start; width:30px; height:30px;
+  #menu-btn { flex:none; align-self:flex-start; width:30px; height:30px;
     border:none; background:none; padding:0; color:#f5ecd8; display:flex; align-items:center;
     justify-content:center; cursor:pointer; }
   #menu-btn svg { width:20px; height:20px; }
@@ -343,16 +348,18 @@
       <div class="topbar">
         <h1><img src="assets/title_logo.png" alt="타임슬립 한국사"></h1>
         <p class="subtitle">한능검 심화 기출</p>
-        <button id="streak-pill" aria-label="스트릭">
-          <span class="beacon-icon">
-            <img src="assets/icons/beacon_streak.png" alt="">
-            <i class="beacon-glow"></i>
-            <i class="beacon-ember e1"></i>
-            <i class="beacon-ember e2"></i>
-          </span>
-          <span id="streak-pill-count">0</span>
-        </button>
-        <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <div id="topbar-actions">
+          <button id="streak-pill" aria-label="스트릭">
+            <span class="beacon-icon">
+              <img src="assets/icons/beacon_streak.png" alt="">
+              <i class="beacon-glow"></i>
+              <i class="beacon-ember e1"></i>
+              <i class="beacon-ember e2"></i>
+            </span>
+            <span id="streak-pill-count">0</span>
+          </button>
+          <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        </div>
       </div>
       <div id="era-list"></div>
     </div>
