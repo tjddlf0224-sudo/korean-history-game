@@ -137,6 +137,7 @@
 </div>
 </div>
 
+<script src="assets/streak.js"></script>
 <script>
 /* 가로모드 고정: index.html·게임 챕터들과 동일. */
 function applyOrientation(){
@@ -277,6 +278,7 @@ els.nextBtn.onclick = () => {
 function finishSession(){
   const total = queue.length;
   const correct = total - new Set(mistakes.map(m => m.q)).size;
+  if (window.Streak) Streak.checkIn();
   els.progressFill.style.width = '100%';
   showScreen('result');
   els.resultNum.textContent = correct;

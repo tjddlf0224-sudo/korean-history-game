@@ -34,11 +34,43 @@
 
   .subtitle { margin:2px 0 0; font-size:12px; color:#b8a888; letter-spacing:.02em; }
 
+  /* 스트릭(연속 학습) 알약 — 헤더에 항상 보이게. 오늘 아직 활동이 없어
+     끊기기 직전이면(스트릭 0일 때는 표시 안 함) 살짝 다른 색으로 눈에
+     띄게 한다. */
+  #streak-pill { margin-left:auto; flex:none; align-self:flex-start; display:none;
+    align-items:center; gap:4px; background:#241c12; border:1px solid #4a3512;
+    border-radius:999px; padding:5px 10px 5px 8px; cursor:pointer; font-family:inherit; }
+  #streak-pill.show { display:flex; }
+  #streak-pill svg { width:15px; height:15px; color:#e0883a; }
+  #streak-pill span { font-size:13px; font-weight:700; color:#f0d9a0; font-variant-numeric:tabular-nums; }
+  #streak-pill.at-risk { border-color:#e0883a; background:#3a2410; animation:streak-pulse 1.8s ease-in-out infinite; }
+  @keyframes streak-pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(224,136,58,.35);} 50%{ box-shadow:0 0 0 5px rgba(224,136,58,0);} }
+
   /* 우측 상단 메뉴 버튼 — 동그라미 없이 가로줄 3개(햄버거 아이콘)만. */
-  #menu-btn { margin-left:auto; flex:none; align-self:flex-start; width:30px; height:30px;
+  #menu-btn { margin-left:8px; flex:none; align-self:flex-start; width:30px; height:30px;
     border:none; background:none; padding:0; color:#f5ecd8; display:flex; align-items:center;
     justify-content:center; cursor:pointer; }
   #menu-btn svg { width:20px; height:20px; }
+
+  /* 스트릭 모달 — menu-modal과 같은 뼈대. */
+  #streak-modal { position:absolute; inset:0; z-index:41; display:none;
+    background:rgba(8,6,4,.72); align-items:center; justify-content:center; padding:18px; }
+  #streak-modal.show { display:flex; }
+  #streak-panel { background:#1b150e; border:1px solid #4a3c26; border-radius:16px;
+    width:100%; max-width:320px; padding:20px; text-align:center; }
+  #streak-panel .sk-flame { width:44px; height:44px; color:#e0883a; margin:0 auto 6px; display:block; }
+  #streak-panel .sk-count { font-size:36px; font-weight:700; color:#f0d9a0; font-family:"Gugi","Gowun Batang",serif; }
+  #streak-panel .sk-label { font-size:12px; color:#afa38f; margin-top:2px; }
+  #streak-panel .sk-stats { display:flex; justify-content:center; gap:18px; margin:16px 0;
+    padding-top:14px; border-top:1px solid #3a2c1a; }
+  #streak-panel .sk-stat b { display:block; font-size:16px; color:#f5ecd8; }
+  #streak-panel .sk-stat span { font-size:10.5px; color:#8a7d68; }
+  #streak-panel .sk-msg { font-size:12.5px; color:#d8ccb5; line-height:1.6; margin-bottom:14px; }
+  #streak-freeze-btn { display:block; width:100%; box-sizing:border-box; background:#3a2410; border:1px solid #e0883a;
+    color:#ffd29c; font-family:inherit; font-size:13px; font-weight:700; padding:11px 14px; border-radius:10px;
+    cursor:pointer; margin-bottom:8px; }
+  #streak-close-btn { display:block; width:100%; box-sizing:border-box; background:#2a2013; border:1px solid #4a3c26;
+    color:#f5ecd8; font-family:inherit; font-size:13px; padding:11px 14px; border-radius:10px; cursor:pointer; }
 
   /* 메뉴 · 배지함 모달 — 왕조 계보 모달(#kings-modal)과 같은 뼈대를 쓴다. */
   #menu-modal, #badges-modal { position:absolute; inset:0; z-index:41; display:none;
@@ -273,9 +305,27 @@
       <div class="topbar">
         <h1><img src="assets/title_logo.png" alt="타임슬립 한국사"></h1>
         <p class="subtitle">한능검 심화 기출</p>
+        <button id="streak-pill" aria-label="스트릭">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.5 2c1.5 3-3 4.5-3 8.5a3 3 0 006 0c0-.8-.2-1.4-.2-1.4 2.7 2 4.2 5 4.2 8a5.5 5.5 0 01-11 0c0-7 3-9.5 4-15.1z"/></svg>
+          <span id="streak-pill-count">0</span>
+        </button>
         <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
       </div>
       <div id="era-list"></div>
+    </div>
+  </div>
+  <div id="streak-modal">
+    <div id="streak-panel">
+      <svg class="sk-flame" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.5 2c1.5 3-3 4.5-3 8.5a3 3 0 006 0c0-.8-.2-1.4-.2-1.4 2.7 2 4.2 5 4.2 8a5.5 5.5 0 01-11 0c0-7 3-9.5 4-15.1z"/></svg>
+      <div class="sk-count" id="streak-count">0</div>
+      <div class="sk-label">일 연속 학습</div>
+      <div class="sk-stats">
+        <div class="sk-stat"><b id="streak-longest">0</b><span>최장 기록</span></div>
+        <div class="sk-stat"><b id="streak-freezes">0</b><span>스트릭 프리즈</span></div>
+      </div>
+      <p class="sk-msg" id="streak-msg"></p>
+      <button id="streak-freeze-btn" style="display:none">광고 보고 프리즈 받기</button>
+      <button id="streak-close-btn">닫기</button>
     </div>
   </div>
   <div id="menu-modal">
@@ -311,6 +361,7 @@
 
 <script src="assets/audio.js"></script>
 <script src="assets/badges.js"></script>
+<script src="assets/streak.js"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>
@@ -700,6 +751,39 @@ function renderBadges(){
   document.getElementById('badges-body').innerHTML = html;
   document.getElementById('badges-sub').textContent = `${Object.keys(earned).length} / ${totalCount}개 획득`;
 }
+/* 스트릭 알약(헤더)·모달. 스트릭이 0이면(아직 한 번도 안 깼거나 완전히
+   끊긴 채 오늘도 안 함) 알약 자체를 숨긴다 — 0일째부터 자랑할 건 없다. */
+function renderStreakPill(){
+  if (!window.Streak) return;
+  const s = Streak.load();
+  const pill = document.getElementById('streak-pill');
+  document.getElementById('streak-pill-count').textContent = s.count;
+  pill.classList.toggle('show', s.count > 0);
+  pill.classList.toggle('at-risk', Streak.isAtRisk());
+}
+function openStreak(){
+  if (!window.Streak) return;
+  const s = Streak.load();
+  const atRisk = Streak.isAtRisk();
+  document.getElementById('streak-count').textContent = s.count;
+  document.getElementById('streak-longest').textContent = s.longest || 0;
+  document.getElementById('streak-freezes').textContent = s.freezes || 0;
+  const msg = document.getElementById('streak-msg');
+  const freezeBtn = document.getElementById('streak-freeze-btn');
+  if (s.count === 0){
+    msg.textContent = '이 화를 하나 끝내면 스트릭이 시작돼요.';
+    freezeBtn.style.display = 'none';
+  } else if (atRisk){
+    msg.textContent = '오늘 아직 안 했어요 — 이대로면 내일 스트릭이 끊겨요.';
+    freezeBtn.style.display = (s.freezes > 0) ? 'none' : 'block';
+  } else {
+    msg.textContent = '오늘 학습 완료! 내일도 이어가 볼까요?';
+    freezeBtn.style.display = 'none';
+  }
+  document.getElementById('streak-modal').classList.add('show');
+}
+function closeStreak(){ document.getElementById('streak-modal').classList.remove('show'); }
+
 function openMenu(){ document.getElementById('menu-modal').classList.add('show'); }
 function closeMenu(){ document.getElementById('menu-modal').classList.remove('show'); }
 function openBadges(){ renderBadges(); document.getElementById('badges-modal').classList.add('show'); }
@@ -722,9 +806,22 @@ document.getElementById('menu-reset').addEventListener('click', () => {
     localStorage.removeItem('khg_seenIntro');
     if (window.Badges) Badges.clear();
     if (window.Bonds) Bonds.clear();
+    if (window.Streak) Streak.clear();
   } catch(e){}
   location.reload();
 });
+document.getElementById('streak-pill').addEventListener('click', openStreak);
+document.getElementById('streak-close-btn').addEventListener('click', closeStreak);
+document.getElementById('streak-modal').addEventListener('click', (ev) => {
+  if (ev.target.id === 'streak-modal') closeStreak();
+});
+document.getElementById('streak-freeze-btn').addEventListener('click', () => {
+  const btn = document.getElementById('streak-freeze-btn');
+  btn.disabled = true; btn.textContent = '광고 재생 중…';
+  if (window.StreakAds) StreakAds.offerFreeze(() => { openStreak(); renderStreakPill(); btn.disabled = false; btn.textContent = '광고 보고 프리즈 받기'; });
+});
+renderStreakPill();
+
 document.getElementById('badges-close').addEventListener('click', closeBadges);
 document.getElementById('badges-modal').addEventListener('click', (ev) => {
   if (ev.target.id === 'badges-modal') closeBadges();
