@@ -103,14 +103,14 @@
   /* 기출문제 풀이 버튼 — 마스코트 왼쪽에 겹쳐 띄운다. 마스코트와 같은
      이유(가로 진행선을 밀어내지 않고 그 위를 덮게)로 position:absolute +
      z-index를 쓴다. 마스코트 폭이 시대마다 달라서(65~116px) right 오프셋을
-     인라인 스타일로 개별 계산해 넣는다. */
-  .era-exam-btn { position: absolute; top: 30px; z-index: 3; width: 66px; padding: 9px 5px;
-    border-radius: 13px; background: linear-gradient(180deg, #3a2c1a, #241c12); border: 1px solid #d9a441;
-    color: #f0c96b; font-family: "Gowun Batang", serif; font-size: 11px; font-weight: 700;
-    line-height: 1.4; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,.45);
-    text-decoration: none; display: block; }
-  .era-exam-btn .eb-sub { display: block; font-size: 10px; color: #f5ecd8; font-weight: 400; margin-top: 2px; }
-  .era-exam-btn:active { transform: translateY(1px); }
+     인라인 스타일로 개별 계산해 넣는다. 육각 인장(印章) 모양 배지 —
+     실제 가로 진행선(era-track-line)이 이 배지 뒤로 그대로 지나가므로
+     안에 선을 따로 그리지 않는다. */
+  .era-exam-btn { position: absolute; top: 16px; z-index: 3; width: 74px; height: 88px;
+    cursor: pointer; text-decoration: none; display: block; }
+  .era-exam-btn svg { width: 100%; height: 100%; overflow: visible;
+    filter: drop-shadow(0 3px 8px rgba(0,0,0,.5)); }
+  .era-exam-btn:active svg { transform: translateY(1px); }
 
   /* 시대 진행선 — 시작(금색 점) → 현재(최근 학습한 챕터, 빛나는 고리) →
      끝(빈 점). 카드 목록 위, 헤더 아래 가로선으로 "이 시대의 어디쯤"을
@@ -582,7 +582,29 @@ function renderEraList(){
         width:${mascotW}px; height:${e.mascotH || 112}px"
         title="${e.title}"></div>` : '';
     const examBtnHtml = `<a class="era-exam-btn" href="exam_practice.html?era=${eraIdx}"
-        style="right:${mascotW + 24}px" title="${e.title} 기출문제 풀이">기출문제<span class="eb-sub">Let's Go!</span></a>`;
+        style="right:${mascotW + 24}px" title="${e.title} 기출문제 풀이">
+        <svg viewBox="0 0 100 118" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="eb-grad-${eraIdx}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#332714"/>
+              <stop offset="1" stop-color="#1c150c"/>
+            </linearGradient>
+          </defs>
+          <polygon points="50,6 92,34 92,84 50,112 8,84 8,34" fill="url(#eb-grad-${eraIdx})" stroke="#d9a441" stroke-width="2.5"/>
+          <polygon points="50,6 92,34 92,84 50,112 8,84 8,34" fill="none" stroke="#d9a441" stroke-width="1"
+            transform="translate(50,59) scale(0.87) translate(-50,-59)"/>
+          <g fill="#d9a441">
+            <rect x="88" y="30" width="7" height="7" transform="rotate(45 91.5 33.5)"/>
+            <rect x="88" y="80" width="7" height="7" transform="rotate(45 91.5 83.5)"/>
+            <rect x="5" y="30" width="7" height="7" transform="rotate(45 8.5 33.5)"/>
+            <rect x="5" y="80" width="7" height="7" transform="rotate(45 8.5 83.5)"/>
+          </g>
+          <path d="M50,13 L52,18.5 L57.5,20 L52,21.5 L50,27 L48,21.5 L42.5,20 L48,18.5 Z" fill="#e9c979"/>
+          <text x="50" y="54" text-anchor="middle" font-family="Gowun Batang, serif" font-size="15" font-weight="700" fill="#f0c96b">기출문제</text>
+          <text x="50" y="70" text-anchor="middle" font-family="Gowun Batang, serif" font-size="10.5" fill="#f5ecd8">Let's Go!</text>
+          <text x="50" y="94" text-anchor="middle" font-family="Gowun Batang, serif" font-size="14" fill="#f5ecd8">&#8594;</text>
+        </svg>
+      </a>`;
     section.innerHTML = `
       <div class="era-dot"></div>
       <div class="era-header">
