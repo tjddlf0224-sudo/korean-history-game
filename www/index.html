@@ -497,8 +497,12 @@ function openKingsModal(era){
   // 나라를 넘나들어도 같은 세로줄에 온다 — 그 대신 같은 줄에서 연도가
   // 너무 가까우면 라벨만(배지는 그대로 두고) 한 단 내려 겹침을 피한다.
   const singleRow = groups.length === 1;
+  // 초상화가 있는 왕은 배지가 원(40px)이 아니라 최대 84px짜리 그림이라,
+  // 최소 간격을 원 기준(46px)으로만 두면 초상화끼리 겹친다(실제로 후삼국
+  // 궁예·견훤에서 발생한 문제). 앞뒤 배지의 실제 폭을 반영해 간격을 잡는다.
+  const kingBadgeW = k => k.p ? 84 : 40;
   const rows = groups.map(([country, kings]) => {
-    let lastX = -Infinity, tier = 0;
+    let lastX = -Infinity, lastW = 0, tier = 0;
     const positioned = kings.map((k, i) => {
       // 나라가 하나뿐이면 다른 시대·나라와 맞출 일이 없다. 연도差 그대로
       // 쓰면(예: 단군왕검~위만처럼 왕 수는 적은데 연도差는 수천 년) 화면
@@ -509,12 +513,16 @@ function openKingsModal(era){
         return { k, x, stagger: false };
       }
       let x = 40 + (kingsYearNum(k.year) - minY) * pxPerYear;
-      // 연도가 아무리 가까워도(재위 기간이 짧아 연달아 있으면) 배지 원이
-      // 서로 겹치진 않게 최소 간격을 지킨다 — 그 대신 다른 나라의 같은
-      // 해와 맞추려고 이 최소 간격보다 더 멀어지는 건 그대로 둔다.
-      if (x < lastX + 46) x = lastX + 46;
+      // 연도가 아무리 가까워도(재위 기간이 짧아 연달아 있으면) 배지끼리
+      // 서로 겹치진 않게 최소 간격을 지킨다(초상화 폭 반영) — 그 대신
+      // 다른 나라의 같은 해와 맞추려고 이 최소 간격보다 더 멀어지는 건
+      // 그대로 둔다.
+      const curW = kingBadgeW(k);
+      const minGap = lastW / 2 + curW / 2 + 8;
+      if (x < lastX + minGap) x = lastX + minGap;
       tier = (x - lastX < 100) ? (tier === 0 ? 1 : 0) : 0;
       lastX = x;
+      lastW = curW;
       return { k, x, stagger: tier === 1 };
     });
     const rowEndX = positioned.length ? positioned[positioned.length - 1].x : 40;
