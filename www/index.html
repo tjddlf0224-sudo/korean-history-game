@@ -148,6 +148,41 @@
   .badge-item.got .b-icon { opacity:1; filter:none; }
   .badge-item.got .b-name { color:#f0d9a0; font-weight:700; }
   .badge-item.got .b-desc { color:#c9b896; }
+  .badge-item.got { cursor:pointer; }
+  .badge-item.got:active { transform:scale(.96); }
+
+  /* 배지 확대 보기 — 손으로 쥐고 돌려보는 패, 운동 앱의 배지 회전 연출을
+     이 게임 화풍(가로 화면·마패)에 맞게 가져왔다. perspective로 3D
+     공간을 만들고, 드래그한 만큼 rotateX/rotateY를 주고 놓으면 스프링
+     처럼 다시 정면으로 돌아온다. 광택은 코인과 같이 회전하는 대각선
+     그라디언트라 기울일 때마다 원근으로 비스듬히 빛을 받는 것처럼
+     보인다. */
+  #badge-detail-modal { position:absolute; inset:0; z-index:45; display:none;
+    background:rgba(6,4,2,.86); align-items:center; justify-content:center; padding:18px; }
+  #badge-detail-modal.show { display:flex; }
+  #badge-detail-close { position:absolute; top:18px; right:18px; background:#2a2013;
+    border:1px solid #4a3c26; color:#f5ecd8; border-radius:999px; width:34px; height:34px;
+    font-size:15px; cursor:pointer; z-index:1; }
+  #badge-detail-panel { display:flex; flex-direction:column; align-items:center; gap:2px; max-width:300px; }
+  #badge-detail-stage { width:190px; height:190px; perspective:750px; touch-action:none; margin-bottom:8px; }
+  #badge-detail-coin { position:relative; width:100%; height:100%; transform-style:preserve-3d;
+    cursor:grab; transition:transform .55s cubic-bezier(.22,1.4,.36,1); will-change:transform; }
+  #badge-detail-coin.dragging { transition:none; cursor:grabbing; }
+  #badge-detail-coin img { display:block; width:100%; height:100%; object-fit:contain;
+    -webkit-user-drag:none; user-select:none; pointer-events:none;
+    filter:drop-shadow(0 16px 20px rgba(0,0,0,.55)); }
+  #badge-detail-shine { position:absolute; inset:0; border-radius:50%; pointer-events:none;
+    background:linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.55) 48%, rgba(255,255,255,0) 62%);
+    mix-blend-mode:overlay; opacity:.85; }
+  #badge-detail-coin.hint { animation:badgeHintTilt 1.8s ease-in-out 1; }
+  @keyframes badgeHintTilt {
+    0%, 100% { transform:rotateX(0) rotateY(0); }
+    28% { transform:rotateX(-7deg) rotateY(16deg); }
+    62% { transform:rotateX(5deg) rotateY(-13deg); }
+  }
+  #badge-detail-name { font-family:"Gowun Batang", serif; font-weight:700; font-size:16px; color:#f0d9a0; }
+  #badge-detail-desc { font-size:12.5px; color:#c9b896; line-height:1.5; text-align:center; margin-top:4px; }
+  #badge-detail-hint { font-size:10.5px; color:#8a7d68; margin-top:10px; letter-spacing:.02em; }
 
   /* 시대 아코디언 목록: 세로로 쌓인 시대 중 한 번에 하나만 펼쳐서, 펼친
      시대의 챕터 카드는 가로 한 줄로 크게 보여준다(디자인 가이드 레이아웃
@@ -405,6 +440,20 @@
         <button id="badges-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       </div>
       <div id="badges-body"></div>
+    </div>
+  </div>
+  <div id="badge-detail-modal">
+    <button id="badge-detail-close" aria-label="닫기"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+    <div id="badge-detail-panel">
+      <div id="badge-detail-stage">
+        <div id="badge-detail-coin">
+          <img id="badge-detail-img" src="" alt="">
+          <div id="badge-detail-shine"></div>
+        </div>
+      </div>
+      <div id="badge-detail-name"></div>
+      <div id="badge-detail-desc"></div>
+      <div id="badge-detail-hint">손가락으로 돌려 보세요</div>
     </div>
   </div>
   <div id="kings-modal">
@@ -780,7 +829,17 @@ document.getElementById('kings-modal').addEventListener('click', (ev) => {
 /* ============ 메뉴 · 배지함 ============ */
 function chapterBadgeId(href){ return 'ch_complete_' + href; }
 function renderBadges(){
-  const earned = (window.Badges ? Badges.load() : {});
+  let earned = (window.Badges ? Badges.load() : {});
+  // 전체 36화가 다 완주됐는데 아직 완주 배지를 못 받았다면 지금 준다
+  // (챕터 파일 하나하나를 손대지 않고 여기서만 검사해도 충분하다).
+  if (window.Badges && !Badges.has('all_chapters')){
+    const allIds = [];
+    ERAS.forEach(era => era.cards.forEach(c => allIds.push(chapterBadgeId(c.href))));
+    if (allIds.length && allIds.every(id => earned[id])){
+      Badges.earn('all_chapters');
+      earned = Badges.load();
+    }
+  }
   let totalCount = 0;
   let html = '';
   ERAS.forEach(era => {
@@ -796,18 +855,23 @@ function renderBadges(){
     });
     html += '</div>';
   });
-  html += `<div class="badge-era">그 외</div><div class="badge-grid">`;
-  Object.keys(BADGE_DEFS).forEach(id => {
-    const def = BADGE_DEFS[id];
-    const got = !!earned[id];
-    totalCount++;
-    html += `<div class="badge-item${got ? ' got' : ''}">
-      <div class="b-icon"><img src="assets/icons/badge_mapae.png" alt=""></div>
-      <div class="b-name">${got ? def.name : '???'}</div>
-      <div class="b-desc">${got ? def.desc : '아직 만나지 못한 배지'}</div>
-    </div>`;
-  });
-  html += '</div>';
+  // "그 외" 특별 배지는 챕터처럼 정해진 목록을 미리 보여줄 게 아니라
+  // 다양한 방식으로 우연히 얻는 것들이라, 얻기 전엔 아예 안 보여주고
+  // 얻은 것만 하나씩 진열장에 늘어놓는다("???" 자리 채우기 식이 아님).
+  const gotSpecials = Object.keys(BADGE_DEFS).filter(id => !!earned[id]);
+  totalCount += Object.keys(BADGE_DEFS).length;
+  if (gotSpecials.length){
+    html += `<div class="badge-era">그 외</div><div class="badge-grid">`;
+    gotSpecials.forEach(id => {
+      const def = BADGE_DEFS[id];
+      html += `<div class="badge-item got">
+        <div class="b-icon"><img src="assets/icons/badge_mapae.png" alt=""></div>
+        <div class="b-name">${def.name}</div>
+        <div class="b-desc">${def.desc}</div>
+      </div>`;
+    });
+    html += '</div>';
+  }
   document.getElementById('badges-body').innerHTML = html;
   document.getElementById('badges-sub').textContent = `${Object.keys(earned).length} / ${totalCount}개 획득`;
 }
@@ -848,6 +912,67 @@ function openMenu(){ document.getElementById('menu-modal').classList.add('show')
 function closeMenu(){ document.getElementById('menu-modal').classList.remove('show'); }
 function openBadges(){ renderBadges(); document.getElementById('badges-modal').classList.add('show'); }
 function closeBadges(){ document.getElementById('badges-modal').classList.remove('show'); }
+
+/* 배지 확대 보기 — 얻은 배지를 누르면 손으로 쥔 패처럼 확대해서 보여주고,
+   드래그로 기울여 볼 수 있게 한다("아이폰 운동앱처럼 돌려보고 싶다"는
+   요청). */
+function openBadgeDetail(imgSrc, name, desc){
+  document.getElementById('badge-detail-img').src = imgSrc;
+  document.getElementById('badge-detail-name').textContent = name;
+  document.getElementById('badge-detail-desc').textContent = desc;
+  const coin = document.getElementById('badge-detail-coin');
+  coin.style.transform = '';
+  coin.classList.remove('dragging');
+  document.getElementById('badge-detail-modal').classList.add('show');
+  coin.classList.remove('hint');
+  void coin.offsetWidth; // 재생 위해 리플로우 강제
+  coin.classList.add('hint');
+}
+function closeBadgeDetail(){ document.getElementById('badge-detail-modal').classList.remove('show'); }
+
+document.getElementById('badges-body').addEventListener('click', (ev) => {
+  const item = ev.target.closest('.badge-item.got');
+  if (!item) return;
+  openBadgeDetail(
+    item.querySelector('.b-icon img').src,
+    item.querySelector('.b-name').textContent,
+    item.querySelector('.b-desc').textContent
+  );
+});
+document.getElementById('badge-detail-close').addEventListener('click', closeBadgeDetail);
+document.getElementById('badge-detail-modal').addEventListener('click', (ev) => {
+  if (ev.target.id === 'badge-detail-modal') closeBadgeDetail();
+});
+
+(function(){
+  const coin = document.getElementById('badge-detail-coin');
+  let dragging = false, sx0 = 0, sy0 = 0, rx = 0, ry = 0;
+  function setTilt(nrx, nry){
+    rx = nrx; ry = nry;
+    coin.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+  }
+  coin.addEventListener('pointerdown', (ev) => {
+    dragging = true;
+    coin.classList.remove('hint');
+    coin.classList.add('dragging');
+    sx0 = ev.clientX; sy0 = ev.clientY;
+    coin.setPointerCapture(ev.pointerId);
+  });
+  coin.addEventListener('pointermove', (ev) => {
+    if (!dragging) return;
+    const dx = ev.clientX - sx0, dy = ev.clientY - sy0;
+    setTilt(Math.max(-22, Math.min(22, -dy / 4)), Math.max(-28, Math.min(28, dx / 4)));
+    ev.preventDefault();
+  });
+  function release(){
+    if (!dragging) return;
+    dragging = false;
+    coin.classList.remove('dragging');
+    setTilt(0, 0);
+  }
+  coin.addEventListener('pointerup', release);
+  coin.addEventListener('pointercancel', release);
+})();
 
 document.getElementById('menu-btn').addEventListener('click', openMenu);
 document.getElementById('menu-close-btn').addEventListener('click', closeMenu);

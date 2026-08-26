@@ -60,4 +60,9 @@ window.Bonds = {
 const BADGE_DEFS = {
   bond_nonong: { name: '잊지 않은 은혜', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="21" x2="12" y2="5"/><path d="M12 6c0-2 1.5-3.5 4-4"/><path d="M12 9c0-2-1.5-3.5-4-4"/><path d="M12 12c0-2 1.5-3.5 4-4"/><path d="M12 15c0-2-1.5-3.5-4-4"/></svg>',
     desc: '들녘에서 만난 늙은 농부와의 인연이, 세월이 지나 그 손자뻘 되는 이에게 닿았다.' },
+  streak_7: { name: '이레의 다짐', desc: '7일 동안 하루도 거르지 않고 역사와 만났다.' },
+  streak_30: { name: '서른 밤의 약속', desc: '30일 연속 학습 — 한 달을 꼬박 역사와 함께했다.' },
+  exam_perfect: { name: '만점 급제', desc: '기출문제 풀이에서 단 한 문제도 틀리지 않았다.' },
+  exam_allera: { name: '전 시대를 통달하다', desc: '아홉 시대 모두 기출문제 풀이를 마쳤다.' },
+  all_chapters: { name: '시간여행 완주', desc: '타임슬립 한국사, 서른여섯 화를 모두 마쳤다.' },
 };

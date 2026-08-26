@@ -137,6 +137,7 @@
 </div>
 </div>
 
+<script src="assets/badges.js"></script>
 <script src="assets/streak.js"></script>
 <script>
 /* 가로모드 고정: index.html·게임 챕터들과 동일. */
@@ -279,6 +280,16 @@ function finishSession(){
   const total = queue.length;
   const correct = total - new Set(mistakes.map(m => m.q)).size;
   if (window.Streak) Streak.checkIn();
+  if (window.Badges){
+    if (correct === total) Badges.earn('exam_perfect');
+    try {
+      const key = 'khg_exam_done_eras';
+      const done = JSON.parse(localStorage.getItem(key) || '[]');
+      if (!done.includes(eraIdx)) done.push(eraIdx);
+      localStorage.setItem(key, JSON.stringify(done));
+      if (done.length >= ERA_TITLES.length) Badges.earn('exam_allera');
+    } catch(e){}
+  }
   els.progressFill.style.width = '100%';
   showScreen('result');
   els.resultNum.textContent = correct;

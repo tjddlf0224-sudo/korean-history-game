@@ -55,6 +55,10 @@ window.Streak = {
     s.longest = Math.max(s.longest || 0, s.count);
     s.lastDate = today;
     Streak._save(s);
+    if (window.Badges){
+      if (s.count >= 7) Badges.earn('streak_7');
+      if (s.count >= 30) Badges.earn('streak_30');
+    }
     return { changed:true, broken, s };
   },
 
