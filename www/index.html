@@ -38,12 +38,38 @@
      끊기기 직전이면(스트릭 0일 때는 표시 안 함) 살짝 다른 색으로 눈에
      띄게 한다. */
   #streak-pill { margin-left:auto; flex:none; align-self:flex-start; display:none;
-    align-items:center; gap:4px; background:#241c12; border:1px solid #4a3512;
-    border-radius:999px; padding:5px 10px 5px 8px; cursor:pointer; font-family:inherit; }
+    align-items:center; gap:5px; background:#241c12; border:1px solid #4a3512;
+    border-radius:999px; padding:4px 10px 4px 6px; cursor:pointer; font-family:inherit; }
   #streak-pill.show { display:flex; }
-  #streak-pill svg { width:15px; height:15px; color:#e0883a; }
   #streak-pill span { font-size:13px; font-weight:700; color:#f0d9a0; font-variant-numeric:tabular-nums; }
   #streak-pill.at-risk { border-color:#e0883a; background:#3a2410; animation:streak-pulse 1.8s ease-in-out infinite; }
+
+  /* 봉수대(烽燧臺) 아이콘 — 제미나이로 뽑은 정지 그림(돌탑+불꽃) 위에
+     은은한 불빛 깜빡임(glow)과 위로 떠오르는 불티(ember) 2개를 CSS로
+     얹어서 자연스럽게 일렁이는 느낌을 준다. 그림 자체는 손대지 않고
+     투명 레이어만 덧씌우는 방식이라 원본 그림 교체도 쉽다. */
+  .beacon-icon { position:relative; display:inline-block; flex:none; }
+  .beacon-icon img { display:block; width:100%; height:100%; object-fit:contain; }
+  .beacon-glow { position:absolute; left:50%; top:6%; width:58%; height:42%; transform:translateX(-50%);
+    background:radial-gradient(circle, rgba(255,205,110,.95), rgba(255,120,30,0) 72%);
+    border-radius:50%; mix-blend-mode:screen; pointer-events:none;
+    animation: beacon-flicker 1.7s ease-in-out infinite; }
+  .beacon-ember { position:absolute; left:48%; top:14%; width:6%; height:6%; border-radius:50%;
+    background:#ffcf7a; opacity:0; pointer-events:none; animation: beacon-rise 2.6s ease-in infinite; }
+  .beacon-ember.e2 { left:58%; animation-delay:1.2s; animation-duration:3s; }
+  @keyframes beacon-flicker {
+    0%,100% { opacity:.55; transform:translateX(-50%) scale(.88); }
+    30% { opacity:.9; transform:translateX(-53%) scale(1.05); }
+    55% { opacity:.68; transform:translateX(-47%) scale(.95); }
+    80% { opacity:1; transform:translateX(-50%) scale(1.12); }
+  }
+  @keyframes beacon-rise {
+    0% { opacity:0; transform:translate(0,0) scale(1); }
+    15% { opacity:.9; }
+    75% { opacity:.35; }
+    100% { opacity:0; transform:translate(-40%,-140%) scale(.4); }
+  }
+  #streak-pill .beacon-icon { width:19px; height:19px; }
   @keyframes streak-pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(224,136,58,.35);} 50%{ box-shadow:0 0 0 5px rgba(224,136,58,0);} }
 
   /* 우측 상단 메뉴 버튼 — 동그라미 없이 가로줄 3개(햄버거 아이콘)만. */
@@ -58,7 +84,7 @@
   #streak-modal.show { display:flex; }
   #streak-panel { background:#1b150e; border:1px solid #4a3c26; border-radius:16px;
     width:100%; max-width:320px; padding:20px; text-align:center; }
-  #streak-panel .sk-flame { width:44px; height:44px; color:#e0883a; margin:0 auto 6px; display:block; }
+  #streak-panel .beacon-icon.sk-flame { width:64px; height:64px; margin:0 auto 6px; }
   #streak-panel .sk-count { font-size:36px; font-weight:700; color:#f0d9a0; font-family:"Gugi","Gowun Batang",serif; }
   #streak-panel .sk-label { font-size:12px; color:#afa38f; margin-top:2px; }
   #streak-panel .sk-stats { display:flex; justify-content:center; gap:18px; margin:16px 0;
@@ -306,7 +332,12 @@
         <h1><img src="assets/title_logo.png" alt="타임슬립 한국사"></h1>
         <p class="subtitle">한능검 심화 기출</p>
         <button id="streak-pill" aria-label="스트릭">
-          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.5 2c1.5 3-3 4.5-3 8.5a3 3 0 006 0c0-.8-.2-1.4-.2-1.4 2.7 2 4.2 5 4.2 8a5.5 5.5 0 01-11 0c0-7 3-9.5 4-15.1z"/></svg>
+          <span class="beacon-icon">
+            <img src="assets/icons/beacon_streak.png" alt="">
+            <i class="beacon-glow"></i>
+            <i class="beacon-ember e1"></i>
+            <i class="beacon-ember e2"></i>
+          </span>
           <span id="streak-pill-count">0</span>
         </button>
         <button id="menu-btn" aria-label="메뉴"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
@@ -316,7 +347,12 @@
   </div>
   <div id="streak-modal">
     <div id="streak-panel">
-      <svg class="sk-flame" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.5 2c1.5 3-3 4.5-3 8.5a3 3 0 006 0c0-.8-.2-1.4-.2-1.4 2.7 2 4.2 5 4.2 8a5.5 5.5 0 01-11 0c0-7 3-9.5 4-15.1z"/></svg>
+      <span class="beacon-icon sk-flame">
+        <img src="assets/icons/beacon_streak.png" alt="">
+        <i class="beacon-glow"></i>
+        <i class="beacon-ember e1"></i>
+        <i class="beacon-ember e2"></i>
+      </span>
       <div class="sk-count" id="streak-count">0</div>
       <div class="sk-label">일 연속 학습</div>
       <div class="sk-stats">
