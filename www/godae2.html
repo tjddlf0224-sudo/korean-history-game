@@ -63,6 +63,9 @@
     box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
   .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; color: #afa38f; }
+  .dlg-doc { display: none; width: 100%; border-radius: 10px; margin-bottom: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.4); background-size: contain; background-repeat: no-repeat;
+    background-position: center; aspect-ratio: 900 / 420; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
@@ -371,10 +374,11 @@
       <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
       <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
-        <div class="dlg-top">
+        <div class="dlg-top" id="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
           <div class="dlg-name" id="dlg-name"></div>
         </div>
+        <div class="dlg-doc" id="dlg-doc"></div>
         <div class="dlg-chart" id="dlg-chart" hidden></div>
         <div class="dlg-box" id="dlg-text"></div>
         <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
@@ -1169,8 +1173,21 @@ const NPC_DATA = {
       { who:'npc', t:'원효 스님은 저와 길이 달랐지요. 굳이 당에 가지 않고, 어려운 글보다 나무아미타불 한 마디로 백성에게 다가가셨소.' },
       { who:'npc', t:'당으로 가는 길에 원효 스님과 함께였습니다. 밤중에 무덤가에서 자다가 목이 말라, 어둠 속에서 물을 떠 마셨지요. 참 달았습니다.' },
       { who:'npc', t:'날이 밝고 보니 해골에 고인 물이었습니다. 원효 스님은 그 자리에서 토하고는 깨달았지요 — 모든 것은 마음이 지어낸다고. 그러고는 발길을 돌려 신라로 돌아갔습니다. 저만 갔지요.' },
+      { who:'npc', t:'그보다 앞서 선덕여왕 때는 첨성대를 쌓아 하늘의 별과 날씨를 살폈지요. 농사와 나라의 길흉을 점치는 데 요긴했습니다.' },
+      { who:'doc', docImg:'assets/scenes/heritage_cheomseongdae.jpg',
+        t:'(경주 첨성대. 선덕여왕 때 세운 동양에서 가장 오래된 천문대 중 하나로 꼽힌다.)\n사진: 문화재청(현 국가유산청) · 공유마당 제공, 공공누리 제1유형' },
       { who:'npc', t:'신라 중대에는 감은사지·석굴암·불국사, 성덕대왕신종처럼 웅장한 불사가 이어졌습니다. 헌데 하대에 이르러 선종이 퍼지면서는 철감선사탑 같은 승탑이 유행했지요. 승려의 사리를 모신 무덤입니다.' },
+      { who:'doc', docImg:'assets/scenes/heritage_gameunsaji_tower.jpg',
+        t:'(경주 감은사지 삼층석탑. 문무왕의 뜻을 이어 아들 신문왕이 완성한 절터에 남은 통일 신라 초기의 웅장한 쌍탑이다.)\n사진: 국립중앙박물관 · 공유마당 제공, 공공누리 제1유형' },
+      { who:'doc', docImg:'assets/scenes/heritage_seokguram_buddha.jpg',
+        t:'(석굴암 본존불. 화강암을 짜올린 인공 석굴 안에 모신, 통일 신라 불교 조각의 정수로 꼽히는 불상이다.)\n사진: 故한석홍 기증 사진자료 · 공유마당 제공, 공공누리 제1유형' },
+      { who:'doc', docImg:'assets/scenes/heritage_bulguksa_tower.jpg',
+        t:'(불국사 삼층석탑, 흔히 석가탑이라 부른다. 다보탑과 마주 보고 서 있으며, 균형 잡힌 비례로 통일 신라 석탑의 전형을 보여준다.)\n사진: 국립문화재연구소 · 공유마당 제공, 공공누리 제1유형' },
+      { who:'doc', docImg:'assets/scenes/heritage_seongdeokdaewang_bell.jpg',
+        t:'(성덕대왕신종. 봉덕사에 있던 종이라 봉덕사종이라고도 하며, 현존하는 한국 종 가운데 가장 크고 정교한 문양을 지녔다.)\n사진: 국가유산청 · 공유마당 제공, 공공누리 제1유형' },
       { who:'npc', t:'불국사 삼층석탑, 흔히 석가탑이라 부르는 그 탑을 해체하다가 무구정광대다라니경이 나왔습니다. 지금 남아 있는 것 가운데 가장 오래된 목판 인쇄물이지요.' },
+      { who:'doc', docImg:'assets/scenes/heritage_mugujeonggwang_darani.jpg',
+        t:'(불국사 삼층석탑에서 무구정광대다라니경과 함께 나온 유물로, 국립중앙박물관이 소장하고 있다.)\n사진: 국립중앙박물관 · 공유마당 제공, 공공누리 제1유형' },
     ],
     quizSeq: [
       { q:'당에서 화엄을 배우고 돌아와 부석사를 세우고 「화엄일승법계도」를 지은 승려는?',
@@ -1475,6 +1492,22 @@ const Dialog = {
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
     document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
+    const dlgTop = document.getElementById('dlg-top');
+    const docEl = document.getElementById('dlg-doc');
+    const textEl = document.getElementById('dlg-text');
+    if (beat.docImg){
+      // 실제 문화유산 사진을 보여주는 연출: 인물 초상/이름 줄은 숨기고
+      // 이 그래픽 자체와 캡션(출처 포함)만 보여준다.
+      if (dlgTop) dlgTop.style.display = 'none';
+      docEl.style.display = 'block';
+      docEl.style.backgroundImage = `url('${beat.docImg}')`;
+      textEl.classList.add('caption');
+      textEl.textContent = beat.t;
+      return;
+    }
+    if (dlgTop) dlgTop.style.display = 'flex';
+    docEl.style.display = 'none';
+    textEl.classList.remove('caption');
     document.getElementById('dlg-text').innerHTML = glossarize(beat.t);
   },
   next(){

@@ -63,6 +63,9 @@
     box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
   .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; color: #afa38f; }
+  .dlg-doc { display: none; width: 100%; border-radius: 10px; margin-bottom: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.4); background-size: contain; background-repeat: no-repeat;
+    background-position: center; aspect-ratio: 900 / 420; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
@@ -372,10 +375,11 @@
       <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
       <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
-        <div class="dlg-top">
+        <div class="dlg-top" id="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
           <div class="dlg-name" id="dlg-name"></div>
         </div>
+        <div class="dlg-doc" id="dlg-doc"></div>
         <div class="dlg-chart" id="dlg-chart" hidden></div>
         <div class="dlg-box" id="dlg-text"></div>
         <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
@@ -1169,6 +1173,8 @@ null,
 { name: '법왕' },
 { name: '무왕', note: '서동요', active: true },
 ], cross: [] }, t:'왕이 된 무왕은 금마저(지금의 익산)에 큰 절을 세웠다더군 — 미륵사일세. 세 개의 탑과 금당을 나란히 둔, 백제 최대의 절이었다지.' },
+      { who:'doc', docImg:'assets/scenes/heritage_mireuksaji_tower.jpg',
+        t:'(익산 미륵사지 석탑. 현존하는 삼국 시대 석탑 중 가장 크며, 목탑의 짜임새를 그대로 돌에 옮긴 초기 백제 석탑 양식을 보여준다.)\n사진: 셀수스협동조합 · 공유마당 제공, 기증저작물(자유이용)' },
       { who:'npc', chart:{ type: 'kings', main: [
 { name: '무령왕', note: '22담로' },
 { name: '성왕', note: '사비 천도' },
@@ -1205,6 +1211,8 @@ null,
       { who:'npc', t:'그 남진의 자취는 충주에도 비석으로 남아 있네 — 중원고구려비일세. 신라 왕을 매금이라 낮춰 불렀으니, 그때 우리 세력이 남한강 유역까지 미쳤다는 뜻이지. 한반도에 남은 하나뿐인 고구려 비석이라네.' },
       { who:'npc', t:'우리 무덤 안에는 그림을 그린다네. 사냥하는 모습, 씨름하는 모습, 그리고 사방을 지키는 네 신령까지.' },
       { who:'npc', t:'그 무덤들이 모여 있는 곳이 지안, 옛 국내성 자리일세. 무용총엔 사냥하는 수렵도가, 각저총엔 씨름하는 그림이 남아 있고, 돌을 계단처럼 쌓아 올린 장군총도 그 곁에 있지.' },
+      { who:'doc', docImg:'assets/scenes/heritage_muyongchong_suryeopdo.jpg',
+        t:'(무용총 수렵도 모사도. 말을 타고 활을 쏘며 호랑이와 사슴을 사냥하는 고구려인의 힘찬 모습을 담았다.)\n사진: 국립중앙박물관 · 공유마당 제공, 공공누리 제1유형' },
       { who:'npc', t:'수나라가 백만 대군을 끌고 왔을 때, 을지문덕 장군이 적장 우중문에게 시를 한 수 보냈다네.' },
       { who:'npc', t:'"그대의 신묘한 계책은 하늘의 이치를 다했고, 오묘한 셈은 땅의 이치를 다했도다. 싸움에 이겨 공이 이미 높으니, 만족함을 알고 그만두기를 바라노라." — 겉으로는 칭찬, 속으로는 조롱일세. 그러고는 살수에서 몰살시켰지.' },
       { who:'npc', t:'고구려를 세운 주몽 이야기도 아는가. 알에서 태어났다 하여 버려졌는데, 짐승들이 밟지 않고 새들이 날개로 덮어 주었다지.' },
@@ -1682,6 +1690,22 @@ const Dialog = {
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
     document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
+    const dlgTop = document.getElementById('dlg-top');
+    const docEl = document.getElementById('dlg-doc');
+    const textEl = document.getElementById('dlg-text');
+    if (beat.docImg){
+      // 실제 문화유산 사진을 보여주는 연출: 인물 초상/이름 줄은 숨기고
+      // 이 그래픽 자체와 캡션(출처 포함)만 보여준다.
+      if (dlgTop) dlgTop.style.display = 'none';
+      docEl.style.display = 'block';
+      docEl.style.backgroundImage = `url('${beat.docImg}')`;
+      textEl.classList.add('caption');
+      textEl.textContent = beat.t;
+      return;
+    }
+    if (dlgTop) dlgTop.style.display = 'flex';
+    docEl.style.display = 'none';
+    textEl.classList.remove('caption');
     document.getElementById('dlg-text').innerHTML = glossarize(beat.t);
   },
   next(){
