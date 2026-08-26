@@ -206,6 +206,11 @@
   .kp-line { position:absolute; left:20px; top:24px; height:2px; z-index:0;
     background: linear-gradient(90deg, transparent, #5a4a30 8%, #5a4a30 100%); }
   .kp-king { position:absolute; top:8px; width:108px; display:flex; flex-direction:column; align-items:center; padding:0 5px; z-index:1; }
+  /* 초상화(54px 세로)는 원형 배지(40px)보다 커서, 배지 기준으로 맞춘
+     가로 진행선(top:24px)이 원 안이 아니라 초상화 얼굴·왕관 높이를
+     가로질러 버렸다(왕관이 잘려 보인다는 지적). 초상화가 있는 왕은
+     발밑이 선에 닿도록 블록 전체를 위로 올린다. */
+  .kp-king.kp-has-p { top:-29px; }
   .kp-king .kp-badge { position:relative; width:40px; height:40px; border-radius:50%; display:flex; align-items:center;
     justify-content:center; font-weight:700; font-size:11.5px;
     background:#2a2013; border:2px solid #4a3c26; color:#9c8d70; }
@@ -542,7 +547,7 @@ function openKingsModal(era){
     return `<div class="kp-country"><span class="kp-cname">${country}<span class="kp-ccount">· 왕 ${kings.length}명 · 출제 합계 ${total}회</span></span>
       <div class="kp-strip" style="width:${trackW}px">
         <div class="kp-line" style="width:${lineW}px"></div>` + positioned.map(({ k, x, stagger }) => `
-        <div class="kp-king${stagger ? ' kp-stag' : ''}" data-t="${kingsTier(k.n)}" style="left:${x}px">
+        <div class="kp-king${stagger ? ' kp-stag' : ''}${k.p ? ' kp-has-p' : ''}" data-t="${kingsTier(k.n)}" style="left:${x}px">
           <div class="kp-badge${k.p ? ' has-p' : ''}">${k.p ? `<img src="assets/portraits/${k.p}.png" alt=""><span class="kp-tier-dot"></span><span class="kp-n">${k.n}</span>` : k.n}${kingsDupDot(k.name, era, country, k.year)}</div>
           <div class="kp-label">
             <div class="kp-nm">${k.name}</div>
@@ -589,12 +594,21 @@ function renderEraList(){
     const hasKings = !!KINGS_BY_ERA[e.title];
     const pctLine = e.pct ? `<span class="era-pct">기출 ${e.pct}</span>` : '';
     const mascotW = e.mascot ? (e.mascotW || 112) : 0;
+    // 마스코트는 세로 모드에서 옆으로 90도 누워 보이는데(#wrap 회전 트릭),
+    // 그림마다 원래 폭(mascotW, 65~116px)이 달라 예전처럼 오른쪽 끝을
+    // 다들 10px로 고정해 버리면 그 폭 차이가 화면 회전 후 "세로 중심선이
+    // 안 맞는" 것으로 보였다(실제 사용자 지적). 가장 넓은 마스코트
+    // (단군왕검 116px) 기준으로 폭이 좁을수록 더 안쪽으로 밀어 넣어,
+    // 모든 마스코트의 가로 중심이 한 지점(오른쪽에서 68px)에 오게 한다.
+    const MASCOT_MAX_W = 116;
+    const mascotRight = e.mascot ? 10 + (MASCOT_MAX_W - mascotW) / 2 : 10;
     const mascotHtml = e.mascot ? `<div class="era-mascot"
         style="background-image:url('assets/mascots/${e.mascot}.png?v=${MASCOT_V}');
-        width:${mascotW}px; height:${e.mascotH || 112}px"
+        width:${mascotW}px; height:${e.mascotH || 112}px; right:${mascotRight}px"
         title="${e.title}"></div>` : '';
+    const examBtnRight = mascotRight + mascotW + 14;
     const examBtnHtml = `<a class="era-exam-btn" href="exam_practice.html?era=${eraIdx}"
-        style="right:${mascotW + 24}px" title="${e.title} 기출문제 풀이">
+        style="right:${examBtnRight}px" title="${e.title} 기출문제 풀이">
         <svg class="eb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
         <span class="eb-title">기출문제</span><span class="eb-sub">풀어보기</span>
       </a>`;
