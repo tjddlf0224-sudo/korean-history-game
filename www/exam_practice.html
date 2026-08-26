@@ -22,51 +22,57 @@
     calc(20px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));
     display:flex; flex-direction:column; }
 
-  .topbar { display:flex; align-items:center; gap:10px; margin-bottom: 14px; flex: none; }
+  .topbar { display:flex; align-items:center; gap:10px; margin-bottom: 16px; flex: none; }
   #back-btn { flex:none; width:32px; height:32px; border-radius:50%; border:1px solid #4a3c26;
     background:#2a2013; color:#f5ecd8; display:flex; align-items:center; justify-content:center;
     text-decoration:none; }
   #back-btn svg { width:16px; height:16px; }
-  .topbar h1 { margin:0; font-size:15px; color:#f0c96b; font-weight:700; }
-  .topbar .sub { margin:1px 0 0; font-size:11px; color:#b8a888; }
-  #progress-pill { margin-left:auto; flex:none; font-size:11px; color:#e9c979; background:#241c12;
-    border:1px solid #3a2c1a; border-radius:999px; padding:4px 10px; font-variant-numeric: tabular-nums; }
-
-  /* ---- 시작 화면 ---- */
-  #screen-start { flex:1 1 auto; display:none; flex-direction:column; align-items:center;
-    justify-content:center; text-align:center; gap:16px; padding-bottom: 10vh; }
-  #screen-start.show { display:flex; }
-  #screen-start .big-icon { font-size:44px; }
-  #screen-start h2 { margin:0; font-size:20px; color:#f0c96b; }
-  #screen-start p { margin:0; font-size:13px; line-height:1.7; color:#cfc7de; max-width:420px; }
-  #screen-start .stat-row { display:flex; gap:10px; margin-top:4px; }
-  .stat-chip { background:#241c12; border:1px solid #3a2c1a; border-radius:12px; padding:8px 14px;
-    font-size:12px; color:#d8ccb5; }
-  .stat-chip b { display:block; font-size:18px; color:#f0c96b; font-variant-numeric: tabular-nums; }
-  #start-btn { margin-top:10px; background:#c9b8f0; color:#0c0f14; border:none; text-decoration:none;
-    padding:14px 32px; border-radius:999px; font-size:15px; font-weight:bold; cursor:pointer;
-    font-family:inherit; }
+  .topbar h1 { margin:0; font-size:16px; color:#f0c96b; font-weight:700; }
+  #progress-pill { margin-left:auto; flex:none; font-size:12px; color:#e9c979; background:#241c12;
+    border:1px solid #3a2c1a; border-radius:999px; padding:5px 12px; font-variant-numeric: tabular-nums; }
 
   /* ---- 문제 화면 ---- */
   #screen-quiz { flex:1 1 auto; display:none; flex-direction:column; }
   #screen-quiz.show { display:flex; }
-  #progress-track { position:relative; height:4px; border-radius:2px; background:#241c12; flex:none; margin-bottom:16px; }
-  #progress-fill { position:absolute; left:0; top:0; height:100%; border-radius:2px; background:#d9a441; transition:width .3s; }
-  .q-src { font-size:11px; color:#afa38f; margin-bottom:8px; }
-  .q-passage { background:#1c150c; border:1px solid #3a2c1a; border-left:3px solid #d9a441; border-radius:8px;
-    padding:12px 14px; font-size:13px; line-height:1.7; color:#cfc7de; margin-bottom:14px; white-space:pre-wrap; }
-  .q-text { font-size:16px; line-height:1.6; margin-bottom:16px; font-weight:700; }
-  .q-opts { display:flex; flex-direction:column; gap:8px; flex:none; }
-  .q-opt { padding:13px 14px; border-radius:12px; border:1px solid #51432c; background:#2a2013; color:#f5ecd8;
-    font-size:14px; text-align:left; font-family:inherit; cursor:pointer; line-height:1.5; }
-  .q-opt .opt-num { color:#e9c979; margin-right:6px; }
+  #progress-track { position:relative; height:4px; border-radius:2px; background:#241c12; flex:none; margin-bottom:18px; }
+  #progress-fill { position:absolute; left:0; top:0; height:100%; border-radius:2px;
+    background:linear-gradient(90deg, #a8781f, #f0c96b); transition:width .3s; }
+  .q-src { font-size:12px; color:#afa38f; margin-bottom:10px; letter-spacing:.02em; }
+
+  /* 제시문(사료) 카드 — 게임 속 실제 문서처럼, 낡은 종이 위에 먹으로 쓴
+     듯한 재질감을 준다. 살짝 비뚤어진 각도 + 불규칙한 모서리 + 은은한
+     얼룩(radial-gradient 여러 겹)으로 "인쇄물"이 아니라 "손에 든 사료"
+     처럼 보이게 한다. 도장(인장)은 실제 역사 문서의 관인 느낌을 낸다. */
+  .q-passage-wrap { position:relative; margin: 4px 6px 20px; }
+  .q-passage { position:relative; transform:rotate(-0.6deg);
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(120,90,40,.10), transparent 45%),
+      radial-gradient(ellipse at 85% 75%, rgba(120,90,40,.12), transparent 50%),
+      radial-gradient(ellipse at 60% 10%, rgba(80,60,30,.08), transparent 40%),
+      #e8dcbc;
+    color:#3b2c18; border-radius: 3px 12px 5px 14px;
+    padding:18px 20px; font-size:17px; line-height:1.85; white-space:pre-wrap;
+    box-shadow: 0 8px 18px rgba(0,0,0,.45), inset 0 0 0 1px rgba(120,90,40,.25);
+  }
+  .q-passage::before { /* 세로 줄무늬 — 살짝 눈에 띄는 종이 결 */
+    content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(120,90,40,.035) 18px 19px);
+  }
+  .q-seal { position:absolute; top:-10px; right:2px; width:40px; height:40px; z-index:2;
+    transform:rotate(8deg); filter:drop-shadow(0 3px 4px rgba(0,0,0,.5)); }
+
+  .q-text { font-size:19px; line-height:1.65; margin-bottom:18px; font-weight:700; color:#f9f1de; }
+  .q-opts { display:flex; flex-direction:column; gap:9px; flex:none; }
+  .q-opt { padding:14px 16px; border-radius:12px; border:1px solid #51432c; background:#2a2013; color:#f5ecd8;
+    font-size:17px; text-align:left; font-family:inherit; cursor:pointer; line-height:1.55; }
+  .q-opt .opt-num { color:#e9c979; margin-right:8px; font-weight:700; }
   .q-opt.correct { background:#253d2c; border-color:#7faf8b; }
   .q-opt.wrong { background:#3d2622; border-color:#d96b5f; }
   .q-opt:disabled { opacity:.6; cursor:default; }
-  .q-fb { margin-top:12px; font-size:13px; line-height:1.6; color:#d8ccb5; min-height:20px; }
-  .q-next { text-align:right; margin-top:14px; }
-  #next-btn { background:#c9b8f0; color:#0c0f14; border:none; padding:11px 24px; border-radius:999px;
-    font-size:13px; font-weight:bold; cursor:pointer; font-family:inherit; opacity:0; pointer-events:none;
+  .q-fb { margin-top:14px; font-size:15px; line-height:1.65; color:#d8ccb5; min-height:20px; }
+  .q-next { text-align:right; margin-top:16px; }
+  #next-btn { background:#c9b8f0; color:#0c0f14; border:none; padding:12px 26px; border-radius:999px;
+    font-size:14px; font-weight:bold; cursor:pointer; font-family:inherit; opacity:0; pointer-events:none;
     transition:opacity .2s; }
   #next-btn.show { opacity:1; pointer-events:auto; }
 
@@ -76,17 +82,17 @@
   .result-score { text-align:center; padding: 18px 0 22px; flex:none; }
   .result-score .num { font-size:44px; font-weight:bold; color:#f0c96b; font-family:"Gugi", "Gowun Batang", serif; }
   .result-score .denom { font-size:16px; color:#afa38f; }
-  .result-score .msg { margin-top:6px; font-size:13px; color:#cfc7de; }
+  .result-score .msg { margin-top:6px; font-size:14px; color:#cfc7de; }
   .result-list { flex:1 1 auto; overflow-y:auto; }
-  .result-item { background:#1c150c; border:1px solid #3a2c1a; border-radius:10px; padding:12px 14px; margin-bottom:8px; }
-  .result-item .ri-q { font-size:13px; font-weight:700; margin-bottom:6px; line-height:1.5; }
-  .result-item .ri-ans { font-size:12px; color:#9fd4ab; margin-bottom:4px; }
-  .result-item .ri-mine { font-size:12px; color:#e79f95; margin-bottom:4px; }
-  .result-item .ri-fb { font-size:12px; color:#b8a888; line-height:1.5; }
-  .result-empty { text-align:center; padding:30px 0; color:#9fd4ab; font-size:14px; }
+  .result-item { background:#1c150c; border:1px solid #3a2c1a; border-radius:10px; padding:13px 15px; margin-bottom:9px; }
+  .result-item .ri-q { font-size:14px; font-weight:700; margin-bottom:7px; line-height:1.55; }
+  .result-item .ri-ans { font-size:13px; color:#9fd4ab; margin-bottom:4px; }
+  .result-item .ri-mine { font-size:13px; color:#e79f95; margin-bottom:4px; }
+  .result-item .ri-fb { font-size:13px; color:#b8a888; line-height:1.55; }
+  .result-empty { text-align:center; padding:30px 0; color:#9fd4ab; font-size:15px; }
   .result-btns { flex:none; display:flex; gap:10px; margin-top:16px; }
   .result-btns a, .result-btns button { flex:1; text-align:center; text-decoration:none; font-family:inherit;
-    border:1px solid #4a3c26; border-radius:12px; padding:12px; font-size:13px; cursor:pointer; }
+    border:1px solid #4a3c26; border-radius:12px; padding:13px; font-size:14px; cursor:pointer; }
   .result-btns .primary { background:#c9b8f0; color:#0c0f14; font-weight:bold; border:none; }
   .result-btns .secondary { background:#2a2013; color:#f5ecd8; }
 
@@ -100,30 +106,22 @@
 
   <div class="topbar">
     <a id="back-btn" href="index.html" aria-label="챕터 목록으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
-    <div>
-      <h1 id="era-title">기출문제 풀이</h1>
-      <p class="sub" id="era-sub"></p>
-    </div>
+    <h1 id="era-title">기출문제 풀이</h1>
     <div id="progress-pill" style="display:none"></div>
   </div>
 
   <div id="loading">불러오는 중…</div>
 
-  <div id="screen-start">
-    <div class="big-icon">📜</div>
-    <h2 id="start-title">기출문제 풀이</h2>
-    <p>이 시대를 배경으로 한 실제 기출 스타일 5지선다 문제를 풀어봅니다. 게임 속 대사만으로 풀 수 있는지 확인해 보세요.</p>
-    <div class="stat-row">
-      <div class="stat-chip"><b id="stat-count">0</b>문항</div>
-      <div class="stat-chip"><b id="stat-rounds">0</b>개 회차 기출 반영</div>
-    </div>
-    <button id="start-btn">시작하기 · Let's Go!</button>
-  </div>
-
   <div id="screen-quiz">
     <div id="progress-track"><div id="progress-fill" style="width:0%"></div></div>
     <div class="q-src" id="q-src"></div>
-    <div class="q-passage" id="q-passage" style="display:none"></div>
+    <div class="q-passage-wrap" id="q-passage-wrap" style="display:none">
+      <svg class="q-seal" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="#a83232" stroke="#7a2222" stroke-width="1.5"/>
+        <text x="20" y="27" text-anchor="middle" font-size="17" font-family="Gowun Batang, serif" fill="#f5ecd8">史</text>
+      </svg>
+      <div class="q-passage" id="q-passage"></div>
+    </div>
     <div class="q-text" id="q-text"></div>
     <div class="q-opts" id="q-opts"></div>
     <div class="q-fb" id="q-fb"></div>
@@ -161,6 +159,7 @@ applyOrientation();
 
 /* index.html의 ERAS 배열과 같은 순서 — era= 쿼리는 이 배열의 인덱스. */
 const ERA_TITLES = ['선사·초기국가','고대','고려','조선 전기','조선 후기','근대·개항기','일제강점기','현대','시대 통합'];
+const CIRCLED = ['①','②','③','④','⑤'];
 
 const params = new URLSearchParams(location.search);
 const eraIdx = parseInt(params.get('era'), 10);
@@ -168,18 +167,13 @@ const eraTitle = ERA_TITLES[eraIdx];
 
 const els = {
   loading: document.getElementById('loading'),
-  screenStart: document.getElementById('screen-start'),
   screenQuiz: document.getElementById('screen-quiz'),
   screenResult: document.getElementById('screen-result'),
   eraTitle: document.getElementById('era-title'),
-  eraSub: document.getElementById('era-sub'),
-  startTitle: document.getElementById('start-title'),
-  statCount: document.getElementById('stat-count'),
-  statRounds: document.getElementById('stat-rounds'),
-  startBtn: document.getElementById('start-btn'),
   progressPill: document.getElementById('progress-pill'),
   progressFill: document.getElementById('progress-fill'),
   qSrc: document.getElementById('q-src'),
+  qPassageWrap: document.getElementById('q-passage-wrap'),
   qPassage: document.getElementById('q-passage'),
   qText: document.getElementById('q-text'),
   qOpts: document.getElementById('q-opts'),
@@ -217,7 +211,6 @@ let order = [];
 let mistakes = [];
 
 function showScreen(name){
-  els.screenStart.classList.toggle('show', name === 'start');
   els.screenQuiz.classList.toggle('show', name === 'quiz');
   els.screenResult.classList.toggle('show', name === 'result');
   els.progressPill.style.display = name === 'quiz' ? '' : 'none';
@@ -238,10 +231,10 @@ function renderQuestion(){
   els.progressFill.style.width = (qIdx / queue.length * 100) + '%';
   els.qSrc.textContent = formatSrc(data.src);
   if (data.passage){
-    els.qPassage.style.display = '';
+    els.qPassageWrap.style.display = '';
     els.qPassage.textContent = data.passage;
   } else {
-    els.qPassage.style.display = 'none';
+    els.qPassageWrap.style.display = 'none';
     els.qPassage.textContent = '';
   }
   els.qText.textContent = data.q;
@@ -254,7 +247,7 @@ function renderQuestion(){
   optButtons = order.map((origIdx, i) => {
     const b = document.createElement('button');
     b.className = 'q-opt';
-    b.innerHTML = `<span class="opt-num">${i + 1}.</span>${data.opts[origIdx]}`;
+    b.innerHTML = `<span class="opt-num">${CIRCLED[i]}</span>${data.opts[origIdx]}`;
     b.onclick = () => pick(i);
     els.qOpts.appendChild(b);
     return b;
@@ -321,8 +314,7 @@ function finishSession(){
   }
 }
 
-els.startBtn.onclick = startSession;
-els.retryBtn.onclick = () => { showScreen('start'); };
+els.retryBtn.onclick = startSession;
 
 if (!eraTitle){
   els.loading.textContent = '이 시대를 찾을 수 없어요. 챕터 목록에서 다시 들어와 주세요.';
@@ -331,15 +323,9 @@ if (!eraTitle){
     .then(r => r.json())
     .then(all => {
       pool = all.filter(item => item.era === eraTitle);
-      const allRounds = new Set();
-      pool.forEach(item => (item.src || []).forEach(r => allRounds.add(r)));
       els.loading.style.display = 'none';
       els.eraTitle.textContent = eraTitle + ' · 기출문제';
-      els.eraSub.textContent = '실제 기출 발문 형식을 흉내 낸 연습 문제';
-      els.startTitle.textContent = eraTitle;
-      els.statCount.textContent = pool.length;
-      els.statRounds.textContent = allRounds.size;
-      showScreen('start');
+      startSession();
     })
     .catch(() => { els.loading.textContent = '문제를 불러오지 못했어요. 새로고침해 주세요.'; });
 }
