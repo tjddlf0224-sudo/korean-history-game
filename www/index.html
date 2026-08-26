@@ -198,7 +198,11 @@
      함께 가로 스크롤한다(줄마다 스크롤이 있으면 다시 어긋난다). */
   .kp-hscroll { overflow-x:auto; scrollbar-width: none; -ms-overflow-style: none; }
   .kp-hscroll::-webkit-scrollbar { display: none; }
-  .kp-strip { position:relative; height:156px; padding:8px 8px 10px; }
+  .kp-strip { position:relative; height:156px; padding:8px 8px 10px; margin-top:30px; }
+  /* margin-top: 초상화 있는 왕(.kp-has-p)이 발밑을 선에 맞추려고 블록을
+     29px 위로 올리는데(왕관이 선에 안 걸리게), 그 여유 공간이 없으면
+     바로 위 나라 이름 줄과 겹쳐서 글자가 잘렸다(고려·조선전기 등에서
+     실제 발생) — 그만큼 위에 미리 여백을 깔아 둔다. */
   /* 예전엔 ::before로 줄 전체 폭(20px~right:20px)에 선을 그렸는데, 그러면
      나라가 일찍 멸망해도 선이 트랙 끝까지 이어져 마치 그 뒤로도 왕조가
      계속되는 것처럼 보였다. 이제 실제 엘리먼트로 그려서, 그 나라의
