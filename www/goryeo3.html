@@ -63,6 +63,9 @@
     box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
   .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; color: #afa38f; }
+  .dlg-doc { display: none; width: 100%; border-radius: 10px; margin-bottom: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.4); background-size: contain; background-repeat: no-repeat;
+    background-position: center; aspect-ratio: 900 / 420; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
@@ -371,10 +374,11 @@
       <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
       <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
-        <div class="dlg-top">
+        <div class="dlg-top" id="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
           <div class="dlg-name" id="dlg-name"></div>
         </div>
+        <div class="dlg-doc" id="dlg-doc"></div>
         <div class="dlg-chart" id="dlg-chart" hidden></div>
         <div class="dlg-box" id="dlg-text"></div>
         <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
@@ -1161,7 +1165,11 @@ const NPC_DATA = {
       { who:'npc', t:'흩어진 불경을 모아 목록을 만들고 속장경을 펴냈소. 화폐를 쓰자고 조정에 아뢴 것도 나였지.' },
       { who:'npc', t:'불경만이 아니라 이 땅의 탑도 눈여겨보시게. 고려의 탑은 신라의 반듯한 3층 석탑과 달리 다각 다층으로 자유분방했고, 안정감보다는 화려한 조형미를 앞세웠소.' },
       { who:'npc', t:'그중에도 개경 경천사에 세운 십층 석탑은 원의 양식을 받아들여 대리석으로 짓고 구석구석 정교한 조각을 새겼지. 부석사 소조여래좌상처럼 신라의 단아한 양식을 고이 이은 것도 있었지만, 탑만큼은 확실히 새로운 멋을 냈소.' },
+      { who:'doc', docImg:'assets/scenes/heritage_gyeongcheonsa_tower.jpg',
+        t:'(지금은 국립중앙박물관 실내에 옮겨 세운 경천사지 십층 석탑. 원의 영향을 받은 대리석 탑으로, 구석구석 화려한 조각이 새겨져 있다.)\n사진: 이상화(문화유산 사진작가) · 공유마당 제공, CC BY' },
       { who:'npc', t:'반면 안동 봉정사 극락전은 지금 남은 목조 건물 중 가장 오래되었고, 부석사 무량수전과 수덕사 대웅전도 그 무렵 세운 그대로요. 모두 기둥 위에만 짜임을 얹은 수수한 주심포 양식이지 — 경천사 탑의 화려함과는 결이 다르오.' },
+      { who:'doc', docImg:'assets/scenes/heritage_buseoksa_muryangsujeon.jpg',
+        t:'(영주 부석사 무량수전. 배흘림기둥과 수수한 주심포 양식으로 유명한, 현존하는 가장 오래된 목조 건물 중 하나다. 앞에 놓인 것은 국보 부석사 석등이다.)\n사진: 이상화(문화유산 사진작가) · 공유마당 제공, 공공누리 제1유형' },
       { who:'npc', t:'그릇도 한몫했소. 12세기에는 그릇 겉에 무늬를 새기고 백토·흑토로 메우는 상감법을 개발해 상감청자를 빚었지. 고려만의 솜씨였소.' },
       { who:'npc', t:'지방 호족들이 세운 불상도 저마다 개성이 있었소. 안동 이천동의 마애여래입상은 바위에 몸을 새기고 머리를 얹어 거대하고, 하남 하사창동의 철조 석가여래좌상은 쇠로 지어 소박하지.' },
     ],
@@ -1486,6 +1494,22 @@ const Dialog = {
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
     document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
+    const dlgTop = document.getElementById('dlg-top');
+    const docEl = document.getElementById('dlg-doc');
+    const textEl = document.getElementById('dlg-text');
+    if (beat.docImg){
+      // 실제 문화유산 사진을 보여주는 연출: 인물 초상/이름 줄은 숨기고
+      // 이 그래픽 자체와 캡션(출처 포함)만 보여준다.
+      if (dlgTop) dlgTop.style.display = 'none';
+      docEl.style.display = 'block';
+      docEl.style.backgroundImage = `url('${beat.docImg}')`;
+      textEl.classList.add('caption');
+      textEl.textContent = beat.t;
+      return;
+    }
+    if (dlgTop) dlgTop.style.display = 'flex';
+    docEl.style.display = 'none';
+    textEl.classList.remove('caption');
     document.getElementById('dlg-text').innerHTML = glossarize(beat.t);
   },
   next(){
