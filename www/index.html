@@ -100,6 +100,18 @@
     background-repeat:no-repeat; background-size: 100% 100%; background-position: 0 0;
     image-rendering:-webkit-optimize-contrast; }
 
+  /* 기출문제 풀이 버튼 — 마스코트 왼쪽에 겹쳐 띄운다. 마스코트와 같은
+     이유(가로 진행선을 밀어내지 않고 그 위를 덮게)로 position:absolute +
+     z-index를 쓴다. 마스코트 폭이 시대마다 달라서(65~116px) right 오프셋을
+     인라인 스타일로 개별 계산해 넣는다. */
+  .era-exam-btn { position: absolute; top: 30px; z-index: 3; width: 66px; padding: 9px 5px;
+    border-radius: 13px; background: linear-gradient(180deg, #3a2c1a, #241c12); border: 1px solid #d9a441;
+    color: #f0c96b; font-family: "Gowun Batang", serif; font-size: 11px; font-weight: 700;
+    line-height: 1.4; text-align: center; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,.45);
+    text-decoration: none; display: block; }
+  .era-exam-btn .eb-sub { display: block; font-size: 10px; color: #f5ecd8; font-weight: 400; margin-top: 2px; }
+  .era-exam-btn:active { transform: translateY(1px); }
+
   /* 시대 진행선 — 시작(금색 점) → 현재(최근 학습한 챕터, 빛나는 고리) →
      끝(빈 점). 카드 목록 위, 헤더 아래 가로선으로 "이 시대의 어디쯤"을
      보여준다. 최근 학습한 챕터가 없는 시대는 고리 없이 선만 보인다. */
@@ -558,22 +570,26 @@ const eraListEl = document.getElementById('era-list');
 // (선사·초기국가)를 펼쳐 둔다.
 function renderEraList(){
   eraListEl.innerHTML = '';
-  ERAS.forEach(e => {
+  ERAS.forEach((e, eraIdx) => {
     const section = document.createElement('div');
     section.className = 'era-section';
 
     const hasKings = !!KINGS_BY_ERA[e.title];
     const pctLine = e.pct ? `<span class="era-pct">기출 ${e.pct}</span>` : '';
+    const mascotW = e.mascot ? (e.mascotW || 112) : 0;
     const mascotHtml = e.mascot ? `<div class="era-mascot"
         style="background-image:url('assets/mascots/${e.mascot}.png?v=${MASCOT_V}');
-        width:${e.mascotW || 112}px; height:${e.mascotH || 112}px"
+        width:${mascotW}px; height:${e.mascotH || 112}px"
         title="${e.title}"></div>` : '';
+    const examBtnHtml = `<a class="era-exam-btn" href="exam_practice.html?era=${eraIdx}"
+        style="right:${mascotW + 24}px" title="${e.title} 기출문제 풀이">기출문제<span class="eb-sub">Let's Go!</span></a>`;
     section.innerHTML = `
       <div class="era-dot"></div>
       <div class="era-header">
         <span class="era-title${hasKings ? ' clk' : ''}"${hasKings ? ` title="누르면 이 시대 왕 계보 보기"` : ''}>${e.title}</span>
         <span class="era-year">${e.year}</span>
         ${pctLine}
+        ${examBtnHtml}
         ${mascotHtml}
       </div>`;
     if (e.cards){
