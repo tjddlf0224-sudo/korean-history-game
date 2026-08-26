@@ -136,7 +136,8 @@
      키우고 이름·설명은 그 아래 가운데 정렬로만 붙인다. */
   .badge-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:14px; }
   .badge-item { display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; padding:6px 4px; }
-  .badge-item .b-icon { font-size:40px; opacity:.3; filter:grayscale(1); }
+  .badge-item .b-icon { width:44px; height:44px; opacity:.3; filter:grayscale(1); }
+  .badge-item .b-icon img { display:block; width:100%; height:100%; object-fit:contain; }
   .badge-item .b-name { font-size:11.5px; color:#8a7d68; }
   .badge-item .b-desc { font-size:9.5px; color:#6a5c48; line-height:1.4; }
   .badge-item.got .b-icon { opacity:1; filter:none; }
@@ -781,7 +782,7 @@ function renderBadges(){
       const got = !!earned[chapterBadgeId(c.href)];
       totalCount++;
       html += `<div class="badge-item${got ? ' got' : ''}">
-        <div class="b-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3l4 6 4-6"/><circle cx="12" cy="15" r="6"/><circle cx="12" cy="15" r="2.5"/></svg></div>
+        <div class="b-icon"><img src="assets/icons/badge_mapae.png" alt=""></div>
         <div class="b-name">${got ? c.num + ' ' + c.name : '???'}</div>
         <div class="b-desc">${got ? '완주' : '이 화를 끝까지 마치면 열립니다'}</div>
       </div>`;
@@ -794,7 +795,7 @@ function renderBadges(){
     const got = !!earned[id];
     totalCount++;
     html += `<div class="badge-item${got ? ' got' : ''}">
-      <div class="b-icon">${got ? def.icon : '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M7.5 11V7.5a4.5 4.5 0 019 0V11"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor" stroke="none"/><line x1="12" y1="16.8" x2="12" y2="18.5"/></svg>'}</div>
+      <div class="b-icon"><img src="assets/icons/badge_mapae.png" alt=""></div>
       <div class="b-name">${got ? def.name : '???'}</div>
       <div class="b-desc">${got ? def.desc : '아직 만나지 못한 배지'}</div>
     </div>`;
