@@ -591,7 +591,8 @@ const ZONES = {
     img: 'assets/scenes/seonsa1_chogiguk.png', label: '초기 국가 마을',
     spawn: { x: 688, y: 470 },
     barriers: [
-      { x0:0, y0:0, x1:620, y1:95 },  // 숲과 목책
+      { x0:0, y0:0, x1:375, y1:95 },  // 숲과 목책(왼쪽, 대문 앞까지)
+      { x0:460, y0:0, x1:620, y1:95 },  // 목책(대문 오른쪽)
       { x0:700, y0:0, x1:965, y1:150 },  // 초가집
       { x0:0, y0:155, x1:260, y1:330 },  // 마구간
       { x0:0, y0:310, x1:95, y1:420 },  // 헛간
@@ -611,7 +612,7 @@ const ZONES = {
       { id:'dongye', name:'동예 사람', x:688, y:560, img:'assets/portraits/dongye.png', look:{ role:'commoner', body:'#6b5a44', accent:'#c9a24a' } },
     ],
     exits: [
-      { rect:{x0:630,y0:0,x1:700,y1:58}, to:'seonsa', spawn:{x:688,y:690}, label:'선사의 강가로' },
+      { rect:{x0:385,y0:0,x1:450,y1:60}, to:'seonsa', spawn:{x:688,y:690}, label:'선사의 강가로' },
     ],
   },
 };
