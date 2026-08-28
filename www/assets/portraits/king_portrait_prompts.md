@@ -726,6 +726,114 @@ marshland hinted behind him evoking the escape-crossing legend.
 
 ---
 
+## 추가 — 전수조사로 발견한 8명 (2026-08-28)
+
+동명성왕 건으로 "다른 왕들도 이름이 달라서 못 찾은 거 아니냐"는 질문을 받고,
+아이클라우드에 있던 실제 원본 태그 데이터(74회분, 3,700문항의 era/topic
+기록)를 찾아 전수 대조했다. 새로 원 안 숫자가 0에서 양수로 바뀐 8명 전부
+초상화 추가 대상(기출 왕 n>0 규칙).
+
+```
+Cute chibi-style character portrait in the same art style as a Korean
+educational history game — big head (roughly head:body 1:2.2), soft
+cel-shaded coloring, clean black linework, warm semi-flat palette,
+gentle friendly expression, three-quarter or front-facing bust/full-body
+shot, plain white background, no drop shadow, no watermark, no text.
+Same rendering style across all characters in this sheet — consistent
+line weight, consistent shading style, consistent proportions.
+
+A grid sheet of 8 ancient/medieval Korean royal figures, evenly spaced,
+same scale:
+
+1. 위만(Wiman, Gojoseon) — id: wiman_king. Originally a general from the
+   Chinese state of Yan who fled east with a band of followers around
+   194 BCE; King Jun of Gojoseon granted him land as a border guardian,
+   but Wiman then turned his forces around and seized the throne for
+   himself. The Records of the Grand Historian note he adopted Gojoseon
+   dress and the topknot (sangtu) hairstyle to win local trust — plain
+   Gojoseon-style robe and a simple topknot rather than Chinese court
+   dress, but a shrewd, ambitious, calculating expression that hints at
+   his outsider origins and the betrayal to come, one hand resting near
+   a sword hilt.
+
+2. 준왕(King Jun, Gojoseon) — id: junwang_king. The last king of the
+   older Gojoseon line, betrayed and driven from his throne by Wiman
+   (whom he had trusted and given land to) around 194 BCE; fled south by
+   sea to the Han River region and declared himself "King of Han" among
+   the Mahan communities there. Weary, dignified king in retreat — plain
+   worn robe from a hasty departure, a small boat or southward coastline
+   hinted in the background, a bitter but proud expression of a
+   betrayed monarch refusing to fully surrender his dignity.
+
+3. 고국천왕(Gogukcheon, Goguryeo) — id: gogukcheon_king. Late-2nd-century
+   king remembered for instituting the Jindaebeop (진대법) in 194 CE —
+   Korea's earliest known relief-loan system, lending grain to poor
+   farmers in spring to be repaid after autumn harvest — after being
+   moved by a starving farmer's plight on a hunting trip. Warm,
+   compassionate expression, holding or gesturing toward a grain sack or
+   jar being distributed to a humble commoner, a caring ruler-of-the-
+   people mood rather than a warrior king.
+
+4. 무열왕/김춘추(Muyeol-wang / Kim Chunchu, Silla) — id: muyeol_king.
+   Silla's first king from true-bone (jingol) rather than sacred-bone
+   lineage, but far more famous for his pre-enthronement diplomatic
+   career as Kim Chunchu: personally traveled to Goguryeo to request
+   military aid (and was nearly imprisoned by Yeon Gaesomun), then
+   secured the pivotal Silla-Tang alliance by sailing to Tang China and
+   winning over Emperor Taizong — Samguk Yusa describes him as
+   remarkably handsome and charismatic. Refined, silver-tongued diplomat
+   bearing, elegant robe with a subtle nod to Tang-style court dress
+   (he was recorded as adopting Tang court costume after his mission),
+   confident persuasive expression, perhaps holding a diplomatic scroll
+   or gesturing as if mid-negotiation.
+
+5. 문주왕(Munju-wang, Baekje) — id: munju_king. Became king in 475 under
+   the worst possible circumstances — his father Gaero had just been
+   captured and executed by Goguryeo's Jangsu-wang, and Hanseong
+   (Baekje's capital) had fallen — forcing an emergency relocation of
+   the capital south to Ungjin (modern Gongju). Exhausted, grief-
+   stricken, and anxious expression, hastily-arranged traveling robes
+   rather than a formal enthronement outfit, a small retreating
+   procession or the silhouette of Ungjin's hills hinted behind him,
+   the weight of sudden catastrophe visible on his face.
+
+6. 동성왕(Dongseong-wang, Baekje) — id: dongseong_king. Late-5th-century
+   king who worked to restore Baekje's strength after the Hanseong
+   disaster — strengthened the Silla-Baekje alliance (Naje dongmaeng)
+   by marrying a Silla noblewoman in 493, and brought the Tamna
+   (Jeju Island) polity under Baekje's influence. Confident,
+   revitalizing young king's expression, a wedding/alliance motif (a
+   ceremonial sash or a Silla-style ornament as a subtle nod to the
+   marriage alliance), restoring rather than mourning mood — a contrast
+   to his predecessor Munju.
+
+7. 선덕여왕(Seondeok, Silla) — id: seondeok_queen. Silla's first reigning
+   queen (r. 632-647) — commissioned Cheomseongdae (one of the oldest
+   surviving astronomical observatories in East Asia) and, on monk
+   Jajang's advice, the nine-story wooden pagoda at Hwangnyongsa; famous
+   for the peony-painting legend where she deduced from a gift painting
+   that the flowers had no fragrance because no bees or butterflies were
+   painted alongside them, correctly foreseeing she would rule without a
+   husband. Elegant, wise queen in fine Silla royal dress and a jeweled
+   crown, serene intelligent expression, perhaps a small peony motif or
+   Cheomseongdae's distinctive bottle-shaped silhouette worked into the
+   background.
+
+8. 공양왕(Gongyang-wang, Goryeo) — id: gongyang_king. The last king of
+   Goryeo (r. 1389-1392), installed by Yi Seong-gye's faction as a
+   powerless figurehead specifically because he seemed easy to control;
+   his brief reign saw the 1391 Gwajeon Beop land reform that undercut
+   the old aristocracy's power base, and ended with his forced
+   abdication as Yi Seong-gye founded Joseon. Uneasy, hollow authority —
+   grand royal robes that seem to sit uncomfortably on him, a distant or
+   downcast gaze suggesting he knows the throne isn't really his,
+   melancholy rather than dignified.
+
+Each figure clearly separated with visible margin for easy cropping.
+```
+
+---
+
 ## 완료 후 연결 방법
 
 각 그리드 이미지를 받아 인물별로 잘라 `assets/portraits/{id}.png`로 저장한 뒤,
