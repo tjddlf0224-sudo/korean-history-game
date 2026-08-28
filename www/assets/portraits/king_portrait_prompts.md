@@ -834,6 +834,39 @@ Each figure clearly separated with visible margin for easy cropping.
 
 ---
 
+## 추가 — 순종(대한제국) (2026-08-28)
+
+전체 재집계(원본 태그 데이터 대조)로 근대·개항기/대한제국의 순종이 0→1회로
+바뀌면서 기출 왕 기준에 새로 들어옴. 신라·고려·조선 범위에서 초상화 없는
+마지막 한 명(다른 왕들은 전부 앞선 "전수조사로 발견한 8명"에 포함됨).
+
+```
+Cute chibi-style character portrait in the same art style as a Korean
+educational history game — big head (roughly head:body 1:2.2), soft
+cel-shaded coloring, clean black linework, warm semi-flat palette,
+gentle friendly expression, three-quarter or front-facing bust/full-body
+shot, plain white background, no drop shadow, no watermark, no text.
+
+A grid sheet of 1 late-Korean-Empire royal figure (single portrait, same
+composition rules as the other grids):
+
+1. 순종(Sunjong, Daehan Empire) — id: sunjong_king. Second and last
+   emperor of the Korean Empire (r. 1907-1910), enthroned after his
+   father Gojong was forced to abdicate by Japan following the Hague
+   Secret Emissary Affair; sickly and largely powerless throughout his
+   reign as Japan's Residency-General under Ito Hirobumi steadily
+   stripped away Korean sovereignty, ending with the 1910 Japan-Korea
+   Annexation Treaty that formally ended the dynasty. Pale, frail,
+   melancholic bearing in the golden-yellow imperial dragon robe
+   (hwangnyongpo) and imperial crown, a hollow ceremonial dignity — eyes
+   that seem distant or resigned rather than commanding, the visual
+   sense of a monarch presiding helplessly over his own nation's end.
+
+Clear margin around the figure for easy cropping.
+```
+
+---
+
 ## 완료 후 연결 방법
 
 각 그리드 이미지를 받아 인물별로 잘라 `assets/portraits/{id}.png`로 저장한 뒤,
