@@ -828,6 +828,19 @@ document.getElementById('kings-modal').addEventListener('click', (ev) => {
 
 /* ============ 메뉴 · 배지함 ============ */
 function chapterBadgeId(href){ return 'ch_complete_' + href; }
+/* 시대 완주 배지 아이콘 — 그 시대 마스코트를 마패 메달에 새긴 그림으로,
+   ERAS의 title과 1:1로 매칭된다(순서는 무관, 제목 문자열로 찾는다). */
+const ERA_BADGE_ICON = {
+  '선사·초기국가': 'assets/icons/badge_dangun.png',
+  '고대': 'assets/icons/badge_gwanggaeto.png',
+  '고려': 'assets/icons/badge_taejo.png',
+  '조선 전기': 'assets/icons/badge_sejong.png',
+  '조선 후기': 'assets/icons/badge_yisunsin.png',
+  '근대·개항기': 'assets/icons/badge_jeonbongjun.png',
+  '일제강점기': 'assets/icons/badge_yugwansun.png',
+  '현대': 'assets/icons/badge_hanbando.png',
+  '시대 통합': 'assets/icons/badge_seollal.png',
+};
 function renderBadges(){
   let earned = (window.Badges ? Badges.load() : {});
   // 전체 36화가 다 완주됐는데 아직 완주 배지를 못 받았다면 지금 준다
@@ -843,12 +856,13 @@ function renderBadges(){
   let totalCount = 0;
   let html = '';
   ERAS.forEach(era => {
+    const icon = ERA_BADGE_ICON[era.title] || 'assets/icons/badge_mapae.png';
     html += `<div class="badge-era">${era.title}</div><div class="badge-grid">`;
     era.cards.forEach(c => {
       const got = !!earned[chapterBadgeId(c.href)];
       totalCount++;
       html += `<div class="badge-item${got ? ' got' : ''}">
-        <div class="b-icon"><img src="assets/icons/badge_mapae.png" alt=""></div>
+        <div class="b-icon"><img src="${icon}" alt=""></div>
         <div class="b-name">${got ? c.num + ' ' + c.name : '???'}</div>
         <div class="b-desc">${got ? '완주' : '이 화를 끝까지 마치면 열립니다'}</div>
       </div>`;
@@ -865,7 +879,7 @@ function renderBadges(){
     gotSpecials.forEach(id => {
       const def = BADGE_DEFS[id];
       html += `<div class="badge-item got">
-        <div class="b-icon"><img src="assets/icons/badge_mapae.png" alt=""></div>
+        <div class="b-icon"><img src="${def.icon || 'assets/icons/badge_mapae.png'}" alt=""></div>
         <div class="b-name">${def.name}</div>
         <div class="b-desc">${def.desc}</div>
       </div>`;

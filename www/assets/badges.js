@@ -75,16 +75,16 @@ window.Bonds = {
    데이터로 직접 만들어 쓰므로(제목·화 번호가 이미 거기 있음) 여기엔
    안 담는다 — 여기엔 그 외의 배지(인연 등)만 정의한다. */
 const BADGE_DEFS = {
-  bond_nonong: { name: '잊지 않은 은혜', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="21" x2="12" y2="5"/><path d="M12 6c0-2 1.5-3.5 4-4"/><path d="M12 9c0-2-1.5-3.5-4-4"/><path d="M12 12c0-2 1.5-3.5 4-4"/><path d="M12 15c0-2-1.5-3.5-4-4"/></svg>',
+  bond_nonong: { name: '잊지 않은 은혜', icon: 'assets/icons/badge_bond_nonong.png',
     desc: '들녘에서 만난 늙은 농부와의 인연이, 세월이 지나 그 손자뻘 되는 이에게 닿았다.' },
-  streak_3: { name: '사흘의 시작', desc: '3일 연속 학습 — 이제 막 리듬이 붙기 시작했다.' },
-  streak_7: { name: '이레의 다짐', desc: '7일 동안 하루도 거르지 않고 역사와 만났다.' },
-  streak_30: { name: '서른 밤의 약속', desc: '30일 연속 학습 — 한 달을 꼬박 역사와 함께했다.' },
-  streak_100: { name: '백일의 기록', desc: '100일 연속 학습 — 습관을 넘어 삶의 일부가 되었다.' },
-  exam_perfect: { name: '만점 급제', desc: '기출문제 풀이에서 단 한 문제도 틀리지 않았다.' },
-  exam_allera: { name: '전 시대를 통달하다', desc: '아홉 시대 모두 기출문제 풀이를 마쳤다.' },
-  all_chapters: { name: '시간여행 완주', desc: '타임슬립 한국사, 서른여섯 화를 모두 마쳤다.' },
-  correct_50: { name: '처음 세운 탑', desc: '문제 50개를 맞혔다 — 작은 답들이 쌓여 탑이 되기 시작했다.' },
-  correct_200: { name: '흔들리지 않는 실력', desc: '문제 200개를 맞혔다 — 이제 웬만해선 헷갈리지 않는다.' },
-  correct_500: { name: '역사를 꿰뚫다', desc: '문제 500개를 맞혔다 — 이 정도면 한 시대를 통째로 꿰고 있다는 뜻이다.' },
+  streak_3: { name: '사흘의 시작', icon: 'assets/icons/badge_streak_3.png', desc: '3일 연속 학습 — 이제 막 리듬이 붙기 시작했다.' },
+  streak_7: { name: '이레의 다짐', icon: 'assets/icons/badge_streak_7.png', desc: '7일 동안 하루도 거르지 않고 역사와 만났다.' },
+  streak_30: { name: '서른 밤의 약속', icon: 'assets/icons/badge_streak_30.png', desc: '30일 연속 학습 — 한 달을 꼬박 역사와 함께했다.' },
+  streak_100: { name: '백일의 기록', icon: 'assets/icons/badge_streak_100.png', desc: '100일 연속 학습 — 습관을 넘어 삶의 일부가 되었다.' },
+  exam_perfect: { name: '만점 급제', icon: 'assets/icons/badge_exam_perfect.png', desc: '기출문제 풀이에서 단 한 문제도 틀리지 않았다.' },
+  exam_allera: { name: '전 시대를 통달하다', icon: 'assets/icons/badge_exam_allera.png', desc: '아홉 시대 모두 기출문제 풀이를 마쳤다.' },
+  all_chapters: { name: '시간여행 완주', icon: 'assets/icons/badge_all_chapters.png', desc: '타임슬립 한국사, 서른여섯 화를 모두 마쳤다.' },
+  correct_50: { name: '처음 세운 탑', icon: 'assets/icons/badge_correct_50.png', desc: '문제 50개를 맞혔다 — 작은 답들이 쌓여 탑이 되기 시작했다.' },
+  correct_200: { name: '흔들리지 않는 실력', icon: 'assets/icons/badge_correct_200.png', desc: '문제 200개를 맞혔다 — 이제 웬만해선 헷갈리지 않는다.' },
+  correct_500: { name: '역사를 꿰뚫다', icon: 'assets/icons/badge_correct_500.png', desc: '문제 500개를 맞혔다 — 이 정도면 한 시대를 통째로 꿰고 있다는 뜻이다.' },
 };
