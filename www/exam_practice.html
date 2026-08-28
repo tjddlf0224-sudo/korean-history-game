@@ -63,13 +63,48 @@
     text-underline-offset: 3px; text-decoration-color:#8a5a2a; font-weight:700; }
   .q-text { font-size:19px; line-height:1.65; margin-bottom:18px; font-weight:700; color:#f9f1de; }
   .q-opts { display:flex; flex-direction:column; gap:9px; flex:none; }
-  .q-opt { padding:14px 16px; border-radius:12px; border:1px solid #51432c; background:#2a2013; color:#f5ecd8;
-    font-size:17px; text-align:left; font-family:inherit; cursor:pointer; line-height:1.55; }
+  .q-opt { position:relative; padding:14px 16px; border-radius:12px; border:1px solid #51432c; background:#2a2013; color:#f5ecd8;
+    font-size:17px; text-align:left; font-family:inherit; cursor:pointer; line-height:1.55; overflow:visible; }
   .q-opt .opt-num { color:#e9c979; margin-right:8px; font-weight:700; }
   .q-opt.correct { background:#253d2c; border-color:#7faf8b; }
   .q-opt.wrong { background:#3d2622; border-color:#d96b5f; }
   .q-opt:disabled { opacity:.6; cursor:default; }
   .q-fb { margin-top:14px; font-size:15px; line-height:1.65; color:#d8ccb5; min-height:20px; }
+
+  /* ---- 정답 축하 연출 ---- 듀오링고처럼 정답 맞히는 순간이 심심하다는
+     피드백을 받고 추가. 이 게임 다른 곳(대화 완료 팡파레)에 이미 쓰던
+     금빛 광채+불티 튀는 연출을 그대로 재사용해서 톤을 맞췄다(색종이
+     대신 이 게임 정체성에 맞는 불티). 버튼 자체 안에 절대좌표로
+     붙이면 세로모드 회전 트릭(#wrap rotate) 신경 안 써도 자동으로
+     같이 돌아간다. */
+  @keyframes opt-pop { 0%{ transform:scale(1); } 40%{ transform:scale(1.045); } 100%{ transform:scale(1); } }
+  .q-opt.correct-pop { animation: opt-pop .45s cubic-bezier(.34,1.56,.64,1); }
+  .opt-check { position:absolute; right:14px; top:50%; width:22px; height:22px; margin-top:-11px;
+    border-radius:50%; background:#7faf8b; display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:scale(.4); }
+  .opt-check svg { width:13px; height:13px; stroke:#12200f; stroke-width:3; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .q-opt.correct .opt-check { animation: check-pop .4s .08s cubic-bezier(.34,1.56,.64,1) forwards; }
+  @keyframes check-pop { 0%{ opacity:0; transform:scale(.4); } 60%{ opacity:1; transform:scale(1.15); } 100%{ opacity:1; transform:scale(1); } }
+
+  .opt-burst { position:absolute; left:50%; top:50%; width:0; height:0; pointer-events:none; z-index:2; }
+  .opt-burst .b-glow { position:absolute; left:0; top:0; width:90px; height:90px; margin:-45px 0 0 -45px;
+    border-radius:50%; background:radial-gradient(circle, rgba(240,201,107,.6), rgba(240,201,107,0) 72%);
+    animation: b-glow .7s ease-out forwards; }
+  @keyframes b-glow { 0%{ transform:scale(.3); opacity:0; } 25%{ opacity:1; } 100%{ transform:scale(2.1); opacity:0; } }
+  .opt-burst .b-spark { position:absolute; left:0; top:0; width:6px; height:6px; background:#f0c96b;
+    clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    opacity:0; transform:rotate(var(--a)) translate(0,0) scale(.4); }
+  .opt-burst .b-spark{ animation: b-spark .7s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes b-spark {
+    0% { opacity:0; transform:rotate(var(--a)) translate(0,0) scale(.3); }
+    15% { opacity:1; }
+    100% { opacity:0; transform:rotate(var(--a)) translate(58px,0) scale(1) rotate(160deg); }
+  }
+
+  .q-fb { transform:translateY(-4px); opacity:0; }
+  .q-fb.show { animation: fb-in .32s ease-out forwards; }
+  @keyframes fb-in { to { transform:translateY(0); opacity:1; } }
+  .q-fb.correct-tone { color:#a7d8b3; font-weight:700; }
   .q-next { text-align:right; margin-top:16px; }
   #next-btn { background:#c9b8f0; color:#0c0f14; border:none; padding:12px 26px; border-radius:999px;
     font-size:14px; font-weight:bold; cursor:pointer; font-family:inherit; opacity:0; pointer-events:none;
@@ -250,6 +285,7 @@ function renderQuestion(){
   }
   els.qText.textContent = data.q;
   els.qFb.textContent = '';
+  els.qFb.classList.remove('show', 'correct-tone');
   els.nextBtn.classList.remove('show');
 
   order = data.opts.map((_, i) => i);
@@ -265,6 +301,21 @@ function renderQuestion(){
   });
 }
 
+function celebrateCorrect(btn){
+  btn.classList.add('correct-pop');
+  const check = document.createElement('span');
+  check.className = 'opt-check';
+  check.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="5 13 10 18 19 7"/></svg>';
+  btn.appendChild(check);
+
+  const burst = document.createElement('span');
+  burst.className = 'opt-burst';
+  burst.innerHTML = '<span class="b-glow"></span>' +
+    [0,45,90,135,180,225,270,315].map(a => `<span class="b-spark" style="--a:${a}deg"></span>`).join('');
+  btn.appendChild(burst);
+  setTimeout(() => burst.remove(), 750);
+}
+
 function pick(i){
   if (answered) return;
   const data = queue[qIdx];
@@ -274,12 +325,15 @@ function pick(i){
     if (window.Badges) Badges.addCorrect();
     optButtons[i].classList.add('correct');
     optButtons.forEach(b => b.disabled = true);
+    celebrateCorrect(optButtons[i]);
     els.qFb.textContent = data.feedback[1];
+    els.qFb.classList.add('show', 'correct-tone');
     els.nextBtn.classList.add('show');
   } else {
     optButtons[i].classList.add('wrong');
     optButtons[i].disabled = true;
     els.qFb.textContent = data.feedback[0];
+    els.qFb.classList.add('show');
     mistakes.push({ q: data.q, correctText: data.opts[data.answer], myText: data.opts[order[i]], feedback: data.feedback[1] });
   }
 }
