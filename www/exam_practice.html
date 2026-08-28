@@ -58,6 +58,9 @@
     content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
     background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(120,90,40,.035) 18px 19px);
   }
+  /* "밑줄 그은 'OO'"이 가리키는 자리 — 실제 밑줄로 표시해야 문제가 성립한다 */
+  .q-passage u { text-decoration: underline; text-decoration-thickness: 2px;
+    text-underline-offset: 3px; text-decoration-color:#8a5a2a; font-weight:700; }
   .q-text { font-size:19px; line-height:1.65; margin-bottom:18px; font-weight:700; color:#f9f1de; }
   .q-opts { display:flex; flex-direction:column; gap:9px; flex:none; }
   .q-opt { padding:14px 16px; border-radius:12px; border:1px solid #51432c; background:#2a2013; color:#f5ecd8;
@@ -188,6 +191,19 @@ function formatSrc(src){
   return '기출 출처 · ' + body;
 }
 
+/* 제시문에 <u>...</u>로 표시된 부분만 실제 밑줄로 렌더링한다. 그 외
+   문자는 전부 이스케이프해서, 데이터에 실수로 다른 태그가 섞여도
+   태그로 해석되지 않고 그대로 텍스트로 보이게 한다. */
+function renderPassageHTML(text){
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  return escaped
+    .replace(/&lt;u&gt;/g, '<u>')
+    .replace(/&lt;\/u&gt;/g, '</u>');
+}
+
 function shuffle(arr){
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--){
@@ -227,7 +243,7 @@ function renderQuestion(){
   els.qSrc.textContent = formatSrc(data.src);
   if (data.passage){
     els.qPassageWrap.style.display = '';
-    els.qPassage.textContent = data.passage;
+    els.qPassage.innerHTML = renderPassageHTML(data.passage);
   } else {
     els.qPassageWrap.style.display = 'none';
     els.qPassage.textContent = '';
