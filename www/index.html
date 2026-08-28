@@ -658,24 +658,21 @@ function kingsEraSectionHTML(era){
   groups.forEach(([, kings]) => kings.forEach(k => allYears.push(kingsYearNum(k.year))));
   const minY = Math.min.apply(null, allYears), maxY = Math.max.apply(null, allYears);
   const span = Math.max(1, maxY - minY);
-  const pxPerYear = Math.max(2.4, 900 / span);
+  // 나라가 여럿인 시대(지금은 고대만)에선 이 축척이 "장수왕과 개로왕처럼
+  // 다른 나라 왕이라도 비슷한 시기면 세로로 가까이 보여야 한다"는 걸
+  // 보장하는 유일한 장치라, 배지 자리를 맞추려고 절대 건드리지 않는다
+  // (예전엔 라벨이 겹칠 때 배지 자체를 오른쪽으로 밀어버려서, 왕이 많이
+  // 몰린 나라의 왕들이 실제 연도보다 한참 뒤로 밀려나 다른 나라와 어긋나
+  // 보이는 버그가 있었다). 대신 아래에서 라벨만 두 단으로 번갈아 내려
+  // 겹침을 피한다.
+  const pxPerYear = Math.max(5.5, 900 / span);
   let trackW = 640;
-
-  // 나라(줄)가 하나뿐이면 다른 줄과 맞출 일이 없으니, 배지끼리 겹치지만
-  // 않게 최소 간격만 지키며 민다(예전 방식 — 안전하고 자리도 안 넘친다).
-  // 나라가 여럿이면(지금은 고대만) 자리를 실제 연도로 고정해야 같은 해가
-  // 나라를 넘나들어도 같은 세로줄에 온다 — 그 대신 같은 줄에서 연도가
-  // 너무 가까우면 라벨만(배지는 그대로 두고) 한 단 내려 겹침을 피한다.
   const singleRow = groups.length === 1;
-  // 왕들이 몰려 있으면(재위 기간이 짧아 연도차가 작으면) 배지는 안
-  // 겹쳐도 그 아래 이름·연도 라벨(.kp-king 폭 108px)끼리 부딪힌다(고구려
-  // 초기 왕들에서 실제 발생). 처음엔 라벨을 한 단씩 번갈아 내리는
-  // 지그재그로 피해 봤는데, 위아래로 들쭉날쭉해서 오히려 더 산만하다는
-  // 지적을 받았다 — 지그재그 없이 한 줄로 두되, 최소 간격 자체를 라벨
-  // 폭(108px)에 가깝게 넉넉히 벌려서 겹치지 않게 한다.
-  const kingBadgeW = k => k.p ? 100 : 88;
   const rows = groups.map(([country, kings]) => {
-    let lastX = -Infinity, lastW = 0;
+    // 라벨(폭 108px) 두 단 중 마지막으로 쓴 x — 새 라벨이 두 단 중 어느
+    // 쪽과도 너무 가까우면(LABEL_GAP 미만) 그나마 덜 겹치는 단에 배정한다.
+    const LABEL_GAP = 96;
+    const laneLastX = [-Infinity, -Infinity];
     const positioned = kings.map((k, i) => {
       // 나라가 하나뿐이면 다른 시대·나라와 맞출 일이 없다. 연도差 그대로
       // 쓰면(예: 단군왕검~위만처럼 왕 수는 적은데 연도差는 수천 년) 화면
@@ -685,17 +682,11 @@ function kingsEraSectionHTML(era){
         const x = 40 + i * 140;
         return { k, x, stagger: false };
       }
-      let x = 40 + (kingsYearNum(k.year) - minY) * pxPerYear;
-      // 연도가 아무리 가까워도(재위 기간이 짧아 연달아 있으면) 배지끼리
-      // 서로 겹치진 않게 최소 간격을 지킨다(초상화 폭 반영) — 그 대신
-      // 다른 나라의 같은 해와 맞추려고 이 최소 간격보다 더 멀어지는 건
-      // 그대로 둔다.
-      const curW = kingBadgeW(k);
-      const minGap = lastW / 2 + curW / 2 + 10;
-      if (x < lastX + minGap) x = lastX + minGap;
-      lastX = x;
-      lastW = curW;
-      return { k, x, stagger: false };
+      const x = 40 + (kingsYearNum(k.year) - minY) * pxPerYear;
+      let lane = 0;
+      if (x - laneLastX[0] < LABEL_GAP) lane = (x - laneLastX[1] < LABEL_GAP) ? 0 : 1;
+      laneLastX[lane] = x;
+      return { k, x, stagger: lane === 1 };
     });
     const rowEndX = positioned.length ? positioned[positioned.length - 1].x : 40;
     trackW = Math.max(trackW, rowEndX + 80);
