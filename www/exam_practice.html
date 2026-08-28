@@ -271,6 +271,7 @@ function startSession(){
 }
 
 function renderQuestion(){
+  document.getElementById('scroller').scrollTop = 0;
   answered = false;
   const data = queue[qIdx];
   els.progressPill.textContent = `${qIdx + 1} / ${queue.length}`;
@@ -367,7 +368,7 @@ function finishSession(){
   els.resultDenom.textContent = '/' + total;
   const pct = Math.round(correct / total * 100);
   els.resultMsg.textContent = pct >= 90
-    ? '훌륭해요! 이 시대는 게임 대사만으로 충분히 풀 수 있어요.'
+    ? '훌륭해요! 이 시대는 확실히 마스터했네요.'
     : pct >= 70
     ? '꽤 잘했어요. 틀린 문제만 다시 확인해 보세요.'
     : '이 시대 챕터를 한 번 더 플레이하고 오면 좋을 것 같아요.';
