@@ -865,6 +865,39 @@ composition rules as the other grids):
 Clear margin around the figure for easy cropping.
 ```
 
+## 재생성 — 순종(대한제국) 흉상 구도로 다시 (2026-08-28)
+
+기존 순종 그림이 다른 왕들과 달리 전신샷으로 나와, 흉상(가슴 위)만 나오도록
+프롬프트를 명시적으로 강화해 다시 요청. `assets/portraits/sunjong_king.png`를
+새 결과물로 교체할 것.
+
+```
+Cute chibi-style character portrait in the same art style as a Korean
+educational history game — BUST PORTRAIT ONLY: head, neck and upper
+chest/shoulders, cropped right below the shoulders — do NOT show the
+full body, hands, or robe hem. Big head (roughly head:body 1:2.2 in
+the visible bust area), soft cel-shaded coloring, clean black
+linework, warm semi-flat palette, gentle friendly expression,
+front-facing or slight three-quarter angle, plain white background,
+no drop shadow, no watermark, no text, no caption/label under the
+image.
+
+순종(Sunjong, Daehan Empire) — id: sunjong_king. Second and last
+emperor of the Korean Empire (r. 1907-1910), enthroned after his
+father Gojong was forced to abdicate by Japan following the Hague
+Secret Emissary Affair; sickly and largely powerless throughout his
+reign as Japan's Residency-General under Ito Hirobumi steadily
+stripped away Korean sovereignty, ending with the 1910 Japan-Korea
+Annexation Treaty that formally ended the dynasty. Pale, frail,
+melancholic bearing in the golden-yellow imperial dragon robe
+(hwangnyongpo) visible at the shoulders, and an imperial crown, a
+hollow ceremonial dignity — eyes that seem distant or resigned rather
+than commanding, the visual sense of a monarch presiding helplessly
+over his own nation's end. Keep the framing tight and consistent with
+a close-up head-and-shoulders bust, matching how the other kings in
+this game are portrayed (not a full standing figure).
+```
+
 ---
 
 ## 완료 후 연결 방법
