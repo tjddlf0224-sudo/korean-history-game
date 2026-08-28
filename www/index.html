@@ -313,8 +313,13 @@
      나라별로 스크롤 위치가 서로 어긋났다). 그러려면 나라별로 따로
      스크롤되면 안 되므로, 한 시대의 모든 나라 줄을 kp-hscroll 하나가
      함께 가로 스크롤한다(줄마다 스크롤이 있으면 다시 어긋난다). */
-  .kp-hscroll { overflow-x:auto; scrollbar-width: none; -ms-overflow-style: none; }
+  .kp-hscroll { position:relative; overflow-x:auto; scrollbar-width: none; -ms-overflow-style: none; }
   .kp-hscroll::-webkit-scrollbar { display: none; }
+  /* 100년 단위 눈금선 — 나라가 여럿(고대)일 때만, 실제 연도 축 감을
+     주려고 긋는다. 글씨·왕 그림보다 항상 맨 뒤에 있어야 하므로 DOM상
+     제일 먼저 두고 z-index도 가장 낮게(0) 준다. */
+  .kp-century-line { position:absolute; top:0; bottom:0; width:0; border-left:1px dashed #3a2c1a; z-index:0; pointer-events:none; }
+  .kp-century-label { position:absolute; top:2px; left:4px; font-size:9px; color:#5a4c38; white-space:nowrap; }
   .kp-strip { position:relative; height:156px; padding:8px 8px 10px; margin-top:30px; }
   /* margin-top: 초상화 있는 왕(.kp-has-p)이 발밑을 선에 맞추려고 블록을
      29px 위로 올리는데(왕관이 선에 안 걸리게), 그 여유 공간이 없으면
@@ -661,6 +666,7 @@ function kingsEraSectionHTML(era){
   const singleRow = groups.length === 1;
   const pxPerYear = Math.max(3.5, 900 / span);
   let trackW = 640;
+  let centuryLines = [];
 
   let rows;
   if (singleRow){
@@ -706,17 +712,34 @@ function kingsEraSectionHTML(era){
         rowPrevOf.get(key).push(prevKey);
       });
     });
+    // 100년 단위 점선 세로선 자리도 같은 sweep에 슬쩍 끼워 넣는다 — 실제
+    // 왕이 없는 "빈 연도"라 아무것도 밀지는(prevKey 없음) 않지만, 그
+    // 지점까지 쌓인 국지적 확장(extraOffset)은 그대로 반영되어 실제
+    // 연도 위치에 맞게 그어진다.
+    const centuryYears = [];
+    for (let y = Math.ceil(minY / 100) * 100; y <= maxY; y += 100){
+      if (!rowPrevOf.has(y)) rowPrevOf.set(y, []);
+      centuryYears.push(y);
+    }
+    // 연도가 다르면 x좌표도 반드시 달라야 한다 — 아래 min0(=floor)를 그냥
+    // "이전 값보다 작아지지만 않게 눌러 붙이기"로 짰더니, 어딘가 한 번
+    // 크게 밀린 뒤에는 그 다음 몇 개 연도가 전부 "눌린 값"에 나란히
+    // 뭉쳐버리는 버그가 있었다(서로 수십 년 차이 나는 왕들이 같은
+    // x에 겹쳐 찍힘). 대신 "밀린 만큼"을 누적 오프셋으로 들고 다니면서
+    // 그 뒤로 나오는 모든 연도의 기준선(baseline) 자체를 같이 밀어준다
+    // — 그러면 한 번 밀린 뒤에도 서로 다른 연도는 항상 서로 다른(그리고
+    // 실제 연도差에 비례하는) x를 갖는다.
     const sortedKeys = Array.from(rowPrevOf.keys()).sort((a, b) => a - b);
     const xOf = new Map();
-    let floor = -Infinity;
+    let extraOffset = 0;
     sortedKeys.forEach(key => {
-      let req = 40 + (key - minY) * pxPerYear;
+      const baseline = 40 + (key - minY) * pxPerYear + extraOffset;
+      let req = baseline;
       rowPrevOf.get(key).forEach(prevKey => {
         if (prevKey !== null) req = Math.max(req, xOf.get(prevKey) + MIN_GAP);
       });
-      req = Math.max(req, floor);
+      if (req > baseline) extraOffset += (req - baseline);
       xOf.set(key, req);
-      floor = req;
     });
 
     rows = groups.map(([country, kings], ri) => {
@@ -725,9 +748,14 @@ function kingsEraSectionHTML(era){
       trackW = Math.max(trackW, rowEndX + 80);
       return { country, kings, positioned, rowEndX };
     });
+    centuryLines = centuryYears.map(y => ({ year: y, x: xOf.get(y) }));
   }
 
-  return `<div class="kp-hscroll">` + rows.map(({ country, kings, positioned, rowEndX }) => {
+  const centuryHtml = centuryLines.map(({ year, x }) =>
+    `<div class="kp-century-line" style="left:${x}px"><span class="kp-century-label">${year}년</span></div>`
+  ).join('');
+
+  return `<div class="kp-hscroll">` + centuryHtml + rows.map(({ country, kings, positioned, rowEndX }) => {
     const total = kings.reduce((s, k) => s + k.n, 0);
     // 이 나라의 마지막 왕(=멸망 또는 이 왕조 목록의 끝) 자리에서 선이
     // 끝나게 한다 — 트랙 전체 폭(trackW)까지 죽 이어지지 않는다.
@@ -740,7 +768,7 @@ function kingsEraSectionHTML(era){
           <div class="kp-label">
             <div class="kp-nm">${k.name}</div>
             <div class="kp-yr">${k.year}</div>
-            ${k.a ? `<ul class="kp-achv-list">${kingsAchvList(k.a)}</ul>` : ''}
+            ${(k.a && k.n > 0) ? `<ul class="kp-achv-list">${kingsAchvList(k.a)}</ul>` : ''}
           </div>
         </div>`).join('') + `</div></div>`;
   }).join('') + `</div>`;
