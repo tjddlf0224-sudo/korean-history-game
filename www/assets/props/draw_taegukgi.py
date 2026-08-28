@@ -97,8 +97,8 @@ def draw_trigram(pattern, corner):
 
 TRIGRAMS = {
     'tl': ['solid', 'solid', 'solid'],   # 건
-    'tr': ['solid', 'broken', 'solid'],  # 리 (예전엔 여기 감 무늬가 들어가 있었음 — 감/리가 뒤바뀐 버그)
-    'bl': ['broken', 'solid', 'broken'], # 감
+    'tr': ['broken', 'solid', 'broken'], # 감
+    'bl': ['solid', 'broken', 'solid'],  # 리
     'br': ['broken', 'broken', 'broken'],# 곤
 }
 
