@@ -696,6 +696,36 @@ Each figure clearly separated with visible margin for easy cropping.
 
 ---
 
+## 추가 — 동명성왕(주몽) (2026-08-28)
+
+기출 집계 스크립트가 "동명성왕"이라는 시호만 찾고, 실제 문제에서 거의 항상
+쓰이는 이름 "주몽"은 못 찾아서 원 안 숫자 0회로 잡혀 있었음(사용자 지적으로
+확인). n을 2로 정정하면서 기출 왕(n>0) 기준에 새로 들어왔으므로 초상화 추가.
+
+```
+Cute chibi-style character portrait in the same art style as a Korean
+educational history game — big head (roughly head:body 1:2.2), soft
+cel-shaded coloring, clean black linework, warm semi-flat palette,
+gentle friendly expression, three-quarter or front-facing bust/full-body
+shot, plain white background, no drop shadow, no watermark, no text.
+
+동명성왕/주몽(Dongmyeongseong-wang / Jumong) — id: dongmyeong_king.
+Founder-king of Goguryeo, known almost entirely through his founding myth:
+born from an egg after his mother Yuhwa was courted by Habaek's daughter
+and the sun, raised in Buyeo where his archery skill was so famous his
+name "Jumong" itself means "skilled archer," fled south with loyal
+companions after Buyeo princes tried to kill him (legend says fish and
+turtles rose to form a bridge across the Eomnok river for his escape),
+and founded Goguryeo at Jolbon in 37 BCE — youthful, athletic build
+(younger than the game's usual elder-king portraits), simple hemp/fur
+hunter's tunic rather than court robes, a wooden bow slung over one
+shoulder or held in hand, a quiver of arrows on his back, confident and
+determined young founder's expression, maybe a faint river or reed
+marshland hinted behind him evoking the escape-crossing legend.
+```
+
+---
+
 ## 완료 후 연결 방법
 
 각 그리드 이미지를 받아 인물별로 잘라 `assets/portraits/{id}.png`로 저장한 뒤,
