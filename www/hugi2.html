@@ -67,6 +67,11 @@
     box-shadow: 0 4px 14px rgba(0,0,0,.4); background-size: contain; background-repeat: no-repeat;
     background-position: center; aspect-ratio: 900 / 420; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
+  /* 문화유산 사진 아래 저작권 표기("사진: OOO · 출처") — 일반 대사와
+     구분 없이 나오던 걸, 작게·오른쪽 정렬·다른 서체로 캡션처럼 보이게. */
+  .dlg-box .photo-credit { display: block; margin-top: 6px; text-align: right;
+    font-size: 11px; font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: #b8a888; letter-spacing: .01em; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
@@ -1510,6 +1515,19 @@ function drawNpcLabel(text, sx, sy, accent){
   ctx.textBaseline = 'alphabetic';
 }
 
+/* 문화유산 사진 설명(beat.t)의 마지막 줄이 "사진:"/"출처:"로 시작하는
+   저작권 표기면 그 줄만 따로 <span class="photo-credit">로 감싸서, 위쪽
+   설명 문장과는 다른 스타일(작게·오른쪽 정렬)로 보이게 한다. */
+function renderDocCaption(t){
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const lines = t.split('\n');
+  const last = lines[lines.length - 1];
+  if (/^(사진|출처)\s*:/.test(last)){
+    const desc = lines.slice(0, -1).join('\n');
+    return esc(desc) + '<span class="photo-credit">' + esc(last) + '</span>';
+  }
+  return esc(t);
+}
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   close(){ document.getElementById('dlg-overlay').classList.remove('show'); World.paused = false; },
@@ -1558,7 +1576,7 @@ const Dialog = {
       docEl.style.display = 'block';
       docEl.style.backgroundImage = `url('${beat.docImg}')`;
       textEl.classList.add('caption');
-      textEl.textContent = beat.t;
+      textEl.innerHTML = renderDocCaption(beat.t);
       return;
     }
     if (dlgTop) dlgTop.style.display = 'flex';
