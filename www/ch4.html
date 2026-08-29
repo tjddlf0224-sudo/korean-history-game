@@ -60,7 +60,11 @@
   .dlg-name { font-weight: bold; font-size: 15px; color: #7fc4e8; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
-  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; opacity: .8; cursor: pointer; }
+  .dlg-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .dlg-prev { font-size: 13px; opacity: .55; cursor: pointer; background: none; border: none;
+    font-family: inherit; padding: 0; visibility: hidden; }
+  .dlg-prev .arrow { display: inline-block; margin-right: 4px; }
+  .dlg-next { text-align: right; font-size: 13px; opacity: .8; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
@@ -335,7 +339,10 @@
         </div>
       <div class="dlg-chart" id="dlg-chart" hidden></div>
       <div class="dlg-box" id="dlg-text"></div>
-      <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+      <div class="dlg-nav">
+          <button class="dlg-prev" id="dlg-prev" onclick="event.stopPropagation(); Dialog.prev();"><span class="arrow">◀</span>이전</button>
+          <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+        </div>
     </div>
     </div>
   </div>
@@ -1440,6 +1447,8 @@ const Dialog = {
   },
   render(){
     const beat = this.data.beats[this.idx];
+    const prevEl = document.getElementById('dlg-prev');
+    if (prevEl) prevEl.style.visibility = this.idx > 0 ? 'visible' : 'hidden';
     // 이 beat만 다른 인물이 말하는가? (beats에 name이 따로 붙어 있으면 끼어든 것)
     const interjecting = !!beat.name && beat.name !== this.data.name;
     document.getElementById('dlg-frame').classList.toggle('alt-speaker', interjecting);
@@ -1461,6 +1470,11 @@ const Dialog = {
   next(){
     this.idx++;
     if (this.idx >= this.data.beats.length){ this.finish(); return; }
+    this.render();
+  },
+  prev(){
+    if (this.idx <= 0) return;
+    this.idx--;
     this.render();
   },
   finish(){

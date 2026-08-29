@@ -77,7 +77,11 @@
   .dlg-box .photo-credit { display: block; margin-top: 6px; text-align: right;
     font-size: 11px; font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
     color: #b8a888; letter-spacing: .01em; }
-  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
+  .dlg-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .dlg-prev { font-size: 13px; color: #a89a82; cursor: pointer; background: none; border: none;
+    font-family: inherit; padding: 0; visibility: hidden; }
+  .dlg-prev .arrow { display: inline-block; margin-right: 4px; }
+  .dlg-next { text-align: right; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
   #intro-text { font-size: 18px; line-height: 1.6; min-height: 40px; white-space: pre-wrap; }
@@ -360,7 +364,10 @@
         <div class="dlg-doc" id="dlg-doc"></div>
         <div class="dlg-chart" id="dlg-chart" hidden></div>
         <div class="dlg-box" id="dlg-text"></div>
-        <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+        <div class="dlg-nav">
+          <button class="dlg-prev" id="dlg-prev" onclick="event.stopPropagation(); Dialog.prev();"><span class="arrow">◀</span>이전</button>
+          <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -980,8 +987,6 @@ const NPC_DATA = {
     beats: [
       { t:'어이, 거기 자네. 처음 보는 얼굴인데 — 그냥 구경하러 온 겐가?' },
       { t:'(씩 웃으며) 맞네, 삼봉 정도전일세. 이 새 궁궐 이름도 내가 지었지 — 경복궁(景福宮), \'큰 복을 누리라\'는 뜻으로.' },
-      { who:'doc', docImg:'assets/scenes/heritage_changdeokgung_injeongjeon.jpg',
-        t:'(창덕궁 인정전. 경복궁만 지은 것이 아니다 — 창덕궁은 정도전 사후인 태종 5년(1405) 이궁으로 지어졌으며, 그 정전인 인정전은 훗날 조선 왕들이 가장 오래 실제로 거처한 궁궐의 정치 중심 건물이 된다. 유네스코 세계유산.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { t:'아무리 훌륭한 임금이라도 대를 이어 계속 훌륭할 순 없는 법이야. 그래서 나는 유능한 신하들이 함께 다스리는 나라 — 재상이 중심이 되는 정치를 꿈꾸고 있네.' },
       { t:'그 뜻을 담아 새 나라의 통치 규범을 글로 정리해 전하께 올렸지. 관제와 법의 큰 줄기를 세운 책일세.' },
       { t:'또 하나, 고려가 무너진 까닭을 나는 불교의 폐단에서 찾았네. 그래서 그 이론을 조목조목 따져 비판하는 글도 따로 지었지.' },
@@ -1260,6 +1265,8 @@ const Dialog = {
   },
   render(){
     const beat = this.data.beats[this.idx];
+    const prevEl = document.getElementById('dlg-prev');
+    if (prevEl) prevEl.style.visibility = this.idx > 0 ? 'visible' : 'hidden';
     // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
     // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
     const interjecting = !!beat.name && beat.name !== this.data.name;
@@ -1322,6 +1329,11 @@ const Dialog = {
       });
       return;
     }
+    this.render();
+  },
+  prev(){
+    if (this.idx <= 0) return;
+    this.idx--;
     this.render();
   },
   finish(){

@@ -64,7 +64,11 @@
   .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; color: #afa38f; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
-  .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
+  .dlg-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .dlg-prev { font-size: 13px; color: #a89a82; cursor: pointer; background: none; border: none;
+    font-family: inherit; padding: 0; visibility: hidden; }
+  .dlg-prev .arrow { display: inline-block; margin-right: 4px; }
+  .dlg-next { text-align: right; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
 
@@ -388,7 +392,10 @@
         </div>
         <div class="dlg-chart" id="dlg-chart" hidden></div>
         <div class="dlg-box" id="dlg-text"></div>
-        <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+        <div class="dlg-nav">
+          <button class="dlg-prev" id="dlg-prev" onclick="event.stopPropagation(); Dialog.prev();"><span class="arrow">◀</span>이전</button>
+          <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1459,6 +1466,8 @@ const Dialog = {
   },
   render(){
     const beat = this.data.beats[this.idx];
+    const prevEl = document.getElementById('dlg-prev');
+    if (prevEl) prevEl.style.visibility = this.idx > 0 ? 'visible' : 'hidden';
     // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
     // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
     const interjecting = !!beat.name && beat.name !== this.data.name;
@@ -1487,6 +1496,11 @@ const Dialog = {
       this.finish();
       return;
     }
+    this.render();
+  },
+  prev(){
+    if (this.idx <= 0) return;
+    this.idx--;
     this.render();
   },
   finish(){
