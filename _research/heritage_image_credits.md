@@ -25,6 +25,8 @@
 | `assets/scenes/heritage_mireuksaji_tower.jpg` | 익산 미륵사지 석탑 | 셀수스협동조합 | 기증저작물(자유이용) | 공유마당 gongu.copyright.or.kr wrtSn=13298918로 재확인(사용자가 감은사지로 오인해 전달한 링크였으나 실제 항목은 미륵사지, 기존 기록과 저작자·라이선스 일치 확인) | `godae1.html` 무령왕(muryeong_0) |
 | `assets/scenes/heritage_cheonghwa_baekja.jpg` | 청화백자 | 국립중앙박물관 | 공공누리 제1유형 | 공유마당 — e뮤지엄 emuseum.go.kr에서 "청화백자수지란초문호" 항목(relicId=PS0100100102400296000000)이 제1유형(출처표시)임을 확인, 동일 주제·라이선스 일치로 간접 확인 완료 | `hugi2.html` 김홍도(gimhongdo_0) |
 | `assets/scenes/heritage_daedongyeojido.jpg` | 대동여지도(부분) | 국립중앙박물관 | 공공누리 제1유형 | 공유마당 — e뮤지엄 emuseum.go.kr에서 "대동여지도" 항목(relicId=PS0100100102400394600000)이 제1유형(출처표시)임을 확인, 동일 주제·라이선스 일치로 간접 확인 완료 | `hugi2.html` 김홍도(gimhongdo_0) |
+| `assets/scenes/heritage_geumdong_daehyangno.jpg` | 백제 금동대향로(국보) | 국가유산청(추정) | 공공누리 제1유형(추정) | heritage.go.kr 국보 상세페이지, 사용자 제공 파일명 "국보_백제 금동대향로(089)_문화재대관(국보)"(문화재청·국가유산청 공식 "문화재대관" 아카이브 사진임을 시사) — ⚠️ 이 항목 상세페이지 자체에는 개별 공공누리 배지가 표시되지 않아, 아래 6건과 동일한 방식(파일명·사이트 성격으로 국가유산청 소관 합리적 추정)으로 처리. 100% 확인된 사실은 아님 | `godae1.html` 성왕(seongwang_0) |
+| `assets/scenes/heritage_jeongnimsaji_tower.jpg` | 부여 정림사지 오층석탑(국보) | 국가유산청(추정) | 공공누리 제1유형(추정) | heritage.go.kr 국보 상세페이지, 사용자 제공 파일명 "부여 정림사지 오층석탑_정면 (촬영년도 : 2015년)" — ⚠️ 위 금동대향로와 동일한 사유로 배지 미확인, 합리적 추정으로 처리 | `godae1.html` 성왕(seongwang_0) |
 
 ## 확인했지만 보류한 이미지
 
