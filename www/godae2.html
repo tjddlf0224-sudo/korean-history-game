@@ -53,7 +53,7 @@
     border-radius: 16px; padding: 16px 18px; color: #f5ecd8; box-shadow: 0 12px 40px rgba(0,0,0,.4);
     max-height: 80%; overflow-y: auto;
   }
-  .dlg-top { margin-bottom: 6px; }
+  .dlg-top { margin-bottom: 6px; gap: 6px; }
   .dlg-close { position: absolute; top: 10px; right: 12px; width: 26px; height: 26px; border-radius: 50%;
     border: 1px solid #51432c; background: #2a2013; color: #f5ecd8; font-size: 13px; line-height: 1;
     display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 3; }
@@ -568,7 +568,7 @@ const ZONES = {
       { id:'munwang', name:'발해 문왕', x:860, y:400, img:'assets/portraits/munwang.png', look:{ role:'king', body:'#4a4a58', accent:'#e0b94a' } },
     ],
     exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:55}, to:'cheonghae', spawn:{x:688,y:335}, label:'배를 타고 남쪽으로' },
+      { rect:{x0:610,y0:700,x1:770,y1:761}, to:'cheonghae', spawn:{x:688,y:335}, label:'배를 타고 남쪽으로' },
     ],
   },
   cheonghae: {
