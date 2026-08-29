@@ -178,6 +178,7 @@
 
 <script src="assets/badges.js"></script>
 <script src="assets/streak.js"></script>
+<script src="assets/audio.js"></script>
 <script>
 /* 가로모드 고정: index.html·게임 챕터들과 동일. */
 function applyOrientation(){
@@ -194,6 +195,21 @@ applyOrientation();
 /* index.html의 ERAS 배열과 같은 순서 — era= 쿼리는 이 배열의 인덱스. */
 const ERA_TITLES = ['선사·초기국가','고대','고려','조선 전기','조선 후기','근대·개항기','일제강점기','현대','시대 통합'];
 const CIRCLED = ['①','②','③','④','⑤'];
+
+/* 시대별 배경음악 — 각 챕터가 쓰는 시대별 BGM과 맞춰서, 기출문제 풀이
+   화면도 같은 시대감을 느낄 수 있게 한다. '시대 통합'은 특정 시대가
+   아니므로 메인 화면과 같은 title_theme을 쓴다. */
+const ERA_BGM = {
+  '선사·초기국가': 'bgm_prehistoric',
+  '고대': 'bgm_ancient_court',
+  '고려': 'bgm_goryeo',
+  '조선 전기': 'bgm_joseon_palace',
+  '조선 후기': 'bgm_joseon_palace',
+  '근대·개항기': 'bgm_gaehang_war',
+  '일제강점기': 'bgm_colonial_era',
+  '현대': 'bgm_modern',
+  '시대 통합': 'title_theme',
+};
 
 const params = new URLSearchParams(location.search);
 const eraIdx = parseInt(params.get('era'), 10);
@@ -303,6 +319,44 @@ function renderQuestion(){
   });
 }
 
+/* 정답/오답 효과음 — 이 화면 전용 효과음 파일이 따로 없어서, Web Audio
+   API로 짧은 톤을 직접 합성한다(정답: 위로 도약하는 두 음, 오답: 낮게
+   내려앉는 두 음). BGM.isMuted()를 그대로 따라가서 배경음악을 끄면
+   효과음도 같이 꺼진다(이 화면에 별도의 효과음 스위치는 없음). */
+let sfxCtx = null;
+function getSfxCtx(){
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  if (!sfxCtx) sfxCtx = new Ctx();
+  if (sfxCtx.state === 'suspended') sfxCtx.resume();
+  return sfxCtx;
+}
+function playTone(freq, startTime, duration, type, peak){
+  const ctx = getSfxCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  const t0 = ctx.currentTime + startTime;
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.linearRampToValueAtTime(peak, t0 + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t0);
+  osc.stop(t0 + duration + 0.02);
+}
+function playCorrectSfx(){
+  if (BGM.isMuted()) return;
+  playTone(784.0, 0, 0.14, 'sine', 0.16);   // G5
+  playTone(1046.5, 0.09, 0.24, 'sine', 0.16); // C6
+}
+function playWrongSfx(){
+  if (BGM.isMuted()) return;
+  playTone(233.1, 0, 0.14, 'sawtooth', 0.10);  // Bb3
+  playTone(174.6, 0.08, 0.26, 'sawtooth', 0.10); // F3
+}
+
 function celebrateCorrect(btn){
   btn.classList.add('correct-pop');
   const check = document.createElement('span');
@@ -328,12 +382,15 @@ function pick(i){
     optButtons[i].classList.add('correct');
     optButtons.forEach(b => b.disabled = true);
     celebrateCorrect(optButtons[i]);
+    playCorrectSfx();
     els.qFb.textContent = data.feedback[1];
     els.qFb.classList.add('show', 'correct-tone');
     els.nextBtn.classList.add('show');
   } else {
     optButtons[i].classList.add('wrong');
     optButtons[i].disabled = true;
+    playWrongSfx();
+    if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
     els.qFb.textContent = data.feedback[0];
     els.qFb.classList.add('show');
     mistakes.push({ q: data.q, correctText: data.opts[data.answer], myText: data.opts[order[i]], feedback: data.feedback[1] });
@@ -404,6 +461,7 @@ if (!eraTitle){
       pool = all.filter(item => item.era === eraTitle);
       els.loading.style.display = 'none';
       els.eraTitle.textContent = eraTitle + ' · 기출문제';
+      BGM.play(ERA_BGM[eraTitle] || 'title_theme');
       startSession();
     })
     .catch(() => { els.loading.textContent = '문제를 불러오지 못했어요. 새로고침해 주세요.'; });

@@ -1608,6 +1608,11 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    // 대화·퀴즈가 열려 있던 동안 화면이 잠깐 백그라운드로 갔다 오는 등의
+    // 이유로 배경음악이 끊기거나 다른 트랙처럼 들리는 제보가 있어, 대화가
+    // 끝날 때마다 이 구역의 정식 배경음악을 다시 한 번 틀어 준다(이미
+    // 맞는 트랙이 재생 중이면 BGM.play()가 그냥 조용히 무시한다).
+    BGM.play(ZONE_BGM[World.zone] || ZONE_BGM.default);
     const prevKey = this.key;
     if (this.npc.id === 'ijagyeom'){
       Stage.state.talkStage = Math.min(Stage.state.talkStage + 1, 0);
