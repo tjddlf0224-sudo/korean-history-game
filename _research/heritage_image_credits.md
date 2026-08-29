@@ -9,17 +9,17 @@
 | `assets/scenes/heritage_sehando.jpg` | 김정희 「세한도」(1844) | 김정희(金正喜) | 저작권 만료(자유이용) | 공유마당 gongu.copyright.or.kr (wrtSn=13361152), 원문파일명 `김정희_세한도_1844_11194.jpg`, 발행 한국데이터산업진흥원(김달진미술연구소) | `hugi2.html` 김홍도(gimhongdo_0) 대사 중 |
 | `assets/scenes/heritage_gyeongcheonsa_tower.jpg` | 개성 경천사지 십층석탑(현 국립중앙박물관 전시) | 이상화(문화유산 사진작가) | CC BY(저작권정보 표시) | 공유마당 gongu.copyright.or.kr (wrtSn=11068325, "용산가족공원국립중앙박물관22350") — ★2026-08: "개성 경천사지 십층석탑 전경(국립중앙박물관)" 고화질본으로 교체 시도했다가 **취소, 원복함**. 그 파일은 국립중앙박물관 이건희컬렉션 소장품 페이지에서 받은 것으로 실제 공공누리 유형이 **제4유형(출처표시+상업용금지+변경금지)**임을 사용자가 다운로드 상세정보 화면에서 확인 — 상업적(광고 수익) 앱에는 절대 쓸 수 없는 라이선스였다. 하마터면 그대로 커밋될 뻔한 사례라 반드시 기억할 것: 국립중앙박물관 소장품 이미지는 항상 개별 다운로드 페이지의 "공공누리 유형" 배지를 직접 확인하고, 배지가 안 보이면 절대 쓰지 않는다 | `goryeo3.html` 의천(uicheon_0) 대사 중 |
 | `assets/scenes/heritage_buseoksa_muryangsujeon.jpg` | 영주 부석사 무량수전 | 이상화(문화유산 사진작가) | CC BY(저작권정보 표시) | 공유마당 gongu.copyright.or.kr wrtSn=11068145 (제목 "부석사부량수전" 확인) — 사용자 제공 링크로 재확인 완료. 이전엔 인접 배치 항목으로 추정해 "공공누리 제1유형"으로 잘못 기재했었는데, 이번 직접 링크 확인 결과 실제로는 CC BY로 정정 | `goryeo3.html` 의천(uicheon_0) 대사 중 |
-| `assets/scenes/heritage_sudeoksa_daeungjeon.jpg` | 예산 수덕사 대웅전 | 국가유산청 | 공공누리 제1유형 | 공유마당(사용자 직접 다운로드, 파일명에 유형 명시) — 국가유산포털 heritage.go.kr 상세페이지 제목("예산 수덕사 대웅전")으로 존재·명칭 재확인 완료 | `goryeo3.html` 의천(uicheon_0) |
-| `assets/scenes/heritage_bongjeongsa_geungnakjeon.jpg` | 안동 봉정사 극락전 | 국가유산청 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재·명칭 재확인 완료 | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_sudeoksa_daeungjeon.jpg` | 예산 수덕사 대웅전 | 국가유산청 | 공공누리 제1유형 | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08, 아래 "저작자명 표기" 메모 최종 정정) | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_bongjeongsa_geungnakjeon.jpg` | 안동 봉정사 극락전 | 국가유산청 | 공공누리 제1유형 | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_beopjusa_palsangjeon.jpg` | 보은 법주사 팔상전 | 이인희 | CC BY(저작권정보 표시) | ★교체(2026-08): 공유마당 gongu.copyright.or.kr wrtSn=11025545 (제목 "속리산_법주사_00074", 저작자 이인희) — 사용자 제공 파일·링크로 교체 및 확인 완료 | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_cheongja_sanggam.jpg` | 청자 상감운학문 매병(보물) | 국립중앙박물관 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `goryeo3.html` 의천(uicheon_0) |
-| `assets/scenes/heritage_icheondong_seokbul.jpg` | 안동 이천동 마애여래입상 | 국가유산청 | 공공누리(출처표시) | 공유마당 — 국가유산포털 상세페이지 제목으로 존재·명칭 재확인 완료 | `goryeo3.html` 의천(uicheon_0) |
-| `assets/scenes/heritage_hasachangdong_buddha.jpg` | 하남 하사창동 철조석가여래좌상 | 국가유산청 | 공공누리(출처표시) | 공유마당 — 국가유산포털 상세페이지 제목으로 존재·명칭 재확인 완료 | `goryeo3.html` 의천(uicheon_0) |
-| `assets/scenes/heritage_cheomseongdae.jpg` | 경주 첨성대 | 국가유산청 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `godae2.html` 의상(uisang_0) |
+| `assets/scenes/heritage_icheondong_seokbul.jpg` | 안동 이천동 마애여래입상 | 국가유산청 | 공공누리(출처표시) | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_hasachangdong_buddha.jpg` | 하남 하사창동 철조석가여래좌상 | 국가유산청 | 공공누리(출처표시) | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_cheomseongdae.jpg` | 경주 첨성대 | 국가유산청 | 공공누리 제1유형 | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_gameunsaji_tower.jpg` | 경주 감은사지 삼층석탑(1971년 촬영) | 셀수스협동조합 | 기증저작물(자유이용) | ★교체(2026-08): 공유마당 gongu.copyright.or.kr wrtSn=13297356 (제목 "1971년_감은사지 3층 석탑") — 사용자 제공 파일·링크로 교체 및 확인 완료 | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_seokguram_buddha.jpg` | 석굴암 본존불 | 故한석홍 기증 사진자료 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_bulguksa_tower.jpg` | 불국사 삼층석탑(석가탑) | 국립문화재연구소 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `godae2.html` 의상(uisang_0) |
-| `assets/scenes/heritage_seongdeokdaewang_bell.jpg` | 성덕대왕신종(국보) | 국가유산청 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `godae2.html` 의상(uisang_0) |
+| `assets/scenes/heritage_seongdeokdaewang_bell.jpg` | 성덕대왕신종(국보) | 국가유산청 | 공공누리 제1유형 | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_mugujeonggwang_darani.jpg` | 무구정광대다라니경(귀) — 펼친 두루마리 사진 | 국립중앙박물관 | 공공누리 제1유형(출처표시) | ★교체(2026-08): 기존 이미지는 카탈로그(종이 유물)와 실제 사진(목재 받침 위 유물)이 서로 다른 개체로 보이는 불일치가 있어 사용자가 새 사진으로 교체. e뮤지엄 emuseum.go.kr 상세페이지(relicId=PS0100100102401070300000, 제목 "무구정광대다라니경(귀)")에서 "제 1유형 : 출처표시" 명문 확인 — 이번엔 펼쳐진 두루마리 실사라 내용과 사진이 정확히 일치함 | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_muyongchong_suryeopdo.jpg` | 무용총 수렵도(모사도) | 정기환(모사) / 국립중앙박물관 소장 | 공공누리 제1유형(출처표시) | 공유마당 — e뮤지엄 emuseum.go.kr에서 모사자 "정기환" 성명 확인, 게임 내 캡션에 반영 완료 | `godae1.html` 고구려 장수(gwanggaeto_0) |
 | `assets/scenes/heritage_mireuksaji_tower.jpg` | 익산 미륵사지 석탑 | 셀수스협동조합 | 기증저작물(자유이용) | 공유마당 gongu.copyright.or.kr wrtSn=13298918로 재확인(사용자가 감은사지로 오인해 전달한 링크였으나 실제 항목은 미륵사지, 기존 기록과 저작자·라이선스 일치 확인) | `godae1.html` 무령왕(muryeong_0) |
@@ -53,7 +53,7 @@
 - **청화백자 / 대동여지도**: 사용자가 준 건 특정 항목이 아닌 e뮤지엄 검색결과 페이지였음. 실제 사진 교체는 하지 않고, 동일 주제의 e뮤지엄 항목이 제1유형(출처표시)임을 확인해 기존 기록의 라이선스 타당성만 간접 검증함.
 
 ## 참고: 저작자명 표기에 대한 메모
-수덕사·봉정사·첨성대·성덕대왕신종·이천동·하사창동 6건은 다운로드 파일명에 "국유"로만 표기되어 있었다. 공유마당 검색으로 정확히 같은 항목을 재확인하지 못했으나(대량 문화재 사진 DB라 제목 검색이 잘 안 됨), "국유" 표기의 지정문화재 사진은 실무상 대부분 국가유산청(구 문화재청) 소관이라는 합리적 추정 하에 사용자 확인을 거쳐 "국가유산청"으로 표기했다. 100% 확인된 사실은 아니라는 점을 남겨둔다 — 추후 정확한 출처가 확인되면 이 표를 갱신할 것.
+수덕사·봉정사·첨성대·성덕대왕신종·이천동·하사창동 6건은 다운로드 파일명에 "국유"로만 표기되어 있었다. 처음엔 어느 사이트에서 받았는지 불확실해 "공유마당"으로 잠정 표기했었는데, 게임 내 캡션(출처: 국가유산청, 공유마당, ...)을 본 사용자가 "공유마당이 아니라 국가유산청 사이트에서 직접 받은 것"이라고 확인해줘서 **국가유산포털(heritage.go.kr)로 확정 정정**했다(2026-08). 저작(권)자 "국가유산청" 표기 자체는 처음부터 맞았고, 틀렸던 건 "어느 사이트에서 받았나"였다.
 
 ## 게임 내 출처 표기 형식 (2026-08 통일)
 
