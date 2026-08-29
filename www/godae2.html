@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; word-break: keep-all; overflow-wrap: break-word; }
-  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; background: #000; font-family: "Gowun Batang", -apple-system, "Malgun Gothic", serif; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; touch-action: none; background: #000; font-family: "Gowun Batang", -apple-system, "Malgun Gothic", serif; }
   #wrap { position: fixed; top: 0; left: 0; touch-action: none; transform-origin: top left; }
   body.rot #wrap { transform: rotate(90deg) translateY(-100%); }
   #game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
@@ -583,9 +583,10 @@ const ZONES = {
       { x0:1085, y0:230, x1:1230, y1:390 },  // 그물 시렁
       { x0:1255, y0:165, x1:1376, y1:410 },  // 소금 가마
       { x0:0, y0:375, x1:300, y1:768 },  // 바다
-      { x0:300, y0:388, x1:600, y1:768 },  // 바다
+      { x0:300, y0:388, x1:410, y1:768 },  // 바다(왼쪽 나루터 다리 서쪽)
+      { x0:550, y0:388, x1:600, y1:768 },  // 바다(왼쪽 나루터 다리 동쪽)
       { x0:600, y0:400, x1:850, y1:768 },  // 바다
-      { x0:950, y0:392, x1:1200, y1:768 },  // 바다
+      { x0:995, y0:392, x1:1200, y1:768 },  // 바다(오른쪽 나루터 다리 동쪽)
       { x0:1200, y0:400, x1:1376, y1:768 },  // 바다
     ],
     npcs: [
@@ -595,7 +596,7 @@ const ZONES = {
       { id:'minjeong', name:'촌주', x:560, y:300, img:'assets/portraits/minjeong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
     ],
     exits: [
-      { rect:{x0:850,y0:375,x1:950,y1:400}, to:'sanggyeong', spawn:{x:688,y:690}, label:'배를 타고 북쪽으로' },
+      { rect:{x0:890,y0:570,x1:975,y1:630}, to:'sanggyeong', spawn:{x:688,y:690}, label:'배를 타고 북쪽으로' },
     ],
   },
 };
@@ -836,6 +837,13 @@ document.getElementById('menu-kings').addEventListener('click', () => {
   openKingsModal();
 });
 
+function exitDirArrow(rect){
+  if (rect.y1 >= BG_H - 12) return ' \u2193';
+  if (rect.y0 <= 12) return ' \u2191';
+  if (rect.x1 >= BG_W - 12) return ' \u2192';
+  if (rect.x0 <= 12) return ' \u2190';
+  return '';
+}
 function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
@@ -859,7 +867,7 @@ function updateHudGoal(){
         for (const zid in ZONES){ if (ZONES[zid].npcs.some(n => n.id === id)){ npcZone = zid; break; } }
         if (npcZone && npcZone !== World.zone){
           const ex = (ZONES[World.zone].exits || []).find(e => e.to === npcZone);
-          if (ex) return '다음 목표: ' + ex.label;
+          if (ex) return '다음 목표: ' + ex.label + exitDirArrow(ex.rect);
         }
         return '다음 목표: ' + goal;
       }
