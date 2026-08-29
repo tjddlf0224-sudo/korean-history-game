@@ -27,6 +27,34 @@
 | `assets/scenes/heritage_daedongyeojido.jpg` | 대동여지도(부분) | 국립중앙박물관 | 공공누리 제1유형 | 공유마당 — e뮤지엄 emuseum.go.kr에서 "대동여지도" 항목(relicId=PS0100100102400394600000)이 제1유형(출처표시)임을 확인, 동일 주제·라이선스 일치로 간접 확인 완료 | `hugi2.html` 김홍도(gimhongdo_0) |
 | `assets/scenes/heritage_geumdong_daehyangno.jpg` | 백제 금동대향로(국보) | 국가유산청(추정) | 공공누리 제1유형(추정) | heritage.go.kr 국보 상세페이지, 사용자 제공 파일명 "국보_백제 금동대향로(089)_문화재대관(국보)"(문화재청·국가유산청 공식 "문화재대관" 아카이브 사진임을 시사) — ⚠️ 이 항목 상세페이지 자체에는 개별 공공누리 배지가 표시되지 않아, 아래 6건과 동일한 방식(파일명·사이트 성격으로 국가유산청 소관 합리적 추정)으로 처리. 100% 확인된 사실은 아님 | `godae1.html` 성왕(seongwang_0) |
 | `assets/scenes/heritage_jeongnimsaji_tower.jpg` | 부여 정림사지 오층석탑(국보) | 국가유산청(추정) | 공공누리 제1유형(추정) | heritage.go.kr 국보 상세페이지, 사용자 제공 파일명 "부여 정림사지 오층석탑_정면 (촬영년도 : 2015년)" — ⚠️ 위 금동대향로와 동일한 사유로 배지 미확인, 합리적 추정으로 처리 | `godae1.html` 성왕(seongwang_0) |
+| `assets/scenes/heritage_ganghwa_bugeunri_dolmen.jpg` | 강화 부근리 지석묘(고인돌, 사적 137호) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1332301370000) — 사용자가 국가유산청 사이트에서 직접 다운로드(2026-08, 파일명 "굄돌기운상태.jpg"). 처음엔 다른 고인돌(학곡리)을 받았으나, Claude가 "고창·화순·강화 고인돌 유적" 중 탁자식 고인돌의 대표격인 부근리 지석묘를 추천해 이걸로 교체 | `seonsa1.html` 청동기시대(cheongdonggi_0) |
+| `assets/scenes/heritage_jungwon_goguryeobi.jpg` | 충주 고구려비(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1113302050000) — 사용자 직접 다운로드(2026-08) | `godae1.html` 고구려 장수(gwanggaeto_0) |
+| `assets/scenes/heritage_ssangbongsa_cheolgamseonsatap.jpg` | 화순 쌍봉사 철감선사탑(국보 57호) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1113600570000) — 사용자 직접 다운로드(2026-08) | `godae2.html` 의상(uisang_0) |
+| `assets/scenes/heritage_munmudaewangneung.jpg` | 경주 문무대왕릉(대왕암, 사적) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1333701580000, 2017년 고도보존육성과 촬영) — 사용자 직접 다운로드(2026-08) | `godae2.html` 의상(uisang_0) |
+| `assets/scenes/heritage_cheonmachong_gold_crown.jpg` | 천마총 금관(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1113701880000) — 사용자 직접 다운로드(2026-08) | `godae2.html` 의상(uisang_0) |
+| `assets/scenes/heritage_hwangnamdaechong_gold_crown.jpg` | 황남대총 북분 금관(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1113701910000, 2014년 국보 동산 앱사진) — 사용자 직접 다운로드(2026-08) | `godae2.html` 의상(uisang_0) |
+| `assets/scenes/heritage_bukhansan_jinheungwang_sunsubi.jpg` | 서울 북한산 신라 진흥왕 순수비(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1111100030000) — 사용자 직접 다운로드(2026-08) | `godae1.html` 진흥왕(jinheung_0) |
+| `assets/scenes/heritage_palman_daejanggyeong.jpg` | 합천 해인사 팔만대장경(고려대장경판, 국보 32호) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=2113200540000) — 사용자 직접 다운로드(2026-08) | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_gyeongbokgung_geunjeongjeon.jpg` | 경복궁 근정전 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1111102230000) — 사용자 직접 다운로드(2026-08) | `ch2.html` 세종(sejong_0) |
+| `assets/scenes/heritage_jongmyo_jeongjeon.jpg` | 종묘 정전(여름) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1111102270000) — 사용자 직접 다운로드(2026-08) | `ch0.html` 정도전(jeongdojeon_1) |
+| `assets/scenes/heritage_changdeokgung_injeongjeon.jpg` | 창덕궁 인정전 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1111102250000) — 사용자 직접 다운로드(2026-08) | `ch0.html` 정도전(jeongdojeon_0) |
+| `assets/scenes/heritage_sungnyemun.jpg` | 서울 숭례문 성곽전경(2015년 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaAsno=0000010000000·ccbaCtcd=11 계열, imgHeritage ccimId=6309894) — 사용자 직접 다운로드(2026-08) | `ch0.html` 정도전(jeongdojeon_1) |
+| `assets/scenes/heritage_heunginjimun.jpg` | 서울 흥인지문(2015년 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=6307840, ccbaKdcd=12·ccbaAsno=0000010000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `ch0.html` 정도전(jeongdojeon_1) |
+| `assets/scenes/heritage_hanyangdoseong.jpg` | 서울 한양도성 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=1624439, ccbaKdcd=13·ccbaAsno=0000100000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `ch0.html` 정도전(jeongdojeon_1) |
+| `assets/scenes/heritage_jagyeongru.jpg` | 창경궁 자격루 | 故한석홍 기증(출처: 국립고궁박물관) | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=6316423, ccbaKdcd=11·ccbaAsno=0002290000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08). 파일명에 "故한석홍 기증 사진자료"로 명시되어 있어 저작자를 그대로 반영(기존 석굴암 사진과 동일 기증자) | `ch2.html` 장영실(jangyeongsil_0) |
+| `assets/scenes/heritage_sosuseowon.jpg` | 영주 소수서원 강학당(2015년 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=6295340, ccbaKdcd=12·ccbaAsno=0014030000000·ccbaCtcd=37) — 사용자 직접 다운로드(2026-08) | `ch5b.html` 주세붕(juseboong_0) |
+| `assets/scenes/heritage_namhansanseong_jihwamun.jpg` | 남한산성 남문(지화문, 2015년 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=6263678, ccbaKdcd=13·ccbaAsno=0000570000000·ccbaCtcd=31) — 사용자 직접 다운로드(2026-08) | `hugi1.html` 인조(injo_0) |
+| `assets/scenes/heritage_suwon_hwaseong.jpg` | 수원 화성(2020년 촬영) | 문화재청(대변인실) | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=6298904, ccbaKdcd=13·ccbaAsno=0000030000000·ccbaCtcd=31) — 사용자 직접 다운로드(2026-08). 파일명에 "출처 : 문화재청 대변인실"로 명시되어 있어 저작자를 국가유산청이 아닌 문화재청(당시 기관명)으로 그대로 반영 | `hugi2.html` 정조(jeongjo_0) |
+| `assets/scenes/heritage_haengju_daecheopbi.jpg` | 행주대첩비 전경(2015년 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=6261077, ccbaKdcd=13·ccbaAsno=0000560000000·ccbaCtcd=31) — 사용자 직접 다운로드(2026-08) | `imjin2.html` 권율(gwonyul_0) |
+| `assets/scenes/heritage_chilbaeuichong.jpg` | 칠백의총 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=5881521, ccbaKdcd=13·ccbaAsno=0001050000000·ccbaCtcd=34) — 사용자 직접 다운로드(2026-08) | `imjin2.html` 조헌(johun_0) |
+| `assets/scenes/heritage_samjeondobi.jpg` | 삼전도비(대청황제공덕비) 전경 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=1624460, ccbaKdcd=13·ccbaAsno=0001010000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `hugi1.html` 인조(injo_0) |
+| `assets/scenes/heritage_donguibogam.jpg` | 동의보감(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=2549237, ccbaKdcd=11·ccbaAsno=0003190000100·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `hugi1.html` 광해군(gwanghae_0) |
+| `assets/scenes/heritage_inwangjesaekdo.jpg` | 정선필 인왕제색도(국보 216호) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=1611690, ccbaKdcd=11·ccbaAsno=0002160000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `hugi2.html` 김홍도(gimhongdo_0) |
+| `assets/scenes/heritage_gimhongdo_pungsokdo.jpg` | 김홍도필 풍속도 화첩(단원풍속도첩, 보물 527호) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=1613429, ccbaKdcd=12·ccbaAsno=0005270000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `hugi2.html` 김홍도(gimhongdo_0) |
+| `assets/scenes/heritage_mandongmyo.jpg` | 괴산 만동묘정비(시도기념물) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=4360829, ccbaKdcd=23·ccbaAsno=0000250000000·ccbaCtcd=33) — 사용자 직접 다운로드(2026-08) | `hugi1.html` 인조(injo_0) |
+| `assets/scenes/heritage_hwangudan.jpg` | 환구단(2023년 정기조사 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=7651090, ccbaKdcd=13·ccbaAsno=0001570000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `gaehang5.html` 고종(gojong_0) |
+| `assets/scenes/heritage_dongnimmun.jpg` | 서울 독립문(2023년 정기조사 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=7651089, ccbaKdcd=13·ccbaAsno=0000320000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `gaehang5.html` 서재필(seojaepil_0) |
+| `assets/scenes/heritage_deoksugung_junghwajeon.jpg` | 덕수궁 중화전 및 중화문 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=6408147, ccbaKdcd=12·ccbaAsno=0008190000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `gaehang5.html` 고종(gojong_0) |
 
 ## 확인했지만 보류한 이미지
 
@@ -66,6 +94,14 @@
 - 공유마당이 아닌 다른 사이트(e뮤지엄 등)에서 받은 경우 그 사이트명을 그대로 쓴다.
 - 저작물명은 대사 설명 문장(괄호 안)에 이미 나와 있으므로 출처 줄에서는 반복하지 않는다.
 - 렌더링은 `renderDocCaption()`(각 챕터 파일)이 `사진:`/`출처:`로 시작하는 마지막 줄만 자동으로 작게·오른쪽 정렬 캡션 스타일로 분리해 보여준다.
+
+## 실물 문화유산 사진 인프라(dlg-doc) 보유 챕터 (2026-08 기준)
+
+`who:'doc'` beat(대사창에 실제 사진을 보여주는 연출)을 쓰려면 해당 챕터 파일에 `.dlg-doc`/`.photo-credit` CSS, `#dlg-doc` HTML, `renderDocCaption()` JS, `Dialog.render()`의 `beat.docImg` 분기가 모두 있어야 한다. 새 사진을 넣기 전에 이 목록에서 대상 파일을 먼저 확인할 것 — 없으면 `godae1.html`을 참고해 먼저 포팅해야 한다.
+
+- **원래부터 있던 파일**: `godae1.html`, `godae2.html`, `goryeo3.html`, `hugi2.html`
+- **2026-08 사진 28장 일괄 추가 때 새로 포팅한 파일**: `seonsa1.html`, `ch0.html`(각주 렌더링 `noteHtml` 로직과 공존하도록 patch), `ch5b.html`, `hugi1.html`, `imjin2.html`, `gaehang5.html`
+- **이미 `#dlg-doc`은 있었지만 `renderDocCaption`(출처 캡션 스타일 분리)이 빠져 있어 같이 업그레이드한 파일**: `ch2.html` (기존 최만리 상소 이미지는 그대로 호환됨)
 
 ## 향후 이미지 추가 시 체크리스트
 1. 공유마당(gongu.copyright.or.kr) 또는 국가유산포털(heritage.go.kr)에서 검색

@@ -63,7 +63,15 @@
     box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
   .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; color: #afa38f; }
+  .dlg-doc { display: none; width: 100%; border-radius: 10px; margin-bottom: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.4); background-size: contain; background-repeat: no-repeat;
+    background-position: center; aspect-ratio: 900 / 420; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
+  /* 문화유산 사진 아래 저작권 표기("사진:"/"출처:")— 일반 대사와
+     구분 없이 나오던 걸, 작게·오른쪽 정렬·다른 서체로 캡션처럼 보이게. */
+  .dlg-box .photo-credit { display: block; margin-top: 6px; text-align: right;
+    font-size: 11px; font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: #b8a888; letter-spacing: .01em; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
@@ -382,10 +390,11 @@
       <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
       <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
-        <div class="dlg-top">
+        <div class="dlg-top" id="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
           <div class="dlg-name" id="dlg-name"></div>
         </div>
+        <div class="dlg-doc" id="dlg-doc"></div>
         <div class="dlg-chart" id="dlg-chart" hidden></div>
         <div class="dlg-box" id="dlg-text"></div>
         <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
@@ -1121,6 +1130,8 @@ const NPC_DATA = {
       { who:'npc', t:'나는 글 읽던 사람일세. 상소를 올리다 귀양도 갔지.' },
       { who:'npc', t:'왜군이 밀려오자 옥천에서 사람을 모았네. 청주성을 되찾았고, 그 길로 금산으로 갔지.' },
       { who:'npc', t:'칠백이었네. 물러설 곳도 없고 물러설 생각도 없었네. 아무도 살아 돌아가지 못했지.' },
+      { who:'doc', docImg:'assets/scenes/heritage_chilbaeuichong.jpg',
+        t:'(충남 금산의 칠백의총. 1592년 조헌이 이끈 의병 700명이 왜군과 싸우다 전원 순국한 것을 기려 조성한 무덤이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'뒷사람들이 뼈를 모아 한 무덤에 묻고 칠백의총이라 이름 붙였다더군.' },
     ],
     quizSeq: [
@@ -1134,6 +1145,8 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'나는 도원수를 맡았네. 1593년 2월, 행주산성에서 삼만에 가까운 왜군을 맞았지.' },
       { who:'npc', t:'군사는 삼천 남짓이었네. 화차와 활, 돌까지 다 썼지. 부녀자들이 치마에 돌을 날라 주었다는 이야기가 그 싸움일세.' },
+      { who:'doc', docImg:'assets/scenes/heritage_haengju_daecheopbi.jpg',
+        t:'(경기 고양 행주산성에 있는 행주대첩비. 1593년 권율이 왜군을 크게 물리친 행주대첩을 기념해 세운 비석이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'그 무렵 조·명 연합군이 평양성을 되찾았네. 왜군이 한양에서 물러나기 시작한 것이 그때부터야.' },
       { who:'npc', t:'조총 앞에서 우리 군제가 얼마나 낡았는지 절감했네. 그래서 훈련도감을 세웠지 — 총 쏘는 포수, 창 쓰는 살수, 활 쏘는 사수, 이 삼수병일세.' },
       { who:'npc', t:'싸움만이 아니었네. 전쟁으로 나라 곳간도 바닥났지. 그래서 조정은 이름 쓸 자리를 비워둔 관직 임명장을 만들어, 곡식을 바치거나 군공을 세운 이에게 그 자리에 이름을 써 넣어 내주었네. 공명첩이라 하지.' },
@@ -1381,6 +1394,19 @@ function drawNpcLabel(text, sx, sy, accent){
   ctx.textBaseline = 'alphabetic';
 }
 
+/* 문화유산 사진 설명(beat.t)의 마지막 줄이 "사진:"/"출처:"로 시작하는
+   저작권 표기면 그 줄만 따로 <span class="photo-credit">로 감싸서, 위쪽
+   설명 문장과는 다른 스타일(작게·오른쪽 정렬)로 보이게 한다. */
+function renderDocCaption(t){
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const lines = t.split('\n');
+  const last = lines[lines.length - 1];
+  if (/^(사진|출처)\s*:/.test(last)){
+    const desc = lines.slice(0, -1).join('\n');
+    return esc(desc) + '<span class="photo-credit">' + esc(last) + '</span>';
+  }
+  return esc(t);
+}
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   close(){ document.getElementById('dlg-overlay').classList.remove('show'); World.paused = false; },
@@ -1419,6 +1445,22 @@ const Dialog = {
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
     document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
+    const dlgTop = document.getElementById('dlg-top');
+    const docEl = document.getElementById('dlg-doc');
+    const textEl = document.getElementById('dlg-text');
+    if (beat.docImg){
+      // 실제 문화유산 사진을 보여주는 연출: 인물 초상/이름 줄은 숨기고
+      // 이 그래픽 자체와 캡션(출처 포함)만 보여준다.
+      if (dlgTop) dlgTop.style.display = 'none';
+      docEl.style.display = 'block';
+      docEl.style.backgroundImage = `url('${beat.docImg}')`;
+      textEl.classList.add('caption');
+      textEl.innerHTML = renderDocCaption(beat.t);
+      return;
+    }
+    if (dlgTop) dlgTop.style.display = 'flex';
+    docEl.style.display = 'none';
+    textEl.classList.remove('caption');
     document.getElementById('dlg-text').innerHTML = glossarize(beat.t);
   },
   next(){

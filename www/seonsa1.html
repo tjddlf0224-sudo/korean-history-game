@@ -63,7 +63,15 @@
     box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
   .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; color: #afa38f; }
+  .dlg-doc { display: none; width: 100%; border-radius: 10px; margin-bottom: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.4); background-size: contain; background-repeat: no-repeat;
+    background-position: center; aspect-ratio: 900 / 420; }
   .dlg-box { font-size: 18px; line-height: 1.6; min-height: 54px; white-space: pre-wrap; }
+  /* 문화유산 사진 아래 저작권 표기("사진: OOO · 출처") — 일반 대사와
+     구분 없이 나오던 걸, 작게·오른쪽 정렬·다른 서체로 캡션처럼 보이게. */
+  .dlg-box .photo-credit { display: block; margin-top: 6px; text-align: right;
+    font-size: 11px; font-family: -apple-system, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    color: #b8a888; letter-spacing: .01em; }
   .dlg-next { text-align: right; margin-top: 10px; font-size: 13px; color: #d8ccb5; cursor: pointer; }
   .dlg-next .arrow { display: inline-block; margin-left: 4px; animation: nudge 1s infinite; }
   @keyframes nudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(4px);} }
@@ -382,10 +390,11 @@
       <div class="dlg-portrait" id="dlg-portrait"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg></div>
       <button class="dlg-close" onclick="Dialog.close()"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <div id="dlg-panel">
-        <div class="dlg-top">
+        <div class="dlg-top" id="dlg-top">
           <div class="dlg-tag" id="dlg-tag"></div>
           <div class="dlg-name" id="dlg-name"></div>
         </div>
+        <div class="dlg-doc" id="dlg-doc"></div>
         <div class="dlg-chart" id="dlg-chart" hidden></div>
         <div class="dlg-box" id="dlg-text"></div>
         <div class="dlg-next" id="dlg-next">계속 <span class="arrow">▶</span></div>
@@ -1167,6 +1176,8 @@ const NPC_DATA = {
       { who:'npc', t:'내 허리의 이 검이 보이는가. 청동으로 부어 만든 것일세. 아무나 가질 수 있는 물건이 아니지.' },
       { who:'npc', t:'이 검은 대장간에서 두드려 만든 게 아닐세. 흙이나 돌로 거푸집(용범)을 빚어 그 틀에 청동물을 부어 굳혀 만들지.' },
       { who:'npc', t:'내가 죽으면 저 큰 돌 아래 묻힐 걸세. 수백 사람이 달라붙어야 옮기는 돌이지 — 그만한 힘을 부릴 수 있는 자만 저기 눕는다네.' },
+      { who:'doc', docImg:'assets/scenes/heritage_ganghwa_bugeunri_dolmen.jpg',
+        t:'(강화 부근리 지석묘. 받침돌 두 개가 거대한 덮개돌을 떠받친 탁자식(북방식) 고인돌로, 덮개돌 무게만 약 53톤에 이른다. "고창·화순·강화 고인돌 유적"으로 유네스코 세계유산에 등재되었다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
     ],
     quizSeq: [
       { q:'벼농사가 퍼지고 계급이 생겨났으며, 비파형 동검과 민무늬 토기를 쓴 시대는?',
@@ -1515,6 +1526,19 @@ function drawNpcLabel(text, sx, sy, accent){
   ctx.textBaseline = 'alphabetic';
 }
 
+/* 문화유산 사진 설명(beat.t)의 마지막 줄이 "사진:"/"출처:"로 시작하는
+   저작권 표기면 그 줄만 따로 <span class="photo-credit">로 감싸서, 위쪽
+   설명 문장과는 다른 스타일(작게·오른쪽 정렬)로 보이게 한다. */
+function renderDocCaption(t){
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const lines = t.split('\n');
+  const last = lines[lines.length - 1];
+  if (/^(사진|출처)\s*:/.test(last)){
+    const desc = lines.slice(0, -1).join('\n');
+    return esc(desc) + '<span class="photo-credit">' + esc(last) + '</span>';
+  }
+  return esc(t);
+}
 const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   close(){ document.getElementById('dlg-overlay').classList.remove('show'); World.paused = false; },
@@ -1553,6 +1577,22 @@ const Dialog = {
       chartEl.hidden = false;
     } else { chartEl.hidden = true; chartEl.innerHTML = ''; }
     document.getElementById('dlg-panel').classList.toggle('has-chart', !!beat.chart);
+    const dlgTop = document.getElementById('dlg-top');
+    const docEl = document.getElementById('dlg-doc');
+    const textEl = document.getElementById('dlg-text');
+    if (beat.docImg){
+      // 실제 문화유산 사진을 보여주는 연출: 인물 초상/이름 줄은 숨기고
+      // 이 그래픽 자체와 캡션(출처 포함)만 보여준다.
+      if (dlgTop) dlgTop.style.display = 'none';
+      docEl.style.display = 'block';
+      docEl.style.backgroundImage = `url('${beat.docImg}')`;
+      textEl.classList.add('caption');
+      textEl.innerHTML = renderDocCaption(beat.t);
+      return;
+    }
+    if (dlgTop) dlgTop.style.display = 'flex';
+    docEl.style.display = 'none';
+    textEl.classList.remove('caption');
     document.getElementById('dlg-text').innerHTML = glossarize(beat.t);
   },
   next(){
