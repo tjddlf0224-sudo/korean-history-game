@@ -247,9 +247,10 @@ window.Items = (function(){
     if (injected) return; injected = true;
     const st = document.createElement('style');
     st.textContent = `
-    /* 가방 버튼 — 미니맵 아래 */
+    /* 가방 버튼 — 미니맵 바로 아래.
+       (아래쪽에 두었더니 조이스틱·행동 버튼과 같은 줄에 몰려 손에 가렸다.) */
     #bag-btn { position:absolute; z-index:24; right:calc(10px + env(safe-area-inset-right));
-      bottom:calc(10px + env(safe-area-inset-bottom)); width:46px; height:46px; border-radius:50%;
+      top:calc(134px + env(safe-area-inset-top)); width:46px; height:46px; border-radius:50%;
       border:1px solid #4a3c26; background:#241c12ee; color:#f0c96b; font-size:20px;
       display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
       box-shadow:0 4px 14px rgba(0,0,0,.5); }
