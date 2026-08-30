@@ -1830,6 +1830,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1957,6 +1959,20 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'geunchogo_0': { icon:'🐎', when:'371년',
+    headline:'근초고왕, 평양성을 쳐서 고국원왕을 쓰러뜨리다',
+    sub:'백제가 전성기를 맞았습니다. 마한을 아우르고 요서·왜와도 통합니다.' },
+  'gwanggaeto_0': { icon:'🐎', when:'400년',
+    headline:'광개토대왕, 5만 군사로 신라를 구원하다',
+    sub:'신라에 들어온 왜를 낙동강까지 밀어냈습니다. 그 일이 훗날 능비에 새겨집니다.' },
+  'muryeong_0': { icon:'⚱️', when:'6세기 초',
+    headline:'무령왕, 22담로에 왕족을 보내다',
+    sub:'지방을 왕족으로 다스려 왕권을 세웁니다. 중국 남조와 활발히 통합니다.' },
+  'jinheung_0': { icon:'🗿', when:'553~568년',
+    headline:'진흥왕, 한강 유역을 차지하고 순수비를 세우다',
+    sub:'나제 동맹을 깨고 한강을 홀로 차지했습니다. 북한산·창녕·황초령·마운령에 비를 세웁니다.' },
+}, 'word');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

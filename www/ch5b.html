@@ -1307,6 +1307,8 @@ const Dialog = {
     if (Stage.keyFor(this.npc.id) === this.key) playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
@@ -1556,6 +1558,11 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'juseboong_0': { icon:'🏫', when:'1550년',
+    headline:'백운동 서원에 소수서원 편액이 내리다',
+    sub:'임금이 이름을 내린 첫 서원입니다. 책과 땅과 노비도 함께 받습니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

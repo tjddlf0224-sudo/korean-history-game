@@ -1554,6 +1554,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1681,6 +1683,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'hongyeong_0': { icon:'⚔️', when:'1811년',
+    headline:'홍경래, 평안도에서 봉기하다',
+    sub:'서북 사람에 대한 차별과 세도 정치가 불씨였습니다.' },
+  'choeje_0': { icon:'☯️', when:'1860년',
+    headline:'최제우, 동학을 열다',
+    sub:'사람이 곧 하늘이라 합니다.' },
+  'imsul_0': { icon:'🔥', when:'1862년',
+    headline:'임술 농민 봉기 — 진주에서 시작되다',
+    sub:'삼정의 문란을 견디지 못한 농민들이 들고일어났습니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

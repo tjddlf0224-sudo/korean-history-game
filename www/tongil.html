@@ -1510,6 +1510,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1637,6 +1639,20 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'gyebaek_0': { icon:'⚔️', when:'660년',
+    headline:'황산벌 — 계백의 5천 결사대가 무너지다',
+    sub:'네 번을 물리쳤으나 다섯 번째를 넘지 못했습니다. 사비성이 열립니다.' },
+  'gimyusin_0': { icon:'🔥', when:'668년',
+    headline:'평양성이 함락되고 고구려가 무너지다',
+    sub:'연개소문이 죽은 뒤 아들들이 갈라섰습니다.' },
+  'munmu_0': { icon:'🌊', when:'676년',
+    headline:'매소성·기벌포에서 당을 몰아내다',
+    sub:'당이 웅진도독부·계림도독부를 두려 했으나 신라가 끝내 밀어냈습니다.' },
+  'sinmun_0': { icon:'🎋', when:'682~689년',
+    headline:'신문왕, 국학을 세우고 녹읍을 없애다',
+    sub:'관료에게 관료전을 주고 녹읍을 거두었습니다. 귀족의 힘을 누르는 일입니다.' },
+}, 'word');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

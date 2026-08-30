@@ -1506,6 +1506,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1633,6 +1635,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'yeounhyeong_0': { icon:'🎉', when:'1945년 8월 15일',
+    headline:'광복',
+    sub:'건국준비위원회가 곧바로 꾸려집니다.' },
+  'nongji_0': { icon:'🌾', when:'1949년',
+    headline:'농지개혁법이 제정되다',
+    sub:'유상 매수·유상 분배가 원칙입니다.' },
+  'yukio_0': { icon:'💥', when:'1950년 6월 25일',
+    headline:'전쟁이 일어나다',
+    sub:'사흘 만에 서울이 떨어집니다.' },
+}, 'press');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

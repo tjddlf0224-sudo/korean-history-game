@@ -1471,6 +1471,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1600,6 +1602,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'jeonbongjun_0': { icon:'🌾', when:'1894년',
+    headline:'동학 농민군이 일어나다',
+    sub:'고부에서 시작해 전주성을 차지했습니다.' },
+  'gungug_0': { icon:'📜', when:'1894년',
+    headline:'갑오개혁 — 신분제가 폐지되다',
+    sub:'과거제와 연좌제도 함께 없앴습니다.' },
+  'eulmi_0': { icon:'🩸', when:'1895년',
+    headline:'을미사변 — 명성황후가 시해되다',
+    sub:'뒤이어 단발령이 내려 의병이 일어납니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

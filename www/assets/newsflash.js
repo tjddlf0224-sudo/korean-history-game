@@ -7,6 +7,12 @@
    - 지금 이 게임은 조용히 진행되기만 한다. 임진왜란 챕터를 걸어도 전쟁이
      일어났다는 감각이 없다. 대사로만 알려 주기 때문이다.
 
+   시대마다 소식이 오는 길이 다르다
+   - 신문은 1883년 한성순보가 처음이다. 그 앞 시대에 "호외"가 뜨면 어긋난다.
+   - 그래서 세 갈래로 나눴다. 선사·고대는 **입에서 입으로**(말이 돌다),
+     고려·조선은 **방(榜)과 파발**, 개항기 뒤로는 **신문 호외**.
+     띠의 이름·색·아이콘이 함께 바뀐다.
+
    언제 뜨는가
    - 챕터의 막이 넘어갈 때(대화를 끝냈을 때) 그 시점에 맞는 속보를 띄운다.
      기준은 `NEWS[챕터][트리거]` 하나뿐이라 챕터가 쓰기 쉬워야 한다.
@@ -20,11 +26,24 @@
 */
 window.News = (function(){
 
-  let TABLE = {};
+  /* 소식이 오는 길. 챕터가 News.set(table, mode)로 고른다.
+       word   선사~남북국 — 사람들의 입으로 옮는다
+       notice 고려~조선   — 관아에 방이 붙고 파발이 달린다
+       press  개항기~현대 — 신문이 호외를 찍는다 (1883 한성순보 이후) */
+  const MEDIA = {
+    word:   { tag:'말 이  돌 다', cls:'nf-word' },
+    notice: { tag:'방 이  붙 다', cls:'nf-notice' },
+    press:  { tag:'호 외',        cls:'nf-press' },
+  };
+
+  let TABLE = {}, MODE = 'notice';
   const fired = new Set();
   let queue = [], showing = false;
 
-  function set(table){ TABLE = table || {}; }
+  function set(table, mode){
+    TABLE = table || {};
+    if (mode && MEDIA[mode]) MODE = mode;
+  }
 
   /* ---------------- 스타일 ---------------- */
   let injected = false;
@@ -44,12 +63,14 @@ window.News = (function(){
       0%{transform:translateY(-130%)} 9%{transform:translateY(6%)} 13%{transform:translateY(0)}
       88%{transform:translateY(0); opacity:1} 100%{transform:translateY(-130%); opacity:0} }
 
-    /* 머리띠 — 붉은 호외 라벨이 흐른다 */
-    .nf .top { display:flex; align-items:center; gap:9px; padding:6px 12px;
-      background:linear-gradient(90deg,#8c2a1e,#b6483c); }
-    .nf .tag { font-size:11px; font-weight:700; letter-spacing:.28em; color:#ffe9d6;
+    /* 머리띠 — 매체에 따라 색이 다르다 */
+    .nf .top { display:flex; align-items:center; gap:9px; padding:6px 12px; }
+    .nf.nf-press  .top { background:linear-gradient(90deg,#8c2a1e,#b6483c); }  /* 신문 호외 */
+    .nf.nf-notice .top { background:linear-gradient(90deg,#5a4423,#7d6234); }  /* 방·파발 */
+    .nf.nf-word   .top { background:linear-gradient(90deg,#3f4a35,#5c6a4a); }  /* 입소문 */
+    .nf .tag { font-size:11px; font-weight:700; letter-spacing:.22em; color:#ffe9d6;
       border:1px solid rgba(255,233,214,.55); border-radius:4px; padding:1px 7px; white-space:nowrap; }
-    .nf .when { font-size:11.5px; color:#ffd9c6; letter-spacing:.06em; }
+    .nf .when { font-size:11.5px; color:#f0dcc6; letter-spacing:.06em; }
     .nf .dot { width:6px; height:6px; border-radius:50%; background:#ffe9d6; margin-left:auto;
       animation:nf-blink .9s ease-in-out infinite; }
     @keyframes nf-blink { 0%,100%{opacity:.3} 50%{opacity:1} }
@@ -101,10 +122,11 @@ window.News = (function(){
 
   function render(n){
     showing = true;
+    const m = MEDIA[n.mode || MODE] || MEDIA.notice;
     const el = document.createElement('div');
-    el.className = 'nf';
+    el.className = 'nf ' + m.cls;
     el.innerHTML =
-      '<div class="top"><span class="tag">호 외</span>' +
+      '<div class="top"><span class="tag">' + m.tag + '</span>' +
         (n.when ? `<span class="when">${n.when}</span>` : '') +
         '<span class="dot"></span></div>' +
       '<div class="body"><div class="ic">' + (n.icon || '📜') + '</div>' +
@@ -130,5 +152,5 @@ window.News = (function(){
     return true;
   }
 
-  return { set, fire, _table: () => TABLE };
+  return { set, fire, MEDIA, _table: () => TABLE, _mode: () => MODE };
 })();

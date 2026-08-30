@@ -1674,6 +1674,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1801,6 +1803,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'jeongjo_0': { icon:'🏯', when:'1794~1796년',
+    headline:'수원 화성을 쌓다',
+    sub:'정약용의 거중기로 공사 기간을 크게 줄였습니다.' },
+  'jeongyagyong_0': { icon:'📔', when:'19세기 초',
+    headline:'정약용, 유배지에서 목민심서를 짓다',
+    sub:'지방 수령이 지킬 도리를 적었습니다.' },
+  'gimhongdo_0': { icon:'🖼️', when:'18세기 후반',
+    headline:'풍속화가 널리 퍼지다',
+    sub:'서민의 삶이 그림의 주인공이 됩니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

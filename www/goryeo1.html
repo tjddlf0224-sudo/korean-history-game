@@ -1500,6 +1500,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1627,6 +1629,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'wanggeon_0': { icon:'🏛️', when:'918~919년',
+    headline:'왕건, 고려를 세우고 송악으로 도읍을 옮기다',
+    sub:'호족과 혼인을 맺고, 북진을 내세웁니다.' },
+  'gwangjong_0': { icon:'⛓️', when:'956년',
+    headline:'광종, 노비안검법을 실시하다',
+    sub:'억울하게 노비가 된 이를 풀어 줍니다. 호족의 힘이 깎입니다.' },
+  'choeseungno_0': { icon:'📜', when:'982년',
+    headline:'최승로, 시무 28조를 올리다',
+    sub:'유교로 다스리고 불교 행사를 줄이자 합니다. 성종이 받아들입니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

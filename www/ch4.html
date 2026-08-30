@@ -1523,6 +1523,8 @@ const Dialog = {
     if (Stage.keyFor(this.npc.id) === prevKey) playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
@@ -1782,6 +1784,14 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'seongjong_0': { icon:'📚', when:'1485년',
+    headline:'경국대전을 반포하다',
+    sub:'세조 때 시작한 법전이 성종 대에 완성되었습니다. 조선의 통치 체제가 여기서 갖춰집니다.' },
+  'seogeojeong_0': { icon:'📖', when:'15세기 후반',
+    headline:'동국통감·동문선을 펴내다',
+    sub:'우리 역사와 글을 우리 손으로 갈무리합니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

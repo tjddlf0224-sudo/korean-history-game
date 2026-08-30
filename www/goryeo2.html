@@ -1661,6 +1661,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1788,6 +1790,23 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'seohui_0': { icon:'🗣️', when:'993년',
+    headline:'서희, 소손녕과 담판해 강동 6주를 얻다',
+    sub:'싸우지 않고 압록강 동쪽 땅을 받아 냈습니다.' },
+  'yungwan_0': { icon:'🐎', when:'1107년',
+    headline:'윤관, 별무반을 이끌고 동북 9성을 쌓다',
+    sub:'신기군·신보군·항마군으로 여진을 쳤습니다.' },
+  'ijagyeom_0': { icon:'🩸', when:'1126년',
+    headline:'이자겸의 난 — 궁궐이 불타다',
+    sub:'외척이 왕을 누르려다 척준경에게 무너졌습니다.' },
+  'choechunghyeon_0': { icon:'⚔️', when:'1170년',
+    headline:'무신정변 — 정중부 등이 정권을 잡다',
+    sub:'문신들이 죽고 무신의 시대가 열립니다.' },
+  'sambyeolcho_0': { icon:'🏝️', when:'1270~1273년',
+    headline:'삼별초, 강화에서 진도·제주로 옮겨 싸우다',
+    sub:'개경 환도를 거부하고 끝까지 맞섰습니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

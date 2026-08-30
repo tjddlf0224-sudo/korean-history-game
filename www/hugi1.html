@@ -1739,6 +1739,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1866,6 +1868,20 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'daedong_0': { icon:'🌾', when:'1608년',
+    headline:'대동법을 경기에 처음 시행하다',
+    sub:'공물을 쌀로 걷습니다. 뒤에 전국으로 넓혀집니다.' },
+  'gwanghae_0': { icon:'⚖️', when:'1619년',
+    headline:'명과 후금 사이에서 중립을 지키다',
+    sub:'강홍립에게 형세를 보아 움직이라 일렀습니다.' },
+  'injo_0': { icon:'❄️', when:'1636년',
+    headline:'청군이 쳐들어오다 — 병자호란',
+    sub:'임금이 남한산성으로 들어갑니다.' },
+  'seokgong_0': { icon:'🪨', when:'1637년',
+    headline:'삼전도에서 항복하다',
+    sub:'비를 세워 그 일을 새기게 했습니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

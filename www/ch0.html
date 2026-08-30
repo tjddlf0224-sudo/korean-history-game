@@ -1384,6 +1384,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1392,12 +1394,12 @@ document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next
 document.getElementById('dlg-portrait').addEventListener('click', () => Dialog.next());
 
 /* ============ 모던 인트로 ============ */
+/* 독서실 장면은 첫 화(seonsa1)로 옮겼다. 여기는 고려를 지나 온 자리다. */
 const INTRO_LINES = [
-  '독서실. 형광등 불빛 아래, 한능검 문제집이 책상 위에 펼쳐져 있다.',
-  '"조선 전기…태조, 태종, 세종…" 몇 번을 읽어도 이름과 사건이 뒤섞인다.',
-  '눈꺼풀이 무거워진다. 시계는 새벽 1시를 가리키고 있었다.',
-  '"딱 5분만…" 책상에 엎드린 순간, 눈앞이 흐려진다.',
-  '— 그리고 눈을 떴을 때, 사방에서 흙먼지 냄새가 났다.'
+  '개경을 떠나온 지 얼마나 되었을까.',
+  '위화도에서 군사를 돌린 장수가 새 나라를 세웠다는 말이 돌더니,',
+  '이번에는 도읍을 남쪽으로 옮긴다는 소문까지 들린다.',
+  '— 눈앞에는 아직 이름도 없는 새 궁궐 터가 펼쳐져 있다.'
 ];
 let introIdx = 0;
 function renderIntro(){
@@ -1422,9 +1424,8 @@ function introNext(){
 }
 document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
-// 독서실(잠들어 시간을 거슬러 오는) 인트로는 이 게임을 정말 처음 시작할
-// 때만 보여준다 — 고려에서 '다음 화로'를 눌러 조선전기로 넘어올 때도
-// 매번 뜨는 건 이상하다는 지적을 반영. 한 번 본 뒤로는 곧장 게임 화면으로.
+// 이 화의 인트로는 이 화에 들어올 때마다 보여도 이상하지 않다
+// (독서실 장면이 아니라 '고려를 지나 온 자리'를 설명하는 글이기 때문).
 (function(){
   let seen = false;
   try { seen = !!localStorage.getItem('khg_seenIntro'); } catch(e){}
@@ -1529,6 +1530,14 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'jeongdojeon_0': { icon:'🏯', when:'1392년',
+    headline:'이성계, 새 나라를 세우다',
+    sub:'위화도에서 군사를 돌린 지 4년 만입니다.' },
+  'jeongdojeon_1': { icon:'🏛️', when:'1394년',
+    headline:'한양으로 도읍을 옮기다',
+    sub:'경복궁과 종묘·사직을 세웁니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

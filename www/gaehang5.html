@@ -1630,6 +1630,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1759,6 +1761,20 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'seojaepil_0': { icon:'📰', when:'1896년',
+    headline:'독립신문이 창간되다',
+    sub:'한글판과 영문판을 함께 냅니다.' },
+  'gojong_0': { icon:'👑', when:'1897년',
+    headline:'환구단에서 대한제국을 선포하다',
+    sub:'연호를 광무라 하고 황제에 오릅니다.' },
+  'sinminhoe_0': { icon:'🕊️', when:'1907년',
+    headline:'신민회가 조직되다',
+    sub:'국권 회복과 공화정을 목표로 삼은 비밀 결사입니다.' },
+  'jeongmi_0': { icon:'⚔️', when:'1907년',
+    headline:'정미의병 — 해산 군인이 합류하다',
+    sub:'군대가 해산되자 훈련받은 군인들이 의병에 들어갔습니다.' },
+}, 'press');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

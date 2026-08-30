@@ -1578,6 +1578,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1705,6 +1707,20 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'hanil_0': { icon:'📜', when:'1965년',
+    headline:'한일 국교가 정상화되다',
+    sub:'굴욕 외교라는 반대 시위가 거셌습니다.' },
+  'saemaul_0': { icon:'🌾', when:'1970년~',
+    headline:'새마을 운동이 시작되다',
+    sub:'근면·자조·협동을 내겁니다.' },
+  'olympic_0': { icon:'🏅', when:'1988년',
+    headline:'서울 올림픽이 열리다',
+    sub:'동서 진영이 12년 만에 함께 모였습니다.' },
+  'gimdaejung_0': { icon:'🕊️', when:'2000년 6월',
+    headline:'첫 남북 정상회담 — 6·15 공동선언',
+    sub:'분단 55년 만에 두 정상이 마주 앉았습니다.' },
+}, 'press');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

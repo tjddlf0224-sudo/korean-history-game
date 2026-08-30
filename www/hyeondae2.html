@@ -1531,6 +1531,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1658,6 +1660,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'sasaoip_0': { icon:'✊', when:'1960년 4월 19일',
+    headline:'4·19 혁명 — 이승만이 하야하다',
+    sub:'3·15 부정선거가 불씨였습니다.' },
+  'gwangju_0': { icon:'🕯️', when:'1980년 5월',
+    headline:'광주에서 시민들이 일어나다',
+    sub:'계엄군에 맞서 시민군이 꾸려졌습니다.' },
+  'yuwol_0': { icon:'✊', when:'1987년 6월',
+    headline:'6월 민주 항쟁 — 직선제를 얻어내다',
+    sub:'6·29 선언으로 대통령 직선제가 받아들여집니다.' },
+}, 'press');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

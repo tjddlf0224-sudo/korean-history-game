@@ -1676,6 +1676,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1803,6 +1805,23 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'cheongsanri_0': { icon:'🏔️', when:'1920년 10월',
+    headline:'청산리에서 크게 이기다',
+    sub:'김좌진·홍범도의 부대가 엿새를 싸웠습니다.' },
+  'mulsan_0': { icon:'🧵', when:'1920년',
+    headline:'물산장려운동이 시작되다',
+    sub:'"내 살림 내 것으로" — 평양에서 조만식이 앞장섰습니다.' },
+  'uiyeoldan_0': { icon:'💥', when:'1923년',
+    headline:'의열단, 조선혁명선언을 내걸다',
+    sub:'신채호가 썼습니다. 민중의 직접 혁명을 말합니다.' },
+  'singanhoe_0': { icon:'🤝', when:'1927년',
+    headline:'신간회가 창립되다',
+    sub:'좌우가 손을 잡은 최대의 항일 단체입니다.' },
+  'eohakhoe_0': { icon:'📝', when:'1942년',
+    headline:'조선어학회 사건',
+    sub:'우리말 큰사전을 엮던 학자들이 잡혀갔습니다.' },
+}, 'press');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

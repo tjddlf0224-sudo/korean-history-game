@@ -1686,6 +1686,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1694,8 +1696,15 @@ document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next
 document.getElementById('dlg-portrait').addEventListener('click', () => Dialog.next());
 
 /* ============ 모던 인트로 ============ */
+/* 이 게임의 진짜 첫머리. 독서실에서 잠들어 시간을 거슬러 오는 장면은
+   원래 ch0(조선 0화)에 있었는데, 선사·고대·고려가 앞에 붙으면서 순서가
+   어긋나 있었다. 첫 화인 여기로 옮긴다. */
 const INTRO_LINES = [
-  '눈을 뜨니 사방이 어둡다. 축축한 돌벽, 어디선가 물 떨어지는 소리.',
+  '독서실. 형광등 불빛 아래, 한능검 문제집이 책상 위에 펼쳐져 있다.',
+  '"구석기, 신석기, 청동기…" 몇 번을 읽어도 순서가 뒤섞인다.',
+  '눈꺼풀이 무거워진다. 시계는 새벽 1시를 가리키고 있었다.',
+  '"딱 5분만…" 책상에 엎드린 순간, 눈앞이 흐려진다.',
+  '— 눈을 떴을 때, 사방이 어둡다. 축축한 돌벽, 어디선가 물 떨어지는 소리.',
   '멀리 불빛이 흔들린다. 누군가 돌을 깨고 있다 — 쨍, 쨍.',
   '"여긴… 언제지?" 손에 잡히는 건 거칠게 떼어낸 돌조각 하나.',
   '— 아주 오래된 시간의 첫머리에 서 있다.',
@@ -1814,6 +1823,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'sinseokgi_0': { icon:'🌾', when:'기원전 8000년경',
+    headline:'농사가 시작되다',
+    sub:'조·피를 심고 한곳에 머물러 삽니다. 강가에 움집을 짓고 빗살무늬 토기에 곡식을 담습니다.' },
+  'cheongdonggi_0': { icon:'⚔️', when:'기원전 2000~1500년경',
+    headline:'청동기가 들어오고 사람 사이에 위아래가 생기다',
+    sub:'청동은 무기와 제기에만 씁니다. 농기구는 여전히 돌입니다. 힘 있는 자가 죽으면 거대한 고인돌을 세웁니다.' },
+  'dangun_0': { icon:'🏛️', when:'기원전 2333년(단군기원)',
+    headline:'고조선, 8조법으로 다스리다',
+    sub:'사람을 죽인 자는 죽이고, 남을 다치게 한 자는 곡식으로 갚게 합니다. 도둑질한 자는 종으로 삼습니다.' },
+}, 'word');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

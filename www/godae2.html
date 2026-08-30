@@ -1636,6 +1636,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1763,6 +1765,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'daejoyeong_0': { icon:'🏔️', when:'698년',
+    headline:'대조영, 동모산에 나라를 세우다',
+    sub:'고구려 유민과 말갈을 아울렀습니다. 뒤에 발해라 부릅니다.' },
+  'munwang_0': { icon:'🏯', when:'8세기 중엽',
+    headline:'발해, 상경으로 도읍을 옮기고 당과 통하다',
+    sub:'당은 발해를 해동성국이라 부릅니다.' },
+  'jangbogo_0': { icon:'⛵', when:'828년',
+    headline:'장보고, 완도에 청해진을 두다',
+    sub:'신라·당·일본을 잇는 바닷길을 쥐었습니다. 해적이 자취를 감춥니다.' },
+}, 'word');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';

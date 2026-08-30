@@ -1512,6 +1512,8 @@ const Dialog = {
       playFanfare('대화 완료');
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
+    // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
+    if (window.News) News.fire(this.key);
 
     }
   }
@@ -1639,6 +1641,17 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'sinrip_0': { icon:'⚔️', when:'1592년 4월',
+    headline:'왜군이 부산에 상륙하다',
+    sub:'스무 날 만에 한양이 떨어집니다. 신립은 탄금대에서 배수진을 쳤습니다.' },
+  'yisunsin_0': { icon:'🌊', when:'1592년 7월',
+    headline:'한산도에서 학익진으로 크게 이기다',
+    sub:'바닷길이 끊겨 왜군의 보급이 막혔습니다.' },
+  'gimsimin_0': { icon:'🏯', when:'1592년 10월',
+    headline:'진주성에서 김시민이 지켜 내다',
+    sub:'3천여 명으로 2만을 막았습니다.' },
+}, 'notice');
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
