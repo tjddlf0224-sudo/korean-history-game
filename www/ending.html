@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>타임슬립 한국사 · 깨어나다</title>
+<meta name="description" content="아홉 시대를 모두 지나 독서실에서 깨어난다. 그리고 시험지를 받아 든다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; word-break:keep-all;
+      overflow-wrap:break-word; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; overscroll-behavior:none;
+    touch-action:none; background:#0a0806; color:#f5ecd8;
+    font-family:"Gowun Batang", -apple-system, "Malgun Gothic", serif; }
+
+  /* 다른 화면과 같은 가로모드 고정 */
+  #wrap { position:fixed; top:0; left:0; touch-action:none; transform-origin:top left; overflow:hidden; }
+  body.rot #wrap { transform:rotate(90deg) translateY(-100%); }
+
+  #bg { position:absolute; inset:0; background-size:cover; background-position:center;
+    opacity:0; transition:opacity 1.6s ease; filter:brightness(.4) saturate(.75); }
+  #bg.on { opacity:1; }
+  #veil { position:absolute; inset:0;
+    background:radial-gradient(ellipse at 50% 45%, rgba(10,8,6,.28), rgba(10,8,6,.9) 76%); }
+
+  /* 장면 글 */
+  #stage { position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; padding:0 9%; text-align:center; }
+  #line { font-size:clamp(17px,3vw,25px); line-height:2; max-width:34em; text-wrap:balance;
+    opacity:0; transform:translateY(9px); transition:opacity .8s ease, transform .8s ease;
+    text-shadow:0 2px 14px rgba(0,0,0,.9); }
+  #line.on { opacity:1; transform:none; }
+  #line b { color:#f0c96b; }
+  #go { margin-top:32px; font-size:13px; color:#9d8d70; letter-spacing:.12em; opacity:0;
+    transition:opacity .5s ease; }
+  #go.on { opacity:1; animation:blink 2.1s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:.45} 50%{opacity:1} }
+
+  /* 성적표 */
+  #report { position:absolute; inset:0; display:none; flex-direction:column;
+    align-items:center; justify-content:center; padding:4% 7%; overflow-y:auto; }
+  #report.on { display:flex; }
+  #report .ttl { font-size:clamp(23px,4.4vw,34px); font-weight:700; color:#f0c96b;
+    text-shadow:0 0 30px rgba(240,201,107,.5); flex:none; }
+  #report .sub { font-size:13px; color:#b8a888; margin-top:6px; letter-spacing:.1em; flex:none; }
+
+  #report .figs { display:grid; grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
+    gap:9px; margin:22px 0 6px; width:min(100%,560px); flex:none; }
+  #report .fig { background:rgba(36,28,18,.9); border:1px solid #4a3c26; border-radius:11px;
+    padding:12px 10px; text-align:center; }
+  #report .fig .v { font-size:25px; font-weight:700; color:#f0c96b; line-height:1.2;
+    font-variant-numeric:tabular-nums; }
+  #report .fig .k { font-size:11.5px; color:#b8a888; margin-top:3px; }
+
+  /* 아홉 개의 열쇠 */
+  #report .keys { display:flex; flex-wrap:wrap; gap:7px; justify-content:center;
+    margin:14px 0 4px; width:min(100%,560px); flex:none; }
+  #report .keys .k { width:52px; text-align:center; }
+  #report .keys .k img { width:44px; height:44px; object-fit:contain;
+    filter:drop-shadow(0 0 10px rgba(240,201,107,.45)); }
+  #report .keys .k span { display:block; font-size:9.5px; color:#a89676; margin-top:2px; line-height:1.3; }
+
+  #report .word { font-size:14px; color:#e6dbc2; line-height:1.95; margin-top:18px;
+    max-width:31em; flex:none; text-wrap:balance; }
+  #report .word b { color:#f0c96b; }
+
+  #report .btns { display:flex; gap:9px; flex-wrap:wrap; justify-content:center; margin-top:24px; flex:none; }
+  #report .btn { background:#2a2013; border:1px solid #c9a24a; color:#f5ecd8; border-radius:12px;
+    padding:12px 24px; font-family:inherit; font-size:15px; cursor:pointer; }
+  #report .btn:hover { background:#3a2c1a; }
+  #report .btn.sub2 { border-color:#4a3c26; color:#b8a888; }
+
+  #skip { position:absolute; right:calc(14px + env(safe-area-inset-right));
+    top:calc(12px + env(safe-area-inset-top)); z-index:9; background:none; border:none;
+    color:#7d7059; font-family:inherit; font-size:12.5px; letter-spacing:.1em; cursor:pointer; padding:8px; }
+  #skip:hover { color:#c9a24a; }
+
+  @media (prefers-reduced-motion:reduce){ #go.on { animation:none; } }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="bg"></div>
+  <div id="veil"></div>
+
+  <div id="stage">
+    <div id="line"></div>
+    <div id="go">탭하여 계속 ▶</div>
+  </div>
+
+  <div id="report">
+    <div class="ttl">깨 어 나 다</div>
+    <div class="sub">아홉 시대를 모두 지나</div>
+    <div class="figs" id="figs"></div>
+    <div class="keys" id="keys"></div>
+    <div class="word">
+      꿈이었는지 아닌지는 알 수 없다.<br>
+      다만 이제 <b>이름과 사건이 뒤섞이지 않는다</b>.
+    </div>
+    <div class="btns">
+      <button class="btn" id="toExam">시험지를 받아 든다 →</button>
+      <button class="btn sub2" id="toIndex">챕터 목록으로</button>
+    </div>
+  </div>
+
+  <button id="skip">건너뛰기</button>
+</div>
+
+<script src="assets/items.js"></script>
+<script src="assets/heroes_data.js"></script>
+<script src="assets/heroes.js"></script>
+<script src="assets/badges.js"></script>
+<script src="assets/rank.js"></script>
+<script src="assets/journey.js"></script>
+<script>
+/* ============ 엔딩 — 독서실에서 깨어난다 ============
+
+   이 게임의 이야기는 "독서실에서 잠들어 선사로 떨어진다"로 시작한다.
+   그러면 끝은 그 자리로 돌아오는 것이어야 한다. 아홉 시대의 열쇠를 모두
+   모으면 여기로 온다(journey.js가 보낸다).
+
+   마지막에 시험지를 받아 드는 것으로 닫는다 — 이 게임이 무엇을 위한
+   것이었는지가 그 한 장면에 들어 있다.
+*/
+const SC = [
+  { bg:'', t:'—' },
+  { t:'어디선가 종이 넘기는 소리가 들린다.' },
+  { t:'흙냄새도, 물소리도, 말발굽 소리도 없다.' },
+  { bg:'assets/scenes/ch0_bg.webp',
+    t:'눈을 뜨니 형광등 불빛.<br>책상 위에 <b>한능검 문제집</b>이 그대로 펼쳐져 있다.' },
+  { t:'시계는 새벽 1시 5분.<br>엎드린 지 <b>5분</b>이 지났을 뿐이다.' },
+  { t:'그런데 손끝에 아직 무언가 남아 있다.<br>차가운 청동, 젖은 나무판, 접힌 종이의 감촉.' },
+  { t:'책장을 넘긴다.<br>구석기, 신석기, 청동기 — 이제 순서가 뒤섞이지 않는다.' },
+  { t:'이름들이 얼굴로 떠오른다.<br>세종의 목소리, 이순신의 등, 유관순의 손에 들린 깃발.' },
+  { t:'— 그 사람들을 만나고 왔기 때문이다.', last:true },
+];
+
+const el = {
+  bg: document.getElementById('bg'), line: document.getElementById('line'),
+  go: document.getElementById('go'), stage: document.getElementById('stage'),
+  report: document.getElementById('report'),
+};
+let idx = -1;
+
+function setBg(src){
+  if (src === undefined) return;
+  if (!src){ el.bg.classList.remove('on'); return; }
+  el.bg.style.backgroundImage = `url('${src}')`;
+  el.bg.classList.add('on');
+}
+
+function next(){
+  idx++;
+  if (idx >= SC.length) return;
+  const s = SC[idx];
+  el.line.classList.remove('on');
+  el.go.classList.remove('on');
+  setTimeout(() => {
+    setBg(s.bg);
+    el.line.innerHTML = s.t;
+    el.line.classList.add('on');
+    if (s.last) setTimeout(showReport, 2600);
+    else setTimeout(() => el.go.classList.add('on'), 800);
+  }, 300);
+}
+
+function showReport(){
+  el.stage.style.transition = 'opacity .8s ease';
+  el.stage.style.opacity = '0';
+  setTimeout(() => {
+    el.stage.style.display = 'none';
+    buildReport();
+    el.report.classList.add('on');
+    try { localStorage.setItem('khg_ending_seen', '1'); } catch(e){}
+    if (window.Badges) Badges.earn('journey_complete');
+    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
+  }, 800);
+}
+
+function buildReport(){
+  const p = window.Journey ? Journey.progress() : null;
+  const heroes = window.Heroes ? Heroes.owned().length : 0;
+  const stars  = window.Heroes ? Heroes.starred().length : 0;
+  const items  = window.Items ? Items.owned().length : 0;
+  const correct = window.Badges ? Badges.correctCount() : 0;
+  const rank = window.Rank ? Rank.get() : null;
+
+  const figs = [
+    [p ? `${p.chapters.done}` : '—', '지나온 화'],
+    [String(correct), '맞힌 문제'],
+    [`${heroes}`, '만난 사람'],
+    [`${items}`, '주운 유물'],
+    [rank ? rank.tier.name : '—', '이르른 신분'],
+  ];
+  document.getElementById('figs').innerHTML = figs
+    .map(([v, k]) => `<div class="fig"><div class="v">${v}</div><div class="k">${k}</div></div>`).join('');
+
+  if (p){
+    document.getElementById('keys').innerHTML = p.keys.map(k =>
+      `<div class="k"><img src="assets/items/${k.key}.png" alt=""><span>${k.name}</span></div>`).join('');
+  }
+  if (stars){
+    const w = document.querySelector('#report .word');
+    w.innerHTML += `<br><span style="font-size:12.5px;color:#b8a888">한 번에 모두 맞힌 인물 <b style="color:#ffd970">★ ${stars}</b></span>`;
+  }
+}
+
+document.getElementById('toExam').onclick = () => location.href = 'exam_practice.html?era=0';
+document.getElementById('toIndex').onclick = () => location.href = 'index.html';
+document.getElementById('skip').onclick = (e) => { e.stopPropagation(); showReport(); };
+
+document.getElementById('wrap').addEventListener('click', (e) => {
+  if (e.target.closest('button')) return;
+  if (!el.report.classList.contains('on')) next();
+});
+document.addEventListener('keydown', (e) => {
+  if ((e.key === ' ' || e.key === 'Enter') && !el.report.classList.contains('on')) next();
+});
+
+/* 가로모드 고정 — 다른 화면과 같은 처리 */
+const wrapEl = document.getElementById('wrap');
+function getViewportSize(){
+  const vv = window.visualViewport;
+  if (vv && (vv.scale || 1) <= 1.01) return { w: vv.width, h: vv.height };
+  return { w: window.innerWidth, h: window.innerHeight };
+}
+function applyOrientation(){
+  const { w: iw, h: ih } = getViewportSize();
+  const portrait = ih > iw;
+  document.body.classList.toggle('rot', portrait);
+  wrapEl.style.width  = (portrait ? ih : iw) + 'px';
+  wrapEl.style.height = (portrait ? iw : ih) + 'px';
+}
+window.addEventListener('resize', applyOrientation);
+window.addEventListener('orientationchange', () => setTimeout(applyOrientation, 80));
+if (window.visualViewport){
+  window.visualViewport.addEventListener('resize', applyOrientation);
+  window.visualViewport.addEventListener('scroll', applyOrientation);
+}
+applyOrientation();
+setTimeout(applyOrientation, 300);
+
+next();
+</script>
+</body>
+</html>

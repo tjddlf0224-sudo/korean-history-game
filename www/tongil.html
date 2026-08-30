@@ -1550,6 +1550,8 @@ renderIntro();
 
 Stage.endChapter = function(){ BGM.play('bgm_chapter_end', {fadeMs:700});
   if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop());
+  // 이 시대를 다 겪었으면 시대의 열쇠를 얻는다
+  if (window.Journey) Journey.onChapterEnd();
   if (window.Streak) Streak.checkIn();
   if (window.Rank) Rank.addXp(50, '챕터 완주');
   document.getElementById('end-screen').classList.add('show');
@@ -1632,6 +1634,7 @@ requestAnimationFrame(loop);
 <script src="assets/heroes_data.js"></script>
 <script src="assets/heroes.js"></script>
 <script src="assets/newsflash.js"></script>
+<script src="assets/journey.js"></script>
 <script src="assets/items.js"></script>
 <script src="assets/autowalk.js"></script>
 <script>
