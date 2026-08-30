@@ -249,13 +249,11 @@ window.Items = (function(){
     st.textContent = `
     /* 가방 버튼 — 우측 정렬대 안에 들어간다(위치는 #side-dock이 잡는다) */
     #bag-btn { width:38px; height:38px; border-radius:50%;
-      border:1px solid #4a3c26; background:#241c12ee; color:#f0c96b; font-size:16px;
-      display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+      border:1px solid #4a3c26; background:#241c12ee; color:#f0c96b;
+      display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
+    #bag-btn svg { width:20px; height:20px; display:block;
       box-shadow:0 4px 14px rgba(0,0,0,.5); }
     #bag-btn:active { transform:scale(.94); }
-    #bag-btn .cnt { position:absolute; right:-3px; top:-3px; min-width:15px; height:15px;
-      border-radius:999px; background:#b6483c; color:#fff; font-size:10px; font-weight:700;
-      display:flex; align-items:center; justify-content:center; padding:0 4px; }
 
     /* 유물 획득 연출 */
     /* #wrap 기준으로 덮는다. fixed로 두면 회전이 없는 가로 화면에서
@@ -466,7 +464,13 @@ window.Items = (function(){
     if (!document.getElementById('bag-btn')){
       const b = document.createElement('button');
       b.id = 'bag-btn';
-      b.innerHTML = '🎒<span class="cnt">0</span>';
+      b.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '+
+        'stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M5.2 10.5h13.6l-1.1 8.2a1.6 1.6 0 0 1-1.6 1.4H7.9a1.6 1.6 0 0 1-1.6-1.4z"/>' +
+        '<path d="M8.6 10.5V8.1a3.4 3.4 0 0 1 6.8 0v2.4"/>' +
+        '<path d="M9.5 4.6 12 6.9l2.5-2.3"/>' +
+        '</svg>';
       b.onclick = openBag;
       b.style.order = '1';
       dock().appendChild(b);
@@ -488,7 +492,7 @@ window.Items = (function(){
 
   function renderBag(){
     const btn = document.getElementById('bag-btn');
-    if (btn) btn.querySelector('.cnt').textContent = owned().length;
+    if (!btn) return;
   }
 
   function openBag(){

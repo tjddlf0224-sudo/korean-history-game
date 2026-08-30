@@ -170,13 +170,11 @@ window.Heroes = (function(){
     st.textContent = `
     /* 인물 카드 버튼 — 우측 정렬대 안 */
     #hero-btn { width:38px; height:38px; border-radius:50%;
-      border:1px solid #4a3c26; background:#241c12ee; color:#f0c96b; font-size:15px;
-      display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+      border:1px solid #4a3c26; background:#241c12ee; color:#f0c96b;
+      display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
+    #hero-btn svg { width:20px; height:20px; display:block;
       box-shadow:0 4px 14px rgba(0,0,0,.5); }
     #hero-btn:active { transform:scale(.94); }
-    #hero-btn .cnt { position:absolute; right:-3px; top:-3px; min-width:15px; height:15px;
-      border-radius:999px; background:#6b4a8c; color:#fff; font-size:10px; font-weight:700;
-      display:flex; align-items:center; justify-content:center; padding:0 4px; }
 
     /* 카드를 얻는 순간 */
     .hr-get { position:absolute; inset:0; z-index:88; display:flex; align-items:center;
@@ -319,7 +317,14 @@ window.Heroes = (function(){
     if (!document.getElementById('hero-btn')){
       const b = document.createElement('button');
       b.id = 'hero-btn';
-      b.innerHTML = '👥<span class="cnt">0</span>';
+      b.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '+
+        'stroke-linecap="round" stroke-linejoin="round">' +
+        '<circle cx="9" cy="8.4" r="3.1"/>' +
+        '<path d="M3.4 19.4a5.6 5.6 0 0 1 11.2 0"/>' +
+        '<path d="M16.4 5.9a3.1 3.1 0 0 1 0 5.9"/>' +
+        '<path d="M17.6 14.4a5.6 5.6 0 0 1 3 5"/>' +
+        '</svg>';
       b.onclick = openBook;
       b.style.order = '2';
       dock().appendChild(b);
@@ -347,8 +352,7 @@ window.Heroes = (function(){
   }
 
   function renderBtn(){
-    const el = document.querySelector('#hero-btn .cnt');
-    if (el) el.textContent = owned().length;
+    /* 개수는 도감 안에서 '몇 / 몇 명'으로 보여 준다. */
   }
 
   function openBook(){
