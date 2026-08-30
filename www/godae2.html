@@ -603,7 +603,10 @@ const ZONES = {
       { id:'minjeong', name:'촌주', x:560, y:300, img:'assets/portraits/minjeong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
     ],
     exits: [
-      { rect:{x0:890,y0:570,x1:975,y1:630}, to:'sanggyeong', spawn:{x:688,y:690}, label:'배를 타고 북쪽으로' },
+      // 라벨에 방향어를 쓰지 않는다: 상경성은 이야기상 북쪽이지만 이 지도에서
+      // 나루터(출구)는 아래쪽이라, "북쪽으로"라고 쓰면 목표 안내에 붙는
+      // 방향 화살표(↓)와 정반대로 보인다.
+      { rect:{x0:890,y0:570,x1:975,y1:630}, to:'sanggyeong', spawn:{x:688,y:690}, label:'배를 타고 상경성으로' },
     ],
   },
 };
