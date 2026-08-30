@@ -1193,6 +1193,27 @@ const NPC_DATA = {
     endsChapter: true
   },
 };
+
+/* ============ 절정 — 이 화의 마지막을 지키는 사람 ============
+   문제는 이 화에서 이미 푼 것들 중에서 골라 낸다(boss.js의 fromChapter).
+   보스전은 그 화에서 배운 것을 시험하는 자리이므로 복습이 되는 편이 맞다. */
+function startChapterBoss(onDone){
+  if (!window.Boss){ onDone(); return; }
+  const qs = Boss.fromChapter(typeof NPC_DATA !== 'undefined' ? NPC_DATA : null, 5);
+  if (!qs.length){ onDone(); return; }
+  World.paused = true;
+  Boss.start({
+    name: '계백',
+    img: 'assets/boss/gyebaek.png',
+    bg: 'assets/scenes/tongil_hwangsanbeol.webp',
+    hp: qs.length, lives: 3,
+    questions: qs,
+    intro: '황산벌. 계백이 마지막 진을 치고 기다리고 있다.',
+    onWin: () => { World.paused = false; onDone(); },
+    onLose: () => { World.paused = false; },   // 다시 도전할 수 있다
+  });
+}
+
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
@@ -1557,6 +1578,19 @@ Stage.endChapter = function(){ BGM.play('bgm_chapter_end', {fadeMs:700});
   document.getElementById('end-screen').classList.add('show');
 };
 
+/* 이 화를 닫기 전에 마지막 관문을 지난다. 이기면 그때 화가 끝난다. */
+(function(){
+  const orig = Stage.endChapter;
+  Stage.endChapter = function(){
+    if (Stage.state && Stage.state._bossCleared) return orig.call(Stage);
+    startChapterBoss(function(){
+      if (Stage.state) Stage.state._bossCleared = true;
+      orig.call(Stage);
+    });
+  };
+})();
+
+
 /* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다
    (Phaser 카메라나 게임 캔버스와 별개). 구역이 바뀌면 현재 구역의 배경
    이미지를 그대로 축소해서 보여준다. */
@@ -1635,6 +1669,7 @@ requestAnimationFrame(loop);
 <script src="assets/heroes.js"></script>
 <script src="assets/newsflash.js"></script>
 <script src="assets/journey.js"></script>
+<script src="assets/boss.js"></script>
 <script src="assets/items.js"></script>
 <script src="assets/autowalk.js"></script>
 <script>

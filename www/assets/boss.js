@@ -62,11 +62,22 @@ window.Boss = (function(){
       box-shadow:0 0 30px rgba(0,0,0,.6), inset 0 12px 30px rgba(0,0,0,.5); }
     .bs-silhouette span { font-family:"Gowun Batang",serif; font-size:15px; font-weight:700;
       color:#e9c979; letter-spacing:.14em; text-shadow:0 2px 8px rgba(0,0,0,.9); }
-    .bs-enemy { bottom:26%; right:8%; width:34%; max-width:230px; }
-    .bs-enemy img { width:100%; object-fit:contain; display:block;
+    .bs-enemy { bottom:22%; right:7%; height:56%; }
+    .bs-enemy img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.2s ease-in-out infinite; }
-    .bs-self { bottom:2%; left:8%; width:30%; max-width:175px; }
-    .bs-self img { width:100%; object-fit:contain; display:block;
+    .bs-self { bottom:3%; left:5%; height:46%; }
+    /* 동료는 나보다 뒤쪽(위)에 선다. 왼쪽 가장자리를 따라 세로로 벌려
+       서로 겹치지 않게 하고, 뒤에 있을수록 작게 그려 거리감을 준다.
+       (처음엔 간격이 좁아 동료가 나를 덮었다.) */
+    .bs-ally { transition:opacity .3s; }
+    .bs-ally img { height:100%; width:auto; object-fit:contain; display:block;
+      filter:drop-shadow(0 8px 14px rgba(0,0,0,.55)); }
+    .bs-ally1 { bottom:25%; left:2%;  height:38%; opacity:.95; }
+    .bs-ally2 { bottom:44%; left:11%; height:31%; opacity:.9; }
+    .bs-ally .nmtag { position:absolute; left:50%; bottom:-3px; transform:translateX(-50%);
+      font-size:9.5px; color:#e8dcc2; background:rgba(20,14,8,.85); border-radius:99px;
+      padding:1px 7px; white-space:nowrap; text-shadow:0 1px 3px rgba(0,0,0,.9); }
+    .bs-self img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.8s ease-in-out infinite; }
     @keyframes bs-bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
     .bs-sprite.lunge { animation:bs-lunge .3s ease-out; }
@@ -166,6 +177,8 @@ window.Boss = (function(){
           '<div class="bs-hp"><i id="bs-php"></i></div><div class="bs-hptxt" id="bs-phptxt"></div></div>' +
         '<div class="bs-combo" id="bs-combo"><span class="x"></span><span class="l">연속 정답</span></div>' +
         '<div class="bs-sprite bs-enemy" id="bs-e"></div>' +
+        '<div class="bs-sprite bs-ally bs-ally2" id="bs-a2"></div>' +
+        '<div class="bs-sprite bs-ally bs-ally1" id="bs-a1"></div>' +
         '<div class="bs-sprite bs-self" id="bs-p"></div>' +
       '</div>' +
       '<div class="bs-bottom">' +
@@ -173,7 +186,9 @@ window.Boss = (function(){
         '<div class="bs-q" id="bs-q"></div>' +
         '<div class="bs-opts" id="bs-opts"></div>' +
       '</div>';
-    document.body.appendChild(d);
+    // #wrap 안에 붙인다. 세로로 든 휴대폰에서 #wrap이 rotate(90deg)로
+    // 가로모드를 만드는데, 밖에 붙이면 전투 화면만 90도 틀어진다.
+    (document.getElementById('wrap') || document.body).appendChild(d);
   }
 
   /* ---------------- 연출 ---------------- */
@@ -264,6 +279,16 @@ window.Boss = (function(){
       S.eHp -= dmg;
       shake(); hitFx('bs-e', crit); ep.classList.add('hit');
       pop('e', '-' + dmg + (crit ? '!' : ''), crit ? 'crit' : null);
+      // 담력을 가진 동료가 있으면 한 대 더 친다
+      if (S.guard && S.eHp > 0){
+        await wait(220);
+        S.eHp -= 1;
+        ['bs-a1','bs-a2'].forEach(id => {
+          const a = document.getElementById(id);
+          if (a && a.innerHTML){ a.classList.add('lunge'); setTimeout(() => a.classList.remove('lunge'), 260); }
+        });
+        hitFx('bs-e', false); pop('e', '-1');
+      }
       if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
       if (navigator.vibrate) navigator.vibrate(crit ? 45 : 25);
       msg(S.cur.feedback[1] + (S.combo >= 3 ? `<br><b>${S.combo}연속! 일격이 무거워진다.</b>` : ''));
@@ -278,6 +303,18 @@ window.Boss = (function(){
       S.combo = 0;
       ep.style.setProperty('--lx', '-26px');
       ep.classList.add('lunge'); await wait(180);
+      // 담력을 가진 동료가 한 번은 대신 맞는다
+      if (S.guard && !S.guardUsed){
+        S.guardUsed = true;
+        const a = document.getElementById('bs-a1');
+        if (a && a.innerHTML){ a.classList.add('hit'); setTimeout(() => a.classList.remove('hit'), 400); }
+        pop('p', '막음', 'crit');
+        msg(S.cur.feedback[0] + '<br><b>동료가 대신 맞았다.</b>');
+        bars(); await wait(900);
+        ep.classList.remove('lunge');
+        S.qIdx++; S.busy = false; ask();
+        return;
+      }
       S.pHp -= 1;
       shake(); hitFx('bs-p', false); pp.classList.add('hit');
       pop('p', '-1');
@@ -290,6 +327,27 @@ window.Boss = (function(){
     S.qIdx++;
     S.busy = false;
     ask();
+  }
+
+
+  /* ---------------- 챕터의 퀴즈로 보스전을 세운다 ----------------
+     보스마다 문제를 새로 쓰면 36챕터에 180문항을 더 써야 한다.
+     대신 **그 챕터에서 이미 푼 문제 중에서** 골라 낸다 — 보스전은 그 화에서
+     배운 것을 시험하는 자리이므로, 복습이 되는 편이 오히려 맞다.
+
+     같은 순서로 다시 나오면 외워서 넘기게 되므로 섞어서 뽑는다. */
+  function fromChapter(npcData, n){
+    const pool = [];
+    for (const k in (npcData || {})){
+      const d = npcData[k];
+      if (d && d.quizSeq) for (const q of d.quizSeq) if (q && q.opts) pool.push(q);
+      if (d && d.quiz && d.quiz.opts) pool.push(d.quiz);
+    }
+    for (let i = pool.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, n || 5);
   }
 
   /* ---------------- 끝 ---------------- */
@@ -365,11 +423,25 @@ window.Boss = (function(){
     document.getElementById('bs-p').innerHTML =
       `<img src="${opt.playerImg || 'assets/player/up_1.png'}" alt="">`;
 
+    // 데려온 동료를 좌측에 세운다. 문제는 내가 풀고, 동료는 그 결과를 키운다 —
+    // 학습 게임에서 동료가 있어야 할 자리다.
+    S.allies = (window.Heroes ? Heroes.party() : []).slice(0, 2);
+    S.guard = (window.Heroes ? Heroes.power('dam') : 0) > 0;   // 담력이 있으면 한 번 막아 준다
+    S.guardUsed = false;
+    ['bs-a1','bs-a2'].forEach((id, i) => {
+      const el = document.getElementById(id); if (!el) return;
+      const k = S.allies[i];
+      if (!k || !window.HERO_DATA || !HERO_DATA[k]){ el.innerHTML = ''; return; }
+      const d = HERO_DATA[k];
+      el.innerHTML = (d.p ? `<img src="assets/portraits/${d.p}" alt="">` : '') +
+                     `<span class="nmtag">${d.n}</span>`;
+    });
+
     bars();
     msg(`<b>${S.name}</b>이(가) 앞을 막아섰다. 아는 것으로 답하라.`);
     ask();
     ov.classList.add('show');
   }
 
-  return { start, _state: () => S };
+  return { start, fromChapter, _state: () => S };
 })();
