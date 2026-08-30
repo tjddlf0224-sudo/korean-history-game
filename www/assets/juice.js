@@ -238,9 +238,16 @@ window.Juice = (function(){
     renderCombo();
   }
 
-  /* 오답. 콤보와 피버가 함께 끊긴다. */
+  /* 오답. 콤보와 피버가 함께 끊긴다.
+     단, 동료의 학식(識)이 있으면 챕터당 한 번은 버틴다. */
   function wrong(){
     mount();
+    if (combo >= 2 && window.Heroes && Heroes.trySik()){
+      sfxWrong();
+      flash('bad');
+      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+      return;                       // 콤보·피버를 그대로 둔다
+    }
     const had = combo;
     combo = 0;
     if (fever){

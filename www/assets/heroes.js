@@ -82,6 +82,86 @@ window.Heroes = (function(){
     return got;
   }
 
+
+  /* ---------------- 능력치 ----------------
+
+     인물의 역할에서 특기를 정한다. 왕은 사람을 모으고(인망), 학자는 알고(학식),
+     장수는 맞서고(담력), 백성은 물정에 밝다(안목). 억지스럽지 않고, 167명을
+     손으로 하나씩 정하지 않아도 된다.
+
+     효과는 일부러 작게 잡았다. 학습 게임에서 능력치가 세지면 "문제를 잘 풀어서"가
+     아니라 "동료가 좋아서" 이기게 된다. 힌트 한 번, 방어 한 번, 경험치 15% —
+     이 정도가 상한이다.
+
+     ★(각성)이면 한 단계 세진다. 다시 와서 제대로 풀 이유가 여기에도 걸린다. */
+  const ABIL = {
+    king:     { id:'mang', name:'인망', han:'望', desc:'경험치를 더 얻는다' },
+    scholar:  { id:'sik',  name:'학식', han:'識', desc:'틀려도 연속이 한 번 버틴다' },
+    general:  { id:'dam',  name:'담력', han:'膽', desc:'보스전에서 함께 싸운다' },
+    commoner: { id:'an',   name:'안목', han:'眼', desc:'유물을 더 멀리서 알아본다' },
+  };
+
+  function abilOf(k){
+    const d = DB()[k]; if (!d) return null;
+    const a = ABIL[d.r] || ABIL.commoner;
+    const grade = load().have[k] || 0;
+    return Object.assign({}, a, { lv: grade === 2 ? 2 : 1 });
+  }
+
+  /* ---------------- 동료 편성 ----------------
+     둘까지만 데려간다. 둘이면 "누구를 뺄까"를 고민하지만 넷이면 그냥 다 넣는다.
+     고민이 사라지면 편성 화면이 무의미해진다. */
+  const MAX_PARTY = 2;
+
+  function party(){
+    const s = load();
+    return (s.party || []).filter(k => s.have[k]).slice(0, MAX_PARTY);
+  }
+  function inParty(k){ return party().indexOf(k) >= 0; }
+  function toggleParty(k){
+    const s = load();
+    s.party = (s.party || []).filter(x => s.have[x]);
+    const i = s.party.indexOf(k);
+    if (i >= 0) s.party.splice(i, 1);
+    else {
+      if (!s.have[k]) return false;
+      if (s.party.length >= MAX_PARTY) s.party.shift();   // 가장 먼저 넣은 사람이 빠진다
+      s.party.push(k);
+    }
+    save(s);
+    renderBtn();
+    return true;
+  }
+
+  /* 데려간 동료들의 능력치 합. 다른 모듈이 이걸 물어본다. */
+  function power(id){
+    let v = 0;
+    for (const k of party()){
+      const a = abilOf(k);
+      if (a && a.id === id) v += a.lv;
+    }
+    return v;
+  }
+
+  /* ---------------- 한 챕터에 한 번 쓰는 것 ----------------
+     학식은 "틀려도 연속이 한 번 버틴다"인데, 이걸 매번 쓰면 콤보가 의미를
+     잃는다. 그래서 챕터당 한 번만 쓰이고 그 사실을 화면에 알린다. */
+  let sikUsed = false;
+  function trySik(){
+    if (sikUsed || power('sik') <= 0) return false;
+    sikUsed = true;
+    toast('학식 — 연속이 끊기지 않았다');
+    return true;
+  }
+  function toast(t){
+    css();
+    const el = document.createElement('div');
+    el.className = 'hr-toast';
+    el.textContent = t;
+    layer().appendChild(el);
+    setTimeout(() => el.remove(), 2200);
+  }
+
   /* ---------------- 스타일 ---------------- */
   let injected = false;
   function css(){
@@ -150,7 +230,31 @@ window.Heroes = (function(){
     #hero-ov .close { display:block; width:100%; margin-top:12px; background:#2a2013;
       border:1px solid #4a3c26; color:#f5ecd8; border-radius:11px; padding:11px;
       font-family:inherit; font-size:14px; cursor:pointer; flex:none; }
-    @media (prefers-reduced-motion:reduce){ .hr-get .card { animation-duration:.01ms !important; } }`;
+    /* 동료 자리 — 도감 위쪽에 붙는 띠 */
+    #hero-ov .party { display:flex; gap:8px; align-items:center; justify-content:center;
+      margin-bottom:11px; padding:9px; background:#241c12; border:1px solid #3a2c1a;
+      border-radius:11px; flex:none; }
+    #hero-ov .party .slot { width:52px; height:52px; border-radius:9px; border:1px dashed #4a3c26;
+      background:#1a140c; display:grid; place-content:center; overflow:hidden; position:relative; }
+    #hero-ov .party .slot img { width:100%; height:100%; object-fit:cover; object-position:top center; }
+    #hero-ov .party .slot .e { font-size:17px; color:#4a3c26; }
+    #hero-ov .party .info { flex:1; font-size:11.5px; color:#b8a888; line-height:1.55; }
+    #hero-ov .party .info b { color:#f0c96b; }
+    #hero-ov .cell.picked { border-color:#c9a24a; box-shadow:0 0 0 1px #c9a24a inset; }
+    #hero-ov .cell .ab { position:absolute; left:3px; top:3px; font-size:10px; color:#c9a24a;
+      text-shadow:0 1px 4px rgba(0,0,0,.9); }
+    #hero-ov .detail .join { margin-top:9px; width:100%; background:#2a2013; border:1px solid #c9a24a;
+      color:#f0c96b; border-radius:9px; padding:9px; font-family:inherit; font-size:13.5px; cursor:pointer; }
+
+    /* 능력이 발동했을 때 알리는 띠 */
+    .hr-toast { position:absolute; left:50%; top:16%; transform:translateX(-50%); z-index:30;
+      background:rgba(26,20,12,.95); border:1px solid rgba(240,201,107,.6); border-radius:10px;
+      padding:9px 16px; font-family:"Gowun Batang",serif; font-size:13.5px; color:#f0c96b;
+      white-space:nowrap; pointer-events:none; animation:hr-toast 2.2s ease forwards; }
+    @keyframes hr-toast { 0%{opacity:0; transform:translate(-50%,8px)} 12%{opacity:1; transform:translate(-50%,0)}
+      80%{opacity:1} 100%{opacity:0; transform:translate(-50%,-8px)} }
+
+    @media (prefers-reduced-motion:reduce){ .hr-get .card, .hr-toast { animation-duration:.01ms !important; } }`;
     document.head.appendChild(st);
   }
 
@@ -195,6 +299,7 @@ window.Heroes = (function(){
       d.id = 'hero-ov';
       d.innerHTML = '<div class="panel"><h3>인물 도감</h3>' +
         '<div class="cntline" id="hero-cnt"></div>' +
+        '<div class="party" id="hero-party"></div>' +
         '<div class="scroll" id="hero-list"></div>' +
         '<div class="detail" id="hero-detail"></div>' +
         '<button class="close" id="hero-close">닫기</button></div>';
@@ -203,6 +308,12 @@ window.Heroes = (function(){
       d.onclick = e => { if (e.target === d) d.classList.remove('show'); };
     }
     renderBtn();
+  }
+
+  function markPicked(){
+    document.querySelectorAll('#hero-list .cell[data-k]').forEach(c => {
+      c.classList.toggle('picked', inParty(c.dataset.k));
+    });
   }
 
   function renderBtn(){
@@ -232,7 +343,9 @@ window.Heroes = (function(){
         const d = db[k], grade = s.have[k] || 0;
         if (!grade) return `<div class="cell locked"><div class="f"><span class="q">?</span></div>` +
                            `<div class="nm">???</div></div>`;
-        return `<div class="cell" data-k="${k}">` +
+        const ab = ABIL[d.r] || ABIL.commoner;
+        return `<div class="cell${inParty(k) ? ' picked' : ''}" data-k="${k}">` +
+               `<span class="ab">${ab.han}</span>` +
                (grade === 2 ? '<span class="st">★</span>' : '') +
                `<div class="f">${faceHtml(k)}</div><div class="nm">${d.n}</div></div>`;
       }).join('') + '</div>').join('');
@@ -240,21 +353,49 @@ window.Heroes = (function(){
     list.querySelectorAll('.cell[data-k]').forEach(c => {
       c.onclick = () => showDetail(c.dataset.k);
     });
+    renderParty();
     document.getElementById('hero-detail').classList.remove('show');
     document.getElementById('hero-ov').classList.add('show');
+  }
+
+  function renderParty(){
+    const el = document.getElementById('hero-party'); if (!el) return;
+    const p = party();
+    let slots = '';
+    for (let i = 0; i < MAX_PARTY; i++){
+      const k = p[i];
+      slots += `<div class="slot">${k ? faceHtml(k) : '<span class="e">＋</span>'}</div>`;
+    }
+    // 지금 붙어 있는 효과를 그대로 읽어 준다
+    const lines = [];
+    for (const id of ['sik','dam','an','mang']){
+      const v = power(id);
+      if (!v) continue;
+      const a = Object.values(ABIL).find(x => x.id === id);
+      lines.push(`<b>${a.name}</b> ${a.desc}`);
+    }
+    el.innerHTML = slots +
+      `<div class="info">${p.length ? lines.join('<br>') : '동료를 두 명까지 데려갈 수 있다.<br>인물을 눌러 정한다.'}</div>`;
   }
 
   function showDetail(k){
     const d = DB()[k], s = load();
     const el = document.getElementById('hero-detail');
     const chs = Object.keys(d.ch).length;
+    const a = abilOf(k);
     el.innerHTML = `<div class="dn">${d.n}${s.have[k] === 2 ? ' <span style="color:#ffd970">★</span>' : ''}</div>` +
       `<div class="de">${d.e}</div>` +
       `<div class="dd">${chs > 1 ? `${chs}개 화에 나온다. ` : ''}` +
-      (s.have[k] === 2 ? '모든 물음에 한 번에 답했다.' : '이야기를 끝까지 들었다.') + '</div>';
+      (s.have[k] === 2 ? '모든 물음에 한 번에 답했다.' : '이야기를 끝까지 들었다.') + '</div>' +
+      (a ? `<div class="dd" style="margin-top:6px"><b style="color:#c9a24a">${a.han} ${a.name}</b>` +
+           `${a.lv > 1 ? ' <span style="color:#ffd970">Ⅱ</span>' : ''} — ${a.desc}</div>` : '') +
+      `<button class="join" data-k="${k}">${inParty(k) ? '동행 그만두기' : '데리고 가기'}</button>`;
     el.classList.add('show');
+    const btn = el.querySelector('.join');
+    if (btn) btn.onclick = () => { toggleParty(k); renderParty(); showDetail(k); markPicked(); };
   }
 
   return { recordTalk, mount, openBook, has, owned, starred, total,
-           keyForNpc, _load: load };
+           keyForNpc, abilOf, party, inParty, toggleParty, power, trySik, ABIL, MAX_PARTY,
+           _load: load };
 })();

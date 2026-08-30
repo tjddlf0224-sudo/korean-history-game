@@ -43,6 +43,8 @@ def main():
                 r"\{\s*id:\s*'(\w+)',\s*name:\s*'([^']+)'((?:(?!\},).)*)\}", s, re.S):
             m = re.search(r"img:\s*'([^']+)'", rest)
             img = m.group(1) if m else None
+            rm = re.search(r"role:\s*'(\w+)'", rest)
+            role = rm.group(1) if rm else 'commoner'
             key = os.path.splitext(os.path.basename(img))[0] if img else nid
             talks = []
             for km in re.finditer(r"^  (%s_\w+):\s*\{(.*?)^  \}," % re.escape(nid), s, re.S | re.M):
@@ -55,7 +57,8 @@ def main():
                 heroes[key]['ch'][b] = sorted(set(prev + talks))
             else:
                 heroes[key] = {'n': name, 'p': (os.path.basename(img) if img else None),
-                               'e': era_of.get(b, '기타'), 'ch': {b: sorted(set(talks))}}
+                               'e': era_of.get(b, '기타'), 'r': role,
+                               'ch': {b: sorted(set(talks))}}
 
     order = {e: i for i, e in enumerate(era_order)}
     items = sorted(heroes.items(), key=lambda kv: (order.get(kv[1]['e'], 99), kv[1]['n']))
@@ -65,11 +68,11 @@ def main():
         ch = ', '.join(f"'{c}':[{','.join(repr(t) for t in ts)}]"
                        for c, ts in sorted(v['ch'].items()))
         p = f"'{v['p']}'" if v['p'] else 'null'
-        lines.append(f"    {k}: {{ n:'{v['n']}', p:{p}, e:'{v['e']}', ch:{{{ch}}} }},")
+        lines.append(f"    {k}: {{ n:'{v['n']}', p:{p}, e:'{v['e']}', r:'{v.get('r','commoner')}', ch:{{{ch}}} }},")
 
     out = ("/* 인물 카드 데이터 — 챕터 파일에서 뽑아 생성한다(assets/tools/gen_heroes.py).\n"
            "   손으로 고치지 말 것. 챕터의 NPC나 대화가 바뀌면 다시 뽑는다.\n\n"
-           "   n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)\n"
+           "   n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)\n"
            "   ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다\n"
            f"   인물 {len(items)}명 */\n"
            "window.HERO_DATA = (function(){\n  return {\n" + "\n".join(lines) + "\n  };\n})();\n")

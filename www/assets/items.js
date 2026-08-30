@@ -368,7 +368,8 @@ window.Items = (function(){
     // 지도에 표식을 두지 않는다. 유물은 직접 돌아다니다 발견하는 것이라,
     // 유일한 단서는 가까이 갔을 때 행동 버튼이 돋보기로 바뀌는 것뿐이다.
     // 그래서 대화 반경(108.8)보다 조금 넉넉하게 잡아, 스쳐 지나가도 걸리게 한다.
-    const RANGE = 128;
+    // 동료의 안목(眼)만큼 더 멀리서 알아본다
+    const RANGE = 128 + (window.Heroes ? Heroes.power('an') * 24 : 0);
     const zone = ZONES[world.zone];
     const list = (zone && zone.spots) || [];
     let best = RANGE, found = null;

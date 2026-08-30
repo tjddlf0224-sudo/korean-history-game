@@ -83,6 +83,9 @@ window.Rank = (function(){
   function addXp(amount, reason){
     amount = Math.max(0, Math.round(amount || 0));
     if (!amount) return null;
+    // 동료의 인망(望)만큼 경험치를 더 얻는다 (한 명당 15%)
+    const mang = window.Heroes ? Heroes.power('mang') : 0;
+    if (mang) amount = Math.round(amount * (1 + 0.15 * mang));
     const before = get();
     const s = load();
     s.xp += amount;
