@@ -146,7 +146,7 @@ window.Rank = (function(){
       @keyframes rk-shine { 0%{transform:translateX(-100%);} 60%,100%{transform:translateX(220%);} }
 
       /* 떠오르는 +XP */
-      .rk-float { position:fixed; left:50%; top:38%; transform:translate(-50%,0); z-index:70;
+      .rk-float { position:absolute; left:50%; top:38%; transform:translate(-50%,0); z-index:70;
         pointer-events:none; font-family:"Gowun Batang",serif; font-weight:700; text-align:center;
         color:#fff7e6; text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 18px rgba(240,201,107,.9);
         animation:rk-float 1.15s cubic-bezier(.2,.8,.3,1) forwards; }
@@ -158,7 +158,7 @@ window.Rank = (function(){
         100%{opacity:0; transform:translate(-50%,-52px) scale(1);} }
 
       /* 레벨업 */
-      .rk-ov { position:fixed; inset:0; z-index:80; display:flex; align-items:center;
+      .rk-ov { position:absolute; inset:0; z-index:80; display:flex; align-items:center;
         justify-content:center; pointer-events:none; }
       .rk-lvup { position:relative; display:flex; align-items:center; justify-content:center; }
       .rk-lvup .ring { position:absolute; width:120px; height:120px; border-radius:50%;
@@ -182,7 +182,7 @@ window.Rank = (function(){
         15%{opacity:1;} 100%{opacity:0; transform:rotate(var(--a)) translate(96px,0) scale(1) rotate(200deg);} }
 
       /* 승급식 — 두루마리가 펼쳐지고 낙관이 찍힌다 */
-      .rk-cer { position:fixed; inset:0; z-index:90; display:flex; align-items:center;
+      .rk-cer { position:absolute; inset:0; z-index:90; display:flex; align-items:center;
         justify-content:center; background:rgba(8,6,3,0); animation:rk-dim .5s ease forwards; }
       @keyframes rk-dim { to { background:rgba(8,6,3,.82); } }
       .rk-cer .card { position:relative; width:min(84vw,420px); padding:26px 24px 22px;
@@ -221,7 +221,7 @@ window.Rank = (function(){
       @keyframes rk-glow { 0%{opacity:0; transform:scale(.4);} 35%{opacity:.85;}
         100%{opacity:0; transform:scale(1.7);} }
       /* 금빛 조각이 흩날림 */
-      .rk-fall { position:fixed; top:-14px; z-index:88; width:7px; height:11px; border-radius:2px;
+      .rk-fall { position:absolute; top:-14px; z-index:88; width:7px; height:11px; border-radius:2px;
         background:linear-gradient(180deg,#f7dc93,#c9962e); opacity:.9; pointer-events:none;
         animation:rk-fall linear forwards; }
       @keyframes rk-fall { to { transform:translateY(112vh) rotate(var(--sp)); opacity:0; } }
@@ -232,13 +232,18 @@ window.Rank = (function(){
       document.head.appendChild(s);
     }
 
+    /* 화면에 얹는 것은 전부 #wrap 안에. 세로로 든 휴대폰에서는 body.rot #wrap이
+       rotate(90deg)로 가로모드를 만드는데, 밖에 붙이면 그 회전을 안 물려받아
+       연출만 90도 틀어진 채 뜬다(미니맵·items.js와 같은 이유). */
+    function layer(){ return document.getElementById('wrap') || document.body; }
+
     function floatXp(n, reason){
       css();
       const d = document.createElement('div');
       d.className = 'rk-float';
       d.innerHTML = '<span class="n">+' + n + '</span>' +
                     (reason ? '<span class="r">' + reason + '</span>' : '');
-      document.body.appendChild(d);
+      layer().appendChild(d);
       setTimeout(() => d.remove(), 1250);
     }
 
@@ -264,7 +269,7 @@ window.Rank = (function(){
           `<span class="rk-spark" style="--a:${a}deg"></span>`).join('') +
         '<span class="txt">Lv.' + lv + ' 달성</span>';
       ov.appendChild(box);
-      document.body.appendChild(ov);
+      layer().appendChild(ov);
       setTimeout(() => ov.remove(), 1400);
     }
 
@@ -286,7 +291,7 @@ window.Rank = (function(){
           '<div class="tap">화면을 누르면 계속</div>' +
           '<div class="seal">' + tier.name + '</div>' +
         '</div>';
-      document.body.appendChild(ov);
+      layer().appendChild(ov);
 
       // 금빛 조각
       for (let i = 0; i < 26; i++){
@@ -296,7 +301,7 @@ window.Rank = (function(){
         p.style.setProperty('--sp', (Math.random() * 720 - 360) + 'deg');
         p.style.animationDuration = (1.9 + Math.random() * 1.6) + 's';
         p.style.animationDelay = (Math.random() * 0.7) + 's';
-        document.body.appendChild(p);
+        layer().appendChild(p);
         setTimeout(() => p.remove(), 4200);
       }
 

@@ -180,6 +180,12 @@
 <script src="assets/badges.js"></script>
 <script src="assets/streak.js"></script>
 <script src="assets/rank.js"></script>
+<script src="assets/juice.js"></script>
+<script>
+if (window.Rank) Rank.renderHud();
+if (window.Juice) Juice.mount();
+if (window.Juice) Juice.mount();
+</script>
 <script src="assets/audio.js"></script>
 <script>
 /* 가로모드 고정: index.html·게임 챕터들과 동일. */
@@ -382,11 +388,13 @@ function pick(i){
   if (correct){
     answered = true;
     if (window.Badges) Badges.addCorrect();
-    if (window.Rank) Rank.addXp(missedThis ? 3 : 8, missedThis ? '정답' : '첫 시도 정답');
+    const _m = window.Juice ? Juice.xpMul() : 1;
+    if (window.Rank) Rank.addXp((missedThis ? 3 : 8) * _m,
+      (missedThis ? '정답' : '첫 시도 정답') + (_m > 1 ? ' · 피버 2배' : ''));
     optButtons[i].classList.add('correct');
     optButtons.forEach(b => b.disabled = true);
     celebrateCorrect(optButtons[i]);
-    playCorrectSfx();
+    if (window.Juice) Juice.correct(!missedThis); else playCorrectSfx();
     els.qFb.textContent = data.feedback[1];
     els.qFb.classList.add('show', 'correct-tone');
     els.nextBtn.classList.add('show');
@@ -394,8 +402,8 @@ function pick(i){
     missedThis = true;
     optButtons[i].classList.add('wrong');
     optButtons[i].disabled = true;
-    playWrongSfx();
-    if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+    if (window.Juice) Juice.wrong();
+    else { playWrongSfx(); if (navigator.vibrate) navigator.vibrate([60, 40, 60]); }
     els.qFb.textContent = data.feedback[0];
     els.qFb.classList.add('show');
     mistakes.push({ q: data.q, correctText: data.opts[data.answer], myText: data.opts[order[i]], feedback: data.feedback[1] });
