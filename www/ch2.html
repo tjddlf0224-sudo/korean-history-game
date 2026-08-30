@@ -1421,6 +1421,28 @@ const BOSS_CHOEMANRI = [
    act가 오를 때마다 목표 문구가 바뀌고, 최만리는 위기에서야 지도에 나타난다. */
 const ACT = { OPEN:0, RISE:1, CRISIS:2, CLIMAX:3, CLOSE:4 };
 
+
+/* ============ 이 챕터의 속보 ============
+   막이 넘어가는 자리에 그 시대에 실제로 벌어진 일을 띄운다.
+   대사로만 알려 주면 "지금 무슨 일이 벌어지는 중인지"가 안 남는다. */
+const CH_NEWS = {
+  'sejong_0': { icon:'🏯', when:'1420년 · 세종 2년',
+    headline:'집현전을 넓히고 학사를 두다',
+    sub:'젊은 문신들을 모아 경서와 역사를 연구하게 했습니다. 사가독서로 휴가까지 주어 학문에만 전념하게 합니다.' },
+  'jangyeongsil_0': { icon:'⏳', when:'1434년 · 세종 16년',
+    headline:'자격루, 스스로 시각을 알리다',
+    sub:'장영실이 만든 물시계가 정해진 때마다 인형을 움직여 종과 북을 울립니다. 사람이 지키지 않아도 시각이 맞습니다.' },
+  'sejong_1': { icon:'🌧️', when:'1441년 · 세종 23년',
+    headline:'측우기를 만들어 전국에 보내다',
+    sub:'고을마다 빗물의 양을 재어 조정에 보고하게 했습니다. 세계에서도 이른 시기의 강우량 관측입니다.' },
+  'choemanri_0': { icon:'📜', when:'1444년 · 세종 26년',
+    headline:'집현전 부제학 최만리 등, 언문 반대 상소!',
+    sub:'"중국과 다른 글자를 만드는 것은 사대에 어긋난다." 반포를 앞둔 새 글자가 조정에서 막혔습니다.' },
+  'debate_won': { icon:'📖', when:'1446년 · 세종 28년',
+    headline:'훈민정음, 마침내 반포되다',
+    sub:'스물여덟 자로 된 새 글자가 세상에 나왔습니다. 만든 원리를 풀이한 해례본도 함께 펴냈습니다.' },
+};
+
 const Stage = {
   state: { act: ACT.OPEN, sejongStage: 0, bossADone: false,
     sinsukjuDone: false, jangyeongsilDone: false, choemanriMet: false,
@@ -1476,6 +1498,7 @@ const Stage = {
         World.paused = false;
         updateHudGoal();
         showZoneBanner('상소를 물리쳤다 — 세종에게 돌아가자');
+        if (window.News) setTimeout(() => News.fire('debate_won'), 900);
       },
       onLose: () => {
         World.paused = false;
@@ -1847,6 +1870,7 @@ renderIntro();
 /* 대화 하나가 끝날 때마다 막이 넘어가는지 본다. */
 Stage.advance = function(key){
   const st = Stage.state;
+  if (window.News) News.fire(key);
   if (key === 'sejong_0'){ st.act = Math.max(st.act, ACT.RISE); }
   else if (key === 'sinsukju_0'){ st.sinsukjuDone = true; }
   else if (key === 'jangyeongsil_0'){ st.jangyeongsilDone = true; }
@@ -1973,6 +1997,7 @@ requestAnimationFrame(loop);
 <script src="assets/juice.js"></script>
 <script src="assets/heroes_data.js"></script>
 <script src="assets/heroes.js"></script>
+<script src="assets/newsflash.js"></script>
 <script src="assets/items.js"></script>
 <script src="assets/autowalk.js"></script>
 <script src="assets/boss.js"></script>
@@ -1981,6 +2006,7 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News && typeof CH_NEWS !== 'undefined') News.set(CH_NEWS);
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
