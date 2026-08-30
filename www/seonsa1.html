@@ -367,6 +367,7 @@
     <div>선사 1화 · 뗀석기에서 고인돌까지</div>
     <div class="sub">구석기~초기국가</div>
     <div class="sub" id="hud-goal"></div>
+    <div id="rank-hud"></div>
   </div>
 
   <div id="stick-zone">
@@ -891,6 +892,7 @@ function exitDirArrow(rect){
   if (cx >= BG_W * 0.7) return ' \u2192';
   return '';
 }
+if (window.Rank) Rank.renderHud();
 function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
@@ -1405,7 +1407,7 @@ const Quiz = {
     this._openOne(this.seq[this.seqIdx], () => this._seqAdvance());
   },
   _openOne(data, onDone){
-    this.data = data; this.onDone = onDone; this.answered = false;
+    this.data = data; this.onDone = onDone; this.answered = false; this._missed = false;
     document.getElementById('quiz-overlay').classList.add('show');
     document.getElementById('quiz-tag').textContent = this.seq ? `${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
     document.getElementById('quiz-q').textContent = data.q;
@@ -1435,6 +1437,7 @@ const Quiz = {
       this.answered = true;
       if (this.seq) this.seqScore++;
       if (window.Badges) Badges.addCorrect();
+      if (window.Rank) Rank.addXp(this._missed ? 3 : 10, this._missed ? '정답' : '첫 시도 정답');
       this.optButtons[i].classList.add('correct');
       this.optButtons.forEach(b => b.disabled = true);
       document.getElementById('quiz-fb').textContent = this.data.feedback[1];
@@ -1442,6 +1445,7 @@ const Quiz = {
       next.classList.add('show');
       next.onclick = () => this.confirmIfReady();
     } else {
+      this._missed = true;
       this.optButtons[i].classList.add('wrong');
       this.optButtons[i].disabled = true;
       document.getElementById('quiz-fb').textContent = this.data.feedback[0];
@@ -1552,6 +1556,13 @@ const Dialog = {
   open(key, npc){
     this.key = key; this.npc = npc; this.idx = 0;
     this.data = NPC_DATA[key];
+    // 신분에 따라 이 인물이 나를 맞이하는 첫마디가 달라진다. 원본 NPC_DATA를
+    // 고치면 다음 대화에 인사가 쌓이므로, 얕은 복사본의 beats 앞에만 붙인다.
+    if (window.Rank && npc && npc.look && npc.look.role){
+      const greet = Rank.greetingFor(npc.look.role);
+      if (greet) this.data = Object.assign({}, this.data,
+        { beats: [{ who:'npc', t: greet }].concat(this.data.beats) });
+    }
     seenDialogKeys.add(key);
     World.paused = true;
     document.getElementById('dlg-overlay').classList.add('show');
@@ -1685,6 +1696,7 @@ renderIntro();
 Stage.endChapter = function(){ BGM.play('bgm_chapter_end', {fadeMs:700});
   if (window.Badges) Badges.earn('ch_complete_' + location.pathname.split('/').pop());
   if (window.Streak) Streak.checkIn();
+  if (window.Rank) Rank.addXp(50, '챕터 완주');
   document.getElementById('end-screen').classList.add('show');
 };
 
@@ -1758,6 +1770,7 @@ requestAnimationFrame(loop);
 </script>
 <script src="assets/badges.js"></script>
 <script src="assets/streak.js"></script>
+<script src="assets/rank.js"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>

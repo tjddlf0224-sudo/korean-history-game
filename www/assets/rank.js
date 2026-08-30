@@ -124,9 +124,10 @@ window.Rank = (function(){
       if (injected) return; injected = true;
       const s = document.createElement('style');
       s.textContent = `
-      #rank-hud { position:absolute; top:calc(6px + env(safe-area-inset-top));
-        left:calc(10px + env(safe-area-inset-left)); z-index:24; pointer-events:none;
-        display:flex; align-items:center; gap:7px; font-family:"Gowun Batang",serif;
+      /* 챕터 화면에서는 기존 #hud(제목·목표) 안에 마지막 줄로 흘러 들어간다.
+         따로 절대배치하면 제목과 겹친다(실제로 겹쳤다). */
+      #rank-hud { margin-top:5px; pointer-events:none; transform-origin:left center;
+        display:inline-flex; align-items:center; gap:7px; font-family:"Gowun Batang",serif;
         transition:transform .18s cubic-bezier(.34,1.56,.64,1); }
       #rank-hud.rk-pulse { transform:scale(1.09); }
       #rank-hud .rk-tier { font-size:13px; font-weight:700; color:#f0c96b; padding:2px 9px;

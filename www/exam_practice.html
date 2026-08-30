@@ -145,6 +145,7 @@
     <h1 id="era-title">기출문제 풀이</h1>
     <div id="progress-pill" style="display:none"></div>
   </div>
+  <div id="rank-hud" style="margin:-8px 0 14px"></div>
 
   <div id="loading">불러오는 중…</div>
 
@@ -178,6 +179,7 @@
 
 <script src="assets/badges.js"></script>
 <script src="assets/streak.js"></script>
+<script src="assets/rank.js"></script>
 <script src="assets/audio.js"></script>
 <script>
 /* 가로모드 고정: index.html·게임 챕터들과 동일. */
@@ -266,6 +268,7 @@ function shuffle(arr){
 }
 
 let pool = [];
+let missedThis = false;
 let queue = [];
 let qIdx = 0;
 let answered = false;
@@ -289,7 +292,7 @@ function startSession(){
 
 function renderQuestion(){
   document.getElementById('scroller').scrollTop = 0;
-  answered = false;
+  answered = false; missedThis = false;
   const data = queue[qIdx];
   els.progressPill.textContent = `${qIdx + 1} / ${queue.length}`;
   els.progressFill.style.width = (qIdx / queue.length * 100) + '%';
@@ -379,6 +382,7 @@ function pick(i){
   if (correct){
     answered = true;
     if (window.Badges) Badges.addCorrect();
+    if (window.Rank) Rank.addXp(missedThis ? 3 : 8, missedThis ? '정답' : '첫 시도 정답');
     optButtons[i].classList.add('correct');
     optButtons.forEach(b => b.disabled = true);
     celebrateCorrect(optButtons[i]);
@@ -387,6 +391,7 @@ function pick(i){
     els.qFb.classList.add('show', 'correct-tone');
     els.nextBtn.classList.add('show');
   } else {
+    missedThis = true;
     optButtons[i].classList.add('wrong');
     optButtons[i].disabled = true;
     playWrongSfx();
@@ -461,6 +466,7 @@ if (!eraTitle){
       pool = all.filter(item => item.era === eraTitle);
       els.loading.style.display = 'none';
       els.eraTitle.textContent = eraTitle + ' · 기출문제';
+      if (window.Rank) Rank.renderHud();
       BGM.play(ERA_BGM[eraTitle] || 'title_theme');
       startSession();
     })
