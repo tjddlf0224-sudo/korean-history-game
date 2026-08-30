@@ -587,6 +587,11 @@ const ZONES = {
       { id: 'sejong', name: '세종', x: 590, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
       { id: 'sinsukju', name: '신숙주', x: 790, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 세종만 네 번 연달아 만나면
+    // 같은 형식이 반복돼 지루해진다는 지적이 있었다.
+    spots: [
+      { id:'sp_haerye', x:400, y:152, item:'hunminjeongeum', label:'북쪽 서가' },
+    ],
     // 출구는 6시 방향 창호지 문 → 밖의 간의대(천문 관측대)로 나간다.
     // (원래 있던 12시 정문은 권농 들녘·국경 진영으로 가는 문이었으나, 2화
     // 분리 후 그 두 무대가 3화(ch2b.html)로 옮겨가면서 정문도 함께 없앴다.)
@@ -615,6 +620,10 @@ const ZONES = {
     ],
     npcs: [
       { id: 'jangyeongsil', name: '장영실', x: 430, y: 500, img: 'assets/portraits/jangyeongsil.png', look: { role: 'scholar', body: '#4a4a3d', accent: '#9ab0c9' } },
+    ],
+    spots: [
+      { id:'sp_angbu',  x:533, y:550, item:'angbuilgu',  label:'해시계 받침돌' },
+      { id:'sp_jagyeok', x:220, y:557, item:'jagyeongnu', label:'물시계 부품 궤짝' },
     ],
     exits: [ { rect:{x0:620,y0:635,x1:760,y1:665}, to:'jiphyeonjeon', spawn:{x:688,y:560}, label:'집현전으로' } ],
   },
@@ -1025,6 +1034,7 @@ const World = {
       const btn = document.getElementById('act-btn');
       if (found) btn.classList.add('show'); else btn.classList.remove('show');
     }
+    if (window.Items) Items.checkSpot(this);
   },
 
   render(){
@@ -1170,9 +1180,6 @@ const NPC_DATA = {
       { who:'npc', t:'그나저나 이 젊은 학사들 말일세 — 특별히 휴가를 주어 관청 일 대신 집에서 책만 읽게 하고 있다네. 그래야 제대로 된 학문을 이룰 수 있지 않겠나.' },
     ],
     quizSeq: [
-      { q:'최만리의 상소에 대해 세종이 실제로 편 반박 논리는?',
-        opts:['설총이 만든 이두도 결국 발음을 다르게 쓴 것인데, 그것이 백성을 편하게 하려는 뜻이었다면 이 글자도 다르지 않다', '중국과의 사대관계를 이번 기회에 완전히 끊어야 한다'], answer:0, src:[29],
-        feedback:['세종이 중국과의 사대외교 자체를 문제 삼은 건 아니었어요.', '정답! 세종은 이두를 만든 설총도 결국 백성을 위한 것이었다는 점을 들어 반박했습니다. 상소를 올린 신하들은 잠시 하옥됐다가 다음 날 풀려났습니다.'] },
       { q:'세종이 학문 연구와 인재 양성을 위해 설치했고, 훈민정음 창제의 산실이 된 기구는?', opts:['집현전','홍문관'], answer:0, src:[28,72],
         feedback:['홍문관은 훗날 성종 대에 옛 집현전의 기능을 이어받아 만들어져요.','정답! 지금 자네가 서 있는 이곳, 집현전입니다.'] },
       { q:'세종이 젊은 문신들에게 휴가를 주어 학문에만 전념하게 한 제도는?', opts:['사가독서제','현량과'], answer:0, src:[79],
@@ -1244,7 +1251,6 @@ const NPC_DATA = {
       { q:'세종이 박연에게 명해 정비하게 한 궁중 음악은?', opts:['아악','판소리'], answer:0, src:[76],
         feedback:['판소리는 조선 후기에 성행한 서민 음악이에요.','정답! 편경 등을 새로 만들며 아악을 정비했습니다.'] }
     ],
-    finishesBossA: true
   },
   sejong_repeat: {
     name: '세종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sejong.png',
@@ -1316,21 +1322,173 @@ const NPC_DATA = {
         feedback:['앙부일구는 해시계예요.','정답! 측우기입니다. 각 고을에 보급해 강우량을 재어 보고하게 했어요.'] },
     ]
   },
+
+  /* 전개 중에 세종에게 다시 오면 — 아직 할 일이 남았음을 일러 준다 */
+  sejong_wait: {
+    name: '세종', tag: '1418~1450년 · 조선',
+    beats: [
+      { who:'npc', t:'신숙주와 장영실을 만나 보았는가. 그 둘의 이야기를 듣고 오게.' },
+      { who:'npc', t:'하나는 소리를 다루고, 하나는 하늘을 다루지. 둘 다 이 나라에 없어서는 안 될 일일세.' },
+    ],
+  },
+
+  /* 위기·절정 중에 세종에게 오면 — 물러설 수 없다는 것을 못박는다 */
+  sejong_crisis: {
+    name: '세종', tag: '1444년 · 반대 상소',
+    beats: [
+      { who:'npc', t:'(낮은 목소리로) 최만리가 왔는가.' },
+      { who:'npc', t:'저들이 그르다고는 하지 않겠네. 저들은 저들이 아는 세상을 지키려는 것이지.' },
+      { who:'npc', t:'허나 나는 묻고 싶네 — 글을 몰라 제 뜻을 펴지 못하는 백성은, 누가 지켜 주는가.' },
+      { who:'npc', t:'가서 답하게. 내가 아니라 <b>자네가</b> 답해야 저들도 들을 걸세.' },
+    ],
+  },
+
+  /* ── 위기 ── 훈민정음이 다 만들어진 뒤, 반포를 막아선 상소.
+     실제로 1444년(세종 26) 최만리·신석조·김문·정창손 등이 올렸다. */
+  choemanri_0: {
+    name: '최만리', tag: '1444년 · 반대 상소',
+    beats: [
+      { who:'npc', t:'(집현전 문을 밀고 들어서며) 전하, 아니 되옵니다.' },
+      { who:'npc', t:'신 부제학 최만리, 여러 학사와 더불어 상소를 올리러 왔소이다.' },
+      { who:'me',  t:'무슨 상소입니까?' },
+      { who:'npc', t:'언문(諺文) 말이오. 중국과 다른 글자를 따로 만드는 일은 사대(事大)의 도리에 어긋나오.' },
+      { who:'npc', t:'몽고·서하·여진·일본·서번이 각기 제 글자를 가졌으나, 그것들은 모두 오랑캐의 일이외다. 어찌 스스로 오랑캐가 되려 하시오.' },
+      { who:'npc', t:'게다가 이두가 이미 있소. 천 년을 써 온 것을 두고 어찌 새것을 만든단 말이오.' },
+      { who:'npc', t:'스물일곱 자만 익히면 벼슬을 얻는다 여겨, 성리학을 버리는 자가 나올 것이오.' },
+      { who:'me',  t:'…' },
+      { who:'npc', t:'그대는 전하 곁에 있다지. 그렇다면 그대가 답해 보시오.' },
+      { who:'npc', t:'내 상소가 어디서부터 그른지, 아는 대로 말해 보란 말이오.' },
+    ],
+  },
+
+  /* ── 결말 뒤 ── */
+  choemanri_after: {
+    name: '최만리', tag: '1444년 · 상소 이후',
+    beats: [
+      { who:'npc', t:'…나는 하루 옥에 갇혔다가 다음 날 풀려났소.' },
+      { who:'npc', t:'전하께서는 내 벼슬을 거두지 않으셨소. 다만 정창손만은 파직하셨지.' },
+      { who:'npc', t:'내가 옳았다고는 아직도 말하지 못하겠소. 다만 그때 나는 내가 아는 세상을 지키려 했을 뿐이오.' },
+    ],
+  },
 };
 
+
+/* ============ 절정 — 최만리와의 논쟁 ============
+   상소의 실제 논지와 세종실록에 남은 반박을 그대로 문제로 만들었다.
+   보스전 형식이라 틀리면 체력이 깎이고, 연속으로 맞히면 타격이 커진다. */
+const BOSS_CHOEMANRI = [
+  { q:'최만리 등이 훈민정음 창제에 반대하며 내세운 가장 큰 명분은?',
+    opts:['중국과 다른 글자를 만드는 것은 사대(事大)에 어긋난다','새 글자는 백성이 배우기에 너무 어렵다'],
+    answer:0, src:[47,54],
+    feedback:['백성이 배우기 쉽다는 점은 오히려 반대의 이유가 되었소 — 쉬운 글자에 안주한다는 것이었지.',
+              '그렇소. 몽고·서하·여진·일본을 두고 "오랑캐의 일"이라 하였소이다.'] },
+  { q:'"이두가 이미 있는데 새 글자가 무슨 소용인가"라는 물음에 세종이 든 근거는?',
+    opts:['설총이 이두를 만든 것도 결국 백성을 편하게 하려던 뜻이었다','이두는 중국 글자이므로 조선에서 쓸 수 없다'],
+    answer:0, src:[40,53],
+    feedback:['이두는 한자를 빌려 우리말을 적던 방식이오. 쓸 수 없다고는 하지 않았소.',
+              '…그 말에는 나도 답할 바가 없었소. 설총을 끌어대실 줄이야.'] },
+  { q:'반대 상소를 올린 신하들에게 세종이 던진 반문은?',
+    opts:['그대는 운서를 아는가, 사성 칠음에 자모가 몇인지 아는가','그대는 몇 해나 벼슬을 살았는가'],
+    answer:0, src:[6,11],
+    feedback:['벼슬의 길고 짧음을 따지실 분이 아니오.',
+              '그렇소. 소리의 이치를 아느냐 물으셨소. …아무도 답하지 못했소이다.'] },
+  { q:'세종이 훈민정음 서문에서 밝힌 창제의 까닭은?',
+    opts:['제 뜻을 펴지 못하는 백성이 많아 이를 딱하게 여겼다','중국 글자를 완전히 대신할 문자가 필요했다'],
+    answer:0, src:[15,20,32],
+    feedback:['한자를 없애려 하신 것이 아니오. 그랬다면 나도 그리 말하지 않았을 것이오.',
+              '"어린 백성이 이르고자 할 바 있어도 마침내 제 뜻을 펴지 못하는 사람이 많다" — 그리 쓰셨소.'] },
+  { q:'상소를 올린 최만리 등이 실제로 받은 처분은?',
+    opts:['하루 옥에 갇혔다가 다음 날 풀려났다','모두 관직을 잃고 유배되었다'],
+    answer:0, src:[24,37],
+    feedback:['유배까지 가지는 않았소. 그랬다면 내가 여기 서 있지도 못했겠지.',
+              '그렇소. 다만 정창손만은 파직되었소이다.'] },
+];
+
+/* ============ 이 챕터의 5막 ============
+   지인 피드백: "세종과 네 번이나 대화해야 해서 재미가 없다."
+   재어 보니 이 챕터는 대화 여섯 번 중 네 번이 세종이었고, 세종과 신숙주가
+   같은 방에 있어 그 넷 중 셋은 이동조차 없는 제자리 반복이었다.
+
+   그래서 순서를 이야기의 뼈대에 맞춰 다시 세웠다. 세종을 만나는 횟수는
+   그대로지만, 사이사이에 다른 일이 끼어들어 연달아 오지 않는다.
+
+     0 발단  세종을 만난다 — 글을 모르는 백성 이야기
+     1 전개  신숙주·장영실을 찾아다닌다(+ 유물 탐색), 다시 세종에게
+     2 위기  최만리가 상소를 들고 들이닥친다
+     3 절정  최만리와 논쟁한다(보스전)
+     4 결말  반포. 그리고 세종의 만년.
+
+   act가 오를 때마다 목표 문구가 바뀌고, 최만리는 위기에서야 지도에 나타난다. */
+const ACT = { OPEN:0, RISE:1, CRISIS:2, CLIMAX:3, CLOSE:4 };
+
 const Stage = {
-  state: { sejongStage: 0, bossADone: false,
-    sejongScore: 0, sejongTotal: 0,
+  state: { act: ACT.OPEN, sejongStage: 0, bossADone: false,
+    sinsukjuDone: false, jangyeongsilDone: false, choemanriMet: false,
+    sejongScore: 0, sejongTotal: 0, debateScore: '',
     // 지도를 거쳐야 하는 출구는 처음 한 번만 지도를 띄운다(key별 통과 여부)
     mapDone: {} },
+
   keyFor(id){
-    if (id === 'sejong') return Stage.state.bossADone ? 'sejong_repeat' : 'sejong_' + Math.min(Stage.state.sejongStage, 3);
+    const st = Stage.state;
+    if (id === 'sejong'){
+      if (st.act === ACT.OPEN)  return 'sejong_0';
+      if (st.act === ACT.RISE)  return (st.sinsukjuDone && st.jangyeongsilDone) ? 'sejong_1' : 'sejong_wait';
+      if (st.act === ACT.CRISIS) return 'sejong_crisis';
+      if (st.act === ACT.CLIMAX) return 'sejong_crisis';
+      if (st.act === ACT.CLOSE)  return st.sejongStage >= 3 ? 'sejong_repeat'
+                                       : (st.sejongStage >= 2 ? 'sejong_3' : 'sejong_2');
+      return 'sejong_repeat';
+    }
     if (id === 'sinsukju') return 'sinsukju_0';
     if (id === 'jangyeongsil') return 'jangyeongsil_0';
+    if (id === 'choemanri') return st.act >= ACT.CLOSE ? 'choemanri_after' : 'choemanri_0';
     return null;
+  },
+
+  /* 위기 — 최만리가 지도에 나타난다. 없던 사람이 문을 밀고 들어오는 것이라
+     구역 안에 있을 때만 등장 연출을 띄운다. */
+  summonChoemanri(){
+    const st = Stage.state;
+    if (st.act >= ACT.CRISIS) return;
+    st.act = ACT.CRISIS;
+    const z = ZONES.jiphyeonjeon;
+    if (!z.npcs.some(n => n.id === 'choemanri')){
+      z.npcs.push({ id:'choemanri', name:'최만리', x:688, y:656,
+        look:{ role:'scholar', body:'#4a3c52', accent:'#b9a06a' } });
+    }
+    updateHudGoal();
+    if (World.zone === 'jiphyeonjeon') showZoneBanner('최만리가 상소를 들고 들어선다');
+    else showZoneBanner('집현전이 소란스럽다');
+  },
+
+  /* 절정 — 논쟁. 이기면 반포(결말)로 넘어간다. */
+  startDebate(){
+    Stage.state.act = ACT.CLIMAX;
+    World.paused = true;
+    Boss.start({
+      name: '최만리',
+      bg: 'assets/scenes/ch2_jiphyeonjeon.webp',
+      hp: BOSS_CHOEMANRI.length, lives: 3,
+      questions: BOSS_CHOEMANRI,
+      onWin: (r) => {
+        Stage.state.debateScore = `${r ? r.hit : BOSS_CHOEMANRI.length}/${BOSS_CHOEMANRI.length}`;
+        Stage.state.act = ACT.CLOSE;
+        World.paused = false;
+        updateHudGoal();
+        showZoneBanner('상소를 물리쳤다 — 세종에게 돌아가자');
+      },
+      onLose: () => {
+        World.paused = false;
+        Stage.state.act = ACT.CRISIS;   // 다시 붙을 수 있다
+        updateHudGoal();
+        showZoneBanner('말문이 막혔다 — 다시 이야기해 보자');
+      },
+    });
   },
   interact(){
     if (overlayOpen()) return;
+    // 가까이에 탐색 지점이 있으면 대화가 아니라 탐색이 먼저다
+    if (window.Items && Items.trySearch(World)) return;
     const n = World.nearNpc;
     if (!n) return;
     const key = Stage.keyFor(n.id);
@@ -1501,7 +1659,6 @@ const Dialog = {
     if (this.npc.id === 'sejong'){
       Stage.state.sejongScore += score; Stage.state.sejongTotal += total;
     }
-    if (this.data.finishesBossA){ Stage.finishBoss('A', Stage.state.sejongScore, Stage.state.sejongTotal); return; }
     this.afterQuiz();
   },
   afterQuiz(){
@@ -1511,10 +1668,8 @@ const Dialog = {
     // 끝날 때마다 이 구역의 정식 배경음악을 다시 한 번 틀어 준다(이미
     // 맞는 트랙이 재생 중이면 BGM.play()가 그냥 조용히 무시한다).
     BGM.play(ZONE_BGM[World.zone] || ZONE_BGM.default);
-    if (this.npc.id === 'sejong'){
-      Stage.state.sejongStage = Math.min(Stage.state.sejongStage + 1, 3);
-    }
     playFanfare('대화 완료');
+    Stage.advance(this.key);
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
@@ -1683,17 +1838,50 @@ document.getElementById('intro-panel').addEventListener('click', introNext);
 renderIntro();
 
 /* ============ 챕터 진행 / 종료 (집현전 보스전이 끝나면 종료) ============ */
+/* 대화 하나가 끝날 때마다 막이 넘어가는지 본다. */
+Stage.advance = function(key){
+  const st = Stage.state;
+  if (key === 'sejong_0'){ st.act = Math.max(st.act, ACT.RISE); }
+  else if (key === 'sinsukju_0'){ st.sinsukjuDone = true; }
+  else if (key === 'jangyeongsil_0'){ st.jangyeongsilDone = true; }
+  else if (key === 'sejong_1'){ Stage.summonChoemanri(); }
+  else if (key === 'choemanri_0'){ st.choemanriMet = true; setTimeout(() => Stage.startDebate(), 420); }
+  else if (key === 'sejong_2'){ st.sejongStage = 2; }
+  else if (key === 'sejong_3'){ st.sejongStage = 3; Stage.finishChapter(); }
+  updateHudGoal();
+};
+
+/* 목표 문구 — 지금 어느 막에 있는지가 곧 다음에 할 일이다. */
 function updateHudGoal(){
   const el = document.getElementById('hud-goal');
-  if (Stage.state.bossADone){ el.textContent = ''; return; }
-  el.textContent = '다음 목표: 집현전에서 세종과 대화하기';
+  const st = Stage.state;
+  let t = '';
+  switch (st.act){
+    case ACT.OPEN:
+      t = '집현전에서 세종과 대화하기'; break;
+    case ACT.RISE:
+      if (!st.sinsukjuDone && !st.jangyeongsilDone) t = '신숙주와 장영실을 찾아가기';
+      else if (!st.sinsukjuDone) t = '집현전의 신숙주와 대화하기';
+      else if (!st.jangyeongsilDone) t = '간의대의 장영실과 대화하기' + exitDirArrow(ZONES.jiphyeonjeon.exits[0].rect);
+      else t = '세종에게 돌아가기';
+      break;
+    case ACT.CRISIS:
+      t = '최만리의 상소에 답하기'; break;
+    case ACT.CLIMAX:
+      t = '최만리와 논쟁 중'; break;
+    case ACT.CLOSE:
+      t = st.sejongStage >= 3 ? '' : '세종에게 돌아가기';
+      break;
+  }
+  el.textContent = t ? '다음 목표: ' + t : '';
 }
-Stage.finishBoss = function(id, score, total){
-  Stage.state.bossADone = true; Stage.state.bossAScore = `${score}/${total}`;
-  World.paused = false;
-  updateHudGoal();
-  document.getElementById('end-score').textContent = `집현전: ${Stage.state.bossAScore} 정답`;
+
+Stage.finishChapter = function(){
+  document.getElementById('end-score').textContent =
+    '집현전: ' + Stage.state.sejongScore + '/' + Stage.state.sejongTotal + ' 정답'
+    + (Stage.state.debateScore ? ' · 논쟁 ' + Stage.state.debateScore : '');
   document.getElementById('next-chapter-btn').classList.add('show');
+  updateHudGoal();
 };
 Stage.endChapter = function(){
   BGM.play('bgm_chapter_end', {fadeMs:700});
@@ -1776,9 +1964,12 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js"></script>
 <script src="assets/juice.js"></script>
+<script src="assets/items.js"></script>
+<script src="assets/boss.js"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
+if (window.Items) Items.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';

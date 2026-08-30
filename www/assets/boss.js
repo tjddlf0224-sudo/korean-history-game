@@ -22,7 +22,7 @@
        img: 'assets/portraits/yeongaesomun.png',
        hp: 5,                       // 맞혀야 하는 문제 수(=보스 체력 칸)
        questions: [{q, opts, answer, feedback}],   // 기존 퀴즈와 같은 형식
-       onWin: () => {...}, onLose: () => {...}
+       onWin: (r) => {...}, onLose: (r) => {...}   // r = {hit, total, best}
      });
 */
 window.Boss = (function(){
@@ -54,6 +54,14 @@ window.Boss = (function(){
        내가 등을 보여야 "내가 저기 서 있다"는 느낌이 나고, 상대가 위에
        있어야 거리감이 생긴다. */
     .bs-sprite { position:absolute; z-index:5; filter:drop-shadow(0 8px 7px rgba(0,0,0,.55)); }
+    /* 초상이 없는 보스 — 먹으로 친 듯한 실루엣에 이름을 얹는다 */
+    .bs-silhouette { width:100%; aspect-ratio:3/4; border-radius:46% 46% 12% 12%;
+      background:linear-gradient(180deg,#2a2118 0%,#171208 100%);
+      border:1px solid rgba(201,162,74,.45); display:flex; align-items:flex-end;
+      justify-content:center; padding-bottom:12%;
+      box-shadow:0 0 30px rgba(0,0,0,.6), inset 0 12px 30px rgba(0,0,0,.5); }
+    .bs-silhouette span { font-family:"Gowun Batang",serif; font-size:15px; font-weight:700;
+      color:#e9c979; letter-spacing:.14em; text-shadow:0 2px 8px rgba(0,0,0,.9); }
     .bs-enemy { bottom:26%; right:8%; width:34%; max-width:230px; }
     .bs-enemy img { width:100%; object-fit:contain; display:block;
       animation:bs-bob 3.2s ease-in-out infinite; }
@@ -285,6 +293,15 @@ window.Boss = (function(){
   }
 
   /* ---------------- 끝 ---------------- */
+  /* 이름 끝 글자에 받침이 있으면 '을', 없으면 '를'.
+     "최만리을(를)"처럼 나오면 사극 말투가 통째로 어색해진다. */
+  function objJosa(name){
+    const ch = (name || '').trim().slice(-1);
+    const code = ch.charCodeAt(0);
+    if (!(code >= 0xAC00 && code <= 0xD7A3)) return '을';   // 한글이 아니면 무난한 쪽
+    return (code - 0xAC00) % 28 ? '을' : '를';
+  }
+
   function finish(won){
     const arena = document.getElementById('bs-arena');
     const end = document.createElement('div');
@@ -293,7 +310,7 @@ window.Boss = (function(){
       '<div class="card">' +
         '<div class="ttl">' + (won ? '승리' : '패배') + '</div>' +
         '<div class="sub">' + (won
-          ? `${S.name}을(를) 논파했다.<br>맞힌 문제 ${S.hit}개 · 최고 연속 ${S.best}`
+          ? `${S.name}${objJosa(S.name)} 논파했다.<br>맞힌 문제 ${S.hit}개 · 최고 연속 ${S.best}`
           : '아직 이르다. 대사를 다시 듣고 오면 이길 수 있다.') + '</div>' +
         '<button id="bs-close">' + (won ? '계속' : '돌아가기') + '</button>' +
       '</div>';
@@ -303,8 +320,9 @@ window.Boss = (function(){
       document.getElementById('boss-ov').classList.remove('show');
       end.remove();
       const cb = won ? S.onWin : S.onLose;
+      const result = { hit: S.hit, total: S.questions.length, best: S.best };
       S = null;
-      cb && cb();
+      cb && cb(result);
     };
   }
 
@@ -336,8 +354,11 @@ window.Boss = (function(){
     document.getElementById('bs-ename').textContent = S.name;
     document.getElementById('bs-pname').textContent =
       (window.Rank ? Rank.get().tier.name : '나');
+    // 초상이 아직 없는 인물도 있다(최만리처럼 새로 세운 보스). 그럴 때
+    // 자리를 비워 두면 허공에 대고 싸우는 꼴이라, 이름을 새긴 실루엣을 세운다.
     document.getElementById('bs-e').innerHTML =
-      opt.img ? `<img src="${opt.img}" alt="">` : '';
+      opt.img ? `<img src="${opt.img}" alt="">`
+              : `<div class="bs-silhouette"><span>${S.name}</span></div>`;
     // 뒷모습(up_1)을 쓴다. 정면을 쓰면 상대가 아니라 화면을 보고 서 있는
     // 꼴이라 대치 구도가 안 산다. 스프라이트 시트 2행이 이미 뒷면이라
     // 새로 그릴 필요가 없다.
