@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보스전 확인 (개발용)</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;background:#15110c;color:#f5ecd8;font-family:"Gowun Batang",serif;}
+  .pad{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;}
+  button{background:#2a2013;border:1px solid #4a3c26;color:#f5ecd8;border-radius:10px;
+    padding:12px 20px;font-family:inherit;font-size:14px;cursor:pointer;margin:5px;}
+</style>
+</head>
+<body>
+<div class="pad">
+  <div id="rank-hud" style="margin-bottom:18px"></div>
+  <button onclick="go()">보스전 시작 (연개소문)</button>
+  <div id="log" style="margin-top:16px;font-size:12px;color:#b8a888"></div>
+</div>
+<script src="assets/audio.js"></script>
+<script src="assets/rank.js"></script>
+<script src="assets/boss.js"></script>
+<script>
+Rank.renderHud();
+function go(){
+  Boss.start({
+    name: '연개소문',
+    img: 'assets/portraits/gwanggaeto.png',
+    bg: 'assets/scenes/godae2_sanggyeong.webp',
+    hp: 4, lives: 3,
+    questions: [
+      { q:'고구려가 당의 침입에 대비해 국경에 쌓은 방어 시설은?',
+        opts:['천리장성','강동 6주'], answer:0,
+        feedback:['강동 6주는 고려 서희가 거란과 담판해 얻은 땅이오.','그렇다. 천리장성이다. 부여성에서 비사성까지 이어졌지.'] },
+      { q:'645년 당 태종의 대군을 물리친 고구려의 성은?',
+        opts:['안시성','평양성'], answer:0,
+        feedback:['평양성은 고구려의 도읍이오.','안시성이다. 성주와 백성이 끝내 지켜 냈다.'] },
+      { q:'연개소문이 일으켜 영류왕을 몰아내고 권력을 잡은 사건은?',
+        opts:['정변','무신정변'], answer:0,
+        feedback:['무신정변은 훨씬 뒷날 고려의 일이오.','그렇다. 그렇게 대막리지가 되었다.'] },
+      { q:'고구려가 수의 대군을 살수에서 물리친 싸움을 이끈 장수는?',
+        opts:['을지문덕','계백'], answer:0,
+        feedback:['계백은 백제의 장수요.','을지문덕이다. 살수대첩이라 부르지.'] },
+      { q:'고구려의 지방 5부 중 왕이 직접 다스린 중심 부는?',
+        opts:['계루부','사출도'], answer:0,
+        feedback:['사출도는 부여의 것이오.','계루부다. 왕실이 나온 부지.'] },
+    ],
+    onWin: () => log('승리 콜백 실행됨 · 현재 XP ' + Rank.get().xp),
+    onLose: () => log('패배 콜백 실행됨'),
+  });
+}
+function log(t){ document.getElementById('log').textContent = t; Rank.renderHud(); }
+</script>
+</body>
+</html>
