@@ -438,6 +438,7 @@
   <div id="menu-modal">
     <div id="menu-panel">
       <h3>메뉴</h3>
+      <button id="menu-prologue">프롤로그 다시 보기</button>
       <button id="menu-kings-open">왕조 계보 보기</button>
       <button id="menu-badges-open"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3l4 6 4-6"/><circle cx="12" cy="15" r="6"/><circle cx="12" cy="15" r="2.5"/></svg> 배지함 보기</button>
       <button id="menu-reset">진행 기록 초기화</button>
@@ -533,6 +534,16 @@ if (window.visualViewport){
 setTimeout(applyOrientation, 300);
 setTimeout(applyOrientation, 800);
 applyOrientation();
+
+/* 프롤로그 — 처음 들어온 사람은 여기부터. localStorage에 표시가 남으면 건너뛴다. */
+document.getElementById('menu-prologue').addEventListener('click', () => {
+  location.href = 'prologue.html';
+});
+(function(){
+  let seen = null;
+  try { seen = localStorage.getItem('khg_prologue_seen'); } catch(e){ seen = '1'; }
+  if (!seen) location.replace('prologue.html');
+})();
 
 /* 마스코트 이미지 파일을 같은 이름으로 교체할 때마다 브라우저·CDN 캐시가
    예전 파일을 계속 물고 있는 문제(예: 예전 스프라이트 시트가 좁게

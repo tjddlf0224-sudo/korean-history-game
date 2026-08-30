@@ -569,6 +569,8 @@ const ZONES = {
      한 문제로는 정보가 부족하다는 지적을 받아, 두 번째 구역(초기 국가 마을)을
      새로 세우고 나라마다 NPC와 퀴즈를 따로 뒀다. */
   seonsa: {
+    // 구석기·신석기에는 계급이 없었다 — 신분에 따른 인사를 붙이지 않는다
+    rankEra: 'none',
     img: 'assets/scenes/seonsa1_river.png', label: '선사의 강가',
     spawn: { x: 688, y: 470 },
     barriers: [
@@ -1792,6 +1794,7 @@ requestAnimationFrame(loop);
 </script>
 <script src="assets/badges.js"></script>
 <script src="assets/streak.js"></script>
+<script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js"></script>
 <script src="assets/juice.js"></script>
 <script src="assets/items.js"></script>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>타임슬립 한국사 · 프롤로그</title>
+<meta name="description" content="글을 모르는 자에게 조선은 이름조차 적어 주지 않았다. 그대가 노비로 시작하는 이유.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gugi&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; word-break:keep-all;
+      overflow-wrap:break-word; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; overscroll-behavior:none;
+    touch-action:none; background:#0a0806; color:#f5ecd8;
+    font-family:"Gowun Batang", -apple-system, "Malgun Gothic", serif; }
+
+  /* 다른 화면과 같은 가로모드 고정 트릭 */
+  #wrap { position:fixed; top:0; left:0; touch-action:none; transform-origin:top left; overflow:hidden; }
+  body.rot #wrap { transform:rotate(90deg) translateY(-100%); }
+
+  /* 배경 — 장면마다 갈아 끼우고 부드럽게 교차된다 */
+  #bg { position:absolute; inset:0; background-size:cover; background-position:center;
+        opacity:0; transition:opacity 1.2s ease, filter 1.2s ease; filter:brightness(.34) saturate(.7); }
+  #bg.on { opacity:1; }
+  #veil { position:absolute; inset:0; background:radial-gradient(ellipse at 50% 45%,
+          rgba(10,8,6,.30), rgba(10,8,6,.86) 78%); }
+
+  /* 본문 */
+  #stage { position:absolute; inset:0; display:flex; flex-direction:column;
+           align-items:center; justify-content:center; padding:0 8%; text-align:center; }
+  #line { font-size:clamp(17px,3.0vw,25px); line-height:1.95; letter-spacing:.01em;
+          max-width:34em; text-wrap:balance; opacity:0; transform:translateY(9px);
+          transition:opacity .7s ease, transform .7s ease; text-shadow:0 2px 14px rgba(0,0,0,.9); }
+  #line.on { opacity:1; transform:translateY(0); }
+  #line .q { color:#e8d9a8; }
+  #line .w { color:#f0c96b; font-weight:700; }
+
+  /* 말하는 이 이름표 */
+  #who { font-size:12.5px; letter-spacing:.24em; color:#a89676; margin-bottom:16px;
+         opacity:0; transition:opacity .6s ease; }
+  #who.on { opacity:1; }
+
+  /* 선택지 */
+  #picks { display:flex; flex-direction:column; gap:9px; margin-top:26px; width:min(90%,430px);
+           opacity:0; pointer-events:none; transition:opacity .5s ease; }
+  #picks.on { opacity:1; pointer-events:auto; }
+  .pick { background:rgba(42,32,19,.9); border:1px solid #6a5533; color:#f5ecd8;
+          border-radius:12px; padding:13px 16px; font-family:inherit; font-size:15px;
+          cursor:pointer; line-height:1.5; transition:background .18s, border-color .18s, transform .12s; }
+  .pick:hover { background:rgba(58,44,26,.95); border-color:#c9a24a; }
+  .pick:active { transform:scale(.985); }
+
+  /* 계속 표시 */
+  #go { margin-top:30px; font-size:13px; color:#9d8d70; letter-spacing:.12em;
+        opacity:0; transition:opacity .5s ease; }
+  #go.on { opacity:1; animation:blink 2.1s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:.45} 50%{opacity:1} }
+
+  /* 읽어 보라고 내미는 한자 — 못 읽는다는 걸 몸으로 느끼게 하는 장치 */
+  #hanja { font-size:clamp(46px,9vw,86px); letter-spacing:.18em; color:#efe4c8;
+           margin:10px 0 4px; opacity:0; transform:scale(.86);
+           transition:opacity .8s ease, transform .8s cubic-bezier(.2,1.3,.4,1);
+           text-shadow:0 4px 26px rgba(0,0,0,.9); }
+  #hanja.on { opacity:1; transform:scale(1); }
+
+  /* 신분이 찍히는 순간 */
+  #brand { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+           pointer-events:none; opacity:0; }
+  #brand.go { animation:brand-in 2.4s cubic-bezier(.15,.9,.25,1) forwards; }
+  @keyframes brand-in {
+    0%   { opacity:0; }
+    8%   { opacity:1; }
+    100% { opacity:1; }
+  }
+  #brand .mark { font-family:"Gugi","Gowun Batang",serif; font-size:clamp(84px,17vw,180px);
+    color:#c9452f; text-shadow:0 0 36px rgba(201,69,47,.85), 0 4px 0 #3a1108;
+    transform:scale(2.4) rotate(-9deg); opacity:0; }
+  #brand.go .mark { animation:stamp 1.1s cubic-bezier(.2,1.4,.3,1) forwards; }
+  @keyframes stamp {
+    0%   { transform:scale(2.6) rotate(-11deg); opacity:0; }
+    45%  { transform:scale(.92) rotate(-4deg);  opacity:1; }
+    62%  { transform:scale(1.06) rotate(-4deg); }
+    100% { transform:scale(1) rotate(-4deg); opacity:1; }
+  }
+  #brand .ring { position:absolute; width:26vmin; height:26vmin; border-radius:50%;
+    border:3px solid rgba(201,69,47,.75); opacity:0; }
+  #brand.go .ring { animation:ring 1.1s .42s cubic-bezier(.2,.8,.3,1) forwards; }
+  @keyframes ring { 0%{transform:scale(.4); opacity:.95} 100%{transform:scale(3.1); opacity:0} }
+  #shock { position:absolute; inset:0; background:#c9452f; opacity:0; pointer-events:none; }
+  #shock.go { animation:shock .5s ease-out; }
+  @keyframes shock { 0%{opacity:0} 14%{opacity:.5} 100%{opacity:0} }
+  body.shake #wrap { animation:shake .42s cubic-bezier(.36,.07,.19,.97); }
+  body.rot.shake #wrap { animation:none; }   /* 회전 중에는 흔들지 않는다(변환이 겹쳐 어긋난다) */
+  @keyframes shake {
+    10%,90%{transform:translate(-2px,0)} 20%,80%{transform:translate(4px,0)}
+    30%,50%,70%{transform:translate(-7px,0)} 40%,60%{transform:translate(7px,0)}
+  }
+
+  /* 마지막 카드 */
+  #final { position:absolute; inset:0; display:none; flex-direction:column;
+           align-items:center; justify-content:center; text-align:center;
+           padding:5% 9%; overflow-y:auto; }
+  #final.on { display:flex; }
+  #final .tt { font-size:12px; letter-spacing:.26em; color:#a89676; margin-bottom:10px; flex:none; }
+  #final .paths { font-size:clamp(14px,2.4vw,17px); line-height:1.8; color:#e6dbc2;
+                   max-width:32em; flex:none; }
+  #final .paths b { color:#f0c96b; }
+  #final .hit { margin:16px 0 0; font-size:clamp(18px,3.2vw,26px); font-weight:700; color:#f0c96b;
+                text-shadow:0 0 26px rgba(240,201,107,.5); flex:none; }
+  #final .btn { margin-top:22px; background:#2a2013; border:1px solid #c9a24a; color:#f5ecd8;
+    border-radius:13px; padding:12px 28px; font-family:inherit; font-size:15.5px; cursor:pointer; flex:none; }
+  #final .btn:hover { background:#3a2c1a; }
+  #final .skip { margin:11px 0 0; font-size:12.5px; color:#8d7f66; cursor:pointer; flex:none; }
+
+  #skipAll { position:absolute; right:calc(14px + env(safe-area-inset-right));
+    top:calc(12px + env(safe-area-inset-top)); z-index:9; background:none; border:none;
+    color:#7d7059; font-family:inherit; font-size:12.5px; letter-spacing:.1em; cursor:pointer; padding:8px; }
+  #skipAll:hover { color:#c9a24a; }
+
+  @media (prefers-reduced-motion:reduce){
+    #brand.go .mark,#brand.go .ring,#shock.go,body.shake #wrap,#go.on { animation-duration:.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="bg"></div>
+  <div id="veil"></div>
+
+  <div id="stage">
+    <div id="who"></div>
+    <div id="hanja"></div>
+    <div id="line"></div>
+    <div id="picks"></div>
+    <div id="go">탭하여 계속 ▶</div>
+  </div>
+
+  <div id="brand"><span class="ring"></span><span class="mark">奴</span></div>
+  <div id="shock"></div>
+
+  <div id="final">
+    <div class="tt">조 선 의 신 분</div>
+    <div class="paths">
+      노비가 신분을 벗는 길은 셋뿐이었다.<br>
+      <b>군공</b>을 세우거나, <b>납속</b>으로 곡식을 바치거나, <b>속량</b>으로 몸값을 치르거나.<br>
+      그마저도 드문 일이었다.
+    </div>
+    <div class="hit">그러나 그대에겐 네 번째 길이 있다</div>
+    <div class="paths" style="margin-top:11px">
+      시대를 건너다니며 <b>보고, 듣고, 아는 것</b>.<br>
+      아는 만큼 오르고, 오른 만큼 사람들이 그대를 달리 대할 것이다.
+    </div>
+    <button class="btn" id="startBtn">첫 시대로 →</button>
+    <div class="skip" id="toIndex">챕터 목록으로</div>
+  </div>
+
+  <button id="skipAll">건너뛰기</button>
+</div>
+
+<script>
+/* ============ 프롤로그 — 그대가 노비로 시작하는 이유 ============
+
+   왜 만들었나
+   - rank.js가 노비에서 시작하는데, 왜 노비인지 게임이 한 번도 말해 주지 않았다.
+     보상 시스템의 출발점에 이야기가 없으면 승급도 그냥 숫자가 오르는 일이 된다.
+   - 조선에서 신분을 증명하는 것은 호패와 문서였다. 그것이 없고 글도 못 읽는
+     떠돌이는 실제로 관에 붙들려 노비로 삼아지곤 했다. 시간을 건너온 주인공은
+     정확히 그 조건에 해당한다 — 억지 설정이 아니라 이 시대의 논리다.
+   - 그래서 심문에 **직접 답하게** 한다. 무엇을 고르든 결말은 같지만,
+     "내가 아무것도 답하지 못했다"는 경험이 남아야 학습 동기와 이어진다.
+*/
+const SC = [
+  { bg:'', who:'', t:'2026년, 어느 박물관.' },
+  { bg:'', t:'유리장 안에 낡은 나무패 하나가 놓여 있다.<br>이름과 태어난 해, 사는 곳을 새긴 <span class="w">호패</span>.' },
+  { bg:'', t:'"조선 사람은 이걸 늘 지니고 다녔대."<br>친구의 말을 들으며 무심코 유리에 손을 댄 순간 —' },
+
+  { bg:'assets/scenes/ch4_jibang_goeul.webp', t:'흙냄새. 발밑이 젖어 있다.<br>기와지붕과 낮은 담, 저 멀리 <span class="q">官衙</span>라 쓴 현판.' },
+  { t:'"게 섰거라."<br>창을 든 사내 둘이 앞을 막는다.' },
+
+  { who:'관 원', t:'"낯선 얼굴이로군. 이름이 무엇이냐."',
+    picks:['김민준입니다', '…모르겠습니다'],
+    after:['"김민준? 성이 김이라. 본관은 어디냐."', '"이름조차 모른다니. 정신이 온전치 못한 게냐."'] },
+
+  { who:'관 원', t:'"본관은 어디고, 아비의 이름은 무엇이냐."',
+    picks:['잘 모르겠습니다', '먼 곳에서 왔습니다'],
+    after:['"조상을 모르는 자가 어디 있단 말이냐."', '"먼 곳이라. 어느 고을, 어느 면이냐."'] },
+
+  { who:'관 원', t:'"호패를 내보여라. 열여섯이 넘은 사내라면 반드시 차고 있어야 하는 것이다."',
+    picks:['그런 것은 없습니다'],
+    after:['"없다? …도망친 자가 아니고서야."'] },
+
+  { who:'관 원', t:'"마지막이다. 글은 아느냐. 이것을 읽어 보아라."', hanja:'戶 牌' },
+  { t:'종이 위의 두 글자가 눈에 들어오지 않는다.<br>획이 엉켜 있을 뿐이다.',
+    picks:['…읽지 못하겠습니다'],
+    after:[''] },
+
+  { who:'관 원', t:'"이름도, 본관도, 호패도, 글도 없다."' },
+  { who:'관 원', t:'"관아의 문서에 적어 넣을 것이 하나도 없는 자로다."' },
+  { who:'관 원', t:'"<span class="w">관노(官奴)</span>로 삼는다. 데려가라."', brand:true },
+];
+
+const el = {
+  bg: document.getElementById('bg'), who: document.getElementById('who'),
+  line: document.getElementById('line'), hanja: document.getElementById('hanja'),
+  picks: document.getElementById('picks'), go: document.getElementById('go'),
+  brand: document.getElementById('brand'), shock: document.getElementById('shock'),
+  final: document.getElementById('final'), stage: document.getElementById('stage'),
+};
+
+let idx = -1, busy = false, waitingPick = false, pendingAfter = null;
+
+function setBg(src){
+  if (src === undefined) return;
+  if (!src){ el.bg.classList.remove('on'); return; }
+  if (el.bg.dataset.src === src){ el.bg.classList.add('on'); return; }
+  el.bg.dataset.src = src;
+  el.bg.style.backgroundImage = `url('${src}')`;
+  el.bg.classList.add('on');
+}
+
+function show(html, who){
+  el.line.classList.remove('on');
+  el.who.classList.remove('on');
+  setTimeout(() => {
+    el.line.innerHTML = html;
+    el.line.classList.add('on');
+    if (who){ el.who.textContent = who; el.who.classList.add('on'); }
+  }, 260);
+}
+
+function next(){
+  if (busy || waitingPick) return;
+
+  // 선택 뒤에 이어지는 관원의 대꾸를 먼저 보여준다
+  if (pendingAfter){
+    const t = pendingAfter; pendingAfter = null;
+    if (t){ show(t, el.who.textContent); el.go.classList.add('on'); return; }
+  }
+
+  idx++;
+  if (idx >= SC.length) return;
+  const s = SC[idx];
+
+  setBg(s.bg);
+  el.go.classList.remove('on');
+  el.picks.classList.remove('on');
+  el.picks.innerHTML = '';
+
+  // 한자를 내미는 장면
+  if (s.hanja){ el.hanja.textContent = s.hanja; el.hanja.classList.add('on'); }
+  else if (!SC[idx-1] || !SC[idx-1].hanja) el.hanja.classList.remove('on');
+
+  show(s.t, s.who);
+
+  if (s.brand){ busy = true; setTimeout(brandScene, 1500); return; }
+
+  if (s.picks){
+    waitingPick = true;
+    setTimeout(() => {
+      s.picks.forEach((p, i) => {
+        const b = document.createElement('button');
+        b.className = 'pick'; b.textContent = p;
+        b.onclick = (e) => {
+          e.stopPropagation();
+          waitingPick = false;
+          pendingAfter = (s.after && s.after[i]) || '';
+          el.picks.classList.remove('on');
+          setTimeout(() => { el.picks.innerHTML = ''; next(); }, 260);
+        };
+        el.picks.appendChild(b);
+      });
+      el.picks.classList.add('on');
+    }, 420);
+    return;
+  }
+  setTimeout(() => el.go.classList.add('on'), 700);
+}
+
+/* 신분이 찍히는 순간 — 이 게임의 보상 축이 시작되는 자리라 가장 세게 만든다 */
+function brandScene(){
+  el.stage.style.transition = 'opacity .5s ease';
+  el.stage.style.opacity = '0';
+  el.hanja.classList.remove('on');
+  setTimeout(() => {
+    el.shock.classList.add('go');
+    el.brand.classList.add('go');
+    document.body.classList.add('shake');
+    if (navigator.vibrate) navigator.vibrate([90, 60, 140]);
+    thud();
+    setTimeout(() => document.body.classList.remove('shake'), 500);
+    setTimeout(() => {
+      el.brand.style.transition = 'opacity .9s ease';
+      el.brand.style.opacity = '0';
+      setTimeout(finish, 900);
+    }, 2100);
+  }, 520);
+}
+
+/* 낙인 소리 — 파일 없이 합성한다(juice.js와 같은 방식) */
+function thud(){
+  try {
+    const c = new (window.AudioContext || window.webkitAudioContext)();
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(180, c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(38, c.currentTime + 0.42);
+    g.gain.setValueAtTime(0.0001, c.currentTime);
+    g.gain.linearRampToValueAtTime(0.35, c.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.55);
+    o.connect(g).connect(c.destination);
+    o.start(); o.stop(c.currentTime + 0.6);
+    // 나무가 갈라지는 듯한 잡음 한 겹
+    const n = c.createBufferSource();
+    const buf = c.createBuffer(1, c.sampleRate * 0.25, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length) ** 3;
+    n.buffer = buf;
+    const ng = c.createGain(); ng.gain.value = 0.22;
+    n.connect(ng).connect(c.destination); n.start();
+  } catch(e){}
+}
+
+function finish(){
+  el.brand.classList.remove('go');
+  el.stage.style.display = 'none';
+  el.final.classList.add('on');
+  el.bg.style.filter = 'brightness(.22) saturate(.5)';
+  try { localStorage.setItem('khg_prologue_seen', '1'); } catch(e){}
+}
+
+document.getElementById('startBtn').onclick = () => location.href = 'seonsa1.html';
+document.getElementById('toIndex').onclick = () => location.href = 'index.html';
+document.getElementById('skipAll').onclick = (e) => {
+  e.stopPropagation();
+  try { localStorage.setItem('khg_prologue_seen', '1'); } catch(e){}
+  location.href = 'index.html';
+};
+
+document.getElementById('wrap').addEventListener('click', (e) => {
+  if (e.target.closest('.pick') || e.target.closest('button')) return;
+  next();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') next();
+});
+
+/* 가로모드 고정 — index.html과 같은 처리 */
+const wrapEl = document.getElementById('wrap');
+function getViewportSize(){
+  const vv = window.visualViewport;
+  if (vv && (vv.scale || 1) <= 1.01) return { w: vv.width, h: vv.height };
+  return { w: window.innerWidth, h: window.innerHeight };
+}
+function applyOrientation(){
+  const { w: iw, h: ih } = getViewportSize();
+  const portrait = ih > iw;
+  document.body.classList.toggle('rot', portrait);
+  wrapEl.style.width  = (portrait ? ih : iw) + 'px';
+  wrapEl.style.height = (portrait ? iw : ih) + 'px';
+}
+window.addEventListener('resize', applyOrientation);
+window.addEventListener('orientationchange', () => setTimeout(applyOrientation, 80));
+if (window.visualViewport){
+  window.visualViewport.addEventListener('resize', applyOrientation);
+  window.visualViewport.addEventListener('scroll', applyOrientation);
+}
+applyOrientation();
+setTimeout(applyOrientation, 300);
+
+let __lastTouchEnd = 0;
+document.addEventListener('touchend', function(e){
+  const now = Date.now();
+  if (now - __lastTouchEnd <= 300) e.preventDefault();
+  __lastTouchEnd = now;
+}, { passive:false });
+
+next();
+</script>
+</body>
+</html>

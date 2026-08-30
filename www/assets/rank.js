@@ -351,14 +351,82 @@ window.Rank = (function(){
       wang:'(땅에 엎드려 감히 얼굴을 들지 못한다)',
     },
   };
+
+  /* ---------------- 시대에 따라 인사를 갈아 끼운다 ----------------
+
+     신분에 따라 말투가 달라지는 건 **신분제가 있던 시대**에만 맞는 이야기다.
+     - 구석기·신석기에는 계급 자체가 없었다. 고인돌(청동기)이 나오고서야
+       지배자가 생긴다. 그 앞에서 "나으리"가 나오면 시대상이 어긋난다.
+     - 갑오개혁(1894)으로 신분제는 법적으로 폐지됐다. 일제강점기·현대의
+       인물이 신분을 따져 대우하면 역시 어긋난다.
+
+     그래서 세 갈래로 나눈다.
+       none   — 계급 이전. 인사를 붙이지 않는다.
+       class  — 신분제 시대. 아래 GREET 표 그대로.
+       modern — 신분제 폐지 후. 신분 용어 대신 **얼마나 아는 사람인가**로
+                대한다. 게임의 보상 체감은 지키면서 고증은 어기지 않는다.
+
+     챕터는 <script>const RANK_ERA = 'modern';</script> 한 줄로 선언한다.
+     한 챕터에 두 시대가 걸치면(선사 1화가 구석기~고조선을 함께 담는다)
+     구역에 rankEra를 달아 그쪽을 우선한다. */
+  const GREET_MODERN = {
+    king: {
+      nobi:'…처음 뵙는 얼굴이오.',
+      yangin:'낯이 익구려. 어디서 뵈었던가.',
+      jungin:'그래, 무슨 일로 찾아오셨소.',
+      yangban:'잘 오셨소. 마침 이야기 나눌 사람이 필요했소.',
+      jaesang:'선생이 오셨구려. 이리 앉으시오.',
+      wang:'…그대라면 이 이야기를 알아들을 것 같소.',
+    },
+    scholar: {
+      nobi:'배우러 오셨소? 무엇이든 물어보시오.',
+      yangin:'묻는 사람이 있어야 가르치는 보람도 있는 법이오.',
+      jungin:'제법 아는 이와 말하니 수월하구려.',
+      yangban:'오, 공부가 깊은 분이시군.',
+      jaesang:'선생 같은 분과 이야기하게 되어 반갑소.',
+      wang:'이만큼 아시는 분은 내 처음 뵙소.',
+    },
+    general: {
+      nobi:'여긴 위험하오. …그래도 왔으니 들어 보시오.',
+      yangin:'몸조심하시오. 지금은 그것부터가 일이오.',
+      jungin:'자네 같은 사람이 있어야 일이 돌아가지.',
+      yangban:'마침 형편을 이야기하던 참이오.',
+      jaesang:'선생, 어찌 보시오. 의견을 듣고 싶소.',
+      wang:'선생이 오셨으니 든든하오.',
+    },
+    commoner: {
+      nobi:'우리 사정이 다 그렇지요.',
+      yangin:'같은 처지끼리 못 할 말이 뭐 있겠소.',
+      jungin:'그래도 좀 아시는 분 같은데.',
+      yangban:'많이 배우신 분이구려.',
+      jaesang:'선생님 같은 분이 알아주셔야지요.',
+      wang:'이런 분을 다 뵙습니다그려.',
+    },
+  };
+
+  function eraMode(){
+    // 구역 설정이 우선이다 — 한 챕터가 두 시대에 걸칠 수 있다
+    // ZONES·World는 챕터가 const로 선언한다 — window.World로는 잡히지 않으므로
+    // typeof로 확인해야 한다(실제로 이 때문에 구역 설정이 무시됐다).
+    try {
+      if (typeof ZONES !== 'undefined' && typeof World !== 'undefined'
+          && ZONES[World.zone] && ZONES[World.zone].rankEra)
+        return ZONES[World.zone].rankEra;
+    } catch(e){}
+    return (typeof RANK_ERA !== 'undefined' && RANK_ERA) || 'class';
+  }
+
   function greetingFor(npcRole){
+    const mode = eraMode();
+    if (mode === 'none') return null;          // 계급이 없던 시대
+    const table = mode === 'modern' ? GREET_MODERN : GREET;
     const tier = get().tier.id;
-    const set = GREET[npcRole] || GREET.commoner;
+    const set = table[npcRole] || table.commoner;
     return set[tier] || null;
   }
 
   function reset(){ save({ xp: 0 }); renderHud(); }
 
-  return { get, addXp, renderHud, greetingFor, reset, TIERS, MAX_LV,
+  return { get, addXp, renderHud, greetingFor, eraMode, reset, TIERS, MAX_LV,
            _effects: Effects };
 })();
