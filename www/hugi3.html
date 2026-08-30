@@ -1627,10 +1627,12 @@ Stage.endChapter = function(){ BGM.play('bgm_chapter_end', {fadeMs:700});
   const orig = Stage.endChapter;
   Stage.endChapter = function(){
     if (Stage.state && Stage.state._bossCleared) return orig.call(Stage);
-    startChapterBoss(function(){
+    // 연표를 먼저 맞추고, 그다음 마지막 관문(보스)을 지난다
+    const goBoss = function(){ startChapterBoss(function(){
       if (Stage.state) Stage.state._bossCleared = true;
       orig.call(Stage);
-    });
+    }); };
+    if (window.Timeline) Timeline.play(goBoss); else goBoss();
   };
 })();
 
@@ -1712,6 +1714,7 @@ requestAnimationFrame(loop);
 <script src="assets/heroes_data.js"></script>
 <script src="assets/heroes.js"></script>
 <script src="assets/newsflash.js"></script>
+<script src="assets/timeline.js"></script>
 <script src="assets/journey.js"></script>
 <script src="assets/boss.js"></script>
 <script src="assets/items.js"></script>

@@ -1624,6 +1624,20 @@ Stage.endChapter = function(){
   document.getElementById('end-screen').classList.add('show');
 };
 
+/* 이 화를 닫기 전에 연표를 한 번 맞춘다. 2지선다만 이어지면 단조롭다. */
+(function(){
+  const orig = Stage.endChapter;
+  Stage.endChapter = function(){
+    if (Stage.state && Stage.state._tlDone) return orig.call(Stage);
+    if (!window.Timeline) return orig.call(Stage);
+    Timeline.play(function(){
+      if (Stage.state) Stage.state._tlDone = true;
+      orig.call(Stage);
+    });
+  };
+})();
+
+
 /* ============ 미니맵: #wrap 안의 독립된 2D 캔버스에 매 프레임 직접 그린다
    (Phaser 카메라나 게임 캔버스와 별개). 구역이 바뀌면 현재 구역의 배경
    이미지를 그대로 축소해서 보여준다. */
@@ -1701,6 +1715,7 @@ requestAnimationFrame(loop);
 <script src="assets/heroes_data.js"></script>
 <script src="assets/heroes.js"></script>
 <script src="assets/newsflash.js"></script>
+<script src="assets/timeline.js"></script>
 <script src="assets/journey.js"></script>
 <script src="assets/items.js"></script>
 <script src="assets/autowalk.js"></script>
