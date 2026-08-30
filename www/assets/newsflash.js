@@ -76,7 +76,7 @@ window.News = (function(){
     @keyframes nf-blink { 0%,100%{opacity:.3} 50%{opacity:1} }
 
     .nf .body { padding:12px 14px 13px; display:flex; gap:12px; align-items:flex-start; }
-    .nf .ic { font-size:30px; line-height:1.1; flex:none; }
+    .nf .ic { flex:none; width:32px; height:32px; }
     .nf .txt { flex:1; min-width:0; }
     .nf .hl { font-size:16.5px; font-weight:700; color:#f7dd93; line-height:1.45;
       text-wrap:balance; text-shadow:0 1px 6px rgba(0,0,0,.7); }
@@ -129,7 +129,8 @@ window.News = (function(){
       '<div class="top"><span class="tag">' + m.tag + '</span>' +
         (n.when ? `<span class="when">${n.when}</span>` : '') +
         '<span class="dot"></span></div>' +
-      '<div class="body"><div class="ic">' + (n.icon || '📜') + '</div>' +
+      '<div class="body"><div class="ic">' +
+        (window.Icons ? Icons.svg(n.icon, 32) : (n.icon || '')) + '</div>' +
         '<div class="txt"><div class="hl">' + n.headline + '</div>' +
         (n.sub ? '<div class="sub">' + n.sub + '</div>' : '') +
       '</div></div>';

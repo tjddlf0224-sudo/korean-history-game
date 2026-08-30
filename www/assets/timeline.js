@@ -50,7 +50,7 @@ window.Timeline = (function(){
       background:#241c12; border:1px solid #4a3c26; border-radius:12px; padding:11px 13px;
       color:#f5ecd8; font-family:inherit; cursor:pointer; transition:border-color .15s, opacity .2s; }
     #tl-ov .card:hover { border-color:#c9a24a; }
-    #tl-ov .card .ic { font-size:22px; line-height:1.1; flex:none; }
+    #tl-ov .card .ic { flex:none; width:24px; height:24px; }
     #tl-ov .card .hl { font-size:14px; font-weight:700; line-height:1.5; }
     #tl-ov .card .sb { font-size:11.5px; color:#b8a888; line-height:1.55; margin-top:2px; }
     #tl-ov .card.done { opacity:.28; pointer-events:none; }
@@ -118,7 +118,8 @@ window.Timeline = (function(){
     track.innerHTML = ''; msg.textContent = '';
 
     box.innerHTML = cards.map((c, i) =>
-      `<button class="card" data-i="${i}"><span class="ic">${c.icon || '📜'}</span>` +
+      `<button class="card" data-i="${i}"><span class="ic">` +
+      (window.Icons ? Icons.svg(c.icon, 24) : '') + '</span>' +
       `<span><span class="hl">${c.headline}</span>` +
       `<span class="when">${c.when || ''}</span></span></button>`).join('');
 
