@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
 """주인공 걷기 사이클 시트(4행x3열) 크롭 + 배경 투명화.
 
-행: 아래/위/옆모습. AI가 좌우를 구분 못 그리므로 옆모습 한 행만 쓰고
-반대쪽은 좌우 반전으로 만든다. 실제로 나온 그림이 오른쪽을 보고 있어
-right를 원본으로, left를 반전으로 삼는다.
+행: 아래/위/왼쪽/오른쪽. AI가 좌우를 구분 못 그려서 '왼쪽' 행만 쓰고
+오른쪽은 좌우 반전으로 직접 생성한다.
+
+┌─ 좌우를 건드리지 마라 ────────────────────────────────────────────┐
+│ 이 규칙(row2=left 원본, right=반전)은 **맞다.** 원본 시트          │
+│ player_sheet_raw.png의 옆모습 행은 실제로 왼쪽을 보고 있다.        │
+│ 눈으로 확인하려면:                                                 │
+│   python3 -c "from PIL import Image; im=Image.open(                │
+│     'player_sheet_raw.png'); W,H=im.size;                          │
+│     im.crop((W//3,H//2,2*W//3,3*H//4)).show()"                     │
+│                                                                    │
+│ 2026-08-31, 이걸 확인 안 하고 '뒤집혀 있다'고 넘겨짚어 left/right  │
+│ 파일을 통째로 맞바꾼 적이 있다(커밋 19a2cfc, 곧바로 되돌림).       │
+│ 지도에서 걷는 방향이 36개 챕터 전부에서 반대가 됐다.               │
+│ 방향이 이상해 보이면 파일을 바꾸기 전에 **위 명령으로 원본을 먼저  │
+│ 보라.** 대개 범인은 스프라이트가 아니라 브라우저 캐시다            │
+│ (그럴 땐 챕터의 ART_V를 올린다).                                   │
+└────────────────────────────────────────────────────────────────────┘
 
 배경색은 옷 색과 가장 먼 것을 골라야 한다. 마젠타 배경에 홍색 관복을 놓으면
 옷이 배경으로 오인돼 뚫리고, 초록 배경에 옥색(연녹색) 도포를 놓으면 같은 일이
@@ -24,12 +39,7 @@ import numpy as np
 
 COLS, ROWS = 3, 4
 PAD = 14
-# row0=down, row1=up, row2=옆모습(캐노니컬), row3은 버림.
-# 프롬프트에는 '왼쪽 측면'이라 썼지만 실제로 나온 그림은 **오른쪽을 보고 있다**.
-# 파일 이름을 left로 붙여 두었더니 지도에서 왼쪽으로 걸을 때 오른쪽을 보는
-# 버그가 있었다(한참 뒤에 발견). 나온 그림 그대로 right로 이름 붙이고,
-# left는 좌우반전으로 만든다.
-DIRS = ['down', 'up', 'right']
+DIRS = ['down', 'up', 'left']   # row0=down, row1=up, row2=left(캐노니컬), row3은 버림
 
 # 배경색별 키 값. thresh는 "이 색에서 이만큼 떨어지면 전경"으로 보는 거리.
 BGS = {
@@ -98,9 +108,9 @@ def main():
             print(f'{name} {out.size} 전경 {filled*100:.1f}%{warn}')
 
     for col in range(COLS):
-        left = frames[f'right_{col}'].transpose(Image.FLIP_LEFT_RIGHT)
-        left.save(os.path.join(a.out, f'left_{col}.png'))
-        print(f'left_{col} {left.size} (좌우반전)')
+        right = frames[f'left_{col}'].transpose(Image.FLIP_LEFT_RIGHT)
+        right.save(os.path.join(a.out, f'right_{col}.png'))
+        print(f'right_{col} {right.size} (좌우반전)')
 
 
 if __name__ == '__main__':
