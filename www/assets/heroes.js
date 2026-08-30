@@ -168,14 +168,13 @@ window.Heroes = (function(){
     if (injected) return; injected = true;
     const st = document.createElement('style');
     st.textContent = `
-    /* 인물 카드 버튼 — 가방 아래 */
-    #hero-btn { position:absolute; z-index:24; right:calc(10px + env(safe-area-inset-right));
-      top:calc(188px + env(safe-area-inset-top)); width:46px; height:46px; border-radius:50%;
-      border:1px solid #4a3c26; background:#241c12ee; color:#f0c96b; font-size:19px;
+    /* 인물 카드 버튼 — 우측 정렬대 안 */
+    #hero-btn { width:38px; height:38px; border-radius:50%;
+      border:1px solid #4a3c26; background:#241c12ee; color:#f0c96b; font-size:15px;
       display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
       box-shadow:0 4px 14px rgba(0,0,0,.5); }
     #hero-btn:active { transform:scale(.94); }
-    #hero-btn .cnt { position:absolute; right:-2px; top:-2px; min-width:17px; height:17px;
+    #hero-btn .cnt { position:absolute; right:-3px; top:-3px; min-width:15px; height:15px;
       border-radius:999px; background:#6b4a8c; color:#fff; font-size:10px; font-weight:700;
       display:flex; align-items:center; justify-content:center; padding:0 4px; }
 
@@ -261,6 +260,36 @@ window.Heroes = (function(){
   /* 화면에 얹는 것은 #wrap 안에 — 세로로 든 휴대폰에서 #wrap이 90도 돌기 때문 */
   function layer(){ return document.getElementById('wrap') || document.body; }
 
+  /* ---------------- 우측 버튼 정렬대 ----------------
+     가방·인물·AUTO를 각 모듈이 따로 절대배치했더니, 세로로 든 휴대폰처럼
+     화면이 짧아지면 서로 겹쳤다(실제로 겹쳤다). 하나의 세로 정렬대에
+     담아 간격을 CSS가 지키게 한다. 먼저 만드는 모듈이 스타일도 넣는다. */
+  function dock(){
+    const L = document.getElementById('wrap') || document.body;
+    let d = document.getElementById('side-dock');
+    if (!d){
+      d = document.createElement('div');
+      d.id = 'side-dock';
+      const st = document.createElement('style');
+      st.textContent = `
+      /* 세로로 든 휴대폰에서는 게임 화면 높이가 375px밖에 안 된다.
+         가운데 정렬로 두면 위로는 미니맵, 아래로는 행동 버튼과 겹친다
+         (둘 다 실제로 겹쳤다). 미니맵 바로 아래에서 시작해 아래로 쌓는다. */
+      #side-dock { position:absolute; z-index:24; right:calc(10px + env(safe-area-inset-right));
+        top:calc(128px + env(safe-area-inset-top)); display:flex; flex-direction:column;
+        align-items:center; gap:5px; pointer-events:none; }
+      #side-dock > * { pointer-events:auto; position:static !important;
+        top:auto !important; right:auto !important; bottom:auto !important;
+        transform:none !important; margin:0 !important; }
+      #side-dock > *:active { transform:scale(.94) !important; }`;
+      document.head.appendChild(st);
+      L.appendChild(d);
+    }
+    return d;
+  }
+
+
+
   function faceHtml(k){
     const d = DB()[k];
     if (d && d.p) return `<img src="assets/portraits/${d.p}" alt="">`;
@@ -292,7 +321,8 @@ window.Heroes = (function(){
       b.id = 'hero-btn';
       b.innerHTML = '👥<span class="cnt">0</span>';
       b.onclick = openBook;
-      L.appendChild(b);
+      b.style.order = '2';
+      dock().appendChild(b);
     }
     if (!document.getElementById('hero-ov')){
       const d = document.createElement('div');

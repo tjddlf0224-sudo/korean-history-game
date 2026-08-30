@@ -32,18 +32,16 @@ window.Auto = (function(){
     if (injected) return; injected = true;
     const st = document.createElement('style');
     st.textContent = `
-    /* 우측 한가운데 — 미니맵(위)과 행동 버튼(아래) 사이의 빈 자리.
-       켜져 있는 동안 순환 화살표가 계속 돈다(메이플키우기의 Full Auto 방식). */
-    #auto-btn { position:absolute; z-index:24; right:calc(12px + env(safe-area-inset-right));
-      top:50%; transform:translateY(-50%); width:54px; height:54px; padding:0;
+    /* 우측 정렬대 안. 켜져 있는 동안 순환 화살표가 계속 돈다
+       (메이플키우기의 Full Auto 방식). */
+    #auto-btn { width:44px; height:44px; padding:0;
       border-radius:50%; border:2px solid #4a3c26; background:#241c12ee; color:#8a7a5c;
       font-family:"Gowun Batang",serif; cursor:pointer;
       display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
       box-shadow:0 4px 14px rgba(0,0,0,.55); transition:color .18s, border-color .18s, background .18s; }
-    #auto-btn:active { transform:translateY(-50%) scale(.94); }
-    #auto-btn .ring { width:26px; height:26px; display:block; }
+    #auto-btn .ring { width:21px; height:21px; display:block; }
     #auto-btn .ring svg { width:100%; height:100%; display:block; }
-    #auto-btn .lbl { font-size:9.5px; font-weight:700; letter-spacing:.1em; line-height:1; }
+    #auto-btn .lbl { font-size:8.5px; font-weight:700; letter-spacing:.1em; line-height:1; }
 
     /* 켜짐 — 금빛으로 물들고 화살표가 돈다 */
     #auto-btn.on { color:#f7dd93; border-color:#e0b94a; background:#4a3410ee;
@@ -64,6 +62,36 @@ window.Auto = (function(){
 
   function layer(){ return document.getElementById('wrap') || document.body; }
 
+  /* ---------------- 우측 버튼 정렬대 ----------------
+     가방·인물·AUTO를 각 모듈이 따로 절대배치했더니, 세로로 든 휴대폰처럼
+     화면이 짧아지면 서로 겹쳤다(실제로 겹쳤다). 하나의 세로 정렬대에
+     담아 간격을 CSS가 지키게 한다. 먼저 만드는 모듈이 스타일도 넣는다. */
+  function dock(){
+    const L = document.getElementById('wrap') || document.body;
+    let d = document.getElementById('side-dock');
+    if (!d){
+      d = document.createElement('div');
+      d.id = 'side-dock';
+      const st = document.createElement('style');
+      st.textContent = `
+      /* 세로로 든 휴대폰에서는 게임 화면 높이가 375px밖에 안 된다.
+         가운데 정렬로 두면 위로는 미니맵, 아래로는 행동 버튼과 겹친다
+         (둘 다 실제로 겹쳤다). 미니맵 바로 아래에서 시작해 아래로 쌓는다. */
+      #side-dock { position:absolute; z-index:24; right:calc(10px + env(safe-area-inset-right));
+        top:calc(128px + env(safe-area-inset-top)); display:flex; flex-direction:column;
+        align-items:center; gap:5px; pointer-events:none; }
+      #side-dock > * { pointer-events:auto; position:static !important;
+        top:auto !important; right:auto !important; bottom:auto !important;
+        transform:none !important; margin:0 !important; }
+      #side-dock > *:active { transform:scale(.94) !important; }`;
+      document.head.appendChild(st);
+      L.appendChild(d);
+    }
+    return d;
+  }
+
+
+
   function mount(){
     css();
     if (document.getElementById('auto-btn')) return;
@@ -79,7 +107,8 @@ window.Auto = (function(){
       '<path d="M6.6 21.4v-4.2h4.2"/>' +
       '</svg></span><span class="lbl">AUTO</span>';
     b.onclick = (e) => { e.stopPropagation(); toggle(); };
-    layer().appendChild(b);
+    b.style.order = '3';
+    dock().appendChild(b);
   }
 
   function render(){
