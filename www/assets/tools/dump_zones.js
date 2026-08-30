@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const WWW = path.join(__dirname, '..', '..');
-const SKIP = new Set(['index.html', '_smoke.html', 'ch0_phaser.html', 'exam_practice.html', '_ranktest.html']);
+const SKIP = new Set(['index.html', '_smoke.html', 'ch0_phaser.html', 'exam_practice.html', '_ranktest.html', '_bosstest.html']);
 
 function extractConsts(src){
   const m = src.match(/const BG_W = (\d+), BG_H = (\d+), ZOOM = ([\d.]+);/);
