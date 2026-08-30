@@ -49,11 +49,15 @@ window.Boss = (function(){
     @keyframes bs-shake { 0%,100%{transform:translate(0,0);} 20%{transform:translate(-7px,3px);}
       40%{transform:translate(6px,-4px);} 60%{transform:translate(-4px,-2px);} 80%{transform:translate(4px,3px);} }
 
+    /* 배치는 보카바리스타 탐험 전투를 따른다: 내 캐릭터는 왼쪽 아래에서
+       뒤통수를 보이고(어깨 너머 시점), 상대는 오른쪽에 더 위(=멀리) 선다.
+       내가 등을 보여야 "내가 저기 서 있다"는 느낌이 나고, 상대가 위에
+       있어야 거리감이 생긴다. */
     .bs-sprite { position:absolute; z-index:5; filter:drop-shadow(0 8px 7px rgba(0,0,0,.55)); }
-    .bs-enemy { bottom:16%; right:7%; width:42%; max-width:260px; }
+    .bs-enemy { bottom:26%; right:8%; width:34%; max-width:230px; }
     .bs-enemy img { width:100%; object-fit:contain; display:block;
       animation:bs-bob 3.2s ease-in-out infinite; }
-    .bs-self { bottom:9%; left:7%; width:26%; max-width:150px; }
+    .bs-self { bottom:2%; left:8%; width:30%; max-width:175px; }
     .bs-self img { width:100%; object-fit:contain; display:block;
       animation:bs-bob 3.8s ease-in-out infinite; }
     @keyframes bs-bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
@@ -66,8 +70,9 @@ window.Boss = (function(){
     .bs-info { position:absolute; z-index:6; width:38%; max-width:230px;
       background:rgba(16,11,5,.74); border:1px solid rgba(240,201,107,.42);
       border-radius:10px; padding:7px 10px; }
-    .bs-info-e { top:5%; left:5%; }
-    .bs-info-p { bottom:5%; right:5%; }
+    /* 내 정보가 왼쪽 위, 상대가 오른쪽 위 — 각자 자기 캐릭터 쪽 위에 붙는다 */
+    .bs-info-p { top:5%; left:5%; }
+    .bs-info-e { top:5%; right:5%; }
     .bs-info .nm { font-size:13px; font-weight:700; color:#f0c96b; margin-bottom:5px; }
     .bs-hp { height:9px; border-radius:999px; background:rgba(0,0,0,.6);
       border:1px solid rgba(240,201,107,.3); overflow:hidden; }
@@ -77,8 +82,9 @@ window.Boss = (function(){
     .bs-hptxt { font-size:10px; color:#c9bda6; margin-top:3px; text-align:right;
       font-variant-numeric:tabular-nums; }
 
-    /* 연속 정답 배율 */
-    .bs-combo { position:absolute; top:5%; right:5%; z-index:7; text-align:right;
+    /* 연속 정답 배율 — 정보창이 위쪽 양옆을 쓰므로 가운데 위에 둔다 */
+    .bs-combo { position:absolute; top:5%; left:50%; transform:translateX(-50%);
+      z-index:7; text-align:center;
       font-weight:700; color:#f0c96b; text-shadow:0 2px 8px rgba(0,0,0,.8);
       opacity:0; transition:opacity .2s; }
     .bs-combo.on { opacity:1; }
@@ -332,8 +338,11 @@ window.Boss = (function(){
       (window.Rank ? Rank.get().tier.name : '나');
     document.getElementById('bs-e').innerHTML =
       opt.img ? `<img src="${opt.img}" alt="">` : '';
+    // 뒷모습(up_1)을 쓴다. 정면을 쓰면 상대가 아니라 화면을 보고 서 있는
+    // 꼴이라 대치 구도가 안 산다. 스프라이트 시트 2행이 이미 뒷면이라
+    // 새로 그릴 필요가 없다.
     document.getElementById('bs-p').innerHTML =
-      `<img src="${opt.playerImg || 'assets/player/down_1.png'}" alt="">`;
+      `<img src="${opt.playerImg || 'assets/player/up_1.png'}" alt="">`;
 
     bars();
     msg(`<b>${S.name}</b>이(가) 앞을 막아섰다. 아는 것으로 답하라.`);
