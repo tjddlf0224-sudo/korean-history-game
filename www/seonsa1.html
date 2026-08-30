@@ -35,7 +35,19 @@
   .ov.center { align-items: center; }
   /* 인트로 뒤로 그 챕터의 맵이 비치게 둔다. 까맣게 덮으면 화면이 텅 비어
      보이고, 어디에 서 있는지도 알 수 없다. */
-  #intro-overlay { background: linear-gradient(rgba(8,6,4,.55), rgba(8,6,4,.78)); }
+  /* 인트로 배경(독서실). 첫 화의 첫 장면이라 그림이 없으면 까만 화면만 나온다
+     — 실제로 텍스트만 옮기고 이 줄을 빠뜨려 그렇게 됐다.
+     webp를 먼저 쓰고, 못 읽는 브라우저는 앞 규칙의 png로 되돌아간다. */
+  #intro-overlay {
+    background: linear-gradient(rgba(10,8,6,.42), rgba(10,8,6,.66)),
+      url('assets/scenes/intro_dokseosil.png') center/cover no-repeat, #15110c;
+  }
+  #intro-overlay {
+    background: linear-gradient(rgba(10,8,6,.42), rgba(10,8,6,.66)),
+      image-set(url('assets/scenes/intro_dokseosil.webp') type('image/webp'),
+                url('assets/scenes/intro_dokseosil.png') type('image/png')) center/cover no-repeat,
+      #15110c;
+  }
   #intro-panel { max-width: 520px; }
 
   /* 대화창 — 초상화가 상자 밖으로 위·왼쪽으로 살짝 튀어나와 앞에 겹쳐

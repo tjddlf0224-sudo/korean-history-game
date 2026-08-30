@@ -33,17 +33,16 @@
   .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
-  /* 인트로 배경(독서실). Phaser에서 캔버스로 옮길 때 이 줄을 빠뜨려서
-     한동안 까만 화면만 나왔다. webp를 먼저 쓰고, 못 읽는 브라우저는
-     앞줄의 png로 되돌아간다. */
+  /* 독서실 배경은 첫 화(seonsa1)로 옮겼다. 이 화의 인트로는 '고려를 지나 온
+     자리'를 설명하는 글이라 이 화의 첫 무대(궁궐 터)를 깔아 준다. */
   #intro-overlay {
-    background: linear-gradient(rgba(10,8,6,.35), rgba(10,8,6,.6)),
-      url('assets/scenes/intro_dokseosil.png') center/cover no-repeat, #15110c;
+    background: linear-gradient(rgba(10,8,6,.42), rgba(10,8,6,.7)),
+      url('assets/scenes/ch0_bg.png') center/cover no-repeat, #15110c;
   }
   #intro-overlay {
-    background: linear-gradient(rgba(10,8,6,.35), rgba(10,8,6,.6)),
-      image-set(url('assets/scenes/intro_dokseosil.webp') type('image/webp'),
-                url('assets/scenes/intro_dokseosil.png') type('image/png')) center/cover no-repeat,
+    background: linear-gradient(rgba(10,8,6,.42), rgba(10,8,6,.7)),
+      image-set(url('assets/scenes/ch0_bg.webp') type('image/webp'),
+                url('assets/scenes/ch0_bg.png') type('image/png')) center/cover no-repeat,
       #15110c;
   }
 
