@@ -438,6 +438,7 @@
   <div id="menu-modal">
     <div id="menu-panel">
       <h3>메뉴</h3>
+      <button id="menu-srs">오답 복습</button>
       <button id="menu-kings-open">왕조 계보 보기</button>
       <button id="menu-badges-open"><svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3l4 6 4-6"/><circle cx="12" cy="15" r="6"/><circle cx="12" cy="15" r="2.5"/></svg> 배지함 보기</button>
       <button id="menu-reset">진행 기록 초기화</button>
@@ -481,6 +482,7 @@
 </div>
 
 <script src="assets/audio.js"></script>
+<script src="assets/srs.js"></script>
 <script src="assets/badges.js"></script>
 <script src="assets/streak.js"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
@@ -533,6 +535,16 @@ if (window.visualViewport){
 setTimeout(applyOrientation, 300);
 setTimeout(applyOrientation, 800);
 applyOrientation();
+
+/* 오답 복습 — 틀린 문제가 날이 지날수록 간격을 두고 다시 나타난다.
+   오늘 볼 것이 있으면 메뉴 항목에 개수를 붙여 눈에 띄게 한다. */
+(function(){
+  const b = document.getElementById('menu-srs');
+  if (!b || !window.Srs) return;
+  const n = Srs.due().length, all = Srs.count();
+  b.textContent = '오답 복습' + (all ? ` (${n ? n + ' 오늘' : all})` : '');
+  b.addEventListener('click', () => { Srs.openReview(); });
+})();
 
 /* 프롤로그 — 처음 들어온 사람은 여기부터. localStorage에 표시가 남으면 건너뛴다. */
 

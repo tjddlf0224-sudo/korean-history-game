@@ -1384,6 +1384,9 @@ const Quiz = {
       if (window.Rank) Rank.addXp((this._missed ? 3 : 10) * _m,
         (this._missed ? '정답' : '첫 시도 정답') + (_m > 1 ? ' · 피버 2배' : ''));
       if (window.Juice) Juice.correct(!this._missed);
+      if (window.Srs && typeof Dialog !== 'undefined' && Dialog.key)
+        Srs.hit(Srs.refOf(location.pathname.split('/').pop(), Dialog.key,
+                this.seqIdx != null ? this.seqIdx : 0));
       this.optButtons[i].classList.add('correct');
       this.optButtons.forEach(b => b.disabled = true);
       document.getElementById('quiz-fb').textContent = this.data.feedback[1];
@@ -1392,6 +1395,11 @@ const Quiz = {
       next.onclick = () => this.confirmIfReady();
     } else {
       if (window.Juice) Juice.wrong();
+      // 틀린 문항을 오답노트에 넣는다(날이 지날수록 간격을 두고 다시 나온다)
+      // Dialog는 const라 window.Dialog로는 안 잡힌다(rank·autowalk·heroes와 같은 함정)
+      if (window.Srs && typeof Dialog !== 'undefined' && Dialog.key)
+        Srs.miss(Srs.refOf(location.pathname.split('/').pop(), Dialog.key,
+                 this.seqIdx != null ? this.seqIdx : 0), this.data && this.data.q);
       // 이 대화에서 한 번이라도 틀리면 인물 카드의 ★이 붙지 않는다.
       // Dialog는 const라 window.Dialog로는 안 잡힌다(rank.js·autowalk.js와 같은 함정).
       if (typeof Dialog !== 'undefined') Dialog._missedAny = true;
@@ -1718,6 +1726,7 @@ requestAnimationFrame(loop);
 <script src="assets/heroes_data.js"></script>
 <script src="assets/heroes.js"></script>
 <script src="assets/icons.js"></script>
+<script src="assets/srs.js"></script>
 <script src="assets/newsflash.js"></script>
 <script src="assets/timeline.js"></script>
 <script src="assets/journey.js"></script>
