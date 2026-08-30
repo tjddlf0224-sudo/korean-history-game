@@ -62,21 +62,10 @@ window.Boss = (function(){
       box-shadow:0 0 30px rgba(0,0,0,.6), inset 0 12px 30px rgba(0,0,0,.5); }
     .bs-silhouette span { font-family:"Gowun Batang",serif; font-size:15px; font-weight:700;
       color:#e9c979; letter-spacing:.14em; text-shadow:0 2px 8px rgba(0,0,0,.9); }
-    .bs-enemy { bottom:22%; right:7%; height:56%; }
+    .bs-enemy { bottom:22%; right:13%; height:56%; }
     .bs-enemy img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.2s ease-in-out infinite; }
-    .bs-self { bottom:3%; left:5%; height:46%; }
-    /* 동료는 나보다 뒤쪽(위)에 선다. 왼쪽 가장자리를 따라 세로로 벌려
-       서로 겹치지 않게 하고, 뒤에 있을수록 작게 그려 거리감을 준다.
-       (처음엔 간격이 좁아 동료가 나를 덮었다.) */
-    .bs-ally { transition:opacity .3s; }
-    .bs-ally img { height:100%; width:auto; object-fit:contain; display:block;
-      filter:drop-shadow(0 8px 14px rgba(0,0,0,.55)); }
-    .bs-ally1 { bottom:25%; left:2%;  height:38%; opacity:.95; }
-    .bs-ally2 { bottom:44%; left:11%; height:31%; opacity:.9; }
-    .bs-ally .nmtag { position:absolute; left:50%; bottom:-3px; transform:translateX(-50%);
-      font-size:9.5px; color:#e8dcc2; background:rgba(20,14,8,.85); border-radius:99px;
-      padding:1px 7px; white-space:nowrap; text-shadow:0 1px 3px rgba(0,0,0,.9); }
+    .bs-self { bottom:3%; left:11%; height:48%; }
     .bs-self img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.8s ease-in-out infinite; }
     @keyframes bs-bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
@@ -177,8 +166,6 @@ window.Boss = (function(){
           '<div class="bs-hp"><i id="bs-php"></i></div><div class="bs-hptxt" id="bs-phptxt"></div></div>' +
         '<div class="bs-combo" id="bs-combo"><span class="x"></span><span class="l">연속 정답</span></div>' +
         '<div class="bs-sprite bs-enemy" id="bs-e"></div>' +
-        '<div class="bs-sprite bs-ally bs-ally2" id="bs-a2"></div>' +
-        '<div class="bs-sprite bs-ally bs-ally1" id="bs-a1"></div>' +
         '<div class="bs-sprite bs-self" id="bs-p"></div>' +
       '</div>' +
       '<div class="bs-bottom">' +
@@ -279,16 +266,7 @@ window.Boss = (function(){
       S.eHp -= dmg;
       shake(); hitFx('bs-e', crit); ep.classList.add('hit');
       pop('e', '-' + dmg + (crit ? '!' : ''), crit ? 'crit' : null);
-      // 담력을 가진 동료가 있으면 한 대 더 친다
-      if (S.guard && S.eHp > 0){
-        await wait(220);
-        S.eHp -= 1;
-        ['bs-a1','bs-a2'].forEach(id => {
-          const a = document.getElementById(id);
-          if (a && a.innerHTML){ a.classList.add('lunge'); setTimeout(() => a.classList.remove('lunge'), 260); }
-        });
-        hitFx('bs-e', false); pop('e', '-1');
-      }
+
       if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
       if (navigator.vibrate) navigator.vibrate(crit ? 45 : 25);
       msg(S.cur.feedback[1] + (S.combo >= 3 ? `<br><b>${S.combo}연속! 일격이 무거워진다.</b>` : ''));
@@ -306,10 +284,8 @@ window.Boss = (function(){
       // 담력을 가진 동료가 한 번은 대신 맞는다
       if (S.guard && !S.guardUsed){
         S.guardUsed = true;
-        const a = document.getElementById('bs-a1');
-        if (a && a.innerHTML){ a.classList.add('hit'); setTimeout(() => a.classList.remove('hit'), 400); }
-        pop('p', '막음', 'crit');
-        msg(S.cur.feedback[0] + '<br><b>동료가 대신 맞았다.</b>');
+        pop('p', '버팀', 'crit');
+        msg(S.cur.feedback[0] + '<br><b>동료의 담력이 한 번 버티게 했다.</b>');
         bars(); await wait(900);
         ep.classList.remove('lunge');
         S.qIdx++; S.busy = false; ask();
@@ -417,25 +393,16 @@ window.Boss = (function(){
     document.getElementById('bs-e').innerHTML =
       opt.img ? `<img src="${opt.img}" alt="">`
               : `<div class="bs-silhouette"><span>${S.name}</span></div>`;
-    // 뒷모습(up_1)을 쓴다. 정면을 쓰면 상대가 아니라 화면을 보고 서 있는
-    // 꼴이라 대치 구도가 안 산다. 스프라이트 시트 2행이 이미 뒷면이라
-    // 새로 그릴 필요가 없다.
+    // 오른쪽을 보는 측면(right_1)을 쓴다. 보스는 왼쪽을 보고 있으므로
+    // 둘이 마주 선다. 뒷모습을 쓰면 얼굴이 안 보여 누가 싸우는지 모른다.
     document.getElementById('bs-p').innerHTML =
-      `<img src="${opt.playerImg || 'assets/player/up_1.png'}" alt="">`;
+      `<img src="${opt.playerImg || 'assets/player/right_1.png'}" alt="">`;
 
-    // 데려온 동료를 좌측에 세운다. 문제는 내가 풀고, 동료는 그 결과를 키운다 —
-    // 학습 게임에서 동료가 있어야 할 자리다.
-    S.allies = (window.Heroes ? Heroes.party() : []).slice(0, 2);
-    S.guard = (window.Heroes ? Heroes.power('dam') : 0) > 0;   // 담력이 있으면 한 번 막아 준다
+    // 담력(膽)을 가진 동료가 있으면 한 번은 대신 맞아 준다.
+    // 동료를 화면에 세우지는 않는다 — 전투용 아트를 따로 뽑아야 하는데
+    // 그 비용에 비해 얻는 것이 적다.
+    S.guard = (window.Heroes ? Heroes.power('dam') : 0) > 0;
     S.guardUsed = false;
-    ['bs-a1','bs-a2'].forEach((id, i) => {
-      const el = document.getElementById(id); if (!el) return;
-      const k = S.allies[i];
-      if (!k || !window.HERO_DATA || !HERO_DATA[k]){ el.innerHTML = ''; return; }
-      const d = HERO_DATA[k];
-      el.innerHTML = (d.p ? `<img src="assets/portraits/${d.p}" alt="">` : '') +
-                     `<span class="nmtag">${d.n}</span>`;
-    });
 
     bars();
     msg(`<b>${S.name}</b>이(가) 앞을 막아섰다. 아는 것으로 답하라.`);

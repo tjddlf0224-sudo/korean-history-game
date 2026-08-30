@@ -97,7 +97,7 @@ window.Heroes = (function(){
   const ABIL = {
     king:     { id:'mang', name:'인망', han:'望', desc:'경험치를 더 얻는다' },
     scholar:  { id:'sik',  name:'학식', han:'識', desc:'틀려도 연속이 한 번 버틴다' },
-    general:  { id:'dam',  name:'담력', han:'膽', desc:'보스전에서 함께 싸운다' },
+    general:  { id:'dam',  name:'담력', han:'膽', desc:'보스전에서 한 번 버틴다' },
     commoner: { id:'an',   name:'안목', han:'眼', desc:'유물을 더 멀리서 알아본다' },
   };
 
