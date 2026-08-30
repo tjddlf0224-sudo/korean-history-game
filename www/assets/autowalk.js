@@ -32,20 +32,33 @@ window.Auto = (function(){
     if (injected) return; injected = true;
     const st = document.createElement('style');
     st.textContent = `
-    /* 우측 한가운데 — 미니맵(위)과 행동 버튼(아래) 사이의 빈 자리 */
+    /* 우측 한가운데 — 미니맵(위)과 행동 버튼(아래) 사이의 빈 자리.
+       켜져 있는 동안 순환 화살표가 계속 돈다(메이플키우기의 Full Auto 방식). */
     #auto-btn { position:absolute; z-index:24; right:calc(12px + env(safe-area-inset-right));
-      top:50%; transform:translateY(-50%); min-width:52px; height:40px; padding:0 12px;
-      border-radius:20px; border:1px solid #4a3c26; background:#241c12dd; color:#b8a888;
-      font-family:"Gowun Batang",serif; font-size:13px; font-weight:700; letter-spacing:.08em;
-      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px;
-      box-shadow:0 4px 14px rgba(0,0,0,.5); transition:color .15s, border-color .15s, background .15s; }
-    #auto-btn:active { transform:translateY(-50%) scale(.95); }
-    #auto-btn.on { color:#f0c96b; border-color:#c9a24a; background:#3a2c1add;
-      box-shadow:0 0 16px rgba(240,201,107,.35); }
-    #auto-btn .dot { width:7px; height:7px; border-radius:50%; background:#6a5a3c; }
-    #auto-btn.on .dot { background:#f0c96b; animation:auto-pulse 1.1s ease-in-out infinite; }
-    @keyframes auto-pulse { 0%,100%{opacity:.45} 50%{opacity:1} }
-    @media (prefers-reduced-motion:reduce){ #auto-btn.on .dot { animation:none; } }`;
+      top:50%; transform:translateY(-50%); width:54px; height:54px; padding:0;
+      border-radius:50%; border:2px solid #4a3c26; background:#241c12ee; color:#8a7a5c;
+      font-family:"Gowun Batang",serif; cursor:pointer;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+      box-shadow:0 4px 14px rgba(0,0,0,.55); transition:color .18s, border-color .18s, background .18s; }
+    #auto-btn:active { transform:translateY(-50%) scale(.94); }
+    #auto-btn .ring { width:26px; height:26px; display:block; }
+    #auto-btn .ring svg { width:100%; height:100%; display:block; }
+    #auto-btn .lbl { font-size:9.5px; font-weight:700; letter-spacing:.1em; line-height:1; }
+
+    /* 켜짐 — 금빛으로 물들고 화살표가 돈다 */
+    #auto-btn.on { color:#f7dd93; border-color:#e0b94a; background:#4a3410ee;
+      box-shadow:0 0 18px rgba(240,201,107,.5), 0 4px 14px rgba(0,0,0,.55); }
+    #auto-btn.on .ring { animation:auto-spin 1.6s linear infinite; }
+    @keyframes auto-spin { to { transform:rotate(360deg); } }
+
+    /* 켜진 동안 테두리 바깥으로 옅은 파문 — 지금 저절로 움직이는 중임을 알린다 */
+    #auto-btn.on::after { content:''; position:absolute; inset:-4px; border-radius:50%;
+      border:2px solid rgba(240,201,107,.55); animation:auto-wave 1.6s ease-out infinite; }
+    @keyframes auto-wave { 0%{transform:scale(1); opacity:.75} 100%{transform:scale(1.45); opacity:0} }
+
+    @media (prefers-reduced-motion:reduce){
+      #auto-btn.on .ring, #auto-btn.on::after { animation:none; }
+    }`;
     document.head.appendChild(st);
   }
 
@@ -56,7 +69,15 @@ window.Auto = (function(){
     if (document.getElementById('auto-btn')) return;
     const b = document.createElement('button');
     b.id = 'auto-btn';
-    b.innerHTML = '<span class="dot"></span>AUTO';
+    // 순환 화살표 — 꼬리를 문 두 개의 호에 화살촉을 달았다
+    b.innerHTML =
+      '<span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="2.4" stroke-linecap="round">' +
+      '<path d="M20.4 13.2a8.5 8.5 0 0 1-14.3 4.4"/>' +
+      '<path d="M3.6 10.8a8.5 8.5 0 0 1 14.3-4.4"/>' +
+      '<path d="M17.4 2.6v4.2h-4.2"/>' +
+      '<path d="M6.6 21.4v-4.2h4.2"/>' +
+      '</svg></span><span class="lbl">AUTO</span>';
     b.onclick = (e) => { e.stopPropagation(); toggle(); };
     layer().appendChild(b);
   }
