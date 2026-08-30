@@ -570,6 +570,11 @@ const ZONES = {
     // 유일한 다른 무대인 국경 진영으로 직접 잇는다 — 국경으로 나가기 전에
     // 지도를 띄워, 압록강·두만강 위치를 직접 확인하고 김종서가 있는 국경의
     // 끝(두만강 6진)을 짚게 한다(원래 집현전 12시 문에 있던 장치를 옮김).
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_cheugugi', x:864, y:64, item:'cheugugi', label:'북쪽 끝' },
+    ],
     exits: [ { rect:{x0:600,y0:700,x1:790,y1:760}, to:'gukgyeong', spawn:{x:688,y:700}, label:'국경 진영으로',
       viaMap: {
         key: 'gukgyeong',
@@ -595,6 +600,11 @@ const ZONES = {
       { id: 'kimjongseo', name: '김종서', x: 688, y: 420, img: 'assets/portraits/kimjongseo.png', look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
     ],
     // 출구는 6시 방향(남쪽) 관문 — 이제 권농 들녘으로 돌아간다.
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_nongsajiks', x:64, y:64, item:'nongsajikseol', label:'서북쪽 구석' },
+    ],
     exits: [ { rect:{x0:625,y0:735,x1:740,y1:768}, to:'gwonnong', spawn:{x:700,y:300}, label:'권농 들녘으로' } ],
   },
 };

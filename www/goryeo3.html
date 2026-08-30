@@ -588,6 +588,13 @@ const ZONES = {
       { id:'igyubo', name:'이규보', x:688, y:495, img:'assets/portraits/igyubo.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
       { id:'ijehyeon', name:'이제현', x:850, y:470, img:'assets/portraits/ijehyeon.png', look:{ role:'scholar', body:'#5a4a6b', accent:'#c9a24a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_samgukyusa', x:568, y:568, item:'samgukyusa', label:'남쪽 끝' },
+      { id:'sp_jikji', x:360, y:568, item:'jikji', label:'서남쪽 구석' },
+      { id:'sp_hwatongdog', x:824, y:232, item:'hwatongdogam', label:'북쪽 끝' },
+    ],
     exits: [],
   },
 };

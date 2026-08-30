@@ -575,6 +575,12 @@ const ZONES = {
       { id:'daejoyeong', name:'대조영', x:520, y:400, img:'assets/portraits/daejoyeong.png', look:{ role:'general', body:'#3a4a5a', accent:'#c9a24a' } },
       { id:'munwang', name:'발해 문왕', x:860, y:400, img:'assets/portraits/munwang.png', look:{ role:'king', body:'#4a4a58', accent:'#e0b94a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_mugujeongg', x:800, y:704, item:'mugujeonggwang', label:'남쪽 끝' },
+      { id:'sp_ibulbyeong', x:576, y:704, item:'ibulbyeongjwasang', label:'남쪽 끝' },
+    ],
     exits: [
       { rect:{x0:610,y0:700,x1:770,y1:761}, to:'cheonghae', spawn:{x:688,y:335}, label:'배를 타고 남쪽으로' },
     ],
@@ -602,6 +608,11 @@ const ZONES = {
       { id:'uisang', name:'의상', x:700, y:230, img:'assets/portraits/uisang.png', look:{ role:'scholar', body:'#8a6d3b', accent:'#e0b94a' } },
       { id:'cheoyong', name:'처용', x:950, y:300, img:'assets/portraits/cheoyong.png', look:{ role:'commoner', body:'#6b7a5a', accent:'#c9a24a' } },
       { id:'minjeong', name:'촌주', x:560, y:300, img:'assets/portraits/minjeong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_cheonghaej', x:528, y:704, item:'cheonghaejin', label:'남쪽 끝' },
     ],
     exits: [
       // 라벨에 방향어를 쓰지 않는다: 상경성은 이야기상 북쪽이지만 이 지도에서

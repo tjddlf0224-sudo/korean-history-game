@@ -569,6 +569,11 @@ const ZONES = {
     npcs: [
       { id:'sinrip', name:'신립', x:688, y:350, img:'assets/portraits/sinrip.png', look:{ role:'general', body:'#4a3a3a', accent:'#8a6d3b' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_geobukseon', x:752, y:64, item:'geobukseon', label:'북쪽 끝' },
+    ],
     exits: [
       // 배로 남쪽 바다(한산도)로 떠나는 출구 — 배경 그림에서 물(남한강)은
       // 지도 아래쪽이다. 예전에는 이 출구가 물이 전혀 없는 위쪽 들판(y 0~55)에
@@ -599,6 +604,11 @@ const ZONES = {
     ],
     npcs: [
       { id:'yisunsin', name:'이순신', x:500, y:300, img:'assets/portraits/yisunsin.png', look:{ role:'general', body:'#3f5a6b', accent:'#c9a24a' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_nanjungilg', x:368, y:64, item:'nanjungilgi', label:'서북쪽 구석' },
     ],
     exits: [
       { rect:{x0:600,y0:385,x1:760,y1:430}, to:'jinju', spawn:{x:688,y:170}, label:'뭍으로' },

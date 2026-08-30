@@ -575,6 +575,11 @@ const ZONES = {
       { id:'olympic', name:'서울올림픽 자원봉사자', x:880, y:400, img:'assets/portraits/olympic.png', look:{ role:'commoner', body:'#3f5a8a', accent:'#e0b94a' } },
       { id:'gimdaejung', name:'김대중', x:1050, y:395, img:'assets/portraits/gimdaejung.png', look:{ role:'king', body:'#2f3a4a', accent:'#c9a24a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_yugilo', x:392, y:64, item:'yugilo', label:'서북쪽 구석' },
+    ],
     exits: [],
   },
 };

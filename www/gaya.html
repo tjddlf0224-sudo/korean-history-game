@@ -585,6 +585,13 @@ const ZONES = {
       { id:'cheolsang', name:'덩이쇠 상인', x:980, y:350, img:'assets/portraits/cheolsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
       { id:'wae', name:'왜 사신', x:688, y:640, img:'assets/portraits/wae.png', look:{ role:'commoner', body:'#5a6b5a', accent:'#b8a888' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_deongiswe', x:568, y:240, item:'deongiswe', label:'북쪽 끝' },
+      { id:'sp_pangapot', x:832, y:240, item:'pangapot', label:'북쪽 끝' },
+      { id:'sp_gayageum', x:712, y:512, item:'gayageum', label:'남쪽 끝' },
+    ],
     exits: [],
   },
 };

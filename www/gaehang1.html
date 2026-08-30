@@ -566,6 +566,12 @@ const ZONES = {
       { id:'yangheonsu', name:'양헌수', x:500, y:400, img:'assets/portraits/yangheonsu.png', look:{ role:'general', body:'#4a4a58', accent:'#8a6d3b' } },
       { id:'eojaeyeon', name:'어재연', x:900, y:400, img:'assets/portraits/eojaeyeon.png', look:{ role:'general', body:'#5c2f2f', accent:'#c9a24a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_cheokhwabi', x:688, y:704, item:'cheokhwabi', label:'남쪽 끝' },
+      { id:'sp_oegyujangg', x:896, y:704, item:'oegyujanggak', label:'남쪽 끝' },
+    ],
     exits: [
       { rect:{x0:600,y0:0,x1:790,y1:55}, to:'ganghwado', spawn:{x:1040,y:100}, label:'5년 뒤, 연무당으로' },
     ],
@@ -594,6 +600,11 @@ const ZONES = {
       { id:'choeikhyeon', name:'최익현', x:1060, y:280, img:'assets/portraits/choeikhyeon.png', look:{ role:'scholar', body:'#4a5a68', accent:'#e0b94a' } },
       { id:'gaehwa', name:'개화파 관원', x:760, y:500, img:'assets/portraits/gaehwa.png', look:{ role:'scholar', body:'#5c4a2f', accent:'#c9a24a' } },
       { id:'kimhongjip', name:'김홍집', x:500, y:460, look:{ role:'scholar', body:'#3a4a3a', accent:'#a9c9a4' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_sujagi', x:1032, y:144, item:'sujagi', label:'동북쪽 구석' },
     ],
     exits: [
       { rect:{x0:1010,y0:0,x1:1070,y1:55}, to:'gwangseong', spawn:{x:688,y:690}, label:'광성보로' },

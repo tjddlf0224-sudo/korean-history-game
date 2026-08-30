@@ -581,6 +581,12 @@ const ZONES = {
       { id:'gwangbokhoe', name:'대한광복회 단원', x:688, y:600, img:'assets/portraits/gwangbokhoe.png', look:{ role:'general', body:'#4a4a58', accent:'#8a6d3b' } },
       { id:'uibyeongbu', name:'독립의군부 단원', x:1000, y:550, img:'assets/portraits/uibyeongbu.png', look:{ role:'commoner', body:'#5a4a3a', accent:'#8a7a5a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_gimiseoneo', x:520, y:80, item:'gimiseoneon', label:'북쪽 끝' },
+      { id:'sp_taegeukgi', x:864, y:80, item:'taegeukgi', label:'북쪽 끝' },
+    ],
     exits: [],
   },
 };

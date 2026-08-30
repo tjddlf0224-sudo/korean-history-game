@@ -602,6 +602,11 @@ const ZONES = {
       { id:'injo', name:'척화 대신', x:1120, y:325, img:'assets/portraits/injo.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'daedong', name:'선혜청 서리', x:688, y:640, img:'assets/portraits/daedong.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_samjeondob', x:568, y:704, item:'samjeondobi', label:'남쪽 끝' },
+    ],
     exits: [
       { rect:{x0:600,y0:715,x1:790,y1:768}, to:'samjeondo', spawn:{x:430,y:260}, label:'삼전도로' },
     ],
@@ -618,6 +623,11 @@ const ZONES = {
     ],
     npcs: [
       { id:'seokgong', name:'삼전도비 석공', x:688, y:400, img:'assets/portraits/seokgong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_donguiboga', x:432, y:64, item:'donguibogam', label:'서북쪽 구석' },
     ],
     exits: [
       { rect:{x0:800,y0:0,x1:990,y1:55}, to:'namhan', spawn:{x:688,y:690}, label:'남한산성으로' },

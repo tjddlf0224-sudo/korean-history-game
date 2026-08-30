@@ -520,6 +520,11 @@ const ZONES = {
     npcs: [
       { id: 'seogeojeong', name: '서거정', x: 400, y: 380, img: 'assets/portraits/seogeojeong.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_gyeonggukt', x:600, y:616, item:'gyeongguktaejeon', label:'남쪽 끝' },
+    ],
     exits: [
       { rect:{x0:610,y0:103,x1:795,y1:158}, to:'jibang_goeul', spawn:{x:680,y:640}, label:'지방 고을로' },
       { rect:{x0:610,y0:640,x1:795,y1:696}, to:'gyeonggukdaejeon', spawn:{x:690,y:590}, label:'편찬실로' },
@@ -555,6 +560,11 @@ const ZONES = {
     ],
     npcs: [
       { id: 'seongjong', name: '성종', x: 690, y: 300, img: 'assets/portraits/seongjong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_baekja', x:688, y:704, item:'baekja', label:'남쪽 끝' },
     ],
     exits: [ { rect:{x0:635,y0:95,x1:748,y1:148}, to:'hongmungwan', spawn:{x:690,y:600}, label:'홍문관으로' } ],
   },

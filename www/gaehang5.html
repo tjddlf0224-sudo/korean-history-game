@@ -582,6 +582,12 @@ const ZONES = {
       { id:'sinminhoe', name:'신민회 회원', x:500, y:640, img:'assets/portraits/sinminhoe.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
       { id:'jeongmi', name:'정미의병', x:900, y:510, img:'assets/portraits/jeongmi.png', look:{ role:'general', body:'#5c2f2f', accent:'#8a6d3b' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_dongnipsin', x:688, y:704, item:'dongnipsinmun', label:'남쪽 끝' },
+      { id:'sp_daehanguks', x:384, y:704, item:'daehanguksae', label:'서남쪽 구석' },
+    ],
     exits: [],
   },
 };

@@ -508,6 +508,11 @@ const ZONES = {
     npcs: [
       { id: 'taejong', name: '태종', x: 688, y: 300, img: 'assets/portraits/taejong.png', look: { role: 'king', body: '#8a2f2f', accent: '#e0b94a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_honilgangn', x:792, y:704, item:'honilgangni', label:'남쪽 끝' },
+    ],
     exits: [ { rect:{x0:600,y0:735,x1:780,y1:768}, to:'hullyeonjang', spawn:{x:120,y:640}, label:'사병 훈련장으로' } ],
   },
   hullyeonjang: {
@@ -518,6 +523,11 @@ const ZONES = {
     ],
     npcs: [
       { id: 'guard', name: '내금위 군사', x: 1150, y: 150, img: 'assets/portraits/general.png', look: { role: 'general', body: '#4f5d75', accent: '#8a6d3b' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_gyemija', x:64, y:64, item:'gyemija', label:'서북쪽 구석' },
     ],
     exits: [
       // (좌측 가장자리에도 출구가 하나 더 있었는데, 미니맵에 문이 두 개로

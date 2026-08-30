@@ -578,6 +578,11 @@ const ZONES = {
       { id:'myocheong', name:'묘청', x:500, y:400, img:'assets/portraits/myocheong.png', look:{ role:'scholar', body:'#4a3a5a', accent:'#e0b94a' } },
       { id:'gimbusik', name:'김부식', x:900, y:400, img:'assets/portraits/gimbusik.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_palmandaej', x:1312, y:600, item:'palmandaejanggyeong', label:'동남쪽 구석' },
+    ],
     exits: [
       { rect:{x0:600,y0:700,x1:790,y1:768}, to:'ganghwa', spawn:{x:688,y:470}, label:'개경으로' },
     ],
@@ -608,6 +613,11 @@ const ZONES = {
       { id:'yungwan', name:'윤관', x:680, y:230, img:'assets/portraits/yungwan.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
       { id:'choechunghyeon', name:'최충헌', x:960, y:420, img:'assets/portraits/choechunghyeon.png', look:{ role:'general', body:'#3d3d4a', accent:'#c9a24a' } },
       { id:'sambyeolcho', name:'삼별초 장수', x:688, y:600, img:'assets/portraits/sambyeolcho.png', look:{ role:'general', body:'#5c2f2f', accent:'#8a6d3b' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_samguksagi', x:480, y:704, item:'samguksagi', label:'남쪽 끝' },
     ],
     exits: [
       { rect:{x0:890,y0:585,x1:1010,y1:710}, to:'seogyeong', spawn:{x:688,y:690}, label:'서경으로' },

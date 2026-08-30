@@ -582,6 +582,12 @@ const ZONES = {
       { id:'munmu', name:'문무왕', x:500, y:560, img:'assets/portraits/munmu.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
       { id:'sinmun', name:'신문왕', x:900, y:560, img:'assets/portraits/sinmun.png', look:{ role:'king', body:'#5a2f4a', accent:'#e0b94a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_manpasikje', x:688, y:704, item:'manpasikjeok', label:'남쪽 끝' },
+      { id:'sp_sesogogye', x:896, y:704, item:'sesogogye', label:'남쪽 끝' },
+    ],
     exits: [],
   },
 };

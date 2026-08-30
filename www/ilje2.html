@@ -587,6 +587,11 @@ const ZONES = {
       { id:'cheongsanri', name:'독립군 대장', x:900, y:700, img:'assets/portraits/cheongsanri.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
       { id:'eohakhoe', name:'조선어학회 회원', x:700, y:330, img:'assets/portraits/eohakhoe.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_joseoneoha', x:616, y:704, item:'joseoneohakhoe', label:'남쪽 끝' },
+    ],
     exits: [
       { rect:{x0:1345,y0:650,x1:1370,y1:725}, to:'sanghai', spawn:{x:688,y:690}, label:'상하이 임시정부로' },
     ],
@@ -599,6 +604,11 @@ const ZONES = {
     npcs: [
       { id:'anchangho', name:'안창호', x:500, y:400, img:'assets/portraits/anchangho.png', look:{ role:'scholar', body:'#3d3d4a', accent:'#c9a24a' } },
       { id:'sinchaeho', name:'신채호', x:900, y:400, img:'assets/portraits/sinchaeho.png', look:{ role:'scholar', body:'#4a5a3a', accent:'#8a7a5a' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_uiyeoldan', x:584, y:704, item:'uiyeoldan', label:'남쪽 끝' },
     ],
     exits: [
       { rect:{x0:600,y0:715,x1:790,y1:768}, to:'gyeongseong', spawn:{x:1332,y:660}, label:'경성으로' },

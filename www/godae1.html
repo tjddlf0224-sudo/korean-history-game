@@ -582,6 +582,12 @@ const ZONES = {
     npcs: [
       { id:'geunchogo', name:'근초고왕', x:688, y:400, img:'assets/portraits/geunchogo.png', look:{ role:'king', body:'#7a3a3a', accent:'#e0b94a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_chiljido', x:1312, y:552, item:'chiljido', label:'동남쪽 구석' },
+      { id:'sp_jinheungbi', x:64, y:376, item:'jinheungbi', label:'서쪽 끝' },
+    ],
     exits: [
       { rect:{x0:580,y0:655,x1:790,y1:758}, to:'samguk', spawn:{x:688,y:290}, label:'남쪽 길을 따라 한강 유역으로' },
     ],
@@ -612,6 +618,12 @@ const ZONES = {
       { id:'seongwang', name:'백제 성왕', x:540, y:470, img:'assets/portraits/seongwang.png', look:{ role:'king', body:'#5a3a5a', accent:'#c9a24a' } },
       { id:'jinheung', name:'진흥왕', x:1030, y:330, img:'assets/portraits/jinheung.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
       { id:'hwarang', name:'화랑', x:1090, y:430, img:'assets/portraits/hwarang.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_gwanggaeto', x:304, y:704, item:'gwanggaetobi', label:'서남쪽 구석' },
+      { id:'sp_geumdongda', x:1104, y:704, item:'geumdongdaehyangno', label:'동남쪽 구석' },
     ],
     exits: [
       { rect:{x0:650,y0:170,x1:730,y1:258}, to:'hanseong', spawn:{x:688,y:600}, label:'한성으로' },

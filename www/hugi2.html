@@ -575,6 +575,12 @@ const ZONES = {
       { id:'yuhyeongwon', name:'유형원', x:500, y:400, img:'assets/portraits/yuhyeongwon.png', look:{ role:'scholar', body:'#4a5a3a', accent:'#c9a24a' } },
       { id:'iik', name:'이익', x:900, y:400, img:'assets/portraits/iik.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#e0b94a' } },
     ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_daedongyeo', x:688, y:704, item:'daedongyeojido', label:'남쪽 끝' },
+      { id:'sp_geojunggi', x:896, y:704, item:'geojunggi', label:'남쪽 끝' },
+    ],
     exits: [
       { rect:{x0:600,y0:0,x1:790,y1:55}, to:'jeojat', spawn:{x:688,y:470}, label:'한양 저잣거리로' },
     ],
@@ -611,6 +617,12 @@ const ZONES = {
       { id:'hongdaeyong', name:'홍대용', x:1060, y:345, img:'assets/portraits/hongdaeyong.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
       { id:'gimhongdo', name:'김홍도', x:560, y:480, img:'assets/portraits/gimhongdo.png', look:{ role:'scholar', body:'#6b5636', accent:'#c9a24a' } },
       { id:'jeongjo', name:'정조', x:900, y:500, img:'assets/portraits/jeongjo.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
+    ],
+    // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
+    // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
+    spots: [
+      { id:'sp_mongminsim', x:1312, y:464, item:'mongminsimseo', label:'동쪽 끝' },
+      { id:'sp_sangpyeong', x:160, y:424, item:'sangpyeongtongbo', label:'서쪽 끝' },
     ],
     exits: [
       { rect:{x0:600,y0:690,x1:790,y1:735}, to:'seongho', spawn:{x:688,y:690}, label:'성호의 서재로' },
