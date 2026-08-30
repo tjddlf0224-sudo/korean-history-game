@@ -605,6 +605,18 @@ const ZONES = {
       { x0:1130, y0:430, x1:1376, y1:560 },  // 마을 흙둑
       { x0:1150, y0:620, x1:1376, y1:740 },  // 밭
     ],
+    // 지도에 숨긴 유물. 좌표는 배경 그림의 실제 물체(막집·움집·고인돌 등) 위에
+    // 두고, 도달 가능한지는 check_reachability와 같은 BFS로 미리 확인했다.
+    spots: [
+      { id:'sp_jumeok', x:350, y:408, item:'jumeokdokki',
+        label:'막집 앞 자갈' },
+      { id:'sp_bitsal', x:546, y:262, item:'bitsalmunui',
+        label:'움집 옆 항아리' },
+      { id:'sp_bipa',   x:1124, y:577, item:'bipahyeong',
+        label:'고인돌 덮개돌 곁' },
+      { id:'sp_bandal', x:1150, y:490, item:'bandal',
+        label:'밭 가장자리' },
+    ],
     npcs: [
       { id:'gusukgi', name:'뗀석기 사냥꾼', x:400, y:560, img:'assets/portraits/gusukgi.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
       { id:'sinseokgi', name:'빗살무늬 아낙', x:690, y:310, img:'assets/portraits/sinseokgi.png', look:{ role:'commoner', body:'#a89878', accent:'#6b5636' } },
@@ -632,6 +644,10 @@ const ZONES = {
       { x0:330, y0:580, x1:570, y1:768 },  // 자작나무
       { x0:648, y0:615, x1:748, y1:715 },  // 북
       { x0:758, y0:495, x1:815, y1:705 },  // 솟대
+    ],
+    spots: [
+      { id:'sp_misong', x:1290, y:330, item:'misongni',
+        label:'바구니와 항아리' },
     ],
     npcs: [
       { id:'buyeo', name:'부여 사람', x:400, y:350, img:'assets/portraits/buyeo.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
@@ -892,7 +908,6 @@ function exitDirArrow(rect){
   if (cx >= BG_W * 0.7) return ' \u2192';
   return '';
 }
-if (window.Rank) Rank.renderHud();
 function updateHudGoal(){
   const el = document.getElementById('hud-goal');
   if (!el) return;
@@ -1017,6 +1032,7 @@ const World = {
       const btn = document.getElementById('act-btn');
       if (found) btn.classList.add('show'); else btn.classList.remove('show');
     }
+    if (window.Items) Items.checkSpot(this);
   },
 
   render(){
@@ -1334,6 +1350,8 @@ const Stage = {
   },
   interact(){
     if (document.querySelector('.ov.show')) return;
+    // 가까이에 탐색 지점이 있으면 대화가 아니라 탐색이 먼저다
+    if (window.Items && Items.trySearch(World)) return;
     const n = World.nearNpc;
     if (!n) return;
     const key = Stage.keyFor(n.id);
@@ -1771,6 +1789,11 @@ requestAnimationFrame(loop);
 <script src="assets/badges.js"></script>
 <script src="assets/streak.js"></script>
 <script src="assets/rank.js"></script>
+<script src="assets/items.js"></script>
+<script>
+if (window.Rank) Rank.renderHud();
+if (window.Items) Items.mount();
+</script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>
