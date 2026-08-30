@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>신분·경험치 연출 확인 (개발용)</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;background:#15110c;color:#f5ecd8;
+    font-family:"Gowun Batang",serif;}
+  #wrap{position:relative;height:100%;
+    background:linear-gradient(160deg,#2a2113,#15110c);}
+  .pad{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);
+    display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:92%;}
+  button{background:#2a2013;border:1px solid #4a3c26;color:#f5ecd8;border-radius:10px;
+    padding:10px 14px;font-family:inherit;font-size:13px;cursor:pointer;}
+  button:active{transform:scale(.97);}
+  #state{position:absolute;left:50%;top:44%;transform:translateX(-50%);
+    text-align:center;font-size:13px;color:#b8a888;line-height:1.9;}
+  #state b{color:#f0c96b;font-size:15px;}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="rank-hud"></div>
+  <div id="state"></div>
+  <div class="pad">
+    <button onclick="Rank.addXp(10,'첫 시도 정답')">+10 정답</button>
+    <button onclick="Rank.addXp(50,'챕터 완주')">+50 완주</button>
+    <button onclick="Rank.addXp(300,'대량')">+300</button>
+    <button onclick="jump()">다음 승급까지 채우기</button>
+    <button onclick="Rank._effects.levelUp(7)">레벨업 연출만</button>
+    <button onclick="cer()">승급식 연출만</button>
+    <button onclick="Rank.reset();sync()">초기화</button>
+    <button onclick="greet()">NPC 인사 확인</button>
+  </div>
+</div>
+<script src="assets/audio.js"></script>
+<script src="assets/rank.js"></script>
+<script>
+function sync(){
+  const r = Rank.get();
+  document.getElementById('state').innerHTML =
+    `<b>${r.tier.name}</b> · Lv.${r.level} / ${r.maxLevel}<br>` +
+    `경험치 ${r.xp} (다음 레벨까지 ${r.needForNext - r.intoLevel})<br>` +
+    `<span style="font-size:11px">${r.tier.note}</span>`;
+  Rank.renderHud();
+}
+// 다음 승급 직전까지 한 번에 채운다(연출 확인용)
+function jump(){
+  const r = Rank.get();
+  const tiers = Rank.TIERS;
+  const next = tiers.find(t => t.minLv > r.level);
+  if (!next) return alert('이미 최고 신분입니다');
+  let need = 0, lv = 1, tot = 0;
+  const needFor = n => 100 + (n-1)*20;
+  for (lv = 1; lv < next.minLv; lv++) tot += needFor(lv);
+  need = tot - r.xp;
+  Rank.addXp(need, '연출 확인용');
+  setTimeout(sync, 100);
+}
+function cer(){
+  const t = Rank.TIERS[1];
+  Rank._effects.promote(t, 6);
+}
+function greet(){
+  const roles = ['king','scholar','general','commoner'];
+  const r = Rank.get();
+  alert(`내 신분: ${r.tier.name}\n\n` +
+    roles.map(x => `[${x}] ${Rank.greetingFor(x)}`).join('\n\n'));
+}
+const _add = Rank.addXp;
+Rank.addXp = function(n, why){ const res = _add(n, why); setTimeout(sync, 60); return res; };
+sync();
+</script>
+</body>
+</html>
