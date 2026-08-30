@@ -1287,7 +1287,7 @@ const Dialog = {
   key: null, npc: null, idx: 0, data: null,
   close(){ document.getElementById('dlg-overlay').classList.remove('show'); World.paused = false; },
   open(key, npc){
-    this.key = key; this.npc = npc; this.idx = 0;
+    this.key = key; this.npc = npc; this.idx = 0; this._missedAny = false;
     this.data = NPC_DATA[key];
     // 신분에 따라 이 인물이 나를 맞이하는 첫마디가 달라진다. 원본 NPC_DATA를
     // 고치면 다음 대화에 인사가 쌓이므로, 얕은 복사본의 beats 앞에만 붙인다.
@@ -1367,6 +1367,8 @@ const Dialog = {
     // 때)만 띄운다 — 재방문 단계가 남아 있는데도 뜨면 끝난 줄 알고
     // 다시 안 찾아가게 된다.
     if (Stage.keyFor(this.npc.id) === this.key) playFanfare('대화 완료');
+    // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
+    if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
@@ -1471,6 +1473,9 @@ const Quiz = {
       // 오답이면 그 보기만 비활성화하고, 정답을 맞힐 때까지 다시 고를 기회를 준다
       // (다음 문제로는 못 넘어감 — 정답 공개도 하지 않음).
       if (window.Juice) Juice.wrong();
+      // 이 대화에서 한 번이라도 틀리면 인물 카드의 ★이 붙지 않는다.
+      // Dialog는 const라 window.Dialog로는 안 잡힌다(rank.js·autowalk.js와 같은 함정).
+      if (typeof Dialog !== 'undefined') Dialog._missedAny = true;
       this._missed = true;
       this.optButtons[i].classList.add('wrong');
       this.optButtons[i].disabled = true;
@@ -1628,12 +1633,15 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js"></script>
 <script src="assets/juice.js"></script>
+<script src="assets/heroes_data.js"></script>
+<script src="assets/heroes.js"></script>
 <script src="assets/items.js"></script>
 <script src="assets/autowalk.js"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
+if (window.Heroes) Heroes.mount();
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
