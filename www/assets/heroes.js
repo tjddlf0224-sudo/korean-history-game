@@ -210,7 +210,12 @@ window.Heroes = (function(){
     #hero-ov .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(72px,1fr)); gap:8px; }
     #hero-ov .cell { background:#241c12; border:1px solid #3a2c1a; border-radius:10px;
       padding:6px 4px 7px; text-align:center; cursor:pointer; position:relative; }
-    #hero-ov .cell.locked { opacity:.32; cursor:default; }
+    /* 못 만난 사람도 **그림자로** 세워 둔다. 물음표만 있으면 빈칸이지만,
+       윤곽이 보이면 "저 사람은 누구지"가 된다. 얼굴은 지우고 실루엣만 남긴다. */
+    #hero-ov .cell.locked { cursor:default; }
+    #hero-ov .cell.locked .f { opacity:.3; }
+    #hero-ov .cell.locked .f img { filter:brightness(0) saturate(0); }
+    #hero-ov .cell.locked .nm { color:#6d6250; }
     #hero-ov .cell .f { width:100%; aspect-ratio:1; border-radius:7px; overflow:hidden;
       background:#1a140c; margin-bottom:4px; display:grid; place-content:center; }
     #hero-ov .cell .f img { width:100%; height:100%; object-fit:cover; object-position:top center; }
@@ -358,10 +363,16 @@ window.Heroes = (function(){
 
   function openBook(){
     css(); mount();
+    // 아직 안 열린 계급이면 mount가 패널을 안 만든다. 그대로 두면 아래에서 터진다.
+    // 단추로는 닿을 수 없는 길이지만, 다른 모듈이 부를 수 있으니 막아 둔다.
+    if (!document.getElementById('hero-ov')) return;
     const s = load(), db = DB();
     const got = owned().length, st = starred().length;
+    // 남은 수를 같이 적는다 — 유물 도감과 같은 방식
+    const left = total() - got;
     document.getElementById('hero-cnt').textContent =
-      `${got} / ${total()} 명` + (st ? ` · ★ ${st}` : '');
+      `${got} / ${total()} 명` + (st ? ` · ★ ${st}` : '') +
+      (left ? ` · ${left}명이 아직 그림자다` : ' · 다 만났다');
 
     // 시대별로 묶어 보여 준다(챕터 목록과 같은 순서)
     const byEra = [];
@@ -376,7 +387,7 @@ window.Heroes = (function(){
       `<div class="era">${g.e} · ${g.items.filter(k => s.have[k]).length}/${g.items.length}</div>` +
       '<div class="grid">' + g.items.map(k => {
         const d = db[k], grade = s.have[k] || 0;
-        if (!grade) return `<div class="cell locked"><div class="f"><span class="q">?</span></div>` +
+        if (!grade) return `<div class="cell locked"><div class="f">${faceHtml(k)}</div>` +
                            `<div class="nm">???</div></div>`;
         const ab = ABIL[d.r] || ABIL.commoner;
         return `<div class="cell${inParty(k) ? ' picked' : ''}" data-k="${k}">` +

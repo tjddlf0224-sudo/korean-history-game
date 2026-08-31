@@ -93,8 +93,9 @@ window.Auto = (function(){
 
 
   function mount(){
-    // 양반이 되어야 열린다 — 처음에는 직접 걸으며 지도를 익히게 한다
-    if (window.Unlock && !Unlock.has('auto')) return;
+    // 처음부터 열려 있다. 한때 양반(16)에 잠가 뒀었는데, 걷는 게 답답한 사람에게
+    // 열다섯 판을 걷게 하는 건 진입 장벽일 뿐이다. 배우는 것(대사·퀴즈)은
+    // 자동 이동으로도 건너뛰지 못하므로 잠글 이유가 없다.
     css();
     if (document.getElementById('auto-btn')) return;
     const b = document.createElement('button');

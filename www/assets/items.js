@@ -295,7 +295,13 @@ window.Items = (function(){
     #bag-ov .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:9px; }
     #bag-ov .cell { background:#241c12; border:1px solid #3a2c1a; border-radius:11px;
       padding:10px 6px; text-align:center; cursor:pointer; }
-    #bag-ov .cell.locked { opacity:.35; cursor:default; }
+    /* 못 찾은 칸은 **그림자로 보여 준다.** 물음표만 있으면 무엇이 빠졌는지 알 수 없어
+       "그냥 안 채워진 칸"이 되지만, 모양이 보이면 "저건 뭐지"가 된다.
+       모양만 남기고 색은 지운다 — 답을 다 알려 주면 찾는 재미가 없다. */
+    #bag-ov .cell.locked { cursor:default; }
+    #bag-ov .cell.locked .ic { opacity:.34; }
+    #bag-ov .cell.locked .ic img { filter:brightness(0) saturate(0); }
+    #bag-ov .cell.locked .nm { color:#6d6250; }
     #bag-ov .cell .ic { font-size:26px; display:block; margin-bottom:5px; }
     #bag-ov .cell .ic img { width:38px; height:38px; object-fit:contain; }
     #bag-ov .cell .nm { font-size:11.5px; color:#e8dcc2; line-height:1.35; }
@@ -504,16 +510,20 @@ window.Items = (function(){
     mount();
     const all = Object.keys(DB);
     const mine = owned();
-    document.getElementById('bag-cnt').textContent = `${mine.length} / ${all.length} 종`;
+    // 남은 수를 같이 적는다 — "몇 개 모았나"보다 "몇 개 남았나"가 더 끌어당긴다
+    const left = all.length - mine.length;
+    document.getElementById('bag-cnt').textContent =
+      `${mine.length} / ${all.length} 종` + (left ? ` · ${left}개가 아직 그림자다` : ' · 다 채웠다');
     const g = document.getElementById('bag-grid');
     g.innerHTML = '';
     for (const id of all){
       const got = mine.includes(id);
       const c = document.createElement('div');
       c.className = 'cell' + (got ? '' : ' locked');
+      // 못 찾은 것도 **그림자로** 보여 준다. 이름만 가린다.
       c.innerHTML = got
         ? iconHtml(id) + `<div class="nm">${DB[id].name}</div>`
-        : `<span class="ic">❔</span><div class="nm">???</div>`;
+        : iconHtml(id) + `<div class="nm">???</div>`;
       if (got) c.onclick = () => showDetail(id);
       g.appendChild(c);
     }
