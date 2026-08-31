@@ -242,7 +242,10 @@ window.Juice = (function(){
      단, 동료의 학식(識)이 있으면 챕터당 한 번은 버틴다. */
   function wrong(){
     mount();
-    if (combo >= 2 && window.Heroes && Heroes.trySik()){
+    // 학식(동료 능력)이 먼저, 그다음이 금으로 산 콤보 지키기.
+    // 공짜인 쪽을 먼저 쓰게 하는 것이 순서로도 맞다.
+    if (combo >= 2 && ((window.Heroes && Heroes.trySik()) ||
+                       (window.Gold && Gold.useShield()))){
       sfxWrong();
       flash('bad');
       if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
