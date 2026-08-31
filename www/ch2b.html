@@ -1762,6 +1762,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1771,6 +1772,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=16"></script>
   <script src="assets/fx.js?v=16"></script>
+  <script src="assets/deed.js?v=16"></script>
   <script src="assets/dash.js?v=16"></script>
 <script src="assets/juice.js?v=16"></script>
   <script src="assets/difficulty.js?v=16"></script>
@@ -1824,6 +1826,38 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 농사 짓기 ============
+   밭이 그림으로만 있었다. 여기 서면 직접 지어 볼 수 있게 했다.
+
+   문항은 새로 넣지 않는다 — 농사직설은 이 화에서 이미 세 번 묻는다.
+   대신 **해 보는 것**으로 남긴다. 모내기가 왜 위험했는지는 설명을 읽는 것보다
+   못자리를 앉히고 비를 기다려 보는 편이 빠르다.
+
+   고증: 조선 전기 밭농사는 2년에 세 번 짓는 돌려짓기(조·보리·콩)가 자리 잡았고,
+   거름 주는 법이 늘면서 묵히지 않고 해마다 지을 수 있게 되었다. 논은 씨를 바로
+   뿌리는 직파가 보통이었고, 모내기는 남부 일부에서만 했다 — 물을 못 대면 한 해를
+   통째로 버리기 때문에 나라에서 말렸다. */
+if (window.Deed) Deed.add({
+  id: 'nongsa_gwonnong', zone: 'gwonnong', x: 700, y: 430, range: 180,
+  label: '농사를 지어 본다', tag: '권 농',
+  lines: [
+    '늙은 농부가 호미를 건넨다.<br>"올해는 이 밭에 무엇을 심을 텐가?"',
+    '지난해 이 밭에는 조를 심었다 한다.<br>이어 보리를 넣고, 그다음에 콩을 넣는다.<br>' +
+      '<b>두 해에 세 번</b>을 거두는 셈이다. 땅을 놀리지 않는다.',
+    '"예전엔 한 해 짓고 한 해 묵혔지."<br>' +
+      '거름 주는 법이 늘면서 <b>묵히지 않고 해마다</b> 지을 수 있게 되었다 한다.',
+    '논으로 내려간다. 볍씨를 물 댄 논에 바로 뿌린다.<br>' +
+      '"모를 따로 길러 옮겨 심는 법도 있다네. 김매기가 훨씬 수월하지."',
+    '"허나 옮겨 심을 때 비가 안 오면?"<br>노인이 손을 젓는다.<br>' +
+      '"한 해를 통째로 버리네. 그래서 나라에서 말리는 걸세."<br>' +
+      '<b>모내기는 아직 남쪽 일부에서만</b> 한다.',
+    '해가 기운다. 손톱 밑에 흙이 끼었다.<br>' +
+      '정초가 늙은 농부들에게 물어 적었다는 그 책이,<br>이 손끝의 일을 옮긴 것임을 알 것 같다.',
+  ],
+  gold: 22, badge: 'did_nongsa',
+});
+
 </script>
 </body>
 </html>

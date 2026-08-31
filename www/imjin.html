@@ -1735,6 +1735,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Encounter) Encounter.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1745,6 +1746,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=16"></script>
   <script src="assets/fx.js?v=16"></script>
+  <script src="assets/encounter.js?v=16"></script>
   <script src="assets/dash.js?v=16"></script>
 <script src="assets/juice.js?v=16"></script>
   <script src="assets/difficulty.js?v=16"></script>
@@ -1798,6 +1800,34 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 길을 막는 왜장 ============
+   탄금대는 신립이 무너진 자리다. 그 벌판을 가로지르면 적장과 마주친다.
+
+   문제는 이 화에서 아직 안 물어본 것으로 골랐다 — 평양성 탈환(51회)과
+   임진왜란 귀화인(68회). 둘째 문항은 이 마주침과 맞물린다. 조선에 귀순해
+   조총 만드는 법을 전한 왜장이 실제로 있었다(김충선, 본래 이름 사야가). */
+if (window.Encounter) Encounter.add({
+  id: 'waejang_tangeumdae', zone: 'tangeumdae', x: 1150, y: 60, range: 165,
+  name: '왜장', img: 'assets/portraits/wae.png',
+  bg: 'assets/scenes/imjin_tangeumdae.webp',
+  cry: '누 구 냐 !',
+  lead: '억새가 갈라지며 투구가 솟았다.<br>' +
+        '칼끝이 그대를 향한다. 물러설 틈이 없다.<br>' +
+        '<b>말이 통하지 않아도, 아는 것으로는 맞설 수 있다.</b>',
+  intro: '적장이 칼을 고쳐 잡는다.',
+  lives: 3,
+  questions: [
+    { q:'1593년 조선과 명의 연합군이 왜군에게서 되찾은 성은?',
+      opts:['평양성','동래성'], answer:0, src:[51],
+      feedback:['동래성은 전쟁이 터진 1592년 4월에 왜군에게 함락된 곳이에요.','정답! 평양성입니다. 이 승리로 전세가 뒤집히기 시작했어요.'] },
+    { q:'임진왜란 때 조선에 귀순해 조총 만드는 법을 전한 일본 장수는?',
+      opts:['김충선(사야가)','고니시 유키나가'], answer:0, src:[68],
+      feedback:['고니시 유키나가는 왜군 선봉장으로 끝까지 조선과 싸운 인물이에요.','정답! 김충선입니다. 본래 이름은 사야가로, 귀순해 조선 이름을 받았어요.'] },
+  ],
+  gold: 30, badge: 'waejang_down',
+});
+
 </script>
 </body>
 </html>
