@@ -540,6 +540,18 @@ window.Items = (function(){
      한 번 쓰면 khg_used에 적어 두고 다시 못 쓰게 한다(대동여지도만 예외).
   */
   const USE = {
+    /* 만파식적은 삼국유사의 그 자리에서 분다 — 감은사 앞바다다.
+       신문왕이 아버지 문무왕의 뜻을 이어 682년에 이 절을 마쳤고,
+       바다 가운데 바위섬이 문무왕의 수중릉(대왕암)이다. */
+    manpasikjeok: {
+      file: 'tongil.html', zone: 'gameunsa', label: '분다',
+      tag: '만 파 식 적',
+      line: '피리를 입에 대자 소리가 바다로 퍼졌다.<br>' +
+            '일던 물결이 차츰 낮아지고, 바위섬 둘레의 흰 거품이 잦아들었다.<br>' +
+            '만 개의 물결을 잠재우는 피리라 하였다. 아버지의 뜻이 아들의 나라를 지킨다.',
+      badge: 'use_manpasikjeok',
+      gold: 30,
+    },
     gimiseoneon: {
       file: 'ilje1.html', zone: 'tapgol', label: '읽는다',
       tag: '기 미 독 립 선 언 서',
