@@ -501,6 +501,8 @@
   <script src="assets/guide.js?v=14"></script>
   <script src="assets/minigames.js?v=14"></script>
   <script src="assets/quests.js?v=14"></script>
+  <script src="assets/journey.js?v=14"></script>
+  <script src="assets/season.js?v=14"></script>
   <script src="assets/offline.js?v=14"></script>
   <script src="assets/telemetry.js?v=14"></script>
 <script src="assets/badges.js?v=14"></script>
@@ -935,6 +937,8 @@ function renderEraList(){
   });
 }
 renderEraList();
+// 이달의 시대 띠 — 목록 맨 위. 오늘 무엇을 할지 여기서 정해진다.
+if (window.Season) Season.mountBand(eraListEl.parentNode, eraListEl);
 
 document.getElementById('kings-close').addEventListener('click', closeKingsModal);
 document.getElementById('kings-modal').addEventListener('click', (ev) => {
