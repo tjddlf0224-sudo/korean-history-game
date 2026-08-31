@@ -487,6 +487,7 @@
 <script src="vendor/firebase/firebase-firestore-compat.js"></script>
 <script src="assets/firebase_config.js?v=17"></script>
 <script src="assets/auth.js?v=17"></script>
+<script src="assets/board.js?v=17"></script>
 <script src="assets/audio.js?v=17"></script>
 <script src="assets/srs.js?v=17"></script>
   <script src="assets/rank.js?v=17"></script>
@@ -1201,6 +1202,17 @@ document.addEventListener('keydown', (ev) => {
   (function(){
     var host = document.getElementById('topbar-actions');
     if (window.Auth && host) Auth.attach(host);
+
+    /* 랭킹 단추. 로그인 안 해도 남들 점수는 볼 수 있게 열어 둔다 —
+       올리는 것만 로그인이 필요하다. */
+    if (window.Board && host && !document.getElementById('board-btn')){
+      var b = document.createElement('button');
+      b.id = 'board-btn';
+      b.setAttribute('aria-label', '랭킹');
+      b.textContent = '급제';
+      b.onclick = function(){ Board.open(); };
+      host.insertBefore(b, host.firstChild);
+    }
   })();
 </script>
 </body>
