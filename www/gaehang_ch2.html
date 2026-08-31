@@ -466,7 +466,10 @@ const ZONES = {
     barriers: [ { x0:400, y0:0, x1:1250, y1:200 } ], // 낡은 병영 건물
     npcs: [
       { id: 'daewongun', name: '흥선대원군', x: 700, y: 460, img: 'assets/portraits/daewongun.png', look: { role: 'king', body: '#3a2a1e', accent: '#e0954a' } },
-      { id: 'soldier', name: '무위영 병사', x: 470, y: 560, img: 'assets/portraits/muwiyeong_soldier.png', look: { role: 'general', body: '#5a4a3a', accent: '#8c8676', headband:true } },
+      { id: 'soldier', name: '무위영 병사', x: 470, y: 560, img: 'assets/portraits/muwiyeong_soldier.png', look: { role: 'general', body: '#5a4a3a', accent: '#8c8676', headband:true } },      // 조약을 맺은 것은 대원군이 아니라 조정(고종)이고, 별기군 이야기는
+      // 별기군에게 듣는 것이 맞다. 자리는 place_npcs.py 로 골랐다.
+      { id: 'gojong', name: '고종', x: 960, y: 456, img: 'assets/portraits/gojong_king.png', look: { role: 'king', body: '#3a4a6b', accent: '#e0b94a' } },
+      { id: 'byeolgigun', name: '별기군 교련병', x: 392, y: 312, img: 'assets/portraits/extra_gunsa.png', look: { role: 'general', body: '#4a5a4a', accent: '#c9a24a' } },
     ],
     exits: [],
   },
@@ -713,8 +716,11 @@ function updateHudGoal(){
     const wa = (w) => { const c = w.charCodeAt(w.length-1) - 0xAC00;
       return (c >= 0 && c <= 11171 && c % 28 !== 0) ? '과' : '와'; };
     const order = [
+      // 맨 끝 인물(고종)이 챕터를 닫는다(endsChapter).
+      ['soldier', '무위영 병사'],
+      ['byeolgigun', '별기군 교련병'],
       ['daewongun', '흥선대원군'],
-      ['soldier', '무위영 병사']
+      ['gojong', '고종']
     ];
     for (const [id, name] of order){
       const k = Stage.keyFor(id);
@@ -908,6 +914,42 @@ const NPC_DATA = {
       { t:'…이대로 청나라로 끌려가는가 보네. 내가 다시 이 궁을 밟을 수 있을지는 모르겠군.' },
       { t:'다만 한 가지는 분명하네 — 청의 군대가 이 땅에 들어온 이상, 저들이 그냥 물러가지는 않을 걸세. 상인들의 장사길까지 파고들겠지.' },
     ],
+  },
+  /* ── 아래 셋은 원래 흥선대원군 한 사람에게 몰려 있던 것을 나눈 것이다.
+     조약을 맺은 것은 조정(고종)이고, 별기군 이야기는 별기군의 몫이다.
+     문항과 기출 출처(src)는 그대로 옮겨 왔다. ── */
+
+  byeolgigun_0: {
+    name: '별기군 교련병', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7 3v6c0 4-3 6.6-7 9-4-2.4-7-5-7-9v-6z"/><path d="M9 12l2 2 4-4"/></svg>', img: 'assets/portraits/extra_gunsa.png',
+    beats: [
+      { t:'…나를 보는 눈이 곱지 않은 건 안다. 같은 나라 군사인데도 그렇지.' },
+      { t:'우리는 일본인 교관에게 신식 훈련을 받는다. 총도 새것이고, 급료도 제때 나오지.' },
+      { t:'구식 군인들은 열세 달치 급료가 밀렸다더군. 겨우 받은 쌀에는 겨와 모래가 섞여 있었다지. 그러니 어찌 화가 나지 않겠나.' },
+      { t:'우리 별기군도 제 발로 생긴 것이 아니다. 재작년에 조정이 개화의 일을 도맡을 기구를 새로 세우고, 그 아래에서 우리를 길러낸 것이지.' },
+    ],
+    quizSeq: [
+      { q:'1880년 개화 정책을 총괄하기 위해 설치되어, 그 아래 12사를 두고 별기군 창설을 추진한 기구는?',
+        opts:['통리기무아문','군국기무처'], answer:0, src:[36, 42, 54, 71, 79],
+        feedback:['군국기무처는 훨씬 뒤인 1894년 갑오개혁을 추진한 기구예요.','맞습니다. 통리기무아문(1880)입니다. 그 아래 12사를 두고 개화 정책을 맡았으며, 이듬해 별기군을 창설했습니다.'] },
+    ]
+  },
+
+  gojong_wait: {
+    name: '고종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/gojong_king.png',
+    beats: [
+      { t:'…아직은 아무 말도 할 수 없다. 궁 밖의 일이 어찌 되었는지부터 알아야겠다.' },
+      { t:'대원군께서 어찌 되셨는지, 먼저 알아보고 오라.' },
+    ]
+  },
+
+  gojong_0: {
+    name: '고종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/gojong_king.png',
+    beats: [
+      { t:'…아버님께서 청으로 끌려가셨다. 군란은 가라앉았으나, 가라앉힌 것은 우리 손이 아니었다.' },
+      { t:'일본은 공사관이 불탔다며 배상을 요구해 왔다. 배상금에 더해, 공사관을 지킬 군대를 한성에 두겠다 한다.' },
+      { t:'청은 청대로 값을 매겼다. 저들의 상인이 한성을 넘어 내지까지 들어와 장사하게 해 달라는 것이다.' },
+      { t:'…군사를 빌린 값이 이토록 무겁구나. 이 나라가 제 힘으로 서지 못하면, 다음엔 무엇을 내주게 될지.' },
+    ],
     quizSeq: [
       { q:'임오군란의 결과로 일본과 맺은 조약은?',
         opts:['제물포 조약','강화도 조약'], answer:0, src:[6, 22, 23, 28, 31, 35, 38, 40, 46, 51, 52, 53],
@@ -918,6 +960,7 @@ const NPC_DATA = {
     ],
     endsChapter: true
   },
+
   soldier_0: {
     name:'무위영 병사', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11c0 4.3 3.6 7.5 8 7.5s8-3.2 8-7.5"/><path d="M5.5 11a6.5 3.2 0 0113 0c0 1.8-2.9 3.2-6.5 3.2s-6.5-1.4-6.5-3.2z" fill="currentColor" stroke="none"/></svg>', img:'assets/portraits/muwiyeong_soldier.png',
     beats: [
@@ -937,6 +980,10 @@ const Stage = {
   keyFor(id){
     if (id === 'daewongun') return 'daewongun_' + Math.min(Stage.state.talkStage, 2);
     if (id === 'soldier') return 'soldier_0';
+    if (id === 'byeolgigun') return 'byeolgigun_0';
+    // 조약 이야기는 대원군이 청으로 끌려간 뒤의 일이다. 그 전에는 열지 않는다
+    // (열어 두면 대원군을 만나기도 전에 챕터가 끝나 버린다).
+    if (id === 'gojong') return seenDialogKeys.has('daewongun_2') ? 'gojong_0' : 'gojong_wait';
     return null;
   },
   interact(){

@@ -127,17 +127,25 @@ def main():
                    for dx in (-STEP, 0, STEP) for dy in (-STEP, 0, STEP)})
     cand = [p for p in cand if ok(p)]
 
+    # 가장 먼 자리를 고르면 배리어가 적은 열린 지도에서는 네 귀퉁이로 밀려난다
+    # (지도 끝에 처박힌 NPC는 눈에 띄지도 않고 보기에도 어색하다). 그래서
+    # "최대"가 아니라 **적당한 간격**을 목표로 잡는다.
+    TARGET, MIN_GAP = 260, 150
     picked = []
     for _ in range(want):
-        best, bd = None, -1
+        best, bd = None, None
         for p in cand:
-            d = min((p[0] - a) ** 2 + (p[1] - b) ** 2 for a, b in avoid + picked)
-            if d > bd:
-                best, bd = p, d
+            d = min((p[0] - a) ** 2 + (p[1] - b) ** 2 for a, b in avoid + picked) ** .5
+            if d < MIN_GAP:
+                continue
+            score = abs(d - TARGET)
+            if bd is None or score < bd:
+                best, bd = p, score
         if best is None:
             break
         picked.append(best)
-        print(f'  x:{best[0]}, y:{best[1]}   (가장 가까운 기존 요소까지 {bd ** .5:.0f}px)')
+        gap = min((best[0] - a) ** 2 + (best[1] - b) ** 2 for a, b in avoid) ** .5
+        print(f'  x:{best[0]}, y:{best[1]}   (가장 가까운 기존 요소까지 {gap:.0f}px)')
     if len(picked) < want:
         print(f'  ※ {want}개를 요청했으나 {len(picked)}개만 가능')
 

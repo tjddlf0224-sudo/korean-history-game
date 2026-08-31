@@ -81,6 +81,28 @@ def check_quiz_src(f, s):
     return withsrc - empty
 
 
+def check_dup_questions(f, s):
+    """한 챕터 안에서 **서로 다른 인물**이 똑같은 질문을 하는지.
+
+    문항을 다른 인물에게 옮기다 원래 자리에서 지우는 것을 잊으면 같은 문제를
+    두 번 풀게 된다(실제로 임오군란 화에서 한 번 냈다).
+
+    같은 인물의 다른 대화 키(hyangni_0 / hyangni_bond처럼)는 세지 않는다 —
+    조건에 따라 **둘 중 하나만** 나오는 분기라, 한 번의 플레이에서 겹치지
+    않는다. 이걸 구분하지 않으면 멀쩡한 분기를 중복이라 잡는다.
+    """
+    m = re.search(r'const NPC_DATA\s*=\s*\{[\s\S]*?\n\};', s)
+    if not m:
+        return
+    owner = {}
+    for blk in re.finditer(r"^  (\w+):\s*\{([\s\S]*?)(?=\n  \w+:\s*\{|\n\};)", m.group(0), re.M):
+        who = blk.group(1).rsplit('_', 1)[0]          # hyangni_0 → hyangni
+        for q in re.findall(r"q:'([^']+)'", blk.group(2)):
+            if q in owner and owner[q] != who:
+                fails.append(f'{f}  같은 질문을 {owner[q]}와 {who}가 함께 물음 — {q[:40]}')
+            owner.setdefault(q, who)
+
+
 def check_assets(f, s):
     """그림 파일 존재 — 없으면 실패가 아니라 '생성 대기'."""
     need = set(re.findall(r"assets/(?:scenes|portraits)/[\w.\-]+\.png", s))
@@ -158,6 +180,7 @@ def main():
         check_syntax(f, s)
         check_features(f, s)
         nq += check_quiz_src(f, s)
+        check_dup_questions(f, s)
         check_links(f, s)
         check_spawn_inside_barrier(f, s)
         check_alt_speaker_portrait(f, s)

@@ -506,7 +506,10 @@ const ZONES = {
     spawn: { x: 690, y: 560 },
     barriers: [ { x0:540, y0:55, x1:835, y1:225 } ], // 어좌 단상
     npcs: [
-      { id: 'taejong', name: '태종', x: 688, y: 300, img: 'assets/portraits/taejong.png', look: { role: 'king', body: '#8a2f2f', accent: '#e0b94a' } },
+      { id: 'taejong', name: '태종', x: 688, y: 300, img: 'assets/portraits/taejong.png', look: { role: 'king', body: '#8a2f2f', accent: '#e0b94a' } },      // 사간원·서경권은 대간의 일이고, 계미자는 주자소 장인의 일이다.
+      // 태종 혼자 네 문항을 연달아 묻고 있었다. 자리는 place_npcs.py 로 골랐다.
+      { id: 'daegan', name: '사간원 대간', x: 448, y: 200, img: 'assets/portraits/extra_munsin.png', look: { role: 'scholar', body: '#3d4a5a', accent: '#c9a24a' } },
+      { id: 'jujaso', name: '주자소 장인', x: 896, y: 144, img: 'assets/portraits/extra_daejanggan.png', look: { role: 'commoner', body: '#5a4a3a', accent: '#c98a4a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -829,6 +832,8 @@ function updateHudGoal(){
       return (c >= 0 && c <= 11171 && c % 28 !== 0) ? '과' : '와'; };
     const order = [
       ['taejong', '태종'],
+      ['daegan', '사간원 대간'],
+      ['jujaso', '주자소 장인'],
       ['guard', '내금위 군사']
     ];
     for (const [id, name] of order){
@@ -1079,19 +1084,13 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'지금까지는 육조가 의정부를 거쳐야만 내게 보고할 수 있었네. 그러다 보니 결정이 늦고, 재상들 손에 권한이 몰렸지.' },
       { who:'npc', t:'이제 육조가 나에게 직접 보고하도록 바꿀 것이야. 그리고 하나 더 — 문하부도 손을 봤네.' },
-      { who:'npc', t:'문하부의 낭사를 사간원으로 독립시켜 임금의 언행을 살피게 했고, 사헌부와 더불어 관리를 새로 임명할 때 이 둘의 동의를 받는 서경권도 갖게 했네. 왕이라도 함부로 사람을 쓸 순 없게 말이야.' },
+      { who:'npc', t:'문하부도 손을 봤네. 그 낭사를 떼어 따로 세웠지 — 자세한 것은 저기 대간에게 물어보게. 제 입으로 말하는 편이 나을 게야.' },
       { who:'npc', t:'…자네가 지금 서 있는 이 궁궐 말일세. 아바마마께서 한양으로 도읍을 옮기시며 처음 세우신 정궁이지. 저 앞의 큰 전각이 조회를 여는 곳이라네.' },
       { who:'npc', t:'허나 나는 이 궁이 편치 않네. 형제의 피가 흐른 자리니까. 그래서 동쪽에 궁을 하나 더 짓고 있네 — 개경에서 다시 이곳으로 돌아오면서 말이야.' },
       { who:'doc', docImg:'assets/scenes/heritage_changdeokgung_injeongjeon.jpg',
         t:'(창덕궁 인정전. 태종 5년(1405) 이궁으로 지어진 창덕궁의 정전으로, 경복궁 동쪽에 있어 동궐이라고도 불렸다. 훗날 조선 왕들이 가장 오래 실제로 거처한 궁궐이 된다. 유네스코 세계유산.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
     ],
     quizSeq: [
-      { q:'태종이 문하부를 폐지하면서, 그 낭사(郎舍)를 독립시켜 만든 언론 기구는?',
-        opts:['사간원','홍문관'], answer:0, src:[41,49,52,59,70,77],
-        feedback:['홍문관은 훗날 성종 대에 옛 집현전의 기능을 이어받아 만들어지는 기구예요.','정답! 문하부의 낭사를 독립시켜 사간원을 만들고, 왕에게 직언하는 역할을 맡겼습니다.'] },
-      { q:'태종 대에 관리를 새로 임명할 때 사간원·사헌부의 동의를 거치도록 한 권한은?',
-        opts:['서경권','상피제'], answer:0, src:[19],
-        feedback:['상피제는 친인척이 같은 관청이나 연고지에서 근무하지 못하게 한 제도예요.','정답! 서경권입니다. 사간원과 사헌부가 관리 임명에 동의권을 행사했습니다.'] },
       { q:'태조가 한양 천도와 함께 세운 조선의 정궁(법궁)으로, 정도전이 이름을 지은 궁궐은?',
         opts:['경복궁','창덕궁'], answer:0, src:[7,10,38,40,47,60,62,64,68],
         feedback:['창덕궁은 태종이 뒤에 따로 세운 궁궐이에요.','정답! 경복궁입니다. 조회를 여는 정전이 근정전이지요.'] },
@@ -1117,6 +1116,43 @@ const NPC_DATA = {
     },
     startsBoss: true
   },
+  /* ── 아래 둘은 원래 태종 혼자 네 문항을 연달아 묻던 것을 나눈 것이다.
+     사간원·서경권은 대간의 일이고, 계미자는 주자소 장인의 일이다.
+     앞의 두 문항은 기출 출처(src)까지 그대로 옮겨 왔다. ── */
+
+  daegan_0: {
+    name: '사간원 대간', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M6.5 8.5L12 3l5.5 5.5"/><path d="M4 20h16"/></svg>', img: 'assets/portraits/extra_munsin.png',
+    beats: [
+      { who:'npc', t:'소신은 사간원의 대간이옵니다. 전하의 언행에 그릇된 바가 있으면 아뢰는 것이 소임이지요.' },
+      { who:'npc', t:'본래 저희는 문하부에 딸린 낭사였습니다. 전하께서 문하부를 폐하시면서 저희만 따로 떼어 사간원으로 세우셨지요.' },
+      { who:'npc', t:'벼슬을 새로 내리실 때에도 저희 사간원과 사헌부의 동의를 받으셔야 합니다. 이를 서경(署經)이라 하옵니다.' },
+      { who:'npc', t:'…왕권을 다지신 분이 어찌 스스로를 묶는 제도를 두셨느냐고요? 묶이지 않는 힘은 오래가지 못한다는 것을 아셨기 때문이겠지요.' },
+    ],
+    quizSeq: [
+      { q:'태종이 문하부를 폐지하면서, 그 낭사(郎舍)를 독립시켜 만든 언론 기구는?',
+        opts:['사간원','홍문관'], answer:0, src:[41,49,52,59,70,77],
+        feedback:['홍문관은 훗날 성종 대에 옛 집현전의 기능을 이어받아 만들어지는 기구예요.','정답! 문하부의 낭사를 독립시켜 사간원을 만들고, 왕에게 직언하는 역할을 맡겼습니다.'] },
+      { q:'태종 대에 관리를 새로 임명할 때 사간원·사헌부의 동의를 거치도록 한 권한은?',
+        opts:['서경권','상피제'], answer:0, src:[19],
+        feedback:['상피제는 친인척이 같은 관청이나 연고지에서 근무하지 못하게 한 제도예요.','정답! 서경권입니다. 사간원과 사헌부가 관리 임명에 동의권을 행사했습니다.'] },
+    ]
+  },
+
+  jujaso_0: {
+    name: '주자소 장인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="11" rx="1.4"/><path d="M8 8h8M8 11.5h5"/><path d="M6 15v5M18 15v5M6 20h12"/></svg>', img: 'assets/portraits/extra_daejanggan.png',
+    beats: [
+      { who:'npc', t:'손 조심하십시오, 쇳물이 뜨겁습니다. 여기가 활자를 부어 만드는 주자소올시다.' },
+      { who:'npc', t:'전하께서 재작년에 이 관청을 세우셨지요. 글자를 하나하나 새기는 목판으로는 책을 넉넉히 낼 수가 없으니까요.' },
+      { who:'npc', t:'계미년에 부어 만든 것이라 계미자라 부릅니다. 조선에서 처음 만든 금속활자이지요.' },
+      { who:'npc', t:'…물론 쇠로 활자를 부은 것이 우리가 세상에서 처음은 아닙니다. 그건 고려 사람들이 훨씬 앞서 했던 일이지요.' },
+    ],
+    quizSeq: [
+      { q:'태종이 주자소를 세우고 계미년에 부어 만든, 조선 최초의 금속활자는?',
+        opts:['계미자','갑인자'], answer:0, src:[41, 49],
+        feedback:['갑인자는 뒷날 세종 대에 만든 활자로, 계미자의 단점을 고쳐 더 정교해졌어요.','정답! 계미자(1403)입니다. 조선에서 처음 만든 금속활자예요 — 다만 세계 최초의 금속활자는 고려의 것입니다.'] },
+    ]
+  },
+
   guard_0: {
     name: '내금위 군사', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>', img: 'assets/portraits/general.png',
     beats: [
@@ -1158,6 +1194,8 @@ const Stage = {
   keyFor(id){
     if (id === 'taejong') return 'taejong_' + Math.min(Stage.state.talkStage, 2);
     if (id === 'guard') return 'guard_0';
+    if (id === 'daegan') return 'daegan_0';
+    if (id === 'jujaso') return 'jujaso_0';
     return null;
   },
   interact(){

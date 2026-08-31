@@ -530,6 +530,10 @@ const ZONES = {
     npcs: [
       { id:'jeongdojeon', name:'정도전', x:420, y:220, img:'assets/portraits/jeongdojeon.png', look:{ role:'scholar',  body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'worker',      name:'인부',   x:880, y:420, img:'assets/portraits/commoner1.png',   look:{ role:'commoner', body:'#8a7a5a', accent:'#5a5650' } },
+      // 위화도 회군과 과전법은 정도전이 아니라 태조가 한 일인데 정도전이 대신
+      // 말하고 있었다. 임자에게 돌려준다. 자리는 place_npcs.py 로 골랐다.
+      { id:'taejo',       name:'태조 이성계', x:816, y:168, img:'assets/portraits/taejo_yi_king.png', look:{ role:'king', body:'#8a2f2f', accent:'#e0b94a' } },
+      { id:'jongmyo',     name:'종묘 제관',   x:944, y:672, img:'assets/portraits/extra_naegwan.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -791,7 +795,9 @@ function updateHudGoal(){
     const wa = (w) => { const c = w.charCodeAt(w.length-1) - 0xAC00;
       return (c >= 0 && c <= 11171 && c % 28 !== 0) ? '과' : '와'; };
     const order = [
-      ['jeongdojeon', '정도전']
+      ['jeongdojeon', '정도전'],
+      ['taejo', '태조 이성계'],
+      ['jongmyo', '종묘 제관']
     ];
     for (const [id, name] of order){
       const k = Stage.keyFor(id);
@@ -1028,17 +1034,7 @@ const NPC_DATA = {
         t:'(서울 숭례문. 도성의 남쪽 대문에 유교의 다섯 덕목 중 \'예(禮)\'를 담아 이름을 붙였다. 국보 제1호이며, 한양도성의 정문 격인 남대문이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'doc', docImg:'assets/scenes/heritage_heunginjimun.jpg',
         t:'(서울 흥인지문. 동쪽 대문에 \'인(仁)\'을 담아 이름을 붙였다. 보물 제1호이며, 한양도성의 여덟 성문 가운데 유일하게 옹성(성문을 보호하는 반원형 성벽)을 갖추었다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
-      { t:'생각해 보면 여기까지 오는 데 참 멀리도 왔네. 전하께서 요동으로 향하던 군사를 압록강 어귀에서 되돌리신 그날부터 말일세.' },
-      { quiz: { q:'이성계가 요동 정벌에 나섰다가 군사를 되돌려 권력을 잡은 사건은?',
-          opts:['위화도 회군','묘청의 난'], answer:0, src:[9,47,58],
-          feedback:['묘청의 난은 고려 인종 대의 사건이에요.','정답! 위화도 회군(1388)입니다. 이성계는 네 가지 이유를 들어 출병에 반대했지요(4불가론).'] } },
-      { t:'…허나 끝까지 우리와 함께 가지 못한 이도 있었네. 포은 정몽주 — 고려를 고쳐 쓰자 했지, 갈아엎자 하지는 않았거든.' },
-      { t:'방원 공이 그를 떠보았네. "이런들 어떠하며 저런들 어떠하리… 우리도 이같이 얽혀 백 년까지 누리리라." 하여가라 하지.' },
-      { t:'포은이 답하기를, "이 몸이 죽고 죽어 일백 번 고쳐 죽어… 임 향한 일편단심이야 가실 줄이 있으랴." 단심가일세. 그러고 돌아가는 길, 선죽교에서 최후를 맞았네.' },
-      { t:'나라를 세우려면 먼저 땅을 다시 나눠야 했지. 권문세족이 움켜쥔 토지를 거두어 관리들에게 다시 나눠주는 새 제도를 만들었네.' },
-      { quiz: { q:'조준 등의 건의로 제정되어, 새 나라 관리들의 경제 기반이 된 토지 제도는?',
-          opts:['과전법','직전법'], answer:0, src:[6,9,13,43,47,58],
-          feedback:['직전법은 훗날 세조가 현직 관리에게만 토지를 주도록 바꾼 제도예요.','정답! 과전법(1391)입니다. 조선 건국 직전에 제정되어 신진 사대부의 기반이 되었어요.'] } },
+      { t:'여기까지 오는 데 참 멀리도 왔네. 그 이야기는 전하께 직접 들으시게 — 저기 계시네.' },
     ],
   },
   jeongdojeon_2: {
@@ -1055,6 +1051,49 @@ const NPC_DATA = {
     },
     endsChapter: true
   },
+  /* ── 아래 셋은 원래 정도전 혼자 떠맡던 것을 나눈 것이다. 위화도 회군과
+     과전법은 태조가 한 일이고, 종묘 이야기는 제관의 몫이다. 문항과 기출
+     출처(src)는 그대로 옮겨 왔다. ── */
+
+  taejo_0: {
+    name: '태조 이성계', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/taejo_yi_king.png',
+    beats: [
+      { t:'…그 얼굴은 처음 보는군. 삼봉이 데려온 자인가.' },
+      { t:'요동을 치라는 명을 받았을 때, 과인은 네 가지 이유를 들어 아니 된다 하였다. 작은 나라가 큰 나라를 거스르는 일, 여름에 군사를 일으키는 일, 왜구가 빈틈을 노릴 일, 장마에 활이 풀리고 병이 도는 일.' },
+      { t:'허나 명은 내려졌고, 군사는 압록강 어귀 위화도까지 갔다. 거기서 과인은 말머리를 돌렸다.' },
+      { quiz: { q:'이성계가 요동 정벌에 나섰다가 군사를 되돌려 권력을 잡은 사건은?',
+          opts:['위화도 회군','묘청의 난'], answer:0, src:[9,47,58],
+          feedback:['묘청의 난은 고려 인종 대의 사건이에요.','정답! 위화도 회군(1388)입니다. 이성계는 네 가지 이유를 들어 출병에 반대했지요(4불가론).'] } },
+      { t:'…끝까지 함께 가지 못한 이도 있었다. 포은 정몽주. 고려를 고쳐 쓰자 했지, 갈아엎자 하지는 않았지.' },
+      { t:'방원이 그를 떠보았다. "이런들 어떠하며 저런들 어떠하리…" 하여가라 한다. 포은은 답했다. "이 몸이 죽고 죽어 일백 번 고쳐 죽어…" 단심가다. 그러고 돌아가는 길, 선죽교에서 최후를 맞았다.' },
+      { t:'나라를 세우려면 먼저 땅을 다시 나눠야 했다. 권문세족이 움켜쥔 토지를 거두어 관리들에게 다시 나눠 주었지. 조준이 앞장서 건의한 일이다.' },
+      { quiz: { q:'조준 등의 건의로 제정되어, 새 나라 관리들의 경제 기반이 된 토지 제도는?',
+          opts:['과전법','직전법'], answer:0, src:[6,9,13,43,47,58],
+          feedback:['직전법은 훗날 세조가 현직 관리에게만 토지를 주도록 바꾼 제도예요.','정답! 과전법(1391)입니다. 조선 건국 직전에 제정되어 신진 사대부의 기반이 되었어요.'] } },
+    ]
+  },
+
+  jongmyo_0: {
+    name: '종묘 제관', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9L12 4l9.5 5"/><path d="M5 9v9h14V9"/><path d="M9 18v-5h6v5"/><path d="M3 21h18"/></svg>', img: 'assets/portraits/extra_naegwan.png',
+    beats: [
+      { t:'궁궐만 세운다고 나라가 서는 것이 아닙니다. 조상을 모실 자리부터 잡아야지요.' },
+      { t:'삼봉께서 좌묘우사(左廟右社)의 법도를 따랐습니다 — 궁궐에서 보아 왼쪽(동쪽)에 종묘를, 오른쪽(서쪽)에 사직단을 두는 것이지요.' },
+      { who:'doc', docImg:'assets/scenes/heritage_jongmyo_jeongjeon.jpg',
+        t:'(종묘 정전. 조선 역대 왕과 왕비의 신주를 모신 왕실 사당으로, 유교 제례 공간의 정수를 보여준다. 유네스코 세계유산.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
+      { quiz: { q:'조선 역대 왕과 왕비의 신주를 모신 왕실 사당으로, 궁궐에서 보아 왼쪽(동쪽)에 세운 곳은?',
+          opts:['종묘','사직단'], answer:0, src:[41,68,74],
+          feedback:['사직단은 토지의 신과 곡식의 신에게 제사 지내던 곳으로, 궁궐 오른쪽(서쪽)에 두었어요.','정답! 종묘입니다. 좌묘우사에 따라 궁궐 왼쪽에 두었어요.'] } },
+    ]
+  },
+
+  jeongdojeon_wait: {
+    name: '정도전', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/></svg>', img: 'assets/portraits/jeongdojeon.png',
+    beats: [
+      { t:'…아직 할 이야기가 남았네만, 그 전에 전하를 뵙고 오시게. 종묘 쪽 제관에게도 들를 것이 있고.' },
+      { t:'이 도읍이 어떻게 앉았는지를 알아야, 내가 하려는 말도 뜻이 통할 걸세.' },
+    ]
+  },
+
   worker_0: {
     name:'인부', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="10" rx="1"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="9" y1="7" x2="9" y2="12"/><line x1="15" y1="12" x2="15" y2="17"/></svg>', img:'assets/portraits/commoner1.png',
     beats: [
@@ -1077,8 +1116,18 @@ const NPC_DATA = {
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
-    if (id === 'jeongdojeon') return 'jeongdojeon_' + Math.min(Stage.state.talkStage, 2);
+    if (id === 'jeongdojeon'){
+      const st = Math.min(Stage.state.talkStage, 2);
+      // 마지막 이야기(이방원의 그림자)는 챕터를 닫는다. 그래서 태조와 종묘
+      // 제관을 만나기 전에는 열지 않는다 — 안 그러면 정도전만 세 번 만나고
+      // 새로 세운 두 사람을 한 번도 못 본 채 챕터가 끝난다.
+      if (st >= 2 && !(seenDialogKeys.has('taejo_0') && seenDialogKeys.has('jongmyo_0')))
+        return 'jeongdojeon_wait';
+      return 'jeongdojeon_' + st;
+    }
     if (id === 'worker') return 'worker_0';
+    if (id === 'taejo') return 'taejo_0';
+    if (id === 'jongmyo') return 'jongmyo_0';
     return null;
   },
   interact(){
