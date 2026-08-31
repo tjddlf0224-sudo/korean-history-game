@@ -1702,6 +1702,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1712,6 +1713,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1767,6 +1769,28 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 과거를 쳐 본다 ============
+   광종이 958년 쌍기의 건의를 받아들여 과거제를 시행했다. 호족의 자식이라고
+   벼슬을 주던 것을 시험으로 바꾼 것이라, 왕권을 세우는 일이기도 했다.
+
+   문항은 새로 안 넣는다(이 화가 이미 광종을 묻는다). 대신 답안을 써 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'gwageo_gaegyeong', zone: 'gaegyeong', x: 824, y: 638, range: 170,
+  label: '과거를 쳐 본다', tag: '과 거',
+  lines: [
+    '마당에 자리가 깔리고 종이와 붓이 놓였다.<br>시험을 보러 온 이들이 줄지어 앉는다.',
+    '옆자리 사람이 손을 떤다.<br>"우리 집안엔 벼슬한 이가 없소. 그래도 여기 앉을 수 있게 되었소."',
+    '문제가 내걸린다. 경전의 뜻을 묻고, 시를 짓게 하고, 나라 다스릴 방책을 묻는다.',
+    '붓을 든다. 아는 만큼 쓰는 수밖에 없다.<br>' +
+      '<b>집안이 아니라 아는 것으로 뽑는다</b> — 그것이 이 자리의 뜻이다.',
+    '거두어 가는 답안 더미를 본다.<br>' +
+      '이 제도를 들여온 이는 중국에서 귀화한 <b>쌍기</b>였고, 받아들인 이는 <b>광종</b>이었다.',
+    '호족의 힘을 누르는 데 칼만 쓴 것이 아니다.<br>종이와 붓으로도 그리했다.',
+  ],
+  gold: 24, badge: 'did_gwageo',
+});
+
 </script>
 </body>
 </html>

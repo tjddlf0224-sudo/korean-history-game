@@ -1671,6 +1671,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1681,6 +1682,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1736,6 +1738,32 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 벽란도 — 뱃짐 부리기 ============
+   벽란도는 예성강 어귀의 국제 무역항이었다. 송·일본은 물론 **대식국(아라비아)
+   상인까지** 왔다고 고려사에 적혀 있다(1024·1025·1040년). 서방에 '고려'라는
+   이름이 알려진 통로가 여기다.
+
+   문항은 새로 안 넣는다 — 이 화는 이미 경시서·관영상점·은병·전시과를 묻는다.
+   대신 짐을 직접 부려 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'byeokran_jim', zone: 'byeokran', x: 352, y: 582, range: 170,
+  label: '뱃짐을 부린다', tag: '벽 란 도',
+  lines: [
+    '뱃사람이 갈고리를 건넨다.<br>"거들어 주시오. 물때가 지나면 배가 못 떠나오."',
+    '첫 배는 송에서 왔다. 비단과 약재, 그리고 책이 나온다.<br>' +
+      '내어 주는 것은 인삼과 종이와 먹이다. 고려 종이는 특히 값을 잘 받는다 한다.',
+    '두 번째 배는 일본 것이다. 유황과 수은을 부린다.',
+    '세 번째 배에서 낯선 말이 들린다. 살결도 옷도 다르다.<br>' +
+      '"대식국에서 왔다 하오. 수은과 향료를 싣고." — <b>아라비아 상인</b>이다.',
+    '그들이 부르는 이 나라 이름이 귀에 설다.<br>' +
+      '"코리아…"<br>서쪽 끝까지 이 이름이 건너간 것이 이 나루에서였다.',
+    '갈고리를 돌려주자 뱃사람이 엽전 몇 닢을 쥐여 준다.<br>' +
+      '"오늘 값이오. 여기선 누구든 일한 만큼 받소."',
+  ],
+  gold: 24, badge: 'did_byeokran',
+});
+
 </script>
 </body>
 </html>
