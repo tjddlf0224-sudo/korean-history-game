@@ -469,7 +469,7 @@
 </div>
 
 <script src="assets/map/map_component.js?v=7"></script>
-<script src="assets/audio.js?v=15"></script>
+<script src="assets/audio.js?v=16"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -481,7 +481,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=15';   // 연출·달리기
+const ART_V = '?v=16';   // 새 구역·이벤트
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -587,6 +587,59 @@ const ZONES = {
       { id:'sp_gimiseoneo', x:520, y:80, item:'gimiseoneon', label:'북쪽 끝' },
       { id:'sp_taegeukgi', x:864, y:80, item:'taegeukgi', label:'북쪽 끝' },
     ],
+    exits: [],
+  },
+  /* 서대문형무소 옥사. 1908년 문을 열 때 정원이 500명이었는데, 1919년 3·1 운동
+     뒤에는 3,075명이 갇혔다. 감방 한 평에 네 명 꼴이었다.
+     붉은 벽돌로 짓고, 가운데 중앙사에서 옥사가 뻗어 한 곳에서 다 감시했다.
+
+     여기서 탈옥은 만들지 않았다. 실제로 없던 일이고, 지어내면 그 자리를
+     가볍게 만든다. 나가는 길은 이 게임의 설정 그대로다 — 그대는 이 시대의
+     사람이 아니다. 갇힌 이들의 이야기를 다 듣고 나면, 그대만 빠져나간다. */
+  seodaemun: {
+    img: 'assets/scenes/ilje_seodaemun.png', label: '서대문형무소',
+    // 첫 수감자가 (331,423)에 서 있다. 같은 자리에 떨어지면 인물에 밀려
+    // 시작부터 끼인다 — 한 칸 앞(복도 서쪽 끝)에 내려놓는다.
+    spawn: { x: 253, y: 442 },
+    barriers: [
+      { x0:0, y0:0, x1:214, y1:768 },
+      { x0:1150, y0:0, x1:1376, y1:768 },
+      { x0:214, y0:0, x1:292, y1:364 },
+      { x0:214, y0:520, x1:292, y1:768 },
+      { x0:292, y0:0, x1:370, y1:345 },
+      { x0:292, y0:501, x1:370, y1:768 },
+      { x0:370, y0:0, x1:448, y1:326 },
+      { x0:370, y0:482, x1:448, y1:768 },
+      { x0:448, y0:0, x1:526, y1:306 },
+      { x0:448, y0:462, x1:526, y1:768 },
+      { x0:526, y0:0, x1:604, y1:287 },
+      { x0:526, y0:443, x1:604, y1:768 },
+      { x0:604, y0:0, x1:682, y1:268 },
+      { x0:604, y0:424, x1:682, y1:768 },
+      { x0:682, y0:0, x1:760, y1:249 },
+      { x0:682, y0:405, x1:760, y1:768 },
+      { x0:760, y0:0, x1:838, y1:230 },
+      { x0:760, y0:386, x1:838, y1:768 },
+      { x0:838, y0:0, x1:916, y1:211 },
+      { x0:838, y0:367, x1:916, y1:768 },
+      { x0:916, y0:0, x1:994, y1:191 },
+      { x0:916, y0:347, x1:994, y1:768 },
+      { x0:994, y0:0, x1:1072, y1:172 },
+      { x0:994, y0:328, x1:1072, y1:768 },
+      { x0:1072, y0:0, x1:1150, y1:153 },
+      { x0:1072, y0:309, x1:1150, y1:768 },
+    ],
+    npcs: [
+      { id:'suin1', name:'옆방 사내', x:331, y:423,
+        img:'assets/portraits/suin_nam.png', look:{ role:'commoner', body:'#d8d2c2', accent:'#7a7264' } },
+      { id:'suin2', name:'맞은편 여인', x:565, y:365,
+        img:'assets/portraits/suin_yeo.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#7a7264' } },
+      { id:'suin3', name:'끝방 노인', x:799, y:308,
+        img:'assets/portraits/suin_nam.png', look:{ role:'commoner', body:'#cfc8b8', accent:'#6b6458' } },
+      { id:'ganso', name:'간수', x:1033, y:250,
+        img:'assets/portraits/heonbyeong.png', look:{ role:'general', body:'#2a2a34', accent:'#8a8a96' } },
+    ],
+    spots: [],
     exits: [],
   },
 };
@@ -1145,6 +1198,63 @@ const NPC_DATA = {
         feedback:['대종교는 단군을 받드는 종교로, 나철이 창시하고 만주에서 중광단 등 무장 투쟁을 뒷받침했어요.','정답! 천도교입니다. 동학 농민 운동 이후 3대 교주 손병희가 이름을 천도교로 바꿨어요.'] },
     ]
   },
+  suin1_0: {
+    name: '옆방 사내', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18M9 3v18M14 3v18M19 3v18"/></svg>', img: 'assets/portraits/suin_nam.png',
+    beats: [
+      { who:'npc', t:'…새로 들어왔구려. 앉으시오. 앉을 자리는 없지만.' },
+      { who:'npc', t:'이 방이 한 평 남짓이오. 여기 넷이 있소. 누우면 서로 발이 얼굴에 닿소.' },
+      { who:'npc', t:'나는 만세를 불렀다는 죄로 잡혀 왔소. 재판이랄 것도 없었소. 헌병이 그 자리에서 매를 치라 하면 그것으로 끝이오.' },
+      { who:'npc', t:'조선 사람에게만 그러하오. 일본 사람은 매를 맞지 않소. 법에 그리 적어 두었소.' },
+    ],
+    quizSeq: [
+      { q:'1912년 일제가 만들어 조선인에게만 적용한, 죄인을 매로 치던 법령은?',
+        opts:['조선 태형령','회사령'], answer:0, src:[65, 71],
+        feedback:['회사령은 회사를 세울 때 총독의 허가를 받게 한 법이에요. 매질과는 다릅니다.','정답! 조선 태형령입니다. 조선인에게만 적용해 재판 없이 매를 칠 수 있게 했어요.'] },
+    ]
+  },
+
+  suin2_0: {
+    name: '맞은편 여인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18M9 3v18M14 3v18M19 3v18"/></svg>', img: 'assets/portraits/suin_yeo.png',
+    beats: [
+      { who:'npc', t:'울지 마시오. 여기서 울면 저들이 좋아하오.' },
+      { who:'npc', t:'이 옥은 본디 오백을 넣으려 지었다 하오. 지금은 삼천이 넘게 있소. 만세 뒤로 이리되었소.' },
+      { who:'npc', t:'그래도 저들이 겁을 먹은 것이오. 온 조선이 한꺼번에 일어섰으니.' },
+      { who:'npc', t:'들리는 말로는 총독이 바뀐다 하오. 칼을 앞세우던 것을 거두고, 부드러운 낯을 지어 보이겠다는 게지요.' },
+      { who:'npc', t:'…낯만 바뀌는 것이오. 속은 그대로일 것이오.' },
+    ],
+    quizSeq: [
+      { q:'3·1 운동 이후 일제가 내세운 통치 방식은?',
+        opts:['문화 통치','무단 통치'], answer:0, src:[10, 21, 34, 45],
+        feedback:['무단 통치는 3·1 운동 **이전** 1910년대의 방식이에요.','정답! 문화 통치입니다. 헌병경찰을 보통경찰로 바꾸는 등 겉모습만 고쳤을 뿐, 감시는 오히려 촘촘해졌어요.'] },
+    ]
+  },
+
+  suin3_0: {
+    name: '끝방 노인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18M9 3v18M14 3v18M19 3v18"/></svg>', img: 'assets/portraits/suin_nam.png',
+    beats: [
+      { who:'npc', t:'나는 만세를 부른 것이 아니오. 땅 때문에 왔소.' },
+      { who:'npc', t:'몇 해 전 관에서 땅을 신고하라 했소. 기한이 짧고 절차가 까다로웠소. 글을 모르는 이가 태반인데 어찌 다 하겠소.' },
+      { who:'npc', t:'신고 못 한 땅은 나라가 가져갔소. 조상 대대로 부치던 논이 하루아침에 남의 것이 되었소.' },
+      { who:'npc', t:'따졌더니 여기로 왔소. …그대는 나가거든, 이 일을 기억이나 해 주시오.' },
+    ],
+    quizSeq: [
+      { q:'일제가 1910년대에 벌여 많은 조선 농민이 땅을 잃는 결과를 낳은 사업은?',
+        opts:['토지 조사 사업','산미 증식 계획'], answer:0, src:[10, 13, 17, 22, 27, 77, 78],
+        feedback:['산미 증식 계획은 1920년대에 쌀 생산을 늘려 일본으로 가져가려 한 정책이에요.','정답! 토지 조사 사업입니다. 기한부 신고제라 신고하지 못한 땅을 총독부가 차지했어요.'] },
+    ]
+  },
+
+  ganso_0: {
+    name: '간수', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>', img: 'assets/portraits/heonbyeong.png',
+    beats: [
+      { who:'npc', t:'떠들지 마라.' },
+      { who:'npc', t:'…이름이 뭐라고 했나. 명부에 없군. 어제 들어온 자 중에 네 이름이 없어.' },
+      { who:'npc', t:'(그가 명부를 다시 넘긴다. 몇 번을 넘겨도 그대의 이름은 없다.)' },
+      { who:'npc', t:'…이상한 일이군. 여기 없는 사람이 여기 있을 수는 없는데.' },
+    ],
+    quizSeq: []
+  },
+
   siwon1_0: {
     name: '만세 시위 시민', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4a2 2 0 0 0 2 2h1l10 5V5L6 8H5a2 2 0 0 0-2 2z"/><path d="M17 9a4 4 0 0 1 0 6"/><path d="M8 16v3a2 2 0 0 0 4 0v-1"/></svg>', img: 'assets/portraits/siwon1.png',
     beats: [
@@ -1592,6 +1702,8 @@ const Dialog = {
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
     // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
     if (window.News) News.fire(this.key);
+    // 갇힌 이의 이야기를 다 들었는지 세어 둔다 — 셋을 다 들어야 나갈 수 있다
+    if (window.Manse && this.npc) Manse.heardFrom(this.npc.id);
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
@@ -1701,6 +1813,17 @@ function drawMinimap(){
   miniCtx.stroke();
 }
 
+/* 걸어서 가는 것이 아니라 끌려가거나 빠져나오는 것이라, 출구를 쓰지 않고
+   바로 옮긴다. 화면은 잠깐 어두워졌다 밝아진다. */
+function warpTo(zone, x, y){
+  if (!ZONES[zone]) return;
+  World.zone = zone;
+  World.px = x; World.py = y;
+  World.stick.dx = 0; World.stick.dy = 0;
+  if (window.BGM && ZONE_BGM) BGM.play(ZONE_BGM[zone] || ZONE_BGM.default);
+  if (window.Fx) Fx.punch(.05, 420);
+}
+
 function loop(t){
   if (!World.lastT) World.lastT = t;
   const dt = Math.min(0.05, (t - World.lastT) / 1000);
@@ -1713,39 +1836,46 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  // 만세를 부를 자리인지, 나갈 때가 되었는지 살핀다
+  if (window.Manse) Manse.tick(World.zone, {
+    squareZone: 'tapgol', jailZone: 'seodaemun',
+    onJail: () => warpTo('seodaemun', 253, 442),
+    onOut:  () => warpTo('tapgol', 688, 470),
+  });
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=15"></script>
-<script src="assets/streak.js?v=15"></script>
+<script src="assets/badges.js?v=16"></script>
+<script src="assets/streak.js?v=16"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=15"></script>
-  <script src="assets/fx.js?v=15"></script>
-  <script src="assets/dash.js?v=15"></script>
-<script src="assets/juice.js?v=15"></script>
-  <script src="assets/difficulty.js?v=15"></script>
-<script src="assets/heroes_data.js?v=15"></script>
-<script src="assets/heroes.js?v=15"></script>
-<script src="assets/icons.js?v=15"></script>
-<script src="assets/srs.js?v=15"></script>
-<script src="assets/newsflash.js?v=15"></script>
-<script src="assets/timeline.js?v=15"></script>
-<script src="assets/journey.js?v=15"></script>
-<script src="assets/season.js?v=15"></script>
-<script src="assets/items.js?v=15"></script>
-  <script src="assets/gold.js?v=15"></script>
-  <script src="assets/ads.js?v=15"></script>
-  <script src="assets/energy.js?v=15"></script>
-  <script src="assets/daily.js?v=15"></script>
-  <script src="assets/unlock.js?v=15"></script>
-  <script src="assets/guide.js?v=15"></script>
-  <script src="assets/minigames.js?v=15"></script>
-  <script src="assets/quests.js?v=15"></script>
-  <script src="assets/offline.js?v=15"></script>
-  <script src="assets/telemetry.js?v=15"></script>
-<script src="assets/autowalk.js?v=15"></script>
+<script src="assets/rank.js?v=16"></script>
+  <script src="assets/fx.js?v=16"></script>
+  <script src="assets/manse.js?v=16"></script>
+  <script src="assets/dash.js?v=16"></script>
+<script src="assets/juice.js?v=16"></script>
+  <script src="assets/difficulty.js?v=16"></script>
+<script src="assets/heroes_data.js?v=16"></script>
+<script src="assets/heroes.js?v=16"></script>
+<script src="assets/icons.js?v=16"></script>
+<script src="assets/srs.js?v=16"></script>
+<script src="assets/newsflash.js?v=16"></script>
+<script src="assets/timeline.js?v=16"></script>
+<script src="assets/journey.js?v=16"></script>
+<script src="assets/season.js?v=16"></script>
+<script src="assets/items.js?v=16"></script>
+  <script src="assets/gold.js?v=16"></script>
+  <script src="assets/ads.js?v=16"></script>
+  <script src="assets/energy.js?v=16"></script>
+  <script src="assets/daily.js?v=16"></script>
+  <script src="assets/unlock.js?v=16"></script>
+  <script src="assets/guide.js?v=16"></script>
+  <script src="assets/minigames.js?v=16"></script>
+  <script src="assets/quests.js?v=16"></script>
+  <script src="assets/offline.js?v=16"></script>
+  <script src="assets/telemetry.js?v=16"></script>
+<script src="assets/autowalk.js?v=16"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
