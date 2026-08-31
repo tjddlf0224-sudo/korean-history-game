@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
 """주인공 걷기 사이클 시트(4행x3열) 크롭 + 배경 투명화.
 
-행: 아래/위/왼쪽/오른쪽. AI가 좌우를 구분 못 그려서 '왼쪽' 행만 쓰고
-오른쪽은 좌우 반전으로 직접 생성한다.
+행: 아래/위/옆모습. AI가 좌우를 구분 못 그려서 옆모습 한 행만 쓰고
+반대쪽은 좌우 반전으로 만든다.
 
-┌─ 좌우를 건드리지 마라 ────────────────────────────────────────────┐
-│ 이 규칙(row2=left 원본, right=반전)은 **맞다.** 원본 시트          │
-│ player_sheet_raw.png의 옆모습 행은 실제로 왼쪽을 보고 있다.        │
-│ 눈으로 확인하려면:                                                 │
-│   python3 -c "from PIL import Image; im=Image.open(                │
-│     'player_sheet_raw.png'); W,H=im.size;                          │
-│     im.crop((W//3,H//2,2*W//3,3*H//4)).show()"                     │
+┌─ 좌우 — 눈대중하지 말고 재라 ──────────────────────────────────────┐
+│ 원본 시트 player_sheet_raw.png의 옆모습 행은 **오른쪽을 본다.**    │
+│ 그래서 그 행을 right로 삼고, left는 좌우반전으로 만든다.           │
 │                                                                    │
-│ 2026-08-31, 이걸 확인 안 하고 '뒤집혀 있다'고 넘겨짚어 left/right  │
-│ 파일을 통째로 맞바꾼 적이 있다(커밋 19a2cfc, 곧바로 되돌림).       │
-│ 지도에서 걷는 방향이 36개 챕터 전부에서 반대가 됐다.               │
-│ 방향이 이상해 보이면 파일을 바꾸기 전에 **위 명령으로 원본을 먼저  │
-│ 보라.** 대개 범인은 스프라이트가 아니라 브라우저 캐시다            │
-│ (그럴 땐 챕터의 ART_V를 올린다).                                   │
+│ 눈으로 보고 판단하지 말 것 — 치비 그림이라 작게 보면 어느 쪽인지   │
+│ 사람 눈에도 잘 안 잡힌다(실제로 두 번 틀렸다). 이렇게 재라:        │
+│   얼굴(살색) 픽셀의 가로 중심이 몸통 중심보다 오른쪽이면 오른쪽을  │
+│   보는 것이다. 아래 한 줄로 확인된다.                              │
+│                                                                    │
+│   python3 -c "from PIL import Image; import numpy as np;           │
+│     a=np.array(Image.open('right_1.png').convert('RGBA'));         │
+│     al=a[...,3]; r,g,b=a[...,0].astype(int),a[...,1].astype(int),  │
+│     a[...,2].astype(int); ys,xs=np.where(al>100);                  │
+│     h=np.zeros_like(al,bool); h[ys.min():ys.min()+                 │
+│     int((ys.max()-ys.min())*.45), xs.min():xs.max()+1]=True;       │
+│     s=(al>100)&h&(r>170)&(g>120)&(b>100)&(r>b+18)&(r>g+8);         │
+│     print(np.where(s)[1].mean()-(xs.min()+xs.max())/2)"            │
+│                                                                    │
+│ 2026-08-31: 예전에는 파일 이름이 그림과 반대여서, 챕터마다         │
+│ DIR_SRC로 좌우를 바꿔치기해 보정했다. 그 보정을 모르는 boss.js에서 │
+│ 주인공이 보스 반대쪽을 보는 버그가 났다. 이제 이름과 그림이 같고   │
+│ 보정도 없앴으니, **파일을 다시 뽑을 때 이 규칙을 지켜라.**         │
 └────────────────────────────────────────────────────────────────────┘
 
 배경색은 옷 색과 가장 먼 것을 골라야 한다. 마젠타 배경에 홍색 관복을 놓으면
@@ -39,7 +47,7 @@ import numpy as np
 
 COLS, ROWS = 3, 4
 PAD = 14
-DIRS = ['down', 'up', 'left']   # row0=down, row1=up, row2=left(캐노니컬), row3은 버림
+DIRS = ['down', 'up', 'right']  # row0=down, row1=up, row2=옆모습(오른쪽을 봄), row3은 버림
 
 # 배경색별 키 값. thresh는 "이 색에서 이만큼 떨어지면 전경"으로 보는 거리.
 BGS = {
@@ -108,9 +116,9 @@ def main():
             print(f'{name} {out.size} 전경 {filled*100:.1f}%{warn}')
 
     for col in range(COLS):
-        right = frames[f'left_{col}'].transpose(Image.FLIP_LEFT_RIGHT)
-        right.save(os.path.join(a.out, f'right_{col}.png'))
-        print(f'right_{col} {right.size} (좌우반전)')
+        left = frames[f'right_{col}'].transpose(Image.FLIP_LEFT_RIGHT)
+        left.save(os.path.join(a.out, f'left_{col}.png'))
+        print(f'left_{col} {left.size} (좌우반전)')
 
 
 if __name__ == '__main__':
