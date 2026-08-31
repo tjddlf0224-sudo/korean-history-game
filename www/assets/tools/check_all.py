@@ -81,6 +81,41 @@ def check_quiz_src(f, s):
     return withsrc - empty
 
 
+def check_portrait_era(all_files):
+    """한 초상이 서로 다른 시대의 인물에게 쓰였는지.
+
+    노는 초상을 돌려 쓰다 실제로 사고를 냈다 — 선사시대 털가죽을 입은 인물이
+    1894년 동학 접주로, 조선 사모·단령을 쓴 인물이 고려 관리로 서 있었다.
+    복식은 시대가 다르면 통째로 다르므로, 시대를 넘나드는 재사용은 일단 잡는다.
+
+    시대 구분은 journey.js(챕터 목록과 같은 구분)를 그대로 쓴다.
+    """
+    jp = os.path.join(HERE, '..', 'journey.js')
+    if not os.path.exists(jp):
+        return
+    j = open(jp, encoding='utf-8').read()
+    era_of = {}
+    for m in re.finditer(r"name:'([^']+)'[\s\S]*?chapters:\[([^\]]*)\]", j):
+        for ch in re.findall(r"'([^']+)'", m.group(2)):
+            era_of[ch] = m.group(1)
+
+    use = {}
+    for f, s in all_files:
+        z = re.search(r'const ZONES\s*=\s*\{[\s\S]*?\n\};', s)
+        if not z:
+            continue
+        for m in re.finditer(
+                r"\{\s*id:\s*'\w+',\s*name:\s*'([^']*)'[^}]*?img:\s*'assets/portraits/([\w.\-]+)'",
+                z.group(0)):
+            use.setdefault(m.group(2), []).append((era_of.get(f, '?'), f, m.group(1)))
+
+    for p, rows in sorted(use.items()):
+        eras = {r[0] for r in rows if r[0] != '?'}
+        if len(eras) > 1:
+            who = ' / '.join(f'{e} {n}' for e, _, n in rows)
+            warns.append(f'{p}  한 초상이 여러 시대에 쓰임 — {who}')
+
+
 def check_dup_questions(f, s):
     """한 챕터 안에서 **서로 다른 인물**이 똑같은 질문을 하는지.
 
@@ -186,6 +221,7 @@ def main():
         check_alt_speaker_portrait(f, s)
         allmiss |= set(check_assets(f, s))
         used |= set(re.findall(r"assets/scenes/[\w.\-]+\.png", s))
+    check_portrait_era(chs)
     idx = open(os.path.join(WWW, 'index.html'), encoding='utf-8').read()
     used |= set(re.findall(r"assets/scenes/[\w.\-]+\.png", idx))
     check_unused_scenes(used)

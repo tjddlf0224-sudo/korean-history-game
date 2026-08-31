@@ -508,7 +508,7 @@ const ZONES = {
       // 아니다. 대사 내용도 인종·명종 교체와 문정왕후 수렴청정 같은 궁중 소식이라
       // 궁녀가 훨씬 자연스럽다(초상 gungnyeo.png는 여태 안 쓰이고 있었다).
       { id: 'commoner1', name: '나인', x: 480, y: 380, img: 'assets/portraits/gungnyeo.png', look: { role: 'commoner', body: '#4a4a58', accent: '#8a7a5a' } },
-      { id:'yeonsangun', name:'연산군', x:240, y:280, img:'assets/portraits/yeonsangun_king.png', look:{ role:'king', body:'#5c2f2f', accent:'#e0b94a' } },
+      { id:'yeonsangun', name:'연산군', x:240, y:280, look:{ role:'king', body:'#5c2f2f', accent:'#e0b94a' } },
     ],
     exits: [
       { rect:{x0:0,y0:340,x1:60,y1:460}, to:'sago', spawn:{x:1290,y:390}, label:'사초 사고로' },
@@ -546,7 +546,7 @@ const ZONES = {
     ], // 초가집
     npcs: [
       { id: 'jogwangjo', name: '조광조', x: 900, y: 600, img: 'assets/portraits/jogwangjo.png', look: { role: 'scholar', body: '#3a5040', accent: '#c9a24a' } },
-      { id:'jungjong', name:'중종', x:640, y:600, img:'assets/portraits/jungjong_king.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
+      { id:'jungjong', name:'중종', x:640, y:600, look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
     ],
     exits: [ { rect:{x0:625,y0:665,x1:750,y1:760}, to:'pokjeong', spawn:{x:1300,y:400}, label:'궁궐로' } ],
   },

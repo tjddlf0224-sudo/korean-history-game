@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 191명 */
+   인물 190명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -45,11 +45,11 @@ window.HERO_DATA = (function(){
     extra_munsin: { n:'경시서 관리', p:'extra_munsin.png', e:'고려', r:'scholar', ch:{'byeokrando.html':['gyeongsiseo_0'], 'ch1.html':['daegan_0'], 'ch2.html':['haksa_0'], 'ch5b.html':['yusaeng_0'], 'imjin2.html':['bibyeonsa_0']} },
     sukjong_goryeo_king: { n:'고려 숙종', p:'sukjong_goryeo_king.png', e:'고려', r:'king', ch:{'byeokrando.html':['sukjong_0']} },
     gongmin: { n:'공민왕', p:'gongmin.png', e:'고려', r:'king', ch:{'goryeo3.html':['gongmin_0','gongmin_1']} },
+    sambyeolcho: { n:'광군 군사', p:'sambyeolcho.png', e:'고려', r:'general', ch:{'goryeo1.html':['gwanggun_0'], 'goryeo2.html':['sambyeolcho_0']} },
     gwangjong: { n:'광종', p:'gwangjong.png', e:'고려', r:'king', ch:{'goryeo1.html':['gwangjong_0']} },
     gimbusik: { n:'김부식', p:'gimbusik.png', e:'고려', r:'scholar', ch:{'goryeo2.html':['gimbusik_0']} },
     arabsang: { n:'대식국 상인', p:'arabsang.png', e:'고려', r:'commoner', ch:{'byeokrando.html':['arabsang_0']} },
     myocheong: { n:'묘청', p:'myocheong.png', e:'고려', r:'scholar', ch:{'goryeo2.html':['myocheong_0']} },
-    sambyeolcho: { n:'삼별초 장수', p:'sambyeolcho.png', e:'고려', r:'general', ch:{'goryeo2.html':['sambyeolcho_0']} },
     seohui: { n:'서희', p:'seohui.png', e:'고려', r:'scholar', ch:{'goryeo2.html':['seohui_0']} },
     songsang: { n:'송 상인', p:'songsang.png', e:'고려', r:'commoner', ch:{'byeokrando.html':['songsang_0']} },
     yejong_king: { n:'예종', p:'yejong_king.png', e:'고려', r:'king', ch:{'goryeo1.html':['yejong_0']} },
@@ -73,7 +73,7 @@ window.HERO_DATA = (function(){
     danjong: { n:'노산군', p:'danjong.png', e:'조선 전기', r:'commoner', ch:{'ch3.html':['danjong_0']} },
     gunjol: { n:'늙은 군졸', p:'gunjol.png', e:'조선 전기', r:'commoner', ch:{'ch6.html':['gunjol_0']} },
     naesi: { n:'늙은 내관', p:'naesi.png', e:'조선 전기', r:'commoner', ch:{'ch3.html':['attendant_0']} },
-    nonong: { n:'늙은 농부', p:'nonong.png', e:'조선 전기', r:'commoner', ch:{'ch2b.html':['nonong_0']} },
+    nonong: { n:'늙은 농부', p:'nonong.png', e:'조선 전기', r:'commoner', ch:{'ch2b.html':['nonong_0'], 'gaehang4.html':['jeopju_0']} },
     bakyeon: { n:'박연', p:'bakyeon.png', e:'조선 전기', r:'scholar', ch:{'ch2.html':['bakyeon_0']} },
     suryeong: { n:'사또', p:'suryeong.png', e:'조선 전기', r:'king', ch:{'ch4.html':['suryeong_0']} },
     seogeojeong: { n:'서거정', p:'seogeojeong.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['seogeojeong_0','seogeojeong_1','seogeojeong_2']} },
@@ -87,7 +87,7 @@ window.HERO_DATA = (function(){
     yeonsangun_king: { n:'연산군', p:'yeonsangun_king.png', e:'조선 전기', r:'king', ch:{'ch5.html':['yeonsangun_0']} },
     yusaeng: { n:'유생', p:'yusaeng.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['yusaeng_0']} },
     yiyi: { n:'이이', p:'yiyi.png', e:'조선 전기', r:'scholar', ch:{'ch6.html':['yiyi_0']} },
-    extra_musin: { n:'이종무', p:'extra_musin.png', e:'조선 전기', r:'general', ch:{'ch2b.html':['ijongmu_0'], 'goryeo1.html':['gwanggun_0']} },
+    extra_musin: { n:'이종무', p:'extra_musin.png', e:'조선 전기', r:'general', ch:{'ch2b.html':['ijongmu_0']} },
     yihwang: { n:'이황', p:'yihwang.png', e:'조선 전기', r:'scholar', ch:{'ch5b.html':['yihwang_0','yihwang_repeat']} },
     commoner1: { n:'인부', p:'commoner1.png', e:'조선 전기', r:'commoner', ch:{'ch0.html':['worker_0']} },
     jangyeongsil: { n:'장영실', p:'jangyeongsil.png', e:'조선 전기', r:'scholar', ch:{'ch2.html':['jangyeongsil_0']} },
@@ -102,7 +102,7 @@ window.HERO_DATA = (function(){
     choeyundeok: { n:'최윤덕', p:'choeyundeok.png', e:'조선 전기', r:'general', ch:{'ch2b.html':['choeyundeok_0']} },
     taejo_yi_king: { n:'태조 이성계', p:'taejo_yi_king.png', e:'조선 전기', r:'king', ch:{'ch0.html':['taejo_0']} },
     taejong: { n:'태종', p:'taejong.png', e:'조선 전기', r:'king', ch:{'ch1.html':['taejong_0','taejong_1','taejong_2']} },
-    hyangni: { n:'호방', p:'hyangni.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['hyangni_0','hyangni_bond']} },
+    hyangni: { n:'호방', p:'hyangni.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['hyangni_0','hyangni_bond'], 'goryeo1.html':['hyangni_0']} },
     hwangyungil: { n:'황윤길', p:'hwangyungil.png', e:'조선 전기', r:'scholar', ch:{'ch6.html':['hwangyungil_0']} },
     hundo: { n:'훈도', p:'hundo.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['hundo_0']} },
     gwakjaeu: { n:'곽재우', p:'gwakjaeu.png', e:'조선 후기', r:'general', ch:{'imjin2.html':['gwakjaeu_0']} },
@@ -133,7 +133,7 @@ window.HERO_DATA = (function(){
     hongyeong: { n:'홍경래', p:'hongyeong.png', e:'조선 후기', r:'general', ch:{'hugi3.html':['hongyeong_0']} },
     hongdaeyong: { n:'홍대용', p:'hongdaeyong.png', e:'조선 후기', r:'scholar', ch:{'hugi2.html':['hongdaeyong_0']} },
     hyojong: { n:'효종', p:'hyojong.png', e:'조선 후기', r:'king', ch:{'hugi1.html':['hyojong_0']} },
-    hullyeon: { n:'훈련도감 포수', p:'hullyeon.png', e:'조선 후기', r:'general', ch:{'hugi1.html':['hullyeon_0']} },
+    hullyeon: { n:'훈련도감 포수', p:'hullyeon.png', e:'조선 후기', r:'general', ch:{'hugi1.html':['hullyeon_0'], 'imjin2.html':['hullyeon_0']} },
     gaehwa: { n:'개화파 관원', p:'gaehwa.png', e:'근대·개항기', r:'scholar', ch:{'gaehang1.html':['gaehwa_0']} },
     extra_gungnyeo: { n:'경복궁 궁녀', p:'extra_gungnyeo.png', e:'근대·개항기', r:'commoner', ch:{'gaehang4.html':['gungnyeo_0']} },
     gojong_king: { n:'고종', p:'gojong_king.png', e:'근대·개항기', r:'king', ch:{'gaehang_ch2.html':['gojong_0']} },
@@ -143,9 +143,8 @@ window.HERO_DATA = (function(){
     kimhongjip: { n:'김홍집', p:null, e:'근대·개항기', r:'scholar', ch:{'gaehang1.html':['kimhongjip_0']} },
     maeil: { n:'대한매일신보 기자', p:'maeil.png', e:'근대·개항기', r:'scholar', ch:{'gaehang5.html':['maeil_0']} },
     seojaepil: { n:'독립협회 회원', p:'seojaepil.png', e:'근대·개항기', r:'scholar', ch:{'gaehang5.html':['seojaepil_0'], 'gaehang_ch3.html':['seojaepil_0']} },
-    extra_chonjang: { n:'동학 접주', p:'extra_chonjang.png', e:'근대·개항기', r:'commoner', ch:{'gaehang4.html':['jeopju_0'], 'goryeo1.html':['hyangni_0']} },
     muwiyeong_soldier: { n:'무위영 병사', p:'muwiyeong_soldier.png', e:'근대·개항기', r:'general', ch:{'gaehang_ch2.html':['soldier_0']} },
-    extra_gunsa: { n:'별기군 교련병', p:'extra_gunsa.png', e:'근대·개항기', r:'general', ch:{'gaehang_ch2.html':['byeolgigun_0'], 'gaehang_ch3.html':['cheonggun_0'], 'imjin.html':['dongnae_0'], 'imjin2.html':['hullyeon_0']} },
+    extra_gunsa: { n:'별기군 교련병', p:'extra_gunsa.png', e:'근대·개항기', r:'general', ch:{'gaehang_ch2.html':['byeolgigun_0'], 'gaehang_ch3.html':['cheonggun_0'], 'imjin.html':['dongnae_0']} },
     sinminhoe: { n:'신민회 회원', p:'sinminhoe.png', e:'근대·개항기', r:'scholar', ch:{'gaehang5.html':['sinminhoe_0']} },
     yangheonsu: { n:'양헌수', p:'yangheonsu.png', e:'근대·개항기', r:'general', ch:{'gaehang1.html':['yangheonsu_0']} },
     eojaeyeon: { n:'어재연', p:'eojaeyeon.png', e:'근대·개항기', r:'general', ch:{'gaehang1.html':['eojaeyeon_0']} },

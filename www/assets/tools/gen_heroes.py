@@ -43,6 +43,18 @@ def main():
                 r"\{\s*id:\s*'(\w+)',\s*name:\s*'([^']+)'((?:(?!\},).)*)\}", s, re.S):
             m = re.search(r"img:\s*'([^']+)'", rest)
             img = m.group(1) if m else None
+            # 지도에 초상을 안 쓰는 인물도 있다 — 반신 초상은 지도에서 머리만
+            # 떠 보여서 img를 빼고 실루엣으로 그리기 때문이다(대화창에는 그대로
+            # 뜬다). 그럴 때는 NPC_DATA 쪽 초상을 가져온다.
+            if not img:
+                # 블록 안에서만 찾는다. 다음 인물까지 넘어가면 엉뚱한 얼굴이
+                # 붙는다 — 실제로 김홍집에게 최익현 초상이 붙었다.
+                bm = re.search(r"^  %s_\w+:\s*\{([\s\S]*?)(?=\n  \w+:\s*\{|\n\};)"
+                               % re.escape(nid), s, re.M)
+                if bm:
+                    dm = re.search(r"img:\s*'([^']+)'", bm.group(1))
+                    if dm:
+                        img = dm.group(1)
             rm = re.search(r"role:\s*'(\w+)'", rest)
             role = rm.group(1) if rm else 'commoner'
             key = os.path.splitext(os.path.basename(img))[0] if img else nid
