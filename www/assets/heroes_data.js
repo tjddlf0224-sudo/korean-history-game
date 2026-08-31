@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 184명 */
+   인물 185명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -42,7 +42,7 @@ window.HERO_DATA = (function(){
     minjeong: { n:'촌주', p:'minjeong.png', e:'고대', r:'commoner', ch:{'godae2.html':['minjeong_0']} },
     choechiwon: { n:'최치원', p:'choechiwon.png', e:'고대', r:'scholar', ch:{'godae3.html':['choechiwon_0']} },
     hwarang: { n:'화랑', p:'hwarang.png', e:'고대', r:'general', ch:{'godae1.html':['hwarang_0']} },
-    extra_munsin: { n:'경시서 관리', p:'extra_munsin.png', e:'고려', r:'scholar', ch:{'byeokrando.html':['gyeongsiseo_0'], 'ch1.html':['daegan_0'], 'imjin2.html':['bibyeonsa_0']} },
+    extra_munsin: { n:'경시서 관리', p:'extra_munsin.png', e:'고려', r:'scholar', ch:{'byeokrando.html':['gyeongsiseo_0'], 'ch1.html':['daegan_0'], 'ch2.html':['haksa_0'], 'imjin2.html':['bibyeonsa_0']} },
     sukjong_goryeo_king: { n:'고려 숙종', p:'sukjong_goryeo_king.png', e:'고려', r:'king', ch:{'byeokrando.html':['sukjong_0']} },
     gongmin: { n:'공민왕', p:'gongmin.png', e:'고려', r:'king', ch:{'goryeo3.html':['gongmin_0','gongmin_1']} },
     extra_musin: { n:'광군 군사', p:'extra_musin.png', e:'고려', r:'general', ch:{'goryeo1.html':['gwanggun_0']} },
@@ -78,6 +78,7 @@ window.HERO_DATA = (function(){
     suryeong: { n:'사또', p:'suryeong.png', e:'조선 전기', r:'king', ch:{'ch4.html':['suryeong_0']} },
     seogeojeong: { n:'서거정', p:'seogeojeong.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['seogeojeong_0','seogeojeong_1','seogeojeong_2']} },
     seonjo: { n:'선조', p:'seonjo.png', e:'조선 전기', r:'king', ch:{'ch6.html':['seonjo_0']} },
+    seongsammun: { n:'성삼문', p:'seongsammun.png', e:'조선 전기', r:'scholar', ch:{'ch2.html':['seongsammun_0']} },
     seongjong: { n:'성종', p:'seongjong.png', e:'조선 전기', r:'king', ch:{'ch4.html':['seongjong_0','seongjong_1']} },
     sejo: { n:'세조', p:'sejo.png', e:'조선 전기', r:'king', ch:{'ch3.html':['sejo_0','sejo_1','sejo_2']} },
     sejong: { n:'세종', p:'sejong.png', e:'조선 전기', r:'king', ch:{'ch2.html':['sejong_0','sejong_1','sejong_2','sejong_3']} },

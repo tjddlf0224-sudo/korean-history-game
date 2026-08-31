@@ -586,6 +586,8 @@ const ZONES = {
     npcs: [
       { id: 'sejong', name: '세종', x: 590, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
       { id: 'sinsukju', name: '신숙주', x: 790, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
+      { id:'seongsammun', name:'성삼문', x:1032, y:480, img:'assets/portraits/seongsammun.png', look:{ role:'scholar', body:'#3d4a5a', accent:'#c9a24a' } },
+      { id:'haksa', name:'집현전 학사', x:336, y:440, img:'assets/portraits/extra_munsin.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 세종만 네 번 연달아 만나면
     // 같은 형식이 반복돼 지루해진다는 지적이 있었다.
@@ -1167,6 +1169,61 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============
    beats 항목에 name/icon을 개별로 주면 그 줄만 다른 화자로 표시된다(최만리 논쟁 장면용 확장). */
 const NPC_DATA = {
+  haksa_0: {
+    name: '집현전 학사', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>', img: 'assets/portraits/extra_munsin.png',
+    beats: [
+      { who:'npc', t:'여기는 사서를 엮는 자리입니다. 손이 모자라 눈이 벌겋지요.' },
+      { who:'npc', t:'앞선 왕조의 역사를 정리하라는 명이 있었습니다. 전하 대에 시작해 문종 대에 이르러서야 겨우 마쳤지요.' },
+      { who:'npc', t:'지도도 여기 있습니다. 태종 대에 김사형·이무 등이 만든 것인데, 이 땅뿐 아니라 서쪽 끝까지 그려 넣었습니다.' },
+      { who:'npc', t:'…세상이 이만큼 넓다는 것을 알고 나면, 우리가 어디쯤 서 있는지도 달리 보이지요.' },
+    ],
+    quizSeq: [
+      { q:'세종 대에 편찬을 시작해 문종 대에 완성된, 앞선 왕조의 역사를 정리한 역사서는?', opts:['고려사','삼국사기'], answer:0, src:[16,52,67,70],
+        feedback:['삼국사기는 고려 인종 대에 김부식이 편찬한 역사서예요.','정답! 고려사입니다. 조선 건국의 정당성을 밝히는 관점에서 고려의 역사를 정리했어요.'] },
+      { q:'태종 때 김사형·이무 등이 만들어, 현재 남아 있는 동양 최고(最古)의 세계지도로 꼽히는 것은?',
+        opts:['혼일강리역대국도지도','대동여지도'], answer:0, src:[14,10],
+        feedback:['대동여지도는 훗날 조선 후기 김정호가 만든 지도예요.','정답! 혼일강리역대국도지도입니다. 현존하는 동양 최고의 세계지도로 꼽혀요.'] }
+    ]
+  },
+  sejong_3: {
+    name: '세종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sejong.png',
+    beats: [
+      { who:'npc', t:'(늙고 지친 목소리로) …요즘 몸이 예전 같지 않네.' },
+      { who:'npc', t:'이 경복궁도 참 오래 머물렀군. 강녕전에서 잠을 자고, 사정전에서 신하들과 정사를 논했지. 전각마다 쓰임이 다 달랐네.' },
+      { who:'npc', t:'다음 왕위는 문종, 그리고 어린 세손에게 이어지겠지. 부디 이 아이가 무사히 왕좌를 지킬 수 있기를…' },
+      { who:'npc', t:'가기 전에, 내가 이룬 것들을 자네가 정말 잘 알고 있는지 한번 보고 싶군.' },
+    ],
+    quizSeq: [
+      { q:'태조가 개경에 처음 세웠다가 한양 천도 후 지금 자리로 옮긴, 조선 왕실의 사당은?', opts:['종묘','사직단'], answer:0, src:[41,68,74],
+        feedback:['사직단은 토지신과 곡식신에게 제사 지내는 곳이에요.','정답! 역대 왕과 왕비의 신위를 모신 종묘입니다.'] },
+      { q:'종묘에 대한 설명으로 옳은 것은?', opts:['역대 왕과 왕비의 신위를 모신 사당이다','국왕이 신하들과 정사를 논하던 편전이다'], answer:0, src:[41,68,74],
+        feedback:['편전은 왕이 일상적으로 정무를 보던 공간이에요.','정답! 종묘는 조선 왕실의 신위를 모신 사당입니다.'] },
+      { q:'경복궁에서 왕이 신하들과 일상적으로 정사를 논하던 편전은?', opts:['사정전','강녕전'], answer:0, src:[10],
+        feedback:['강녕전은 왕이 잠을 자고 쉬는 침전이에요.','정답! 사정전입니다. 왕의 침전인 강녕전과 함께 경복궁 내정의 핵심 전각이었어요.'] },
+    ]
+  },
+
+  seongsammun_0: {
+    name: '성삼문', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M16 4v3h3"/><path d="M8 11h8M8 15h5"/></svg>', img: 'assets/portraits/seongsammun.png',
+    beats: [
+      { who:'npc', t:'집현전 학사 성삼문이올시다. 요즘은 밤을 새우는 날이 많습니다.' },
+      { who:'npc', t:'새 글자로 무엇을 지을 것인가 — 그것이 저희에게 내려진 물음이었지요.' },
+      { who:'npc', t:'먼저 조상의 공덕을 노래로 지었습니다. 새 글자가 참으로 쓸 만한지 보이려면, 가장 무거운 것을 먼저 담아야 하니까요.' },
+      { who:'npc', t:'한자음도 나라마다 달라 어지러웠습니다. 하여 우리 한자음을 바로잡아 책으로 묶었지요.' },
+      { who:'npc', t:'…수양대군께서 지으신 부처의 일대기도 새 글자로 옮겨졌습니다. 중전마마의 명복을 비는 글이었습니다.' },
+    ],
+    quizSeq: [
+      { q:'조선 왕조의 창업을 기리며 훈민정음으로 지은 최초의 작품은?',
+        opts:['용비어천가','제왕운기'], answer:0, src:[9,43],
+        feedback:['제왕운기는 고려 후기에 이승휴가 지은 역사 서사시예요.','정답! 용비어천가입니다. 정인지·권제 등이 새 글자로 지어 올렸어요.'] },
+      { q:'신숙주·최항·박팽년 등이 왕명으로 우리나라 한자음을 바로잡아 펴낸 책은?',
+        opts:['동국정운','훈몽자회'], answer:0, src:[64],
+        feedback:['훈몽자회는 조선 중종 때 최세진이 지은 한자 학습서예요.','정답! 동국정운입니다.'] },
+      { q:'세종이 왕비의 명복을 빌며 수양대군에게 짓게 한 산문을, 훗날 한글 노래로 옮긴 작품은?', opts:['월인천강지곡','관동별곡'], answer:0, src:[73],
+        feedback:['관동별곡은 조선 중기 정철이 지은 가사예요.','정답! 석보상절의 내용을 한글 노래로 옮긴 월인천강지곡입니다.'] },
+    ]
+  },
+
   sejong_0: {
     name: '세종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sejong.png',
     beats: [
@@ -1224,30 +1281,6 @@ const NPC_DATA = {
         feedback:['세한도는 훗날 조선 후기 김정희의 작품이에요.','정답! 안견이 그린 몽유도원도입니다.'] },
       { q:'시·그림·글씨에 모두 능해 조선 전기를 대표하는 문인 화가로 꼽히는 인물은?', opts:['강희안','김홍도'], answer:0, src:[72],
         feedback:['김홍도는 훨씬 후대인 조선 후기 화가예요.','정답! 강희안입니다.'] },
-      { q:'세종이 왕비의 명복을 빌며 수양대군에게 짓게 한 산문을, 훗날 한글 노래로 옮긴 작품은?', opts:['월인천강지곡','관동별곡'], answer:0, src:[73],
-        feedback:['관동별곡은 조선 중기 정철이 지은 가사예요.','정답! 석보상절의 내용을 한글 노래로 옮긴 월인천강지곡입니다.'] },
-      { q:'세종 대에 편찬을 시작해 문종 대에 완성된, 앞선 왕조의 역사를 정리한 역사서는?', opts:['고려사','삼국사기'], answer:0, src:[16,52,67,70],
-        feedback:['삼국사기는 고려 인종 대에 김부식이 편찬한 역사서예요.','정답! 고려사입니다. 조선 건국의 정당성을 밝히는 관점에서 고려의 역사를 정리했어요.'] },
-      { q:'태종 때 김사형·이무 등이 만들어, 현재 남아 있는 동양 최고(最古)의 세계지도로 꼽히는 것은?',
-        opts:['혼일강리역대국도지도','대동여지도'], answer:0, src:[14,10],
-        feedback:['대동여지도는 훗날 조선 후기 김정호가 만든 지도예요.','정답! 혼일강리역대국도지도입니다. 현존하는 동양 최고의 세계지도로 꼽혀요.'] }
-    ]
-  },
-  sejong_3: {
-    name: '세종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sejong.png',
-    beats: [
-      { who:'npc', t:'(늙고 지친 목소리로) …요즘 몸이 예전 같지 않네.' },
-      { who:'npc', t:'이 경복궁도 참 오래 머물렀군. 강녕전에서 잠을 자고, 사정전에서 신하들과 정사를 논했지. 전각마다 쓰임이 다 달랐네.' },
-      { who:'npc', t:'다음 왕위는 문종, 그리고 어린 세손에게 이어지겠지. 부디 이 아이가 무사히 왕좌를 지킬 수 있기를…' },
-      { who:'npc', t:'가기 전에, 내가 이룬 것들을 자네가 정말 잘 알고 있는지 한번 보고 싶군.' },
-    ],
-    quizSeq: [
-      { q:'경복궁에서 왕이 신하들과 일상적으로 정사를 논하던 편전은?', opts:['사정전','강녕전'], answer:0, src:[10],
-        feedback:['강녕전은 왕이 잠을 자고 쉬는 침전이에요.','정답! 사정전입니다. 왕의 침전인 강녕전과 함께 경복궁 내정의 핵심 전각이었어요.'] },
-      { q:'태조가 개경에 처음 세웠다가 한양 천도 후 지금 자리로 옮긴, 조선 왕실의 사당은?', opts:['종묘','사직단'], answer:0, src:[41,68,74],
-        feedback:['사직단은 토지신과 곡식신에게 제사 지내는 곳이에요.','정답! 역대 왕과 왕비의 신위를 모신 종묘입니다.'] },
-      { q:'종묘에 대한 설명으로 옳은 것은?', opts:['역대 왕과 왕비의 신위를 모신 사당이다','국왕이 신하들과 정사를 논하던 편전이다'], answer:0, src:[41,68,74],
-        feedback:['편전은 왕이 일상적으로 정무를 보던 공간이에요.','정답! 종묘는 조선 왕실의 신위를 모신 사당입니다.'] },
       { q:'세종이 박연에게 명해 정비하게 한 궁중 음악은?', opts:['아악','판소리'], answer:0, src:[76],
         feedback:['판소리는 조선 후기에 성행한 서민 음악이에요.','정답! 편경 등을 새로 만들며 아악을 정비했습니다.'] }
     ],
@@ -1285,12 +1318,6 @@ const NPC_DATA = {
       { q:'충신·효자·열녀의 행적을 그림과 함께 엮어, 글을 모르는 백성에게도 유교 윤리를 알리려 한 세종 대의 책은?',
         opts:['삼강행실도','국조오례의'], answer:0, src:[6,20,24,28,29,58,62],
         feedback:['국조오례의는 성종 대에 완성된 국가 의례서예요.','정답! 삼강행실도입니다. 그림을 곁들인 것이 핵심이에요.'] },
-      { q:'조선 왕조의 창업을 기리며 훈민정음으로 지은 최초의 작품은?',
-        opts:['용비어천가','제왕운기'], answer:0, src:[9,43],
-        feedback:['제왕운기는 고려 후기에 이승휴가 지은 역사 서사시예요.','정답! 용비어천가입니다. 정인지·권제 등이 새 글자로 지어 올렸어요.'] },
-      { q:'신숙주·최항·박팽년 등이 왕명으로 우리나라 한자음을 바로잡아 펴낸 책은?',
-        opts:['동국정운','훈몽자회'], answer:0, src:[64],
-        feedback:['훈몽자회는 조선 중종 때 최세진이 지은 한자 학습서예요.','정답! 동국정운입니다.'] },
     ]
   },
   /* 수양대군 NPC는 뺐다. 세종 대에 그가 집현전에 있었다는 기록이 없어서(대군은
@@ -1464,6 +1491,8 @@ const Stage = {
     if (id === 'sinsukju') return 'sinsukju_0';
     if (id === 'jangyeongsil') return 'jangyeongsil_0';
     if (id === 'choemanri') return st.act >= ACT.CLOSE ? 'choemanri_after' : 'choemanri_0';
+    if (id === 'seongsammun') return 'seongsammun_0';
+    if (id === 'haksa') return 'haksa_0';
     return null;
   },
 
@@ -1903,6 +1932,8 @@ function updateHudGoal(){
       if (!st.sinsukjuDone && !st.jangyeongsilDone) t = '신숙주와 장영실을 찾아가기';
       else if (!st.sinsukjuDone) t = '집현전의 신숙주와 대화하기';
       else if (!st.jangyeongsilDone) t = '간의대의 장영실과 대화하기' + exitDirArrow(ZONES.jiphyeonjeon.exits[0].rect);
+      else if (!seenDialogKeys.has('seongsammun_0')) t = '성삼문과 대화하기';
+      else if (!seenDialogKeys.has('haksa_0')) t = '집현전 학사와 대화하기';
       else t = '세종에게 돌아가기';
       break;
     case ACT.CRISIS:
