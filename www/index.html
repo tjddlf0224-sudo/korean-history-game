@@ -485,12 +485,17 @@
 <script src="vendor/firebase/firebase-app-compat.js"></script>
 <script src="vendor/firebase/firebase-auth-compat.js"></script>
 <script src="vendor/firebase/firebase-firestore-compat.js"></script>
-<script src="assets/firebase_config.js?v=7"></script>
-<script src="assets/auth.js?v=7"></script>
-<script src="assets/audio.js?v=7"></script>
-<script src="assets/srs.js?v=7"></script>
-<script src="assets/badges.js?v=7"></script>
-<script src="assets/streak.js?v=7"></script>
+<script src="assets/firebase_config.js?v=8"></script>
+<script src="assets/auth.js?v=8"></script>
+<script src="assets/audio.js?v=8"></script>
+<script src="assets/srs.js?v=8"></script>
+  <script src="assets/items.js?v=8"></script>
+  <script src="assets/gold.js?v=8"></script>
+  <script src="assets/ads.js?v=8"></script>
+  <script src="assets/energy.js?v=8"></script>
+  <script src="assets/daily.js?v=8"></script>
+<script src="assets/badges.js?v=8"></script>
+<script src="assets/streak.js?v=8"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>
@@ -1143,6 +1148,35 @@ document.addEventListener('keydown', (ev) => {
 })();
 </script>
 <script>
+  /* 출석·상자 단추 — 앱을 켰을 때 "오늘 뭘 하지"가 없다는 게 이 게임의
+     가장 큰 구멍이었다. 목록 화면 맨 위에 오늘 할 것 두 개를 세워 둔다.
+     아직 안 한 게 있으면 점을 찍어 눈에 띄게 한다. */
+  (function(){
+    var host = document.getElementById('topbar-actions');
+    if (!host || !window.Daily) return;
+    function mk(id, label, fn){
+      var b = document.createElement('button');
+      b.id = id; b.type = 'button'; b.className = 'daily-pill';
+      b.textContent = label; b.onclick = fn;
+      host.appendChild(b); return b;
+    }
+    var st = document.createElement('style');
+    st.textContent = '.daily-pill{height:34px;padding:0 13px;border-radius:17px;' +
+      'background:rgba(26,20,12,.82);border:1px solid #4a3c26;color:#f0c96b;' +
+      'font-family:"Gowun Batang",serif;font-size:13px;cursor:pointer;position:relative}' +
+      '.daily-pill.hot::after{content:"";position:absolute;top:5px;right:6px;width:7px;' +
+      'height:7px;border-radius:50%;background:#e8836e}';
+    document.head.appendChild(st);
+    var a = mk('daily-att', '출석', function(){ Daily.openAttendance(); });
+    var b = mk('daily-box', '상자', function(){ Daily.openBox(); });
+    function paint(){
+      a.classList.toggle('hot', !Daily.claimedToday());
+      b.classList.toggle('hot', Daily.boxLeft() > 0);
+    }
+    paint();
+    setInterval(paint, 3000);
+  })();
+
   /* 로그인 단추는 상단 액션 줄에 붙인다. 설정이 없으면 Auth.attach가
      아무것도 만들지 않으므로, 여기서 조건을 또 볼 필요가 없다. */
   (function(){

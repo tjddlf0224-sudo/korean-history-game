@@ -120,6 +120,20 @@ window.Juice = (function(){
       24%{opacity:1; transform:scale(1.1) translateY(0)} 60%{opacity:1; transform:scale(1)}
       100%{opacity:0; transform:translateY(-14px)} }
 
+    /* 콤보 되살리기 — 끊긴 직후 아래쪽에 잠깐 뜬다. 퀴즈 카드를 가리지
+       않도록 화면 아래에 붙이고, 몇 초 뒤 저절로 사라진다. */
+    .jc-revive { position:absolute; z-index:95; left:50%; bottom:6%;
+      transform:translateX(-50%); display:flex; flex-direction:column; gap:7px;
+      align-items:stretch; width:min(86%,320px); padding:13px 14px; border-radius:14px;
+      background:rgba(26,20,12,.96); border:1px solid #c9452f;
+      font-family:"Gowun Batang",serif; }
+    .jc-revive b { text-align:center; font-size:14px; color:#e8836e; font-weight:700; }
+    .jc-revive button { padding:10px; border-radius:9px; font-family:inherit; font-size:13.5px;
+      cursor:pointer; border:1px solid #4a3c26; background:#3a2c1a; color:#f0c96b; }
+    .jc-revive button.no { background:transparent; border-color:transparent; color:#8d7f66;
+      font-size:12.5px; padding:4px; }
+    .jc-revive button:disabled { opacity:.5; cursor:default; }
+
     @media (prefers-reduced-motion:reduce){
       #jc-combo.pop,#jc-fever.on,#jc-flash.ok,#jc-flash.bad,#jc-praise.go,.jc-coin
         { animation-duration:.01ms !important; }
@@ -262,6 +276,49 @@ window.Juice = (function(){
     if (navigator.vibrate) navigator.vibrate([55, 40, 55]);
     if (had >= 2) showPraise('연속 ' + had + ' 끊김');
     renderCombo();
+    // 크게 쌓았을 때만 되살릴 기회를 준다. 두세 개에서 매번 물어보면
+    // 그냥 성가신 광고가 된다 — 아까워야 자발적으로 본다.
+    if (had >= REVIVE_FROM) offerRevive(had);
+  }
+
+  /* ---------------- 콤보 되살리기 ----------------
+     끊긴 직후 몇 초만 뜬다. 이 게임에서 가장 아까운 순간이라,
+     광고를 볼 이유가 가장 자연스럽게 생기는 자리다. */
+  const REVIVE_FROM = 5;
+  const REVIVE_MS = 6000;
+  let reviveOpen = false;
+
+  function offerRevive(had){
+    if (reviveOpen) return;
+    if (!window.Ads && !window.Energy) return;      // 붙일 수단이 없으면 조용히 넘어간다
+    reviveOpen = true;
+    const L = layer();
+    const d = document.createElement('div');
+    d.className = 'jc-revive';
+    d.innerHTML = `<b>연속 ${had}이 끊겼다</b>` +
+      '<button data-k="ad">광고 보고 되살리기</button>' +
+      '<button data-k="eng">기력 1로 되살리기</button>' +
+      '<button data-k="no" class="no">그냥 간다</button>';
+    L.appendChild(d);
+    let timer = setTimeout(shut, REVIVE_MS);
+    function shut(){ clearTimeout(timer); reviveOpen = false; d.remove(); }
+    function restore(){ combo = had; renderCombo(); showPraise('되살렸다'); shut(); }
+    d.querySelectorAll('button').forEach(b => {
+      b.onclick = async () => {
+        clearTimeout(timer);
+        const k = b.dataset.k;
+        if (k === 'no') return shut();
+        if (k === 'eng'){
+          if (window.Energy && Energy.spend(1)) return restore();
+          b.textContent = '기력이 없다'; timer = setTimeout(shut, 1600); return;
+        }
+        b.textContent = '광고 준비 중…';
+        d.querySelectorAll('button').forEach(x => { x.disabled = true; });
+        const ok = window.Ads ? await Ads.rewarded() : false;
+        if (ok) return restore();
+        b.textContent = '못 받았다'; timer = setTimeout(shut, 1600);
+      };
+    });
   }
 
   /* 챕터·퀴즈 묶음을 벗어날 때 조용히 접는다(연출만 정리, 기록은 남긴다). */

@@ -133,7 +133,11 @@ window.Gold = (function(){
   function mount(){
     css();
     if (document.getElementById('gold-btn')) return;
-    const dock = document.getElementById('side-dock');
+    // 챕터에서는 우측 세로 정렬대에, 목록 화면에서는 상단 알약 줄에 붙인다.
+    // 둘 다 없을 때만 제 자리를 잡는다 — 예전에 모듈마다 제멋대로 absolute로
+    // 붙였다가 서로 겹친 적이 있다.
+    const dock = document.getElementById('side-dock') ||
+                 document.getElementById('topbar-actions');
     const b = document.createElement('button');
     b.id = 'gold-btn'; b.type = 'button';
     b.setAttribute('aria-label', '금');
@@ -249,6 +253,8 @@ window.Gold = (function(){
     st.shield--; save(st);
     return true;
   }
+  /* 상자나 광고로 방패를 받을 때 쓴다 */
+  function addShield(n){ st.shield += (n || 1); save(st); return st.shield; }
 
   /* ---------------- 이미 있는 함수에 붙는다 ---------------- */
   function wire(){
@@ -296,6 +302,6 @@ window.Gold = (function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  return { get, earn, spend, open, mount, useShield, scanSpots,
+  return { get, earn, spend, open, mount, useShield, addShield, scanSpots,
            get shields(){ return st.shield; } };
 })();
