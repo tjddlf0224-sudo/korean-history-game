@@ -238,10 +238,16 @@ window.Juice = (function(){
         const f = document.getElementById('jc-fever'); if (f) f.classList.add('on');
         sfxFever();
         showPraise('피 버');
+        // 피버는 이 게임에서 가장 센 순간인데 테두리만 빛났다.
+        // 집중선으로 화면을 한 번 조여 준다 — 여기서 확 올라야 계속 맞히고 싶어진다.
+        if (window.Fx){ Fx.lines(420); Fx.punch(.05, 300); }
         if (navigator.vibrate) navigator.vibrate([25, 35, 25, 35, 45]);
       } else {
         sfxCorrect(combo);
         showPraise(praiseFor(combo));
+        // 칭찬 문구가 뜨는 마디(3·5·8·12…)에서만 화면을 살짝 당긴다.
+        // 매번 당기면 금세 무뎌진다 — 마디에서만 해야 마디로 느껴진다.
+        if (window.Fx && combo >= 3 && praiseFor(combo)) Fx.punch(.03, 240);
         if (navigator.vibrate) navigator.vibrate(fever ? 24 : 16);
       }
     } else {

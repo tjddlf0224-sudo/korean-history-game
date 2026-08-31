@@ -179,10 +179,12 @@ window.Boss = (function(){
   }
 
   /* ---------------- 연출 ---------------- */
-  function shake(){
+  function shake(level){
     const a = document.getElementById('bs-arena');
     a.classList.remove('shake'); void a.offsetWidth; a.classList.add('shake');
     setTimeout(() => a.classList.remove('shake'), 300);
+    // 무대(캔버스)까지 같이 흔들고 당긴다. 전투 칸만 흔들리면 그 칸 안의 일로 보인다.
+    if (window.Fx) Fx.impact(level || 1);
   }
   function hitFx(anchorId, crit){
     const arena = document.getElementById('bs-arena'), el = document.getElementById(anchorId);
@@ -264,7 +266,9 @@ window.Boss = (function(){
       pp.style.setProperty('--lx', '26px');
       pp.classList.add('lunge'); await wait(160);
       S.eHp -= dmg;
-      shake(); hitFx('bs-e', crit); ep.classList.add('hit');
+      // 데미지가 오르면 화면도 같이 세진다. 숫자만 커지고 화면이 그대로면
+      // '세졌다'가 느껴지지 않는다. 마지막 일격(체력을 깎아 0)이면 결정타.
+      shake(S.eHp <= 0 ? 3 : (crit ? 2 : 1)); hitFx('bs-e', crit); ep.classList.add('hit');
       pop('e', '-' + dmg + (crit ? '!' : ''), crit ? 'crit' : null);
 
       if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
@@ -292,8 +296,10 @@ window.Boss = (function(){
         return;
       }
       S.pHp -= 1;
-      shake(); hitFx('bs-p', false); pp.classList.add('hit');
+      shake(2); hitFx('bs-p', false); pp.classList.add('hit');
       pop('p', '-1');
+      // 목숨이 하나 남으면 화면 가장자리가 붉게 뛴다 — 숫자를 안 봐도 알게 한다
+      if (window.Fx) Fx.danger(S.pHp <= 1);
       if (navigator.vibrate) navigator.vibrate([50, 40, 50]);
       msg(S.cur.feedback[0]);
       bars(); await wait(900);
@@ -337,6 +343,8 @@ window.Boss = (function(){
   }
 
   function finish(won){
+    // 위험 표시를 반드시 끈다. 안 끄면 전투가 끝난 뒤 지도 위에까지 붉게 남는다.
+    if (window.Fx) Fx.danger(false);
     const arena = document.getElementById('bs-arena');
     const end = document.createElement('div');
     end.className = 'bs-end';
@@ -363,6 +371,7 @@ window.Boss = (function(){
   /* ---------------- 시작 ---------------- */
   function start(opt){
     css(); mount();
+    if (window.Fx) Fx.danger(false);      // 지난 전투의 흔적을 지우고 시작한다
     const qs = (opt.questions || []).filter(q => q && q.opts && q.opts.length >= 2);
     if (!qs.length){ opt.onWin && opt.onWin(); return; }
 
