@@ -598,6 +598,8 @@ const ZONES = {
     npcs: [
       { id: 'choeyundeok', name: '최윤덕', x: 430, y: 430, img: 'assets/portraits/choeyundeok.png', look: { role: 'general', body: '#4f5d75', accent: '#8a6d3b' } },
       { id: 'kimjongseo', name: '김종서', x: 688, y: 420, img: 'assets/portraits/kimjongseo.png', look: { role: 'general', body: '#454f42', accent: '#8a6d3b' } },
+      { id:'ijongmu', name:'이종무', x:624, y:672, img:'assets/portraits/extra_musin.png', look:{ role:'general', body:'#4a4a52', accent:'#c9a24a' } },
+      { id:'sinsukju', name:'신숙주', x:896, y:576, img:'assets/portraits/sinsukju.png', look:{ role:'scholar', body:'#3d4a5a', accent:'#c9a24a' } },
     ],
     // 출구는 6시 방향(남쪽) 관문 — 이제 권농 들녘으로 돌아간다.
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
@@ -1147,6 +1149,36 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============
    beats 항목에 name/icon을 개별로 주면 그 줄만 다른 화자로 표시된다(최만리 논쟁 장면용 확장). */
 const NPC_DATA = {
+  sinsukju_0: {
+    name: '신숙주', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/></svg>', img: 'assets/portraits/sinsukju.png',
+    beats: [
+      { who:'npc', t:'일본에 다녀왔습니다. 서장관으로 바다를 건넜지요.' },
+      { who:'npc', t:'가서 보니 저들의 사정을 우리가 너무 모르고 있었습니다. 지리도, 풍속도, 누가 어디를 다스리는지도요.' },
+      { who:'npc', t:'하여 보고 들은 것을 낱낱이 적어 책으로 묶었습니다. 이웃을 아는 것이 이웃을 다루는 첫걸음이니까요.' },
+    ],
+    quizSeq: [
+      { q:'신숙주가 일본에 다녀와서 지은, 일본의 지리·풍속을 기록한 책은?', opts:['해동제국기','동국여지승람'], answer:0, src:[15,62,78],
+        feedback:['동국여지승람은 조선 전체의 지리를 다룬 책이에요.','정답! 해동제국기입니다.'] },
+    ]
+  },
+
+  ijongmu_0: {
+    name: '이종무', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l2.5 3h13L21 17z"/><path d="M5.5 17V9h13v8"/><path d="M12 9V4M9 6h6"/></svg>', img: 'assets/portraits/extra_musin.png',
+    beats: [
+      { who:'npc', t:'배 이백일곱 척, 군사 만칠천이었소. 거제를 떠나 대마도로 향했지.' },
+      { who:'npc', t:'왜구의 소굴을 치지 않고서는 남쪽 바다가 조용할 날이 없었소.' },
+      { who:'npc', t:'…물론 힘으로만 끝낼 일은 아니었소. 뒷날 대마도주와 약조를 맺어, 드나드는 배의 수를 못박았지.' },
+      { who:'npc', t:'치고 나서 길을 열어 준 것이오. 그래야 오래가오.' },
+    ],
+    quizSeq: [
+      { q:'이종무가 왜구의 근거지를 정벌한 사건은?', opts:['대마도 정벌','진주성 전투'], answer:0, src:[33],
+        feedback:['진주성 전투는 훗날 임진왜란 때의 전투예요.','정답! 이종무가 이끈 대마도 정벌입니다.'] },
+      { q:'대마도 정벌 이후, 왜인이 드나드는 무역선의 수를 제한하며 대마도주와 맺은 조약은?',
+        opts:['계해약조','강화도 조약'], answer:0, src:[26,46,58],
+        feedback:['강화도 조약은 훨씬 뒷날인 1876년에 일본과 맺은 조약이에요.','정답! 계해약조입니다. 세견선의 수를 정해 무역을 허용하되 제한했어요.'] },
+    ]
+  },
+
   /* 최윤덕 — 4군(기출 4문항, 6·26·46·75회). 그동안 김종서 문항의 오답 보기로만
      등장해서, 압록강 쪽을 실제로 개척한 사람을 만날 수가 없었다. */
   /* 권농 들녘 두 사람 — 농사직설(기출 11문항: 7·9·18·19·20·39·43·54·55·58·66회).
@@ -1241,13 +1273,6 @@ const NPC_DATA = {
       { who:'npc', t:'자, 그럼 내가 아는 걸 좀 시험해보겠나?' },
     ],
     quizSeq: [
-      { q:'이종무가 왜구의 근거지를 정벌한 사건은?', opts:['대마도 정벌','진주성 전투'], answer:0, src:[33],
-        feedback:['진주성 전투는 훗날 임진왜란 때의 전투예요.','정답! 이종무가 이끈 대마도 정벌입니다.'] },
-      { q:'대마도 정벌 이후, 왜인이 드나드는 무역선의 수를 제한하며 대마도주와 맺은 조약은?',
-        opts:['계해약조','강화도 조약'], answer:0, src:[26,46,58],
-        feedback:['강화도 조약은 훨씬 뒷날인 1876년에 일본과 맺은 조약이에요.','정답! 계해약조입니다. 세견선의 수를 정해 무역을 허용하되 제한했어요.'] },
-      { q:'신숙주가 일본에 다녀와서 지은, 일본의 지리·풍속을 기록한 책은?', opts:['해동제국기','동국여지승람'], answer:0, src:[15,62,78],
-        feedback:['동국여지승람은 조선 전체의 지리를 다룬 책이에요.','정답! 해동제국기입니다.'] },
       { q:'두만강 유역에 6진을, 압록강 유역에 4군을 각각 개척한 인물의 조합으로 옳은 것은?', opts:['김종서(6진)·최윤덕(4군)','최윤덕(6진)·김종서(4군)'], answer:0, src:[34,39,46,59,67,70],
         feedback:['방향이 바뀌었어요 — 6진은 김종서, 4군은 최윤덕입니다.','정답! 나(김종서)는 두만강 쪽 6진을, 최윤덕 장군은 압록강 쪽 4군을 맡았지.'] }
     ],
@@ -1269,6 +1294,8 @@ const Stage = {
     if (id === 'choeyundeok') return 'choeyundeok_0';
     if (id === 'jeongcho') return 'jeongcho_0';
     if (id === 'nonong') return 'nonong_0';
+    if (id === 'ijongmu') return 'ijongmu_0';
+    if (id === 'sinsukju') return 'sinsukju_0';
     return null;
   },
   interact(){

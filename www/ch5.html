@@ -508,6 +508,7 @@ const ZONES = {
       // 아니다. 대사 내용도 인종·명종 교체와 문정왕후 수렴청정 같은 궁중 소식이라
       // 궁녀가 훨씬 자연스럽다(초상 gungnyeo.png는 여태 안 쓰이고 있었다).
       { id: 'commoner1', name: '나인', x: 480, y: 380, img: 'assets/portraits/gungnyeo.png', look: { role: 'commoner', body: '#4a4a58', accent: '#8a7a5a' } },
+      { id:'yeonsangun', name:'연산군', x:240, y:280, img:'assets/portraits/yeonsangun_king.png', look:{ role:'king', body:'#5c2f2f', accent:'#e0b94a' } },
     ],
     exits: [
       { rect:{x0:0,y0:340,x1:60,y1:460}, to:'sago', spawn:{x:1290,y:390}, label:'사초 사고로' },
@@ -545,6 +546,7 @@ const ZONES = {
     ], // 초가집
     npcs: [
       { id: 'jogwangjo', name: '조광조', x: 900, y: 600, img: 'assets/portraits/jogwangjo.png', look: { role: 'scholar', body: '#3a5040', accent: '#c9a24a' } },
+      { id:'jungjong', name:'중종', x:640, y:600, img:'assets/portraits/jungjong_king.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
     ],
     exits: [ { rect:{x0:625,y0:665,x1:750,y1:760}, to:'pokjeong', spawn:{x:1300,y:400}, label:'궁궐로' } ],
   },
@@ -1058,40 +1060,30 @@ window.addEventListener('keyup', e=>{
 
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
-  kimilson_0: {
-    name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
+  jungjong_0: {
+    name: '중종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/jungjong_king.png',
     beats: [
-      { who:'npc', t:'무오사화의 서막이었지.' },
-      { who:'npc', name:'연산군', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img:'assets/portraits/yeonsangun.png', t:'김일손, 네놈이 쓴 사초에 무슨 내용이 있는지 내가 모를 줄 알았느냐. 세조 할아버님을 비방하는 글이라니!' },
-      { who:'npc', t:'신은 역사를 있는 그대로 기록했을 뿐입니다…' },
-      { who:'npc', t:'스승 김종직 선생의 「조의제문」을 사초에 실은 것이 빌미가 되어, 많은 사림 인사가 목숨을 잃었네 — 무오사화였지.' },
-      { who:'npc', t:'몇 년 뒤, 연산군은 자신의 생모 폐비 윤씨의 죽음에 관련된 이들을 찾아내 대규모로 숙청했네. 갑자사화 — 조선 전기 사화 중 가장 많은 희생자를 냈지.' },
-      { who:'npc', t:'그 성정이 하루아침에 생긴 게 아닐세. 세자 시절 이미 낌새가 있었지 — 아바마마 성종께서 손수 기르시던 사슴을 활로 쏘아 죽인 일도 있었다더군.' },
-      { who:'npc', t:'그렇게 폭정이 극에 달하자, 결국 신하들이 힘을 모아 연산군을 몰아내고 새 임금을 세웠네 — 중종반정이라 부르는 사건이었지.' },
-      { who:'npc', chart:{
-          head:['사화','연도','왕','불씨'],
-          rows:[['무오','1498','연산군','김일손의 사초 — 조의제문'],
-                ['갑자','1504','연산군','폐비 윤씨 사사 사건'],
-                ['기묘','1519','중종','주초위왕 — 조광조 제거'],
-                ['을사','1545','명종','외척 다툼 — 대윤과 소윤']],
-          note:'순서는 <b>“무오년에 갑자기 기묘하게 을씨년스럽다”</b>.<br>왕은 <b>연·연·중·명</b> — 앞의 둘이 연산군인 것만 잡으면 절반은 끝일세.'
-        },
-        t:'네 번의 사화를 한 눈에 놓고 보게. 이름만 외우면 반드시 엉키네.' },
-      { who:'npc', t:'…이제 네가 이 비극의 흐름을 얼마나 아는지 보여다오.' },
+      { who:'npc', t:'과인은 스스로 이 자리에 오른 것이 아니다. 신하들이 과인을 데려다 앉혔다.' },
+      { who:'npc', t:'박원종·성희안·유순정. 그들이 형님을 몰아내고 과인을 왕으로 세웠지.' },
+      { who:'npc', t:'…그러니 과인이 그들에게 무엇을 말할 수 있겠느냐. 조광조를 불러들인 것도, 끝내 내친 것도 과인이다.' },
     ],
-    quiz: null,
-    startsMini: 1
+    quizSeq: [
+      { q:'연산군을 몰아내고 중종을 세운 사건은?', opts:['중종반정','계유정난'], answer:0, src:[27,46,47,59,61],
+        feedback:['계유정난은 훨씬 앞선 세조 즉위 관련 사건이에요.','정답! 중종반정입니다. 그 뒤에 제가 조정에 나섰지요.'] },
+    ]
   },
-  kimilson_1: {
-    name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
+
+  yeonsangun_0: {
+    name: '연산군', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/yeonsangun_king.png',
     beats: [
-      { who:'npc', t:'다시 왔군. 무오사화와 갑자사화, 두 사건이 자꾸 뒤섞이지 않는가? 하나씩 정리해보세.' }
+      { who:'npc', t:'…과인의 어미가 어찌 죽었는지, 그대는 아는가.' },
+      { who:'npc', t:'폐비 윤씨. 사약을 받고 돌아가셨다. 과인은 그 일을 스무 해가 지나 알았다.' },
+      { who:'npc', t:'그 일에 관여한 자들을 하나도 남기지 않았다. 이미 죽은 자는 무덤에서 꺼내어 벌하였다.' },
+      { who:'npc', t:'…무섭다는 눈으로 보는군. 그래, 다들 그런 눈으로 과인을 본다.' },
     ],
     quizSeq: [
       { q:'갑자사화는 어느 왕 때 일어났는가?', opts:['연산군','중종'], answer:0, src:[31,34,38,42,48,54,59,61,66,73],
         feedback:['중종 때는 기묘사화가 일어나요.','정답! 연산군입니다. 무오·갑자는 연산군, 기묘는 중종, 을사는 명종 — 연·연·중·명일세.'] },
-      { q:'조의제문을 사초에 실어 무오사화의 빌미를 제공한 인물은?', opts:['김일손','조광조'], answer:0, src:[10,12,13,14,26,29,31,38,45,47,48,57,59,63,66,73,76],
-        feedback:['조광조는 훗날 기묘사화의 중심 인물이에요.','정답! 바로 나, 김일손일세.'] },
       { q:'갑자사화의 빌미가 된 사건은?', opts:['폐비 윤씨 사사 사건','소격서 폐지 주장'], answer:0, src:[31,34,38,42,48,54,59,61,66,73],
         feedback:['소격서 폐지 주장은 훗날 조광조 무렵의 일이에요.','정답! 연산군의 생모, 폐비 윤씨 사사 사건이었네. 갑(甲)자에 걸어 두게 — 갑자기 어머니 이야기.'] }
     ],
@@ -1124,8 +1116,41 @@ const NPC_DATA = {
       { who:'npc', t:'개혁은 소격서와 현량과뿐이 아니었습니다. 「소학」을 널리 읽혀 어릴 때부터 사람의 도리를 배우게 하려 했고, 공납의 폐단을 고치고자 쌀로 걷자는 수미법도 건의했지요.' }
     ],
     quizSeq: [
-      { q:'연산군을 몰아내고 중종을 세운 사건은?', opts:['중종반정','계유정난'], answer:0, src:[27,46,47,59,61],
-        feedback:['계유정난은 훨씬 앞선 세조 즉위 관련 사건이에요.','정답! 중종반정입니다. 그 뒤에 제가 조정에 나섰지요.'] },
+    ]
+  },
+
+  kimilson_0: {
+    name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
+    beats: [
+      { who:'npc', t:'무오사화의 서막이었지.' },
+      { who:'npc', name:'연산군', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img:'assets/portraits/yeonsangun.png', t:'김일손, 네놈이 쓴 사초에 무슨 내용이 있는지 내가 모를 줄 알았느냐. 세조 할아버님을 비방하는 글이라니!' },
+      { who:'npc', t:'신은 역사를 있는 그대로 기록했을 뿐입니다…' },
+      { who:'npc', t:'스승 김종직 선생의 「조의제문」을 사초에 실은 것이 빌미가 되어, 많은 사림 인사가 목숨을 잃었네 — 무오사화였지.' },
+      { who:'npc', t:'몇 년 뒤, 연산군은 자신의 생모 폐비 윤씨의 죽음에 관련된 이들을 찾아내 대규모로 숙청했네. 갑자사화 — 조선 전기 사화 중 가장 많은 희생자를 냈지.' },
+      { who:'npc', t:'그 성정이 하루아침에 생긴 게 아닐세. 세자 시절 이미 낌새가 있었지 — 아바마마 성종께서 손수 기르시던 사슴을 활로 쏘아 죽인 일도 있었다더군.' },
+      { who:'npc', t:'그렇게 폭정이 극에 달하자, 결국 신하들이 힘을 모아 연산군을 몰아내고 새 임금을 세웠네 — 중종반정이라 부르는 사건이었지.' },
+      { who:'npc', chart:{
+          head:['사화','연도','왕','불씨'],
+          rows:[['무오','1498','연산군','김일손의 사초 — 조의제문'],
+                ['갑자','1504','연산군','폐비 윤씨 사사 사건'],
+                ['기묘','1519','중종','주초위왕 — 조광조 제거'],
+                ['을사','1545','명종','외척 다툼 — 대윤과 소윤']],
+          note:'순서는 <b>“무오년에 갑자기 기묘하게 을씨년스럽다”</b>.<br>왕은 <b>연·연·중·명</b> — 앞의 둘이 연산군인 것만 잡으면 절반은 끝일세.'
+        },
+        t:'네 번의 사화를 한 눈에 놓고 보게. 이름만 외우면 반드시 엉키네.' },
+      { who:'npc', t:'…이제 네가 이 비극의 흐름을 얼마나 아는지 보여다오.' },
+    ],
+    quiz: null,
+    startsMini: 1
+  },
+  kimilson_1: {
+    name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
+    beats: [
+      { who:'npc', t:'다시 왔군. 무오사화와 갑자사화, 두 사건이 자꾸 뒤섞이지 않는가? 하나씩 정리해보세.' }
+    ],
+    quizSeq: [
+      { q:'조의제문을 사초에 실어 무오사화의 빌미를 제공한 인물은?', opts:['김일손','조광조'], answer:0, src:[10,12,13,14,26,29,31,38,45,47,48,57,59,63,66,73,76],
+        feedback:['조광조는 훗날 기묘사화의 중심 인물이에요.','정답! 바로 나, 김일손일세.'] },
       { q:'중종 때 조광조의 개혁이 실패로 끝난 사건은?', opts:['기묘사화','갑자사화'], answer:0, src:[11,14,27,32,34,38,42,46,48,49,61,64,66,69,75],
         feedback:['갑자사화는 앞서 연산군 대의 사건이에요.','정답! 기묘사화입니다. 순서는 “무오년에 갑자기 기묘하게 을씨년스럽다” — 세 번째지요.'] },
       { q:'조광조가 「소학」 보급과 함께, 공납의 폐단을 고치고자 현물 대신 쌀로 거두자며 주장한 것은?', opts:['수미법','대동법'], answer:0, src:[39],

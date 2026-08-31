@@ -531,6 +531,7 @@ const ZONES = {
       { id: 'juseboong', name: '주세붕', x: 690, y: 450, img: 'assets/portraits/juseboong.png', look: { role: 'scholar', body: '#3d4a6b', accent: '#c9a24a' } },
       { id: 'josik', name: '조식', x: 560, y: 490, img: 'assets/portraits/josik.png', look: { role: 'scholar', body: '#4a4030', accent: '#7a9a5a' } },
       { id: 'yihwang', name: '이황', x: 820, y: 490, img: 'assets/portraits/yihwang.png', look: { role: 'scholar', body: '#4a3a5a', accent: '#c9b8f0' } },
+      { id:'yusaeng', name:'소수서원 유생', x:984, y:288, img:'assets/portraits/extra_munsin.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -1041,6 +1042,24 @@ window.addEventListener('keyup', e=>{
 
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============ */
 const NPC_DATA = {
+  yusaeng_0: {
+    name: '소수서원 유생', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 016.5 3H19v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M8 7.5h7M8 11h5"/></svg>', img: 'assets/portraits/extra_munsin.png',
+    beats: [
+      { who:'npc', t:'여기서 글을 읽는 유생이올시다. 사당에는 매년 봄가을로 제를 올리지요.' },
+      { who:'npc', t:'이 땅에 성리학을 처음 들여온 고려의 어른을 모십니다. 원나라에서 주자의 글을 구해 오신 분이지요.' },
+      { who:'npc', t:'얼마 전 임금께서 친히 쓰신 편액이 내려왔습니다. 토지와 노비도 함께요.' },
+      { who:'npc', t:'그날로 서원의 이름이 바뀌었습니다. 나라가 인정한 첫 서원이 된 것이지요.' },
+    ],
+    quizSeq: [
+      { q:'백운동서원에서 제사한, 이 땅에 성리학을 처음 들여온 고려의 인물은?',
+        opts:['안향','정몽주'], answer:0, src:[24,46],
+        feedback:['정몽주는 고려 말의 충신으로 성리학자이지만, 성리학을 처음 들여온 사람은 따로 있어요.','정답! 안향(문성공)입니다.'] },
+      { q:'백운동서원이 임금에게 편액과 토지·노비를 받아 최초의 사액서원이 되면서 바뀐 이름은?',
+        opts:['소수서원','도동서원'], answer:0, src:[9,46],
+        feedback:['도동서원은 김굉필을 기린 다른 서원이에요.','정답! 소수서원입니다. 이황의 건의로 사액을 받았어요.'] },
+    ]
+  },
+
   josik_0: {
     name: '조식', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18l6-10 4 5.5"/><path d="M9 18l7-12 6 12"/></svg>', img: 'assets/portraits/josik.png',
     beats: [
@@ -1078,12 +1097,6 @@ const NPC_DATA = {
       { q:'주세붕이 세운 우리나라 최초의 서원 이름은?',
         opts:['백운동서원','도산서원'], answer:0, src:[9,12,24,46],
         feedback:['도산서원은 훗날 이황을 기려 세운 서원이에요.','정답! 백운동서원입니다.'] },
-      { q:'백운동서원에서 제사한, 이 땅에 성리학을 처음 들여온 고려의 인물은?',
-        opts:['안향','정몽주'], answer:0, src:[24,46],
-        feedback:['정몽주는 고려 말의 충신으로 성리학자이지만, 성리학을 처음 들여온 사람은 따로 있어요.','정답! 안향(문성공)입니다.'] },
-      { q:'백운동서원이 임금에게 편액과 토지·노비를 받아 최초의 사액서원이 되면서 바뀐 이름은?',
-        opts:['소수서원','도동서원'], answer:0, src:[9,46],
-        feedback:['도동서원은 김굉필을 기린 다른 서원이에요.','정답! 소수서원입니다. 이황의 건의로 사액을 받았어요.'] },
     ]
   },
   yihwang_0: {
