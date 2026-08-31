@@ -93,6 +93,8 @@ window.Auto = (function(){
 
 
   function mount(){
+    // 양반이 되어야 열린다 — 처음에는 직접 걸으며 지도를 익히게 한다
+    if (window.Unlock && !Unlock.has('auto')) return;
     css();
     if (document.getElementById('auto-btn')) return;
     const b = document.createElement('button');

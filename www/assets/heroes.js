@@ -312,6 +312,7 @@ window.Heroes = (function(){
 
   /* ---------------- 버튼·도감 ---------------- */
   function mount(){
+    if (window.Unlock && !Unlock.has('heroes')) return;   // 양인부터
     css();
     const L = layer();
     if (!document.getElementById('hero-btn')){

@@ -152,14 +152,16 @@ window.Gold = (function(){
   function rows(){
     const hasMap = !!(window.Items && Items.has('daedongyeojido'));
     const scan = hasMap ? PRICE.scanWithMap : PRICE.scan;
-    const out = [
+    const out = [];
+    // 유물 탐지는 재상부터 — 지도를 다 걸어 본 사람에게 주는 편의다
+    if (!window.Unlock || Unlock.has('scan')) out.push(
       { id:'scan', nm:'유물 탐지', price:scan,
         ds:'이 구역에서 아직 못 찾은 유물 자리가 잠시 빛난다.' +
-           (hasMap ? ' 대동여지도를 지녀 값이 싸다.' : '') },
+           (hasMap ? ' 대동여지도를 지녀 값이 싸다.' : '') });
+    out.push(
       { id:'shield', nm:'콤보 지키기', price:PRICE.shield,
         ds:'다음에 한 번 틀려도 콤보가 끊기지 않는다.' +
-           (st.shield ? ` (지금 ${st.shield}개)` : '') },
-    ];
+           (st.shield ? ` (지금 ${st.shield}개)` : '') });
     // 군자금 후원은 상점에서 뺐다 — 선사시대에서도 임시정부에 후원할 수
     // 있었기 때문이다. 이제 금붙이를 지니고 임시정부 청사에 서 있을 때만
     // 가방에서 꺼내 쓸 수 있다(items.js의 USE).
@@ -167,6 +169,8 @@ window.Gold = (function(){
   }
 
   function open(){
+    // 상점은 중인부터. 금은 그전에도 쌓이지만 쓸 곳이 그때 열린다.
+    if (window.Unlock && !Unlock.has('shop')){ Unlock.deny('shop'); return; }
     css(); mountOv();
     const ov = document.getElementById('gold-ov');
     document.getElementById('gold-bal').textContent = `지닌 금 ${st.gold}`;

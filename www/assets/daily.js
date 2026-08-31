@@ -82,7 +82,9 @@ window.Daily = (function(){
   /* ---------------- 상자 ---------------- */
   function boxLeft(){
     if (st.boxDay !== today()){ st.boxDay = today(); st.boxUsed = 0; st.adBox = 0; save(st); }
-    return Math.max(0, 1 - st.boxUsed);
+    // 왕이 되면 하루 두 번
+    const cap = (window.Unlock && Unlock.has('box2')) ? 2 : 1;
+    return Math.max(0, cap - st.boxUsed);
   }
   function adBoxLeft(){ boxLeft(); return Math.max(0, 1 - st.adBox); }
 
