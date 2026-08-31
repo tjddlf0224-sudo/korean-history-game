@@ -1623,6 +1623,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Encounter) Encounter.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1645,6 +1646,7 @@ requestAnimationFrame(loop);
 <script src="assets/journey.js?v=16"></script>
 <script src="assets/season.js?v=16"></script>
 <script src="assets/boss.js?v=16"></script>
+  <script src="assets/encounter.js?v=16"></script>
 <script src="assets/items.js?v=16"></script>
   <script src="assets/gold.js?v=16"></script>
   <script src="assets/ads.js?v=16"></script>
@@ -1687,6 +1689,37 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 호랑이 ============
+   지어낸 사건이 아니다. 1465년(세조 11) 창덕궁 후원에 호랑이가 들었다는
+   기록이 실록에 있다. 후원에서 어미 호랑이가 새끼를 친 일도 있었다.
+   조정에 보고된 호환 사망자는 철종 때까지 3,989명에 이르고,
+   호랑이 잡는 전담 부대인 **착호갑사**를 따로 두었을 정도다.
+
+   문제는 이 화에서 아직 안 물어본 것으로 골랐다(육조직계제·경국대전).
+   호랑이가 물러나는 것이지 잡는 것이 아니다 — 잡는 것은 착호갑사의 일이다. */
+if (window.Encounter) Encounter.add({
+  id: 'beom_gungya', zone: 'gungya', x: 980, y: 300, range: 155,
+  name: '호랑이', img: 'assets/portraits/beom.png',
+  bg: 'assets/scenes/ch3_gungya.webp',
+  cry: '…크 르 릉',
+  lead: '풀숲이 낮게 흔들렸다. 후원 쪽이다.<br>' +
+        '<b>궁궐 담 안에 호랑이가 들었다.</b> 실제로 있던 일이다 — ' +
+        '세조 십일년, 창덕궁 후원에 범이 들었다고 실록은 적었다.<br>' +
+        '물러설 곳이 없다. 눈을 피하지 말고 버텨야 한다.',
+  intro: '범이 고개를 낮추고 그대를 본다.',
+  lives: 3,
+  questions: [
+    { q:'세조가 의정부를 거치지 않고 육조가 왕에게 곧바로 보고하게 한 제도는?',
+      opts:['육조 직계제','의정부 서사제'], answer:0, src:[51, 52],
+      feedback:['의정부 서사제는 의정부가 먼저 심의하는 방식으로, 왕권을 나누는 쪽이에요.','정답! 육조 직계제입니다. 왕권을 강화하려는 조치였어요.'] },
+    { q:'세조 때 편찬을 시작해 성종 때 완성·반포된 조선의 기본 법전은?',
+      opts:['경국대전','대전회통'], answer:0, src:[25, 54, 56, 65],
+      feedback:['대전회통은 훗날 흥선대원군 때 정비한 법전이에요.','정답! 경국대전입니다. 세조가 시작해 성종 대에 완성되었어요.'] },
+  ],
+  gold: 30, badge: 'beom_gungya',
+});
+
 </script>
 </body>
 </html>
