@@ -481,6 +481,12 @@
   </div>
 </div>
 
+<!-- 로그인·랭킹: 설정(firebase_config.js)이 비어 있으면 조용히 꺼진 채로 돈다 -->
+<script src="vendor/firebase/firebase-app-compat.js"></script>
+<script src="vendor/firebase/firebase-auth-compat.js"></script>
+<script src="vendor/firebase/firebase-firestore-compat.js"></script>
+<script src="assets/firebase_config.js?v=7"></script>
+<script src="assets/auth.js?v=7"></script>
 <script src="assets/audio.js?v=7"></script>
 <script src="assets/srs.js?v=7"></script>
 <script src="assets/badges.js?v=7"></script>
@@ -1135,6 +1141,14 @@ document.addEventListener('keydown', (ev) => {
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+</script>
+<script>
+  /* 로그인 단추는 상단 액션 줄에 붙인다. 설정이 없으면 Auth.attach가
+     아무것도 만들지 않으므로, 여기서 조건을 또 볼 필요가 없다. */
+  (function(){
+    var host = document.getElementById('topbar-actions');
+    if (window.Auth && host) Auth.attach(host);
+  })();
 </script>
 </body>
 </html>
