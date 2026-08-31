@@ -12,6 +12,9 @@
      2) 계급이 올라 기능이 열렸을 때 — 열린 단추를 가리키고 한 번 눌러 보게 한다
 
    원칙
+   - **가이드는 존댓말로 쓴다.** 이 게임의 지문은 '한다'체지만, 그건 이야기의
+     목소리다. 가이드는 이야기가 아니라 **플레이어에게 직접 하는 말**이라
+     같은 문체로 쓰면 반말로 지시하는 꼴이 된다.
    - 한 번 끝낸 가이드는 다시 안 뜬다(기기에 적어 둔다).
    - 언제든 건너뛸 수 있다. 붙잡아 두면 그때부터 방해다.
    - 기다리는 조건이 영영 안 오면 스스로 물러난다(막히지 않게).
@@ -127,7 +130,7 @@ window.Guide = (function(){
       const bub = document.createElement('div');
       bub.id = 'gd-bub';
       bub.innerHTML = (opt.tag ? `<span class="t">${opt.tag}</span>` : '') + opt.text +
-        (opt.wait ? '' : '<button class="go">알겠다</button>') +
+        (opt.wait ? '' : '<button class="go">알겠습니다</button>') +
         '<button class="skip">가이드 그만 보기</button>';
       L.appendChild(bub);
 
@@ -191,24 +194,24 @@ window.Guide = (function(){
     const started = { x: World.px, y: World.py };
     run('first', [
       { tag:'움 직 이 기', target: () => el('stick-zone'),
-        text:'왼쪽 아래 둥근 곳을 끌면 걷는다. 한번 움직여 보라.',
+        text:'왼쪽 아래 둥근 곳을 끌면 걸어갑니다. 한번 움직여 보세요.',
         wait: () => Math.hypot(World.px - started.x, World.py - started.y) > 40,
         timeout: 25000 },
       { tag:'다 가 가 기', target: null, ring:false,
-        text:'머리 위에 <b>!</b>가 뜬 사람에게 다가가 보라.',
+        text:'머리 위에 <b>!</b>가 뜬 사람에게 다가가 보세요.',
         wait: () => !!World.nearNpc, timeout: 40000 },
       { tag:'말 걸 기', target: () => el('act-btn'),
-        text:'이 단추를 누르면 말을 건다.',
+        text:'이 단추를 누르면 말을 겁니다.',
         wait: () => !!document.querySelector('#dlg-overlay.show, .ov.show'),
         timeout: 25000 },
       { tag:'문 제', target: () => el('quiz-panel') || el('quiz-overlay'),
-        text:'대사 끝에 문제가 나온다. <b>틀려도 괜찮다</b> — 바로 해설이 나오고, 틀린 문제는 며칠 뒤 다시 만난다.',
+        text:'대사 끝에 문제가 나옵니다. <b>틀려도 괜찮습니다</b> — 바로 해설이 나오고, 틀린 문제는 며칠 뒤에 다시 만납니다.',
       },
       // 자동 이동은 처음부터 열려 있다(해금 안내가 아니라 첫 안내에 넣은 이유).
       // 걷는 법을 먼저 익힌 **뒤에** 알려 준다 — 순서만은 지킨다.
       { tag:'자 동 이 동', target: () => el('auto-btn'),
-        text:'걷는 게 번거로우면 이걸 켜라. 알아서 다음 사람에게 간다.<br>' +
-             '<b>대사와 문제는 직접 넘겨야 한다</b> — 거기서 배우기 때문이다.',
+        text:'걷는 게 번거로우면 이걸 켜 보세요. 알아서 다음 사람에게 갑니다.<br>' +
+             '<b>대사와 문제는 직접 넘기셔야 합니다</b> — 거기서 배우기 때문입니다.',
       },
     ]);
   }
@@ -218,17 +221,17 @@ window.Guide = (function(){
      **한 번 눌러 보게** 한다 — 열렸다고 알리기만 하면 안 쓴다. */
   const ON_UNLOCK = {
     heroes: { btn: 'hero-btn', tag:'인 물 도 감',
-      text:'만난 사람이 카드로 쌓인다. 그 사람의 문제를 <b>첫 시도에 다 맞히면 ★</b>이 붙는다.' },
+      text:'만난 사람이 카드로 쌓입니다. 그 사람의 문제를 <b>첫 시도에 다 맞히면 ★</b>이 붙습니다.' },
     shop:   { btn: 'gold-btn',   tag:'금 으 로  하 는  것',
-      text:'모은 금을 쓸 수 있게 되었다. 눌러서 무엇이 있는지 보라.' },
+      text:'모은 금을 쓸 수 있게 되었습니다. 눌러서 무엇이 있는지 보세요.' },
     scan:   { btn: 'gold-btn',   tag:'유 물 탐 지',
-      text:'이 구역에서 못 찾은 유물 자리를 잠깐 비춰 준다. 금으로 하는 것 안에 있다.' },
+      text:'이 구역에서 못 찾은 유물 자리를 잠깐 비춰 줍니다. 금으로 하는 것 안에 있습니다.' },
     mg_match: { btn: 'daily-mini', tag:'미 니 게 임',
-      text:'유물과 시대를 잇는 놀이가 열렸다. 이기면 금이 나온다.' },
+      text:'유물과 시대를 잇는 놀이가 열렸습니다. 이기면 금이 나옵니다.' },
     mg_face:  { btn: 'daily-mini', tag:'미 니 게 임',
-      text:'얼굴을 보고 이름을 맞히는 놀이가 열렸다.' },
+      text:'얼굴을 보고 이름을 맞히는 놀이가 열렸습니다.' },
     box2:   { btn: 'daily-box',  tag:'상 자',
-      text:'이제 시대 상자를 하루 두 번 연다.' },
+      text:'이제 시대 상자를 하루에 두 번 열 수 있습니다.' },
   };
 
   /* 계급이 오른 직후에 부른다. 새로 열린 것들을 하나씩 안내한다. */
@@ -245,7 +248,7 @@ window.Guide = (function(){
         if (!btn) continue;                 // 이 화면에 그 단추가 없으면 다음에
         await run(key, [{
           tag: c.tag, target: btn,
-          text: `<b>${g.name}</b>이 되어 열렸다.<br>${c.text}`,
+          text: `<b>${g.name}</b>이 되어 열렸습니다.<br>${c.text}`,
           wait: () => btn.dataset.gdTapped === '1',
           timeout: 20000,
         }]);

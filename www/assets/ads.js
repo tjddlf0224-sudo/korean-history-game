@@ -8,7 +8,10 @@
 // ============================================================
 
 window.Ads = (function () {
-  var USE_TEST = true;  // 한국사 게임용 광고단위를 발급받으면 false 로 // 배포: REAL ID(iOS·Android 둘 다) 적용됨.
+  // iOS는 한국사 게임 전용 단위를 발급받아 넣었다(2026-09-01).
+  // 안드로이드는 아직 보카바리스타 것이라 **실광고를 켜면 정책 위반**이다 —
+  // 안드로이드 단위를 따로 발급받기 전에는 여기를 false 로 내리지 말 것.
+  var USE_TEST = true;
 
   // Google 공식 테스트 광고단위 (계정 없이 동작)
   var TEST = {
@@ -16,7 +19,7 @@ window.Ads = (function () {
     android: { rewarded: 'ca-app-pub-3940256099942544/5224354917', interstitial: 'ca-app-pub-3940256099942544/1033173712' },
   };
   var REAL = {
-    ios:     { rewarded: 'ca-app-pub-7418287954060066/1585931446', interstitial: 'ca-app-pub-7418287954060066/1535362922' },
+    ios:     { rewarded: 'ca-app-pub-7418287954060066/6516779176', interstitial: 'ca-app-pub-7418287954060066/1264452497' }, // 2026-09-01 한국사 게임 전용
     android: { rewarded: 'ca-app-pub-7418287954060066/5259988507', interstitial: 'ca-app-pub-7418287954060066/6818175857' }, // 2026-08-18 발급
   };
 
