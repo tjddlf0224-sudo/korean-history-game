@@ -332,3 +332,17 @@
 **CSS 애니메이션으로만 보이게 만들면 안 된다** — 장면이 화면에 안 떠서 파고들었더니, 이 검증 브라우저에서는 **애니메이션 시계가 아예 가지 않았다**(`playState`는 running인데 `currentTime`이 계속 0). `animation ... forwards`의 0% 프레임이 `opacity:0`이라 영영 안 보였다. `items.js`의 사용 장면과 `journey.js`의 시대의 열쇠 장면 둘 다 **JS로 띄웠다 지우는** 방식으로 바꿨다.
 
 **`AUDIT_2026-08-30.md` 머리말 정정** — "아직 아무것도 안 고침"으로 남아 있었으나 33건은 `70ffad4`에서 이미 다 고쳤다. 다시 읽을 때 오해를 살 문서였다.
+
+### 30. iOS 앱 — Capacitor 스캐폴드 + 가로 고정 (2026-08-31)
+
+- `npm install` → `npx cap add ios`. **CocoaPods 없이 SPM으로** 잡혔다(Capacitor 8). Xcode 26.6에서 24초 빌드, iPhone 17 Pro 시뮬레이터 실행 성공.
+- **챕터 이동이 된다** — HTML 36개를 오가는 구조라 Capacitor에서 자주 깨지는 지점인데 문제없었다. 배경·우측 버튼(AUTO·인물·가방·금)도 정상.
+- **가로 전용으로 잠갔다.** 이 게임은 가로 전용인데, 웹에서는 화면이 세로면 CSS로 90도 돌려 보여 준다(`index.html`의 `classList.toggle('rot', portrait)`). 앱에서는 iOS가 직접 돌리는 편이 낫다 — 상태바·안전영역이 제자리를 찾고 회전 코드를 아예 안 탄다.
+  - 보카 바리스타는 메뉴가 세로라서 탐험 화면에서만 `ScreenOrientation.lock`을 건다. 한국사 게임은 전부 가로라 **Info.plist 한 번으로 끝난다**(플러그인 불필요).
+  - 아이패드 키(`~ipad`)도 같이 잠갔다 — 안 고치면 아이패드에서만 세로가 열린다.
+
+**`ios/`는 .gitignore에 있다.** 그래서 Info.plist를 손으로 고치면 `cap add ios`를 다시 할 때 사라진다. 기억에 기대지 않도록 `www/assets/tools/ios_setup.py`에 적어 두고 돌린다(여러 번 돌려도 안전).
+
+    npx cap add ios  뒤에는 반드시:  python3 www/assets/tools/ios_setup.py
+
+**크롬은 못 붙였다** — 확장은 설치돼 있고(1.0.90) 크롬도 켜져 있는데 MCP 브리지가 안 잡힌다. 크롬에서 Claude 사이드 패널을 열어야 연결되는 것으로 보인다. 사장님이 맥북 앞에 계셔야 확인된다.
