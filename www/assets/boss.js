@@ -400,7 +400,7 @@ window.Boss = (function(){
     // 여기만 그게 없어서, 파일을 고쳐도 브라우저가 옛 그림을 계속 썼다
     // (좌우 파일 이름을 바로잡은 뒤에도 주인공이 보스 반대쪽을 보고 있었다).
     document.getElementById('bs-p').innerHTML =
-      `<img src="${opt.playerImg || 'assets/player/right_1.png?v=5'}" alt="">`;
+      `<img src="${opt.playerImg || 'assets/player/right_1.png?v=6'}" alt="">`;
 
     // 담력(膽)을 가진 동료가 있으면 한 번은 대신 맞아 준다.
     // 동료를 화면에 세우지는 않는다 — 전투용 아트를 따로 뽑아야 하는데

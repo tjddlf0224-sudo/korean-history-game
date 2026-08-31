@@ -98,13 +98,14 @@ window.Journey = (function(){
     st.textContent = `
     .jn-key { position:absolute; inset:0; z-index:90; display:flex; align-items:center;
       justify-content:center; background:rgba(8,6,3,.86); font-family:"Gowun Batang",serif;
-      animation:jn-fade 6s ease forwards; }
-    @keyframes jn-fade { 0%{opacity:0} 6%{opacity:1} 88%{opacity:1} 100%{opacity:0} }
+      opacity:1; transition:opacity .5s; }
+    /* 애니메이션으로만 보이게 하지 않는다 — 애니메이션 시계가 가지 않는
+       환경에서는 화면에 아무것도 안 뜬다(실제로 겪었다). JS로 띄웠다 지운다. */
     .jn-key .box { text-align:center; padding:0 8%; max-width:34em; }
     .jn-key .era { font-size:12px; letter-spacing:.26em; color:#a89676; }
     .jn-key .ic { margin:14px auto 10px; width:104px; height:104px; display:grid; place-content:center; }
-    .jn-key .ic img { width:100%; height:100%; object-fit:contain;
-      filter:drop-shadow(0 0 26px rgba(240,201,107,.65)); animation:jn-rise 1.4s cubic-bezier(.2,1.2,.3,1); }
+    .jn-key .ic img { width:100%; height:100%; object-fit:contain; opacity:1;
+      filter:drop-shadow(0 0 26px rgba(240,201,107,.65)); }
     @keyframes jn-rise { 0%{opacity:0; transform:translateY(18px) scale(.7)} 100%{opacity:1; transform:none} }
     .jn-key .nm { font-size:24px; font-weight:700; color:#f0c96b;
       text-shadow:0 0 24px rgba(240,201,107,.55); }
@@ -140,6 +141,7 @@ window.Journey = (function(){
     layer().appendChild(ov);
     if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
     if (navigator.vibrate) navigator.vibrate([40, 60, 90]);
+    setTimeout(() => { ov.style.opacity = '0'; }, 5400);
     setTimeout(() => { ov.remove(); checkEnding(); }, 6000);
   }
 

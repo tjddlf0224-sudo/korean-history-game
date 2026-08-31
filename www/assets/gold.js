@@ -156,11 +156,9 @@ window.Gold = (function(){
         ds:'다음에 한 번 틀려도 콤보가 끊기지 않는다.' +
            (st.shield ? ` (지금 ${st.shield}개)` : '') },
     ];
-    // 군자금 후원 — 일제강점기에서, 금붙이를 지녔을 때만
-    if (window.Items && Items.has('geumbuchi') && !st.funded){
-      out.push({ id:'fund', nm:'군자금 후원', price:PRICE.fund,
-        ds:'지닌 금붙이와 함께 임시정부에 내놓는다. 한 번뿐이다.' });
-    }
+    // 군자금 후원은 상점에서 뺐다 — 선사시대에서도 임시정부에 후원할 수
+    // 있었기 때문이다. 이제 금붙이를 지니고 임시정부 청사에 서 있을 때만
+    // 가방에서 꺼내 쓸 수 있다(items.js의 USE).
     return out;
   }
 
@@ -204,10 +202,6 @@ window.Gold = (function(){
       document.getElementById('gold-ov').classList.remove('show');
     } else if (id === 'shield'){
       st.shield++; save(st); say('콤보를 한 번 지켜 준다.');
-    } else if (id === 'fund'){
-      st.funded = true; save(st);
-      document.getElementById('gold-ov').classList.remove('show');
-      fundScene();
     }
     open();
   }
@@ -248,24 +242,6 @@ window.Gold = (function(){
     return left.length;
   }
 
-  /* ---------------- 군자금 후원 ---------------- */
-  function fundScene(){
-    const ov = document.createElement('div');
-    ov.className = 'jn-key';
-    ov.style.cssText = 'position:absolute;inset:0;z-index:90;display:flex;align-items:center;' +
-      'justify-content:center;background:rgba(8,6,3,.88);font-family:"Gowun Batang",serif;';
-    ov.innerHTML = '<div style="text-align:center;padding:0 10%;max-width:32em">' +
-      '<div style="font-size:12px;letter-spacing:.26em;color:#a89676">군 자 금</div>' +
-      '<div style="font-size:22px;font-weight:700;color:#f0c96b;margin-top:14px">' +
-      '이름을 적지 않았다</div>' +
-      '<div style="font-size:15px;color:#e6dbc2;line-height:1.9;margin-top:12px">' +
-      '금붙이와 함께 내놓았다. 받는 이는 영수증을 쓰려 했지만, 그대는 고개를 저었다.<br>' +
-      '이런 돈이 모여 사람이 움직이고, 배가 뜨고, 소식이 건너간다.</div></div>';
-    layer().appendChild(ov);
-    if (window.Badges) Badges.earn('fund_independence');
-    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
-    setTimeout(() => ov.remove(), 5200);
-  }
 
   /* ---------------- 콤보 지키기 ---------------- */
   function useShield(){
@@ -320,6 +296,6 @@ window.Gold = (function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  return { get, earn, spend, open, mount, useShield,
+  return { get, earn, spend, open, mount, useShield, scanSpots,
            get shields(){ return st.shield; } };
 })();

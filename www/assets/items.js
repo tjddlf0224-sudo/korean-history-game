@@ -307,6 +307,11 @@ window.Items = (function(){
     #bag-ov .detail .dd { font-size:13.5px; color:#f5ecd8; line-height:1.7; }
     #bag-ov .detail .dx { margin-top:9px; padding-top:9px; border-top:1px solid #3a2c1a;
       font-size:12.5px; color:#c9bda6; line-height:1.7; }
+    #bag-ov .detail .it-use { display:block; width:100%; margin-top:12px; padding:11px;
+      background:#3a2c1a; border:1px solid #c9a24a; color:#f0c96b; border-radius:10px;
+      font-family:inherit; font-size:14px; cursor:pointer; }
+    #bag-ov .detail .it-use:active { transform:scale(.985); }
+    @keyframes jn-fade { 0%{opacity:0} 6%{opacity:1} 88%{opacity:1} 100%{opacity:0} }
     #bag-ov .detail .dx b { color:#e9c979; }
     #bag-ov .close { display:block; width:100%; margin-top:14px; background:#2a2013;
       border:1px solid #4a3c26; color:#f5ecd8; border-radius:11px; padding:11px;
@@ -516,15 +521,112 @@ window.Items = (function(){
     document.getElementById('bag-ov').classList.add('show');
   }
 
-  function showDetail(id){
-    const d = DB[id], el = document.getElementById('bag-detail');
-    el.innerHTML = `<div class="dn">${d.name}</div><div class="de">${d.era}</div>` +
-      `<div class="dd">${d.desc}</div>` +
-      `<div class="dx"><b>시험에는</b> ${d.exam}</div>`;
-    el.classList.add('show');
+  /* ============ 쓰는 유물 ============
+
+     유물이 줍기만 하는 물건이면 도감을 채우는 것 말고는 할 일이 없다.
+     제자리에서 꺼내 쓸 수 있는 것만 몇 개 골라 장면을 붙였다.
+
+     where: 그 유물을 쓸 수 있는 챕터와 구역. 구역을 비우면 그 챕터 어디서든.
+     한 번 쓰면 khg_used에 적어 두고 다시 못 쓰게 한다(대동여지도만 예외).
+  */
+  const USE = {
+    gimiseoneon: {
+      file: 'ilje1.html', zone: 'tapgol', label: '읽는다',
+      tag: '기 미 독 립 선 언 서',
+      line: '“오등은 자에 아 조선의 독립국임과 조선인의 자주민임을 선언하노라.”<br>' +
+            '읽는 소리가 멀리까지 갔다. 앞줄에서 뒷줄로, 뒷줄에서 골목으로.<br>' +
+            '그리고 한 사람이 두 팔을 들었다. 이내 광장이 통째로 들썩였다.',
+      badge: 'use_gimiseoneon',
+    },
+    joseoneohakhoe: {
+      file: 'ilje2.html', zone: 'gyeongseong', label: '숨긴다',
+      tag: '우 리 말 큰 사 전 원 고',
+      line: '순사의 발소리가 골목 끝에서 들렸다. 원고 뭉치를 품에 넣고 벽을 등졌다.<br>' +
+            '말을 빼앗기면 생각을 빼앗기고, 생각을 빼앗기면 나라를 잃는다 했다.<br>' +
+            '…발소리가 멀어졌다. 종이 귀퉁이가 땀에 젖었다.',
+      badge: 'use_eohakhoe',
+    },
+    geumbuchi: {
+      file: 'ilje_ch7.html', zone: 'imjeong', label: '내놓는다', gold: 50,
+      tag: '군 자 금',
+      line: '금붙이와 함께 내놓았다. 받는 이가 영수증을 쓰려 했지만 그대는 고개를 저었다.<br>' +
+            '이런 돈이 모여 사람이 움직이고, 배가 뜨고, 소식이 건너간다.',
+      badge: 'fund_independence',
+    },
+    daedongyeojido: {
+      file: null, zone: null, label: '펼친다', repeat: true,
+      tag: '대 동 여 지 도',
+      line: '지도를 펴자 이 고을의 생김새가 한눈에 들어온다.<br>아직 손대지 않은 자리가 어렴풋이 빛난다.',
+      onUse(){ return window.Gold ? Gold.scanSpots() : 0; },
+    },
+  };
+
+  function usedKey(){ return 'khg_used'; }
+  function usedSet(){
+    try { return new Set(JSON.parse(localStorage.getItem(usedKey())) || []); } catch(e){ return new Set(); }
+  }
+  function markUsed(id){
+    const s = usedSet(); s.add(id);
+    try { localStorage.setItem(usedKey(), JSON.stringify([...s])); } catch(e){}
   }
 
-  return { DB, has, owned, give, checkSpot, trySearch,
+  /* 지금 이 자리에서 쓸 수 있는가 */
+  function canUse(id){
+    const u = USE[id];
+    if (!u || !has(id)) return null;
+    if (!u.repeat && usedSet().has(id)) return null;
+    const here = location.pathname.split('/').pop();
+    if (u.file && u.file !== here) return null;
+    if (u.zone && !(typeof World !== 'undefined' && World.zone === u.zone)) return null;
+    if (u.gold && window.Gold && Gold.get() < u.gold) return null;
+    return u;
+  }
+
+  function useItem(id){
+    const u = canUse(id);
+    if (!u) return;
+    if (u.gold && window.Gold && !Gold.spend(u.gold)) return;
+    if (!u.repeat) markUsed(id);
+    document.getElementById('bag-ov').classList.remove('show');
+    if (u.onUse) u.onUse();
+    if (u.badge && window.Badges) Badges.earn(u.badge);
+    scene(u);
+  }
+
+  function scene(u){
+    const L = document.getElementById('wrap') || document.body;
+    const d = document.createElement('div');
+    d.style.cssText = 'position:absolute;inset:0;z-index:94;display:flex;align-items:center;' +
+      'justify-content:center;background:rgba(8,6,3,.9);font-family:"Gowun Batang",serif;' +
+      // 애니메이션으로만 보이게 하면 안 된다 — CSS 애니메이션 시계가 가지
+      // 않는 환경이 있고(실제로 겪었다: playState는 running인데 currentTime이
+      // 계속 0), 그러면 화면에 아무것도 안 뜬다. 그냥 띄우고 JS로 지운다.
+      'opacity:1;transition:opacity .5s;';
+    d.innerHTML = '<div style="text-align:center;padding:0 9%;max-width:34em">' +
+      `<div style="font-size:12px;letter-spacing:.26em;color:#a89676">${u.tag}</div>` +
+      `<div style="font-size:15.5px;color:#e6dbc2;line-height:2;margin-top:16px">${u.line}</div>` +
+      '</div>';
+    L.appendChild(d);
+    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
+    if (navigator.vibrate) navigator.vibrate([40, 60, 90]);
+    setTimeout(() => { d.style.opacity = '0'; }, 5400);
+    setTimeout(() => d.remove(), 6000);
+  }
+
+  function showDetail(id){
+    const d = DB[id], el = document.getElementById('bag-detail');
+    const u = canUse(id);
+    el.innerHTML = `<div class="dn">${d.name}</div><div class="de">${d.era}</div>` +
+      `<div class="dd">${d.desc}</div>` +
+      `<div class="dx"><b>시험에는</b> ${d.exam}</div>` +
+      (u ? `<button class="it-use" id="it-use">${u.label}` +
+           (u.gold ? ` (금 ${u.gold})` : '') + '</button>' : '');
+    el.classList.add('show');
+    const b = document.getElementById('it-use');
+    if (b) b.onclick = () => useItem(id);
+  }
+
+  return { DB, has, owned, give, checkSpot, trySearch, canUse, useItem,
            mount, openBag, renderBag,
            get nearSpot(){ return nearSpot; } };
 })();
