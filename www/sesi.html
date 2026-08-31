@@ -1688,6 +1688,30 @@ if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Items) Items.mount();
 if (window.Heroes) Heroes.mount();
+if (window.News) News.set({
+  'seollal_0': { icon:'🧧', when:'음력 정월 초하루',
+    headline:'설, 한 해가 열리다',
+    sub:'차례를 지내고 세배를 올립니다. 떡국을 먹습니다.' },
+  'daeboreum_0': { icon:'🌕', when:'음력 정월 보름',
+    headline:'대보름, 부럼을 깨물다',
+    sub:'오곡밥과 묵은 나물을 먹고, 논둑에서 쥐불을 놓습니다.' },
+  'hansik_0': { icon:'🌱', when:'동지로부터 105일',
+    headline:'한식, 불을 피우지 않다',
+    sub:'찬 음식을 먹고 조상의 산소를 손봅니다.' },
+  'dano_0': { icon:'🌾', when:'음력 5월 5일',
+    headline:'단오, 창포물에 머리를 감다',
+    sub:'여자는 그네를 뛰고 남자는 씨름을 합니다.' },
+  'chilseok_0': { icon:'✨', when:'음력 7월 7일',
+    headline:'칠석, 견우와 직녀가 만나다',
+    sub:'까치와 까마귀가 다리를 놓는다고 전합니다.' },
+  'chuseok_0': { icon:'🌕', when:'음력 8월 보름',
+    headline:'한가위, 햇곡식으로 차례를 지내다',
+    sub:'송편을 빚고 밤에는 강강술래를 돕니다.' },
+  'dongji_0': { icon:'🥣', when:'동지',
+    headline:'동지, 밤이 가장 길다',
+    sub:'팥죽을 쑵니다. 이날부터 해가 다시 길어져 작은설이라 합니다.' },
+}, 'word');
+
 if (window.Auto) Auto.mount();
 </script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
