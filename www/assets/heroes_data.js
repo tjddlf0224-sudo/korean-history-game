@@ -112,6 +112,8 @@ window.HERO_DATA = (function(){
     gwakjaeu: { n:'곽재우', p:'gwakjaeu.png', e:'조선 후기', r:'general', ch:{'imjin2.html':['gwakjaeu_0']} },
     gwanghae: { n:'광해군', p:'gwanghae.png', e:'조선 후기', r:'king', ch:{'hugi1.html':['gwanghae_0']} },
     gwonyul: { n:'권율', p:'gwonyul.png', e:'조선 후기', r:'general', ch:{'imjin2.html':['gwonyul_0']} },
+    gyeokgun: { n:'격군', p:'gyeokgun.png', e:'조선 후기', r:'commoner', ch:{'imjin.html':['gyeokgun_0']} },
+    subyeong_sabu: { n:'사부', p:'subyeong_sabu.png', e:'조선 후기', r:'general', ch:{'imjin.html':['sabu_0']} },
     gimsimin: { n:'김시민', p:'gimsimin.png', e:'조선 후기', r:'general', ch:{'imjin.html':['gimsimin_0']} },
     gimhongdo: { n:'김홍도', p:'gimhongdo.png', e:'조선 후기', r:'scholar', ch:{'hugi2.html':['gimhongdo_0']} },
     nongae: { n:'논개', p:'nongae.png', e:'조선 후기', r:'commoner', ch:{'imjin.html':['nongae_0']} },
