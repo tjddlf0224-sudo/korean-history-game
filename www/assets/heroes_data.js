@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 186명 */
+   인물 191명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -74,14 +74,16 @@ window.HERO_DATA = (function(){
     gunjol: { n:'늙은 군졸', p:'gunjol.png', e:'조선 전기', r:'commoner', ch:{'ch6.html':['gunjol_0']} },
     naesi: { n:'늙은 내관', p:'naesi.png', e:'조선 전기', r:'commoner', ch:{'ch3.html':['attendant_0']} },
     nonong: { n:'늙은 농부', p:'nonong.png', e:'조선 전기', r:'commoner', ch:{'ch2b.html':['nonong_0']} },
+    bakyeon: { n:'박연', p:'bakyeon.png', e:'조선 전기', r:'scholar', ch:{'ch2.html':['bakyeon_0']} },
     suryeong: { n:'사또', p:'suryeong.png', e:'조선 전기', r:'king', ch:{'ch4.html':['suryeong_0']} },
     seogeojeong: { n:'서거정', p:'seogeojeong.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['seogeojeong_0','seogeojeong_1','seogeojeong_2']} },
     seonjo: { n:'선조', p:'seonjo.png', e:'조선 전기', r:'king', ch:{'ch6.html':['seonjo_0']} },
     seongsammun: { n:'성삼문', p:'seongsammun.png', e:'조선 전기', r:'scholar', ch:{'ch2.html':['seongsammun_0'], 'ch3.html':['seongsammun_0']} },
     seongjong: { n:'성종', p:'seongjong.png', e:'조선 전기', r:'king', ch:{'ch4.html':['seongjong_0','seongjong_1']} },
     sejo: { n:'세조', p:'sejo.png', e:'조선 전기', r:'king', ch:{'ch3.html':['sejo_0','sejo_1','sejo_2']} },
-    sejong: { n:'세종', p:'sejong.png', e:'조선 전기', r:'king', ch:{'ch2.html':['sejong_0','sejong_1','sejong_2','sejong_3']} },
+    sejong: { n:'세종', p:'sejong.png', e:'조선 전기', r:'king', ch:{'ch2.html':['sejong_0','sejong_1','sejong_3']} },
     sinsukju: { n:'신숙주', p:'sinsukju.png', e:'조선 전기', r:'scholar', ch:{'ch2.html':['sinsukju_0'], 'ch2b.html':['sinsukju_0']} },
+    angyeon: { n:'안견', p:'angyeon.png', e:'조선 전기', r:'commoner', ch:{'ch2.html':['angyeon_0']} },
     yeonsangun_king: { n:'연산군', p:'yeonsangun_king.png', e:'조선 전기', r:'king', ch:{'ch5.html':['yeonsangun_0']} },
     yusaeng: { n:'유생', p:'yusaeng.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['yusaeng_0']} },
     yiyi: { n:'이이', p:'yiyi.png', e:'조선 전기', r:'scholar', ch:{'ch6.html':['yiyi_0']} },
@@ -165,10 +167,13 @@ window.HERO_DATA = (function(){
     singanhoe: { n:'신간회 간부', p:'singanhoe.png', e:'일제강점기', r:'scholar', ch:{'ilje2.html':['singanhoe_0']} },
     sinchaeho: { n:'신채호', p:'sinchaeho.png', e:'일제강점기', r:'scholar', ch:{'ilje2.html':['sinchaeho_0']} },
     anchangho: { n:'안창호', p:'anchangho.png', e:'일제강점기', r:'scholar', ch:{'ilje2.html':['anchangho_0']} },
+    aegukban: { n:'애국반 아낙', p:'aegukban.png', e:'일제강점기', r:'commoner', ch:{'ilje_ch7.html':['aegukban_0']} },
     yugwansun: { n:'유관순', p:'yugwansun.png', e:'일제강점기', r:'commoner', ch:{'ilje1.html':['yugwansun_0']} },
     yunbonggil: { n:'윤봉길', p:'yunbonggil.png', e:'일제강점기', r:'commoner', ch:{'ilje_ch7.html':['yunbonggil_0']} },
     uiyeoldan: { n:'의열단원', p:'uiyeoldan.png', e:'일제강점기', r:'general', ch:{'ilje2.html':['uiyeoldan_0']} },
     eohakhoe: { n:'조선어학회 회원', p:'eohakhoe.png', e:'일제강점기', r:'scholar', ch:{'ilje2.html':['eohakhoe_0']} },
+    josoang: { n:'조소앙', p:'josoang.png', e:'일제강점기', r:'scholar', ch:{'ilje_ch7.html':['josoang_0']} },
+    jicheongcheon: { n:'지청천', p:'jicheongcheon.png', e:'일제강점기', r:'general', ch:{'ilje_ch7.html':['jicheongcheon_0']} },
     mudan: { n:'헌병경찰 피해자', p:'mudan.png', e:'일제강점기', r:'commoner', ch:{'ilje1.html':['mudan_0']} },
     sasaoip: { n:'4·19 학생', p:'sasaoip.png', e:'현대', r:'commoner', ch:{'hyeondae2.html':['sasaoip_0']} },
     yuwol: { n:'6월 항쟁 시민', p:'yuwol.png', e:'현대', r:'commoner', ch:{'hyeondae2.html':['yuwol_0']} },

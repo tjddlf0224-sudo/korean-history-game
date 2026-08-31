@@ -95,6 +95,17 @@ SHEETS = {
         'buyeo', 'gogurin', 'okjeo', 'dongye', 'samhan_cheongun',
         'extra_musa0', 'extra_yeoin0', 'extra_eobu', 'extra_daejanggan', 'extra_sangin',
         'extra_jikjo', 'extra_sanyang', 'extra_chonjang', 'extra_mokdong', 'extra_nopa']),
+    # 보스 최만리 — 초록 배경 한 칸짜리. 제미나이 로고를 뺀 인물 영역만
+    # 미리 잘라 두고 돌린다(로고는 인물과 떨어진 우하단에 있다).
+    # 뽑은 뒤 assets/boss/ 로 옮긴다.
+    'boss_choemanri': (1, 1, ['choemanri']),
+    # 인물 보강분 5명. 3열 2행으로 부탁했는데 제미나이가 4열 2행으로 그렸고,
+    # 조소앙과 애국반 여인을 각각 두 벌씩 냈다. 프롬프트에 더 가까운 쪽만 쓴다 —
+    # 조소앙은 서류 뭉치를 든 4번, 애국반 여인은 머리 수건에 물통을 든 7번.
+    # 8번은 제미나이 로고 자리라 비워 뒀다.
+    'sheet_bogang': (4, 2, [
+        'bakyeon', 'angyeon', None, 'josoang',
+        'jicheongcheon', None, 'aegukban', None]),
 }
 
 
@@ -149,6 +160,13 @@ def extract(cell, out):
     sizes = ndimage.sum(mask, lab, range(1, n + 1))
     mask = lab == (int(np.argmax(sizes)) + 1)
     mask = ndimage.binary_fill_holes(mask)
+
+    # 구멍 메우기는 인물 안쪽의 끊긴 자리를 이어 주지만, **정말로 뚫린 자리**까지
+    # 메워 버린다. 팔과 옷 사이로 배경이 비쳐 보이는 곳이 그렇다(애국반 여인의
+    # 물통 손잡이 안쪽에서 마젠타가 그대로 남아 나왔다).
+    # 그래서 메운 뒤에, 순수 배경색에 아주 가까운 픽셀은 도로 뚫어 준다.
+    # 기준을 느슨하게 잡으면 분홍 한복이나 초록 저고리까지 뚫리므로 좁게 잡는다.
+    mask = mask & ~(dist < 70)
 
     a = mask.astype(np.float64)
     # 마젠타가 테두리로 번지지 않도록 색을 먼저 곱한 뒤 축소한다.

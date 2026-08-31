@@ -588,6 +588,8 @@ const ZONES = {
       { id: 'sinsukju', name: '신숙주', x: 790, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
       { id:'seongsammun', name:'성삼문', x:1032, y:480, img:'assets/portraits/seongsammun.png', look:{ role:'scholar', body:'#3d4a5a', accent:'#c9a24a' } },
       { id:'haksa', name:'집현전 학사', x:336, y:440, img:'assets/portraits/extra_munsin.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
+      { id:'bakyeon', name:'박연', x:920, y:160, img:'assets/portraits/bakyeon.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'angyeon', name:'안견', x:152, y:256, img:'assets/portraits/angyeon.png', look:{ role:'commoner', body:'#5a7c7a', accent:'#c9a24a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 세종만 네 번 연달아 만나면
     // 같은 형식이 반복돼 지루해진다는 지적이 있었다.
@@ -1169,6 +1171,39 @@ window.addEventListener('keyup', e=>{
 /* ============ 대화 데이터 (beats, 순차 진행 — 분기 없음) ============
    beats 항목에 name/icon을 개별로 주면 그 줄만 다른 화자로 표시된다(최만리 논쟁 장면용 확장). */
 const NPC_DATA = {
+  angyeon_0: {
+    name: '안견', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M4 15l5-5 4 4 3-3 4 4"/><circle cx="9" cy="9" r="1.4"/></svg>', img: 'assets/portraits/angyeon.png',
+    beats: [
+      { who:'npc', t:'도화원의 화원 안견이라 하옵니다. 붓을 놓은 지 사흘째입니다.' },
+      { who:'npc', t:'안평대군께서 꿈 이야기를 들려주셨습니다. 복숭아꽃이 만발한 골짜기를 거닐었다는 꿈이었지요.' },
+      { who:'npc', t:'사흘 만에 그렸습니다. 오른쪽에서 왼쪽으로 갈수록 현실이 이상으로 넘어가도록 폈지요.' },
+      { who:'npc', t:'제 곁에는 강희안이라는 분도 계십니다. 시와 그림과 글씨 셋 다에 능하신 분이라, 저는 그림 하나로도 벅찹니다.' },
+    ],
+    quizSeq: [
+      { q:'안평대군의 꿈 이야기를 듣고 안견이 그린, 현실과 이상 세계를 함께 담은 그림은?', opts:['몽유도원도','세한도'], answer:0, src:[15,23,28,30,31,65],
+        feedback:['세한도는 훗날 조선 후기 김정희의 작품이에요.','정답! 안견이 그린 몽유도원도입니다.'] },
+      { q:'시·그림·글씨에 모두 능해 조선 전기를 대표하는 문인 화가로 꼽히는 인물은?', opts:['강희안','김홍도'], answer:0, src:[72],
+        feedback:['김홍도는 훨씬 후대인 조선 후기 화가예요.','정답! 강희안입니다.'] },
+    ]
+  },
+
+  bakyeon_0: {
+    name: '박연', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6h14M5 10h14M5 14h14"/><path d="M8 4v12M16 4v12"/><path d="M7 20h10"/></svg>', img: 'assets/portraits/bakyeon.png',
+    beats: [
+      { who:'npc', t:'가만, 잠시만 기다려 주시오. …지금 이 소리가 반음쯤 높소.' },
+      { who:'npc', t:'우리 악기는 철마다 소리가 달라졌소. 나무와 가죽은 습기를 먹으니까.' },
+      { who:'npc', t:'하여 돌로 만들었소. 경석을 갈아 열여섯 개를 매단 편경이오. 돌은 마르든 젖든 소리가 변하지 않소.' },
+      { who:'npc', t:'율관으로 기준음을 잡고, 종묘와 조회에서 쓰는 아악도 처음부터 다시 정리했소.' },
+      { who:'npc', t:'…음이 바르지 않으면 예도 바르지 않다 하셨소. 전하께서 그리 말씀하셨소.' },
+    ],
+    quizSeq: [
+      { q:'세종이 박연에게 명해 새로 만들게 한 궁중 타악기는?', opts:['편경','거문고'], answer:0, src:[76],
+        feedback:['거문고는 이미 오래전부터 있던 현악기예요.','정답! 돌을 깎아 만든 편경으로 궁중 음악(아악)을 새로 정비했습니다.'] },
+      { q:'세종이 박연에게 명해 정비하게 한 궁중 음악은?', opts:['아악','판소리'], answer:0, src:[76],
+        feedback:['판소리는 조선 후기에 성행한 서민 음악이에요.','정답! 편경 등을 새로 만들며 아악을 정비했습니다.'] }
+    ]
+  },
+
   haksa_0: {
     name: '집현전 학사', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>', img: 'assets/portraits/extra_munsin.png',
     beats: [
@@ -1188,6 +1223,8 @@ const NPC_DATA = {
   sejong_3: {
     name: '세종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sejong.png',
     beats: [
+      { who:'npc', t:'언문은 이제 시작일 뿐이네. 이 글자로 수많은 책을 펴낼 걸세 — 역사서, 의학서, 음악까지.' },
+      { who:'npc', t:'악학의 박연, 도화원의 안견… 저마다 제 자리에서 제 일을 하고 있네. 아직 못 만났거든 한번 들러 보게.' },
       { who:'npc', t:'(늙고 지친 목소리로) …요즘 몸이 예전 같지 않네.' },
       { who:'npc', t:'이 경복궁도 참 오래 머물렀군. 강녕전에서 잠을 자고, 사정전에서 신하들과 정사를 논했지. 전각마다 쓰임이 다 달랐네.' },
       { who:'npc', t:'다음 왕위는 문종, 그리고 어린 세손에게 이어지겠지. 부디 이 아이가 무사히 왕좌를 지킬 수 있기를…' },
@@ -1262,28 +1299,6 @@ const NPC_DATA = {
       { q:'세종이 전국 찬반 여론조사를 실시한 뒤 확정한 새 전세 제도는?', opts:['공법(전분6등·연분9등)','대동법'], answer:0, src:[7,10,18,22,55,68],
         feedback:['대동법은 훗날 광해군 대부터 시행되는 수취 제도예요.','정답! 토지 비옥도(전분6등)와 풍흉(연분9등)에 따라 세금을 매긴 공법입니다.'] }
     ]
-  },
-  sejong_2: {
-    name: '세종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sejong.png',
-    beats: [
-      { who:'npc', t:'언문은 이제 시작일 뿐이네. 이 글자로 수많은 책을 펴낼 걸세 — 역사서, 의학서, 음악까지.' },
-      { who:'npc', name:'신숙주', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3l3 3-9.5 9.5-4 1 1-4L18 3z"/><line x1="4" y1="20" x2="7.5" y2="16.5"/></svg>', img:'assets/portraits/sinsukju.png', t:'박연 어른이 편경도 새로 만드셨다지요. 소리가 예전 것보다 훨씬 맑고 정확하다 들었습니다.' },
-      { who:'npc', t:'악기뿐인가. 안평대군도 얼마 전 기이한 꿈을 꾸었다며 나에게 들려주더군. 화공 안견에게 그 꿈을 그림으로 남기게 했다네.' },
-      { who:'npc', t:'그 곁에는 강희안이라는 사람도 있네. 시와 그림, 글씨 셋 다에 능해서 내 눈을 늘 즐겁게 하지.' },
-      { who:'npc', t:'얼마 전 왕비를 먼저 떠나보내고, 수양대군에게 명복을 비는 글(석보상절)을 짓게 했네. 그 내용을 한글 노래로도 옮길 생각일세.' },
-      { who:'npc', t:'그리고 앞선 왕조의 역사도 정리하게 했네. 지난 왕조가 어찌 무너졌는지를 밝혀야, 우리 조선이 왜 서야 했는지도 분명해지는 법이지.' },
-      { who:'npc', t:'아바마마(태종) 대에는 김사형·이무 등이 세계지도를 만들기도 했었지. 우리가 아는 세상을 하나의 그림에 다 담아낸 것이었네.' },
-    ],
-    quizSeq: [
-      { q:'세종이 박연에게 명해 새로 만들게 한 궁중 타악기는?', opts:['편경','거문고'], answer:0, src:[76],
-        feedback:['거문고는 이미 오래전부터 있던 현악기예요.','정답! 돌을 깎아 만든 편경으로 궁중 음악(아악)을 새로 정비했습니다.'] },
-      { q:'안평대군의 꿈 이야기를 듣고 안견이 그린, 현실과 이상 세계를 함께 담은 그림은?', opts:['몽유도원도','세한도'], answer:0, src:[15,23,28,30,31,65],
-        feedback:['세한도는 훗날 조선 후기 김정희의 작품이에요.','정답! 안견이 그린 몽유도원도입니다.'] },
-      { q:'시·그림·글씨에 모두 능해 조선 전기를 대표하는 문인 화가로 꼽히는 인물은?', opts:['강희안','김홍도'], answer:0, src:[72],
-        feedback:['김홍도는 훨씬 후대인 조선 후기 화가예요.','정답! 강희안입니다.'] },
-      { q:'세종이 박연에게 명해 정비하게 한 궁중 음악은?', opts:['아악','판소리'], answer:0, src:[76],
-        feedback:['판소리는 조선 후기에 성행한 서민 음악이에요.','정답! 편경 등을 새로 만들며 아악을 정비했습니다.'] }
-    ],
   },
   sejong_repeat: {
     name: '세종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sejong.png',
@@ -1484,8 +1499,10 @@ const Stage = {
       if (st.act === ACT.RISE)  return (st.sinsukjuDone && st.jangyeongsilDone) ? 'sejong_1' : 'sejong_wait';
       if (st.act === ACT.CRISIS) return 'sejong_crisis';
       if (st.act === ACT.CLIMAX) return 'sejong_crisis';
-      if (st.act === ACT.CLOSE)  return st.sejongStage >= 3 ? 'sejong_repeat'
-                                       : (st.sejongStage >= 2 ? 'sejong_3' : 'sejong_2');
+      // 결말 막에서 세종을 두 번 찾아가게 했더니, 앞의 한 번은 남의 일(편경·
+      // 몽유도원도)을 대신 말하는 자리였다. 그 이야기를 박연·안견에게 돌려주고
+      // 결말 대화도 한 번으로 합쳤다 — 세종과의 대화는 이제 셋이다.
+      if (st.act === ACT.CLOSE)  return st.sejongStage >= 3 ? 'sejong_repeat' : 'sejong_3';
       return 'sejong_repeat';
     }
     if (id === 'sinsukju') return 'sinsukju_0';
@@ -1493,6 +1510,8 @@ const Stage = {
     if (id === 'choemanri') return st.act >= ACT.CLOSE ? 'choemanri_after' : 'choemanri_0';
     if (id === 'seongsammun') return 'seongsammun_0';
     if (id === 'haksa') return 'haksa_0';
+    if (id === 'bakyeon') return 'bakyeon_0';
+    if (id === 'angyeon') return 'angyeon_0';
     return null;
   },
 
@@ -1505,6 +1524,7 @@ const Stage = {
     const z = ZONES.jiphyeonjeon;
     if (!z.npcs.some(n => n.id === 'choemanri')){
       z.npcs.push({ id:'choemanri', name:'최만리', x:688, y:656,
+        img:'assets/portraits/choemanri.png',
         look:{ role:'scholar', body:'#4a3c52', accent:'#b9a06a' } });
     }
     updateHudGoal();
@@ -1518,6 +1538,7 @@ const Stage = {
     World.paused = true;
     Boss.start({
       name: '최만리',
+      img: 'assets/boss/choemanri.png',
       bg: 'assets/scenes/ch2_jiphyeonjeon.webp',
       hp: BOSS_CHOEMANRI.length, lives: 3,
       questions: BOSS_CHOEMANRI,
@@ -1915,7 +1936,6 @@ Stage.advance = function(key){
   else if (key === 'jangyeongsil_0'){ st.jangyeongsilDone = true; }
   else if (key === 'sejong_1'){ Stage.summonChoemanri(); }
   else if (key === 'choemanri_0'){ st.choemanriMet = true; setTimeout(() => Stage.startDebate(), 420); }
-  else if (key === 'sejong_2'){ st.sejongStage = 2; }
   else if (key === 'sejong_3'){ st.sejongStage = 3; Stage.finishChapter(); }
   updateHudGoal();
 };
@@ -1934,6 +1954,8 @@ function updateHudGoal(){
       else if (!st.jangyeongsilDone) t = '간의대의 장영실과 대화하기' + exitDirArrow(ZONES.jiphyeonjeon.exits[0].rect);
       else if (!seenDialogKeys.has('seongsammun_0')) t = '성삼문과 대화하기';
       else if (!seenDialogKeys.has('haksa_0')) t = '집현전 학사와 대화하기';
+      else if (!seenDialogKeys.has('bakyeon_0')) t = '박연과 대화하기';
+      else if (!seenDialogKeys.has('angyeon_0')) t = '안견과 대화하기';
       else t = '세종에게 돌아가기';
       break;
     case ACT.CRISIS:

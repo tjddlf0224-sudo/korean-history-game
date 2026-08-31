@@ -472,6 +472,9 @@ const ZONES = {
     npcs: [
       { id: 'gimgu', name: '김구', x: 900, y: 260, img: 'assets/portraits/gimgu.png', look: { role: 'scholar', body: '#2a3a4a', accent: '#9dc3e0' } },
       { id: 'yunbonggil', name: '윤봉길', x: 900, y: 460, img: 'assets/portraits/yunbonggil.png', look: { role: 'commoner', body: '#3a4a52', accent: '#c9d9e8', headband:true } },
+      { id:'josoang', name:'조소앙', x:1160, y:256, img:'assets/portraits/josoang.png', look:{ role:'scholar', body:'#3d4a5a', accent:'#c9a24a' } },
+      { id:'jicheongcheon', name:'지청천', x:712, y:640, img:'assets/portraits/jicheongcheon.png', look:{ role:'general', body:'#4a5a4a', accent:'#c9a24a' } },
+      { id:'aegukban', name:'애국반 아낙', x:456, y:592, img:'assets/portraits/aegukban.png', look:{ role:'commoner', body:'#6b6b4a', accent:'#e8e4d8' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -719,6 +722,9 @@ function updateHudGoal(){
       return (c >= 0 && c <= 11171 && c % 28 !== 0) ? '과' : '와'; };
     const order = [
       ['gimgu', '김구'],
+      ['josoang', '조소앙'],
+      ['jicheongcheon', '지청천'],
+      ['aegukban', '애국반 아낙'],
       ['yunbonggil', '윤봉길']
     ];
     for (const [id, name] of order){
@@ -874,6 +880,64 @@ window.addEventListener('keyup', e=>{
 /* 사료 근거: 한국민족문화대백과사전 "한인애국단" E0061905.
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님. */
 const NPC_DATA = {
+  aegukban_0: {
+    name: '애국반 아낙', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21c0-4.2 2.9-7 6.5-7s6.5 2.8 6.5 7z"/></svg>', img: 'assets/portraits/aegukban.png',
+    beats: [
+      { who:'npc', t:'…이 옷 말입니까. 몸뻬라고들 합니다. 일본 여자들 일할 때 입는 바지지요.' },
+      { who:'npc', t:'처음엔 다들 안 입었습니다. 치마를 벗으라는 말 같아서요. 그런데 요새는 이걸 안 입으면 전차도 못 탑니다.' },
+      { who:'npc', t:'동네마다 애국반이라는 걸 만들어 놓았습니다. 열 집씩 묶어서요.' },
+      { who:'npc', t:'배급도 거기서 받고, 방공 훈련도 거기서 하고, 누가 무슨 말을 했는지도 거기서 새어 나갑니다.' },
+      { who:'npc', t:'…물통 들고 줄 서서 불 끄는 연습을 합니다. 정작 우리 집에 불이 나면 누가 꺼 주겠습니까.' },
+    ],
+    quizSeq: [
+      { q:'1940년대 전시 동원기에 일제가 조선 여성에게 입도록 강요한 일본식 노동복은?',
+        opts:['몸뻬','개량 한복'], answer:0, src:[71],
+        feedback:['개량 한복은 활동하기 편하게 우리 옷을 고친 것으로, 강요된 옷이 아니에요.','맞습니다. 몸뻬입니다. 1940년 애국반의 방공 훈련에서 시작해, 나중에는 입지 않으면 전차도 탈 수 없게 했습니다.'] },
+      { q:'일제가 전시에 주민을 통제하려고 열 집 안팎을 하나로 묶어 만든 최말단 조직으로, 배급과 방공 훈련을 맡은 것은?',
+        opts:['애국반','향약'], answer:0, src:[58],
+        feedback:['향약은 조선 시대 향촌의 자치 규약으로, 일제의 전시 조직과는 전혀 다릅니다.','맞습니다. 애국반입니다. 배급·방공 훈련은 물론 주민 감시까지 맡은 말단 통제 조직이었습니다.'] },
+    ]
+  },
+
+  jicheongcheon_0: {
+    name: '지청천', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7 3v6c0 4-3 6.6-7 9-4-2.4-7-5-7-9v-6z"/><path d="M9 12l2 2 4-4"/></svg>', img: 'assets/portraits/jicheongcheon.png',
+    beats: [
+      { who:'npc', t:'…경례는 됐소. 나는 지청천이오.' },
+      { who:'npc', t:'1940년 9월, 충칭에서 우리 군대를 세웠소. 임시정부의 정규군이오 — 한국광복군이라 하오.' },
+      { who:'npc', t:'빌린 남의 군대가 아니오. 우리 정부가 우리 이름으로 세운 군대요. 그 차이는 총 한 자루보다 무겁소.' },
+      { who:'npc', t:'인도와 미얀마 전선에도 나갔소. 영국군과 함께 선전 방송을 하고 포로를 심문했지.' },
+      { who:'npc', t:'그리고 준비하던 것이 하나 더 있었소. 미국 전략정보국과 함께 훈련해, 우리 손으로 국내에 들어가는 작전이오.' },
+      { who:'npc', t:'…광복이 먼저 왔소. 기뻐해야 할 일인데, 그 작전을 못 편 것이 두고두고 아쉽소.' },
+    ],
+    quizSeq: [
+      { q:'1940년 충칭에서 창설된 대한민국 임시정부의 정규군으로, 지청천이 총사령을 맡은 부대는?',
+        opts:['한국광복군','조선 의용대'], answer:0, src:[36, 38, 49, 62],
+        feedback:['조선 의용대는 1938년 김원봉이 우한에서 조직한 부대로, 임시정부의 군대는 아니었어요.','맞습니다. 한국광복군(1940)입니다. 대한민국 임시정부의 정규군으로 충칭에서 창설되었습니다.'] },
+      { q:'한국광복군이 미국 전략정보국(OSS)과 함께 훈련하며 준비했으나 광복으로 실행하지 못한 작전은?',
+        opts:['국내 진공 작전','봉오동 전투'], answer:0, src:[10, 25, 37, 41, 44, 51, 52, 58, 59, 64, 69, 71, 75, 76, 79],
+        feedback:['봉오동 전투는 1920년 홍범도가 이끈 독립군이 거둔 승리로, 광복군보다 20년 앞선 일이에요.','맞습니다. 국내 진공 작전입니다. OSS와 합작 훈련까지 마쳤으나 실행 전에 광복을 맞았습니다.'] },
+    ]
+  },
+
+  josoang_0: {
+    name: '조소앙', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8h14"/><path d="M5 8l-2.5 6h5zM19 8l-2.5 6h5z"/></svg>', img: 'assets/portraits/josoang.png',
+    beats: [
+      { who:'npc', t:'나는 오래전부터 같은 것을 생각해 왔소. 나라를 되찾은 다음의 일 말이오.' },
+      { who:'npc', t:'빼앗긴 것을 되찾는 것만으로는 부족하오. 되찾은 다음 어떤 나라를 세울지 미리 적어 두어야 하오.' },
+      { who:'npc', t:'셋이 고르게 되어야 하오 — 사람과 사람 사이, 민족과 민족 사이, 나라와 나라 사이. 나는 이를 삼균(三均)이라 부르오.' },
+      { who:'npc', t:'정치는 보통선거로, 경제는 토지와 큰 산업을 나라가 맡아 고르게, 교육은 나라가 값 없이 가르치는 것으로.' },
+      { who:'npc', t:'1941년, 임시정부는 이 뜻을 담아 건국강령을 내놓았소. 광복 뒤에 세울 나라의 설계도요.' },
+    ],
+    quizSeq: [
+      { q:'조소앙이 제창하여 대한민국 임시정부 건국강령의 바탕이 된, 개인·민족·국가 사이의 균등을 내세운 사상은?',
+        opts:['삼균주의','사회 진화론'], answer:0, src:[14, 35, 50, 77],
+        feedback:['사회 진화론은 약육강식을 내세워 오히려 제국주의를 옹호하는 데 쓰인 이론이에요.','맞습니다. 삼균주의입니다. 정치·경제·교육의 균등을 통해 개인·민족·국가 간의 균등을 이루자는 사상이지요.'] },
+      { q:'1941년 대한민국 임시정부가 삼균주의를 바탕으로 발표한, 광복 후 세울 나라의 방향을 담은 문서는?',
+        opts:['대한민국 건국강령','대한국 국제'], answer:0, src:[35, 50, 70, 77],
+        feedback:['대한국 국제는 1899년 대한제국이 황제권을 규정한 문서로, 임시정부와는 관계가 없어요.','맞습니다. 대한민국 건국강령(1941)입니다. 보통선거·토지 국유화·의무교육을 담았습니다.'] },
+    ]
+  },
+
   gimgu_0: {
     name:'김구', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>', img:'assets/portraits/gimgu.png',
     beats: [
@@ -958,6 +1022,9 @@ const Stage = {
   keyFor(id){
     if (id === 'gimgu') return 'gimgu_' + Math.min(Stage.state.talkStage, 1);
     if (id === 'yunbonggil') return 'yunbonggil_0';
+    if (id === 'josoang') return 'josoang_0';
+    if (id === 'jicheongcheon') return 'jicheongcheon_0';
+    if (id === 'aegukban') return 'aegukban_0';
     return null;
   },
   interact(){
