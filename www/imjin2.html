@@ -612,6 +612,8 @@ const ZONES = {
     npcs: [
       { id:'gwonyul', name:'권율', x:460, y:420, img:'assets/portraits/gwonyul.png', look:{ role:'general', body:'#5a4a4a', accent:'#c9a24a' } },
       { id:'haengju_yeoin', name:'행주산성 아낙', x:920, y:420, img:'assets/portraits/haengju_yeoin.png', look:{ role:'commoner', body:'#6b8a4a', accent:'#e8e4d8' } },
+      { id:'hullyeon', name:'훈련도감 포수', x:688, y:560, img:'assets/portraits/extra_gunsa.png', look:{ role:'general', body:'#4a4a52', accent:'#c9a24a' } },
+      { id:'bibyeonsa', name:'비변사 당상', x:1128, y:576, img:'assets/portraits/extra_munsin.png', look:{ role:'scholar', body:'#3d4a5a', accent:'#c9a24a' } },
     ],
     exits: [
       { rect:{x0:1180,y0:670,x1:1350,y1:768}, to:'uibyeong', spawn:{x:600,y:610}, label:'나룻배로 돌아가기' },
@@ -878,6 +880,8 @@ function updateHudGoal(){
       ['gwakjaeu', '의병 진영에서 곽재우와 대화하기'],
       ['johun', '의병 진영에서 조헌과 대화하기'],
       ['gwonyul', '행주산성에서 권율과 대화하기'],
+      ['hullyeon', '훈련도감 포수와 대화하기'],
+      ['bibyeonsa', '비변사 당상과 대화하기'],
       ['haengju_yeoin', '행주산성에서 아낙과 대화하기']
     ];
     for (const [id, goal] of order){
@@ -1117,6 +1121,38 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  bibyeonsa_0: {
+    name: '비변사 당상', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/></svg>', img: 'assets/portraits/extra_munsin.png',
+    beats: [
+      { who:'npc', t:'전란이 길어지니 의정부에서 일을 감당하지 못하오. 지금은 모든 일이 비변사로 모이오.' },
+      { who:'npc', t:'본래는 왜구와 여진을 막으려 임시로 둔 기구였소. 그것이 이제 나라의 최고 회의가 되었소.' },
+      { who:'npc', t:'…군량이 바닥났소. 하여 이름 쓸 자리를 비워 둔 임명장을 찍어 내고 있소. 곡식을 바치거나 군공을 세운 이에게 그 자리에서 이름을 적어 주는 것이오.' },
+      { who:'npc', t:'벼슬을 팔아 나라를 지탱한다는 말이 부끄럽소만, 지금은 달리 길이 없소.' },
+    ],
+    quizSeq: [
+      { q:'본래 왜구와 여진 대비를 위한 임시 기구였다가 임진왜란을 겪으며 최고 회의 기구가 된 것은?',
+        opts:['비변사','의정부'], answer:0, src:[9, 17, 20, 23, 34, 36, 37, 39, 40, 41, 45, 47],
+        feedback:['의정부는 조선 초부터 있던 최고 행정 기구로, 비변사가 커지며 힘을 잃었어요.','정답! 비변사입니다. 삼포왜란을 계기로 생겨 을묘왜변 때 상설화되었어요.'] },
+      { q:'임진왜란으로 바닥난 재정을 메우고 군공을 세운 이를 포상하고자, 이름을 비워둔 채 발급해 곡식이나 공로에 따라 벼슬을 내린 문서는?',
+        opts:['공명첩','호패'], answer:0, src:[10],
+        feedback:['호패는 신분을 확인하려고 지니고 다니던 패예요.','정답! 공명첩입니다. 이 문서가 퍼지며 조선 후기 신분제가 흔들리는 계기가 되었어요.'] },
+    ]
+  },
+
+  hullyeon_0: {
+    name: '훈련도감 포수', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20L18 8"/><path d="M14 4l6 6-3 1-4-4z"/><path d="M4 22l3-3"/></svg>', img: 'assets/portraits/extra_gunsa.png',
+    beats: [
+      { who:'npc', t:'이 총을 보시오. 왜군의 조총을 본떠 만든 것이오.' },
+      { who:'npc', t:'활만으로는 저들을 당할 수 없다는 걸 뼈저리게 알았소. 하여 나라가 훈련도감을 세웠지.' },
+      { who:'npc', t:'포수는 총을, 살수는 창칼을, 사수는 활을 잡소. 이 셋을 삼수병이라 하오. 나는 그중 포수요.' },
+    ],
+    quizSeq: [
+      { q:'임진왜란 중 조총에 맞서기 위해 설치되어 포수·살수·사수의 삼수병으로 편성된 군영은?',
+        opts:['훈련도감','장용영'], answer:0, src:[16, 17, 23, 24, 29, 32, 34, 35, 37, 38, 39, 41],
+        feedback:['장용영은 정조가 설치한 국왕 친위 부대예요.','정답! 훈련도감입니다. 뒤에 5군영 체제의 중심이 돼요.'] },
+    ]
+  },
+
   gwakjaeu_0: {
     name: '곽재우', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M12.5 2c1.5 3-3 4.5-3 8.5a3 3 0 006 0c0-.8-.2-1.4-.2-1.4 2.7 2 4.2 5 4.2 8a5.5 5.5 0 01-11 0c0-7 3-9.5 4-15.1z"/></svg>', img: 'assets/portraits/gwakjaeu.png',
     beats: [
@@ -1170,15 +1206,6 @@ const NPC_DATA = {
       { q:'1593년 권율이 부녀자까지 힘을 보태 왜군을 물리친 싸움으로, 임진왜란 3대 대첩에 드는 것은?',
         opts:['행주 대첩','귀주 대첩'], answer:0, src:[17, 23, 34, 37, 39, 41, 45, 47, 49, 51, 54, 55],
         feedback:['귀주 대첩은 1019년 강감찬이 거란을 물리친 싸움이에요.','정답! 행주 대첩입니다. 이 승리로 왜군이 한양에서 물러나게 돼요.'] },
-      { q:'임진왜란 중 조총에 맞서기 위해 설치되어 포수·살수·사수의 삼수병으로 편성된 군영은?',
-        opts:['훈련도감','장용영'], answer:0, src:[16, 17, 23, 24, 29, 32, 34, 35, 37, 38, 39, 41],
-        feedback:['장용영은 정조가 설치한 국왕 친위 부대예요.','정답! 훈련도감입니다. 뒤에 5군영 체제의 중심이 돼요.'] },
-      { q:'본래 왜구와 여진 대비를 위한 임시 기구였다가 임진왜란을 겪으며 최고 회의 기구가 된 것은?',
-        opts:['비변사','의정부'], answer:0, src:[9, 17, 20, 23, 34, 36, 37, 39, 40, 41, 45, 47],
-        feedback:['의정부는 조선 초부터 있던 최고 행정 기구로, 비변사가 커지며 힘을 잃었어요.','정답! 비변사입니다. 삼포왜란을 계기로 생겨 을묘왜변 때 상설화되었어요.'] },
-      { q:'임진왜란으로 바닥난 재정을 메우고 군공을 세운 이를 포상하고자, 이름을 비워둔 채 발급해 곡식이나 공로에 따라 벼슬을 내린 문서는?',
-        opts:['공명첩','호패'], answer:0, src:[10],
-        feedback:['호패는 신분을 확인하려고 지니고 다니던 패예요.','정답! 공명첩입니다. 이 문서가 퍼지며 조선 후기 신분제가 흔들리는 계기가 되었어요.'] },
     ]
   },
   haengju_yeoin_0: {
@@ -1225,6 +1252,8 @@ const Stage = {
     if (id === 'johun') return 'johun_0';
     if (id === 'gwonyul') return 'gwonyul_0';
     if (id === 'haengju_yeoin') return 'haengju_yeoin_0';
+    if (id === 'hullyeon') return 'hullyeon_0';
+    if (id === 'bibyeonsa') return 'bibyeonsa_0';
     return null;
   },
   interact(){

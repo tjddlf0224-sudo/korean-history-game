@@ -579,6 +579,8 @@ const ZONES = {
       { id:'songsang', name:'송 상인', x:700, y:240, img:'assets/portraits/songsang.png', look:{ role:'commoner', body:'#5c4a6b', accent:'#d8c48a' } },
       { id:'arabsang', name:'대식국 상인', x:688, y:555, img:'assets/portraits/arabsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#e0b94a' } },
       { id:'jujeon', name:'주전도감 장인', x:1040, y:300, img:'assets/portraits/jujeon.png', look:{ role:'commoner', body:'#5a5a4a', accent:'#b8a888' } },
+      { id:'sukjong', name:'고려 숙종', x:504, y:344, img:'assets/portraits/sukjong_goryeo_king.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
+      { id:'gyeongsiseo', name:'경시서 관리', x:856, y:352, img:'assets/portraits/extra_munsin.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -850,6 +852,8 @@ function updateHudGoal(){
       ['jeonsigwa', '전시과 담당 관리와 대화하기'],
       ['songsang', '송 상인과 대화하기'],
       ['arabsang', '대식국 상인과 대화하기'],
+      ['sukjong', '고려 숙종과 대화하기'],
+      ['gyeongsiseo', '경시서 관리와 대화하기'],
       ['jujeon', '주전도감 장인과 대화하기']
     ];
     for (const [id, goal] of order){
@@ -1089,6 +1093,37 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  gyeongsiseo_0: {
+    name: '경시서 관리', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14"/><path d="M5 7l-2.5 6h5zM19 7l-2.5 6h5z"/><path d="M8 21h8"/></svg>', img: 'assets/portraits/extra_munsin.png',
+    beats: [
+      { who:'npc', t:'거기 서시오. 되와 자를 좀 봅시다 — 소인은 경시서에서 나왔소.' },
+      { who:'npc', t:'개경 시전에서 되를 속이거나 값을 함부로 올리는 자가 있는지 살피는 것이 우리 일이오.' },
+      { who:'npc', t:'나라가 직접 여는 가게도 있소. 서적점·다점 같은 관영 상점이지. 백성이 쓸 물건을 나라가 갖추어 두는 것이오.' },
+    ],
+    quizSeq: [
+      { q:'고려가 개경 시전의 상행위를 감독하기 위해 둔 관청은?',
+        opts:['경시서','평시서'], answer:0, src:[64, 39],
+        feedback:['평시서는 조선 시대에 시전을 감독한 관청이에요(고려의 경시서를 이어받았어요).','정답! 경시서입니다. 개경 시전의 상행위를 관리·감독했어요.'] },
+      { q:'고려에서 나라가 직접 운영한 관영 상점으로 옳은 것은?',
+        opts:['서적점·다점','객주·여각'], answer:0, src:[78],
+        feedback:['객주·여각은 조선 후기에 등장한 민간 중간 상인이에요.','정답! 서적점(책)과 다점(차) 같은 관영 상점을 두었어요.'] },
+    ]
+  },
+
+  sukjong_0: {
+    name: '고려 숙종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sukjong_goryeo_king.png',
+    beats: [
+      { who:'npc', t:'과인이 주전도감을 두라 명하였다. 의천이 거듭 청한 일이지.' },
+      { who:'npc', t:'동전만으로는 큰 거래가 어렵다. 하여 은 한 근으로 이 나라의 지형을 본떠 병(甁)을 지어 냈다.' },
+      { who:'npc', t:'입이 넓어 활구(闊口)라고도 부른다. 값이 커서 아무나 쓰지는 못하지만, 큰 장사에는 이만한 것이 없지.' },
+    ],
+    quizSeq: [
+      { q:'고려 숙종 때 은으로 우리나라 지형을 본떠 만들어 활구라고도 불린 고액 화폐는?',
+        opts:['은병','건원중보'], answer:0, src:[9, 28, 41, 61, 69],
+        feedback:['건원중보는 성종 때 만든 우리나라 최초의 금속 화폐예요.','정답! 은병(활구)입니다. 값이 매우 커서 큰 거래에 쓰였어요.'] },
+    ]
+  },
+
   jeonsigwa_0: {
     name: '전시과 담당 관리', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/jeonsigwa.png',
     beats: [
@@ -1177,15 +1212,6 @@ const NPC_DATA = {
       { q:'고려 숙종 때 주전도감을 두고 만든 화폐로, 삼한통보와 함께 찍어 낸 동전은?',
         opts:['해동통보','상평통보'], answer:0, src:[13, 31, 37, 49, 51, 59, 62, 71, 75],
         feedback:['상평통보는 조선 숙종 때 전국적으로 유통된 화폐예요.','정답! 해동통보입니다. 고려 숙종 대에 의천의 건의로 주조되었어요.'] },
-      { q:'고려 숙종 때 은으로 우리나라 지형을 본떠 만들어 활구라고도 불린 고액 화폐는?',
-        opts:['은병','건원중보'], answer:0, src:[9, 28, 41, 61, 69],
-        feedback:['건원중보는 성종 때 만든 우리나라 최초의 금속 화폐예요.','정답! 은병(활구)입니다. 값이 매우 커서 큰 거래에 쓰였어요.'] },
-      { q:'고려가 개경 시전의 상행위를 감독하기 위해 둔 관청은?',
-        opts:['경시서','평시서'], answer:0, src:[64, 39],
-        feedback:['평시서는 조선 시대에 시전을 감독한 관청이에요(고려의 경시서를 이어받았어요).','정답! 경시서입니다. 개경 시전의 상행위를 관리·감독했어요.'] },
-      { q:'고려에서 나라가 직접 운영한 관영 상점으로 옳은 것은?',
-        opts:['서적점·다점','객주·여각'], answer:0, src:[78],
-        feedback:['객주·여각은 조선 후기에 등장한 민간 중간 상인이에요.','정답! 서적점(책)과 다점(차) 같은 관영 상점을 두었어요.'] },
     ],
     endsChapter: true
   },
@@ -1197,6 +1223,8 @@ const Stage = {
     if (id === 'songsang') return 'songsang_0';
     if (id === 'arabsang') return 'arabsang_0';
     if (id === 'jujeon') return 'jujeon_0';
+    if (id === 'sukjong') return 'sukjong_0';
+    if (id === 'gyeongsiseo') return 'gyeongsiseo_0';
     return null;
   },
   interact(){

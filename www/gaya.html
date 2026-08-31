@@ -584,6 +584,8 @@ const ZONES = {
       { id:'ureuk', name:'우륵', x:700, y:240, img:'assets/portraits/ureuk.png', look:{ role:'scholar', body:'#5c4a6b', accent:'#d8c48a' } },
       { id:'cheolsang', name:'덩이쇠 상인', x:980, y:350, img:'assets/portraits/cheolsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
       { id:'wae', name:'왜 사신', x:688, y:640, img:'assets/portraits/wae.png', look:{ role:'commoner', body:'#5a6b5a', accent:'#b8a888' } },
+      { id:'ijinasi', name:'대가야 왕', x:512, y:480, img:'assets/portraits/ijinasi_king.png', look:{ role:'king', body:'#5c4a2f', accent:'#e0b94a' } },
+      { id:'beopheung', name:'신라 법흥왕', x:872, y:472, img:'assets/portraits/beopheung_king.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -855,6 +857,8 @@ function updateHudGoal(){
       ['suro', '금관가야 왕과 대화하기'],
       ['cheolsang', '덩이쇠 상인과 대화하기'],
       ['wae', '왜 사신과 대화하기'],
+      ['ijinasi', '대가야 왕과 대화하기'],
+      ['beopheung', '신라 법흥왕과 대화하기'],
       ['ureuk', '우륵과 대화하기']
     ];
     for (const [id, goal] of order){
@@ -1094,6 +1098,39 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  beopheung_0: {
+    name: '신라 법흥왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/beopheung_king.png',
+    beats: [
+      { who:'npc', t:'과인은 신라의 왕이다. 이 김해 땅에 온 까닭을 묻는 것이냐.' },
+      { who:'npc', t:'532년, 이 나라의 왕이 스스로 과인에게 나라를 넘겼다. 싸움 없이 끝난 일이다.' },
+      { who:'npc', t:'과인은 그를 벌하지 않고 진골로 삼았다. 그 자손 가운데 뒷날 큰 장수가 나온다 — 김유신이다.' },
+      { who:'npc', t:'낙동강 하구의 철과 뱃길이 이제 신라의 것이 되었다.' },
+    ],
+    quizSeq: [
+      { q:'김해에 자리 잡아 전기 가야 연맹을 이끌었고, 532년 신라 법흥왕에게 항복한 나라는?',
+        opts:['금관가야','대가야'], answer:0, src:[13, 14, 15, 18, 21, 25, 26, 27, 31, 33, 35, 36],
+        feedback:['대가야는 고령에 있던 후기 가야 연맹의 중심국으로, 562년에 멸망했어요.','정답! 금관가야입니다. 김수로 건국 설화와 구지가가 전해져요.'] },
+    ]
+  },
+
+  ijinasi_0: {
+    name: '대가야 왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19c2-6 5-9 9-9s7 3 9 9z"/><path d="M2 21h20"/></svg>', img: 'assets/portraits/ijinasi_king.png',
+    beats: [
+      { who:'npc', t:'김해가 기울고 난 뒤, 가야의 중심은 이 고령으로 옮겨 왔다.' },
+      { who:'npc', t:'우리를 대가야라 부른다. 후기 가야 연맹을 이끄는 것은 이제 우리다.' },
+      { who:'npc', t:'지산동 등성이에 우리 왕들의 무덤이 늘어서 있다. 그 규모를 보면 우리가 어떤 나라였는지 알 것이다.' },
+      { who:'npc', t:'…허나 신라가 커지고 있다. 562년, 진흥왕의 군사가 이 고을에 이르렀을 때 우리 이야기도 끝났다.' },
+    ],
+    quizSeq: [
+      { q:'고령을 중심으로 후기 가야 연맹을 이끌다가 562년 신라 진흥왕에게 멸망한 나라는?',
+        opts:['대가야','금관가야'], answer:0, src:[11, 13, 15, 21, 24, 26, 30, 31, 34, 35, 41, 43],
+        feedback:['금관가야는 그보다 30년 앞선 532년에 법흥왕에게 항복했어요.','정답! 대가야입니다. 이사부가 군사를 이끌어 병합했어요.'] },
+      { q:'대가야의 왕릉급 무덤이 모여 있는 고령의 고분군은?',
+        opts:['지산동 고분군','대성동 고분군'], answer:0, src:[11, 24, 26, 30, 34, 41, 43, 45, 54, 58, 73, 75],
+        feedback:['대성동 고분군은 김해에 있는 금관가야의 고분군이에요.','정답! 고령 지산동 고분군입니다. 순장 흔적이 확인되었어요.'] },
+    ]
+  },
+
   suro_0: {
     name: '금관가야 왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/suro.png',
     beats: [
@@ -1103,9 +1140,6 @@ const NPC_DATA = {
       { who:'npc', t:'결국 532년, 우리 마지막 임금 구형왕께서 신라 법흥왕에게 나라를 넘기셨네. 뒷날 김유신이 그 핏줄일세.' },
     ],
     quizSeq: [
-      { q:'김해에 자리 잡아 전기 가야 연맹을 이끌었고, 532년 신라 법흥왕에게 항복한 나라는?',
-        opts:['금관가야','대가야'], answer:0, src:[13, 14, 15, 18, 21, 25, 26, 27, 31, 33, 35, 36],
-        feedback:['대가야는 고령에 있던 후기 가야 연맹의 중심국으로, 562년에 멸망했어요.','정답! 금관가야입니다. 김수로 건국 설화와 구지가가 전해져요.'] },
       { q:'금관가야의 왕릉급 무덤이 모여 있어 가야의 철기 문화를 보여주는 김해의 고분군은?',
         opts:['대성동 고분군','지산동 고분군'], answer:0, src:[13, 14, 15, 18, 21, 25, 26, 27, 31, 33, 35, 36],
         feedback:['지산동 고분군은 고령에 있는 대가야의 고분군이에요.','정답! 김해 대성동 고분군입니다.'] },
@@ -1171,15 +1205,9 @@ const NPC_DATA = {
 ], note: '앞이 <b>김해·전기·532</b>, 뒤가 <b>고령·후기·562</b>. 30년 차이입니다.' }, t:'가야는 둘로 나눠 보면 헷갈리지 않습니다.' },
     ],
     quizSeq: [
-      { q:'고령을 중심으로 후기 가야 연맹을 이끌다가 562년 신라 진흥왕에게 멸망한 나라는?',
-        opts:['대가야','금관가야'], answer:0, src:[11, 13, 15, 21, 24, 26, 30, 31, 34, 35, 41, 43],
-        feedback:['금관가야는 그보다 30년 앞선 532년에 법흥왕에게 항복했어요.','정답! 대가야입니다. 이사부가 군사를 이끌어 병합했어요.'] },
       { q:'대가야 가실왕의 명으로 우륵이 만들었다고 전하는 열두 줄 현악기는?',
         opts:['가야금','거문고'], answer:0, src:[11, 15, 24, 26, 30, 34, 41, 43, 45, 54, 58, 73],
         feedback:['거문고는 고구려의 왕산악이 만들었다고 전해요.','정답! 가야금입니다. 우륵은 뒷날 신라에 투항해 충주에서 음악을 가르쳤어요.'] },
-      { q:'대가야의 왕릉급 무덤이 모여 있는 고령의 고분군은?',
-        opts:['지산동 고분군','대성동 고분군'], answer:0, src:[11, 24, 26, 30, 34, 41, 43, 45, 54, 58, 73, 75],
-        feedback:['대성동 고분군은 김해에 있는 금관가야의 고분군이에요.','정답! 고령 지산동 고분군입니다. 순장 흔적이 확인되었어요.'] },
     ],
     endsChapter: true
   },
@@ -1191,6 +1219,8 @@ const Stage = {
     if (id === 'cheolsang') return 'cheolsang_0';
     if (id === 'wae') return 'wae_0';
     if (id === 'ureuk') return 'ureuk_0';
+    if (id === 'ijinasi') return 'ijinasi_0';
+    if (id === 'beopheung') return 'beopheung_0';
     return null;
   },
   interact(){

@@ -568,6 +568,7 @@ const ZONES = {
     ],
     npcs: [
       { id:'sinrip', name:'신립', x:688, y:350, img:'assets/portraits/sinrip.png', look:{ role:'general', body:'#4a3a3a', accent:'#8a6d3b' } },
+      { id:'dongnae', name:'동래성 군졸', x:440, y:272, img:'assets/portraits/extra_gunsa.png', look:{ role:'general', body:'#5a4a3a', accent:'#8c8676' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -894,6 +895,7 @@ function updateHudGoal(){
       ['sinrip', '탄금대에서 신립과 대화하기'],
       ['yisunsin', '한산도에서 이순신과 대화하기'],
       ['gimsimin', '진주성에서 김시민과 대화하기'],
+      ['dongnae', '동래성에서 살아남은 군졸과 대화하기'],
       ['nongae', '진주성에서 논개와 대화하기']
     ];
     for (const [id, goal] of order){
@@ -1133,6 +1135,21 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  dongnae_0: {
+    name: '동래성 군졸', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l7 3v6c0 4-3 6.6-7 9-4-2.4-7-5-7-9v-6z"/><path d="M9 12l2 2 4-4"/></svg>', img: 'assets/portraits/extra_gunsa.png',
+    beats: [
+      { who:'npc', t:'…나는 동래성에서 왔소. 성이 무너지기 전에 전령으로 빠져나온 게 전부요.' },
+      { who:'npc', t:'왜군이 널판에 글을 써 보였소. \'싸울 테면 싸우고, 싸우지 않으려면 길을 빌려 달라.\'' },
+      { who:'npc', t:'부사께서 답을 써 던지셨소. \'싸워 죽기는 쉬우나 길을 빌려주기는 어렵다.\' 그러고는 조복으로 갈아입고 성루에 앉으셨소.' },
+      { who:'npc', t:'…성은 반나절을 못 버텼소. 부사께서는 끝내 그 자리를 뜨지 않으셨소.' },
+    ],
+    quizSeq: [
+      { q:'임진왜란 발발 직후 부산 동래성에서 성문을 닫고 끝까지 싸우다 순절한 동래부사는?',
+        opts:['송상현','김시민'], answer:0, src:[64],
+        feedback:['김시민은 그해 10월 진주성에서 왜군을 크게 물리친 진주 목사예요.','정답! 송상현입니다. 신립의 탄금대 전투보다도 앞서, 개전 직후 동래성에서 순절했어요.'] },
+    ]
+  },
+
   sinrip_0: {
     name: '신립', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21l1-6"/><path d="M5 15c-1.5-2-1.5-4.5 0-6.5C7 6 9 5 12 5h1l2-2 1.5 2.5L18 5l1 3-2 1"/><path d="M17 9v3.5c0 2-1 3.5-3 4.5"/><path d="M14 17l-1 4"/><path d="M9 15l-1.5 6"/><path d="M9 9.5c1 0 2 .3 2.5 1"/><circle cx="15.3" cy="8.3" r=".4" fill="currentColor" stroke="none"/></svg>', img: 'assets/portraits/sinrip.png',
     beats: [
@@ -1150,9 +1167,6 @@ const NPC_DATA = {
       { q:'강을 등져 물러설 곳을 없애고 죽기로 싸우게 하는 진법을 무엇이라 하나요?',
         opts:['배수진','학익진'], answer:0, src:[17, 23, 34, 37, 39, 41, 45, 47, 49, 51, 54, 55],
         feedback:['학익진은 이순신이 한산도에서 쓴, 학이 날개를 편 모양의 진법이에요.','정답! 배수진입니다. 기병을 넓은 벌판에서 쓰려는 계산이었지만, 조총 앞에서는 통하지 않았어요.'] },
-      { q:'임진왜란 발발 직후 부산 동래성에서 성문을 닫고 끝까지 싸우다 순절한 동래부사는?',
-        opts:['송상현','김시민'], answer:0, src:[64],
-        feedback:['김시민은 그해 10월 진주성에서 왜군을 크게 물리친 진주 목사예요.','정답! 송상현입니다. 신립의 탄금대 전투보다도 앞서, 개전 직후 동래성에서 순절했어요.'] },
     ]
   },
   yisunsin_0: {
@@ -1213,6 +1227,7 @@ const Stage = {
     if (id === 'yisunsin') return 'yisunsin_0';
     if (id === 'gimsimin') return 'gimsimin_0';
     if (id === 'nongae') return 'nongae_0';
+    if (id === 'dongnae') return 'dongnae_0';
     return null;
   },
   interact(){

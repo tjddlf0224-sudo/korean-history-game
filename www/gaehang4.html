@@ -579,6 +579,8 @@ const ZONES = {
       { id:'jipgang', name:'집강소 집강', x:700, y:305, img:'assets/portraits/jipgang.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
       { id:'gungug', name:'군국기무처 관원', x:1105, y:415, img:'assets/portraits/gungug.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
       { id:'eulmi', name:'을미의병', x:688, y:640, img:'assets/portraits/eulmi.png', look:{ role:'general', body:'#4a4a58', accent:'#8a6d3b' } },
+      { id:'jeopju', name:'동학 접주', x:360, y:416, img:'assets/portraits/extra_chonjang.png', look:{ role:'commoner', body:'#5a4a3a', accent:'#c94f4f' } },
+      { id:'gungnyeo', name:'경복궁 궁녀', x:1144, y:672, img:'assets/portraits/extra_gungnyeo.png', look:{ role:'commoner', body:'#6b4a5a', accent:'#e8e4d8' } },
     ],
     exits: [],
   },
@@ -843,6 +845,8 @@ function updateHudGoal(){
       ['jeonbongjun', '전봉준과 대화하기'],
       ['jipgang', '집강소 집강과 대화하기'],
       ['gungug', '군국기무처 관원과 대화하기'],
+      ['jeopju', '동학 접주와 대화하기'],
+      ['gungnyeo', '경복궁 궁녀와 대화하기'],
       ['eulmi', '을미의병과 대화하기']
     ];
     for (const [id, goal] of order){
@@ -1082,6 +1086,35 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  gungnyeo_0: {
+    name: '경복궁 궁녀', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21c0-4.2 2.9-7 6.5-7s6.5 2.8 6.5 7z"/></svg>', img: 'assets/portraits/extra_gungnyeo.png',
+    beats: [
+      { who:'npc', t:'…그날 새벽 일을 물으시는 겁니까.' },
+      { who:'npc', t:'칼을 든 자들이 광화문을 넘어 들어왔습니다. 건청궁까지 곧장 올라왔지요.' },
+      { who:'npc', t:'중전마마께서 어디 계신지 대라 하였습니다. 저희는 아무도 입을 열지 않았습니다만…' },
+      { who:'npc', t:'…그 뒤의 일은 차마 입에 담지 못하겠습니다. 시신마저 뜰에서 태웠다 합니다.' },
+    ],
+    quizSeq: [
+      { q:'1895년 일본이 경복궁에 침입해 명성황후를 시해한 사건은?',
+        opts:['을미사변','아관파천'], answer:0, src:[11, 34, 36, 40, 42, 56, 64],
+        feedback:['아관파천은 그 뒤 고종이 러시아 공사관으로 거처를 옮긴 일이에요.','정답! 을미사변입니다.'] },
+    ]
+  },
+
+  jeopju_0: {
+    name: '동학 접주', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V3"/><path d="M6 4h11l-2.5 4L17 12H6z"/></svg>', img: 'assets/portraits/extra_chonjang.png',
+    beats: [
+      { who:'npc', t:'전주에서 화약을 맺고 우리는 흩어졌소. 이제 싸울 일은 없으리라 여겼지.' },
+      { who:'npc', t:'헌데 일본군이 경복궁을 넘어 들어갔다는 소식이 왔소. 청과 일본이 이 땅에서 서로 총을 겨눈다는 소식도.' },
+      { who:'npc', t:'남접과 북접이 논산에 모였소. 이번엔 탐관오리가 아니라 왜적을 치러 가는 것이오 — 두 번째 봉기요.' },
+    ],
+    quizSeq: [
+      { q:'일본군이 경복궁을 침범하고 청·일 군대가 충돌하자, 이에 맞서 동학 농민군 사이에서 있었던 사실로 옳은 것은?',
+        opts:['남접과 북접의 농민군이 논산에 집결하였다','농민군이 황토현에서 관군을 격파하였다'], answer:0, src:[78],
+        feedback:['황토현 전투는 고부 봉기 직후, 1차 봉기 때 있었던 일이에요.','정답! 일본군의 경복궁 침범에 맞서 전봉준의 남접과 손병희의 북접이 논산에 모여 2차 봉기를 준비했어요.'] },
+    ]
+  },
+
   jeonbongjun_0: {
     name: '전봉준', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="3" x2="5" y2="21"/><path d="M5 4h14v9H5z"/></svg>', img: 'assets/portraits/jeonbongjun.png',
     beats: [
@@ -1099,9 +1132,6 @@ const NPC_DATA = {
       { q:'동학 농민군이 일본군의 근대 무기 앞에 크게 패한 싸움은?',
         opts:['우금치 전투','황토현 전투'], answer:0, src:[9, 15, 23, 29, 36, 47, 51, 65],
         feedback:['황토현 전투는 농민군이 관군을 크게 이긴 싸움이에요.','정답! 우금치 전투입니다. 2차 봉기의 마지막 싸움이었어요.'] },
-      { q:'일본군이 경복궁을 침범하고 청·일 군대가 충돌하자, 이에 맞서 동학 농민군 사이에서 있었던 사실로 옳은 것은?',
-        opts:['남접과 북접의 농민군이 논산에 집결하였다','농민군이 황토현에서 관군을 격파하였다'], answer:0, src:[78],
-        feedback:['황토현 전투는 고부 봉기 직후, 1차 봉기 때 있었던 일이에요.','정답! 일본군의 경복궁 침범에 맞서 전봉준의 남접과 손병희의 북접이 논산에 모여 2차 봉기를 준비했어요.'] },
     ]
   },
   jipgang_0: {
@@ -1145,9 +1175,6 @@ const NPC_DATA = {
       { who:'npc', t:'유인석 어른을 비롯한 유생들이 일어섰소. 이것이 첫 의병이오.' },
     ],
     quizSeq: [
-      { q:'1895년 일본이 경복궁에 침입해 명성황후를 시해한 사건은?',
-        opts:['을미사변','아관파천'], answer:0, src:[11, 34, 36, 40, 42, 56, 64],
-        feedback:['아관파천은 그 뒤 고종이 러시아 공사관으로 거처를 옮긴 일이에요.','정답! 을미사변입니다.'] },
       { q:'을미사변과 단발령에 반발해 유생들이 주도한 최초의 의병은?',
         opts:['을미의병','정미의병'], answer:0, src:[23, 28, 32, 43, 66],
         feedback:['정미의병은 1907년 고종 강제 퇴위와 군대 해산 뒤에 일어나요.','정답! 을미의병입니다. 유인석·이소응 등이 이끌었어요.'] },
@@ -1183,6 +1210,8 @@ const Stage = {
     if (id === 'jipgang') return 'jipgang_0';
     if (id === 'gungug') return 'gungug_0';
     if (id === 'eulmi') return 'eulmi_0';
+    if (id === 'jeopju') return 'jeopju_0';
+    if (id === 'gungnyeo') return 'gungnyeo_0';
     return null;
   },
   interact(){
