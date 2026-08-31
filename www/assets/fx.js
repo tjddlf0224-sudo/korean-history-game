@@ -19,7 +19,11 @@
      Fx.lines(300)          집중선 — 먹을 튀긴 듯한 방사선
      Fx.danger(true)        붉은 비네트(위험). false로 끈다
      Fx.impact()            타격 한 방 = 흔들림+당김+집중선을 한꺼번에
-     Fx.stamp('正')         낙관을 쾅 찍는다
+
+   안 넣기로 한 것
+   - **낙관(도장) 찍기**: 촌스럽다. 넣지 않는다.
+   - **시간 제한**: 어디에도 걸지 않는다. 생각을 해야 배우고, 정답을 맞힌 뒤에는
+     시계를 걸 이유가 없다. 미니게임에도 안 건다.
 
    지킨 것
    - **멀미를 안 만든다.** 흔들림에 상한을 두고, prefers-reduced-motion이면 전부
@@ -59,18 +63,7 @@ window.Fx = (function(){
       box-shadow:inset 0 0 120px 34px rgba(150,26,26,.66); }
     #fx-vig.on { opacity:1; animation:fx-pulse 1.5s ease-in-out infinite; }
     @keyframes fx-pulse { 0%,100%{ opacity:.55; } 50%{ opacity:1; } }
-
-    /* 낙관 — 도장을 내리찍는다. 커진 채로 들어와 살짝 지나쳤다가 앉는다. */
-    #fx-stamp { position:absolute; left:50%; top:46%; z-index:70; pointer-events:none;
-      transform:translate(-50%,-50%); display:flex; align-items:center;
-      justify-content:center; width:104px; height:104px; border-radius:12px;
-      background:rgba(150,26,26,.9); color:#ffeccd; font-family:"Gowun Batang",serif;
-      font-size:46px; font-weight:700; letter-spacing:.04em;
-      box-shadow:0 0 0 4px rgba(150,26,26,.45); }
-    @keyframes fx-stamp { 0%{ opacity:0; transform:translate(-50%,-50%) scale(2.5) rotate(-16deg); }
-      42%{ opacity:1; transform:translate(-50%,-50%) scale(.9) rotate(3deg); }
-      56%{ transform:translate(-50%,-50%) scale(1.04) rotate(0deg); }
-      100%{ opacity:0; transform:translate(-50%,-50%) scale(1) rotate(0deg); } }`;
+`;
     document.head.appendChild(s);
   }
 
@@ -164,16 +157,6 @@ window.Fx = (function(){
     d.classList.toggle('on', !!on);
   }
 
-  /* ---------------- 낙관 ---------------- */
-  function stamp(ch, ms){
-    css();
-    const d = document.createElement('div');
-    d.id = 'fx-stamp';
-    d.textContent = ch || '正';
-    d.style.animation = `fx-stamp ${ms || 900}ms ease-out forwards`;
-    layer().appendChild(d);
-    setTimeout(() => d.remove(), (ms || 900) + 60);
-  }
 
   /* ---------------- 타격 한 방 ----------------
      흔들림·당김·집중선은 따로 쓰면 밋밋하다. 셋이 같은 순간에 겹쳐야 '맞았다'가 된다.
@@ -186,5 +169,5 @@ window.Fx = (function(){
     try { if (navigator.vibrate) navigator.vibrate(L >= 3 ? [50, 30, 70] : 40); } catch(e){}
   }
 
-  return { shake, punch, lines, danger, stamp, impact, calm };
+  return { shake, punch, lines, danger, impact, calm };
 })();
