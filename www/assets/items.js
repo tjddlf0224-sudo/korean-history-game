@@ -220,11 +220,14 @@ window.Items = (function(){
 
   /* ---------------- 저장 ---------------- */
   function load(){
-    try {
-      const raw = JSON.parse(localStorage.getItem(KEY));
-      if (raw && typeof raw === 'object') return raw;
-    } catch(e){}
-    return { have: {}, spots: {} };
+    // 저장된 값을 **그대로 믿지 않는다.** 예전 판에서 저장된 것이나 반쯤 쓰다 만
+    // 값이면 키 하나가 없어서 쓰는 쪽에서 터진다(heroes.js에서 실제로 터졌다).
+    let raw = null;
+    try { raw = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+    if (!raw || typeof raw !== 'object') raw = {};
+    if (!raw.have || typeof raw.have !== 'object') raw.have = {};
+    if (!raw.spots || typeof raw.spots !== 'object') raw.spots = {};
+    return raw;
   }
   function save(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} }
 

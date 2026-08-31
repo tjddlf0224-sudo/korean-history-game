@@ -1108,7 +1108,9 @@ const Dialog = {
   },
   finish(){
     document.getElementById('dlg-overlay').classList.remove('show');
-    if (this.data.quizSeq){ Quiz.openSequence(this.data.quizSeq, () => this.afterQuiz()); }
+    // 퀴즈가 없는 인물도 있다(무당·간수처럼 이야기만 하는 사람).
+    // 빈 배열을 그대로 넘기면 Quiz가 첫 문항을 읽다 터진다.
+    if (this.data.quizSeq && this.data.quizSeq.length){ Quiz.openSequence(this.data.quizSeq, () => this.afterQuiz()); }
     else if (this.data.quiz){ Quiz.open(this.data.quiz, () => this.afterQuiz()); }
     else { this.afterQuiz(); }
   },

@@ -27,11 +27,15 @@ window.Heroes = (function(){
      have: { heroKey: 1|2 }   1=카드, 2=★(각성)
      prog: { 'chapter:heroKey': { d:[끝낸 대화 키], m:true(한 번이라도 틀림) } } */
   function load(){
-    try {
-      const raw = JSON.parse(localStorage.getItem(KEY));
-      if (raw && typeof raw === 'object') return raw;
-    } catch(e){}
-    return { have:{}, prog:{} };
+    // 저장된 값을 **그대로 믿지 않는다.** 예전 판에서 저장된 것이나 반쯤 쓰다 만
+    // 값이 들어 있으면 have/prog 중 하나가 없을 수 있고, 그러면 recordTalk가
+    // s.prog[...]에서 터진다(실제로 터졌다). 모양을 갖춰서 돌려준다.
+    let raw = null;
+    try { raw = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+    if (!raw || typeof raw !== 'object') raw = {};
+    if (!raw.have || typeof raw.have !== 'object') raw.have = {};
+    if (!raw.prog || typeof raw.prog !== 'object') raw.prog = {};
+    return raw;
   }
   function save(s){ try { localStorage.setItem(KEY, JSON.stringify(s)); } catch(e){} }
 
