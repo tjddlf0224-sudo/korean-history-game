@@ -18,7 +18,8 @@
      Fx.punch(.06, 260)     확 당겼다 놓는다
      Fx.lines(300)          집중선 — 먹을 튀긴 듯한 방사선
      Fx.danger(true)        붉은 비네트(위험). false로 끈다
-     Fx.impact()            타격 한 방 = 흔들림+당김+집중선을 한꺼번에
+     Fx.impact()            타격 한 방 = 흔들림+당김+집중선+히트스톱
+     Fx.freeze(90)          화면을 아주 짧게 세운다(히트스톱)
 
    안 넣기로 한 것
    - **낙관(도장) 찍기**: 촌스럽다. 넣지 않는다.
@@ -70,10 +71,18 @@ window.Fx = (function(){
   /* ---------------- 카메라 ----------------
      흔들림과 당김을 **한 transform에 같이 쓴다.** 따로 쓰면 나중 것이 앞 것을 지운다. */
   let shakeAmp = 0, shakeUntil = 0, punchAmt = 0, punchUntil = 0, raf = 0;
+  let freezeUntil = 0;      // 이 시각까지는 화면을 얼린다(히트스톱)
 
   function apply(){
     const el = stage();
     const now = performance.now();
+    // 히트스톱 — 때린 순간을 아주 짧게 **정지**시킨다. 격투 게임의 기본기이고,
+    // 이 게임에서 가장 싸게 무게를 만드는 방법이다. 90ms면 '멈췄다'고
+    // 인식되지 않으면서 손맛만 남는다. 더 길면 렉으로 느껴진다.
+    if (now < freezeUntil){
+      raf = requestAnimationFrame(apply);
+      return;                       // 이 프레임은 화면을 그대로 둔다
+    }
     const sLeft = Math.max(0, shakeUntil - now);
     const pLeft = Math.max(0, punchUntil - now);
     if (!el){ raf = 0; return; }
@@ -158,6 +167,15 @@ window.Fx = (function(){
   }
 
 
+  /* 아주 짧게 화면을 세운다. 흔들림·당김이 도는 중에 이걸 걸면
+     그 프레임에서 딱 멈췄다가 다시 흐른다 — 그 한 박자가 타격이 된다.
+     느려진 시간을 오래 끌면 렉이라 오해받으므로 100ms를 넘기지 않는다. */
+  function freeze(ms){
+    const t = performance.now() + Math.min(100, ms || 90) * (calm() ? 0.4 : 1);
+    if (t > freezeUntil) freezeUntil = t;
+    pump();
+  }
+
   /* ---------------- 타격 한 방 ----------------
      흔들림·당김·집중선은 따로 쓰면 밋밋하다. 셋이 같은 순간에 겹쳐야 '맞았다'가 된다.
      강도: 1 보통 / 2 크게 / 3 결정타 */
@@ -165,9 +183,10 @@ window.Fx = (function(){
     const L = level || 1;
     punch(.04 + .028 * L, 220 + 60 * L);
     shake(7 + 5 * L, 240 + 70 * L);
+    freeze(52 + 20 * L);            // 보통 72 · 크게 92 · 결정타 112→100(상한)
     if (L >= 2) lines(260 + 60 * L);
     try { if (navigator.vibrate) navigator.vibrate(L >= 3 ? [50, 30, 70] : 40); } catch(e){}
   }
 
-  return { shake, punch, lines, danger, impact, calm };
+  return { shake, punch, lines, danger, impact, freeze, calm };
 })();

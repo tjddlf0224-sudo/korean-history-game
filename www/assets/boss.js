@@ -274,7 +274,10 @@ window.Boss = (function(){
       if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
       if (navigator.vibrate) navigator.vibrate(crit ? 45 : 25);
       msg(S.cur.feedback[1] + (S.combo >= 3 ? `<br><b>${S.combo}연속! 일격이 무거워진다.</b>` : ''));
-      bars(); await wait(700);
+      // 잘 맞힐수록 전투가 빨라진다. 콤보가 3이든 0이든 똑같이 기다리면
+      // 잘하고 있는데 화면이 안 따라와 리듬이 끊긴다 — **속도 자체가 보상**이다.
+      // 오답 쪽(900ms)은 줄이지 않는다. 해설을 읽어야 하는 순간이라서다.
+      bars(); await wait(S.combo >= 3 ? 460 : 640);
       pp.classList.remove('lunge'); ep.classList.remove('hit');
       if (S.eHp <= 0) return finish(true);
     } else {
