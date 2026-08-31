@@ -586,6 +586,12 @@ const ZONES = {
       { id:'dano', name:'단오 그네 뛰는 여인', x:800, y:320, img:'assets/portraits/dano.png', look:{ role:'commoner', body:'#4a7c8a', accent:'#e8e4d8' } },
       { id:'chuseok', name:'추석 성묘객', x:860, y:470, img:'assets/portraits/chuseok.png', look:{ role:'commoner', body:'#8a7a5a', accent:'#d8c48a' } },
       { id:'dongji', name:'동지 팥죽 할머니', x:560, y:505, img:'assets/portraits/dongji.png', look:{ role:'commoner', body:'#6b4a4a', accent:'#e8e4d8' } },
+      // 원래는 설날 아이가 대보름을, 단오 여인이 한식을, 추석 성묘객이 칠석을
+      // 덤으로 떠맡고 있었다. 명절마다 임자를 따로 세운다.
+      // 자리는 assets/tools/place_npcs.py 로 골랐다.
+      { id:'daeboreum', name:'대보름 쥐불 놓는 아이', x:720, y:144, img:'assets/portraits/extra_mokdong.png', look:{ role:'commoner', body:'#8a6a3a', accent:'#e0b94a' } },
+      { id:'hansik', name:'한식 성묘객', x:752, y:624, img:'assets/portraits/extra_nopa.png', look:{ role:'commoner', body:'#5a6b5a', accent:'#d8d0c0' } },
+      { id:'chilseok', name:'칠석 베 짜는 여인', x:1104, y:344, img:'assets/portraits/extra_jikjo.png', look:{ role:'commoner', body:'#4a5a7c', accent:'#e8e4d8' } },
     ],
     exits: [],
   },
@@ -847,8 +853,12 @@ function updateHudGoal(){
   // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
+      // 열두 달 차례대로. 맨 끝 인물이 챕터를 닫는다(endsChapter).
       ['seollal', '설빔 입은 아이와 대화하기'],
+      ['daeboreum', '대보름 쥐불 놓는 아이와 대화하기'],
+      ['hansik', '한식 성묘객과 대화하기'],
       ['dano', '단오 그네 뛰는 여인과 대화하기'],
+      ['chilseok', '칠석 베 짜는 여인과 대화하기'],
       ['chuseok', '추석 성묘객과 대화하기'],
       ['dongji', '동지 팥죽 할머니와 대화하기']
     ];
@@ -1094,32 +1104,71 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'오늘은 정월 초하루예요! 새 옷 입고 어른들께 세배 드렸어요. 떡국도 한 그릇 먹었고요 — 이걸 먹어야 한 살 더 먹는대요.' },
       { who:'npc', t:'차례 지내고 나면 윷놀이랑 널뛰기를 해요. 연도 날리고요.' },
-      { who:'npc', t:'보름날은 또 달라요. 새벽에 부럼을 깨물고, 오곡밥이랑 묵은 나물을 먹어요. 밤에는 논둑에서 쥐불놀이를 하고 달집도 태우죠.' },
+      { who:'npc', t:'보름날은 또 달라요. 저기 논둑에서 깡통 돌리는 애가 있죠? 걔한테 물어보세요 — 대보름은 걔가 제일 잘 알아요.' },
     ],
     quizSeq: [
       { q:'음력 정월 초하루로 차례와 세배를 하고 떡국을 먹는 명절은?',
         opts:['설날','한식'], answer:0, src:[18, 19, 20, 22, 23, 24, 26, 28, 30, 31, 32, 33],
         feedback:['한식은 동지에서 105일째 되는 날로, 찬 음식을 먹고 성묘하는 날이에요.','정답! 설날입니다.'] },
+    ]
+  },
+  /* ── 아래 셋은 원래 다른 인물이 덤으로 떠맡던 명절을 임자에게 돌려준 것이다.
+     문항과 기출 출처(src)는 그대로 옮겨 왔다 — 새로 지어낸 문제가 아니다. ── */
+
+  daeboreum_0: {
+    name: '대보름 쥐불 놓는 아이', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M19.4 4.6L18 6M6 18l-1.4 1.4"/></svg>', img: 'assets/portraits/extra_mokdong.png',
+    beats: [
+      { who:'npc', t:'오늘이 정월 대보름이에요! 새벽에 부럼 깨물었어요 — 딱! 하고 소리 나야 한 해 동안 부스럼이 안 난대요.' },
+      { who:'npc', t:'아침엔 오곡밥이랑 묵은 나물을 먹었고요. 귀밝이술도 어른들이 한 모금 주셨어요.' },
+      { who:'npc', t:'해 지면 논둑에서 쥐불놀이를 해요. 깡통에 불을 담아 빙빙 돌리면 논둑의 해충이 타 죽는대요. 달 뜨면 달집도 태우고요!' },
+    ],
+    quizSeq: [
       { q:'음력 정월 대보름에 하는 풍속으로 옳은 것은?',
         opts:['부럼 깨물기와 오곡밥 먹기','창포물에 머리 감기'], answer:0, src:[30],
         feedback:['창포물에 머리 감기는 단오의 풍속이에요.','정답! 정월 대보름에는 부럼을 깨고 오곡밥과 묵은 나물을 먹으며 쥐불놀이를 했어요.'] },
     ]
   },
+
+  hansik_0: {
+    name: '한식 성묘객', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20v-5a6 6 0 0112 0v5"/><path d="M12 9V5M10 6.5h4"/></svg>', img: 'assets/portraits/extra_nopa.png',
+    beats: [
+      { who:'npc', t:'산소에 다녀오는 길일세. 오늘이 한식이니.' },
+      { who:'npc', t:'동지로부터 백닷새째 되는 날이라네. 이날은 불을 피우지 않고 찬 음식을 먹지 — 그래서 한식(寒食)이야.' },
+      { who:'npc', t:'무덤에 떼를 새로 입히고 술 한 잔 올리네. 봄이 왔으니 조상께도 알려 드려야지.' },
+    ],
+    quizSeq: [
+      { q:'동지에서 105일째 되는 날로, 불을 쓰지 않고 찬 음식을 먹으며 성묘하는 날은?',
+        opts:['한식','유두'], answer:0, src:[23, 35],
+        feedback:['유두는 음력 6월 15일로, 동쪽으로 흐르는 물에 머리를 감는 날이에요.','정답! 한식입니다.'] },
+    ]
+  },
+
+  chilseok_0: {
+    name: '칠석 베 짜는 여인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.2 5.1 5.3.5-4 3.6 1.2 5.3L12 14.2 7.3 17l1.2-5.3-4-3.6 5.3-.5z"/><path d="M4 21h16"/></svg>', img: 'assets/portraits/extra_jikjo.png',
+    beats: [
+      { who:'npc', t:'베틀 앞에 앉은 지 한나절이네요. 오늘이 칠석, 음력 칠월 초이레입니다.' },
+      { who:'npc', t:'견우와 직녀가 일 년에 한 번 오작교에서 만난다는 날이지요. 까치와 까마귀가 다리를 놓아 준다고요.' },
+      { who:'npc', t:'이날 비가 오면 두 사람이 만나서 흘리는 기쁨의 눈물이라 하고, 이튿날 비는 헤어지며 흘리는 눈물이라 합니다.' },
+    ],
+    quizSeq: [
+      { q:'음력 7월 7일로 견우와 직녀가 만난다는 이야기가 전해지는 날은?',
+        opts:['칠석','삼짇날'], answer:0, src:[20, 60],
+        feedback:['삼짇날은 음력 3월 3일로, 진달래 화전을 부쳐 먹는 날이에요.','정답! 칠석입니다.'] },
+    ]
+  },
+
   dano_0: {
     name: '단오 그네 뛰는 여인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V6"/><path d="M12 9c0-3 3-4 5-4-1 3-2 5-5 5"/><path d="M12 13c0-3-3-4-5-4 1 3 2 5 5 5"/><path d="M12 17c0-2.5 2.5-3.5 4-3.5-1 2.5-1.5 4-4 4"/></svg>', img: 'assets/portraits/dano.png',
     beats: [
       { who:'npc', t:'오늘은 음력 오월 초닷새, 단오입니다. 수릿날이라고도 하지요.' },
       { who:'npc', t:'아침에 창포 삶은 물로 머리를 감았습니다. 그래야 한 해 동안 머리에 윤이 난다고들 해요.' },
       { who:'npc', t:'여자들은 그네를 뛰고 남자들은 씨름을 합니다. 수리취를 넣은 떡도 빚고요.' },
-      { who:'npc', t:'봄에는 다른 날들도 있었지요. 삼월 삼짇날에는 진달래 화전을 부치고, 한식에는 불을 피우지 않고 찬 음식을 먹으며 성묘를 합니다.' },
+      { who:'npc', t:'봄에는 다른 날들도 있었지요. 삼월 삼짇날에는 진달래 화전을 부칩니다. 한식은… 저기 산소 다녀오시는 어르신께 여쭤보세요.' },
     ],
     quizSeq: [
       { q:'음력 5월 5일로 창포물에 머리를 감고 그네뛰기와 씨름을 하는 명절은?',
         opts:['단오','칠석'], answer:0, src:[19, 24, 33, 56],
         feedback:['칠석은 음력 7월 7일로, 견우와 직녀가 만난다는 날이에요.','정답! 단오입니다. 수릿날이라고도 하며 수리취떡을 먹었어요.'] },
-      { q:'동지에서 105일째 되는 날로, 불을 쓰지 않고 찬 음식을 먹으며 성묘하는 날은?',
-        opts:['한식','유두'], answer:0, src:[23, 35],
-        feedback:['유두는 음력 6월 15일로, 동쪽으로 흐르는 물에 머리를 감는 날이에요.','정답! 한식입니다.'] },
     ]
   },
   chuseok_0: {
@@ -1128,15 +1177,12 @@ const NPC_DATA = {
       { who:'npc', t:'음력 팔월 보름, 한가위입니다. 햇곡식으로 차례를 지내고 조상 산소를 찾아 벌초를 하지요.' },
       { who:'npc', t:'송편을 빚습니다. 솔잎을 깔고 쪄서 송편이라 합니다.' },
       { who:'npc', t:'밤에는 마을 여자들이 손을 잡고 둥글게 돌며 노래합니다 — 강강술래입니다.' },
-      { who:'npc', t:'여름에는 유두라고, 동쪽으로 흐르는 물에 머리를 감는 날도 있고, 칠석에는 견우직녀 이야기를 하며 밤하늘을 봅니다.' },
+      { who:'npc', t:'여름에는 유두라고, 동쪽으로 흐르는 물에 머리를 감는 날도 있지요. 칠석 이야기는 저 베틀 앞의 아낙이 잘합니다.' },
     ],
     quizSeq: [
       { q:'음력 8월 15일로 햇곡식으로 차례를 지내고 송편을 빚으며 강강술래를 하는 명절은?',
         opts:['추석','동지'], answer:0, src:[28],
         feedback:['동지는 양력 12월 22일 무렵으로, 팥죽을 먹는 날이에요.','정답! 추석(한가위)입니다.'] },
-      { q:'음력 7월 7일로 견우와 직녀가 만난다는 이야기가 전해지는 날은?',
-        opts:['칠석','삼짇날'], answer:0, src:[20, 60],
-        feedback:['삼짇날은 음력 3월 3일로, 진달래 화전을 부쳐 먹는 날이에요.','정답! 칠석입니다.'] },
     ]
   },
   dongji_0: {
@@ -1165,6 +1211,9 @@ const Stage = {
     if (id === 'dano') return 'dano_0';
     if (id === 'chuseok') return 'chuseok_0';
     if (id === 'dongji') return 'dongji_0';
+    if (id === 'daeboreum') return 'daeboreum_0';
+    if (id === 'hansik') return 'hansik_0';
+    if (id === 'chilseok') return 'chilseok_0';
     return null;
   },
   interact(){
@@ -1480,12 +1529,11 @@ const Dialog = {
       // 때)만 "대화 완료"를 띄운다 — 여러 단계로 나뉜 인물에게 매번 뜨면
       // 아직 이어질 이야기가 남아 있는데도 끝난 줄 알고 다시 안 걸게 된다.
       playFanfare('대화 완료');
+    }
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
     // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
     if (window.News) News.fire(this.key);
-
-    }
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());

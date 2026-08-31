@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 167명 */
+   인물 174명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -41,6 +41,7 @@ window.HERO_DATA = (function(){
     choechiwon: { n:'최치원', p:'choechiwon.png', e:'고대', r:'scholar', ch:{'godae3.html':['choechiwon_0']} },
     hwarang: { n:'화랑', p:'hwarang.png', e:'고대', r:'general', ch:{'godae1.html':['hwarang_0']} },
     gongmin: { n:'공민왕', p:'gongmin.png', e:'고려', r:'king', ch:{'goryeo3.html':['gongmin_0','gongmin_1']} },
+    extra_musin: { n:'광군 군사', p:'extra_musin.png', e:'고려', r:'general', ch:{'goryeo1.html':['gwanggun_0']} },
     gwangjong: { n:'광종', p:'gwangjong.png', e:'고려', r:'king', ch:{'goryeo1.html':['gwangjong_0']} },
     gimbusik: { n:'김부식', p:'gimbusik.png', e:'고려', r:'scholar', ch:{'goryeo2.html':['gimbusik_0']} },
     arabsang: { n:'대식국 상인', p:'arabsang.png', e:'고려', r:'commoner', ch:{'byeokrando.html':['arabsang_0']} },
@@ -48,6 +49,7 @@ window.HERO_DATA = (function(){
     sambyeolcho: { n:'삼별초 장수', p:'sambyeolcho.png', e:'고려', r:'general', ch:{'goryeo2.html':['sambyeolcho_0']} },
     seohui: { n:'서희', p:'seohui.png', e:'고려', r:'scholar', ch:{'goryeo2.html':['seohui_0']} },
     songsang: { n:'송 상인', p:'songsang.png', e:'고려', r:'commoner', ch:{'byeokrando.html':['songsang_0']} },
+    yejong_king: { n:'예종', p:'yejong_king.png', e:'고려', r:'king', ch:{'goryeo1.html':['yejong_0']} },
     yungwan: { n:'윤관', p:'yungwan.png', e:'고려', r:'general', ch:{'goryeo2.html':['yungwan_0']} },
     uicheon: { n:'의천', p:'uicheon.png', e:'고려', r:'scholar', ch:{'goryeo3.html':['uicheon_0']} },
     igyubo: { n:'이규보', p:'igyubo.png', e:'고려', r:'scholar', ch:{'goryeo3.html':['igyubo_0']} },
@@ -59,6 +61,8 @@ window.HERO_DATA = (function(){
     choeseungno: { n:'최승로', p:'choeseungno.png', e:'고려', r:'scholar', ch:{'goryeo1.html':['choeseungno_0']} },
     choechunghyeon: { n:'최충헌', p:'choechunghyeon.png', e:'고려', r:'general', ch:{'goryeo2.html':['choechunghyeon_0']} },
     wanggeon: { n:'태조 왕건', p:'wanggeon.png', e:'고려', r:'king', ch:{'goryeo1.html':['wanggeon_0','wanggeon_1']} },
+    extra_chonjang: { n:'향리 호장', p:'extra_chonjang.png', e:'고려', r:'commoner', ch:{'goryeo1.html':['hyangni_0']} },
+    hyeonjong_goryeo_king: { n:'현종', p:'hyeonjong_goryeo_king.png', e:'고려', r:'king', ch:{'goryeo1.html':['hyeonjong_0']} },
     jwasu: { n:'김 좌수', p:'jwasu.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['jwasu_0']} },
     gimseongil: { n:'김성일', p:'gimseongil.png', e:'조선 전기', r:'scholar', ch:{'ch6.html':['gimseongil_0']} },
     kimilson: { n:'김일손', p:'kimilson.png', e:'조선 전기', r:'scholar', ch:{'ch5.html':['kimilson_1']} },
@@ -170,8 +174,11 @@ window.HERO_DATA = (function(){
     yukio: { n:'피란민', p:'yukio.png', e:'현대', r:'commoner', ch:{'hyeondae1.html':['yukio_0']} },
     hanil: { n:'한일 회담 반대 학생', p:'hanil.png', e:'현대', r:'commoner', ch:{'hyeondae3.html':['hanil_0']} },
     dano: { n:'단오 그네 뛰는 여인', p:'dano.png', e:'시대 통합', r:'commoner', ch:{'sesi.html':['dano_0']} },
+    extra_mokdong: { n:'대보름 쥐불 놓는 아이', p:'extra_mokdong.png', e:'시대 통합', r:'commoner', ch:{'sesi.html':['daeboreum_0']} },
     dongji: { n:'동지 팥죽 할머니', p:'dongji.png', e:'시대 통합', r:'commoner', ch:{'sesi.html':['dongji_0']} },
     seollal: { n:'설빔 입은 아이', p:'seollal.png', e:'시대 통합', r:'commoner', ch:{'sesi.html':['seollal_0']} },
     chuseok: { n:'추석 성묘객', p:'chuseok.png', e:'시대 통합', r:'commoner', ch:{'sesi.html':['chuseok_0']} },
+    extra_jikjo: { n:'칠석 베 짜는 여인', p:'extra_jikjo.png', e:'시대 통합', r:'commoner', ch:{'sesi.html':['chilseok_0']} },
+    extra_nopa: { n:'한식 성묘객', p:'extra_nopa.png', e:'시대 통합', r:'commoner', ch:{'sesi.html':['hansik_0']} },
   };
 })();

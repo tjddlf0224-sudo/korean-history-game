@@ -1506,12 +1506,11 @@ const Dialog = {
       // 때)만 "대화 완료"를 띄운다 — 여러 단계로 나뉜 인물에게 매번 뜨면
       // 아직 이어질 이야기가 남아 있는데도 끝난 줄 알고 다시 안 걸게 된다.
       playFanfare('대화 완료');
+    }
     // 이 인물의 퀴즈 대화를 다 끝냈으면 인물 카드를 얻는다
     if (window.Heroes && this.npc) Heroes.recordTalk(this.npc.id, this.key, !!this._missedAny);
     // 이 대화에 걸린 속보가 있으면 띄운다(없으면 조용히 넘어간다)
     if (window.News) News.fire(this.key);
-
-    }
   }
 };
 document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
