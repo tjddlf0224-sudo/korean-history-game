@@ -47,36 +47,41 @@ def set_array(s, key, value):
 
 GSI = os.path.join(ROOT, 'ios', 'App', 'App', 'GoogleService-Info.plist')
 
-URL_TYPES = """<key>CFBundleURLTypes</key>
-\t<array>
-\t\t<dict>
-\t\t\t<key>CFBundleURLSchemes</key>
-\t\t\t<array>
-\t\t\t\t<string>%s</string>
-\t\t\t</array>
-\t\t</dict>
-\t</array>
-\t"""
-
 
 def add_google_scheme(s):
-    """GoogleService-Info.plist 의 REVERSED_CLIENT_ID 를 URL 스킴으로 넣는다."""
+    """GoogleService-Info.plist 의 REVERSED_CLIENT_ID 를 URL 스킴으로 넣는다.
+
+    **문자열로 끼워 넣지 않는다.** 예전에 그렇게 했다가 <key>가
+    UIApplicationSceneManifest 의 dict **안쪽**에 들어갔다. plutil 검사는
+    통과한다(유효한 XML이니까) — 그래서 티도 안 났고, 루트가 아니라서
+    구글 로그인 콜백이 안 잡혔다. plistlib 으로 파싱해서 넣는다.
+    """
+    import plistlib
     if not os.path.exists(GSI):
         return s, 'GoogleService-Info.plist 가 없어 건너뜀 (구글 로그인 준비 전)'
-    g = open(GSI, encoding='utf-8').read()
-    m = re.search(r'<key>REVERSED_CLIENT_ID</key>\s*<string>([^<]+)</string>', g)
-    if not m:
-        return s, 'REVERSED_CLIENT_ID 를 못 찾음 — GoogleService-Info.plist 를 확인하라'
-    scheme = m.group(1)
-    if scheme in s:
-        return s, '이미 들어 있음: ' + scheme
-    if '<key>CFBundleURLTypes</key>' in s:
-        return s, ('CFBundleURLTypes 가 이미 있다 — 손으로 확인할 것. 넣을 값: ' + scheme)
-    # 최상위 dict의 첫 key 앞에 끼워 넣는다
-    m2 = re.search(r'(<dict>\s*\n\t)', s)
-    if not m2:
-        return s, 'Info.plist 모양이 예상과 달라 못 넣음'
-    return s[:m2.end(1)] + (URL_TYPES % scheme) + s[m2.end(1):], '넣음: ' + scheme
+    try:
+        g = plistlib.load(open(GSI, 'rb'))
+    except Exception as e:
+        return s, 'GoogleService-Info.plist 를 못 읽음: %s' % e
+    rev = g.get('REVERSED_CLIENT_ID')
+    if not rev:
+        return s, ('REVERSED_CLIENT_ID 가 없다 — 콘솔에서 구글 로그인을 켠 뒤 '
+                   'plist 를 다시 받아라')
+    d = plistlib.load(open(PLIST, 'rb'))
+    sm = d.get('UIApplicationSceneManifest')
+    fixed = False
+    if isinstance(sm, dict) and 'CFBundleURLTypes' in sm:
+        del sm['CFBundleURLTypes']          # 예전 버그로 잘못 들어간 것
+        fixed = True
+    cur = d.get('CFBundleURLTypes') or []
+    if any(rev in (t.get('CFBundleURLSchemes') or [])
+           for t in cur if isinstance(t, dict)):
+        return s, '이미 들어 있음: ' + rev
+    cur.append({'CFBundleURLSchemes': [rev]})
+    d['CFBundleURLTypes'] = cur
+    plistlib.dump(d, open(PLIST, 'wb'))
+    note = ' (엉뚱한 자리에 있던 것도 걷어냄)' if fixed else ''
+    return open(PLIST, encoding='utf-8').read(), '넣음: ' + rev + note
 
 
 def main():
