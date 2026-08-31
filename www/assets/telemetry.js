@@ -94,13 +94,18 @@ window.Telemetry = (function(){
           wrong: INC(v.wrong || 0), ms: INC(v.ms || 0), lv4: INC(v.lv4 || 0),
         }, { merge: true });
       }
-      // 챕터별 진행 — 사람 단위로 하나. 어디서 그만두는지를 본다.
+      // 챕터별 진행 — **사람마다 한 덩어리로 쌓지 않는다.**
+      // 처음엔 khg_progress/<사람> 문서 하나에 챕터를 필드로 붙여 나갔는데,
+      // 챕터가 서른여섯이라 필드가 서른일곱까지 늘어난다. 보안 규칙이
+      // 문서 필드 수에 상한을 두고 있어서(클라이언트를 못 믿으니 당연히 둬야 한다)
+      // 스물세 챕터쯤에서 **permission-denied 로 조용히 막혔다.**
+      // 사람×챕터로 쪼개면 문서 하나가 네 필드로 고정된다.
       const uid = who();
       for (const c of chs){
         const v = snapshot.ch[c];
-        batch.set(D.collection('khg_progress').doc(uid), {
-          [c.replace(/\./g, '_')]: {
-            enter: INC(v.enter || 0), done: INC(v.done || 0), quit: INC(v.quit || 0) },
+        const id = uid + '__' + c.replace(/\./g, '_');
+        batch.set(D.collection('khg_progress').doc(id), {
+          enter: INC(v.enter || 0), done: INC(v.done || 0), quit: INC(v.quit || 0),
           updatedAt: Date.now(),
         }, { merge: true });
       }
