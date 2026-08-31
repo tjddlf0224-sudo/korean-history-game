@@ -1659,6 +1659,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1669,6 +1670,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1725,6 +1727,31 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 집강소에 앉는다 ============
+   1894년 전주 화약 뒤, 동학 농민군이 전라도 고을마다 집강소를 두고 스스로
+   고을 일을 보았다. 이 화는 집강소를 이미 문항으로 묻는다 — 여기서는 앉아 보게 한다.
+
+   고증 주의: 흔히 말하는 '폐정개혁 12개조'는 뒷날 오지영의 『동학사』에 실린
+   것이라 사료로서 논란이 있다. 그래서 조목을 그대로 옮기지 않고,
+   **실제로 벌어진 일**(탐관오리 처벌, 노비 문서 태우기, 세금 바로잡기)만 적는다. */
+if (window.Deed) Deed.add({
+  id: 'jipgangso', zone: 'ugeumchi', x: 368, y: 750, range: 175,
+  label: '집강소에 앉는다', tag: '집 강 소',
+  lines: [
+    '고을 관아 마루에 농민들이 앉아 있다. 관리가 앉던 자리다.',
+    '"앉으시오. 오늘은 그대가 들을 차례요."',
+    '한 사람이 나와 아뢴다. 아전이 세금을 두 번 걷었다고.<br>' +
+      '장부를 펴 맞춰 보니 정말 그렇다. 되돌려 주기로 한다.',
+    '다음 사람은 종문서를 들고 왔다.<br>마당에서 불을 놓는다. 종이가 검게 말려 올라간다.',
+    '"우리가 바란 건 나라를 뒤엎는 게 아니었소.<br>' +
+      '<b>세금을 정한 대로만 걷고, 사람을 사람으로 대하라는 것</b>이었소."',
+    '해가 기운다. 이 마루에 농민이 앉은 것은 조선에서 처음 있는 일이다.<br>' +
+      '오래가지는 못한다. 그해 겨울 우금치에서 끝난다.',
+  ],
+  gold: 24, badge: 'did_jipgangso',
+});
+
 </script>
 </body>
 </html>

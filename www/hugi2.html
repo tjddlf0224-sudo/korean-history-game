@@ -1821,6 +1821,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1831,6 +1832,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1886,6 +1888,31 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 화성을 쌓는다 ============
+   정조가 1794~1796년에 수원 화성을 쌓았다. 정약용이 거중기와 녹로를 만들어
+   무거운 돌을 올렸다. 이 화는 거중기를 이미 문항으로 묻는다 — 그래서 여기서는
+   묻지 않고 **직접 올려 보게** 한다.
+
+   가장 중요한 사실은 기구가 아니라 품삯이다. 부역으로 끌어다 쓰지 않고
+   일한 사람에게 삯을 주었고, 그 내역까지 『화성성역의궤』에 남겼다. */
+if (window.Deed) Deed.add({
+  id: 'hwaseong_dol', zone: 'seongho', x: 288, y: 752, range: 175,
+  label: '돌을 올려 본다', tag: '화 성',
+  lines: [
+    '공사장 목수가 밧줄 끝을 넘긴다.<br>"당겨 보시오. 혼자서도 될 것이오."',
+    '도르래가 여러 겹으로 걸려 있다. 줄을 당기자 사람 키만 한 돌이 슬며시 뜬다.<br>' +
+      '<b>거중기</b>다. 힘은 나누고 거리는 늘리는 이치라 한다.',
+    '"이거 없을 땐 스무 명이 붙어도 하루에 몇 덩이 못 올렸소."',
+    '옆에서 서기가 붓을 놀린다. 무엇을 적느냐 물으니 삯을 적는다 한다.',
+    '"부역이 아니오. <b>일한 만큼 삯을 받소.</b> 며칠 일했는지, 얼마를 줬는지 —<br>' +
+      '한 사람도 빠뜨리지 않고 적어 두라 하셨소."',
+    '그 장부가 뒷날 『화성성역의궤』로 남는다.<br>' +
+      '성을 쌓은 기록이 아니라, <b>성을 쌓은 사람들의 기록</b>이다.',
+  ],
+  gold: 24, badge: 'did_hwaseong',
+});
+
 </script>
 </body>
 </html>

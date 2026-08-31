@@ -1828,6 +1828,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1838,6 +1839,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/moment.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
@@ -1901,6 +1903,31 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 경판을 새긴다 ============
+   몽골이 쳐들어오자 강화도에서 1236년부터 열여섯 해에 걸쳐 새겼다.
+   8만 장이 넘는다. 이 화는 팔만대장경을 이미 문항으로 묻는다 —
+   그래서 여기서는 묻지 않고 새겨 보게 한다.
+
+   놀라운 것은 규모가 아니라 **고르다는 것**이다. 여러 사람이 새겼는데도
+   글씨체가 한 사람 것처럼 고르고 오·탈자가 거의 없다. */
+if (window.Deed) Deed.add({
+  id: 'daejanggyeong_pan', zone: 'seogyeong', x: 696, y: 752, range: 175,
+  label: '경판을 새겨 본다', tag: '대 장 경',
+  lines: [
+    '각수(刻手)가 칼을 건넨다.<br>"한 자만 파 보시오. 손이 떨리면 못 하오."',
+    '나무는 산벚나무다. 소금물에 삶아 몇 해를 말렸다 한다.<br>' +
+      '그래야 뒤틀리지도 벌레 먹지도 않는다고.',
+    '한 자를 파는 데 한참이 걸린다. 판 하나에 글자가 삼백이 넘는다.',
+    '"판이 팔만 장이오. 열여섯 해를 새겼소."',
+    '쌓인 판을 훑어본다. 새긴 사람이 여럿인데 <b>글씨체가 한 사람 것처럼 고르다.</b><br>' +
+      '틀린 글자도 거의 없다.',
+    '"몽골 군사를 이 칼로 막을 수야 없지요."<br>각수가 웃는다.<br>' +
+      '"허나 우리가 여기서 이걸 하고 있다는 걸, 저들도 언젠가 알 것이오."',
+  ],
+  gold: 24, badge: 'did_janggyeong',
+});
+
 </script>
 </body>
 </html>
