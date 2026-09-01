@@ -789,3 +789,13 @@ F. **성능** — 타이머 11개, 영구 인터벌 챕터당 2개. 조치 불�
   - **브라우저 패널은 document.visibilityState='hidden'이라 rAF·CSS 애니메이션이 멈춘다** — 레이아웃 측정은 resize_window로 뷰포트를 강제하면 되지만, 애니메이션 확인은 불가(실기기/시뮬레이터 몫).
 - **로그인 실패 원인 규명**: `auth/unauthorized-domain`. 코드 문제 아님 — Firebase 콘솔 Authentication → Settings → 승인된 도메인에 `tjddlf0224-sudo.github.io` 추가 필요(유저 몫). iOS 앱은 네이티브 로그인이라 무관.
 - v26, 커밋 e554f5b 푸시(웹+iOS 동시).
+
+## 54. 로그인 도메인 승인 + 팝업 막힘 대비 (2026-09-01)
+- 유저가 Firebase 콘솔에 `tjddlf0224-sudo.github.io` 추가 → identitytoolkit API로 authorizedDomains 직접 조회해 반영 확인.
+- 라이브에서 signInWithPopup 호출 시 오류가 `auth/unauthorized-domain` → `auth/popup-blocked`로 바뀜 = 도메인 검사 통과 확인(자격증명 입력 없이 코드만 확인).
+- **보강**: 아이폰 사파리는 팝업 로그인을 자주 막는데, 기존 코드는 팝업 실패 시 그냥 끝나 로그인할 길이 없었다.
+  - `webSignIn()` 추가 — popup-blocked/operation-not-supported/web-storage-unsupported면 `signInWithRedirect`로 전환. **popup-closed-by-user는 전환 안 함**(사용자가 취소한 것).
+  - 돌아온 뒤 실패는 `getRedirectResult().catch`로 받아 로그인 창의 `#auth-err`에 표시(창이 아직 없으면 redirectErr에 담아 두고 open() 때 표시).
+  - 구글·애플 둘 다 적용. 네이티브(Capacitor) 경로는 그대로.
+- 검증: 팝업 막힘 흉내 → 리다이렉트 전환 O, 취소 흉내 → 전환 X, 콘솔 0건.
+- v27, 커밋 bbd5abf 푸시(웹+iOS 동시).
