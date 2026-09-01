@@ -21,19 +21,22 @@ window.Unlock = (function(){
 
   /* 계급 → 그 계급에서 열리는 것들. rank.js의 TIERS와 minLv를 그대로 따른다. */
   const GATES = [
+    /* 칸이 좁으니 설명하지 않고 **이름만** 적는다. 무엇이 열리는지만 알면 된다.
+       노비는 잠긴 것이 없어서 opens가 비고, 대신 처음부터 되는 것을 같은
+       모양으로 적어 둔다(빈 칸으로 두면 아무것도 못 하는 것처럼 보인다). */
     { tier:'nobi',    lv:1,  name:'노비',
-      opens:[], desc:'기본 기능은 처음부터 모두 쓸 수 있습니다.' },
+      opens:[], desc:'· 기출 학습<br>· 출석 · 상자<br>· 오답 복습<br>· 왕조 계보' },
     { tier:'yangin',  lv:6,  name:'양인',
       opens:[ ['heroes',   '인물 도감'],
-              ['mg_match', '미니게임 · 유물 짝 맞추기'] ] },
+              ['mg_match', '유물 짝 맞추기'] ] },
     { tier:'jungin',  lv:11, name:'중인',
-      opens:[ ['shop',     '금으로 하는 것들'] ] },
+      opens:[ ['shop',     '상점 열림'] ] },
     { tier:'yangban', lv:16, name:'양반',
-      opens:[ ['mg_face',  '미니게임 · 초상 알아맞히기'] ] },
+      opens:[ ['mg_face',  '초상 알아맞히기'] ] },
     { tier:'jaesang', lv:21, name:'재상',
       opens:[ ['scan',     '유물 탐지'] ] },
     { tier:'wang',    lv:26, name:'왕',
-      opens:[ ['box2',     '시대 상자 하루 두 번'] ] },
+      opens:[ ['box2',     '상자 하루 두 번'] ] },
   ];
 
   function level(){

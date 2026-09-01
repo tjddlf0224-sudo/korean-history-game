@@ -90,9 +90,13 @@ window.Ads = (function () {
     return false;
   }
 
-  // 웹(프리뷰)에서는 실제 광고 불가 → 개발용 확인창으로 보상 흐름 테스트
+  // 웹에는 광고가 붙지 않는다(앱에서만 재생된다). 그래도 보상 흐름은
+  // 그대로 돌아가야 하므로 여기서 한 번 묻고 넘어간다.
+  // window.confirm은 쓰지 않는다 — 운영체제 창이라 화면 회전을 안 따라온다.
   function _webFallback() {
-    return Promise.resolve(window.confirm('[웹 테스트] 광고를 끝까지 봤다고 가정하고 보상을 받을까요?\n(실기기에서는 실제 리워드 광고가 재생됩니다)'));
+    if (window.Ask && Ask.confirm)
+      return Ask.confirm('이대로 보상을 받을까요?', { ok:'받기', cancel:'그만두기' });
+    return Promise.resolve(window.confirm('이대로 보상을 받을까요?'));
   }
 
   return { init: init, rewarded: rewarded, interstitial: interstitial, interstitialEvery: interstitialEvery, isNative: isNative };

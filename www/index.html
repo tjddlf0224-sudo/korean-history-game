@@ -1119,8 +1119,12 @@ document.getElementById('menu-kings-open').addEventListener('click', () => {
   openKingsModal();
 });
 document.getElementById('menu-badges-open').addEventListener('click', () => { closeMenu(); openBadges(); });
-document.getElementById('menu-reset').addEventListener('click', () => {
-  if (!confirm('마지막 학습 위치·배지·인연 기록을 전부 지울까요? 되돌릴 수 없습니다.')) return;
+document.getElementById('menu-reset').addEventListener('click', async () => {
+  // 브라우저 confirm()은 운영체제 창이라 화면 회전을 따라오지 않는다
+  // (가로로 하고 있는데 확인창만 세로로 떴다) — 게임 안 모달로 묻는다
+  const yes = await Ask.confirm('마지막 학습 위치·배지·인연 기록을<br>전부 지울까요?',
+    { sub:'되돌릴 수 없습니다.', ok:'지우기', cancel:'취소', danger:true });
+  if (!yes) return;
   try {
     localStorage.removeItem('khg_lastChapter');
     localStorage.removeItem('khg_seenIntro');
@@ -1215,6 +1219,7 @@ document.addEventListener('keydown', (ev) => {
     }
   })();
 </script>
+<script src="assets/ask.js?v=27"></script>
 <script src="assets/tidy.js?v=27"></script>
 </body>
 </html>
