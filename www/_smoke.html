@@ -54,6 +54,22 @@ function load(file){
     f.onload = () => {
       const w = f.contentWindow;
       w.addEventListener('error', e => errs.push(String(e.message)));
+      // 콘솔에 찍히는 error/warn도 잡는다 — 예외로 안 터지고 조용히 지나가는
+      // 문제(리소스 404, 모듈이 삼킨 오류)는 여기로만 드러난다.
+      ['error', 'warn'].forEach(k => {
+        const o = w.console[k];
+        w.console[k] = function(){
+          errs.push('[console.' + k + '] ' +
+            [...arguments].map(a => { try { return String(a && a.message || a); } catch(e){ return '?'; } })
+              .join(' ').slice(0, 220));
+          return o.apply(this, arguments);
+        };
+      });
+      // 리소스(이미지·스크립트) 404는 window error 이벤트의 캡처 단계로만 온다
+      w.addEventListener('error', e => {
+        if (e.target && e.target !== w && (e.target.src || e.target.href))
+          errs.push('[리소스 실패] ' + (e.target.src || e.target.href).split('/').slice(-2).join('/'));
+      }, true);
       // 인트로가 있으면 넘겨서 게임 화면 상태로 만든다.
       try {
         const ov = w.document.getElementById('intro-overlay');
