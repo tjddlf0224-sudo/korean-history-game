@@ -1645,6 +1645,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1655,6 +1656,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1713,6 +1715,24 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 계미자 ============
+   태종이 1403년 주자소를 두고 계미자를 부어 만들었다. 조선 최초의 금속활자다.
+   목판은 책 한 종에 판을 통째로 새겨야 하지만, 활자는 낱자를 흩어 다시 쓴다. */
+if (window.Deed) Deed.add({
+  id: 'gyemija_jocha', zone: 'hullyeonjang', x: 528, y: 432, range: 175,
+  label: '활자를 고른다', tag: '계 미 자',
+  lines: [
+    '나무 상자마다 낱글자가 칸칸이 담겼다. 손끝에 서늘하다.<br>"골라 보시오. 이 판에 들어갈 글자요."',
+    '글자를 하나씩 집어 판에 앉힌다. 거꾸로 된 글자가 손에 익지 않는다.',
+    '"목판은 안 씁니까?"<br>"목판은 책 한 종에 판을 통째로 새기오. 다른 책을 내려면 처음부터 다시 새겨야 하고."',
+    '"이건 다르오. <b>다 찍고 나면 도로 흩어 다음 책에 쓰오.</b>"',
+    '먹을 올리고 종이를 덮어 문지른다. 글자가 배어 나온다.<br>줄이 미세하게 어긋난 것이 오히려 활자로 찍은 표다.',
+    '이 활자를 계미년에 부었다 하여 계미자라 한다.<br>뒤에 세종이 갑인자로 더 고쳐 만든다.',
+  ],
+  gold: 24, badge: 'did_gyemija',
+});
+
 </script>
 </body>
 </html>

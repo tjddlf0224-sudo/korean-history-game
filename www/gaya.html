@@ -1665,6 +1665,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1675,6 +1676,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1733,6 +1735,24 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 덩이쇠 ============
+   가야는 철이 많이 났고 그 철을 낙랑과 왜에 팔았다. 덩이쇠는 그대로 화폐처럼
+   쓰이기도 했다. 이 화는 덩이쇠를 문항으로 묻는다 — 여기서는 두드려 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'deongi_dudeurim', zone: 'gimhae', x: 808, y: 390, range: 175,
+  label: '쇠를 두드려 본다', tag: '덩 이 쇠',
+  lines: [
+    '대장간의 열기가 얼굴을 밀어낸다. 망치가 건네진다.<br>"쇠가 붉을 때만 두드리시오. 식으면 안 먹소."',
+    '달군 쇳덩이를 모루에 올리고 친다. 불티가 튄다.<br>납작해질 때까지 접고 두드리고 다시 달군다.',
+    '다 편 것을 보니 손바닥만 한 판이다.<br>"이게 <b>덩이쇠</b>요. 이대로 배에 싣소."',
+    '"이걸로 무엇을 만듭니까?"<br>"사는 쪽이 알아서 하오. 칼을 만들든 보습을 만들든."',
+    '그러니 이건 물건이 아니라 재료다. 그리고 재료는 값이 고르다.<br><b>고르니까 돈처럼 쓰인다.</b> 실제로 이걸 화폐처럼 주고받았다 한다.',
+    '낙랑으로 가는 배, 왜로 가는 배가 이 쇠를 싣고 떠난다.<br>가야의 힘이 여기서 나왔다.',
+  ],
+  gold: 24, badge: 'did_deongiswe',
+});
+
 </script>
 </body>
 </html>

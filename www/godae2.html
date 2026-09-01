@@ -1804,6 +1804,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1814,6 +1815,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1870,6 +1872,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 청해진 ============
+   장보고가 완도에 청해진을 두고 신라·당·일본을 잇는 바닷길을 쥐었다.
+   그가 먼저 잡은 것은 해적이었다 — 당에 팔려 가는 신라 사람을 막는 일이 먼저였다.
+   이 화는 장보고를 문항으로 묻는다 — 여기서는 배를 띄워 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'cheonghae_bae', zone: 'cheonghae', x: 872, y: 592, range: 175,
+  label: '배를 띄운다', tag: '청 해 진',
+  lines: [
+    '선원이 돛줄을 넘긴다.<br>"바람이 좋소. 지금 나가면 사흘이면 당에 닿소."',
+    '짐칸에 도자기와 비단, 그리고 신라의 인삼과 모피가 실린다.',
+    '"이 길이 원래 이렇게 조용했습니까?"<br>선원이 고개를 젓는다.',
+    '"해적이 들끓었소. 사람을 잡아다 당에 노비로 팔았소.<br>우리 사람이 우리 바다에서 잡혀갔단 말이오."',
+    '"대사께서 그걸 먼저 없앴소. 장사는 그다음이었소."<br><b>길을 연 것이 아니라 길을 되찾은 것</b>이다.',
+    '돛이 부풀고 배가 나아간다. 뒤로 완도가 멀어진다.',
+  ],
+  gold: 24, badge: 'did_cheonghae',
+});
+
 </script>
 </body>
 </html>

@@ -1784,6 +1784,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1794,6 +1795,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1849,6 +1851,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 전민변정 ============
+   공민왕이 신돈을 시켜 전민변정도감을 두었다. 권문세족이 빼앗은 땅을 임자에게
+   돌려주고, 억지로 종이 된 사람을 풀어 주는 일이었다.
+   이 화는 그 기구를 문항으로 묻는다 — 여기서는 돌려주는 일을 해 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'jeonmin_munseo', zone: 'goryeomal', x: 536, y: 364, range: 175,
+  label: '문서를 돌려준다', tag: '전 민 변 정',
+  lines: [
+    '관아 마당에 사람이 줄을 섰다. 저마다 종이 한 장씩을 들었다.',
+    '앞사람이 내민 것은 땅문서다. 십 년 전 권세가에게 빼앗겼다 한다.<br>대조해 보니 정말 그 사람 이름이 원래 주인이다.',
+    '도장을 찍어 돌려준다. 받아 든 손이 떨린다.',
+    '다음 사람은 문서가 아니라 제 몸으로 왔다.<br>빚 때문에 종이 되었는데 빚은 이미 갚았다 한다.',
+    '종문서를 찢는다. <b>"오늘부터 양인이오."</b><br>줄이 줄지 않는다. 빼앗긴 사람이 이렇게 많았다.',
+    '이 일을 맡은 신돈은 뒷날 쫓겨나 죽는다.<br>빼앗은 쪽이 가만히 있지 않았기 때문이다.',
+  ],
+  gold: 24, badge: 'did_jeonmin',
+});
+
 </script>
 </body>
 </html>

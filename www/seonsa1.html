@@ -1862,6 +1862,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1872,6 +1873,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1928,6 +1930,26 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 고인돌 ============
+   고인돌은 청동기의 무덤이자 **계급의 증거**다. 덮개돌 하나가 수십 톤이라
+   수백 명이 매달려야 옮긴다. 그 사람들을 부릴 수 있는 자가 있었다는 뜻이고,
+   그게 곧 지배자의 등장이다. 이 화는 청동기를 문항으로 묻는다 — 여기서는
+   끌어 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'goindol_seonsa', zone: 'seonsa', x: 960, y: 174, range: 175,
+  label: '고인돌을 세운다', tag: '고 인 돌',
+  lines: [
+    '군장이 밧줄 한 가닥을 넘긴다.<br>"당기시오. 오늘 안에 올려야 하오."',
+    '덮개돌 하나에 밧줄이 수십 가닥 매였다. 사람이 백 명은 붙었다.<br>통나무를 굴림대로 깔고 조금씩 민다.',
+    '"이 돌 하나에 며칠이 걸립니까?"<br>"며칠이 아니라 몇 달이오."',
+    '문득 이상하다. 이만한 사람을 몇 달이나 붙들어 둘 수 있는 이가 있다는 뜻이다.<br><b>먹을 것을 쌓아 두고, 사람을 부리는 자.</b>',
+    '무덤 주인은 그런 사람이었다.<br>고인돌은 무덤이면서 동시에 <b>누가 위였는지를 적어 둔 표</b>다.',
+    '덮개돌이 받침돌 위에 얹힌다. 둔한 소리가 땅을 타고 발바닥까지 온다.',
+  ],
+  gold: 24, badge: 'did_goindol',
+});
+
 </script>
 </body>
 </html>

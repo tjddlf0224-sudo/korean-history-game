@@ -1642,6 +1642,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1652,6 +1653,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1710,6 +1712,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 공산 ============
+   927년 공산 전투. 견훤이 경주를 치자 왕건이 구원에 나섰다가 크게 패했다.
+   신숭겸이 왕건의 갑옷을 바꿔 입고 대신 싸우다 죽어 왕건이 빠져나갔다.
+   이 화는 그 사실을 문항으로 묻는다 — 여기서는 그 자리에 서 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'gongsan_jari', zone: 'gongsan', x: 688, y: 152, range: 175,
+  label: '그 자리에 서 본다', tag: '공 산',
+  lines: [
+    '싸움이 끝난 벌판이다. 부러진 창이 아직 꽂혀 있다.',
+    '여기서 왕건은 거의 죽을 뻔했다.',
+    '포위가 좁혀지자 신숭겸이 왕건의 갑옷을 벗겨 제가 입었다.<br>그러고는 임금의 깃발을 들고 반대쪽으로 달렸다.',
+    '적이 그쪽으로 몰렸다. 그 틈에 왕건은 빠져나갔다.',
+    '<b>신숭겸은 왕건의 옷을 입은 채 죽었다.</b><br>왕건이 뒷날 그 자리에 절을 세워 그를 기렸다.',
+    '발밑의 흙을 본다. 이긴 쪽의 이야기만 남는 것은 아니다.',
+  ],
+  gold: 24, badge: 'did_gongsan',
+});
+
 </script>
 </body>
 </html>

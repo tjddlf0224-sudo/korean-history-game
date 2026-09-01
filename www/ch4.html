@@ -1801,6 +1801,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1811,6 +1812,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1866,6 +1868,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 수령칠사 ============
+   조선은 모든 군현에 수령을 보냈고(속현이 없어졌다), 수령이 할 일 일곱 가지를
+   정해 두고 그것으로 평가했다 — 수령칠사. 농사·호구·교육·군정·부역·소송·향리 단속.
+   이 화는 경국대전과 관제를 묻는다 — 여기서는 고을 일을 해 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'suryeong_chilsa', zone: 'jibang_goeul', x: 736, y: 172, range: 175,
+  label: '고을 일을 본다', tag: '수 령 칠 사',
+  lines: [
+    '동헌 마루에 앉자 아전이 두루마리를 편다.<br>"오늘 볼 일이 일곱 가지올시다."',
+    '농사가 잘되는지, 호구가 느는지, 아이들을 가르치는지 —<br>하나씩 짚어 나간다.',
+    '"군정은 축났고, 부역은 고르지 못하고, 송사는 밀렸습니다."',
+    '마지막 항목에서 아전이 목소리를 낮춘다.<br>"…아전을 단속하는 일입니다."<br>제 목을 죄는 항목을 제가 읽는 셈이다.',
+    '이 일곱을 <b>수령칠사</b>라 하고, 이걸로 수령을 평가한다.<br>못하면 갈린다.',
+    '고려에는 수령이 안 가는 고을(속현)이 많아 향리가 실제로 다스렸다.<br>조선은 그걸 없앴다 — 모든 고을에 수령을 보낸다.',
+  ],
+  gold: 24, badge: 'did_chilsa',
+});
+
 </script>
 </body>
 </html>

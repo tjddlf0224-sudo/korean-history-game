@@ -1588,6 +1588,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1598,6 +1599,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1656,6 +1658,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 도성 ============
+   한양 도성은 백악·낙산·남산·인왕 네 산을 이어 약 18km를 쌓았다.
+   전국에서 백성을 부역으로 불러 구간을 나눠 맡겼고, 구간마다 어느 고을이
+   맡았는지를 성돌에 새겼다(각자성석). 그래서 무너지면 누가 부실하게 쌓았는지 안다. */
+if (window.Deed) Deed.add({
+  id: 'doseong_dol', zone: 'gongsa', x: 524, y: 510, range: 175,
+  label: '성돌을 놓아 본다', tag: '도 성',
+  lines: [
+    '돌을 나르는 줄에 끼어 선다. 앞뒤로 사람이 끝이 안 보인다.',
+    '"어디서 오셨소?"<br>"경상도요. 저쪽은 함길도, 그 너머는 전라도 사람이오."',
+    '구간마다 맡은 고을이 다르다. 오늘 쌓는 이 자리는 어느 고을 몫이다.',
+    '석수가 성돌 하나에 글자를 새긴다. 고을 이름과 맡은 이의 이름이다.',
+    '"왜 이름을 남깁니까?"<br>"무너지면 누가 부실히 쌓았는지 알아야 하지 않겠소."<br><b>책임을 돌에 새기는 것</b>이다.',
+    '네 산을 잇는 성이 열여덟 리 남짓이라 한다.<br>이 줄에 선 사람들이 그걸 다 쌓는다.',
+  ],
+  gold: 24, badge: 'did_doseong',
+});
+
 </script>
 </body>
 </html>

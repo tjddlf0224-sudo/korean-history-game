@@ -2079,6 +2079,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -2088,6 +2089,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -2134,6 +2136,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 간의대 ============
+   세종이 경복궁에 간의대를 세우고 간의로 천체를 관측하게 했다.
+   중국 역법을 그대로 쓰면 절기가 어긋난다 — 서울의 위도가 다르기 때문이다.
+   그래서 우리 하늘을 직접 재어 칠정산을 만들었다. 이 화는 그걸 여기서 겪게 한다. */
+if (window.Deed) Deed.add({
+  id: 'ganui_gwancheuk', zone: 'ganuidae', x: 736, y: 392, range: 175,
+  label: '별을 재어 본다', tag: '간 의 대',
+  lines: [
+    '관원이 간의 앞으로 부른다.<br>"눈을 여기 대고, 저 별이 눈금 어디에 오는지 읽으시오."',
+    '밤바람에 눈이 시리다. 별이 천천히 눈금을 지난다.<br>읽은 숫자를 부르자 옆에서 받아 적는다.',
+    '"이걸 매일 밤 합니까?"<br>"매일 하오. 한 해를 채워야 한 번 쓸 수 있소."',
+    '"중국 책에 다 나와 있지 않습니까?"<br>관원이 고개를 젓는다.',
+    '"나와 있소. 허나 그건 <b>그쪽 하늘</b>이오.<br>여기서 재면 절기가 며칠씩 어긋나오. 농사 지을 때를 놓치오."',
+    '그래서 우리 하늘을 직접 잰다.<br>그 기록이 쌓여 칠정산이 된다 — 서울을 기준으로 만든 첫 역법이다.',
+  ],
+  gold: 24, badge: 'did_ganui',
+});
+
 </script>
 </body>
 </html>

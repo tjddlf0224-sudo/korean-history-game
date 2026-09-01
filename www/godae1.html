@@ -1978,6 +1978,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1988,6 +1989,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -2046,6 +2048,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 순수비 ============
+   진흥왕은 새로 넓힌 땅을 돌아보고 그 자리에 비를 세웠다(북한산·창녕·황초령·마운령).
+   한강 유역을 차지했다는 것을 돌에 적어 둔 것이다.
+   이 화는 진흥왕을 문항으로 묻는다 — 여기서는 새겨 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'sunsubi_saegim', zone: 'samguk', x: 864, y: 518, range: 175,
+  label: '비석에 새겨 본다', tag: '순 수 비',
+  lines: [
+    '석공이 정과 망치를 건넨다.<br>"한 획만 쳐 보시오. 손목으로 치는 게 아니라 어깨로 미는 것이오."',
+    '돌은 생각보다 단단하다. 한 획에 여러 번 친다.',
+    '새기는 글은 임금이 이 땅을 돌아보았다는 내용이다.<br>어디까지가 신라 땅인지, 누가 따라왔는지를 적는다.',
+    '"왜 굳이 돌에 새깁니까? 종이에 적으면 쉬울 텐데."<br>석공이 웃는다.',
+    '"종이는 삭소. 돌은 안 삭소."<br><b>천 년 뒤에도 읽히라고 새기는 것이오.</b>',
+    '실제로 그리되었다. 이 비를 조선의 김정희가 찾아내 읽었고,<br>그래서 신라가 여기까지 왔었다는 것을 우리가 안다.',
+  ],
+  gold: 24, badge: 'did_sunsubi',
+});
+
 </script>
 </body>
 </html>
