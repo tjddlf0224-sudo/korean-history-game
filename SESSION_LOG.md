@@ -770,3 +770,10 @@ F. **성능** — 타이머 11개, 영구 인터벌 챕터당 2개. 조치 불�
 2. 앱스토어 등록 시 개인정보 URL:
    https://tjddlf0224-sudo.github.io/korean-history-game/privacy.html
 3. 심사 노트에 "ATT 미사용·비개인화 광고" 명시, 데모 계정 준비.
+
+## 52. UI 전면 존댓말 전환 (2026-09-01)
+- 유저 지적: 유저 대상 문구가 죄다 반말 + 개발자용 설계 설명이 UI에 노출됨.
+- **정책 확립**: ①NPC 대사는 시대 말투 유지 ②장면 지문(나레이션: manse/journey/deed lines)은 소설체 유지 ③도감·계급 역사 설명은 사전체 유지 ④표제형 제목·신문 헤드라인·퀴즈 보기(시험체) 유지 — **그 외 유저에게 말 거는 모든 UI(토스트·버튼·패널·안내)는 존댓말** ⑤개발자 설계 설명("~하려고 만들었다" 류)은 UI에서 삭제.
+- 적용: daily/srs/unlock/minigames/gold/energy/quests/offline/heroes/items/juice/manse/deed/encounter/boss/badges/season 17개 모듈 + 36챕터 이벤트 버튼 라벨 전부 명사형("~해 보기/~하기")으로 통일.
+- check_reachability SKIP에 privacy/ending/prologue 추가(문서·연출 페이지 오탐 제거).
+- v25 범프, 스모크 36챕터 0건, ship(웹+iOS 동시), 커밋 a08a3a9 푸시.
