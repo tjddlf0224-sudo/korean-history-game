@@ -129,24 +129,96 @@ window.Daily = (function(){
     .dy-ov { position:absolute; inset:0; z-index:94; display:none; align-items:center;
       justify-content:center; background:rgba(8,6,3,.9); font-family:"Gowun Batang",serif; }
     .dy-ov.show { display:flex; }
-    .dy-ov .panel { width:min(94%,460px); background:#1a140c; border:1px solid #4a3c26;
-      border-radius:16px; padding:20px 18px; display:flex; flex-direction:column; gap:12px; }
-    .dy-ov h3 { margin:0; font-size:18px; color:#f0c96b; text-align:center; }
+    /* 가로 화면은 세로가 390 남짓이다. 판이 그보다 커지면 위아래가 잘린다 —
+       덮개 높이의 92%로 묶고, 넘치면 안에서 굴린다. */
+    .dy-ov .panel { position:relative; width:min(94%,470px); max-height:92%; overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      background:linear-gradient(180deg,#241b11 0%,#171108 100%);
+      border:1px solid #4a3c26; border-radius:18px; padding:16px 18px 16px;
+      box-shadow:0 24px 60px rgba(0,0,0,.62), inset 0 1px 0 rgba(255,238,205,.06);
+      display:flex; flex-direction:column; gap:9px; }
+    .dy-ov .panel::before { content:''; position:absolute; left:0; right:0; top:0; height:2px;
+      background:linear-gradient(90deg,transparent,rgba(201,162,74,.35) 18%,
+        rgba(240,201,107,.72) 50%,rgba(201,162,74,.35) 82%,transparent); }
+    .dy-ov h3 { margin:0; font-size:18px; color:#f0c96b; text-align:center;
+      font-family:"Gugi","Gowun Batang",serif; letter-spacing:.05em; }
+    /* 닫기는 모서리 표로 — 아래에 가로로 긴 단추를 두면 그만큼 자리를 먹는다 */
+    .dy-ov .x { position:absolute; top:11px; right:12px; width:29px; height:29px; padding:0;
+      border-radius:50%; border:1px solid #46381f; background:rgba(0,0,0,.28);
+      color:#bfae90; font-size:15px; line-height:1; display:flex; align-items:center;
+      justify-content:center; }
+    /* 받기·광고는 나란히 — 크기를 똑같이 둔다 */
+    .dy-ov .row2 { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    .dy-ov .row2 button { margin:0; }
     .dy-ov .sub { text-align:center; font-size:12.5px; color:#b8a888; line-height:1.7; margin-top:-5px; }
     .dy-ov button { padding:12px; border-radius:11px; font-family:inherit; font-size:14.5px;
       cursor:pointer; border:1px solid #4a3c26; background:#2a2013; color:#f5ecd8; }
-    .dy-ov button.hi { background:#3a2c1a; border-color:#c9a24a; color:#f0c96b; }
+    .dy-ov button.hi { background:linear-gradient(180deg,#efcd8b,#c9a24a);
+      border-color:#e0bd76; color:#2b1f0c; font-weight:700;
+      box-shadow:0 4px 14px rgba(201,162,74,.28); }
+    .dy-ov button.hi:active { transform:scale(.98); }
+    .dy-ov button { transition:transform .12s ease, background .16s, border-color .16s; }
+    .dy-ov button:active { transform:scale(.98); }
     .dy-ov button:disabled { opacity:.38; cursor:default; }
-    .dy-ov .msg { min-height:18px; text-align:center; font-size:13px; color:#c9a24a; }
+    .dy-ov .msg { text-align:center; font-size:13px; color:#c9a24a; }
+    .dy-ov .msg:empty { display:none; }
 
-    .dy-track { display:flex; gap:5px; }
-    .dy-track .d { flex:1; border:1px solid #3a2c1a; border-radius:9px; padding:8px 2px;
-      text-align:center; background:#241c12; }
-    .dy-track .d.done { opacity:.42; }
-    .dy-track .d.today { border-color:#f0c96b; background:#3a2c1a; }
-    .dy-track .d.sp { border-color:#c9a24a; }
-    .dy-track .n { font-size:10.5px; color:#8d7f66; }
-    .dy-track .g { font-size:12px; color:#f0c96b; font-variant-numeric:tabular-nums; }
+    /* ---- 이레 길 ----
+       네모 일곱 개를 나란히 두는 대신, **길 위에 놓인 엽전 일곱 닢**으로 본다.
+       지나온 자리는 길이 금빛으로 채워지고, 오늘 자리는 혼자 밝다.
+       어디까지 왔고 다음이 무엇인지가 글자를 읽기 전에 보인다. */
+    .dy-track { position:relative; display:flex; gap:3px; padding:4px 0 2px; }
+    /* 엽전을 꿰는 줄 — 가운데 높이에 깔고, 지나온 만큼만 금빛으로 덮는다 */
+    .dy-track .road, .dy-track .road i { position:absolute; left:7.14%; right:7.14%;
+      top:31px; height:2px; border-radius:2px; }
+    .dy-track .road { background:#33281a; }
+    .dy-track .road i { right:auto; background:linear-gradient(90deg,#8a6f34,#f0c96b);
+      box-shadow:0 0 8px rgba(240,201,107,.35); transition:width .5s cubic-bezier(.2,.9,.25,1); }
+    .dy-day { flex:1; position:relative; z-index:2; display:flex; flex-direction:column;
+      align-items:center; gap:6px; min-width:0; }
+    .dy-day .nm { font-size:10px; color:#7d7059; letter-spacing:.02em; }
+    .dy-day .coin { position:relative; width:40px; height:40px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      border:1.5px solid #443722; background:radial-gradient(circle at 35% 28%,#2c2215,#1a1309);
+      font-size:12.5px; color:#8d7f66; font-variant-numeric:tabular-nums;
+      box-shadow:inset 0 1px 0 rgba(255,238,205,.05); }
+    /* 받은 날 — 금빛으로 채우고 갈고리표를 놓는다(도장은 쓰지 않는다) */
+    .dy-day.done .coin { border-color:#8a6f34; color:#f0c96b;
+      background:radial-gradient(circle at 35% 28%,#4a3717,#2b1f0c); }
+    .dy-day.done .v { display:none; }
+    .dy-day.done .ck { display:block; }
+    .dy-day .ck { display:none; width:17px; height:17px; }
+    /* 오늘 — 한 자리만 밝게. 여기를 누르면 된다는 신호다 */
+    .dy-day.today .coin { border-color:#f0c96b; color:#ffe6ac; font-weight:700;
+      background:radial-gradient(circle at 35% 28%,#5a4318,#33240c);
+      box-shadow:0 0 0 3px rgba(240,201,107,.13), 0 0 16px rgba(240,201,107,.3);
+      animation:dy-beat 2.1s ease-in-out infinite; }
+    .dy-day.today .nm { color:#f0c96b; }
+    @keyframes dy-beat { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.07); } }
+    @media (prefers-reduced-motion:reduce){ .dy-day.today .coin { animation:none; } }
+    /* 이레째 — 상자가 걸린 날. 작은 표를 달아 둔다 */
+    .dy-day.sp .coin { border-color:#c9a24a; }
+    .dy-day .chest { position:absolute; right:-4px; bottom:-3px; width:17px; height:17px;
+      border-radius:50%; background:#2b1f0c; border:1px solid #c9a24a;
+      display:flex; align-items:center; justify-content:center; color:#f0c96b; }
+    .dy-day .chest svg { width:10px; height:10px; }
+    /* 받는 순간 엽전이 튀어 오른다 */
+    .dy-day.pop .coin { animation:dy-pop .5s cubic-bezier(.2,.9,.25,1); }
+    @keyframes dy-pop { 0%{ transform:scale(1); } 35%{ transform:scale(1.28); } 100%{ transform:scale(1); } }
+    .dy-spark { position:absolute; left:50%; top:50%; width:6px; height:6px; margin:-3px 0 0 -3px;
+      border-radius:50%; background:#f0c96b; pointer-events:none;
+      animation:dy-spark .62s ease-out forwards; }
+    @keyframes dy-spark { 0%{ opacity:1; transform:translate(0,0) scale(1); }
+      100%{ opacity:0; transform:translate(var(--dx),var(--dy)) scale(.3); } }
+
+    /* 오늘 받을 몫을 크게 한 번 더 보여 준다 — 누르기 전에 무엇을 받는지 */
+    .dy-prize { display:flex; align-items:center; justify-content:center; gap:14px;
+      padding:11px 14px; border-radius:13px; border:1px solid #46381f;
+      background:linear-gradient(180deg,rgba(58,44,26,.55),rgba(26,20,12,.35)); }
+    .dy-prize .p { display:flex; align-items:center; gap:7px; font-size:13px; color:#b8a888; }
+    .dy-prize .p b { font-size:18px; color:#f0c96b; font-weight:700;
+      font-variant-numeric:tabular-nums; }
+    .dy-prize .p svg { width:16px; height:16px; color:#c9a24a; }
 
     .dy-loot { text-align:center; font-size:20px; color:#f0c96b; min-height:30px;
       font-weight:700; }`;
@@ -169,36 +241,88 @@ window.Daily = (function(){
   }
 
   /* ---------------- 출석 창 ---------------- */
-  function openAttendance(){
+  const SVG_CHECK = '<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+  const SVG_CHEST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18v10H3z"/><path d="M3 13h18"/>' +
+    '<path d="M10 13v3h4v-3"/><path d="M5 9V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2"/></svg>';
+  const SVG_COIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">' +
+    '<circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="3.4"/></svg>';
+  const SVG_ENG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" ' +
+    'stroke-linejoin="round"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg>';
+
+  /* 받는 순간 엽전에서 불티가 튄다 — 여덟 방향으로 흩어졌다 사라진다 */
+  function sparks(el){
+    if (!el) return;
+    for (let i = 0; i < 8; i++){
+      const a = (Math.PI * 2 * i) / 8, r = 26 + Math.random() * 12;
+      const s = document.createElement('i');
+      s.className = 'dy-spark';
+      s.style.setProperty('--dx', (Math.cos(a) * r).toFixed(1) + 'px');
+      s.style.setProperty('--dy', (Math.sin(a) * r).toFixed(1) + 'px');
+      (el.querySelector('.coin') || el).appendChild(s);
+      setTimeout(() => s.remove(), 700);
+    }
+  }
+
+  function openAttendance(popAt, note){
     const cur = stepToday(), done = claimedToday();
-    const track = TRACK.map((r, i) =>
-      `<div class="d${i < cur ? ' done' : ''}${i === cur ? ' today' : ''}${r.box ? ' sp' : ''}">` +
-      `<div class="n">${i + 1}일</div><div class="g">${r.gold}</div></div>`).join('');
+    // 받은 칸 수 — 오늘 몫을 받았으면 오늘 칸까지 포함한다
+    const got = done ? cur + 1 : cur;
+    const st7 = (window.Streak && Streak.load) ? (Streak.load().count || 0) : 0;
+    const track = TRACK.map((r, i) => {
+      const cls = (i < got ? ' done' : '') + (!done && i === cur ? ' today' : '') +
+                  (r.box ? ' sp' : '') + (popAt === i ? ' pop' : '');
+      return `<div class="dy-day${cls}">` +
+        `<div class="coin"><span class="v">${r.gold}</span>${SVG_CHECK}` +
+        (r.box ? `<i class="chest">${SVG_CHEST}</i>` : '') + '</div>' +
+        `<div class="nm">${i + 1}일</div></div>`;
+    }).join('');
+    // 지나온 만큼만 길을 채운다(칸 가운데에서 칸 가운데까지)
+    const walked = done ? got - 1 : cur;   // 길은 '서 있는 칸'까지 이어진다
+    const fill = walked <= 0 ? 0 : Math.min(100, (walked / (TRACK.length - 1)) * 100);
+    const now = TRACK[cur] || TRACK[0];
+
     const d = ov('dy-att',
       '<h3>출석</h3>' +
       `<div class="sub">${done ? '오늘 몫은 받으셨습니다. 내일 또 오시면 다음 칸입니다.'
-                              : '오늘 몫을 받아 가세요.'}</div>` +
-      `<div class="dy-track">${track}</div>` +
-      (done ? '' : '<button class="hi" id="dy-c">받기</button>' +
-                   '<button id="dy-c2">광고 보고 두 배로 받기</button>') +
-      '<div class="msg" id="dy-m"></div>' +
-      '<button id="dy-x">닫기</button>');
+                              : '오늘 몫을 받아 가세요.'}` +
+        (st7 > 1 ? ` · 연속 ${st7}일` : '') + '</div>' +
+      `<div class="dy-track"><div class="road"><i style="width:${fill}%"></i></div>${track}</div>` +
+      (done ? '' :
+        '<div class="dy-prize">' +
+        `<span class="p">${SVG_COIN} 금 <b>${now.gold}</b></span>` +
+        `<span class="p">${SVG_ENG} 기력 <b>${now.eng}</b></span>` +
+        (now.box ? '<span class="p">' + SVG_CHEST + ' 상자 <b>+1</b></span>' : '') +
+        '</div>' +
+        '<div class="row2"><button class="hi" id="dy-c">받기</button>' +
+        '<button id="dy-c2">광고 보고 두 배</button></div>') +
+      `<div class="msg" id="dy-m">${note || ''}</div>` +
+      '<button class="x" id="dy-x" aria-label="닫기">✕</button>');
+    // 줄은 엽전 한가운데를 지나야 한다. 글꼴에 따라 높이가 달라지므로 재서 맞춘다.
+    const c0 = d.querySelector('.dy-day .coin'), road = d.querySelector('.road');
+    if (c0 && road) road.style.top = (c0.offsetTop + c0.offsetHeight / 2 - 1) + 'px';
+    if (popAt != null) sparks(d.querySelectorAll('.dy-day')[popAt]);
     d.querySelector('#dy-x').onclick = () => d.classList.remove('show');
     const msg = t => { const m = d.querySelector('#dy-m'); if (m) m.textContent = t; };
     const b1 = d.querySelector('#dy-c'), b2 = d.querySelector('#dy-c2');
     if (b1) b1.onclick = () => {
+      const at = stepToday();
       const r = claim(false);
-      if (r) msg(`금 ${r.gold}, 기력 ${r.eng}${r.box ? ' + 상자 한 번 더' : ''}`);
-      setTimeout(openAttendance, 900);
+      const t = r ? `금 ${r.gold} · 기력 ${r.eng}${r.box ? ' · 상자 한 번 더' : ''} 받았습니다` : '';
+      msg(t);
+      setTimeout(() => openAttendance(at, t), 900);
     };
     if (b2) b2.onclick = async () => {
       b2.disabled = true; b2.textContent = '광고 준비 중…';
       const ok = window.Ads ? await Ads.rewarded() : false;
-      if (!ok){ b2.disabled = false; b2.textContent = '광고 보고 두 배로 받기';
+      if (!ok){ b2.disabled = false; b2.textContent = '광고 보고 두 배';
                 msg('광고를 끝까지 보지 않으셨습니다.'); return; }
+      const at = stepToday();
       const r = claim(true);
-      if (r) msg(`두 배! 금 ${r.gold}, 기력 ${r.eng}`);
-      setTimeout(openAttendance, 900);
+      const t = r ? `두 배! 금 ${r.gold} · 기력 ${r.eng} 받았습니다` : '';
+      msg(t);
+      setTimeout(() => openAttendance(at, t), 900);
     };
   }
 
