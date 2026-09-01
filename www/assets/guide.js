@@ -44,6 +44,8 @@ window.Guide = (function(){
     #gd-hole { position:absolute; z-index:9200; border-radius:14px; pointer-events:none;
       box-shadow:0 0 0 9999px rgba(6,4,2,.82); transition:none; }
     #gd-hole.ring { outline:2px solid #f0c96b; outline-offset:3px; }
+    /* 가리킬 것이 없을 때 — 구멍 없이 화면만 고르게 어둡게 */
+    #gd-hole.dim { inset:0; box-shadow:none; background:rgba(6,4,2,.72); border-radius:0; }
     #gd-bub { position:absolute; z-index:9201; width:min(84%,330px);
       background:#1a140c; border:1px solid #c9a24a; border-radius:14px;
       padding:14px 16px; font-family:"Gowun Batang",serif; color:#f5ecd8;
@@ -67,21 +69,42 @@ window.Guide = (function(){
     ['gd-hole','gd-bub','gd-tap'].forEach(i => { const e = el(i); if (e) e.remove(); });
   }
 
-  /* 화면 크기 — #wrap이 0×0으로 잡히는 챕터가 있어서(자식만 절대배치)
-     그럴 땐 뷰포트를 쓴다. 이걸 안 하면 말풍선이 화면 밖으로 나간다. */
+  /* 화면 크기 — **레이아웃 크기**를 쓴다(offsetWidth/Height).
+     getBoundingClientRect 를 쓰면 안 된다: 세로 모드에서 #wrap 은
+     `rotate(90deg)` 로 돌아가 있어서 화면 기준 가로·세로가 뒤바뀐 값이 나온다.
+     구멍과 말풍선은 그 돌아간 #wrap **안에** 절대배치되므로,
+     회전 전(레이아웃) 좌표계로 계산해야 자리가 맞는다. */
   function box(){
-    const r = layer().getBoundingClientRect();
-    return (r.width > 10 && r.height > 10)
-      ? { l: r.left, t: r.top, w: r.width, h: r.height }
-      : { l: 0, t: 0, w: window.innerWidth, h: window.innerHeight };
+    const L = layer();
+    const w = L.offsetWidth, h = L.offsetHeight;
+    if (w > 10 && h > 10) return { w: w, h: h };
+    // #wrap 이 레이아웃 크기를 안 갖는 챕터가 있다(자식이 전부 절대배치라서).
+    // 그때 뷰포트로 대신하는데, **세로 모드에서는 가로·세로를 바꿔서** 써야 한다 —
+    // 그 모드의 #wrap 은 rotate(90deg) 로 돌아가 있어서, 안쪽 좌표계의 가로는
+    // 화면의 세로다. 안 바꾸면 말풍선이 화면 밖으로 밀린다.
+    const rot = document.body.classList.contains('rot');
+    return rot
+      ? { w: window.innerHeight, h: window.innerWidth }
+      : { w: window.innerWidth,  h: window.innerHeight };
   }
 
-  /* 대상 사각형 구하기 — DOM 요소 또는 직접 준 사각형 */
+  /* 대상 사각형 — **#wrap 기준 레이아웃 좌표**로 구한다.
+
+     예전에는 getBoundingClientRect 끼리 빼서 구했는데, 세로 모드에서
+     #wrap 이 90도 돌아가 있으면 그건 **화면 좌표**라 돌아간 좌표계에
+     그대로 쓰면 엉뚱한 데가 뚫린다(실제로 조이스틱 대신 빈 곳이 잡혔다).
+     offset 사슬을 타고 올라가면 회전과 무관한 레이아웃 좌표가 나온다 —
+     조이스틱 손잡이가 같은 이유로 틀어졌던 것과 같은 함정이다. */
   function rectOf(target){
     const L = box();
-    if (target && target.getBoundingClientRect){
-      const r = target.getBoundingClientRect();
-      return { x: r.left - L.l, y: r.top - L.t, w: r.width, h: r.height };
+    if (target && target.offsetParent !== undefined && target.getBoundingClientRect){
+      let x = 0, y = 0, n = target;
+      const stop = layer();
+      while (n && n !== stop && n !== document.body){
+        x += n.offsetLeft; y += n.offsetTop;
+        n = n.offsetParent;
+      }
+      return { x: x, y: y, w: target.offsetWidth, h: target.offsetHeight };
     }
     if (target && typeof target.x === 'number') return target;
     return { x: L.w / 2, y: L.h / 2, w: 1, h: 1 };
@@ -113,18 +136,29 @@ window.Guide = (function(){
     css();
     clear();
     const r = await whenSettled(opt.target);
-    if (opt.target && !settled(r)) return true;   // 끝내 못 찾으면 이 단계는 건너뛴다
+    // 대상이 화면에 없다 = 아직 볼 수 없다(예: 메뉴 안에 있는데 메뉴가 닫혀 있다).
+    // 이때 '했다'고 적어 버리면 그 안내를 **영영 못 보게** 된다. 미뤄 둔다.
+    if (opt.target && !settled(r)) return 'defer';
+    // 가리킬 것이 없는 단계('머리 위 !가 뜬 사람에게 다가가 보세요')는
+    // **구멍을 뚫지 않는다.** 예전에는 화면 한가운데에 1픽셀짜리 구멍이 나서
+    // 아무것도 아닌 자리에 동그라미가 떠 있었다.
+    const spot = !!opt.target;
     return new Promise(resolve => {
       const L = layer();
       const pad = opt.pad == null ? 8 : opt.pad;
 
       const hole = document.createElement('div');
       hole.id = 'gd-hole';
-      if (opt.ring !== false) hole.className = 'ring';
-      hole.style.left = (r.x - pad) + 'px';
-      hole.style.top = (r.y - pad) + 'px';
-      hole.style.width = (r.w + pad * 2) + 'px';
-      hole.style.height = (r.h + pad * 2) + 'px';
+      if (spot){
+        if (opt.ring !== false) hole.className = 'ring';
+        hole.style.left = (r.x - pad) + 'px';
+        hole.style.top = (r.y - pad) + 'px';
+        hole.style.width = (r.w + pad * 2) + 'px';
+        hole.style.height = (r.h + pad * 2) + 'px';
+      } else {
+        // 화면 전체를 고르게 어둡게만 한다
+        hole.className = 'dim';
+      }
       L.appendChild(hole);
 
       const bub = document.createElement('div');
@@ -140,6 +174,11 @@ window.Guide = (function(){
       // 화면 밖으로 밀려 잘린다(실제로 왼쪽이 잘렸다).
       function place(){
         const bw = bub.offsetWidth, bh2 = bub.offsetHeight;
+        if (!spot){                       // 가리킬 것이 없으면 한가운데
+          bub.style.left = Math.round((LB.w - bw) / 2) + 'px';
+          bub.style.top = Math.round((LB.h - bh2) / 2) + 'px';
+          return;
+        }
         const below2 = r.y + r.h + 16;
         bub.style.left = Math.round(Math.max(10, Math.min(LB.w - bw - 10,
                                     r.x + r.w / 2 - bw / 2))) + 'px';
@@ -175,6 +214,7 @@ window.Guide = (function(){
       for (const s of steps){
         const r = await step(s);
         if (r === 'skip'){ markAll(); return; }
+        if (r === 'defer') return;      // 적지 않고 물러난다 — 다음에 다시 시도한다
       }
       // **끝까지 간 뒤에** 적는다. 시작할 때 적으면, 화면이 아직 안 잡혀
       // 한 번 실패했을 때 그 가이드를 영영 못 보게 된다(실제로 그랬다).
@@ -234,9 +274,16 @@ window.Guide = (function(){
       text:'이제 시대 상자를 하루에 두 번 열 수 있습니다.' },
   };
 
-  /* 계급이 오른 직후에 부른다. 새로 열린 것들을 하나씩 안내한다. */
+  /* 계급이 오른 직후에 부른다. 새로 열린 것들을 하나씩 안내한다.
+     **한 번에 하나만.** 처음 안내와 주기 검사가 각각 이 함수를 부르는 바람에
+     두 개가 동시에 떠서 말풍선이 겹쳤다(실제로 그랬다). */
+  let unlocking = false;
   async function onUnlock(){
-    if (off() || !window.Unlock) return;
+    if (off() || !window.Unlock || unlocking) return;
+    unlocking = true;
+    try { await onUnlockInner(); } finally { unlocking = false; }
+  }
+  async function onUnlockInner(){
     for (const g of Unlock.GATES){
       for (const [id] of g.opens){
         if (!Unlock.has(id)) continue;
@@ -292,6 +339,14 @@ window.Guide = (function(){
       }
       onUnlock();
     }, 1200);
+    /* 해금 안내가 가리키는 것들이 이제 **메뉴 안**에 있다(화면을 정리하면서 옮겼다).
+       메뉴가 닫혀 있으면 안내는 미뤄지므로, 메뉴를 여는 그 순간 다시 본다.
+       주기만 기다리면 열고도 몇 초를 멀뚱히 있게 된다. */
+    const mb = el('menu-btn');
+    if (mb) mb.addEventListener('click', () => setTimeout(() => {
+      if (ready()) onUnlock();
+    }, 320));
+
     // 계급이 오르면 그 자리에서 다시 본다
     setInterval(() => {
       if (!ready()) return;

@@ -99,7 +99,7 @@ window.Auth = (function(){
     #auth-btn:active { transform:scale(.97); }
     #auth-btn img { width:20px; height:20px; border-radius:50%; }
 
-    #auth-ov { position:fixed; inset:0; z-index:9000; display:none;
+    #auth-ov { position:absolute; inset:0; z-index:9000; display:none;
       align-items:center; justify-content:center; background:rgba(8,6,3,.9);
       font-family:"Gowun Batang",serif; }
     #auth-ov.show { display:flex; }
@@ -140,7 +140,9 @@ window.Auth = (function(){
       '<button class="p out" id="auth-out">로그아웃</button>' +
       '<div class="err" id="auth-err"></div>' +
       '<button class="close" id="auth-x">닫기</button></div>';
-    document.body.appendChild(d);
+    // **#wrap 안에** 넣는다 — 밖이면 세로 모드에서 rotate(90deg)를 못 물려받아
+    // 로그인 창만 90도 틀어져 뜬다(이달의 시대·랭킹에서 겪은 것과 같은 함정).
+    (document.getElementById('wrap') || document.body).appendChild(d);
 
     const err = t => { document.getElementById('auth-err').textContent = t || ''; };
     const wrap = fn => async () => {

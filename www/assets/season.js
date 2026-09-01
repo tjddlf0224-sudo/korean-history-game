@@ -21,6 +21,16 @@
 */
 window.Season = (function(){
   const KEY = 'khg_season';
+
+  /* **지금은 꺼 둔다.** (2026-09-01)
+     사용자가 실기기에서 보고 "뭔가 구리다"고 했다. 두 가지가 겹쳤다 —
+     ① 창을 #wrap 밖(document.body)에 붙여서 세로 모드에서 90도 틀어져 떴다.
+        (내가 fx.js 주석에 적어 둔 함정에 그대로 걸렸다.)
+     ② 챕터 이름을 목록 화면에서 읽어 오는데, 챕터 화면에서는 그 목록이 없어
+        'seonsa1' 같은 **파일 이름**이 그대로 보였다.
+     기능 자체를 지우지는 않는다. 나중에 다시 붙일 수 있게 스위치만 내린다.
+     켤 때는 위 둘을 먼저 고칠 것. */
+  const OFF = true;
   const BONUS = 2;                 // 이달의 시대 챕터를 끝내면 금을 이만큼 곱해 준다
 
   function load(){
@@ -84,6 +94,7 @@ window.Season = (function(){
 
   /* ---------------- 챕터를 끝냈을 때 덤 ---------------- */
   function onChapterDone(file){
+    if (OFF) return 0;
     if (!isThisMonth(file)) return 0;
     // 챕터 완주 금(25)에 얹어 주는 몫. 곱하기 대신 차액만 준다 —
     // 원래 주던 곳(gold.js)을 건드리지 않으려는 것이다.
@@ -149,6 +160,7 @@ window.Season = (function(){
   /* anchor를 주면 그 **바로 위**에 놓는다. 안 주면 host의 맨 앞이다 —
      맨 앞은 제목줄보다도 위라서, 목록 위에 놓으려면 anchor를 줘야 한다. */
   function mountBand(host, anchor){
+    if (OFF) return;
     css();
     const p = progress();
     if (!p) return;
@@ -173,6 +185,7 @@ window.Season = (function(){
   }
 
   function open(){
+    if (OFF) return;
     css();
     const p = progress();
     if (!p) return;

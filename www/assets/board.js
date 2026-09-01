@@ -74,7 +74,7 @@ window.Board = (function(){
     if (injected) return; injected = true;
     const s = document.createElement('style');
     s.textContent = `
-    #bd-ov { position:fixed; inset:0; z-index:97; display:none; align-items:center;
+    #bd-ov { position:absolute; inset:0; z-index:97; display:none; align-items:center;
       justify-content:center; background:rgba(8,6,3,.93); font-family:"Gowun Batang",serif; }
     #bd-ov.show { display:flex; }
     #bd-ov .panel { width:min(92%,430px); max-height:86%; display:flex; flex-direction:column;
@@ -117,7 +117,12 @@ window.Board = (function(){
   async function open(){
     css();
     let d = document.getElementById('bd-ov');
-    if (!d){ d = document.createElement('div'); d.id = 'bd-ov'; document.body.appendChild(d); }
+    if (!d){
+      d = document.createElement('div'); d.id = 'bd-ov';
+      // **#wrap 안에** 넣는다. 밖에 붙이면 세로 모드에서 #wrap 의 rotate(90deg)를
+      // 못 물려받아 창만 90도 틀어져 뜬다(이달의 시대에서 실제로 그랬다).
+      (document.getElementById('wrap') || document.body).appendChild(d);
+    }
     d.innerHTML = '<div class="panel"><h3>과거 급제자 명단</h3>' +
       '<div class="sub">불러오는 중…</div><div class="list"></div>' +
       '<button id="bd-close">닫기</button></div>';
