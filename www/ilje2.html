@@ -1821,6 +1821,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1831,6 +1832,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'modern';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1892,6 +1894,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 물산장려 ============
+   1920년대 물산장려운동. 조만식 등이 평양에서 시작해 '조선 사람 조선 것으로'를 내걸었다.
+   이 화는 그 운동을 문항으로 묻는다 — 여기서는 장을 봐 보게 한다.
+   비판도 함께 적는다: 값이 올라 상인만 이롭고 가난한 이에게는 부담이라는 지적이 있었다. */
+if (window.Deed) Deed.add({
+  id: 'mulsan_jangbogi', zone: 'gyeongseong', x: 576, y: 646, range: 175,
+  label: '국산품을 사 본다', tag: '물 산 장 려',
+  lines: [
+    '가게 앞에 종이가 붙었다. <b>조선 사람 조선 것으로.</b>',
+    '무명 한 필을 집는다. 옆에 놓인 일본 광목보다 거칠고 값은 비싸다.',
+    '"이게 더 비싼데요."<br>주인이 고개를 끄덕인다.<br>"비싸지요. 그래도 이 돈이 여기 남습니다."',
+    '밖에서 젊은이들이 지나간다. 학교를 세우자는 모금을 하고 있다.<br>민립대학을 세우자는 것이다.',
+    '다만 다른 목소리도 있다.<br>"사려는 사람이 느니 값만 올랐소. <b>이득은 장사꾼이 봅니다.</b>"',
+    '무명을 안고 나선다. 옳은 일이 늘 쉬운 것은 아니다.',
+  ],
+  gold: 24, badge: 'did_mulsan',
+});
+
 </script>
 </body>
 </html>

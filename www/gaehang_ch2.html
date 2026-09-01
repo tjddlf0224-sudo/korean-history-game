@@ -1345,6 +1345,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1355,6 +1356,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1410,6 +1412,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 임오군란 ============
+   1882년 임오군란의 직접 계기. 구식 군인이 열세 달 만에 받은 급료 쌀에
+   겨와 모래가 섞여 있었고 양도 모자랐다. 별기군과의 차별이 겹쳐 터졌다.
+   이 화는 그 계기를 문항으로 묻는다 — 여기서는 그 쌀을 직접 받아 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'gunpo_ssal', zone: 'byeongyeong', x: 884, y: 220, range: 175,
+  label: '쌀을 받아 본다', tag: '임 오 군 란',
+  lines: [
+    '급료를 준다는 말에 줄을 섰다. 열세 달 만이라 한다.',
+    '됫박이 넘어온다. 손바닥에 부어 본다.',
+    '쌀보다 겨가 많다. 모래가 씹힌다.<br>양도 정한 것의 반이 될까 말까다.',
+    '옆에서 누가 소리친다.<br>"별기군은 제 날에 다 받는다더라. 옷도 새로 받고."',
+    '웅성거림이 커진다. 됫박을 든 관원이 뒷걸음질친다.',
+    '<b>이 쌀 한 됫박에서 임오군란이 터진다.</b><br>불붙은 것은 밥이지만, 타오른 것은 그동안 쌓인 차별이었다.',
+  ],
+  gold: 24, badge: 'did_gunpo',
+});
+
 </script>
 </body>
 </html>

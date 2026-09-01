@@ -1773,6 +1773,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1783,6 +1784,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'modern';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1841,6 +1843,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 광무개혁 ============
+   광무개혁의 양전·지계 사업. 땅을 재고 소유권을 증명하는 문서(지계)를 발급했다.
+   근대적 토지 소유권을 처음 문서로 확정한 일이다. 다만 러일전쟁으로 중단됐다.
+   이 화는 지계를 문항으로 묻는다 — 여기서는 받아 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'jigye_batgi', zone: 'hwangudan', x: 712, y: 614, range: 175,
+  label: '지계를 받는다', tag: '광 무 개 혁',
+  lines: [
+    '관원이 자와 장부를 들고 논둑을 걷는다. 걸음으로 재고 적는다.',
+    '"이 논이 뉘 것이오?"<br>"대대로 저희가 부쳤습니다."<br>"부친 것 말고, <b>임자</b>가 뉘냐 묻는 것이오."',
+    '그 물음에 선뜻 답이 안 나온다.<br>여태 그런 걸 문서로 따진 적이 없었다.',
+    '며칠 뒤 종이 한 장이 나온다. 논의 자리와 넓이, 그리고 임자의 이름이 적혔다.<br>나라 도장이 찍혀 있다. <b>지계</b>다.',
+    '이것이 있으면 팔 수도 있고, 빼앗기면 따질 수도 있다.',
+    '다만 이 일은 끝을 못 본다. 러일전쟁이 터지며 중단된다.',
+  ],
+  gold: 24, badge: 'did_jigye',
+});
+
 </script>
 </body>
 </html>

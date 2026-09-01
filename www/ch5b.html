@@ -1583,6 +1583,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1593,6 +1594,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1648,6 +1650,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 향약 ============
+   향약은 고을의 자치 규약이다. 덕업상권·과실상규·예속상교·환난상휼 네 조목.
+   서로 돕게도 했지만, 사림이 고을을 장악하는 수단이기도 했다 — 두 면을 다 적는다.
+   이 화는 서원을 문항으로 묻는다. 향약은 안 묻으므로 여기서 겪게 한다. */
+if (window.Deed) Deed.add({
+  id: 'seowon_hyangyak', zone: 'seowon', x: 480, y: 184, range: 175,
+  label: '향약을 읽어 본다', tag: '향 약',
+  lines: [
+    '유생이 두루마리를 편다. 고을 사람들이 지킬 약속이라 한다.',
+    '<b>덕업상권</b> — 좋은 일은 서로 권한다.<br><b>과실상규</b> — 잘못은 서로 바로잡는다.',
+    '<b>예속상교</b> — 예로써 사귄다.<br><b>환난상휼</b> — 어려울 때 서로 돕는다.',
+    '"좋은 말입니다."<br>"좋은 말이지요. 상을 당하면 마을이 함께 치르고, 흉년엔 곡식을 꿉니다."',
+    '다만 끝에 벌칙이 적혀 있다. 어기면 고을에서 따돌린다.<br>그 벌을 정하는 이는 이 서원에 모인 사람들이다.',
+    '<b>서로 돕는 규약이면서, 동시에 누가 고을을 쥐는지를 정하는 규약</b>이기도 하다.<br>사림이 향촌에 뿌리내린 방식이 이것이었다.',
+  ],
+  gold: 24, badge: 'did_hyangyak',
+});
+
 </script>
 </body>
 </html>

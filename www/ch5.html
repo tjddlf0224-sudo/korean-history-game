@@ -1677,6 +1677,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1687,6 +1688,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1745,6 +1747,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 사고 ============
+   실록은 한 벌만 두지 않고 여러 사고에 나눠 두었다. 한 곳이 불타도 남게 하려는 것이다.
+   실제로 임진왜란 때 전주 사고 것만 살아남아 오늘까지 전한다.
+   포쇄(曝曬) — 몇 해에 한 번 궤를 열어 볕과 바람에 말리는 일도 실제로 했다. */
+if (window.Deed) Deed.add({
+  id: 'sago_pogswae', zone: 'sago', x: 986, y: 350, range: 175,
+  label: '실록을 말린다', tag: '사 고',
+  lines: [
+    '궤짝을 열자 종이 냄새가 훅 올라온다.<br>관원이 장갑을 건넨다. "맨손으로 만지지 마시오."',
+    '책을 한 권씩 꺼내 마루에 편다. 볕에 말리고 바람을 쐬는 일이다.<br>이걸 몇 해에 한 번씩 한다 한다.',
+    '"이 고생을 왜 합니까?"<br>"습기 먹으면 삭소. 벌레도 먹고."',
+    '"그런데 이걸 왜 네 곳에나 나눠 둡니까? 한 곳에 모아 두면 지키기 쉬울 텐데."',
+    '관원이 손을 멈춘다.<br>"<b>한 곳이 불타도 남아야 하니까요.</b>"',
+    '그 말이 맞았다. 임진왜란에 사고들이 불탔고,<br>전주 것만 겨우 살아남아 오늘까지 전한다.',
+  ],
+  gold: 24, badge: 'did_sago',
+});
+
 </script>
 </body>
 </html>

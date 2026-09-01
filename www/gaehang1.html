@@ -1711,6 +1711,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1721,6 +1722,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1776,6 +1778,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 척화비 ============
+   신미양요 뒤 흥선대원군이 전국에 척화비를 세웠다.
+   '洋夷侵犯 非戰則和 主和賣國' — 서양 오랑캐가 침범하는데 싸우지 않으면 화친이요,
+   화친을 주장함은 나라를 파는 것이다. 뒷면에 세운 해를 적었다. */
+if (window.Deed) Deed.add({
+  id: 'cheokhwabi_sewoom', zone: 'gwangseong', x: 696, y: 176, range: 175,
+  label: '척화비를 세운다', tag: '척 화 비',
+  lines: [
+    '석수가 정을 건넨다. "여기 이 글자부터 치시오."',
+    '새기는 글이 짧다. 열두 자다.<br><b>洋夷侵犯 非戰則和 主和賣國</b>',
+    '"뜻이 무엇입니까?"<br>"서양 오랑캐가 쳐들어오는데 싸우지 않으면 화친하자는 것이고,<br>화친하자는 것은 나라를 파는 것이다 — 그 말이오."',
+    '이런 비를 전국 고을마다 세운다 한다. 한둘이 아니다.',
+    '뒷면에는 세운 해를 적는다. 병인년에 만들고 신미년에 세운다고.',
+    '돌에 새겨 두면 뜻이 오래간다.<br>다만 오래가는 것이 늘 옳은 것은 아니다 — 이 비는 십 년 뒤 대부분 뽑힌다.',
+  ],
+  gold: 24, badge: 'did_cheokhwabi',
+});
+
 </script>
 </body>
 </html>

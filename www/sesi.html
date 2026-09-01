@@ -1682,6 +1682,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1692,6 +1693,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1760,6 +1762,24 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 한가위 ============
+   세시풍속 화는 명절을 하나씩 문항으로 묻는다 — 여기서는 손으로 빚게 한다.
+   송편을 솔잎에 쪄서 송편이라 부른다는 것, 반달 모양인 까닭까지. */
+if (window.Deed) Deed.add({
+  id: 'sesi_songpyeon', zone: 'sesimaeul', x: 664, y: 390, range: 175,
+  label: '송편을 빚어 본다', tag: '한 가 위',
+  lines: [
+    '멍석에 둘러앉아 반죽을 뗀다. 손에 쌀가루가 묻는다.',
+    '"둥글게 말고, 가운데를 눌러 소를 넣고, 반으로 접어 아무리시오."<br>모양이 자꾸 삐뚤어진다.',
+    '"보름달처럼 둥글게 빚지 않고 왜 반달입니까?"',
+    '할머니가 웃는다.<br>"둥근 달은 이제 기울 일만 남았고, <b>반달은 차오를 일만 남았지.</b>"',
+    '찜기 바닥에 솔잎을 깐다. 그 위에 떡을 올린다.<br>그래서 <b>송편</b>이라 부른다 한다.',
+    '쪄 낸 떡에서 솔 냄새가 난다. 잘 빚으면 예쁜 딸을 낳는다는 말에 다들 웃는다.',
+  ],
+  gold: 24, badge: 'did_songpyeon',
+});
+
 </script>
 </body>
 </html>

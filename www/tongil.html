@@ -1703,6 +1703,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1713,6 +1714,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1772,6 +1774,26 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 대왕암 ============
+   문무왕은 죽어서 동해의 용이 되어 나라를 지키겠다며 바다에 장사 지내라 했다.
+   감은사는 아버지의 그 뜻을 이어 신문왕이 682년에 마쳤고, 금당 아래에 바닷물이
+   드나들 틈을 두었다고 전한다. 이 화는 문무왕과 감은사를 문항으로 묻는다 —
+   여기서는 그 바다를 바라보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'daewangam_bara', zone: 'gameunsa', x: 640, y: 484, range: 175,
+  label: '바위섬을 바라본다', tag: '대 왕 암',
+  lines: [
+    '파도가 바위섬에 부딪쳐 흰 거품을 만든다.<br>절터를 지키던 노승이 곁에 선다.',
+    '"저 바위 아래에 왕이 계시다 하오."',
+    '임금은 죽기 전에 이렇게 일렀다 한다.<br>능을 크게 짓지 말고, 화장하여 <b>동해에 묻으라</b>고.',
+    '"어찌 그런 말씀을 하셨습니까?"<br>"죽어서 용이 되어 왜구를 막겠다 하셨소."',
+    '노승이 절터 쪽을 가리킨다.<br>"아드님이 이 절을 마치며 금당 아래에 바닷물이 드나들 틈을 두었다 하오.<br><b>용이 되신 아버지가 드나드시라고.</b>"',
+    '믿거나 말거나 한 이야기다.<br>다만 그 마음이 무엇이었는지는 이 바다 앞에 서면 알 것도 같다.',
+  ],
+  gold: 24, badge: 'did_daewangam',
+});
+
 </script>
 </body>
 </html>

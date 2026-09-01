@@ -1712,6 +1712,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1722,6 +1723,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1777,6 +1779,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 통신사 ============
+   1590년 황윤길·김성일이 일본에 다녀왔다. 같은 것을 보고 정반대로 보고했고
+   조정은 김성일 쪽을 따랐다. 이 화는 통신사를 문항으로 묻는다 —
+   여기서는 떠나기 전 짐을 꾸리게 한다. 결과를 아는 채로 보는 장면이라 더 무겁다. */
+if (window.Deed) Deed.add({
+  id: 'tongsinsa_jim', zone: 'apttul', x: 688, y: 632, range: 175,
+  label: '짐을 꾸린다', tag: '통 신 사',
+  lines: [
+    '마당에 궤짝이 늘어섰다. 예물과 문서, 갈아입을 옷을 넣는다.',
+    '정사와 부사가 따로 선다. 같은 배를 타고 같은 곳을 볼 사람들인데<br>서 있는 자리가 벌써 다르다.',
+    '"무엇을 보고 오십니까?"<br>"쳐들어올 뜻이 있는지를 보고 오오."',
+    '짐을 다 꾸리고 나니 바다 쪽에서 바람이 분다.',
+    '이들은 이듬해 돌아와 <b>정반대로 아뢴다.</b><br>한 사람은 반드시 쳐들어온다 하고, 한 사람은 그럴 낌새가 없다 한다.',
+    '조정은 뒤쪽을 택했다. 그리고 이태 뒤에 왜군이 부산에 닿는다.',
+  ],
+  gold: 24, badge: 'did_tongsinsa',
+});
+
 </script>
 </body>
 </html>

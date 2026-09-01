@@ -1647,6 +1647,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1657,6 +1658,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'modern';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/moment.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
@@ -1713,6 +1715,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 신탁통치 ============
+   1945년 12월 모스크바 3국 외상 회의 결정(임시정부 수립 + 최대 5년 신탁통치)이
+   국내에 전해지자 좌우가 갈렸다. 우익은 반탁, 좌익은 처음 반대했다가 총체적 지지로 선회.
+   이 화는 그 흐름을 문항으로 묻는다 — 여기서는 그 거리에 서 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'sintak_georiro', zone: 'haebang', x: 840, y: 414, range: 175,
+  label: '거리에 나가 본다', tag: '신 탁 통 치',
+  lines: [
+    '거리가 시끄럽다. 양쪽에서 각각 다른 구호가 들린다.',
+    '한쪽은 신탁을 반대한다. 나라를 다시 남에게 맡길 수 없다는 것이다.',
+    '다른 쪽 벽보는 며칠 사이에 내용이 바뀌었다.<br>처음엔 같이 반대했는데 지금은 회의 결정을 지지한다고 적혀 있다.',
+    '"왜 바뀌었습니까?"<br>대답하는 사람마다 말이 다르다.',
+    '결정문에는 <b>임시정부를 세운다</b>는 조항이 먼저 있고,<br>신탁은 최대 다섯 해라 적혀 있다 한다. 그런데 거리에서는 신탁만 오간다.',
+    '이 갈라짐이 그대로 굳는다. 삼팔선은 아직 선일 뿐인데,<br>사람들 사이에는 이미 금이 갔다.',
+  ],
+  gold: 24, badge: 'did_sintak',
+});
+
 </script>
 </body>
 </html>

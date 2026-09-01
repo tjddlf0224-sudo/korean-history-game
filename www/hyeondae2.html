@@ -1671,6 +1671,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1681,6 +1682,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'modern';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1736,6 +1738,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 사일구 ============
+   1960년 3·15 부정선거 → 마산에서 김주열이 최루탄이 박힌 채 발견 → 4·19.
+   교수단까지 시위에 나섰고 이승만이 하야했다. 이 화는 4·19를 문항으로 묻는다 —
+   여기서는 그 광장에 서 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'sailgu_georiro', zone: 'gwangjang', x: 880, y: 382, range: 175,
+  label: '광장에 선다', tag: '사 일 구',
+  lines: [
+    '광장에 사람이 모인다. 교복 입은 학생이 유난히 많다.',
+    '선거 이야기가 오간다. 표를 미리 채워 넣었다는 것,<br>세 사람 다섯 사람씩 묶어 공개로 찍게 했다는 것.',
+    '마산에서 올라온 소식이 사람들을 굳게 만든다.<br>바다에서 떠오른 학생의 눈에 최루탄이 박혀 있었다 한다.',
+    '행렬 앞쪽에 나이 든 이들이 섰다. 대학 교수들이다.<br>플래카드에 <b>학생의 피에 보답하라</b>고 적혀 있다.',
+    '총소리가 났다는 말이 돈다. 그래도 사람이 줄지 않는다.',
+    '나흘 뒤 대통령이 물러난다는 방송이 나온다.<br>이 나라에서 시민의 힘으로 정권을 바꾼 첫 번째다.',
+  ],
+  gold: 24, badge: 'did_sailgu',
+});
+
 </script>
 </body>
 </html>

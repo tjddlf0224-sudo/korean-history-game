@@ -1442,6 +1442,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1452,6 +1453,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1510,6 +1512,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 갑신정변 ============
+   갑신정변 14개조 정강. 이 화는 정강의 내용을 문항으로 묻는다 —
+   여기서는 적어 보게 한다. 무엇을 바꾸려 했는지와, 왜 사흘 만에 끝났는지를
+   함께 보여 준다. 위에서 몇 사람이 벌인 일이라 아래에 뿌리가 없었다. */
+if (window.Deed) Deed.add({
+  id: 'jeonggang_ilgi', zone: 'ujeongchongguk', x: 768, y: 540, range: 175,
+  label: '정강을 적어 본다', tag: '갑 신 정 변',
+  lines: [
+    '촛불 아래 종이를 편다. 새 나라의 뼈대를 적는 일이다.',
+    '<b>문벌을 폐하고 사람을 능력으로 쓴다.</b><br>붓이 잠깐 멈춘다. 이 한 줄로 몇백 년이 뒤집힌다.',
+    '지조법을 고쳐 관리의 부정을 막고 백성의 세를 덜 것.<br>재정을 호조 한 곳으로 모을 것.',
+    '청에 조공하던 허례를 그만둘 것 — 이것부터 적었다.',
+    '적고 나니 열네 조목이다. 종이 한 장이다.',
+    '<b>다만 이 자리에 백성은 없다.</b> 몇 사람이 위에서 적은 종이다.<br>사흘 뒤 청군이 들어오고, 이 종이는 흩어진다.',
+  ],
+  gold: 24, badge: 'did_jeonggang',
+});
+
 </script>
 </body>
 </html>

@@ -1884,6 +1884,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1894,6 +1895,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1952,6 +1954,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 남한산성 ============
+   1636년 겨울, 인조가 남한산성에 들어가 마흔일곱 날을 버텼다. 강화도가 먼저
+   함락되며 왕실이 잡히자 결국 나왔다. 이 화는 삼전도와 병자호란을 문항으로 묻는다 —
+   여기서는 그 마흔일곱 날의 성 안을 겪게 한다. */
+if (window.Deed) Deed.add({
+  id: 'namhan_gyeoul', zone: 'namhan', x: 688, y: 326, range: 175,
+  label: '성 안에서 겨울을 난다', tag: '남 한 산 성',
+  lines: [
+    '성벽 위에서 아래를 본다. 청군의 장막이 눈밭에 빼곡하다.',
+    '군량 창고에 들른다. 관원이 됫박으로 세고 있다.<br>"오늘로 며칠 치 남았습니까?"<br>"…묻지 마시오."',
+    '성 안에서는 매일 같은 다툼이 오간다.<br>끝까지 싸우자는 쪽과, 화친해 나라를 보전하자는 쪽.',
+    '말이 먼저 죽었다. 그다음엔 얼어 죽는 사람이 나왔다.',
+    '강화도가 함락됐다는 기별이 온다. 그곳에 왕실이 피해 있었다.<br><b>버틸 이유가 그날 없어졌다.</b>',
+    '마흔일곱 날이었다. 성문이 열린다.',
+  ],
+  gold: 24, badge: 'did_namhan',
+});
+
 </script>
 </body>
 </html>

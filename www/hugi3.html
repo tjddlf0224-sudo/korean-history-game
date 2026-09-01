@@ -1716,6 +1716,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1726,6 +1727,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1782,6 +1784,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 삼정 ============
+   세도 정치기 삼정(전정·군정·환곡)의 문란. 특히 군정의 황구첨정(어린아이에게 군포)
+   ·백골징포(죽은 사람에게 군포)와 환곡의 강제 대여가 심했다.
+   이 화는 홍경래의 난을 문항으로 묻는다 — 그 봉기가 왜 일어났는지를 여기서 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'sedo_jangbu', zone: 'sedo', x: 456, y: 446, range: 175,
+  label: '장부를 들춰 본다', tag: '삼 정',
+  lines: [
+    '아전이 자리를 비운 사이 장부를 들춘다.',
+    '군포를 낼 사람 명단이다. 그런데 이름 옆 나이가 이상하다.<br><b>세 살.</b> 그 아래는 <b>한 살</b>이다.',
+    '다른 장에는 이미 죽은 사람 이름이 그대로 남아 있다.<br>죽은 해가 적혀 있는데도 올해 몫이 매겨져 있다.',
+    '환곡 장부는 더하다. 봄에 꾸어 주고 가을에 받는 곡식인데,<br>꾸지 않겠다는 집에도 억지로 떠맡기고 이자를 붙였다.',
+    '겨를 섞어 꾸어 주고 받을 때는 온전한 곡식으로 받았다는 말도 적혀 있다.',
+    '장부를 덮는다. <b>이래서 사람들이 들고일어난다.</b><br>평안도에서 홍경래가 일어난 것이 이 무렵이다.',
+  ],
+  gold: 24, badge: 'did_sampjeong',
+});
+
 </script>
 </body>
 </html>

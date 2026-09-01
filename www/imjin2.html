@@ -1728,6 +1728,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1738,6 +1739,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'class';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1797,6 +1799,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 의병 ============
+   관군이 무너진 자리를 의병이 메웠다. 곽재우(홍의장군)·조헌·정문부, 그리고
+   서산대사 휴정과 사명대사 유정의 승병. 이 화는 곽재우·승병을 문항으로 묻는다 —
+   여기서는 이름을 올려 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'uibyeong_moim', zone: 'uibyeong', x: 688, y: 562, range: 175,
+  label: '의병에 이름을 올린다', tag: '의 병',
+  lines: [
+    '장부와 붓이 놓인 상 앞에 사람이 줄을 섰다.<br>"이름을 적으시오. 나이와 사는 고을도."',
+    '앞사람은 유생이다. 그 앞은 농사꾼, 그 앞은 승려다.<br>장삼을 입은 이가 여럿 보인다.',
+    '"스님들도 나옵니까?"<br>"서산대사께서 팔도에 격문을 돌리셨소. 사명당께서도 나오셨고."',
+    '붓을 든다. 관군은 이미 여러 번 무너졌다.<br>여기 적힌 이름들이 그 자리를 메운다.',
+    '<b>이들은 제 고을을 안다.</b> 어디가 좁은 길인지, 어디에 숨을 수 있는지.<br>그래서 적은 수로도 큰 군사를 괴롭힐 수 있었다.',
+    '붉은 옷을 입은 이가 지나간다. 사람들이 홍의장군이라 부른다.',
+  ],
+  gold: 24, badge: 'did_uibyeong',
+});
+
 </script>
 </body>
 </html>

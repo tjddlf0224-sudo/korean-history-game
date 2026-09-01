@@ -1387,6 +1387,7 @@ function loop(t){
   { const zl = document.getElementById('zone-label');
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
+  if (window.Deed) Deed.tick(World);
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
@@ -1397,6 +1398,7 @@ requestAnimationFrame(loop);
 <script>const RANK_ERA = 'modern';</script>
 <script src="assets/rank.js?v=18"></script>
   <script src="assets/fx.js?v=18"></script>
+  <script src="assets/deed.js?v=18"></script>
   <script src="assets/inkwipe.js?v=18"></script>
   <script src="assets/dash.js?v=18"></script>
 <script src="assets/juice.js?v=18"></script>
@@ -1459,6 +1461,25 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
   btn.addEventListener('click', () => { BGM.toggleMuted(); render(); });
   render();
 })();
+
+/* ============ 광복군 ============
+   1940년 충칭에서 한국광복군 창설, 총사령 지청천. 1945년 미국 OSS와 함께
+   국내 진입 작전을 준비했으나 일본이 먼저 항복해 실행하지 못했다.
+   이 화는 광복군을 문항으로 묻는다 — 여기서는 들어가 보게 한다. */
+if (window.Deed) Deed.add({
+  id: 'gwangbokgun_ipdae', zone: 'imjeong', x: 698, y: 364, range: 175,
+  label: '광복군에 든다', tag: '광 복 군',
+  lines: [
+    '충칭의 좁은 건물이다. 태극기가 걸려 있다.<br>입대 장부에 이름을 적는다.',
+    '"어디서 오셨소?"<br>"…멀리서 왔습니다."<br>"다들 멀리서 오오."',
+    '훈련은 산에서 한다. 무전과 폭파, 낙하 훈련까지 한다 한다.',
+    '"이걸 어디에 씁니까?"<br>"<b>국내로 들어갑니다.</b> 우리 손으로 들어가야 하오."',
+    '미국 쪽과 함께 준비한 작전이라 한다. 날짜까지 잡혀 있다.',
+    '그러나 그 작전은 끝내 실행되지 못한다.<br>일본이 먼저 항복한다. 총사령은 그것을 두고 두고두고 아쉬워했다.',
+  ],
+  gold: 24, badge: 'did_gwangbokgun',
+});
+
 </script>
 </body>
 </html>
