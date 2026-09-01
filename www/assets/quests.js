@@ -184,41 +184,65 @@ window.Quests = (function(){
     #qs-ov { position:absolute; inset:0; z-index:95; display:none; align-items:center;
       justify-content:center; background:rgba(8,6,3,.9); font-family:"Gowun Batang",serif; }
     #qs-ov.show { display:flex; }
-    #qs-ov .panel { width:min(94%,470px); max-height:88%; overflow-y:auto; background:#1a140c;
-      border:1px solid #4a3c26; border-radius:16px; padding:20px 18px;
-      display:flex; flex-direction:column; gap:10px; }
-    #qs-ov h3 { margin:0; font-size:18px; color:#f0c96b; text-align:center; }
-    #qs-ov .sec { font-size:12px; letter-spacing:.2em; color:#a89676; margin-top:6px; }
-    #qs-ov .q { border:1px solid #3a2c1a; border-radius:11px; padding:11px 13px;
-      background:#241c12; display:flex; gap:11px; align-items:center; }
-    #qs-ov .q.done { border-color:#c9a24a; }
+    /* 한 줄에 **지금 어느 상태인가**가 보여야 한다 —
+       아직 못 함 / 다 함(받을 수 있음) / 이미 받음. 셋을 다르게 그린다. */
+    #qs-ov .q { position:relative; border:1px solid #3a2c1a; border-radius:12px;
+      padding:8px 12px; background:#241b11; display:flex; gap:10px; align-items:center;
+      transition:border-color .16s, background .16s; }
+    /* 다 한 줄은 금테를 두르고 왼쪽에 금빛 띠를 세운다 */
+    #qs-ov .q.done { border-color:#6b5730; background:#2a2013; }
+    #qs-ov .q.done::before { content:''; position:absolute; left:0; top:9px; bottom:9px; width:3px;
+      border-radius:0 3px 3px 0; background:linear-gradient(180deg,#efcd8b,#c9a24a); }
+    #qs-ov .q.got { opacity:.55; }
+    /* 상태 표 — 동그라미 하나로 */
+    #qs-ov .dot { flex:none; width:22px; height:22px; border-radius:50%;
+      border:1.5px solid #4a3c26; display:flex; align-items:center; justify-content:center; }
+    #qs-ov .dot svg { width:13px; height:13px; display:none; color:#2b1f0c; }
+    #qs-ov .q.done .dot { border-color:#e0bd76; background:linear-gradient(180deg,#efcd8b,#c9a24a); }
+    #qs-ov .q.done .dot svg { display:block; }
     /* span은 인라인이라 그냥 두면 이름과 힌트가 한 줄로 붙는다(gold.js에서 겪은 것) */
     #qs-ov .tx { flex:1; min-width:0; display:flex; flex-direction:column; }
-    #qs-ov .nm { display:block; font-size:14px; color:#f5ecd8; }
-    #qs-ov .hint { display:block; font-size:11.5px; color:#8d7f66; margin-top:2px; line-height:1.6; }
-    #qs-ov .bar { display:block; }
-    #qs-ov .n { display:block; }
-    #qs-ov .bar { height:5px; border-radius:3px; background:#3a2c1a; margin-top:6px; overflow:hidden; }
-    #qs-ov .bar i { display:block; height:100%; background:#c9a24a; }
-    #qs-ov .n { font-size:11.5px; color:#b8a888; font-variant-numeric:tabular-nums; margin-top:3px; }
-    #qs-ov .q button { flex:none; background:#3a2c1a; border:1px solid #c9a24a; color:#f0c96b;
-      border-radius:9px; padding:8px 12px; font-family:inherit; font-size:12.5px; cursor:pointer; }
-    #qs-ov .q button:disabled { opacity:.32; cursor:default; border-color:#4a3c26; color:#8d7f66;
-      background:#2a2013; }
-    #qs-ov .close { padding:11px; border-radius:11px; border:1px solid #4a3c26;
-      background:#2a2013; color:#f5ecd8; font-family:inherit; font-size:14px; cursor:pointer; }`;
+    #qs-ov .nm { display:block; font-size:13.5px; color:#f5ecd8; line-height:1.4; }
+    #qs-ov .hint { display:block; font-size:11px; color:#8d7f66; line-height:1.5; }
+    /* 막대와 숫자를 한 줄에 나란히 — 아래로 한 줄 더 쓰면 그만큼 줄이 길어진다 */
+    #qs-ov .pg { display:flex; align-items:center; gap:8px; margin-top:5px; }
+    #qs-ov .bar { flex:1; }
+    #qs-ov .n { flex:none; }
+    #qs-ov .bar { height:5px; border-radius:3px; background:#31261a; overflow:hidden; }
+    #qs-ov .bar i { display:block; height:100%; border-radius:3px;
+      background:linear-gradient(90deg,#8a6f34,#f0c96b); transition:width .5s cubic-bezier(.2,.9,.25,1); }
+
+    #qs-ov .n { font-size:11px; color:#a2947c; font-variant-numeric:tabular-nums; }
+    /* 받을 수 있는 줄의 단추만 금빛이다 — 이 화면에서 누를 곳이 한눈에 보인다 */
+    #qs-ov .q button { flex:none; min-width:66px; background:#2a2013; border:1px solid #4a3c26;
+      color:#8d7f66; border-radius:10px; padding:9px 12px; font-family:inherit;
+      font-size:12.5px; cursor:pointer; }
+    #qs-ov .q.done button:not(:disabled) { background:linear-gradient(180deg,#efcd8b,#c9a24a);
+      border-color:#e0bd76; color:#2b1f0c; font-weight:700;
+      box-shadow:0 3px 11px rgba(201,162,74,.26); }
+    #qs-ov .q button:disabled { opacity:.5; cursor:default; }
+    /* 오늘 몇 개 남았는지 — 제목 밑에 알약으로 */
+    #qs-ov .qs-tally { display:flex; justify-content:center; gap:7px; }
+    #qs-ov .qs-tally .chip { display:inline-flex; align-items:center; gap:6px; padding:5px 12px;
+      border-radius:999px; border:1px solid #46381f; background:rgba(0,0,0,.28);
+      font-size:11.5px; color:#a8997e; }
+    #qs-ov .qs-tally .chip b { color:#f0c96b; font-weight:700; font-variant-numeric:tabular-nums; }`;
     document.head.appendChild(s);
   }
   function layer(){ return document.getElementById('wrap') || document.body; }
 
+  const QS_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" ' +
+    'stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+
   function row(q, taken, claim){
     const cur = Math.min(q.get(), q.need), pct = Math.round(cur / q.need * 100);
     const ok = cur >= q.need;
-    return `<div class="q${ok ? ' done' : ''}"><span class="tx">` +
+    return `<div class="q${ok ? ' done' : ''}${taken ? ' got' : ''}">` +
+      `<span class="dot">${QS_CHECK}</span><span class="tx">` +
       `<span class="nm">${q.name}</span>` +
       (q.hint && !ok ? `<span class="hint">${q.hint}</span>` : '') +
-      `<span class="bar"><i style="width:${pct}%"></i></span>` +
-      `<span class="n">${cur} / ${q.need}</span></span>` +
+      `<span class="pg"><span class="bar"><i style="width:${pct}%"></i></span>` +
+      `<span class="n">${cur} / ${q.need}</span></span></span>` +
       `<button data-c="${claim}" data-id="${q.id}"${taken ? ' disabled' : (ok ? '' : ' disabled')}>` +
       `${taken ? '받음' : '금 ' + q.gold}</button></div>`;
   }
@@ -230,13 +254,18 @@ window.Quests = (function(){
       d = document.createElement('div'); d.id = 'qs-ov'; layer().appendChild(d);
       d.onclick = e => { if (e.target === d) d.classList.remove('show'); };
     }
+    const today = todayList();
+    const ready = today.filter(q => q.get() >= q.need && !st.taken[q.id]).length;
+    const got = today.filter(q => st.taken[q.id]).length;
     d.innerHTML = '<div class="panel"><h3>할 일</h3>' +
-      '<div class="sec">오 늘</div>' +
-      todayList().map(q => row(q, !!st.taken[q.id], 'd')).join('') +
+      `<div class="qs-tally"><span class="chip">오늘 <b>${got}</b> / ${today.length} 받음</span>` +
+      (ready ? `<span class="chip">받을 것 <b>${ready}</b></span>` : '') + '</div>' +
+      '<div class="sec">오늘</div>' +
+      today.map(q => row(q, !!st.taken[q.id], 'd')).join('') +
       '<div class="sec">긴 것</div>' +
       ACH.filter(q => !st.doneAch[q.id] || q.get() >= q.need)
          .slice(0, 6).map(q => row(q, !!st.doneAch[q.id], 'a')).join('') +
-      '<button class="close" id="qs-x">닫기</button></div>';
+      '<button class="x" id="qs-x" aria-label="닫기">✕</button></div>';
     d.querySelectorAll('[data-id]').forEach(b => {
       b.onclick = () => {
         const got = b.dataset.c === 'd' ? claimDaily(b.dataset.id) : claimAch(b.dataset.id);

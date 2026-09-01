@@ -126,42 +126,7 @@ window.Daily = (function(){
     if (injected) return; injected = true;
     const s = document.createElement('style');
     s.textContent = `
-    .dy-ov { position:absolute; inset:0; z-index:94; display:none; align-items:center;
-      justify-content:center; background:rgba(8,6,3,.9); font-family:"Gowun Batang",serif; }
-    .dy-ov.show { display:flex; }
-    /* 가로 화면은 세로가 390 남짓이다. 판이 그보다 커지면 위아래가 잘린다 —
-       덮개 높이의 92%로 묶고, 넘치면 안에서 굴린다. */
-    .dy-ov .panel { position:relative; width:min(94%,470px); max-height:92%; overflow-y:auto;
-      -webkit-overflow-scrolling:touch;
-      background:linear-gradient(180deg,#241b11 0%,#171108 100%);
-      border:1px solid #4a3c26; border-radius:18px; padding:16px 18px 16px;
-      box-shadow:0 24px 60px rgba(0,0,0,.62), inset 0 1px 0 rgba(255,238,205,.06);
-      display:flex; flex-direction:column; gap:9px; }
-    .dy-ov .panel::before { content:''; position:absolute; left:0; right:0; top:0; height:2px;
-      background:linear-gradient(90deg,transparent,rgba(201,162,74,.35) 18%,
-        rgba(240,201,107,.72) 50%,rgba(201,162,74,.35) 82%,transparent); }
-    .dy-ov h3 { margin:0; font-size:18px; color:#f0c96b; text-align:center;
-      font-family:"Gugi","Gowun Batang",serif; letter-spacing:.05em; }
-    /* 닫기는 모서리 표로 — 아래에 가로로 긴 단추를 두면 그만큼 자리를 먹는다 */
-    .dy-ov .x { position:absolute; top:11px; right:12px; width:29px; height:29px; padding:0;
-      border-radius:50%; border:1px solid #46381f; background:rgba(0,0,0,.28);
-      color:#bfae90; font-size:15px; line-height:1; display:flex; align-items:center;
-      justify-content:center; }
-    /* 받기·광고는 나란히 — 크기를 똑같이 둔다 */
-    .dy-ov .row2 { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
-    .dy-ov .row2 button { margin:0; }
-    .dy-ov .sub { text-align:center; font-size:12.5px; color:#b8a888; line-height:1.7; margin-top:-5px; }
-    .dy-ov button { padding:12px; border-radius:11px; font-family:inherit; font-size:14.5px;
-      cursor:pointer; border:1px solid #4a3c26; background:#2a2013; color:#f5ecd8; }
-    .dy-ov button.hi { background:linear-gradient(180deg,#efcd8b,#c9a24a);
-      border-color:#e0bd76; color:#2b1f0c; font-weight:700;
-      box-shadow:0 4px 14px rgba(201,162,74,.28); }
-    .dy-ov button.hi:active { transform:scale(.98); }
-    .dy-ov button { transition:transform .12s ease, background .16s, border-color .16s; }
-    .dy-ov button:active { transform:scale(.98); }
-    .dy-ov button:disabled { opacity:.38; cursor:default; }
-    .dy-ov .msg { text-align:center; font-size:13px; color:#c9a24a; }
-    .dy-ov .msg:empty { display:none; }
+    /* 판·제목·단추·닫기 공통 모양은 panelskin.js 로 옮겼다 */
 
     /* ---- 이레 길 ----
        네모 일곱 개를 나란히 두는 대신, **길 위에 놓인 엽전 일곱 닢**으로 본다.
@@ -220,8 +185,35 @@ window.Daily = (function(){
       font-variant-numeric:tabular-nums; }
     .dy-prize .p svg { width:16px; height:16px; color:#c9a24a; }
 
-    .dy-loot { text-align:center; font-size:20px; color:#f0c96b; min-height:30px;
-      font-weight:700; }`;
+
+    /* ---- 시대 상자 ----
+       글자만 있던 자리에 **상자를 하나 놓는다.** 열면 상자가 흔들리고
+       빛이 터진 다음 나온 것이 뜬다 — 무엇을 하는 화면인지 그림이 먼저 말한다. */
+    .dy-chest { display:flex; flex-direction:column; align-items:center; gap:8px;
+      padding:6px 0 2px; }
+    .dy-chest .art { position:relative; width:88px; height:88px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      background:radial-gradient(circle at 50% 45%,rgba(240,201,107,.16),transparent 68%); }
+    .dy-chest .art svg { width:56px; height:56px; color:#e0bd76;
+      filter:drop-shadow(0 6px 16px rgba(0,0,0,.55)); }
+    .dy-chest.shake .art svg { animation:dy-shake .55s ease-in-out; }
+    @keyframes dy-shake { 0%,100%{ transform:rotate(0) } 20%{ transform:rotate(-7deg) }
+      45%{ transform:rotate(6deg) } 70%{ transform:rotate(-4deg) } }
+    @media (prefers-reduced-motion:reduce){ .dy-chest.shake .art svg { animation:none; } }
+    /* 나온 것 — 이름 한 줄이지만 크게, 한가운데 */
+    .dy-loot { min-height:26px; text-align:center; font-size:17px; font-weight:700;
+      color:#f0c96b; letter-spacing:.02em; }
+    .dy-loot.pop { animation:dy-lootin .45s cubic-bezier(.2,.9,.25,1) both; }
+    @keyframes dy-lootin { from { opacity:0; transform:translateY(7px) scale(.94); }
+      to { opacity:1; transform:none; } }
+    /* 여는 방법 세 가지를 같은 크기로 나란히 */
+    .dy-ways { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .dy-ov .dy-ways button { display:flex; flex-direction:column; align-items:center; gap:6px;
+      margin:0; padding:11px 5px; font-size:12.5px; line-height:1.35; border-radius:12px;
+      text-align:center; }
+    .dy-ov .dy-ways button svg { width:19px; height:19px; }
+    .dy-ov .dy-ways .cap { font-size:10.5px; color:#8d7f66; }
+    .dy-ov .dy-ways button.hi .cap { color:#5c4718; }`;
     document.head.appendChild(s);
   }
   function layer(){ return document.getElementById('wrap') || document.body; }
@@ -327,24 +319,41 @@ window.Daily = (function(){
   }
 
   /* ---------------- 상자 창 ---------------- */
-  function openBox(){
+  const SVG_AD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" ' +
+    'stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/>' +
+    '<path d="M10.2 9.4l4.8 2.6-4.8 2.6z"/></svg>';
+  const SVG_BIGCHEST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" ' +
+    'stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5h17V19a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 19z"/>' +
+    '<path d="M3.5 13.5h17"/><path d="M9.6 13.5v3.2h4.8v-3.2z"/>' +
+    '<path d="M5.6 9.5V7A2.5 2.5 0 0 1 8.1 4.5h7.8A2.5 2.5 0 0 1 18.4 7v2.5"/>' +
+    '<path d="M12 4.5v5"/></svg>';
+
+  function openBox(lootName){
     const free = boxLeft(), ad = adBoxLeft();
     const d = ov('dy-box',
       '<h3>시대 상자</h3>' +
       '<div class="sub">금·기력·콤보 지키기가 들어 있습니다.</div>' +
-      '<div class="dy-loot" id="dy-l"></div>' +
-      `<button class="hi" id="dy-f"${free ? '' : ' disabled'}>` +
-      `${free ? '오늘의 무료 상자' : '오늘 무료 상자를 다 쓰셨습니다'}</button>` +
-      `<button id="dy-a"${ad ? '' : ' disabled'}>` +
-      `${ad ? '광고 보고 한 번 더' : '광고 몫도 다 쓰셨습니다'}</button>` +
-      `<button id="dy-g">금 ${GOLD_BOX}으로 한 번 더</button>` +
+      `<div class="dy-chest" id="dy-ch"><div class="art">${SVG_BIGCHEST}</div></div>` +
+      `<div class="dy-loot${lootName ? ' pop' : ''}" id="dy-l">${lootName || ''}</div>` +
+      '<div class="dy-ways">' +
+      `<button class="hi" id="dy-f"${free ? '' : ' disabled'}>${SVG_BIGCHEST}` +
+      `<span>무료</span><span class="cap">${free ? '오늘 ' + free + '번' : '다 쓰셨어요'}</span></button>` +
+      `<button id="dy-a"${ad ? '' : ' disabled'}>${SVG_AD}` +
+      `<span>광고</span><span class="cap">${ad ? '한 번 더' : '다 쓰셨어요'}</span></button>` +
+      `<button id="dy-g">${SVG_COIN}<span>금</span><span class="cap">${GOLD_BOX}으로</span></button>` +
+      '</div>' +
       '<div class="msg" id="dy-bm"></div>' +
-      '<button id="dy-bx">닫기</button>');
+      '<button class="x" id="dy-bx" aria-label="닫기">✕</button>');
     d.querySelector('#dy-bx').onclick = () => d.classList.remove('show');
-    const loot = t => { const l = d.querySelector('#dy-l'); if (l) l.textContent = t || ''; };
     const msg = t => { const m = d.querySelector('#dy-bm'); if (m) m.textContent = t || ''; };
-    const show = x => { if (x){ loot(x.nm); msg(''); setTimeout(openBox, 1300); }
-                        else msg('열지 못했습니다.'); };
+    // 열면 상자가 흔들리고, 빛이 터진 다음에 나온 것을 보여 준다
+    const show = x => {
+      if (!x){ msg('열지 못했습니다.'); return; }
+      const ch = d.querySelector('#dy-ch');
+      if (ch){ ch.classList.add('shake'); sparks(ch.querySelector('.art')); }
+      msg('');
+      setTimeout(() => openBox(x.nm), 1300);
+    };
     d.querySelector('#dy-f').onclick = () => show(openFree());
     d.querySelector('#dy-g').onclick = () => {
       const x = openByGold(GOLD_BOX);

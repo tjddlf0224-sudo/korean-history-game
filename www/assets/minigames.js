@@ -85,18 +85,28 @@ window.Mini = (function(){
     if (injected) return; injected = true;
     const s = document.createElement('style');
     s.textContent = `
-    #mg-ov { position:absolute; inset:0; z-index:96; display:none; align-items:center;
-      justify-content:center; background:rgba(8,6,3,.92); font-family:"Gowun Batang",serif; }
-    #mg-ov.show { display:flex; }
-    #mg-ov .panel { width:min(94%,470px); max-height:88%; overflow-y:auto; background:#1a140c;
-      border:1px solid #4a3c26; border-radius:16px; padding:20px 18px;
-      display:flex; flex-direction:column; gap:12px; }
-    #mg-ov h3 { margin:0; font-size:18px; color:#f0c96b; text-align:center; }
-    #mg-ov .sub { text-align:center; font-size:12.5px; color:#b8a888; line-height:1.7; margin-top:-5px; }
-    #mg-ov button { padding:12px; border-radius:11px; font-family:inherit; font-size:14.5px;
-      cursor:pointer; border:1px solid #4a3c26; background:#2a2013; color:#f5ecd8; }
-    #mg-ov button.hi { background:#3a2c1a; border-color:#c9a24a; color:#f0c96b; }
-    #mg-ov button:disabled { opacity:.4; cursor:default; }
+
+    /* ---- 놀이 고르는 칸 ----
+       가로로 긴 단추 두 개를 위아래로 쌓으면 무엇이 다른지 안 보인다.
+       그림·이름·한 줄 설명을 담은 **같은 크기 카드 두 장**을 나란히 둔다. */
+    #mg-ov .mg-pick { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+    #mg-ov .mg-card { display:flex; flex-direction:column; align-items:center; gap:7px;
+      padding:14px 10px 13px; border-radius:13px; border:1px solid #3b2f1e;
+      background:#241b11; color:#efe4cd; font-size:14px; text-align:center;
+      position:relative; overflow:hidden; }
+    #mg-ov .mg-card .ic { width:30px; height:30px; color:#c9a24a; }
+    #mg-ov .mg-card .ht { font-size:11px; color:#8d7f66; line-height:1.55; }
+    #mg-ov .mg-card.on { border-color:#6b5730; background:#2b2013; }
+    #mg-ov .mg-card.on .ic { color:#f0c96b; }
+    #mg-ov .mg-card:disabled { opacity:.5; }
+    #mg-ov .mg-card .lk { position:absolute; top:8px; right:9px; width:14px; height:14px;
+      color:#8d7f66; }
+    /* 오늘 남은 횟수 — 읽는 값이라 알약으로 */
+    #mg-ov .mg-left { display:flex; justify-content:center; gap:7px; }
+    #mg-ov .mg-left .chip { display:inline-flex; align-items:center; gap:6px; padding:5px 12px;
+      border-radius:999px; border:1px solid #46381f; background:rgba(0,0,0,.28);
+      font-size:11.5px; color:#a8997e; }
+    #mg-ov .mg-left .chip b { color:#f0c96b; font-weight:700; font-variant-numeric:tabular-nums; }
     #mg-ov .msg { min-height:19px; text-align:center; font-size:13.5px; color:#c9a24a; }
 
     /* 짝 맞추기 */
@@ -137,20 +147,36 @@ window.Mini = (function(){
   }
 
   /* ---------------- 목록 ---------------- */
+  const MG_ICON = {
+    mg_match: "<path d='M4 4h7v7H4z'/><path d='M13 13h7v7h-7z'/><path d='M13 4h7v7h-7z' " +
+              "stroke-dasharray='2.6 2.4'/><path d='M4 13h7v7H4z' stroke-dasharray='2.6 2.4'/>",
+    mg_face:  "<circle cx='12' cy='9' r='4.2'/><path d='M4.6 20.4a7.6 7.6 0 0 1 14.8 0'/>" +
+              "<path d='M9.6 8.6h.01M14.4 8.6h.01'/>",
+  };
+  const MG_LOCK = "<path d='M6.5 10.5h11v9h-11z'/><path d='M9 10.5V8a3 3 0 0 1 6 0v2.5'/>";
+  function mgSvg(d, cls){
+    return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" ` +
+      `stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+  }
+
   function open(){
-    const rows = Object.entries(GAMES).map(([id, g]) => {
+    const rows = '<div class="mg-pick">' + Object.entries(GAMES).map(([id, g]) => {
       const ok = !window.Unlock || Unlock.has(g.gate);
       const gate = (window.Unlock && Unlock.GATES.find(x => x.opens.some(o => o[0] === g.gate)));
-      return `<button class="${ok ? 'hi' : ''}" data-g="${id}"${ok ? '' : ' disabled'}>` +
-        `${g.name}${ok ? '' : ` · ${gate ? gate.name + '이 되면' : '잠김'}`}</button>`;
-    }).join('');
+      const hint = ok ? g.hint : (gate ? gate.name + '이 되면 열립니다' : '아직 잠겨 있습니다');
+      return `<button class="mg-card${ok ? ' on' : ''}" data-g="${id}"${ok ? '' : ' disabled'}>` +
+        (ok ? '' : mgSvg(MG_LOCK, 'lk')) +
+        mgSvg(MG_ICON[id] || MG_ICON.mg_match, 'ic') +
+        `<span>${g.name}</span><span class="ht">${hint}</span></button>`;
+    }).join('') + '</div>';
     const d = panel('<h3>미니게임</h3>' +
-      `<div class="sub">이기면 금이 나온다. 오늘 남은 무료 ${freeLeft()}회<br>` +
-      '<span style="font-size:11.5px;color:#8d7f66">문제는 그대가 모은 유물과 인물에서 나온다.</span></div>' +
+      '<div class="sub">이기면 금이 나옵니다. 문제는 그대가 모은 유물과 인물에서 나옵니다.</div>' +
+      `<div class="mg-left"><span class="chip">오늘 남은 무료 <b>${freeLeft()}</b></span>` +
+      (adLeft() > 0 ? `<span class="chip">광고 몫 <b>${adLeft()}</b></span>` : '') + '</div>' +
       rows +
       (freeLeft() <= 0 && adLeft() > 0
         ? '<button id="mg-ad">광고 보고 한 번 더</button>' : '') +
-      '<div class="msg" id="mg-m"></div><button id="mg-x">닫기</button>');
+      '<div class="msg" id="mg-m"></div><button class="x" id="mg-x" aria-label="닫기">✕</button>');
     d.querySelectorAll('[data-g]').forEach(b => {
       b.onclick = () => start(b.dataset.g);
     });

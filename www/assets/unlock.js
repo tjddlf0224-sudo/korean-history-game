@@ -82,25 +82,50 @@ window.Unlock = (function(){
       background:rgba(26,20,12,.96); border:1px solid #4a3c26; color:#f0c96b;
       font-family:"Gowun Batang",serif; font-size:13.5px; padding:11px 18px;
       border-radius:20px; white-space:nowrap; }
-    #ul-ov { position:absolute; inset:0; z-index:95; display:none; align-items:center;
-      justify-content:center; background:rgba(8,6,3,.9); font-family:"Gowun Batang",serif; }
-    #ul-ov.show { display:flex; }
-    #ul-ov .panel { width:min(92%,430px); max-height:86%; overflow-y:auto; background:#1a140c;
-      border:1px solid #4a3c26; border-radius:16px; padding:20px 18px;
-      display:flex; flex-direction:column; gap:11px; }
-    #ul-ov h3 { margin:0; font-size:17px; color:#f0c96b; text-align:center; }
-    #ul-ov .g { border:1px solid #3a2c1a; border-radius:11px; padding:11px 13px;
-      background:#241c12; }
-    #ul-ov .g.on { border-color:#c9a24a; }
-    #ul-ov .g.next { border-color:#8fd0e8; }
-    #ul-ov .gh { display:flex; justify-content:space-between; align-items:baseline; }
-    #ul-ov .nm { font-size:14.5px; color:#f5ecd8; }
-    #ul-ov .lv { font-size:11.5px; color:#8d7f66; }
-    #ul-ov .it { font-size:12.5px; color:#b8a888; margin-top:4px; line-height:1.7; }
-    #ul-ov .g.on .nm { color:#f0c96b; }
-    #ul-ov .g:not(.on) .it { color:#6f6555; }
-    #ul-ov button { padding:11px; border-radius:11px; font-family:inherit; font-size:14px;
-      cursor:pointer; border:1px solid #4a3c26; background:#2a2013; color:#f5ecd8; }`;
+    /* ---- 계급 사다리 ----
+       칸 여섯 개를 위아래로 쌓으면 가로 화면(세로 390)을 다 먹고 굴러야 한다.
+       계급은 **차례**이니 출석의 엽전 길처럼 가로로 눕힌다. 하나를 고르면
+       그 계급에서 무엇이 열리는지 아래에 펼친다. */
+    #ul-ov .ul-road { position:relative; display:flex; gap:3px; padding:4px 0 2px; }
+    #ul-ov .ul-road .road, #ul-ov .ul-road .road i { position:absolute;
+      left:8.33%; right:8.33%; height:2px; border-radius:2px; }
+    #ul-ov .ul-road .road { background:#33281a; }
+    #ul-ov .ul-road .road i { right:auto; background:linear-gradient(90deg,#8a6f34,#f0c96b);
+      box-shadow:0 0 8px rgba(240,201,107,.35); }
+    #ul-ov .st { flex:1; min-width:0; position:relative; z-index:2; display:flex;
+      flex-direction:column; align-items:center; gap:6px; margin:0; padding:0;
+      border:0; background:none; cursor:pointer; }
+    #ul-ov .st .bd { width:38px; height:38px; border-radius:50%; display:flex;
+      align-items:center; justify-content:center; font-size:12px; color:#8d7f66;
+      border:1.5px solid #443722; background:radial-gradient(circle at 35% 28%,#2c2215,#1a1309);
+      box-shadow:inset 0 1px 0 rgba(255,238,205,.05); transition:transform .14s ease; }
+    #ul-ov .st .nm { font-size:11px; color:#7d7059; }
+    #ul-ov .st.on .bd { border-color:#8a6f34; color:#f0c96b;
+      background:radial-gradient(circle at 35% 28%,#4a3717,#2b1f0c); }
+    #ul-ov .st.on .nm { color:#c9bda6; }
+    #ul-ov .st.here .bd { border-color:#f0c96b; color:#ffe6ac; font-weight:700;
+      background:radial-gradient(circle at 35% 28%,#5a4318,#33240c);
+      box-shadow:0 0 0 3px rgba(240,201,107,.13), 0 0 16px rgba(240,201,107,.3); }
+    #ul-ov .st.here .nm { color:#f0c96b; }
+    #ul-ov .st.sel .bd { transform:scale(1.12); }
+    #ul-ov .st .bd svg { width:15px; height:15px; }
+
+    /* 고른 계급의 속 */
+    #ul-ov .ul-det { border:1px solid #3b2f1e; border-radius:13px; padding:12px 14px;
+      background:#221a10; }
+    #ul-ov .ul-det .dh { display:flex; justify-content:space-between; align-items:baseline;
+      gap:10px; margin-bottom:7px; }
+    #ul-ov .ul-det .dn { font-size:15px; color:#f0c96b; }
+    #ul-ov .ul-det .dl { font-size:11.5px; color:#8d7f66; }
+    #ul-ov .ul-det .it { font-size:12.5px; color:#b8a888; line-height:1.85; }
+    #ul-ov .ul-det.locked .it { color:#8a7f6b; }
+    /* 지금 계급과 다음 계급까지 얼마나 남았는지 */
+    #ul-ov .ul-now { display:flex; justify-content:center; gap:7px; }
+    #ul-ov .ul-now .chip { display:inline-flex; align-items:center; gap:6px; padding:5px 12px;
+      border-radius:999px; border:1px solid #46381f; background:rgba(0,0,0,.28);
+      font-size:11.5px; color:#a8997e; }
+    #ul-ov .ul-now .chip b { color:#f0c96b; font-weight:700; font-variant-numeric:tabular-nums; }
+`;
     document.head.appendChild(s);
   }
   function layer(){ return document.getElementById('wrap') || document.body; }
@@ -116,27 +141,56 @@ window.Unlock = (function(){
     tT = setTimeout(() => d.remove(), 2200);
   }
 
+  const UL_CHECK = "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' " +
+    "stroke-width='3' stroke-linecap='round' stroke-linejoin='round'>" +
+    "<path d='M5 12.5l4.5 4.5L19 7'/></svg>";
+  const UL_LOCK = "<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' " +
+    "stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'>" +
+    "<rect x='6' y='10.5' width='12' height='9' rx='1.6'/><path d='M9 10.5V8a3 3 0 0 1 6 0v2.5'/></svg>";
+
   function open(){
     css();
     let d = document.getElementById('ul-ov');
     if (!d){ d = document.createElement('div'); d.id = 'ul-ov'; layer().appendChild(d);
              d.onclick = e => { if (e.target === d) d.classList.remove('show'); }; }
     const lv = level(), nx = next();
-    d.innerHTML = '<div class="panel"><h3>계급과 해금</h3>' +
-      GATES.map(g => {
+    // 처음 보여 줄 칸은 **다음 계급** — 무엇을 바라고 올리는지가 궁금한 자리다
+    let sel = nx ? GATES.findIndex(g => g.tier === nx.tier)
+                 : GATES.reduce((a, g, i) => (lv >= g.lv ? i : a), 0);
+
+    function paint(){
+      const here = GATES.reduce((a, g, i) => (lv >= g.lv ? i : a), 0);
+      const fill = here <= 0 ? 0 : Math.min(100, (here / (GATES.length - 1)) * 100);
+      const road = GATES.map((g, i) => {
         const on = lv >= g.lv;
-        const isNext = nx && nx.tier === g.tier;
-        const items = g.opens.length
-          ? g.opens.map(([, n]) => (on ? '· ' : '· ') + n).join('<br>')
-          : (g.desc || '');
-        return `<div class="g${on ? ' on' : ''}${isNext ? ' next' : ''}">` +
-          `<div class="gh"><span class="nm">${g.name}</span>` +
-          `<span class="lv">Lv.${g.lv}${on ? ' · 열림' : ''}</span></div>` +
-          `<div class="it">${items}</div></div>`;
-      }).join('') +
-      '<button id="ul-x">닫기</button></div>';
-    d.querySelector('#ul-x').onclick = () => d.classList.remove('show');
+        return `<button class="st${on ? ' on' : ''}${i === here ? ' here' : ''}` +
+          `${i === sel ? ' sel' : ''}" data-i="${i}">` +
+          `<span class="bd">${on ? UL_CHECK : UL_LOCK}</span>` +
+          `<span class="nm">${g.name}</span></button>`;
+      }).join('');
+      const g = GATES[sel], on = lv >= g.lv;
+      const items = g.opens.length ? g.opens.map(([, n]) => '· ' + n).join('<br>')
+                                   : (g.desc || '');
+      d.innerHTML = '<div class="panel"><h3>계급과 해금</h3>' +
+        `<div class="ul-now"><span class="chip">지금 <b>${GATES[here].name}</b> · Lv.${lv}</span>` +
+        (nx ? `<span class="chip">${nx.name}까지 <b>${Math.max(0, nx.lv - lv)}</b></span>` : '') +
+        '</div>' +
+        `<div class="ul-road"><div class="road" id="ul-rd"><i style="width:${fill}%"></i></div>${road}</div>` +
+        `<div class="ul-det${on ? '' : ' locked'}"><div class="dh"><span class="dn">${g.name}</span>` +
+        `<span class="dl">Lv.${g.lv}${on ? ' · 열림' : ' · 아직'}</span></div>` +
+        `<div class="it">${items}</div></div>` +
+        '<button class="x" id="ul-x" aria-label="닫기">✕</button></div>';
+      // 줄은 표 한가운데를 지나야 한다. 글꼴에 따라 높이가 달라지니 재서 맞춘다.
+      const b0 = d.querySelector('.st .bd'), rd = d.querySelector('#ul-rd');
+      if (b0 && rd) rd.style.top = (b0.offsetTop + b0.offsetHeight / 2 - 1) + 'px';
+      d.querySelectorAll('[data-i]').forEach(b => {
+        b.onclick = () => { sel = +b.dataset.i; paint(); };
+      });
+      d.querySelector('#ul-x').onclick = () => d.classList.remove('show');
+    }
+    // 재기 전에 먼저 보여야 한다 — 숨어 있는 동안엔 높이가 0이라 줄이 어긋난다
     d.classList.add('show');
+    paint();
   }
 
   return { has, next, deny, open, level, GATES };
