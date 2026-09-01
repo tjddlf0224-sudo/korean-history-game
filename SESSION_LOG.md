@@ -777,3 +777,15 @@ F. **성능** — 타이머 11개, 영구 인터벌 챕터당 2개. 조치 불�
 - 적용: daily/srs/unlock/minigames/gold/energy/quests/offline/heroes/items/juice/manse/deed/encounter/boss/badges/season 17개 모듈 + 36챕터 이벤트 버튼 라벨 전부 명사형("~해 보기/~하기")으로 통일.
 - check_reachability SKIP에 privacy/ending/prologue 추가(문서·연출 페이지 오탐 제거).
 - v25 범프, 스모크 36챕터 0건, ship(웹+iOS 동시), 커밋 a08a3a9 푸시.
+
+## 53. 메뉴 UI 개편 + 로그인 오류 원인 (2026-09-01)
+- **메뉴 개편**(www/assets/tidy.js 전면 재작성): 가로 목록 단추 5개와 2열 격자 7개가 섞여 크기·정렬이 제각각이던 것을 **같은 크기 칸 12개**로 통일.
+  - 묶음: 오늘(출석·상자·할 일) / 익히기(미니게임·오답 복습·왕조 계보) / 기록(계급·배지함·급제자 명단) / 설정(로그인·배경음악·기록 초기화). 12 = 4묶음 × 3칸이라 줄이 딱 맞는다.
+  - 넓은 화면(가로)에선 묶음이 2열로 앉아 **스크롤 없이 한 화면**(패널 600×317, 회전 시 wrap 844×390 안에 들어감).
+  - 아이콘은 **CSS mask + data URI**로 바깥에서 씌운다 — auth-btn/bgm-mute-toggle이 innerHTML을 통째로 다시 써도 아이콘이 안 지워진다(안에 원래 있던 svg/img는 CSS로 감춤).
+  - 머리줄: 제목(Gugi) · 금/기력 알약 · 닫기 X. 판 위 금박 한 줄, 뒷배경 blur(7px).
+  - 여는 연출: 판 fade-up + 칸 16ms 시차. **시작 투명도 0이 아니라 .35** — 애니메이션이 멈춰도 칸이 사라지지 않게(실패-안전, inkwipe 교훈 적용).
+- 검증: 12개 단추 클릭 → 해당 오버레이 전부 열림 확인, BGM 아이콘 끔/켬 전환 확인, 로그인창 열림+아이콘 유지 확인, 콘솔 0건. 회전/비회전 두 뷰포트 모두 넘침 없음.
+  - **브라우저 패널은 document.visibilityState='hidden'이라 rAF·CSS 애니메이션이 멈춘다** — 레이아웃 측정은 resize_window로 뷰포트를 강제하면 되지만, 애니메이션 확인은 불가(실기기/시뮬레이터 몫).
+- **로그인 실패 원인 규명**: `auth/unauthorized-domain`. 코드 문제 아님 — Firebase 콘솔 Authentication → Settings → 승인된 도메인에 `tjddlf0224-sudo.github.io` 추가 필요(유저 몫). iOS 앱은 네이티브 로그인이라 무관.
+- v26, 커밋 e554f5b 푸시(웹+iOS 동시).
