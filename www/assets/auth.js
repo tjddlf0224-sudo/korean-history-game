@@ -86,6 +86,27 @@ window.Auth = (function(){
     await auth.signOut();
   }
 
+  /* ============ 계정 삭제 ============
+     애플 심사 요구사항이다(5.1.1(v)): 앱 안에서 계정을 만들 수 있으면
+     앱 안에서 지울 수도 있어야 한다. 없으면 심사에서 떨어진다.
+
+     지우는 것: 파이어베이스 계정, 랭킹에 올린 내 문서(khg_rank/<uid>).
+     안 지우는 것: 이 기기의 게임 기록(localStorage) — 계정과 무관하게
+     기기에 있는 것이고, 지우고 싶으면 메뉴의 '진행 기록 초기화'가 따로 있다.
+     학습 통계(khg_qstats)는 익명 집계라 사람과 연결되지 않는다.
+
+     '최근 로그인' 문제: 파이어베이스는 보안상 로그인한 지 오래된 계정의
+     삭제를 거부한다(auth/requires-recent-login). 그때는 방금 다시 로그인하고
+     눌러 달라고 안내한다 — 여기서 몰래 재인증을 돌리면 더 헷갈린다. */
+  async function deleteAccount(){
+    if (!auth || !user) throw new Error('로그인 상태가 아닙니다');
+    const uid = user.uid;
+    // 랭킹 문서부터 지운다 — 계정을 먼저 지우면 권한이 사라져 못 지운다
+    try { if (db) await db.collection('khg_rank').doc(uid).delete(); }
+    catch(e){ /* 규칙이 삭제를 막고 있으면 계정만 지운다. 문서는 콘솔에서 지울 수 있다. */ }
+    await user.delete();
+  }
+
   /* ---------------- 화면 ---------------- */
   let injected = false;
   function css(){
@@ -99,6 +120,10 @@ window.Auth = (function(){
     #auth-btn:active { transform:scale(.97); }
     #auth-btn img { width:20px; height:20px; border-radius:50%; }
 
+    #auth-ov .del { display:none; margin-top:2px; background:none; border:0;
+      color:#a05a4a; font-family:inherit; font-size:12px; cursor:pointer;
+      text-decoration:underline; text-underline-offset:3px; padding:4px; }
+    #auth-ov.in .del { display:block; }
     #auth-ov { position:absolute; inset:0; z-index:9000; display:none;
       align-items:center; justify-content:center; background:rgba(8,6,3,.9);
       font-family:"Gowun Batang",serif; }
@@ -138,6 +163,7 @@ window.Auth = (function(){
       '<button class="p g" id="auth-g">' + G_ICON + ' 구글로 계속하기</button>' +
       '<button class="p a" id="auth-a">' + A_ICON + ' Apple로 계속하기</button>' +
       '<button class="p out" id="auth-out">로그아웃</button>' +
+      '<button class="del" id="auth-del">계정 삭제</button>' +
       '<div class="err" id="auth-err"></div>' +
       '<button class="close" id="auth-x">닫기</button></div>';
     // **#wrap 안에** 넣는다 — 밖이면 세로 모드에서 rotate(90deg)를 못 물려받아
@@ -153,6 +179,32 @@ window.Auth = (function(){
     document.getElementById('auth-g').onclick = wrap(signInGoogle);
     document.getElementById('auth-a').onclick = wrap(signInApple);
     document.getElementById('auth-out').onclick = wrap(signOut);
+    // 계정 삭제는 두 번 눌러야 한다 — 한 번에 지워지는 삭제는 사고를 만든다
+    const delBtn = document.getElementById('auth-del');
+    let delArmed = 0;
+    delBtn.onclick = async () => {
+      err('');
+      if (Date.now() - delArmed > 6000){
+        delArmed = Date.now();
+        delBtn.textContent = '정말 지우시겠습니까? 한 번 더 누르면 지웁니다';
+        setTimeout(() => { if (Date.now() - delArmed >= 6000){
+          delBtn.textContent = '계정 삭제'; } }, 6200);
+        return;
+      }
+      delArmed = 0;
+      delBtn.textContent = '지우는 중…';
+      try {
+        await deleteAccount();
+        delBtn.textContent = '계정 삭제';
+        err('계정을 지웠습니다. 이 기기의 게임 기록은 남아 있습니다.');
+        render();
+      } catch(e){
+        delBtn.textContent = '계정 삭제';
+        if (/requires-recent-login/i.test((e && e.code) || '')){
+          err('보안을 위해 방금 로그인한 상태에서만 지울 수 있습니다.\n로그아웃 후 다시 로그인하고 눌러 주세요.');
+        } else err(msgOf(e));
+      }
+    };
     document.getElementById('auth-x').onclick = close;
     d.onclick = e => { if (e.target === d) close(); };
   }
@@ -187,6 +239,9 @@ window.Auth = (function(){
     }
     const out = document.getElementById('auth-out');
     if (out) out.style.display = user ? 'flex' : 'none';
+    // 계정 삭제는 로그인 상태에서만 보인다(.in 이 붙어야 CSS가 내보인다)
+    const ov = document.getElementById('auth-ov');
+    if (ov) ov.classList.toggle('in', !!user);
     const sub = document.getElementById('auth-sub');
     if (sub) sub.style.display = user ? 'none' : 'block';
   }
