@@ -355,8 +355,8 @@ window.Boss = (function(){
       '<div class="card">' +
         '<div class="ttl">' + (won ? '승리' : '패배') + '</div>' +
         '<div class="sub">' + (won
-          ? `${S.name}${objJosa(S.name)} 논파했다.<br>맞힌 문제 ${S.hit}개 · 최고 연속 ${S.best}`
-          : '아직 이르다. 대사를 다시 듣고 오면 이길 수 있다.') + '</div>' +
+          ? `${S.name}${objJosa(S.name)} 논파했습니다.<br>맞힌 문제 ${S.hit}개 · 최고 연속 ${S.best}`
+          : '아직 이릅니다. 대사를 다시 듣고 오면 이길 수 있습니다.') + '</div>' +
         '<button id="bs-close">' + (won ? '계속' : '돌아가기') + '</button>' +
       '</div>';
     arena.appendChild(end);

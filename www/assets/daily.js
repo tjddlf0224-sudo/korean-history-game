@@ -176,8 +176,8 @@ window.Daily = (function(){
       `<div class="n">${i + 1}일</div><div class="g">${r.gold}</div></div>`).join('');
     const d = ov('dy-att',
       '<h3>출석</h3>' +
-      `<div class="sub">${done ? '오늘 몫은 받았다. 내일 또 오면 다음 칸이다.'
-                              : '오늘 몫을 받아 가라.'}</div>` +
+      `<div class="sub">${done ? '오늘 몫은 받으셨습니다. 내일 또 오시면 다음 칸입니다.'
+                              : '오늘 몫을 받아 가세요.'}</div>` +
       `<div class="dy-track">${track}</div>` +
       (done ? '' : '<button class="hi" id="dy-c">받기</button>' +
                    '<button id="dy-c2">광고 보고 두 배로 받기</button>') +
@@ -195,7 +195,7 @@ window.Daily = (function(){
       b2.disabled = true; b2.textContent = '광고 준비 중…';
       const ok = window.Ads ? await Ads.rewarded() : false;
       if (!ok){ b2.disabled = false; b2.textContent = '광고 보고 두 배로 받기';
-                msg('광고를 끝까지 보지 않았다.'); return; }
+                msg('광고를 끝까지 보지 않으셨습니다.'); return; }
       const r = claim(true);
       if (r) msg(`두 배! 금 ${r.gold}, 기력 ${r.eng}`);
       setTimeout(openAttendance, 900);
@@ -207,14 +207,12 @@ window.Daily = (function(){
     const free = boxLeft(), ad = adBoxLeft();
     const d = ov('dy-box',
       '<h3>시대 상자</h3>' +
-      '<div class="sub">금·기력·콤보 지키기가 들어 있다.<br>' +
-      '<span style="font-size:11.5px;color:#8d7f66">유물과 인물은 안 들어 있다 — ' +
-      '그건 지도에서 찾고 말을 걸어야 얻는다.</span></div>' +
+      '<div class="sub">금·기력·콤보 지키기가 들어 있습니다.</div>' +
       '<div class="dy-loot" id="dy-l"></div>' +
       `<button class="hi" id="dy-f"${free ? '' : ' disabled'}>` +
-      `${free ? '오늘의 무료 상자' : '오늘 무료 상자는 다 썼다'}</button>` +
+      `${free ? '오늘의 무료 상자' : '오늘 무료 상자를 다 쓰셨습니다'}</button>` +
       `<button id="dy-a"${ad ? '' : ' disabled'}>` +
-      `${ad ? '광고 보고 한 번 더' : '광고 몫도 다 썼다'}</button>` +
+      `${ad ? '광고 보고 한 번 더' : '광고 몫도 다 쓰셨습니다'}</button>` +
       `<button id="dy-g">금 ${GOLD_BOX}으로 한 번 더</button>` +
       '<div class="msg" id="dy-bm"></div>' +
       '<button id="dy-bx">닫기</button>');
@@ -222,18 +220,18 @@ window.Daily = (function(){
     const loot = t => { const l = d.querySelector('#dy-l'); if (l) l.textContent = t || ''; };
     const msg = t => { const m = d.querySelector('#dy-bm'); if (m) m.textContent = t || ''; };
     const show = x => { if (x){ loot(x.nm); msg(''); setTimeout(openBox, 1300); }
-                        else msg('열지 못했다.'); };
+                        else msg('열지 못했습니다.'); };
     d.querySelector('#dy-f').onclick = () => show(openFree());
     d.querySelector('#dy-g').onclick = () => {
       const x = openByGold(GOLD_BOX);
-      show(x); if (!x) msg('금이 모자란다.');
+      show(x); if (!x) msg('금이 모자랍니다.');
     };
     d.querySelector('#dy-a').onclick = async () => {
       const b = d.querySelector('#dy-a');
       b.disabled = true; b.textContent = '광고 준비 중…';
       const x = await openByAd();
       if (!x){ b.disabled = false; b.textContent = '광고 보고 한 번 더';
-               msg('광고를 끝까지 보지 않았다.'); return; }
+               msg('광고를 끝까지 보지 않으셨습니다.'); return; }
       show(x);
     };
   }

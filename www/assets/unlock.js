@@ -22,7 +22,7 @@ window.Unlock = (function(){
   /* 계급 → 그 계급에서 열리는 것들. rank.js의 TIERS와 minLv를 그대로 따른다. */
   const GATES = [
     { tier:'nobi',    lv:1,  name:'노비',
-      opens:[], desc:'대화·퀴즈·유물 줍기·오답 복습·자동 이동은 처음부터 다 된다.' },
+      opens:[], desc:'기본 기능은 처음부터 모두 쓸 수 있습니다.' },
     { tier:'yangin',  lv:6,  name:'양인',
       opens:[ ['heroes',   '인물 도감'],
               ['mg_match', '미니게임 · 유물 짝 맞추기'] ] },
@@ -67,7 +67,7 @@ window.Unlock = (function(){
   function deny(id){
     const g = gateOf(id);
     if (!g) return;
-    toast(`${g.name}이 되면 열린다 (Lv.${g.lv})`);
+    toast(`${g.name}이 되면 열립니다 (Lv.${g.lv})`);
   }
 
   let injected = false;

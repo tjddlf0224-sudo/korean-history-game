@@ -458,7 +458,7 @@
 </div>
 
 <script src="assets/map/map_component.js?v=7"></script>
-<script src="assets/audio.js?v=24"></script>
+<script src="assets/audio.js?v=25"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -470,7 +470,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=24';   // 계정삭제·광고SDK
+const ART_V = '?v=25';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -2084,38 +2084,38 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
-<script src="assets/badges.js?v=24"></script>
-<script src="assets/streak.js?v=24"></script>
+<script src="assets/badges.js?v=25"></script>
+<script src="assets/streak.js?v=25"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=24"></script>
-  <script src="assets/fx.js?v=24"></script>
-  <script src="assets/deed.js?v=24"></script>
-  <script src="assets/inkwipe.js?v=24"></script>
-  <script src="assets/dash.js?v=24"></script>
-<script src="assets/juice.js?v=24"></script>
-  <script src="assets/difficulty.js?v=24"></script>
-  <script src="assets/nextauto.js?v=24"></script>
-<script src="assets/heroes_data.js?v=24"></script>
-<script src="assets/heroes.js?v=24"></script>
-<script src="assets/icons.js?v=24"></script>
-<script src="assets/srs.js?v=24"></script>
-<script src="assets/newsflash.js?v=24"></script>
-<script src="assets/timeline.js?v=24"></script>
-<script src="assets/journey.js?v=24"></script>
-<script src="assets/season.js?v=24"></script>
-<script src="assets/items.js?v=24"></script>
-  <script src="assets/gold.js?v=24"></script>
-  <script src="assets/ads.js?v=24"></script>
-  <script src="assets/energy.js?v=24"></script>
-  <script src="assets/daily.js?v=24"></script>
-  <script src="assets/unlock.js?v=24"></script>
-  <script src="assets/guide.js?v=24"></script>
-  <script src="assets/minigames.js?v=24"></script>
-  <script src="assets/quests.js?v=24"></script>
-  <script src="assets/offline.js?v=24"></script>
-  <script src="assets/telemetry.js?v=24"></script>
-<script src="assets/autowalk.js?v=24"></script>
-<script src="assets/boss.js?v=24"></script>
+<script src="assets/rank.js?v=25"></script>
+  <script src="assets/fx.js?v=25"></script>
+  <script src="assets/deed.js?v=25"></script>
+  <script src="assets/inkwipe.js?v=25"></script>
+  <script src="assets/dash.js?v=25"></script>
+<script src="assets/juice.js?v=25"></script>
+  <script src="assets/difficulty.js?v=25"></script>
+  <script src="assets/nextauto.js?v=25"></script>
+<script src="assets/heroes_data.js?v=25"></script>
+<script src="assets/heroes.js?v=25"></script>
+<script src="assets/icons.js?v=25"></script>
+<script src="assets/srs.js?v=25"></script>
+<script src="assets/newsflash.js?v=25"></script>
+<script src="assets/timeline.js?v=25"></script>
+<script src="assets/journey.js?v=25"></script>
+<script src="assets/season.js?v=25"></script>
+<script src="assets/items.js?v=25"></script>
+  <script src="assets/gold.js?v=25"></script>
+  <script src="assets/ads.js?v=25"></script>
+  <script src="assets/energy.js?v=25"></script>
+  <script src="assets/daily.js?v=25"></script>
+  <script src="assets/unlock.js?v=25"></script>
+  <script src="assets/guide.js?v=25"></script>
+  <script src="assets/minigames.js?v=25"></script>
+  <script src="assets/quests.js?v=25"></script>
+  <script src="assets/offline.js?v=25"></script>
+  <script src="assets/telemetry.js?v=25"></script>
+<script src="assets/autowalk.js?v=25"></script>
+<script src="assets/boss.js?v=25"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2143,7 +2143,7 @@ const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vert
    그래서 우리 하늘을 직접 재어 칠정산을 만들었다. 이 화는 그걸 여기서 겪게 한다. */
 if (window.Deed) Deed.add({
   id: 'ganui_gwancheuk', zone: 'ganuidae', x: 736, y: 392, range: 175,
-  label: '별을 재어 본다', tag: '간 의 대',
+  label: '별 재어 보기', tag: '간 의 대',
   lines: [
     '관원이 간의 앞으로 부른다.<br>"눈을 여기 대고, 저 별이 눈금 어디에 오는지 읽으시오."',
     '밤바람에 눈이 시리다. 별이 천천히 눈금을 지난다.<br>읽은 숫자를 부르자 옆에서 받아 적는다.',

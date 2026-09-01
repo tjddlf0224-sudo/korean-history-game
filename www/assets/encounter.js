@@ -79,7 +79,7 @@ window.Encounter = (function(){
       (e.img ? `<img src="${e.img}" alt="">` : '') +
       (e.cry ? `<div class="cry">${e.cry}</div>` : '') +
       (e.lead ? `<div class="lead">${e.lead}</div>` : '') +
-      '<div class="sm">아무 데나 눌러 계속</div></div>';
+      '<div class="sm">화면을 누르면 계속됩니다</div></div>';
     d.classList.add('show');
     if (window.Fx){ Fx.punch(.12, 460); Fx.shake(15, 520); Fx.lines(420); }
     try { if (navigator.vibrate) navigator.vibrate([60, 40, 80]); } catch(err){}

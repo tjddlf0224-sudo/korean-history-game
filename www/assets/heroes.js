@@ -99,10 +99,10 @@ window.Heroes = (function(){
 
      ★(각성)이면 한 단계 세진다. 다시 와서 제대로 풀 이유가 여기에도 걸린다. */
   const ABIL = {
-    king:     { id:'mang', name:'인망', han:'望', desc:'경험치를 더 얻는다' },
-    scholar:  { id:'sik',  name:'학식', han:'識', desc:'틀려도 연속이 한 번 버틴다' },
-    general:  { id:'dam',  name:'담력', han:'膽', desc:'보스전에서 한 번 버틴다' },
-    commoner: { id:'an',   name:'안목', han:'眼', desc:'유물을 더 멀리서 알아본다' },
+    king:     { id:'mang', name:'인망', han:'望', desc:'경험치를 더 얻습니다' },
+    scholar:  { id:'sik',  name:'학식', han:'識', desc:'틀려도 연속이 한 번 버팁니다' },
+    general:  { id:'dam',  name:'담력', han:'膽', desc:'보스전에서 한 번 버팁니다' },
+    commoner: { id:'an',   name:'안목', han:'眼', desc:'유물을 더 멀리서 알아봅니다' },
   };
 
   function abilOf(k){
@@ -154,7 +154,7 @@ window.Heroes = (function(){
   function trySik(){
     if (sikUsed || power('sik') <= 0) return false;
     sikUsed = true;
-    toast('학식 — 연속이 끊기지 않았다');
+    toast('학식 — 연속이 끊기지 않았습니다');
     return true;
   }
   function toast(t){
@@ -376,7 +376,7 @@ window.Heroes = (function(){
     const left = total() - got;
     document.getElementById('hero-cnt').textContent =
       `${got} / ${total()} 명` + (st ? ` · ★ ${st}` : '') +
-      (left ? ` · ${left}명이 아직 그림자다` : ' · 다 만났다');
+      (left ? ` · ${left}명이 아직 그림자입니다` : ' · 다 만나셨습니다');
 
     // 시대별로 묶어 보여 준다(챕터 목록과 같은 순서)
     const byEra = [];
@@ -425,7 +425,7 @@ window.Heroes = (function(){
       lines.push(`<b>${a.name}</b> ${a.desc}`);
     }
     el.innerHTML = slots +
-      `<div class="info">${p.length ? lines.join('<br>') : '동료를 두 명까지 데려갈 수 있다.<br>인물을 눌러 정한다.'}</div>`;
+      `<div class="info">${p.length ? lines.join('<br>') : '동료를 두 명까지 데려갈 수 있습니다.<br>인물을 눌러 정하세요.'}</div>`;
   }
 
   function showDetail(k){
@@ -436,7 +436,7 @@ window.Heroes = (function(){
     el.innerHTML = `<div class="dn">${d.n}${s.have[k] === 2 ? ' <span style="color:#ffd970">★</span>' : ''}</div>` +
       `<div class="de">${d.e}</div>` +
       `<div class="dd">${chs > 1 ? `${chs}개 화에 나온다. ` : ''}` +
-      (s.have[k] === 2 ? '모든 물음에 한 번에 답했다.' : '이야기를 끝까지 들었다.') + '</div>' +
+      (s.have[k] === 2 ? '모든 물음을 한 번에 맞히셨습니다.' : '이야기를 끝까지 들으셨습니다.') + '</div>' +
       (a ? `<div class="dd" style="margin-top:6px"><b style="color:#c9a24a">${a.han} ${a.name}</b>` +
            `${a.lv > 1 ? ' <span style="color:#ffd970">Ⅱ</span>' : ''} — ${a.desc}</div>` : '') +
       `<button class="join" data-k="${k}">${inParty(k) ? '동행 그만두기' : '데리고 가기'}</button>`;

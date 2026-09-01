@@ -74,9 +74,9 @@ window.Mini = (function(){
 
   const GAMES = {
     mg_match: { name: '유물 짝 맞추기', gate: 'mg_match', make: makeMatch,
-                hint: '유물과 그 시대를 이어 보라' },
+                hint: '유물과 그 시대를 이어 보세요' },
     mg_face:  { name: '초상 알아맞히기', gate: 'mg_face', make: makeFace,
-                hint: '얼굴을 보고 이름을 고르라' },
+                hint: '얼굴을 보고 이름을 골라 보세요' },
   };
 
   /* ---------------- 화면 ---------------- */
@@ -159,7 +159,7 @@ window.Mini = (function(){
       ad.disabled = true; ad.textContent = '광고 준비 중…';
       const ok = window.Ads ? await Ads.rewarded() : false;
       if (!ok){ ad.disabled = false; ad.textContent = '광고 보고 한 번 더';
-                d.querySelector('#mg-m').textContent = '광고를 끝까지 보지 않았다.'; return; }
+                d.querySelector('#mg-m').textContent = '광고를 끝까지 보지 않으셨습니다.'; return; }
       st.adUsed++; st.used = Math.max(0, st.used - 1); save(st);
       open();
     };
@@ -221,7 +221,7 @@ window.Mini = (function(){
       } else {
         miss++; b.classList.add('bad');
         setTimeout(() => b.classList.remove('bad'), 500);
-        msg('그 시대가 아니다.');
+        msg('그 시대가 아닙니다.');
         if (window.Juice) Juice.wrong();
       }
     });
@@ -247,7 +247,7 @@ window.Mini = (function(){
 
   function finish(score, total, miss){
     const g = reward(score, total);
-    panel('<h3>' + (score === total ? '다 맞혔다' : '끝') + '</h3>' +
+    panel('<h3>' + (score === total ? '다 맞히셨습니다' : '끝') + '</h3>' +
       `<div class="sub">${score} / ${total}${miss ? ` · 틀린 횟수 ${miss}` : ''}</div>` +
       `<div style="text-align:center;font-size:26px;color:#f0c96b;font-weight:700">금 +${g}</div>` +
       '<button class="hi" id="mg-again">더 하기</button>' +

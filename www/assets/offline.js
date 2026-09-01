@@ -112,10 +112,10 @@ window.Offline = (function(){
     let d = document.getElementById('of-ov');
     if (!d){ d = document.createElement('div'); d.id = 'of-ov'; layer().appendChild(d); }
     d.innerHTML = '<div class="panel">' +
-      '<div class="tag">그 대 가  없 는  사 이</div>' +
-      `<div class="ln">${p.ms ? fmt(p.ms) + ' 동안 ' : ''}배운 것이 익었다.</div>` +
+      '<div class="tag">자 리 를  비 우 신  사 이</div>' +
+      `<div class="ln">${p.ms ? fmt(p.ms) + ' 동안 ' : ''}배운 것이 익었습니다.</div>` +
       `<div class="big">금 ${p.gold}</div>` +
-      (p.capped ? '<div class="sm">여덟 시간치까지만 쌓인다.</div>' : '') +
+      (p.capped ? '<div class="sm">여덟 시간치까지만 쌓입니다.</div>' : '') +
       '<button class="hi" id="of-take">받기</button>' +
       '<button id="of-ad">광고 보고 두 배로</button>' +
       '<div class="sm" id="of-msg"></div></div>';
@@ -131,7 +131,7 @@ window.Offline = (function(){
       const ok = window.Ads ? await Ads.rewarded() : false;
       if (!ok){
         b.disabled = false; b.textContent = '광고 보고 두 배로';
-        d.querySelector('#of-msg').textContent = '광고를 끝까지 보지 않았다.';
+        d.querySelector('#of-msg').textContent = '광고를 끝까지 보지 않으셨습니다.';
         return;
       }
       if (window.Gold) Gold.earn(p.gold * 2, '없는 사이 · 두 배');

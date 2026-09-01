@@ -156,11 +156,11 @@ window.Gold = (function(){
     // 유물 탐지는 재상부터 — 지도를 다 걸어 본 사람에게 주는 편의다
     if (!window.Unlock || Unlock.has('scan')) out.push(
       { id:'scan', nm:'유물 탐지', price:scan,
-        ds:'이 구역에서 아직 못 찾은 유물 자리가 잠시 빛난다.' +
-           (hasMap ? ' 대동여지도를 지녀 값이 싸다.' : '') });
+        ds:'이 구역에서 아직 못 찾은 유물 자리가 잠시 빛납니다.' +
+           (hasMap ? ' 대동여지도를 지녀 값이 쌉니다.' : '') });
     out.push(
       { id:'shield', nm:'콤보 지키기', price:PRICE.shield,
-        ds:'다음에 한 번 틀려도 콤보가 끊기지 않는다.' +
+        ds:'다음에 한 번 틀려도 콤보가 끊기지 않습니다.' +
            (st.shield ? ` (지금 ${st.shield}개)` : '') });
     // 군자금 후원은 상점에서 뺐다 — 선사시대에서도 임시정부에 후원할 수
     // 있었기 때문이다. 이제 금붙이를 지니고 임시정부 청사에 서 있을 때만
@@ -203,13 +203,13 @@ window.Gold = (function(){
   function say(t){ const m = document.getElementById('gold-msg'); if (m) m.textContent = t; }
 
   function buy(id, price){
-    if (!spend(price)){ say('금이 모자란다.'); return; }
+    if (!spend(price)){ say('금이 모자랍니다.'); return; }
     if (id === 'scan'){
       const n = scanSpots();
-      say(n ? `이 구역에 아직 ${n}곳이 남아 있다.` : '이 구역에는 남은 것이 없다.');
+      say(n ? `이 구역에 아직 ${n}곳이 남아 있다.` : '이 구역에는 남은 것이 없습니다.');
       document.getElementById('gold-ov').classList.remove('show');
     } else if (id === 'shield'){
-      st.shield++; save(st); say('콤보를 한 번 지켜 준다.');
+      st.shield++; save(st); say('콤보를 한 번 지켜 줍니다.');
     }
     open();
   }

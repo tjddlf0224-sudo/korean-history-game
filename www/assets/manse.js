@@ -154,7 +154,7 @@ window.Manse = (function(){
     if (busy){ b.classList.remove('on'); return; }
 
     if (zone === opt.squareZone && !done('shouted')){
-      b.textContent = '함께 만세를 부른다';
+      b.textContent = '함께 만세 부르기';
       b.onclick = () => { b.classList.remove('on'); shout(opt.onJail); };
       b.classList.add('on');
       return;
@@ -162,7 +162,7 @@ window.Manse = (function(){
     if (zone === opt.jailZone && !done('released')){
       const n = heard();
       if (n >= PRISONERS.length){
-        b.textContent = '…걸어 나간다';
+        b.textContent = '…걸어 나가기';
         b.onclick = () => { b.classList.remove('on'); release(opt.onOut); };
         b.classList.add('on');
       } else {

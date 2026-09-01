@@ -69,7 +69,7 @@ window.Deed = (function(){
     if (!d){
       d = document.createElement('div'); d.id = 'dd-ov';
       d.innerHTML = '<div class="box"><div class="tag"></div><div class="ln"></div>' +
-                    '<div class="sm">아무 데나 눌러 계속</div></div>';
+                    '<div class="sm">화면을 누르면 계속됩니다</div></div>';
       layer().appendChild(d);
     }
     d.classList.add('show');
@@ -120,7 +120,7 @@ window.Deed = (function(){
     for (const s of LIST){
       if (s.zone !== W.zone || done(s.id)) continue;
       if (Math.hypot(W.px - s.x, W.py - s.y) <= (s.range || 160)){
-        b.textContent = s.label || '해 본다';
+        b.textContent = s.label || '해 보기';
         b.onclick = () => { b.classList.remove('on'); run(s, W); };
         b.classList.add('on');
         return;

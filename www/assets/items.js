@@ -516,7 +516,7 @@ window.Items = (function(){
     // 남은 수를 같이 적는다 — "몇 개 모았나"보다 "몇 개 남았나"가 더 끌어당긴다
     const left = all.length - mine.length;
     document.getElementById('bag-cnt').textContent =
-      `${mine.length} / ${all.length} 종` + (left ? ` · ${left}개가 아직 그림자다` : ' · 다 채웠다');
+      `${mine.length} / ${all.length} 종` + (left ? ` · ${left}개가 아직 그림자입니다` : ' · 다 채우셨습니다');
     const g = document.getElementById('bag-grid');
     g.innerHTML = '';
     for (const id of all){

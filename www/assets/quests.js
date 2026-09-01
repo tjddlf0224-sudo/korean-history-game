@@ -42,16 +42,16 @@ window.Quests = (function(){
     { id:'d_first',  name:'첫 시도로 10문항 맞히기', need:10, gold:40,
       hint:'찍지 않고 아는 것으로', get:() => st.prog.first || 0 },
     { id:'d_relic',  name:'유물 하나 찾아내기', need:1, gold:35,
-      hint:'표식은 없다 — 걸어 다니다 보면 행동 단추가 바뀐다',
+      hint:'지도를 걷다 보면 행동 단추가 바뀝니다',
       get:() => st.prog.relic || 0 },
     { id:'d_talk',   name:'새로운 사람 셋과 대화하기', need:3, gold:35,
       hint:'머리 위에 !가 뜬 사람', get:() => st.prog.talk || 0 },
     { id:'d_combo',  name:'연속 8 만들기', need:8, gold:45,
-      hint:'첫 시도로 이어서 맞히면 쌓인다', get:() => st.prog.combo || 0 },
+      hint:'첫 시도로 이어서 맞히면 쌓입니다', get:() => st.prog.combo || 0 },
     { id:'d_mini',   name:'미니게임 한 판', need:1, gold:30,
-      hint:'계급이 올라야 열린다', get:() => st.prog.mini || 0 },
+      hint:'계급이 오르면 열립니다', get:() => st.prog.mini || 0 },
     { id:'d_chapter',name:'챕터 하나 끝내기', need:1, gold:60,
-      hint:'끝까지 가면 시대의 열쇠에 가까워진다', get:() => st.prog.chapter || 0 },
+      hint:'끝까지 가면 시대의 열쇠에 가까워집니다', get:() => st.prog.chapter || 0 },
   ];
 
   /* 날짜를 씨앗으로 오늘 것 셋을 고른다 — 하루 동안 안 바뀐다 */

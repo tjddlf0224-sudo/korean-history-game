@@ -174,11 +174,11 @@ window.Energy = (function(){
       btn.disabled = true; btn.textContent = '광고 준비 중…';
       const ok = await refillByAd();
       btn.disabled = false; btn.textContent = '광고 보고 기력 2 받기';
-      say(ok ? '기력 2를 받았다.' : '광고를 끝까지 보지 않아 받지 못했다.');
+      say(ok ? '기력 2를 받았습니다.' : '광고를 끝까지 보지 않아 받지 못했습니다.');
       paint();
     };
     d.querySelector('#eng-gold').onclick = () => {
-      say(refillByGold() ? '기력 1을 채웠다.' : '금이 모자란다.');
+      say(refillByGold() ? '기력 1을 채웠습니다.' : '금이 모자랍니다.');
       paint();
     };
   }
@@ -193,7 +193,7 @@ window.Energy = (function(){
     const sub = document.getElementById('eng-sub');
     if (sub){
       sub.innerHTML = n >= MAX
-        ? '가득 찼다.'
+        ? '가득 찼습니다.'
         : `다음 한 개까지 ${fmt(nextIn())}<br>` +
           '<span style="font-size:11.5px;color:#8d7f66">기력이 없어도 챕터는 그대로 진행된다.<br>' +
           '다시 붙거나 서두를 때만 쓴다.</span>';
@@ -211,7 +211,7 @@ window.Energy = (function(){
   /* 기력이 필요한 자리에서 부른다. 모자라면 충전 창을 띄우고 false. */
   function tryUse(n){
     if (spend(n || 1)) return true;
-    open(); say('기력이 모자란다.');
+    open(); say('기력이 모자랍니다.');
     return false;
   }
 

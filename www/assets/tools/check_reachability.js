@@ -12,7 +12,9 @@ const fs = require('fs');
 const path = require('path');
 
 const WWW = path.join(__dirname, '..', '..');
-const SKIP = new Set(['index.html', '_smoke.html', 'ch0_phaser.html', 'exam_practice.html', '_ranktest.html', '_bosstest.html']);
+const SKIP = new Set(['index.html', '_smoke.html', 'ch0_phaser.html', 'exam_practice.html', '_ranktest.html', '_bosstest.html',
+  // 게임 화면이 아닌 문서·연출 페이지 — 구역이 없는 게 정상이다
+  'privacy.html', 'ending.html', 'prologue.html']);
 
 /* 게임 쪽 상수·판정과 반드시 같아야 하는 값들 (chapter HTML에서 그대로 읽어옴) */
 function extractConsts(src){

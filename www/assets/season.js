@@ -202,14 +202,14 @@ window.Season = (function(){
       `<h3>이달의 시대 — ${p.era.name}</h3>` +
       `<div class="sub">${daysLeft()}일 남았다 · 이 시대 챕터는 금을 두 배로 준다</div>` +
       rows +
-      (rdy ? `<button class="hi" id="sn-claim">다 끝냈다 · 금 ${REWARD()} 받기</button>`
-           : (claimed() ? '<button disabled>상을 받았다</button>' : '')) +
-      '<div class="why">달이 바뀌면 다음 시대에 불이 켜진다. ' +
-      '이달의 시대가 아니어도 다른 챕터는 그대로 다 할 수 있다.</div>' +
+      (rdy ? `<button class="hi" id="sn-claim">다 끝냈습니다 · 금 ${REWARD()} 받기</button>`
+           : (claimed() ? '<button disabled>상을 받았습니다</button>' : '')) +
+      '<div class="why">달이 바뀌면 다음 시대에 불이 켜집니다. ' +
+      '이달의 시대가 아니어도 다른 챕터는 그대로 다 할 수 있습니다.</div>' +
       '<button id="sn-close">닫기</button></div>';
     d.classList.add('show');
     const c = d.querySelector('#sn-claim');
-    if (c) c.onclick = () => { const g = claim(); c.textContent = `금 ${g}을 받았다`;
+    if (c) c.onclick = () => { const g = claim(); c.textContent = `금 ${g}을 받았습니다`;
                                c.disabled = true; mountBand(); };
     d.querySelector('#sn-close').onclick = () => d.classList.remove('show');
   }

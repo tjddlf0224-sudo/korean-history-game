@@ -166,10 +166,10 @@ window.Juice = (function(){
      구간마다 풀을 나눠 두고 그 안에서 무작위로 고른다. 같은 말이 반복되면
      금세 눈에 안 들어오기 때문이다. 사극 말투로 통일했다. */
   const PRAISE = [
-    { at: 3,  pool: ['제법이로다', '옳거니', '잘 아는구나'] },
-    { at: 5,  pool: ['훌륭하다!', '과연!', '대단하구나!'] },
-    { at: 8,  pool: ['놀랍도다!', '가히 으뜸이라!', '이 정도라니!'] },
-    { at: 12, pool: ['천하에 둘도 없다!', '경이롭도다!', '이는 신묘하다!'] },
+    { at: 3,  pool: ['제법이십니다', '옳거니', '잘 아는구나'] },
+    { at: 5,  pool: ['훌륭하십니다!', '과연!', '대단하구나!'] },
+    { at: 8,  pool: ['놀라우십니다!', '가히 으뜸이십니다!', '이 정도라니!'] },
+    { at: 12, pool: ['천하에 둘도 없으십니다!', '경이로우십니다!', '가히 신묘하십니다!'] },
   ];
   function praiseFor(n){
     let hit = null;
@@ -301,14 +301,14 @@ window.Juice = (function(){
     const L = layer();
     const d = document.createElement('div');
     d.className = 'jc-revive';
-    d.innerHTML = `<b>연속 ${had}이 끊겼다</b>` +
+    d.innerHTML = `<b>연속 ${had}이 끊겼습니다</b>` +
       '<button data-k="ad">광고 보고 되살리기</button>' +
       '<button data-k="eng">기력 1로 되살리기</button>' +
-      '<button data-k="no" class="no">그냥 간다</button>';
+      '<button data-k="no" class="no">그냥 갈래요</button>';
     L.appendChild(d);
     let timer = setTimeout(shut, REVIVE_MS);
     function shut(){ clearTimeout(timer); reviveOpen = false; d.remove(); }
-    function restore(){ combo = had; renderCombo(); showPraise('되살렸다'); shut(); }
+    function restore(){ combo = had; renderCombo(); showPraise('되살렸습니다'); shut(); }
     d.querySelectorAll('button').forEach(b => {
       b.onclick = async () => {
         clearTimeout(timer);
@@ -316,13 +316,13 @@ window.Juice = (function(){
         if (k === 'no') return shut();
         if (k === 'eng'){
           if (window.Energy && Energy.spend(1)) return restore();
-          b.textContent = '기력이 없다'; timer = setTimeout(shut, 1600); return;
+          b.textContent = '기력이 없습니다'; timer = setTimeout(shut, 1600); return;
         }
         b.textContent = '광고 준비 중…';
         d.querySelectorAll('button').forEach(x => { x.disabled = true; });
         const ok = window.Ads ? await Ads.rewarded() : false;
         if (ok) return restore();
-        b.textContent = '못 받았다'; timer = setTimeout(shut, 1600);
+        b.textContent = '못 받았습니다'; timer = setTimeout(shut, 1600);
       };
     });
   }

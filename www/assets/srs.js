@@ -149,9 +149,9 @@ window.Srs = (function(){
       list.length ? `${list.length}문항 · 오늘 볼 것 ${dueN}` : '';
     const el = document.getElementById('srs-list');
     if (!list.length){
-      el.innerHTML = '<div class="empty">틀린 문제가 없다.<br>' +
+      el.innerHTML = '<div class="empty">틀린 문제가 없습니다.<br>' +
         '<span style="font-size:12px">틀린 문제는 여기 쌓여, 날이 지날수록<br>' +
-        '간격을 두고 다시 나타난다.</span></div>';
+        '간격을 두고 다시 나옵니다.</span></div>';
     } else {
       el.innerHTML = list.map(x => {
         const [ch, , ] = x.ref.split('|');
