@@ -42,6 +42,14 @@ window.Auth = (function(){
         render();
         listeners.forEach(f => { try { f(u); } catch(e){} });
       });
+      // 팝업이 막혀 리다이렉트로 다녀온 경우, 실패했으면 그 까닭을 보여 준다.
+      // 성공은 위의 onAuthStateChanged가 알아서 받는다.
+      auth.getRedirectResult().catch(e => {
+        // 로그인 창이 아직 안 떠 있을 수 있으니, 띄우고 그 자리에 적는다
+        redirectErr = msgOf(e);
+        const box = document.getElementById('auth-err');
+        if (box) box.textContent = redirectErr;
+      });
       return true;
     } catch(e){
       console.warn('파이어베이스 초기화 실패 — 로그인 없이 진행', e);
@@ -55,6 +63,25 @@ window.Auth = (function(){
             window.Capacitor.Plugins.FirebaseAuthentication) || null;
   }
 
+  /* 웹에서는 팝업으로 연다. 그런데 **사파리는 팝업을 자주 막는다** —
+     특히 아이폰에서 홈 화면에 담아 쓰는 경우, 팝업 자체가 열리지 않는다.
+     그때 그냥 실패로 끝내면 로그인할 길이 없어지므로, 같은 창을 그대로
+     넘겨 보내는 방식(redirect)으로 갈아탄다. 돌아오면 completeRedirect()가
+     받는다. 사용자가 스스로 닫은 경우는 갈아타지 않는다 — 취소한 것이다. */
+  function blockedPopup(e){
+    const c = (e && (e.code || e.message)) || '';
+    return /popup-blocked|operation-not-supported|web-storage-unsupported/i.test(c);
+  }
+  async function webSignIn(provider){
+    try {
+      await auth.signInWithPopup(provider);
+    } catch(e){
+      if (!blockedPopup(e)) throw e;
+      await auth.signInWithRedirect(provider);
+      // 여기서 화면이 넘어간다. 아래 줄은 실행되지 않는다.
+    }
+  }
+
   async function signInGoogle(){
     const np = nativePlugin();
     if (np){
@@ -63,7 +90,7 @@ window.Auth = (function(){
       await auth.signInWithCredential(
         firebase.auth.GoogleAuthProvider.credential(c.idToken, c.accessToken));
     } else {
-      await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+      await webSignIn(new firebase.auth.GoogleAuthProvider());
     }
   }
 
@@ -76,7 +103,7 @@ window.Auth = (function(){
       // rawNonce를 같이 넘겨야 한다 — 안 넘기면 애플이 토큰을 거부한다.
       await auth.signInWithCredential(p.credential({ idToken: c.idToken, rawNonce: c.nonce }));
     } else {
-      await auth.signInWithPopup(new firebase.auth.OAuthProvider('apple.com'));
+      await webSignIn(new firebase.auth.OAuthProvider('apple.com'));
     }
   }
 
@@ -220,7 +247,13 @@ window.Auth = (function(){
     return '로그인에 실패했습니다: ' + (e && e.message ? e.message : c);
   }
 
-  function open(){ mount(); render(); const d = document.getElementById('auth-ov'); if (d) d.classList.add('show'); }
+  let redirectErr = '';
+  function open(){
+    mount(); render();
+    const box = document.getElementById('auth-err');
+    if (box && redirectErr){ box.textContent = redirectErr; redirectErr = ''; }
+    const d = document.getElementById('auth-ov'); if (d) d.classList.add('show');
+  }
   function close(){ const d = document.getElementById('auth-ov'); if (d) d.classList.remove('show'); }
 
   function render(){
