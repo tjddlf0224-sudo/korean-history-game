@@ -29,7 +29,7 @@ window.Tidy = (function(){
     ['daily-quest',  '할 일'],
     ['daily-mini',   '미니게임'],
     ['daily-unlock', '계급'],
-    ['board-btn',    '과거 급제자 명단'],
+    ['board-btn',    '급제자 명단'],
     ['auth-btn',     null],          // 글자는 그대로 둔다(로그인/로그아웃이 바뀐다)
   ];
   const READOUT = ['gold-btn', 'eng-btn'];
@@ -39,14 +39,20 @@ window.Tidy = (function(){
     if (injected) return; injected = true;
     const s = document.createElement('style');
     s.textContent = `
-    /* 메뉴로 옮긴 단추는 메뉴 항목처럼 보이게 한다 */
+    /* 항목이 배로 늘었으니 패널이 화면을 넘지 않게 — 넘으면 안에서 굴린다.
+       실제로 시뮬레이터에서 위아래가 잘려 제목과 닫기가 안 보였다. */
+    #menu-panel { max-height:82vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    body.rot #menu-panel { max-height:82vw; }   /* 세로 모드에선 화면 세로가 vw다 */
+    /* 옮긴 단추들은 2열로 접는다 — 한 줄씩 쌓으면 목록이 너무 길어진다 */
+    #tidy-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0 0 8px; }
     #menu-panel .moved { display:block; width:100%; box-sizing:border-box;
-      text-align:left; height:auto; padding:11px 13px; margin:0 0 8px;
+      text-align:center; height:auto; padding:11px 8px; margin:0;
       border-radius:10px; border:1px solid #4a3c26; background:#241c12;
-      color:#f5ecd8; font-family:"Gowun Batang",serif; font-size:14.5px;
-      cursor:pointer; position:relative; }
-    #menu-panel .moved.hot::after { content:''; position:absolute; top:50%; right:12px;
-      width:7px; height:7px; margin-top:-3.5px; border-radius:50%; background:#e8836e; }
+      color:#f5ecd8; font-family:"Gowun Batang",serif; font-size:14px;
+      cursor:pointer; position:relative; white-space:nowrap;
+      overflow:hidden; text-overflow:ellipsis; }
+    #menu-panel .moved.hot::after { content:''; position:absolute; top:6px; right:7px;
+      width:7px; height:7px; border-radius:50%; background:#e8836e; }
     /* 금·기력은 읽는 값이라 단추가 아니라 한 줄로 */
     #menu-readout { display:flex; gap:14px; align-items:center; justify-content:center;
       padding:9px 0 13px; margin-bottom:11px; border-bottom:1px solid #3a2c1a;
@@ -85,14 +91,20 @@ window.Tidy = (function(){
       golds.forEach(b => { b.style.display = 'none'; });   // 상단에서는 감춘다
     }
 
-    // ② 단추들을 메뉴 안으로 옮긴다
+    // ② 단추들을 메뉴 안 2열 그리드로 옮긴다
+    let grid = document.getElementById('tidy-grid');
+    if (!grid){
+      grid = document.createElement('div');
+      grid.id = 'tidy-grid';
+      p.insertBefore(grid, closeBtn || null);
+    }
     for (const [id, label] of MOVE){
       const b = document.getElementById(id);
       if (!b || b.dataset.moved === '1') continue;
       if (label) b.textContent = label;
       b.classList.add('moved');
       b.dataset.moved = '1';
-      p.insertBefore(b, closeBtn || null);
+      grid.appendChild(b);
     }
   }
 
