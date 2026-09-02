@@ -17,14 +17,31 @@
 | 스팅(짧은 효과) | 5~9초 | 그대로 5~9초 |
 | 루프 이음매 | 신경 안 씀 | 이음매에 세게 치는 음 두지 않기(아래 §5) |
 
-## 2. 이 게임 음악의 대전제 — **재촉하면 안 된다**
+## 2. 이 게임 음악의 대전제 — **재촉하지 않되, 처지지도 않는다**
 
 이 게임은 **시간제한이 없다.** "학습해야 하니까 생각을 해야 한다"는 이유로 일부러
 뺐다. 그런데 음악이 몰아치면 시간제한이 없어도 플레이어는 쫓긴다.
 
-그래서 전쟁 장면 음악조차 **"긴장은 있되 재촉하지 않는" 상태**로 만든다.
-빠른 16분음표 하이햇, 급하게 쪼개지는 퍼커션, 계속 상승하는 스트링은 피한다.
-긴장은 **음정(단조·불협)과 음색(낮은 북·태평소)**으로 만들고, **속도로는 만들지 않는다.**
+그래서 긴장은 **음정(단조·불협)과 음색(낮은 북·태평소)**으로 만들고,
+**속도로는 만들지 않는다.** 빨라지는 템포, 16분음표로 쪼개지는 퍼커션,
+계속 상승하는 스트링은 전 곡에서 제외어로 막았다.
+
+> **1차 프롬프트의 실수(2026-09-02 수정)**: "재촉하지 않는다"를 **"느리고 비운다"**로
+> 잘못 옮겼다. 54~76 BPM에 `sparse`, `minimal melody`, `no strong hook`, `lots of
+> empty space` 같은 말을 넣었더니 **배경음악이 아니라 명상음악**이 됐다.
+> 타이틀곡에서 먼저 드러났다 — 사용자 평 "게임 노래인데 너무 처져".
+>
+> **재촉하지 않는 것과 생기가 없는 것은 다르다.** 그래서 전 곡을 다시 썼다:
+> - BPM을 10~20 올렸다(느리게가 아니라 **안 몰아치게**가 목적이었으므로)
+> - `no strong hook`, `minimal melody`를 빼고 **`memorable melody`를 넣었다**.
+>   특히 `bgm_joseon_palace`는 17곳에서 나오는데 선율이 없으면 벽지가 된다
+> - 대신 `accelerating tempo`(빨라지는 템포)를 제외어에 새로 넣어,
+>   **활기는 주되 재촉은 막는** 쪽으로 방향을 분리했다
+> - 타이틀곡이 사운드 정체성을 잡았으므로, 전 곡에 `warm low cinematic strings`를
+>   깔아 **같은 사운드트랙처럼 들리게** 통일했다
+>
+> 예외 둘: `bgm_seowon`(퀴즈 푸는 자리)와 `bgm_exile`(유배)은 원래 성격이 조용한
+> 곡이라 절제를 유지하되, **선율은 넣었다.** 비어 있는 것과 조용한 것은 다르다.
 
 ## 3. Suno 공통 설정
 
@@ -99,9 +116,9 @@ Uplifting Korean traditional adventure theme, bright and spirited and full of mo
 문자도, 나라도 없던 시대. 선율 악기를 거의 안 쓴다. 넓고 원시적인 공간.
 
 ```
-Primitive ambient tribal score, vast and ancient and quietly awed, bone flute long tones, low frame drum pulse played with soft mallets, hollow log percussion, stone knapping clicks used as sparse rhythm, deep male throat hum drone, wind and distant water ambience, 62 BPM, minimal melody, mostly texture and space, wide natural reverb, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Cinematic tribal Korean prehistoric theme, ancient and adventurous with a sense of wide open discovery, bone flute carrying a simple memorable modal melody, low frame drums and hollow log percussion in a steady walking groove, stone knapping clicks as light rhythmic texture, deep male throat hum drone underneath, warm low cinematic strings supporting, 78 BPM, alive and moving but never rushed, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, wide natural reverb, instrumental, no vocals
 ```
-**Exclude Styles**: `melody-driven, piano, strings section, synth pad, cinematic swell, choir, vocals, modern drum kit`
+**Exclude Styles**: `sparse ambient drone only, no melody, new age, fast percussion, accelerating tempo, rising strings, orchestral climax, choir, vocals, EDM, drum kit`
 
 ---
 
@@ -110,9 +127,9 @@ Primitive ambient tribal score, vast and ancient and quietly awed, bone flute lo
 삼국·가야·발해·통일신라 궁정. 격식 있고 의례적. 화려하지 않고 단정하게.
 
 ```
-Ancient Korean court ceremonial music, stately and dignified and unhurried, piri (Korean double-reed bamboo oboe) carrying a slow modal line, daegeum (large Korean bamboo transverse flute) answering, pyeonjong and pyeongyeong (bronze bell chimes and stone chimes) marking phrases, gayageum (Korean plucked zither) sparse plucks, slow janggu (Korean hourglass drum) on a wide cycle, 72 BPM, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, warm hall reverb, instrumental, no vocals
+Ancient Korean court theme, stately and proud with graceful forward motion, piri (Korean double-reed bamboo oboe) carrying a warm memorable pentatonic melody, daegeum (large Korean bamboo transverse flute) answering in dialogue, gayageum (Korean plucked zither) flowing arpeggios underneath, pyeonjong and pyeongyeong (bronze bell chimes and stone chimes) accenting phrases, janggu (Korean hourglass drum) in a steady dignified groove, warm low strings supporting, 84 BPM, elegant and alive, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `vocals, chanting, western orchestra, brass section, drum kit, synth, fast tempo, dramatic build`
+**Exclude Styles**: `sparse, ambient drone only, no melody, fast percussion, accelerating tempo, rising strings, orchestral climax, vocals, chanting, EDM, drum kit`
 
 ---
 
@@ -121,9 +138,9 @@ Ancient Korean court ceremonial music, stately and dignified and unhurried, piri
 황산벌·공산 전투. **긴장은 주되 재촉하지 않는다** — 느린 큰 북으로 무게를 준다.
 
 ```
-Ancient Korean battlefield score, grim and tense but slow and heavy, large buk (Korean barrel drum) struck on a wide slow pulse, nagak (conch horn) low sustained calls, nabal (long straight trumpet) distant signals, taepyeongso (loud Korean conical oboe) piercing minor motif used sparingly, low drone underneath, 84 BPM, tension carried by harmony and timbre not by speed, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Ancient Korean battlefield theme, grim and heroic with heavy forward momentum, large buk (Korean barrel drum) driving a strong marching pulse, taepyeongso (loud Korean conical oboe) crying a bold minor melody, nagak (conch horn) and nabal (long straight trumpet) calls answering, low ajaeng (bowed Korean zither, low and rough) drone, jing (large Korean gong) accents, dark low cinematic strings, 94 BPM, weight and courage rather than panic, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `fast percussion, sixteenth note hi-hats, rising strings, orchestral climax, cymbal crash, epic trailer, choir, vocals, double kick`
+**Exclude Styles**: `sixteenth note hi-hats, frantic percussion, accelerating tempo, rising strings, orchestral climax, cymbal crash, epic trailer riser, choir, vocals, double kick, EDM`
 
 ---
 
@@ -132,9 +149,9 @@ Ancient Korean battlefield score, grim and tense but slow and heavy, large buk (
 불교 국가이면서 벽란도로 세계와 통했던 나라. 향 냄새와 바닷길이 같이 있어야 한다.
 
 ```
-Goryeo era Korean score with a faint Silk Road color, contemplative and mysterious and slightly exotic, haegeum (two-string Korean bowed fiddle) sustained melancholy line, gayageum (Korean plucked zither) rolling figures, low temple bell struck rarely, soft hand percussion with a gentle uneven lilt, faint bowed drone, 76 BPM, incense-smoke atmosphere, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Goryeo era Korean theme with a faint Silk Road color, mysterious and richly colored with a gentle sway, haegeum (two-string Korean bowed fiddle) singing a memorable melancholy melody, gayageum (Korean plucked zither) rolling ostinato underneath, hand percussion in a lilting steady groove, low temple bell accents, warm low strings supporting, 88 BPM, exotic and flowing and alive, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `vocals, chanting monks, western orchestra, drum kit, synth lead, fast tempo, dramatic build, cymbal crash`
+**Exclude Styles**: `sparse, ambient drone only, no melody, chanting monks, vocals, fast percussion, accelerating tempo, rising strings, orchestral climax, EDM, drum kit`
 
 ---
 
@@ -144,9 +161,9 @@ ch0~ch6, hugi1 등에서 계속 나온다. **가장 안 질려야 하는 곡**�
 선율을 앞세우지 말고 배경으로 물러나 있게 만든다.
 
 ```
-Korean royal court music, restrained and formal and calm, ajaeng (bowed Korean zither, low and rough) sustaining a slow bass line, piri (Korean double-reed bamboo oboe) entering only occasionally with short phrases, pyeonjong (bronze bell chimes) marking long intervals, geomungo (deep six-string Korean zither) low plucks, very slow janggu (Korean hourglass drum) cycle, 66 BPM, understated and background-friendly, no strong hook, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Korean royal court theme, refined and graceful with quiet confidence, piri (Korean double-reed bamboo oboe) and daegeum (large Korean bamboo transverse flute) trading a warm memorable pentatonic melody, geomungo (deep six-string Korean zither) and gayageum (Korean plucked zither) weaving underneath, ajaeng (bowed Korean zither, low and rough) sustaining the bass, janggu (Korean hourglass drum) in a calm steady groove, pyeonjong (bronze bell chimes) accents, warm low strings supporting, 82 BPM, dignified and pleasant to hear many times over, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `catchy melody, lead instrument solo, vocals, western orchestra, brass, drum kit, synth, fast tempo, dramatic build`
+**Exclude Styles**: `sparse, ambient drone only, no melody, fast percussion, accelerating tempo, rising strings, orchestral climax, vocals, chanting, EDM, drum kit, dramatic build`
 
 ---
 
@@ -155,9 +172,9 @@ Korean royal court music, restrained and formal and calm, ajaeng (bowed Korean z
 **퀴즈를 푸는 곳**이다. 이 게임에서 가장 조용해야 하는 곡. 생각을 방해하면 안 된다.
 
 ```
-Quiet Korean study room ambience with music, serene and focused and scholarly, solo geomungo (deep six-string Korean zither) sparse low plucks with long silences between them, faint sogeum (small Korean bamboo flute) breath tones, soft paper and brush rustle in the background, no percussion at all, 58 BPM, extremely minimal, lots of empty space, made to sit far behind concentration, steady, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Quiet Korean scholarly theme, serene and thoughtful with a gentle steady flow, geomungo (deep six-string Korean zither) playing a calm repeating figure, sogeum (small Korean bamboo flute) carrying a soft simple melody above it, gayageum (Korean plucked zither) light plucks, very soft low string pad, no drums, 72 BPM, warm and unhurried, easy to think over, present but never demanding attention, steady, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `percussion, drums, melody hook, strings section, synth pad, cinematic, vocals, dynamic changes, crescendo`
+**Exclude Styles**: `percussion, drums, ambient drone only, long silence, dramatic build, crescendo, rising strings, vocals, new age, synth lead`
 
 ---
 
@@ -166,9 +183,9 @@ Quiet Korean study room ambience with music, serene and focused and scholarly, s
 장터의 활기. 신나되 정신없지는 않게.
 
 ```
-Korean folk marketplace music, bright and busy and good-humored, taepyeongso (loud Korean conical oboe) playing a cheerful folk melody, gayageum (Korean plucked zither) strumming, janggu (Korean hourglass drum) with a light rolling samulnori groove, kkwaenggwari (small sharp Korean gong) accents used sparingly, jing (large Korean gong) on downbeats, 104 BPM, lively but not chaotic, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Korean folk marketplace theme, bright and bustling and good-humored, taepyeongso (loud Korean conical oboe) playing a catchy cheerful folk melody, gayageum (Korean plucked zither) strumming energetically, janggu (Korean hourglass drum) rolling a lively samulnori groove, kkwaenggwari (small sharp Korean gong) accents, jing (large Korean gong) on downbeats, warm acoustic bass underneath, 108 BPM, festive and busy but clean and never chaotic, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `frantic percussion, drum kit, electronic, vocals, shouting, dense mix, dramatic build`
+**Exclude Styles**: `frantic dense percussion, drum kit, electronic, vocals, shouting, muddy mix, dramatic build, accelerating tempo`
 
 ---
 
@@ -177,9 +194,9 @@ Korean folk marketplace music, bright and busy and good-humored, taepyeongso (lo
 혼자 남겨진 자리. 악기 하나로 충분하다.
 
 ```
-Lonely Korean solo score, desolate and resigned and quietly sorrowful, solo daegeum (large Korean bamboo transverse flute) with prominent breath noise and slow wide vibrato, one faint low drone far behind, distant wind and sea ambience, no percussion, 54 BPM, long held notes with long silences, very sparse, cold empty reverb, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Lonely Korean exile theme, desolate and aching yet quietly beautiful, solo daegeum (large Korean bamboo transverse flute) carrying a memorable sorrowful melody with breathy tone and wide vibrato, gayageum (Korean plucked zither) answering with sparse falling phrases, low bowed string drone far behind, faint sea wind, no drums, 68 BPM, spacious and slow moving but with a real melodic line, cold distant reverb, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `percussion, drums, strings section, piano, synth, melody hook, cinematic swell, vocals, crescendo`
+**Exclude Styles**: `percussion, drums, ambient drone only, no melody, piano, synth, cinematic swell, crescendo, vocals, new age`
 
 ---
 
@@ -188,9 +205,9 @@ Lonely Korean solo score, desolate and resigned and quietly sorrowful, solo daeg
 침략당한 나라. 비장하되 절망적이지 않게 — 의병과 이순신이 있는 시대다.
 
 ```
-Korean war era score, grave and resolute and defiant, deep buk (Korean barrel drum) on a slow marching pulse, taepyeongso (loud Korean conical oboe) minor-mode call cutting through, low ajaeng (bowed Korean zither, low and rough) drone, jing (large Korean gong) struck at long intervals, faint distant horn, 88 BPM, weight and resolve rather than panic, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Korean war era theme, grave and defiant with strong marching weight, deep buk (Korean barrel drum) driving a firm steady pulse, taepyeongso (loud Korean conical oboe) crying a bold minor melody, haegeum (two-string Korean bowed fiddle) doubling it darkly, low ajaeng (bowed Korean zither, low and rough) drone, jing (large Korean gong) accents, dark low cinematic strings, 96 BPM, resolve and momentum rather than panic, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `fast tempo, sixteenth note percussion, epic trailer, orchestral climax, rising strings, choir, vocals, drum kit, cymbal crash`
+**Exclude Styles**: `sixteenth note percussion, accelerating tempo, frantic, rising strings, orchestral climax, epic trailer riser, cymbal crash, choir, vocals, drum kit, EDM`
 
 ---
 
@@ -199,9 +216,9 @@ Korean war era score, grave and resolute and defiant, deep buk (Korean barrel dr
 명절. 이 게임에서 가장 밝은 곡. 마음껏 흥겹게.
 
 ```
-Korean samulnori folk festival music, joyful and warm and celebratory, full percussion quartet of kkwaenggwari (small sharp Korean gong), jing (large Korean gong), janggu (Korean hourglass drum) and buk (Korean barrel drum) in an interlocking groove, taepyeongso (loud Korean conical oboe) playing a bright festive melody on top, 112 BPM, village holiday atmosphere, warm outdoor recording feel, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Korean samulnori festival theme, joyful and exuberant and warm, full percussion quartet of kkwaenggwari (small sharp Korean gong), jing (large Korean gong), janggu (Korean hourglass drum) and buk (Korean barrel drum) locked in an infectious interlocking groove, taepyeongso (loud Korean conical oboe) singing a bright catchy festive melody on top, gayageum (Korean plucked zither) strumming, 116 BPM, village holiday celebration, warm outdoor air, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `electronic, drum kit, synth, vocals, shouting, aggressive, dramatic build, modern pop`
+**Exclude Styles**: `electronic, drum kit, synth, vocals, shouting, aggressive, dramatic build, modern pop, muddy mix`
 
 ---
 
@@ -210,9 +227,9 @@ Korean samulnori folk festival music, joyful and warm and celebratory, full perc
 옛것과 새것이 부딪히는 시대. **국악기와 서양 취주악을 일부러 섞는다** — 그 충돌 자체가 이 시대다.
 
 ```
-Late nineteenth century Korean transitional score, uneasy and turbulent with old and new colliding, Western military brass band snare and muted trumpet on one side, haegeum (two-string Korean bowed fiddle) and taepyeongso (loud Korean conical oboe) on the other, the two idioms overlapping and not quite agreeing, low buk (Korean barrel drum) underneath, faint out-of-tune upright piano, 92 BPM, gaslit harbor town atmosphere, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Late nineteenth century Korean transitional theme, restless and dramatic with old and new colliding, Western military brass band snare and muted trumpet playing against haegeum (two-string Korean bowed fiddle) and taepyeongso (loud Korean conical oboe), the two idioms overlapping in tension, low buk (Korean barrel drum) driving underneath, faint slightly out of tune upright piano, dark low strings, 100 BPM, gaslit harbor town in upheaval, forward moving and alive, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `clean modern production, EDM, synth, vocals, epic trailer, orchestral climax, fast tempo, drum kit`
+**Exclude Styles**: `clean modern pop production, EDM, synth lead, vocals, epic trailer riser, orchestral climax, accelerating tempo, drum kit`
 
 ---
 
@@ -222,9 +239,9 @@ Late nineteenth century Korean transitional score, uneasy and turbulent with old
 울리려 들지 말고 담담하게. 기획서의 원칙(일방적 매도·미화 없이)과 같은 태도로.
 
 ```
-Restrained Korean colonial period score, sorrowful but dignified and never self-pitying, haegeum (two-string Korean bowed fiddle) carrying a plain unornamented minor line, sparse upright piano single notes, low cello sustain, very quiet brush pulse, distant street ambience, 70 BPM, understated grief held in check, no swelling, no melodrama, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Restrained Korean colonial period theme, sorrowful but dignified and never self-pitying, haegeum (two-string Korean bowed fiddle) carrying a plain memorable minor melody without heavy ornament, upright piano playing a simple steady figure underneath, low cello sustaining, soft brushed pulse keeping gentle motion, distant street ambience, 80 BPM, quiet grief held in check with a steady forward walk, no swelling, no melodrama, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `melodrama, sentimental strings, swelling crescendo, choir, vocals, epic, orchestral climax, trot, enka, heavy vibrato`
+**Exclude Styles**: `melodrama, sentimental swelling strings, crescendo, choir, vocals, epic, orchestral climax, trot, enka, heavy vibrato, wailing`
 
 ---
 
@@ -233,9 +250,9 @@ Restrained Korean colonial period score, sorrowful but dignified and never self-
 지금 파일은 있는데 어느 챕터에서도 안 쓰고 있다. `manse.js`의 만세 장면에 붙이면 딱이다.
 
 ```
-Korean independence movement score, solemn and swelling with quiet courage, low male hummed drone rising underneath, haegeum (two-string Korean bowed fiddle) and daegeum (large Korean bamboo transverse flute) in unison on a simple hymn-like line, slow deep buk (Korean barrel drum) steps like a marching crowd, distant crowd murmur, 76 BPM, gathering strength without turning triumphant or militant, steady rhythm, seamless loop, no intro, no outro, consistent energy, instrumental, no vocals
+Korean independence movement theme, solemn and stirring with quiet gathering courage, haegeum (two-string Korean bowed fiddle) and daegeum (large Korean bamboo transverse flute) in unison on a simple memorable hymn-like melody, low hummed male drone underneath, deep buk (Korean barrel drum) stepping like a marching crowd, warm low strings, distant crowd murmur, 86 BPM, strength gathering steadily without turning triumphant or militant, steady rhythm, seamless loop, no intro, no outro, consistent energy, instrumental, no vocals
 ```
-**Exclude Styles**: `triumphant fanfare, military march, brass band, epic trailer, choir singing words, vocals, aggressive percussion, EDM`
+**Exclude Styles**: `triumphant fanfare, military march, brass band, epic trailer riser, choir singing words, vocals, aggressive percussion, EDM, orchestral climax`
 
 ---
 
@@ -244,9 +261,9 @@ Korean independence movement score, solemn and swelling with quiet courage, low 
 해방 이후. 폐허에서 다시 짓는 온기, 그리고 광장. 국악기를 줄이고 피아노로.
 
 ```
-Postwar Korean modern score, warm and hopeful and quietly determined, felt piano playing a simple rising figure, warm string pad underneath, soft acoustic guitar harmonics, brushed snare very light, one distant daegeum (large Korean bamboo transverse flute) phrase as a memory of the older eras, 74 BPM, rebuilding and everyday resilience, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Postwar Korean modern theme, warm and hopeful and quietly determined, felt piano playing a memorable rising melody, acoustic guitar arpeggios underneath, warm string pad, light brushed drums keeping an easy steady groove, soft bass, one distant daegeum (large Korean bamboo transverse flute) phrase as a memory of the older eras, 88 BPM, rebuilding and everyday resilience, gentle forward motion, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `epic orchestra, dramatic climax, EDM, heavy drums, vocals, pop song structure, cymbal crash, synth lead`
+**Exclude Styles**: `epic orchestra, dramatic climax, EDM, heavy drums, vocals, pop song structure, cymbal crash, synth lead, sentimental swell`
 
 ---
 
@@ -256,9 +273,9 @@ Postwar Korean modern score, warm and hopeful and quietly determined, felt piano
 답을 생각할 시간이 필요하다. 긴장은 저음과 불협으로만 준다.
 
 ```
-Tense Korean debate confrontation score, focused and pressing but never rushing, low ajaeng (bowed Korean zither, low and rough) sustained dissonant drone, geomungo (deep six-string Korean zither) low repeated single note as a pulse, faint piri (Korean double-reed bamboo oboe) held tone, one janggu (Korean hourglass drum) beat every two bars only, 72 BPM, slow and heavy pressure, tension from harmony and low register not from speed, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
+Tense Korean debate confrontation theme, focused and pressing with a firm steady pulse, low geomungo (deep six-string Korean zither) repeating a dark ostinato figure, ajaeng (bowed Korean zither, low and rough) sustaining a dissonant drone, piri (Korean double-reed bamboo oboe) cutting in with short sharp phrases, janggu (Korean hourglass drum) on a firm unhurried beat, low cinematic strings, 88 BPM, pressure from low register and harmony not from speed, never accelerating, steady rhythm, seamless loop, no intro, no outro, consistent energy, no dramatic changes, instrumental, no vocals
 ```
-**Exclude Styles**: `fast tempo, sixteenth note percussion, ticking clock, urgent strings, rising tension, epic trailer, drum kit, vocals, cymbal crash`
+**Exclude Styles**: `accelerating tempo, sixteenth note percussion, ticking clock, urgent rising strings, epic trailer riser, orchestral climax, drum kit, vocals, cymbal crash, EDM`
 
 ---
 
@@ -267,9 +284,9 @@ Tense Korean debate confrontation score, focused and pressing but never rushing,
 지금 30.8초짜리 루프 파일이 들어가 있다. **짧은 스팅으로 다시 만든다.**
 
 ```
-Short Korean cinematic sting, six seconds, one soft jing (large Korean gong) strike opening into a brief rising daegeum (large Korean bamboo transverse flute) phrase over a warm low string swell, ending cleanly on a settled note with natural decay, 70 BPM, sense of a curtain lifting on an old era, no loop, one single gesture only, instrumental, no vocals
+Short Korean cinematic sting, seven seconds, one bright jing (large Korean gong) strike opening into a quick rising taepyeongso (loud Korean conical oboe) and daegeum (large Korean bamboo transverse flute) flourish over a warm low string swell, a single janggu (Korean hourglass drum) hit landing at the end, settling cleanly with natural decay, 100 BPM, sense of a curtain lifting on a new era, one single gesture only, no loop, instrumental, no vocals
 ```
-**Exclude Styles**: `long form, repeating loop, drums, percussion groove, vocals, fade out, EDM`
+**Exclude Styles**: `long form, repeating loop, percussion groove, vocals, fade out, EDM, slow ambient`
 
 ---
 
@@ -278,9 +295,9 @@ Short Korean cinematic sting, six seconds, one soft jing (large Korean gong) str
 한 화를 마쳤을 때. 성취감보다 **여운**.
 
 ```
-Short Korean cinematic outro cadence, nine seconds, gayageum (Korean plucked zither) descending resolving figure answered by soft daegeum (large Korean bamboo transverse flute), warm low strings settling onto a final consonant chord, one distant jing (large Korean gong) fading, 64 BPM, gentle sense of a chapter closing and a page turning, ending fully resolved with long natural decay, no loop, instrumental, no vocals
+Short Korean cinematic closing cadence, nine seconds, gayageum (Korean plucked zither) descending resolving figure answered by warm daegeum (large Korean bamboo transverse flute), low strings settling onto a final consonant chord, one distant jing (large Korean gong) fading, 72 BPM, satisfying sense of a chapter closing and a page turning, fully resolved ending with long natural decay, no loop, instrumental, no vocals
 ```
-**Exclude Styles**: `fanfare, triumphant brass, drums, percussion groove, vocals, abrupt ending, EDM, loop`
+**Exclude Styles**: `fanfare, triumphant brass, percussion groove, vocals, abrupt cut, EDM, loop, sad, unresolved`
 
 ---
 
@@ -289,9 +306,9 @@ Short Korean cinematic outro cadence, nine seconds, gayageum (Korean plucked zit
 가장 자주 들리는 소리다. **짧고 안 거슬려야 한다.** 45번 들어도 괜찮을 만큼.
 
 ```
-Very short Korean reward chime, two seconds, three ascending gayageum (Korean plucked zither) plucked notes with a small bright bell doubling the last one, warm and gentle, 90 BPM, clean quick decay, no reverb tail, light and unobtrusive because it will be heard hundreds of times, no loop, instrumental, no vocals
+Very short Korean reward chime, two seconds, three ascending gayageum (Korean plucked zither) plucked notes with a small bright bell doubling the last one, warm and gentle and satisfying, 100 BPM, clean quick decay, very short reverb tail, light and unobtrusive because it will be heard hundreds of times, no loop, instrumental, no vocals
 ```
-**Exclude Styles**: `orchestral fanfare, brass, drums, long reverb, dramatic, vocals, video game arcade chiptune, loud`
+**Exclude Styles**: `orchestral fanfare, brass, drums, long reverb tail, dramatic, vocals, arcade chiptune, loud, harsh`
 
 ---
 
