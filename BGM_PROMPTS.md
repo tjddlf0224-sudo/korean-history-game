@@ -4,13 +4,22 @@
 
 ---
 
-## 0. 진행 현황 (2026-09-02)
+## 0. 진행 현황 (2026-09-02 · 1차 완료)
+
+**전 트랙 교체 완료.** 30.8초 루프 16개 → 79~155초 곡 15개 + 합성 효과음·스팅 5개.
 
 | 상태 | 트랙 |
 |---|---|
-| ✅ 완료 | `title_theme`(155초) · `bgm_joseon_palace`(92초) |
-| 🔨 합성으로 처리 | `sfx_fanfare` · `bgm_intro_sting` · `bgm_chapter_end` (§5-1) |
-| ⬜ Suno로 뽑을 것 | 나머지 **14개** (§6 우선순위 순) |
+| ✅ Suno 15곡 | title_theme 155초 · exile 154 · colonial_uprising 137 · colonial_era 123 · ancient_war 122 · folk_festival 122 · ancient_court 119 · goryeo 108 · seowon 107 · gaehang_war 108 · prehistoric 103 · invasion_war 94 · joseon_palace 92 · modern 79 · boss_quiz 58 |
+| ✅ 합성 5개 | `sfx_hit` 0.3초 · `sfx_ding` 1.2초 · `sfx_fanfare` 2.8초 · `bgm_intro_sting` 7초 · `bgm_chapter_end` 9초 |
+| ⚠️ 다시 뽑을 것 | **`bgm_marketplace` 32.4초** — 8곳에서 쓰는 곡인데 짧다. 연장 필요 |
+
+전 곡 **96kbps 모노 + 2패스 loudnorm(-16 LUFS)** 로 통일.
+
+> **가사 시도 기록**: `bgm_colonial_uprising`에 만세 외침(여성 목소리→군중)을 넣어
+> 봤으나 결과가 좋지 않아 **기악으로 확정**했다. Suno는 노래하는 모델이라
+> 외침·구호를 노래로 불러 버린다. 대신 이 곡을 **만세 장면(manse.js)에 연결**했다 —
+> 그 장면엔 원래 소리가 하나도 없었다.
 
 ## 1. 먼저 — 기존 BGM이 아쉬웠던 진짜 이유
 

@@ -95,8 +95,16 @@ window.Manse = (function(){
   }
 
   /* ---------------- 만세 ---------------- */
+  /* 이 장면엔 원래 소리가 하나도 없었다. 지도에서 쓰던 곡이 그대로 깔린 채
+     만세를 부르고 형무소로 끌려갔다. 장면이 바뀌면 음악도 바뀌어야 한다.
+     끝나면 챕터가 알아서 그 구역의 곡으로 돌아간다(warpTo → BGM.play). */
+  function bgm(name){
+    try { if (window.BGM && BGM.play) BGM.play(name, { fadeMs: 700 }); } catch(e){}
+  }
+
   async function shout(onJail){
     const el = veil();
+    bgm('bgm_colonial_uprising');
     if (window.Fx) Fx.punch(.06, 400);
     await line(el, '<div class="shout">대 한 독 립 만 세</div>', 1700);
     if (window.Fx){ Fx.shake(9, 500); Fx.lines(420); }
@@ -120,6 +128,9 @@ window.Manse = (function(){
   /* ---------------- 나오는 길 ---------------- */
   async function release(onOut){
     const el = veil();
+    // 여기서는 만세곡을 쓰지 않는다. 이기고 나오는 것이 아니라
+    // 남은 이들을 두고 혼자 빠져나오는 대목이다.
+    bgm('bgm_colonial_era');
     await line(el, '세 사람의 이야기를 다 들었다.', 2000);
     await line(el, '간수가 명부를 몇 번이나 넘겼지만 그대의 이름은 없었다.<br>' +
       '<b>여기 없는 사람이 여기 있을 수는 없다.</b>', 3000);
