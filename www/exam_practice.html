@@ -177,32 +177,32 @@
 </div>
 </div>
 
-<script src="assets/badges.js?v=31"></script>
-<script src="assets/streak.js?v=31"></script>
-<script src="assets/rank.js?v=31"></script>
-  <script src="assets/fx.js?v=31"></script>
-  <script src="assets/dash.js?v=31"></script>
-<script src="assets/juice.js?v=31"></script>
-  <script src="assets/difficulty.js?v=31"></script>
-  <script src="assets/nextauto.js?v=31"></script>
-  <script src="assets/gold.js?v=31"></script>
-  <script src="assets/ask.js?v=31"></script>
-  <script src="assets/ads.js?v=31"></script>
-  <script src="assets/energy.js?v=31"></script>
-  <script src="assets/daily.js?v=31"></script>
-  <script src="assets/unlock.js?v=31"></script>
-  <script src="assets/guide.js?v=31"></script>
-  <script src="assets/minigames.js?v=31"></script>
-  <script src="assets/quests.js?v=31"></script>
-<script src="assets/season.js?v=31"></script>
-  <script src="assets/offline.js?v=31"></script>
-  <script src="assets/telemetry.js?v=31"></script>
+<script src="assets/badges.js?v=32"></script>
+<script src="assets/streak.js?v=32"></script>
+<script src="assets/rank.js?v=32"></script>
+  <script src="assets/fx.js?v=32"></script>
+  <script src="assets/dash.js?v=32"></script>
+<script src="assets/juice.js?v=32"></script>
+  <script src="assets/difficulty.js?v=32"></script>
+  <script src="assets/nextauto.js?v=32"></script>
+  <script src="assets/gold.js?v=32"></script>
+  <script src="assets/ask.js?v=32"></script>
+  <script src="assets/ads.js?v=32"></script>
+  <script src="assets/energy.js?v=32"></script>
+  <script src="assets/daily.js?v=32"></script>
+  <script src="assets/unlock.js?v=32"></script>
+  <script src="assets/guide.js?v=32"></script>
+  <script src="assets/minigames.js?v=32"></script>
+  <script src="assets/quests.js?v=32"></script>
+<script src="assets/season.js?v=32"></script>
+  <script src="assets/offline.js?v=32"></script>
+  <script src="assets/telemetry.js?v=32"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Juice) Juice.mount();
 </script>
-<script src="assets/audio.js?v=31"></script>
+<script src="assets/audio.js?v=32"></script>
 <script>
 /* 가로모드 고정: index.html·게임 챕터들과 동일. */
 function applyOrientation(){
@@ -221,8 +221,10 @@ const ERA_TITLES = ['선사·초기국가','고대','고려','조선 전기','�
 const CIRCLED = ['①','②','③','④','⑤'];
 
 /* 시대별 배경음악 — 각 챕터가 쓰는 시대별 BGM과 맞춰서, 기출문제 풀이
-   화면도 같은 시대감을 느낄 수 있게 한다. '시대 통합'은 특정 시대가
-   아니므로 메인 화면과 같은 title_theme을 쓴다. */
+   화면도 같은 시대감을 느낄 수 있게 한다.
+   '시대 통합'은 특정 시대가 없어서 예전엔 title_theme을 썼는데, 타이틀곡은
+   시작 화면용이라 활기차다. **문제를 푸는 자리에서 음악이 재촉하면 안 된다** —
+   시간제한을 일부러 뺀 게임이다. 그래서 가장 조용한 서원 곡으로 바꿨다. */
 const ERA_BGM = {
   '선사·초기국가': 'bgm_prehistoric',
   '고대': 'bgm_ancient_court',
@@ -232,7 +234,7 @@ const ERA_BGM = {
   '근대·개항기': 'bgm_gaehang_war',
   '일제강점기': 'bgm_colonial_era',
   '현대': 'bgm_modern',
-  '시대 통합': 'title_theme',
+  '시대 통합': 'bgm_seowon',
 };
 
 const params = new URLSearchParams(location.search);

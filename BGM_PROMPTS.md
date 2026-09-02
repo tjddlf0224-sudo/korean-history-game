@@ -67,12 +67,30 @@ Suno가 한국 악기 이름을 모를 수 있다. **반드시 서양식 설명�
 
 ### 4-1. `title_theme` — 제목 화면 (29초 → 60초)
 
-게임의 얼굴. 유일하게 **선율이 기억에 남아야 하는** 곡. 시간을 거슬러 가는 느낌.
+게임의 얼굴. 유일하게 **선율이 기억에 남아야 하는** 곡.
+
+> **1차 시도 실패 기록**: 처음엔 68 BPM에 `solemn and wistful`(장엄하고 애수 어린)로 썼는데,
+> 게임 시작 화면이 아니라 다큐멘터리 오프닝이 됐다. 사용자 평 — "게임 노래인데 너무 처져".
+> **시작 화면은 이 게임에서 유일하게 신나도 되는 자리다.** 여기서 플레이어는 문제를 풀지
+> 않는다. 아래로 다시 썼다.
+
+**A안 · 퓨전 드라이브 (추천)** — 국악기에 현대적 추진력을 얹은 게임 트레일러 느낌
 
 ```
-Cinematic Korean traditional score, solemn and wistful with a quiet sense of wonder, opening on solo daegeum (large Korean bamboo transverse flute) with breathy tone, answered by gayageum (Korean plucked zither) arpeggios, warm low string pad underneath, distant single jing (large Korean gong) strike, sparse janggu (Korean hourglass drum) heartbeat, 68 BPM, memorable pentatonic main melody stated twice, spacious hall reverb, analog warmth, instrumental, no vocals
+Modern Korean fusion gugak game theme, heroic and exciting with strong forward drive, taepyeongso (loud Korean conical oboe) and daegeum (large Korean bamboo transverse flute) trading a bold memorable pentatonic hook, gayageum (Korean plucked zither) rapid plucked ostinato underneath, janggu (Korean hourglass drum) and large taiko-style buk (Korean barrel drum) locking into a powerful driving groove, low cinematic strings pushing forward, jing (large Korean gong) accents at phrase ends, 112 BPM, adventurous and triumphant, momentum from the first bar, main melody stated twice with the second time fuller, epic but light on its feet, instrumental, no vocals
 ```
-**Exclude Styles**: `vocals, chanting, choir, drums kit, electronic drums, synth lead, EDM, orchestral climax, cymbal crash`
+**Exclude Styles**: `slow tempo, ambient, sparse, drone, melancholy, sad, solemn, funeral, vocals, chanting, choir, EDM, dubstep, drum kit`
+
+**B안 · 정통 국악 활기** — 사물놀이 그루브로 밀고 가는, 더 한국적인 쪽
+
+```
+Uplifting Korean traditional adventure theme, bright and spirited and full of momentum, taepyeongso (loud Korean conical oboe) leading a bold heroic pentatonic melody, gayageum (Korean plucked zither) fast rolling arpeggios underneath, janggu (Korean hourglass drum) driving a lively rolling samulnori groove, buk (Korean barrel drum) accents, kkwaenggwari (small sharp Korean gong) sharp punctuation, jing (large Korean gong) on phrase ends, 108 BPM, strong forward drive, memorable main melody stated twice with the second time fuller, festive and heroic like setting out on a long journey, instrumental, no vocals
+```
+**Exclude Styles**: `slow tempo, ambient, sparse, drone, melancholy, sad, solemn, funeral, vocals, chanting, choir, EDM, drum kit, western orchestra`
+
+> **같이 고친 것**: `title_theme`은 `exam_practice.html`의 '시대 통합' 문제 풀이 화면에서도
+> 쓰이고 있었다. 타이틀을 신나게 만들면 **문제 푸는 동안 음악이 재촉하게 된다.**
+> 그래서 '시대 통합'은 가장 조용한 `bgm_seowon`으로 바꿨다(2026-09-02 적용).
 
 ---
 
