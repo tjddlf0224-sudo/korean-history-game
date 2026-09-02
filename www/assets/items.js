@@ -392,7 +392,7 @@ window.Items = (function(){
       layer().appendChild(p);
       setTimeout(() => p.remove(), 1100);
     }
-    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
+    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_ding');
     if (navigator.vibrate) navigator.vibrate([30, 40, 60]);
     setTimeout(() => ov.remove(), 2700);
   }
@@ -632,7 +632,7 @@ window.Items = (function(){
       `<div style="font-size:15.5px;color:#e6dbc2;line-height:2;margin-top:16px">${u.line}</div>` +
       '</div>';
     L.appendChild(d);
-    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
+    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_ding');
     if (navigator.vibrate) navigator.vibrate([40, 60, 90]);
     setTimeout(() => { d.style.opacity = '0'; }, 5400);
     setTimeout(() => d.remove(), 6000);

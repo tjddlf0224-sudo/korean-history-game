@@ -313,7 +313,7 @@ window.Heroes = (function(){
       `<div class="nm">${d.n}</div><div class="er">${d.e}</div>` +
       (grade === 2 ? '<div class="star">★ 한 번에 모두 맞혔다</div>' : '');
     layer().appendChild(ov);
-    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
+    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_ding');
     if (navigator.vibrate) navigator.vibrate([30, 40, 60]);
     setTimeout(() => ov.remove(), 2700);
     renderBtn();

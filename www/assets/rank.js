@@ -261,7 +261,8 @@ window.Rank = (function(){
 
     function levelUp(lv){
       css();
-      if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
+      // 레벨은 자주 오른다 — 작은 소리로. 팡파레는 계급 승급(promote)에만 쓴다.
+      if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_ding');
       if (navigator.vibrate) navigator.vibrate(30);
       const ov = document.createElement('div');
       ov.className = 'rk-ov';

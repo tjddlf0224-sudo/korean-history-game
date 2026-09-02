@@ -271,7 +271,7 @@ window.Boss = (function(){
       shake(S.eHp <= 0 ? 3 : (crit ? 2 : 1)); hitFx('bs-e', crit); ep.classList.add('hit');
       pop('e', '-' + dmg + (crit ? '!' : ''), crit ? 'crit' : null);
 
-      if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
+      if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_hit');
       if (navigator.vibrate) navigator.vibrate(crit ? 45 : 25);
       msg(S.cur.feedback[1] + (S.combo >= 3 ? `<br><b>${S.combo}연속! 일격이 무거워진다.</b>` : ''));
       // 잘 맞힐수록 전투가 빨라진다. 콤보가 3이든 0이든 똑같이 기다리면

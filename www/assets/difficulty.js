@@ -159,7 +159,7 @@ window.Difficulty = (function(){
       st.level = 4; save(st); d.classList.remove('show'); done();
     };
     d.querySelector('#df-stay').onclick = () => { d.classList.remove('show'); };
-    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_fanfare');
+    if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_ding');
     if (navigator.vibrate) navigator.vibrate([40, 60, 90]);
   }
 
