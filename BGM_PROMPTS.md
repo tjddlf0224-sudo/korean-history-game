@@ -12,7 +12,7 @@
 |---|---|
 | ✅ Suno 15곡 | title_theme 155초 · exile 154 · colonial_uprising 137 · colonial_era 123 · ancient_war 122 · folk_festival 122 · ancient_court 119 · goryeo 108 · seowon 107 · gaehang_war 108 · prehistoric 103 · invasion_war 94 · joseon_palace 92 · modern 79 · boss_quiz 58 |
 | ✅ 합성 5개 | `sfx_hit` 0.3초 · `sfx_ding` 1.2초 · `sfx_fanfare` 2.8초 · `bgm_intro_sting` 7초 · `bgm_chapter_end` 9초 |
-| ⚠️ 다시 뽑을 것 | **`bgm_marketplace` 32.4초** — 8곳에서 쓰는 곡인데 짧다. 연장 필요 |
+| ☑️ 짧지만 그대로 | `bgm_marketplace` 32.4초 — 짧은 건 알지만 **사용자가 그대로 두기로 결정**(2026-09-03). 반복 재생으로 충분하다고 판단. 다시 건드리지 말 것 |
 
 전 곡 **96kbps 모노 + 2패스 loudnorm(-16 LUFS)** 로 통일.
 
