@@ -496,9 +496,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=46"></script>
-<script src="assets/chart.js?v=46"></script>
-<script src="assets/audio.js?v=46"></script>
+<script src="assets/map/map_component.js?v=47"></script>
+<script src="assets/chart.js?v=47"></script>
+<script src="assets/audio.js?v=47"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -510,7 +510,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=46';   // 존댓말 전환
+const ART_V = '?v=47';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1185,12 +1185,13 @@ const NPC_DATA = {
         chart:{ type:'map', title:'발해가 일어난 자리', north:true, pins:[ { x:60, y:-1, n:'동모산', on:true } ] } },
       { who:'me', t:'(성 안을 걷는다) …생각보다 크군요.' },
       { who:'npc', t:'고구려가 무너진 뒤, 유민들을 이끌고 예까지 왔지.' },
-      { who:'npc', t:'말갈 무리도 함께였네.' },
+      { who:'me', t:'…먼 길이었겠습니다.' },
+      { who:'npc', t:'말갈 무리도 함께 옮겨 왔네.' },
       { who:'me', t:'(주위를 둘러본다) …다들 고구려 사람입니까?' },
-      { who:'npc', t:'다스리는 건 고구려 사람들일세.',
+      { who:'npc', t:'허나 다스리는 건 고구려 사람들일세.',
         chart:{ type:'grid', title:'동모산에 모인 두 무리', head:[ '무리', '노릇' ], rows:[ [ '고구려 유민', '나라를 다스림' ], [ '말갈', '함께 옮겨 옴' ] ] } },
       { who:'npc', t:'처음엔 나라 이름을 진(震)이라 했네.' },
-      { who:'npc', t:'뒷날 발해로 고쳤지.',
+      { who:'npc', t:'뒷날에야 발해로 이름을 고쳤지.',
         chart:{ type:'compare', title:'나라 이름이 바뀌다', cols:[ { h:'처음', items:[ '진(震)' ] }, { h:'뒷날', hi:true, items:[ '발해' ] } ] } },
       { who:'me', t:'이름이 왜 바뀌었습니까?' },
       { who:'npc', t:'…그건 나도 다 알지 못하네. 세월이 흐르며 그리 되었지.' },
@@ -1199,10 +1200,12 @@ const NPC_DATA = {
         chart:{ type:'vs', title:'국서에 담긴 뜻', left:{ n:'발해', s:'스스로 고려국왕이라 칭함', win:true }, right:{ n:'일본', s:'「천황경문고려왕」이라 부름' }, mid:'국서' } },
       { who:'npc', t:'내 뒤를 이은 무왕은 아우 대문예를 시켜 흑수말갈을 치려 했네.' },
       { who:'me', t:'…뜻대로 됐습니까?' },
-      { who:'npc', t:'대문예는 당이 두려워 달아났지.' },
+      { who:'npc', t:'대문예는 당이 두려워 그리로 달아났지.',
+        chart:{ type:'vs', title:'무왕의 명, 갈린 대답', left:{ n:'대문예', s:'당을 두려워함' }, right:{ n:'장문휴', s:'등주를 침', win:true }, mid:'무왕의 선택' } },
       { who:'npc', t:'그예 장문휴를 보내 등주를 쳤네.',
         chart:{ type:'timeline', title:'발해 초기의 걸음', marks:[ { y:'698', t:'대조영, 발해 건국' }, { y:'732', t:'장문휴, 등주 공격', on:true } ] } },
-      { who:'npc', t:'당의 코앞을 친 셈이니, 대당 강경책이었지.' },
+      { who:'npc', t:'당의 코앞을 친 셈이니, 대당 강경책이었지.',
+        chart:{ type:'vs', title:'대당 강경책', left:{ n:'무왕의 발해', s:'등주를 먼저 침', win:true }, right:{ n:'당', s:'크게 놀람' }, mid:'732년' } },
       { who:'me', t:'…대단한 힘이었군요.' },
     ],
     quizSeq: [
@@ -1232,14 +1235,16 @@ const NPC_DATA = {
       { who:'npc', t:'그대로 본떴네. 나라의 틀도 당의 것을 가져왔지.' },
       { who:'npc', t:'3성 6부를 두었네. 이름은 우리 식으로 고쳤지만.',
         chart:{ type:'grid', title:'발해의 중앙 관제', head:[ '기구', '하는 일' ], hi:0, rows:[ [ '정당성', '국정을 총괄' ], [ '대내상', '정당성의 우두머리' ], [ '상서성', '6부의 실무를 나눠 맡음' ] ] } },
-      { who:'npc', t:'주자감을 두어 귀족 자제에게 유학을 가르쳤네.' },
+      { who:'npc', t:'주자감을 두어 귀족 자제에게 유학을 가르쳤네.',
+        chart:{ type:'compare', title:'인재를 기르는 두 나라', cols:[ { h:'발해', items:[ '주자감' ] }, { h:'신라', hi:true, items:[ '국학' ] } ] } },
       { who:'me', t:'…신라의 국학과 같은 것입니까?' },
-      { who:'npc', t:'그렇네. 이름만 다를 뿐이지.' },
+      { who:'npc', t:'그렇네. 하는 일은 같고 이름만 다를 뿐이지.' },
+      { who:'me', t:'(고개를 끄덕인다) …그렇군요.' },
       { who:'npc', t:'(두루마리를 건네며) 이건 문적원에 갖다 두게.' },
       { who:'me', t:'(받아 든다) 문적원은 무얼 하는 곳입니까?' },
       { who:'npc', t:'서적을 관리하고 문서를 짓는 곳일세.',
         chart:{ type:'compare', title:'문왕이 세운 두 기구', cols:[ { h:'주자감', items:[ '귀족 자제에게 유학을 가르침' ] }, { h:'문적원', hi:true, items:[ '서적을 관리', '문서를 지음' ] } ] } },
-      { who:'npc', t:'대흥이라는 독자 연호도 썼네.' },
+      { who:'npc', t:'대흥이라는 우리만의 연호도 썼네.' },
       { who:'me', t:'…그 흔적이 남아 있습니까?' },
       { who:'npc', t:'내 딸 정효공주의 무덤 지석에 새겨져 있지.',
         chart:{ type:'stat', title:'정효공주 지석에 남은 연호', items:[ { v:'대흥', l:'문왕의 독자 연호' } ] } },
@@ -1252,16 +1257,18 @@ const NPC_DATA = {
         chart:{ type:'grid', title:'발해의 다섯 갈래 길', head:[ '길', '통하는 곳' ], rows:[ [ '거란도', '거란' ], [ '영주도', '영주' ], [ '신라도', '신라' ], [ '일본도', '일본' ], [ '조공도', '당' ] ] } },
       { who:'me', t:'(손꼽아 센다) …다섯이나 됩니까.' },
       { who:'npc', t:'뒷날 선왕에 이르면 이 틀이 5경 15부 62주로 갖추어지네.',
-        chart:{ type:'stat', title:'선왕 대에 갖춘 지방 조직', items:[ { v:'5경', l:'다섯 도읍' }, { v:'15부', l:'그 아래 고을' }, { v:'62주', l:'다시 그 아래' } ] } },
+        chart:{ type:'stat', title:'선왕 대에 갖춘 지방 조직', items:[ { v:'5경', l:'다섯 도읍' }, { v:'15부', l:'그 아래 고을' }, { v:'62주', l:'다시 그 아래' }, { v:'솔빈부', l:'말이 이름난 고을' } ] } },
       { who:'npc', t:'그때 솔빈부의 말이 특히 이름났지.' },
       { who:'me', t:'그게 다 문왕님 때 이룬 것입니까?' },
-      { who:'npc', t:'아닐세. 나는 터를 닦았을 뿐일세.' },
+      { who:'npc', t:'아닐세. 나는 터를 닦았을 뿐일세.',
+        chart:{ type:'stat', title:'문왕과 선왕, 다른 몫', items:[ { v:'문왕', l:'터를 닦다' }, { v:'선왕', l:'옛 땅을 되찾다' } ] } },
       { who:'npc', t:'강역을 넓혀 해동성국이라 불린 건 뒷날 선왕의 때일세.',
         chart:{ type:'vs', title:'문왕과 선왕', left:{ n:'문왕', s:'상경 천도 · 체제 정비' }, right:{ n:'선왕', s:'옛 고구려 땅을 되찾음 — 해동성국', win:true }, mid:'다른 대' } },
       { who:'npc', t:'훗날 당의 외교 자리에서 일이 있었네.' },
       { who:'npc', t:'발해 사신이 신라보다 아랫자리에 앉게 됐지.' },
       { who:'me', t:'…그냥 넘어갔습니까?' },
-      { who:'npc', t:'다투었지. 쟁장사건이라 하네.' },
+      { who:'npc', t:'다투었지. 그 일을 쟁장사건이라 하네.',
+        chart:{ type:'vs', title:'쟁장사건', left:{ n:'발해', s:'신라와 대등한 자리를 요구', win:true }, right:{ n:'신라', s:'윗자리를 지키려 함' }, mid:'당의 외교 자리' } },
       { who:'npc', t:'우리도 신라 못지않다는 뜻이었네.' },
     ],
     quizSeq: [
@@ -1297,23 +1304,25 @@ const NPC_DATA = {
         chart:{ type:'relic', title:'장보고의 바다', items:[ { img:'cheonghaejin', n:'청해진', s:'완도에 세운 해상 기지' } ] } },
       { who:'npc', t:'흥덕왕께 청하여 여기 완도에 세웠네.' },
       { who:'me', t:'(배에 오른다) …왜 하필 완도입니까?' },
-      { who:'npc', t:'물길의 목이지.',
+      { who:'npc', t:'뱃길의 목을 쥔 곳이지.',
         chart:{ type:'map', title:'청해진의 자리', pins:[ { x:39, y:142, n:'완도', on:true } ] } },
       { who:'npc', t:'예를 막으면 바닷길이 다 이리 모이네.' },
       { who:'npc', t:'예전엔 해적이 우리 백성을 잡아다 팔았지.' },
       { who:'me', t:'…이제 안전합니까?' },
-      { who:'npc', t:'그 길을 끊었네.',
+      { who:'npc', t:'내 손으로 그 길을 끊었네.',
         chart:{ type:'vs', title:'청해진이 서기 전과 후', left:{ n:'그 전', s:'해적이 노략질' }, right:{ n:'청해진이 선 뒤', s:'뱃길이 안전해짐', win:true }, mid:'▶' } },
       { who:'npc', t:'신라·당·일본을 잇는 길이 죄다 예로 통하지.' },
-      { who:'npc', t:'당의 적산에도 절을 하나 두었네. 법화원이라 하지.' },
+      { who:'npc', t:'당의 적산에도 절을 하나 두었네. 법화원이라 하지.',
+        chart:{ type:'map', title:'당 땅의 신라인 마을, 적산 법화원', north:true, pins:[ { x:-18, y:100, n:'적산 법화원', on:true } ] } },
       { who:'me', t:'절이 무슨 소용입니까?' },
       { who:'npc', t:'그 땅에 사는 신라 사람들이 예로 모이네.',
         chart:{ type:'stat', title:'법화원, 재당 신라인의 중심', items:[ { v:'30여 명', l:'법화원에 머문 승려' }, { v:'250여 명', l:'법회 때 모인 신라인' } ] } },
-      { who:'npc', t:'마음 둘 곳이지.' },
+      { who:'npc', t:'타향에서 마음 둘 곳이지.' },
       { who:'me', t:'(고개를 끄덕인다) …그럴 만하군요.' },
       { who:'npc', t:'그보다 앞서 효소왕 때는 서울에 저자를 감독하는 관청을 두었었네.' },
       { who:'me', t:'…저자요?' },
-      { who:'npc', t:'서시전·남시전이라 하지.' },
+      { who:'npc', t:'서시전·남시전이라 하는 관청이지.',
+        chart:{ type:'stat', title:'효소왕이 둔 저자 감독 관청', items:[ { v:'서시전', l:'서쪽 시장 감독' }, { v:'남시전', l:'남쪽 시장 감독' } ] } },
       { who:'npc', t:'울산항과 당항성도 그 무렵부터 배로 북적였네.',
         chart:{ type:'grid', title:'통일 신라의 대외 무역', head:[ '시기', '관청/포구' ], rows:[ [ '효소왕', '서시전·남시전 — 저자 감독' ], [ '그 뒤', '울산항·당항성 — 국제 무역항' ] ] } },
     ],
@@ -1332,17 +1341,20 @@ const NPC_DATA = {
   cheoyong_0: {
     name: '처용', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="7.5" cy="12" rx="5" ry="6.5"/><ellipse cx="16.5" cy="12" rx="5" ry="6.5"/><path d="M5.5 10.5c.8-.7 1.7-.7 2.5 0"/><path d="M14.5 10.5c.8-.7 1.7-.7 2.5 0"/><path d="M5.5 14c1 1.2 3 1.2 4 0"/><path d="M14.5 15c1-1.2 3-1.2 4 0"/></svg>', img: 'assets/portraits/cheoyong.png',
     beats: [
-      { who:'npc', t:'나는 처용이라 하오. 헌강왕 때 사람이오.' },
+      { who:'npc', t:'나는 처용이라 하오. 헌강왕 때 사람이오.',
+        chart:{ type:'compare', title:'처용을 보는 여러 눈', cols:[ { h:'설화 속', items:[ '동해 용왕의 아들' ] }, { h:'학계의 추정', hi:true, items:[ '울산 지역 호족의 아들', '또는 아라비아 상인' ] } ] } },
       { who:'me', t:'장보고 어른보다는 한참 뒤군요.' },
       { who:'npc', t:'그렇소. 어느 밤, 집에 와 보니 아내 곁에 다리가 넷이었소.' },
       { who:'me', t:'…무얼 보신 겁니까?' },
-      { who:'npc', t:'딴 사내인 줄 알았소.',
+      { who:'npc', t:'딴 사내가 든 줄 알았소.',
         chart:{ type:'quote', title:'처용가의 한 구절', text:'서울 밝은 달밤에<br>밤들이 노니다가<br>들어와 잠자리를 보니<br><b>가랑이가 넷이로다</b>', from:'삼국유사 처용랑 망해사조' } },
       { who:'npc', t:'허나 화내는 대신 노래하며 물러났소.' },
       { who:'me', t:'(따라 불러본다) …화도 안 나셨습니까?' },
-      { who:'npc', t:'그 사내, 실은 돌림병을 옮기는 역신이었소.' },
+      { who:'npc', t:'그 사내, 실은 돌림병을 옮기는 역신이었소.',
+        chart:{ type:'stat', title:'역신의 정체', items:[ { v:'역신', l:'돌림병을 옮기는 잡귀' } ] } },
       { who:'me', t:'(고개를 젓는다) …사람이 아니었군요.' },
-      { who:'npc', t:'내 너그러움에 감복해 무릎을 꿇더군.' },
+      { who:'npc', t:'내 너그러움에 감복해 무릎을 꿇더군.',
+        chart:{ type:'vs', title:'처용의 너그러움', left:{ n:'분노 대신', s:'노래와 춤' }, right:{ n:'역신', s:'감복해 물러남', win:true }, mid:'처용무의 유래' } },
       { who:'npc', t:'「공의 얼굴 있는 곳엔 얼씬 않겠다」고 했소.' },
       { who:'npc', t:'그 뒤로 사람들이 대문에 내 얼굴을 그려 붙였소.',
         chart:{ type:'compare', title:'처용가와 처용무', cols:[ { h:'처용가', items:[ '처용이 불렀다는 노래', '향가' ] }, { h:'처용무', hi:true, items:[ '잡귀를 쫓는 궁중 춤', '국가무형유산으로 전함' ] } ] } },
@@ -1362,7 +1374,9 @@ const NPC_DATA = {
         chart:{ type:'quote', title:'의상의 화엄사상', text:'하나가 곧 일체요,<br>한 티끌 속에 온 세상이 있으며,<br>한 찰나가 곧 <b>영원</b>이다.', from:'의상, 화엄일승법계도(뜻풀이)' } },
       { who:'npc', t:'그 이치를 「화엄일승법계도」란 글에 담았소.' },
       { who:'me', t:'…돌아와서는 무얼 하셨습니까?' },
-      { who:'npc', t:'부석사를 열었소. 영주 땅에.' },
+      { who:'npc', t:'영주 땅에 부석사를 열었소.',
+        chart:{ type:'map', title:'의상이 연 절, 부석사', pins:[ { x:66, y:102, n:'영주 부석사', on:true } ] } },
+      { who:'me', t:'(주위를 둘러본다) …아늑한 곳이군요.' },
       { who:'npc', t:'원효 스님은 저와 길이 달랐지요.' },
       { who:'me', t:'어떻게 다릅니까?' },
       { who:'npc', t:'당에 가지 않고, 나무아미타불 한 마디로 백성에게 다가가셨소.',
@@ -1371,36 +1385,36 @@ const NPC_DATA = {
       { who:'me', t:'…무슨 일이 있었습니까?' },
       { who:'npc', t:'밤중 무덤가에서 목이 말라, 어둠 속 물을 떠 마셨지요.' },
       { who:'me', t:'(따라 마시는 시늉) …맛이 어땠습니까?' },
-      { who:'npc', t:'참 달았습니다.' },
+      { who:'npc', t:'참으로 달았습니다.' },
       { who:'npc', t:'날 밝고 보니 해골에 고인 물이었소.' },
       { who:'npc', t:'원효 스님은 그 자리서 토하고 깨달으셨지요.',
         chart:{ type:'steps', title:'원효, 발길을 돌리다', steps:[ { t:'해골물을 마신다', s:'어둠 속' }, { t:'날이 밝아 안다' }, { t:'「모든 것은 마음」', s:'신라로 돌아간다' } ] } },
       { who:'npc', t:'「모든 것은 마음이 짓는다」고. 그러고는 신라로 돌아가셨소.' },
-      { who:'npc', t:'저만 갔지요.' },
+      { who:'npc', t:'저 혼자 신라를 떠났지요.' },
       { who:'npc', t:'그보다 앞서 선덕여왕 때는 첨성대를 쌓아 하늘을 살폈지요.' },
       { who:'me', t:'(고개를 든다) 별을 보는 것입니까?' },
-      { who:'npc', t:'별과 날씨를 함께 살폈소.' },
-      { who:'npc', t:'농사와 나라의 길흉을 점쳤지요.' },
-      { who:'doc', t:'(경주 첨성대. 선덕여왕 때 세운 동양에서 가장 오래된 천문대 중 하나로 꼽힌다.) 출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_cheomseongdae.jpg' },
+      { who:'npc', t:'별자리와 날씨를 함께 살폈소.' },
+      { who:'npc', t:'농사철과 나라의 길흉을 점쳤지요.' },
+      { who:'doc', t:'(경주 첨성대. 선덕여왕 때 세운 동양에서 가장 오래된 천문대 중 하나로 꼽힌다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_cheomseongdae.jpg' },
       { who:'npc', t:'신라 중대엔 감은사지·석굴암·불국사 같은 큰 불사가 이어졌소.' },
       { who:'me', t:'그럼 하대에는요?' },
       { who:'npc', t:'선종이 퍼지며 승탑이 유행했지요.',
         chart:{ type:'compare', title:'신라 중대와 하대의 불교 미술', cols:[ { h:'중대', items:[ '석탑·불상 중심', '감은사지·석굴암·불국사' ] }, { h:'하대', hi:true, items:[ '승탑 유행', '선종과 함께 퍼짐' ] } ] } },
       { who:'npc', t:'철감선사탑이 그 대표요. 승려의 사리를 모신 무덤이지요.' },
       { who:'npc', t:'(사진첩을 펼친다) 직접 보시지요.' },
-      { who:'doc', t:'(1971년에 촬영된 경주 감은사지 삼층석탑. 문무왕의 뜻을 이어 아들 신문왕이 완성한 절터에 남은 통일 신라 초기의 웅장한 쌍탑이다.) 출처: 셀수스협동조합, 공유마당, 기증저작물(자유이용)', docImg:'assets/scenes/heritage_gameunsaji_tower.jpg' },
-      { who:'doc', t:'(경주 문무대왕릉(대왕암). 감은사지 앞바다에 자리한 수중릉으로, 문무왕은 죽어서도 용이 되어 왜구로부터 신라를 지키겠다는 유언을 남겼다.) 출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_munmudaewangneung.jpg' },
-      { who:'doc', t:'(천마총 금관. 경주 대릉원 천마총에서 출토된 신라 금관으로, 같은 무덤에서 나온 천마도와 함께 신라 황금 문화를 대표한다.) 출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_cheonmachong_gold_crown.jpg' },
-      { who:'doc', t:'(황남대총 북분 금관. 대릉원에서 가장 큰 무덤인 황남대총 북쪽 봉분에서 출토된 신라 금관으로, 화려한 곡옥과 달개 장식이 특징이다.) 출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_hwangnamdaechong_gold_crown.jpg' },
-      { who:'doc', t:'(석굴암 본존불. 화강암을 짜올린 인공 석굴 안에 모신, 통일 신라 불교 조각의 정수로 꼽히는 불상이다.) 출처: 故한석홍 기증, 공유마당, 공공누리 제1유형', docImg:'assets/scenes/heritage_seokguram_buddha.jpg' },
-      { who:'doc', t:'(불국사 삼층석탑, 흔히 석가탑이라 부른다. 다보탑과 마주 보고 서 있으며, 균형 잡힌 비례로 통일 신라 석탑의 전형을 보여준다.) 출처: 국립문화재연구소, 공유마당, 공공누리 제1유형', docImg:'assets/scenes/heritage_bulguksa_tower.jpg' },
-      { who:'doc', t:'(성덕대왕신종. 봉덕사에 있던 종이라 봉덕사종이라고도 하며, 현존하는 한국 종 가운데 가장 크고 정교한 문양을 지녔다.) 출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_seongdeokdaewang_bell.jpg' },
-      { who:'doc', t:'(화순 쌍봉사 철감선사탑. 신라 하대 선종 승려 철감선사 도윤의 사리를 모신 승탑으로, 통일 신라 승탑 예술의 최고 걸작으로 꼽힌다.) 출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_ssangbongsa_cheolgamseonsatap.jpg' },
+      { who:'doc', t:'(1971년에 촬영된 경주 감은사지 삼층석탑. 문무왕의 뜻을 이어 아들 신문왕이 완성한 절터에 남은 통일 신라 초기의 웅장한 쌍탑이다.)\n출처: 셀수스협동조합, 공유마당, 기증저작물(자유이용)', docImg:'assets/scenes/heritage_gameunsaji_tower.jpg' },
+      { who:'doc', t:'(경주 문무대왕릉(대왕암). 감은사지 앞바다에 자리한 수중릉으로, 문무왕은 죽어서도 용이 되어 왜구로부터 신라를 지키겠다는 유언을 남겼다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_munmudaewangneung.jpg' },
+      { who:'doc', t:'(천마총 금관. 경주 대릉원 천마총에서 출토된 신라 금관으로, 같은 무덤에서 나온 천마도와 함께 신라 황금 문화를 대표한다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_cheonmachong_gold_crown.jpg' },
+      { who:'doc', t:'(황남대총 북분 금관. 대릉원에서 가장 큰 무덤인 황남대총 북쪽 봉분에서 출토된 신라 금관으로, 화려한 곡옥과 달개 장식이 특징이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_hwangnamdaechong_gold_crown.jpg' },
+      { who:'doc', t:'(석굴암 본존불. 화강암을 짜올린 인공 석굴 안에 모신, 통일 신라 불교 조각의 정수로 꼽히는 불상이다.)\n출처: 故한석홍 기증, 공유마당, 공공누리 제1유형', docImg:'assets/scenes/heritage_seokguram_buddha.jpg' },
+      { who:'doc', t:'(불국사 삼층석탑, 흔히 석가탑이라 부른다. 다보탑과 마주 보고 서 있으며, 균형 잡힌 비례로 통일 신라 석탑의 전형을 보여준다.)\n출처: 국립문화재연구소, 공유마당, 공공누리 제1유형', docImg:'assets/scenes/heritage_bulguksa_tower.jpg' },
+      { who:'doc', t:'(성덕대왕신종. 봉덕사에 있던 종이라 봉덕사종이라고도 하며, 현존하는 한국 종 가운데 가장 크고 정교한 문양을 지녔다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_seongdeokdaewang_bell.jpg' },
+      { who:'doc', t:'(화순 쌍봉사 철감선사탑. 신라 하대 선종 승려 철감선사 도윤의 사리를 모신 승탑으로, 통일 신라 승탑 예술의 최고 걸작으로 꼽힌다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_ssangbongsa_cheolgamseonsatap.jpg' },
       { who:'npc', t:'이 불국사 삼층석탑, 흔히 석가탑이라 하오.' },
       { who:'npc', t:'해체하다 무구정광대다라니경이 나왔지요.' },
       { who:'me', t:'…얼마나 오래된 것입니까?' },
       { who:'npc', t:'지금 남은 것 가운데 가장 오래된 목판 인쇄물이오.' },
-      { who:'doc', t:'(불국사 삼층석탑을 해체하다 나온 무구정광대다라니경. 원래는 두루마리였지만 오랜 세월에 삭아 지금은 보존을 위해 책자 형태로 배접되어 있으며, 목판으로 찍은 한자가 촘촘히 새겨져 있다.) 출처: 국립중앙박물관, e뮤지엄, 공공누리 제1유형', docImg:'assets/scenes/heritage_mugujeonggwang_darani.jpg' },
+      { who:'doc', t:'(불국사 삼층석탑을 해체하다 나온 무구정광대다라니경. 원래는 두루마리였지만 오랜 세월에 삭아 지금은 보존을 위해 책자 형태로 배접되어 있으며, 목판으로 찍은 한자가 촘촘히 새겨져 있다.)\n출처: 국립중앙박물관, e뮤지엄, 공공누리 제1유형', docImg:'assets/scenes/heritage_mugujeonggwang_darani.jpg' },
     ],
     quizSeq: [
       { q:'당에서 화엄을 배우고 돌아와 부석사를 세우고 「화엄일승법계도」를 지은 승려는?',
@@ -1422,14 +1436,16 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'소인은 이 마을 촌주올시다. (장부를 편다) 마침 잘 오셨소.' },
       { who:'me', t:'…무얼 하십니까?' },
-      { who:'npc', t:'삼 년마다 마을을 다시 적소.' },
-      { who:'npc', t:'좀 세어 주시겠소?' },
+      { who:'npc', t:'삼 년마다 마을 형편을 다시 적소.' },
+      { who:'npc', t:'좀 세는 걸 거들어 주시겠소?' },
       { who:'me', t:'(장부를 센다) …사람, 논밭, 소, 말까지 다 있군요.' },
-      { who:'npc', t:'뽕나무·잣나무도 적지요.',
+      { who:'npc', t:'뽕나무·잣나무 수까지 적지요.',
         chart:{ type:'grid', title:'신라 민정문서(촌락문서)에 적힌 것', head:[ '갈래', '예' ], rows:[ [ '사람', '남녀·나이별' ], [ '땅', '논밭' ], [ '가축', '소·말' ], [ '나무', '뽕나무·잣나무' ] ] } },
-      { who:'npc', t:'세금과 부역을 매기려는 것이오.' },
+      { who:'npc', t:'이걸로 세금과 부역을 매기는 것이오.',
+        chart:{ type:'vs', title:'민정문서를 왜 만들었나', left:{ n:'조사한다', s:'사람·땅·가축·나무' }, right:{ n:'매긴다', s:'세금과 부역', win:true }, mid:'그래서' } },
       { who:'me', t:'…그래서 이리 꼼꼼하군요.' },
-      { who:'npc', t:'이 문서, 뒷날 일본 절 창고에서 나왔소.' },
+      { who:'npc', t:'이 문서, 뒷날 일본 절 창고에서 나왔소.',
+        chart:{ type:'stat', title:'신라 촌락문서, 뒤늦게 드러나다', items:[ { v:'1933년', l:'일본 도다이지 쇼소인에서 발견' } ] } },
       { who:'me', t:'…신라 것이 왜 일본에?' },
       { who:'npc', t:'종이를 덧대는 데 쓰였다더군. 그리 전해졌소.' },
       { who:'npc', t:'예전 문무왕 때는 외사정을 보내 지방관을 감찰했소.',
@@ -1442,12 +1458,14 @@ const NPC_DATA = {
       { who:'me', t:'그게 무슨 뜻입니까?' },
       { who:'npc', t:'「삼국사기」는 그때를 기준으로 시대를 나눈다 하오.',
         chart:{ type:'timeline', title:'「삼국사기」의 신라 시대 구분', marks:[ { y:'상대', t:'첫 왕~진덕여왕' }, { y:'중대', t:'무열왕부터', on:true }, { y:'하대', t:'선덕왕 이후' } ] } },
-      { who:'npc', t:'혜공왕이 시해된 뒤론 왕위 다툼이 끊이지 않았소.' },
+      { who:'npc', t:'혜공왕이 시해된 뒤론 왕위 다툼이 끊이지 않았소.',
+        chart:{ type:'stat', title:'흔들리는 왕실', items:[ { v:'혜공왕', l:'시해된 뒤 왕위 다툼 시작' } ] } },
       { who:'me', t:'…촌주께도 그 일이 미칩니까?' },
       { who:'npc', t:'미치다마다. 822년엔 웅천주 도독 김헌창이 반란을 일으켰소.' },
-      { who:'npc', t:'나라 이름을 장안이라 했지요.',
+      { who:'npc', t:'나라 이름을 장안이라 새로 지었지요.',
         chart:{ type:'stat', title:'김헌창의 난', items:[ { v:'822년', l:'김헌창의 난' }, { v:'장안', l:'스스로 세운 나라 이름' } ] } },
-      { who:'npc', t:'오래가진 못했지만.' },
+      { who:'npc', t:'허나 오래가진 못했지요.' },
+      { who:'me', t:'…그럴 줄 알았습니다.' },
       { who:'npc', t:'그 뒤로도 우징과 김명이 왕위를 다투다 민애왕이 시해됐소.' },
       { who:'me', t:'…한 사람의 다툼이 아니었군요.' },
       { who:'npc', t:'그렇소. 그 다툼엔 청해진의 장보고 세력도 얽혀 있었지요.' },
@@ -1460,7 +1478,8 @@ const NPC_DATA = {
       { who:'me', t:'…그게 득난이란 것입니까?' },
       { who:'npc', t:'그렇소. 그러니 지방 호족과 손잡고 개혁을 꿈꾼 것도 당연했지요.' },
       { who:'me', t:'(고개를 끄덕인다) …알 만합니다.' },
-      { who:'npc', t:'선종이 자리 잡은 아홉 절, 9산 선문도 그 무렵 호족의 힘을 입어 퍼졌소.',
+      { who:'npc', t:'선종이 자리 잡은 아홉 절을 9산 선문이라 하오.' },
+      { who:'npc', t:'그 무렵 호족의 힘을 입어 퍼졌지요.',
         chart:{ type:'stat', title:'선종과 호족', items:[ { v:'9산', l:'선문 — 선종 절 아홉 곳' } ] } },
       { who:'npc', t:'(장부를 덮는다) …이 땅도 이제 오래 못 갈 듯하오.' },
     ],
@@ -1963,39 +1982,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=46"></script>
-<script src="assets/streak.js?v=46"></script>
+<script src="assets/badges.js?v=47"></script>
+<script src="assets/streak.js?v=47"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=46"></script>
-  <script src="assets/fx.js?v=46"></script>
-  <script src="assets/deed.js?v=46"></script>
-  <script src="assets/inkwipe.js?v=46"></script>
-  <script src="assets/dash.js?v=46"></script>
-<script src="assets/juice.js?v=46"></script>
-  <script src="assets/difficulty.js?v=46"></script>
-  <script src="assets/nextauto.js?v=46"></script>
-<script src="assets/heroes_data.js?v=46"></script>
-<script src="assets/heroes.js?v=46"></script>
-<script src="assets/icons.js?v=46"></script>
-<script src="assets/srs.js?v=46"></script>
-<script src="assets/newsflash.js?v=46"></script>
-<script src="assets/timeline.js?v=46"></script>
-<script src="assets/journey.js?v=46"></script>
-<script src="assets/season.js?v=46"></script>
-<script src="assets/boss.js?v=46"></script>
-<script src="assets/items.js?v=46"></script>
-  <script src="assets/gold.js?v=46"></script>
-  <script src="assets/ask.js?v=46"></script>
-  <script src="assets/ads.js?v=46"></script>
-  <script src="assets/energy.js?v=46"></script>
-  <script src="assets/daily.js?v=46"></script>
-  <script src="assets/unlock.js?v=46"></script>
-  <script src="assets/guide.js?v=46"></script>
-  <script src="assets/minigames.js?v=46"></script>
-  <script src="assets/quests.js?v=46"></script>
-  <script src="assets/offline.js?v=46"></script>
-  <script src="assets/telemetry.js?v=46"></script>
-<script src="assets/autowalk.js?v=46"></script>
+<script src="assets/rank.js?v=47"></script>
+  <script src="assets/fx.js?v=47"></script>
+  <script src="assets/deed.js?v=47"></script>
+  <script src="assets/inkwipe.js?v=47"></script>
+  <script src="assets/dash.js?v=47"></script>
+<script src="assets/juice.js?v=47"></script>
+  <script src="assets/difficulty.js?v=47"></script>
+  <script src="assets/nextauto.js?v=47"></script>
+<script src="assets/heroes_data.js?v=47"></script>
+<script src="assets/heroes.js?v=47"></script>
+<script src="assets/icons.js?v=47"></script>
+<script src="assets/srs.js?v=47"></script>
+<script src="assets/newsflash.js?v=47"></script>
+<script src="assets/timeline.js?v=47"></script>
+<script src="assets/journey.js?v=47"></script>
+<script src="assets/season.js?v=47"></script>
+<script src="assets/boss.js?v=47"></script>
+<script src="assets/items.js?v=47"></script>
+  <script src="assets/gold.js?v=47"></script>
+  <script src="assets/ask.js?v=47"></script>
+  <script src="assets/ads.js?v=47"></script>
+  <script src="assets/energy.js?v=47"></script>
+  <script src="assets/daily.js?v=47"></script>
+  <script src="assets/unlock.js?v=47"></script>
+  <script src="assets/guide.js?v=47"></script>
+  <script src="assets/minigames.js?v=47"></script>
+  <script src="assets/quests.js?v=47"></script>
+  <script src="assets/offline.js?v=47"></script>
+  <script src="assets/telemetry.js?v=47"></script>
+<script src="assets/autowalk.js?v=47"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

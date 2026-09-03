@@ -28,8 +28,15 @@ TYPES = {'timeline','compare','relic','faces','quote','stat','pyramid','vs',
 
 
 def js_str(s):
-    """JS 작은따옴표 문자열로. 줄바꿈은 <br>로 이미 들어와 있어야 한다."""
-    return "'" + str(s).replace('\\', '\\\\').replace("'", "\\'").replace('\n', ' ') + "'"
+    """JS 작은따옴표 문자열로.
+
+       줄바꿈을 공백으로 뭉개면 안 된다. 유산 사진 캡션은 마지막 줄이
+       '출처: …'인데, renderDocCaption()이 그 줄바꿈으로 출처를 갈라내
+       작은 글씨(.photo-credit)로 따로 앉힌다. 공백으로 바꾸면 출처가
+       설명문에 그대로 붙어 버린다(실제로 한 번 그렇게 냈다).
+       그래서 진짜 줄바꿈은 \\n 이스케이프로 살려서 넘긴다."""
+    return ("'" + str(s).replace('\\', '\\\\').replace("'", "\\'")
+            .replace('\n', '\\n') + "'")
 
 
 def js_val(v, ind):

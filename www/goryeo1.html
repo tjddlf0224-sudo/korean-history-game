@@ -487,9 +487,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=46"></script>
-<script src="assets/chart.js?v=46"></script>
-<script src="assets/audio.js?v=46"></script>
+<script src="assets/map/map_component.js?v=47"></script>
+<script src="assets/chart.js?v=47"></script>
+<script src="assets/audio.js?v=47"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -501,7 +501,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=46';   // 존댓말 전환
+const ART_V = '?v=47';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1149,11 +1149,28 @@ const NPC_DATA = {
   wanggeon_0: {
     name: '태조 왕건', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l3.5 3H8.5z"/><path d="M6 6.5h12l1.5 3H4.5z"/><path d="M7 9.5v4h10v-4"/><path d="M4.5 13.5h15l1.5 3H3z"/><path d="M6.5 16.5v4.5h11v-4.5"/><path d="M10.5 21v-3h3v3"/></svg>', img: 'assets/portraits/wanggeon.png',
     beats: [
-      { who:'npc', t:'나는 송악의 왕건일세. 궁예를 몰아내고 나라를 세워 고려라 하였고, 도읍을 이곳 송악으로 옮겼네.' },
-      { who:'npc', t:'신라의 경순왕이 스스로 나라를 넘겨오고, 이듬해 후백제의 신검이 항복하니 비로소 하나가 되었지.' },
-      { who:'npc', t:'나는 호족들과 혼인을 맺고 성을 내려주며 손을 잡았네. 허나 그 힘이 언젠가 왕실을 누를 것도 알고 있었지.' },
-      { who:'npc', t:'나주에서 목이 말라 우물가에 들렀을 때일세. 처녀에게 물을 청했더니, 바가지에 버들잎을 한 줌 띄워 주더군.' },
-      { who:'npc', t:'급히 마시다 체할까 봐 그랬다는 게야. 그 마음 씀씀이가 예뻐서 아내로 맞았네 — 뒷날 혜종의 어머니, 장화왕후일세.' },
+      { who:'npc', t:'게 섰거라. …낯선 얼굴이군.' },
+      { who:'me', t:'(고개를 숙인다) 소인은 이 댁의 종입니다.' },
+      { who:'npc', t:'종이라… (한숨) 내 나라엔 아직 그런 이가 많네.' },
+      { who:'npc', t:'궁예를 몰아내고 나라를 세웠네. 918년, 고려라 하였지.' },
+      { who:'me', t:'(고개를 든다) 도읍은 예서 멉니까?' },
+      { who:'npc', t:'이듬해 이곳 송악으로 옮겼지.',
+        chart:{ type:'map', title:'새 도읍, 송악', pins:[ { x:36.4, y:84.2, n:'송악', on:true } ], legend:[ { k:'송악', v:'훗날의 개경', on:true } ] } },
+      { who:'npc', t:'신라 경순왕이 스스로 나라를 넘겨왔네.' },
+      { who:'npc', t:'이듬해 후백제 신검마저 무릎을 꿇었네.',
+        chart:{ type:'timeline', title:'왕건의 통일 걸음', marks:[ { y:'918', t:'고려 건국' }, { y:'935', t:'신라 항복' }, { y:'936', t:'후삼국 통일', on:true } ] } },
+      { who:'me', t:'(속으로) …그해가 936년, 마침내 하나가 됐군요.' },
+      { who:'me', t:'호족들은 어찌 다스리셨습니까?' },
+      { who:'npc', t:'힘만으론 도로 일어서네. 혼인을 맺었지.' },
+      { who:'npc', t:'성도 내려주었네 — 사성이라 하네.',
+        chart:{ type:'compare', title:'호족을 다루는 두 손', cols:[ { h:'손을 잡는다', items:[ '혼인 정책', '사성 정책' ] }, { h:'고삐도 쥔다', hi:true, items:[ '기인 제도', '사심관 제도' ] } ] } },
+      { who:'me', t:'(생각한다) …손도 잡고, 고삐도 쥐셨군요.' },
+      { who:'npc', t:'(끄덕이며) 둘 다 없인 다스릴 수 없네.' },
+      { who:'npc', t:'나주에서 물 한 바가지 얻어 마신 일이 있었네.' },
+      { who:'me', t:'무슨 일이 있었습니까?' },
+      { who:'npc', t:'처녀가 버들잎을 띄워 주더군. 체할까 걱정했다는 게야.' },
+      { who:'npc', t:'그 마음이 예뻐 아내로 맞았네 — 장화왕후일세.',
+        chart:{ type:'stat', title:'왕건과 장화왕후', items:[ { v:'나주', l:'물 한 바가지로 맺어진 인연' }, { v:'혜종', l:'두 사람 사이에서 난 아들' } ] } },
     ],
     quizSeq: [
       { q:'궁예를 몰아내고 고려를 세워 후삼국을 통일한 인물은?',
@@ -1167,11 +1184,32 @@ const NPC_DATA = {
   wanggeon_1: {
     name: '태조 왕건', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l3.5 3H8.5z"/><path d="M6 6.5h12l1.5 3H4.5z"/><path d="M7 9.5v4h10v-4"/><path d="M4.5 13.5h15l1.5 3H3z"/><path d="M6.5 16.5v4.5h11v-4.5"/><path d="M10.5 21v-3h3v3"/></svg>', img: 'assets/portraits/wanggeon.png',
     beats: [
-      { who:'npc', t:'백성이 굶으면 나라가 무너지네. 그래서 봄에 곡식을 꾸어 주고 가을에 거두는 창고를 두었지 — 흑창이라 하네.' },
-      { who:'npc', t:'나라를 함께 세운 공신들에게는 공로와 인품을 헤아려 땅을 나누어 주었네 — 역분전이라 하였지.' },
-      { who:'npc', t:'북쪽 땅도 잊지 않았네. 고구려를 잇는다는 뜻으로 나라 이름을 고려라 하였고, 평양을 서경으로 삼아 북진의 발판으로 삼았네.' },
-      { who:'npc', t:'내가 죽거든 후손에게 남길 열 가지 가르침을 적어 두었네. 훈요 10조일세.' },
-      { who:'npc', t:'산과 물의 기운을 살펴 땅을 고르는 풍수지리설도 성했네. 지덕이 쇠한 곳을 돕고자 절을 세우기도 했지 — 비보사찰이라 하였네.' },
+      { who:'npc', t:'또 왔군. …게서 이 됫박 좀 받아 주게.' },
+      { who:'me', t:'(됫박을 받는다) 이건 무엇입니까?' },
+      { who:'npc', t:'봄에 곡식을 꾸어 주는 게야. 가을에 갚으면 되네.' },
+      { who:'npc', t:'백성이 굶으면 나라도 무너지지 — 흑창이라 하네.',
+        chart:{ type:'steps', title:'흑창이 하는 일', steps:[ { t:'봄에 곡식을 꾸어준다' }, { t:'가을에 거두어들인다' }, { t:'백성을 살리는 창고', s:'흑창' } ] } },
+      { who:'me', t:'…뒷날에도 이어집니까?' },
+      { who:'npc', t:'성종 때 의창으로 이름이 바뀌어 이어지네.',
+        chart:{ type:'vs', title:'흑창에서 의창으로', left:{ n:'흑창', s:'태조 때 세움' }, right:{ n:'의창', s:'성종 때 이름을 바꿈' }, mid:'▶' } },
+      { who:'npc', t:'(문서를 편다) 나라를 함께 세운 이들에게 땅을 나누었네.' },
+      { who:'me', t:'(문서를 살핀다) …다들 똑같이 받습니까?' },
+      { who:'npc', t:'공로와 인품을 헤아려 나누었지 — 역분전이라 하네.',
+        chart:{ type:'stat', title:'역분전, 940년', items:[ { v:'공로', l:'나라 세운 공을 헤아린다' }, { v:'인품', l:'그 사람됨도 헤아린다' } ] } },
+      { who:'npc', t:'북쪽 땅도 잊지 않았네. 평양을 서경으로 삼았지.',
+        chart:{ type:'map', title:'태조의 북진, 서경', pins:[ { x:25.0, y:67.6, n:'서경(평양)', on:true }, { x:36.4, y:84.2, n:'송악' } ], legend:[ { k:'서경', v:'북진의 발판', on:true } ] } },
+      { who:'me', t:'…나라 이름을 고려라 하신 것도 그 뜻입니까?' },
+      { who:'npc', t:'그렇지. 고구려를 잇는다는 뜻으로 지었네.' },
+      { who:'npc', t:'(두루마리를 내민다) 후손에게 남길 열 가지 가르침일세.',
+        chart:{ type:'relic', title:'태조가 남긴 가르침', items:[ { img:'hunyo10jo', n:'훈요 10조', s:'후대 왕에게 남긴 열 가지 가르침' } ] } },
+      { who:'me', t:'(펼쳐 본다) …불교를 받들라, 서경을 중히 여기라……' },
+      { who:'npc', t:'거란은 멀리하라고도 적었네.',
+        chart:{ type:'grid', title:'훈요 10조가 이른 것', head:[ '조목', '내용' ], rows:[ [ '제1·2조', '불교를 지켜라' ], [ '제5·6조', '서경을 중히 여겨라' ], [ '제4조', '거란을 멀리하라' ] ] } },
+      { who:'me', t:'…열 가지가 다 다른 얘기군요.' },
+      { who:'npc', t:'풍수도 있었네. 지덕이 쇠하면 절을 세워 도왔지.',
+        chart:{ type:'compare', title:'풍수지리와 비보사찰', cols:[ { h:'터가 좋으면', items:[ '그대로 둔다' ] }, { h:'지덕이 쇠하면', hi:true, items:[ '절을 세운다', '비보사찰' ] } ] } },
+      { who:'me', t:'(고개를 끄덕인다) …나라 하나에도 참 많은 게 필요하군요.' },
+      { who:'npc', t:'(웃으며) 지키는 건 더 어렵네.' },
     ],
     quizSeq: [
       { q:'태조 왕건이 가난한 백성에게 봄에 곡식을 빌려주고 가을에 갚게 한 구휼 기구는?',
@@ -1191,10 +1229,36 @@ const NPC_DATA = {
   gwangjong_0: {
     name: '광종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/gwangjong.png',
     beats: [
-      { who:'npc', t:'호족들이 제멋대로 사람을 종으로 부리고 있었다. 나는 그 내력을 따져 본래 양인이던 자를 풀어 주었다 — 노비안검법이다.' },
-      { who:'npc', t:'벼슬은 뼈대가 아니라 재주로 얻어야 한다. 쌍기의 말을 받아들여 시험으로 사람을 뽑기 시작했다.' },
-      { who:'npc', t:'나는 스스로를 황제라 하고, 광덕·준풍이라는 연호를 썼다. 이 나라의 주인이 누구인지 분명히 해 두어야 했으니.' },
-      { who:'npc', t:'가난한 백성을 구제하고자 제위보라는 기금도 두었다. 곡식을 꾸어 주고 그 이자로 빈민을 돕는 것이다.' },
+      { who:'npc', t:'게 섰거라. …네 문서를 가져오너라.' },
+      { who:'me', t:'(문서를 가져온다) …소인의 것입니다.' },
+      { who:'npc', t:'(문서를 넘기며) 본래 양인인지를 가려낸다.',
+        chart:{ type:'steps', title:'노비안검법의 절차', steps:[ { t:'문서를 살핀다' }, { t:'본래 신분을 따진다' }, { t:'양인이었으면 풀어준다', s:'노비안검법, 956년' } ] } },
+      { who:'me', t:'(숨을 죽인다) …소인도 그리 될 수 있습니까?' },
+      { who:'npc', t:'(문서를 훑는다) …네 집안은 대대로 종이었구나.' },
+      { who:'me', t:'(고개를 떨군다) ……' },
+      { who:'npc', t:'(문서를 덮는다) 옆집 그 사람은 다르네.',
+        chart:{ type:'vs', title:'노비안검법, 갈리는 처지', left:{ n:'대대로 노비', s:'그대로 남는다' }, right:{ n:'본래 양인', s:'풀려난다' }, mid:'문서 한 장' } },
+      { who:'npc', t:'본래 양인이면, 이 법으로 풀려나네.' },
+      { who:'npc', t:'호족이 제멋대로 부리던 이들을 바로잡는다.',
+        chart:{ type:'compare', title:'노비안검법, 그 전과 후', cols:[ { h:'그 전', items:[ '호족이 종으로 부린다' ] }, { h:'그 후', hi:true, items:[ '본래 양인이면 풀려난다', '호족의 힘이 줄어든다' ] } ] } },
+      { who:'me', t:'…호족들이 가만있었겠습니까?' },
+      { who:'npc', t:'(피식) 크게 반발했지만 밀어붙였네.' },
+      { who:'npc', t:'벼슬도 뼈대가 아니라 재주로 얻어야지.' },
+      { who:'me', t:'어떻게 뽑으십니까?' },
+      { who:'npc', t:'시험으로 뽑네. 958년, 처음 열었지.',
+        chart:{ type:'steps', title:'광종이 연 과거', steps:[ { t:'쌍기가 건의한다' }, { t:'시험을 연다', s:'958년' }, { t:'재주로 뽑는다', s:'가문이 아니라' } ] } },
+      { who:'me', t:'쌍기라면… 이 나라 사람이 아니지 않습니까?' },
+      { who:'npc', t:'귀화한 이일세. 그 말을 받아들였지.',
+        chart:{ type:'stat', title:'958년, 첫 과거', items:[ { v:'쌍기', l:'후주에서 귀화한 신하' }, { v:'958년', l:'광종이 처음 연 해' } ] } },
+      { who:'npc', t:'(연호를 가리키며) 나는 스스로 황제라 하였네.' },
+      { who:'npc', t:'광덕·준풍이란 연호도 썼지.',
+        chart:{ type:'grid', title:'광종이 쓴 연호', head:[ '연호', '비고' ], rows:[ [ '광덕', '즉위 후 처음 쓴 연호' ], [ '준풍', '뒤이어 쓴 연호' ] ] } },
+      { who:'me', t:'…나라 안에서만 쓰는 이름 아닙니까?' },
+      { who:'npc', t:'이 나라의 주인이 누구인지 밝히는 것도 왕의 일일세.' },
+      { who:'npc', t:'가난한 이도 잊지 않았네. 제위보를 두었지.',
+        chart:{ type:'steps', title:'제위보가 하는 일', steps:[ { t:'기금을 마련한다' }, { t:'그 이자로 꾸어준다' }, { t:'가난한 백성을 돕는다', s:'제위보' } ] } },
+      { who:'me', t:'(작게) …소인 같은 이도 도움을 받습니까?' },
+      { who:'npc', t:'(짧게) 그리 만들려 하네만, 갈 길이 머네.' },
     ],
     quizSeq: [
       { q:'본래 양인이었다가 호족에게 종이 된 자를 조사해 풀어 준, 광종의 호족 억압책은?',
@@ -1214,10 +1278,23 @@ const NPC_DATA = {
   choeseungno_0: {
     name: '최승로', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/choeseungno.png',
     beats: [
-      { who:'npc', t:'소신 최승로, 성종께 스물여덟 조목의 개혁안을 올렸사옵니다.' },
-      { who:'npc', t:'불교는 몸을 닦는 근본이고 유교는 나라를 다스리는 근원이니, 나라의 일은 유교로 하시라 아뢰었지요.' },
-      { who:'npc', t:'전하께서는 열두 목에 지방관을 보내시고, 국자감을 세워 인재를 기르셨습니다.' },
-      { who:'npc', t:'이 나라가 어떻게 다스려지는지는 저 혼자 다 말할 수 없습니다. 지방의 일은 저기 향리에게, 그 뒤의 일은 뒷날의 임금들에게 물어보시지요.' },
+      { who:'npc', t:'(붓을 내려놓으며) 마침 잘 왔네.' },
+      { who:'me', t:'(두루마리를 받는다) …이게 다 무엇입니까?' },
+      { who:'npc', t:'성종께 올린 개혁안일세. 스물여덟 조목이지.',
+        chart:{ type:'relic', title:'최승로가 올린 글', items:[ { img:'simu28jo', n:'시무 28조', s:'성종에게 올린 스물여덟 조목의 개혁안' } ] } },
+      { who:'me', t:'(펼쳐 본다) …읽기가 쉽지 않습니다.' },
+      { who:'npc', t:'불교는 몸을 닦고, 유교는 나라를 다스리네.',
+        chart:{ type:'compare', title:'최승로가 가른 것', cols:[ { h:'불교', items:[ '몸을 닦는 근본' ] }, { h:'유교', hi:true, items:[ '나라를 다스리는 근원' ] } ] } },
+      { who:'me', t:'전하께서 받아들이셨습니까?' },
+      { who:'npc', t:'그렇다네. 열두 목에 지방관을 보내셨지.',
+        chart:{ type:'stat', title:'성종이 보낸 지방관', items:[ { v:'12목', l:'처음으로 지방관을 보낸 고을' } ] } },
+      { who:'me', t:'그전엔 지방을 어찌 다스렸습니까?' },
+      { who:'npc', t:'중앙이 손을 대지 못했네. 향리들이 대신했지.',
+        chart:{ type:'vs', title:'12목 이전과 이후', left:{ n:'그전', s:'향리가 대신 다스린다' }, right:{ n:'12목 이후', s:'지방관이 직접 다스린다' }, mid:'982년' } },
+      { who:'npc', t:'국자감도 세워 인재를 길렀네.',
+        chart:{ type:'grid', title:'시무 28조가 이른 것', head:[ '요지', '내용' ], rows:[ [ '불교 행사', '팔관회·연등회를 줄여라' ], [ '지방관', '12목에 보내라' ] ] } },
+      { who:'npc', t:'(두루마리를 접으며) …나 혼자 다 말할 순 없네.' },
+      { who:'npc', t:'지방의 일은 저기 향리에게, 그 뒤의 일은 뒷날의 임금들에게 물어보게.' },
     ],
     quizSeq: [
       { q:'성종에게 유교 정치 이념을 바탕으로 한 스물여덟 조목의 개혁안을 올린 인물은?',
@@ -1236,9 +1313,17 @@ const NPC_DATA = {
   gwanggun_0: {
     name: '광군 군사', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4-3 6.5-7 9-4-2.5-7-5-7-9V6z"/><path d="M12 8v6"/></svg>', img: 'assets/portraits/extra_musin.png',
     beats: [
-      { who:'npc', t:'나는 광군에 들었소. 정종 임금께서 거란이 쳐들어올 것에 대비해 세우신 군대요.' },
-      { who:'npc', t:'서른 만이라 하오. 온 나라의 장정을 적어 두고, 일이 있으면 곧바로 불러 모으는 것이지.' },
-      { who:'npc', t:'거란은 아직 오지 않았소. 허나 오지 않았다고 준비하지 않을 수는 없는 법이오.' },
+      { who:'npc', t:'(창을 고쳐 잡으며) 게 서라. …아, 지나가는 이로군.' },
+      { who:'me', t:'(창을 본다) 무슨 군사입니까?' },
+      { who:'npc', t:'광군일세. 정종 임금께서 세우셨지.' },
+      { who:'me', t:'거란이 쳐들어옵니까?' },
+      { who:'npc', t:'아직은 아닐세. 허나 대비는 해 두어야지.',
+        chart:{ type:'stat', title:'광군의 규모', items:[ { v:'30만', l:'전국에서 모은 장정' } ] } },
+      { who:'me', t:'(살펴본다) …다들 매일 훈련만 합니까?' },
+      { who:'npc', t:'아니, 평소엔 저마다 밭을 갈지.',
+        chart:{ type:'compare', title:'평소와 유사시', cols:[ { h:'평소', items:[ '저마다 밭을 간다' ] }, { h:'유사시', hi:true, items:[ '곧바로 모인다' ] } ] } },
+      { who:'npc', t:'일이 있으면 곧바로 모이는 게야.' },
+      { who:'npc', t:'오지 않았다고 준비 안 할 순 없는 법일세.' },
     ],
     quizSeq: [
       { q:'광종의 형인 정종이 거란의 침입에 대비해 만든, 30만에 이르는 군사 조직은?',
@@ -1250,9 +1335,26 @@ const NPC_DATA = {
   hyeonjong_0: {
     name: '현종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg>', img: 'assets/portraits/hyeonjong_goryeo_king.png',
     beats: [
-      { who:'npc', t:'과인은 거란의 침입을 세 차례 겪었다. 도읍을 버리고 남으로 피란한 적도 있었지.' },
-      { who:'npc', t:'그래서 나라의 뼈대를 다시 세웠다. 전국을 5도와 양계로 나누었다.' },
-      { who:'npc', t:'일반 행정을 맡는 5도에는 안찰사를 보내고, 국경의 군사 요충인 양계에는 병마사를 보냈다. 지킬 곳과 다스릴 곳은 다르게 다루어야 하는 법이다.' },
+      { who:'npc', t:'(지친 얼굴로) 과인은 거란의 침입을 세 번 겪었네.' },
+      { who:'me', t:'…도읍을 버리고 피란하신 적도 있었다 들었습니다.' },
+      { who:'npc', t:'그렇네. 2차 침입 땐 나주까지 내려갔었지.',
+        chart:{ type:'map', title:'현종의 피란길', pins:[ { x:36.4, y:84.2, n:'개경' }, { x:38.7, y:130.7, n:'나주', on:true } ], legend:[ { k:'1010년', v:'개경이 무너져 나주로 피란', on:true } ] } },
+      { who:'npc', t:'그때 부처님 힘을 빌리려 대장경을 새기기 시작했네.',
+        chart:{ type:'stat', title:'초조대장경', items:[ { v:'1011년', l:'새기기 시작한 해' }, { v:'현종', l:'거란 물리치길 빌었다' } ] } },
+      { who:'me', t:'(고개를 끄덕인다) …새기면 정말 물러갑니까?' },
+      { who:'npc', t:'(웃음기 없이) 그럴 리야. 3차 침입 땐 강감찬이 막았네.',
+        chart:{ type:'vs', title:'귀주대첩, 1019년', left:{ n:'거란', s:'소배압, 10만' }, right:{ n:'고려', s:'강감찬, 20만 8천', win:true }, mid:'VS' } },
+      { who:'me', t:'(마른침을 삼킨다) …얼마나 큰 싸움이었습니까?' },
+      { who:'npc', t:'1019년, 귀주에서 크게 무찔렀지.',
+        chart:{ type:'timeline', title:'현종 대의 거란 전쟁', marks:[ { y:'1010', t:'2차 침입 · 나주 피란' }, { y:'1011', t:'대장경 새기기 시작' }, { y:'1019', t:'귀주대첩', on:true } ] } },
+      { who:'me', t:'…그 뒤로는 편안하셨습니까?' },
+      { who:'npc', t:'겨우 한숨 돌렸지. 나라의 뼈대를 다시 세웠네.' },
+      { who:'npc', t:'전국을 5도와 양계로 나누었지.',
+        chart:{ type:'compare', title:'5도와 양계', cols:[ { h:'5도 (남쪽)', items:[ '일반 행정', '안찰사가 돈다' ] }, { h:'양계 (북쪽)', hi:true, items:[ '국경 요충', '병마사가 지킨다' ] } ] } },
+      { who:'me', t:'…남쪽과 북쪽을 다르게 다스리십니까?' },
+      { who:'npc', t:'일반 행정은 5도에 안찰사를, 양계엔 병마사를 보냈네.' },
+      { who:'me', t:'…지킬 곳과 다스릴 곳을 다르게 보신 거군요.' },
+      { who:'npc', t:'(끄덕인다) 같은 손으로 다룰 순 없는 법이지.' },
     ],
     quizSeq: [
       { q:'고려가 일반 행정 구역인 5도와 국경 지역의 군사 행정 구역을 함께 둔 지방 제도는?',
@@ -1264,10 +1366,26 @@ const NPC_DATA = {
   hyangni_0: {
     name: '향리 호장', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>', img: 'assets/portraits/extra_chonjang.png',
     beats: [
-      { who:'npc', t:'소인은 이 고을의 호장이올시다. 나라에서 보낸 수령이요? 이 고을엔 오지 않습니다.' },
-      { who:'npc', t:'지방관이 파견된 주현보다, 파견되지 않은 속현이 오히려 더 많지요. 그런 고을은 저희 향리가 실제로 다스립니다.' },
-      { who:'npc', t:'저희에게도 후단사에서 호장까지 아홉 단계에 이르는 승진 체계가 있습니다. 언젠가는 저희 같은 향리 출신도 중앙으로 나아가는 날이 오겠지요.' },
-      { who:'npc', t:'허나 향·부곡·소라 불리는 곳은 사정이 다릅니다. 소는 도자기나 종이 같은 물품을 만들어 바치는 곳인데, 그곳 백성은 일반 군현민보다 심한 차별을 받습니다.' },
+      { who:'npc', t:'(장부를 뒤적이며) …마침 잘 왔군. 이 다발 좀 세어 주게.' },
+      { who:'me', t:'(장부를 받아 센다) …이 고을엔 수령이 안 계십니까?' },
+      { who:'npc', t:'오지 않소. 나라에서 보낸 수령 말이오.' },
+      { who:'npc', t:'지방관이 파견된 주현보다, 속현이 더 많다오.',
+        chart:{ type:'compare', title:'주현과 속현', cols:[ { h:'주현', items:[ '수령이 다스린다' ] }, { h:'속현', hi:true, items:[ '향리가 다스린다', '수가 더 많다' ] } ] } },
+      { who:'me', t:'(장부를 마저 센다) …그럼 실은 어르신이 다스리시는 셈이군요.' },
+      { who:'npc', t:'(어깨를 편다) 그렇소. 소인은 이 고을의 호장이올시다.',
+        chart:{ type:'grid', title:'향리가 일하는 관청', head:[ '고을 등급', '관청 이름' ], rows:[ [ '주·부', '주사·부사' ], [ '군·현', '군사·현사' ], [ '부곡', '부곡사' ] ] } },
+      { who:'me', t:'호장이 되려면 어찌합니까?' },
+      { who:'npc', t:'아홉 단계를 거치오. 후단사에서 시작해 호장까지.',
+        chart:{ type:'steps', title:'향리가 오르는 아홉 단계', steps:[ { t:'후단사부터 시작' }, { t:'병사·창사를 거친다' }, { t:'호장에 이른다', s:'맨 윗자리' } ] } },
+      { who:'me', t:'…소인 같은 자도 오를 수 있습니까?' },
+      { who:'npc', t:'(장부를 덮으며) 향리는 종이 아니오.' },
+      { who:'npc', t:'대대로 이 고을에 뿌리내린 사람들이지.' },
+      { who:'npc', t:'허나 향·부곡·소라 불리는 곳은 사정이 다르오.' },
+      { who:'me', t:'무엇이 다릅니까?' },
+      { who:'npc', t:'소는 도자기·종이를 만들어 바치는데, 차별을 더 받소.',
+        chart:{ type:'compare', title:'군현과 향·부곡·소', cols:[ { h:'일반 군현', items:[ '그나마 나은 대우' ] }, { h:'향·부곡·소', hi:true, items:[ '군현민보다 차별받는다' ] } ] } },
+      { who:'me', t:'(장부를 내려놓는다) ……어디에도 소인 자리는 없군요.' },
+      { who:'npc', t:'(잠시 말이 없다) …그런 세상일세.' },
     ],
     quizSeq: [
       { q:'고려의 군현 중 지방관이 파견되지 않아 향리가 실질적으로 다스렸던 고을을 무엇이라 하나?',
@@ -1285,10 +1403,21 @@ const NPC_DATA = {
   yejong_0: {
     name: '예종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 016.5 3H19v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M8 7.5h7M8 11h5"/></svg>', img: 'assets/portraits/yejong_king.png',
     beats: [
-      { who:'npc', t:'사학이 융성하니 국자감이 도리어 한산해졌다. 나라가 세운 학교가 비어서야 되겠는가.' },
-      { who:'npc', t:'하여 양현고라는 장학 재단을 두어 배우는 이를 먹이고, 국자감에 7재라는 전문 강좌를 열었다.' },
-      { who:'npc', t:'배움만으로는 부족하다. 병든 백성에게 약을 나누어 주는 혜민국도 두었다 — 과인에서 인종 대에 이르도록 이어진 일이다.' },
-      { who:'npc', t:'…그대, 낯선 옷을 입었구나. 먼 데서 왔다면 이 나라가 어떻게 서 있는지 보고 가라.' },
+      { who:'npc', t:'(책을 정리하며) 사학이 융성하니 국자감이 되레 한산해졌네.' },
+      { who:'me', t:'나라가 세운 학교인데 말입니까?' },
+      { who:'npc', t:'그렇네. 그냥 둘 수야 없지.' },
+      { who:'npc', t:'양현고라는 장학 재단을 두어 배우는 이를 먹였네.',
+        chart:{ type:'stat', title:'예종의 관학 진흥', items:[ { v:'양현고', l:'장학 재단' }, { v:'7재', l:'전문 강좌' } ] } },
+      { who:'me', t:'7재는 무엇입니까?' },
+      { who:'npc', t:'국자감 안에 둔 전문 강좌일세. 경전마다 따로 배우게 했지.' },
+      { who:'npc', t:'배움만으론 부족하네. 병든 백성껜 혜민국서 약을 나눠 주었지.',
+        chart:{ type:'steps', title:'예종이 편 백성 구제', steps:[ { t:'구제도감을 둔다', s:'전염병 때 병자를 돌본다' }, { t:'혜민국을 둔다', s:'약을 나눠준다' } ] } },
+      { who:'me', t:'(작게) …소인 같은 이도 약을 받을 수 있습니까?' },
+      { who:'npc', t:'(끄덕이며) 그리 되라고 만든 것일세.',
+        chart:{ type:'compare', title:'예종이 편 것', cols:[ { h:'배움', items:[ '양현고', '7재' ] }, { h:'구제', hi:true, items:[ '구제도감', '혜민국' ] } ] } },
+      { who:'npc', t:'…그대, 낯선 옷을 입었구나.' },
+      { who:'npc', t:'먼 데서 왔다면 이 나라가 어떻게 서 있는지 보고 가라.' },
+      { who:'me', t:'(주위를 둘러본다) ……예, 잘 보았습니다.' },
     ],
     quizSeq: [
       { q:'예종이 관학 진흥을 위해 국자감에 둔 장학 재단과 전문 강좌를 바르게 짝지은 것은?',
@@ -1724,38 +1853,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=46"></script>
-<script src="assets/streak.js?v=46"></script>
+<script src="assets/badges.js?v=47"></script>
+<script src="assets/streak.js?v=47"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=46"></script>
-  <script src="assets/fx.js?v=46"></script>
-  <script src="assets/deed.js?v=46"></script>
-  <script src="assets/inkwipe.js?v=46"></script>
-  <script src="assets/dash.js?v=46"></script>
-<script src="assets/juice.js?v=46"></script>
-  <script src="assets/difficulty.js?v=46"></script>
-  <script src="assets/nextauto.js?v=46"></script>
-<script src="assets/heroes_data.js?v=46"></script>
-<script src="assets/heroes.js?v=46"></script>
-<script src="assets/icons.js?v=46"></script>
-<script src="assets/srs.js?v=46"></script>
-<script src="assets/newsflash.js?v=46"></script>
-<script src="assets/timeline.js?v=46"></script>
-<script src="assets/journey.js?v=46"></script>
-<script src="assets/season.js?v=46"></script>
-<script src="assets/items.js?v=46"></script>
-  <script src="assets/gold.js?v=46"></script>
-  <script src="assets/ask.js?v=46"></script>
-  <script src="assets/ads.js?v=46"></script>
-  <script src="assets/energy.js?v=46"></script>
-  <script src="assets/daily.js?v=46"></script>
-  <script src="assets/unlock.js?v=46"></script>
-  <script src="assets/guide.js?v=46"></script>
-  <script src="assets/minigames.js?v=46"></script>
-  <script src="assets/quests.js?v=46"></script>
-  <script src="assets/offline.js?v=46"></script>
-  <script src="assets/telemetry.js?v=46"></script>
-<script src="assets/autowalk.js?v=46"></script>
+<script src="assets/rank.js?v=47"></script>
+  <script src="assets/fx.js?v=47"></script>
+  <script src="assets/deed.js?v=47"></script>
+  <script src="assets/inkwipe.js?v=47"></script>
+  <script src="assets/dash.js?v=47"></script>
+<script src="assets/juice.js?v=47"></script>
+  <script src="assets/difficulty.js?v=47"></script>
+  <script src="assets/nextauto.js?v=47"></script>
+<script src="assets/heroes_data.js?v=47"></script>
+<script src="assets/heroes.js?v=47"></script>
+<script src="assets/icons.js?v=47"></script>
+<script src="assets/srs.js?v=47"></script>
+<script src="assets/newsflash.js?v=47"></script>
+<script src="assets/timeline.js?v=47"></script>
+<script src="assets/journey.js?v=47"></script>
+<script src="assets/season.js?v=47"></script>
+<script src="assets/items.js?v=47"></script>
+  <script src="assets/gold.js?v=47"></script>
+  <script src="assets/ask.js?v=47"></script>
+  <script src="assets/ads.js?v=47"></script>
+  <script src="assets/energy.js?v=47"></script>
+  <script src="assets/daily.js?v=47"></script>
+  <script src="assets/unlock.js?v=47"></script>
+  <script src="assets/guide.js?v=47"></script>
+  <script src="assets/minigames.js?v=47"></script>
+  <script src="assets/quests.js?v=47"></script>
+  <script src="assets/offline.js?v=47"></script>
+  <script src="assets/telemetry.js?v=47"></script>
+<script src="assets/autowalk.js?v=47"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
