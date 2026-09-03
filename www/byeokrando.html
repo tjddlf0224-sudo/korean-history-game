@@ -487,9 +487,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=45"></script>
-<script src="assets/chart.js?v=45"></script>
-<script src="assets/audio.js?v=45"></script>
+<script src="assets/map/map_component.js?v=46"></script>
+<script src="assets/chart.js?v=46"></script>
+<script src="assets/audio.js?v=46"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -501,7 +501,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=45';   // 존댓말 전환
+const ART_V = '?v=46';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1149,9 +1149,23 @@ const NPC_DATA = {
   gyeongsiseo_0: {
     name: '경시서 관리', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14"/><path d="M5 7l-2.5 6h5zM19 7l-2.5 6h5z"/><path d="M8 21h8"/></svg>', img: 'assets/portraits/goryeo_gyeongsiseo.png',
     beats: [
-      { who:'npc', t:'거기 서시오. 되와 자를 좀 봅시다 — 소인은 경시서에서 나왔소.' },
-      { who:'npc', t:'개경 시전에서 되를 속이거나 값을 함부로 올리는 자가 있는지 살피는 것이 우리 일이오.' },
-      { who:'npc', t:'나라가 직접 여는 가게도 있소. 서적점·다점 같은 관영 상점이지. 백성이 쓸 물건을 나라가 갖추어 두는 것이오.' },
+      { who:'npc', t:'(저잣거리를 가리키며) 개경 시전일세. 여길 살피는 게 내 일이지.',
+        chart:{ type:'map', title:'개경 시전', pins:[ { x:36, y:84, n:'개경', on:true } ], legend:[ { k:'경시서', v:'시전 한복판에 있다', on:true } ] } },
+      { who:'npc', t:'(되를 내밀며) 이 되로 곡식을 되어 보게.' },
+      { who:'me', t:'(곡식을 채운다) …이만큼이 한 되군요.' },
+      { who:'npc', t:'저기 저 되도 재보게. 저잣거리에서 파는 자의 것이네.' },
+      { who:'me', t:'(재본다) …어? 이쪽은 눈금이 모자랍니다.' },
+      { who:'npc', t:'게 섰거라! 되를 깎아 속였구나.',
+        chart:{ type:'steps', title:'경시서가 하는 일', steps:[ { t:'되와 자를 검사한다' }, { t:'값을 함부로 못 올리게 한다' }, { t:'속인 자를 잡아 벌한다' } ] } },
+      { who:'me', t:'값도 마음대로 못 올립니까?' },
+      { who:'npc', t:'흉년엔 쌀값이 뛰지. 그럴 땐 우리가 값을 매겨 주네.',
+        chart:{ type:'stat', title:'경시서의 관원', items:[ { v:'영 1인', l:'우두머리' }, { v:'승 2인', l:'그 아래' }, { v:'이속 5인', l:'실무를 맡다' } ] } },
+      { who:'npc', t:'(거리를 가리키며) 저긴 나라가 직접 여는 가게일세.' },
+      { who:'me', t:'(본다) …보통 시전과는 다릅니까?' },
+      { who:'npc', t:'서적점에선 책을, 다점에선 차를 파네. 나라가 직접 하지.',
+        chart:{ type:'compare', title:'시전과 관영 상점', cols:[ { h:'민간 시전', items:[ '백성이 연다', '값은 시세대로' ] }, { h:'관영 상점', hi:true, items:[ '나라가 연다', '서적점 · 다점' ] } ] } },
+      { who:'me', t:'나라가 장사까지 합니까?' },
+      { who:'npc', t:'백성 쓸 것을 갖추는 것도 나랏일일세.' },
     ],
     quizSeq: [
       { q:'고려가 개경 시전의 상행위를 감독하기 위해 둔 관청은?',
@@ -1166,9 +1180,19 @@ const NPC_DATA = {
   sukjong_0: {
     name: '고려 숙종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/sukjong_goryeo_king.png',
     beats: [
-      { who:'npc', t:'과인이 주전도감을 두라 명하였다. 의천이 거듭 청한 일이지.' },
-      { who:'npc', t:'동전만으로는 큰 거래가 어렵다. 하여 은 한 근으로 이 나라의 지형을 본떠 병(甁)을 지어 냈다.' },
-      { who:'npc', t:'입이 넓어 활구(闊口)라고도 부른다. 값이 커서 아무나 쓰지는 못하지만, 큰 장사에는 이만한 것이 없지.' },
+      { who:'npc', t:'(은병을 내보이며) 과인이 명하여 부은 것이다. 만져 보라.' },
+      { who:'me', t:'(받아 든다) …묵직합니다. 이게 무엇입니까?' },
+      { who:'npc', t:'은 한 근을 부어 만든 은병이다. 큰 장사에 쓰지.',
+        chart:{ type:'relic', title:'고려의 고액 화폐', items:[ { img:'eunbyeong', n:'은병(활구)', s:'은 한 근 · 우리 지형을 본떴다' } ] } },
+      { who:'me', t:'(살펴본다) …입구가 유난히 넓군요.' },
+      { who:'npc', t:'그래서 활구, \'입 벌어진 병\'이라 부른다.' },
+      { who:'me', t:'동전으로는 안 됩니까?' },
+      { who:'npc', t:'동전만으론 큰 거래가 안 된다. 의천이 거듭 청한 일이다.',
+        chart:{ type:'faces', title:'화폐 주조를 청한 승려', people:[ { img:'uicheon', n:'의천', s:'숙종에게 주전을 거듭 청했다' } ] } },
+      { who:'me', t:'아무나 이걸로 물건을 삽니까?' },
+      { who:'npc', t:'값이 워낙 커서 아무나 쓰진 못한다. 그래도 나라의 뜻이지.' },
+      { who:'npc', t:'화폐를 밀어붙인 게 과인이 처음은 아니다.',
+        chart:{ type:'timeline', title:'고려 화폐의 자취', marks:[ { y:'996', t:'건원중보' }, { y:'1002', t:'폐지' }, { y:'1097', t:'주전도감 설치' }, { y:'1101', t:'은병(활구)', on:true } ] } },
     ],
     quizSeq: [
       { q:'고려 숙종 때 은으로 우리나라 지형을 본떠 만들어 활구라고도 불린 고액 화폐는?',
@@ -1180,35 +1204,21 @@ const NPC_DATA = {
   jeonsigwa_0: {
     name: '전시과 담당 관리', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/jeonsigwa.png',
     beats: [
-      { who:'npc', t:'나라가 관리에게 녹봉 대신 땅을 주네. 정확히는 땅 자체가 아니라 거기서 조세를 거둘 권리일세.' },
-      { who:'npc', t:'곡식을 거두는 땅이 전지, 땔감을 얻는 땅이 시지야. 그래서 전시과라 하네.' },
-      { who:'npc', t:'976년 경종 때 처음 정했는데, 그때는 관품만이 아니라 옷 색깔까지 따졌지. 998년 목종 때 고쳐 관직만 보게 했고, 1076년 문종 때 다시 손봐 현직 관리에게만 주기로 했네.' },
-      { who:'npc', chart:{ head: [
-'',
-'연도',
-'왕',
-'지급 기준',
-], rows: [
-[
-'시정',
-'976',
-'경종',
-'인품 + 관품',
-],
-[
-'개정',
-'998',
-'목종',
-'관직만',
-],
-[
-'경정',
-'1076',
-'문종',
-'현직만',
-],
-], note: '<b>인품 → 관직 → 현직</b>으로 점점 좁아지네. 나라가 땅을 아끼게 된 것일세.' }, t:'전시과는 세 번 고쳐졌네. 무엇을 보고 주었는지가 매번 달라지지.' },
-      { who:'npc', t:'높은 벼슬아치에게는 공음전을 따로 주었네. 이건 자손에게 물려줄 수 있어 — 문벌 귀족이 대를 잇는 밑천이 되었지.' },
+      { who:'npc', t:'(문서를 내밀며) 자네 몫의 문서일세. 받아 보게.' },
+      { who:'me', t:'(받아 든다) …땅을 통째로 주시는 겁니까?' },
+      { who:'npc', t:'아닐세. 땅이 아니라 거기서 거둘 조세권이야.' },
+      { who:'me', t:'\'전지\'와 \'시지\'라 쓰여 있는데요.' },
+      { who:'npc', t:'전지는 곡식 거두는 땅, 시지는 땔감 얻는 땅일세.',
+        chart:{ type:'compare', title:'전지와 시지', cols:[ { h:'전지(田)', items:[ '곡식을 거둔다' ] }, { h:'시지(柴)', hi:true, items:[ '땔감을 얻는다' ] } ] } },
+      { who:'me', t:'이 제도, 처음부터 이랬습니까?' },
+      { who:'npc', t:'아니, 세 번 바뀌었네. 처음엔 인품까지 따졌었지.',
+        chart:{ type:'grid', title:'전시과, 세 번 바뀌다', head:[ '', '연도', '왕', '기준' ], rows:[ [ '시정', '976', '경종', '인품 + 관품' ], [ '개정', '998', '목종', '관직만' ], [ '경정', '1076', '문종', '현직만' ] ], hi:2 } },
+      { who:'me', t:'갈수록 좁아지는군요.' },
+      { who:'npc', t:'그렇지. 나라가 땅을 아끼게 된 걸세.' },
+      { who:'npc', t:'(다른 문서를 보이며) 이건 공음전. 5품 이상에게만 주네.' },
+      { who:'me', t:'이건 뭐가 다릅니까?' },
+      { who:'npc', t:'자손에게 물려줄 수 있네. 문벌 귀족이 대를 잇는 밑천이지.',
+        chart:{ type:'vs', title:'물려줄 수 있는가', left:{ n:'전시과', s:'관직 떠나면 반납' }, right:{ n:'공음전', s:'자손에게 세습', win:true }, mid:'≠' } },
     ],
     quizSeq: [
       { q:'고려에서 관리에게 곡식을 거둘 전지와 땔감을 얻을 시지를 지급한 토지 제도는?',
@@ -1225,9 +1235,18 @@ const NPC_DATA = {
   songsang_0: {
     name: '송 상인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M4 8h16"/><circle cx="12" cy="14" r="2.3"/></svg>', img: 'assets/portraits/songsang.png',
     beats: [
-      { who:'npc', t:'송에서 왔소이다. 이 뱃길이 제일 붐비지요.' },
-      { who:'npc', t:'우리는 비단과 서적, 약재, 자기를 싣고 옵니다. 돌아갈 때는 인삼과 종이, 먹, 나전 칠기를 싣지요. 고려 종이는 값을 아주 잘 받습니다.' },
-      { who:'npc', t:'거란이나 여진과도 거래가 있다고 들었소만, 물건 종류가 다릅니다. 저쪽은 말과 모피지요.' },
+      { who:'npc', t:'(짐을 내리며) 송에서 왔소이다. 예성강 물살이 세더군.' },
+      { who:'me', t:'(강 쪽을 본다) …여기가 그렇게 큰 항구입니까?' },
+      { who:'npc', t:'벽란도요. 개경과 가까워 배가 제일 많이 드는 곳이지.',
+        chart:{ type:'map', title:'국제 무역항, 벽란도', pins:[ { x:35, y:86, n:'벽란도', on:true } ], legend:[ { k:'자리', v:'예성강 하구', on:true }, { k:'드나든 이', v:'송 · 일본 · 아라비아' } ] } },
+      { who:'npc', t:'(짐을 풀며) 비단과 서적, 약재, 자기를 실었소. 골라 보시오.' },
+      { who:'me', t:'(비단을 만져 본다) …이건 무엇과 바꾸십니까?' },
+      { who:'npc', t:'인삼과 종이, 나전 칠기를 주면 되오.',
+        chart:{ type:'compare', title:'벽란도의 교역품', cols:[ { h:'송이 가져온 것', items:[ '비단 · 서적 · 약재', '자기' ] }, { h:'고려가 내준 것', hi:true, items:[ '인삼 · 종이', '나전 칠기' ] } ] } },
+      { who:'me', t:'(종이를 건넨다) 이 정도면 되겠습니까?' },
+      { who:'npc', t:'넉넉하오. 고려 종이는 값을 아주 잘 받소.' },
+      { who:'npc', t:'거란·여진과도 거래가 있소만, 그쪽은 물건이 다르지.',
+        chart:{ type:'grid', title:'고려의 교역 상대', head:[ '상대', '가져오는 것' ], rows:[ [ '송', '비단 · 서적 · 약재' ], [ '거란 · 여진', '말 · 모피' ] ], hi:0 } },
     ],
     quizSeq: [
       { q:'고려의 국제 무역항으로, 예성강 하구에 있어 송·일본·아라비아 상인까지 드나든 곳은?',
@@ -1241,9 +1260,17 @@ const NPC_DATA = {
   arabsang_0: {
     name: '대식국 상인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-4 2 2-5z"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>', img: 'assets/portraits/arabsang.png',
     beats: [
-      { who:'npc', t:'아주 먼 서쪽에서 왔습니다. 여기 사람들은 우리를 대식국 사람이라 부르더군요.' },
-      { who:'npc', t:'수은과 향료, 산호를 가져왔습니다. 이런 물건은 이 근방에서 나지 않지요.' },
-      { who:'npc', t:'돌아가면 이 나라 이름을 옮겨 적을 겁니다. 고려 — 우리 말로는 코리아쯤이 되겠군요.' },
+      { who:'npc', t:'(자루를 연다) 아주 먼 서쪽에서 왔소. 냄새를 맡아 보시오.' },
+      { who:'me', t:'(냄새를 맡는다) …처음 맡는 냄새입니다. 무엇입니까?' },
+      { who:'npc', t:'향료요. 수은과 산호도 실었소. 이 근방엔 없는 것들이지.',
+        chart:{ type:'stat', title:'대식국 상인이 가져온 것', items:[ { v:'수은', l:'水銀' }, { v:'향료', l:'香料' }, { v:'산호', l:'珊瑚' } ] } },
+      { who:'me', t:'여긴 어떻게 부릅니까? 사람들이…' },
+      { who:'npc', t:'대식국 사람이라 부르더군. 나는 이 나라를 \'고려\'라 적어 가겠소.' },
+      { who:'me', t:'(고개를 갸웃한다) …그냥 적기만 하는 겁니까?' },
+      { who:'npc', t:'이걸 서쪽까지 가져가지. 그리 코리아란 이름이 퍼질 것이오.',
+        chart:{ type:'stat', title:'대식국 상인의 왕래', items:[ { v:'3회', l:'고려에 온 횟수' }, { v:'100여 명', l:'한 번에 온 인원' } ] } },
+      { who:'npc', t:'송은 늘 오지만, 우리는 좀처럼 오기 힘든 길이오.',
+        chart:{ type:'compare', title:'가까운 상인과 먼 상인', cols:[ { h:'송 · 일본', items:[ '가깝다', '자주 온다' ] }, { h:'대식국(아라비아)', hi:true, items:[ '아주 멀다', '드물게 온다' ] } ] } },
     ],
     quizSeq: [
       { q:'고려에 수은·향료 등을 가져와 교역하며, 고려의 이름을 서방에 알린 것으로 여겨지는 상인들은?',
@@ -1254,12 +1281,24 @@ const NPC_DATA = {
   jujeon_0: {
     name: '주전도감 장인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><rect x="9" y="9" width="6" height="6"/></svg>', img: 'assets/portraits/jujeon.png',
     beats: [
-      { who:'npc', t:'돈을 부어 만드는 곳일세. 성종 때 건원중보라는 쇠돈을 처음 만들었는데, 사람들이 잘 안 쓰더군.' },
-      { who:'npc', t:'숙종께서 다시 나섰네. 의천 스님이 권했다지. 주전도감을 두고 해동통보, 삼한통보, 해동중보를 찍어 냈네.' },
-      { who:'npc', t:'이건 은으로 부은 것일세. 우리 땅 모양을 본떠 만들었다 하여 은병, 사람들은 활구라 부르지. 한 개 값이 어마어마해서 큰 거래에나 쓰인다네.' },
-      { who:'npc', t:'허나 솔직히 말하면, 저잣거리에서는 여전히 쌀과 베로 셈하네. 돈이 자리 잡기가 이리 어렵네.' },
-      { who:'npc', t:'개경에는 시전이 늘어서 있었네. 나라에서는 경시서를 두어 그 상행위를 감독했지.' },
-      { who:'npc', t:'관에서 직접 운영하는 상점도 있었네. 서적점에서는 책을, 다점에서는 차를 팔았지.' },
+      { who:'npc', t:'(거푸집을 내밀며) 마침 잘 왔네. 쇳물을 부어 보게.' },
+      { who:'me', t:'(쇳물을 붓는다) …이게 굳으면 돈이 되는 겁니까?' },
+      { who:'npc', t:'그렇지. 식으면 틀을 깨서 꺼내네.',
+        chart:{ type:'steps', title:'동전을 찍어 내는 차례', steps:[ { t:'거푸집에 쇳물을 붓는다' }, { t:'식을 때까지 기다린다' }, { t:'틀을 깨 꺼낸다' } ] } },
+      { who:'me', t:'(꺼내 본다) …\'해동통보\'라 적혀 있습니다.' },
+      { who:'npc', t:'삼한통보, 해동중보도 함께 찍었네. 숙종께서 명하셨지.' },
+      { who:'me', t:'처음부터 잘 쓰였습니까?' },
+      { who:'npc', t:'아닐세. 성종 때 이걸 먼저 냈지만 다들 안 썼네.',
+        chart:{ type:'relic', title:'잊힌 첫 시도', items:[ { img:'geonwonjungbo', n:'건원중보', s:'성종 때 첫 금속 화폐 — 안 쓰였다' } ] } },
+      { who:'me', t:'이번 해동통보는 다릅니까?' },
+      { who:'npc', t:'(한숨) 솔직히… 저잣거리는 여전히 쌀과 베로 셈하네.',
+        chart:{ type:'compare', title:'무엇으로 셈하는가', cols:[ { h:'나라가 바라는 것', items:[ '해동통보로' ] }, { h:'저잣거리의 실제', hi:true, items:[ '쌀과 베로', '가볍고 안 상한다' ] } ] } },
+      { who:'me', t:'왜 다들 동전을 마다합니까?' },
+      { who:'npc', t:'베는 가볍고 값이 안 변하네. 동전보다 믿음이 가지.' },
+      { who:'npc', t:'그래도 큰 거래엔 이게 있네.',
+        chart:{ type:'relic', title:'큰 거래엔 이것', items:[ { img:'eunbyeong', n:'은병(활구)', s:'값이 커 큰 거래에 쓴다' } ] } },
+      { who:'me', t:'(은병을 들어 본다) …이건 확실히 다르군요.' },
+      { who:'npc', t:'값이 크니 아무나 못 쓰지만, 그래서 오히려 믿을 수 있네.' },
     ],
     quizSeq: [
       { q:'고려 숙종 때 주전도감을 두고 만든 화폐로, 삼한통보와 함께 찍어 낸 동전은?',
@@ -1693,38 +1732,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=45"></script>
-<script src="assets/streak.js?v=45"></script>
+<script src="assets/badges.js?v=46"></script>
+<script src="assets/streak.js?v=46"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=45"></script>
-  <script src="assets/fx.js?v=45"></script>
-  <script src="assets/deed.js?v=45"></script>
-  <script src="assets/inkwipe.js?v=45"></script>
-  <script src="assets/dash.js?v=45"></script>
-<script src="assets/juice.js?v=45"></script>
-  <script src="assets/difficulty.js?v=45"></script>
-  <script src="assets/nextauto.js?v=45"></script>
-<script src="assets/heroes_data.js?v=45"></script>
-<script src="assets/heroes.js?v=45"></script>
-<script src="assets/icons.js?v=45"></script>
-<script src="assets/srs.js?v=45"></script>
-<script src="assets/newsflash.js?v=45"></script>
-<script src="assets/timeline.js?v=45"></script>
-<script src="assets/journey.js?v=45"></script>
-<script src="assets/season.js?v=45"></script>
-<script src="assets/items.js?v=45"></script>
-  <script src="assets/gold.js?v=45"></script>
-  <script src="assets/ask.js?v=45"></script>
-  <script src="assets/ads.js?v=45"></script>
-  <script src="assets/energy.js?v=45"></script>
-  <script src="assets/daily.js?v=45"></script>
-  <script src="assets/unlock.js?v=45"></script>
-  <script src="assets/guide.js?v=45"></script>
-  <script src="assets/minigames.js?v=45"></script>
-  <script src="assets/quests.js?v=45"></script>
-  <script src="assets/offline.js?v=45"></script>
-  <script src="assets/telemetry.js?v=45"></script>
-<script src="assets/autowalk.js?v=45"></script>
+<script src="assets/rank.js?v=46"></script>
+  <script src="assets/fx.js?v=46"></script>
+  <script src="assets/deed.js?v=46"></script>
+  <script src="assets/inkwipe.js?v=46"></script>
+  <script src="assets/dash.js?v=46"></script>
+<script src="assets/juice.js?v=46"></script>
+  <script src="assets/difficulty.js?v=46"></script>
+  <script src="assets/nextauto.js?v=46"></script>
+<script src="assets/heroes_data.js?v=46"></script>
+<script src="assets/heroes.js?v=46"></script>
+<script src="assets/icons.js?v=46"></script>
+<script src="assets/srs.js?v=46"></script>
+<script src="assets/newsflash.js?v=46"></script>
+<script src="assets/timeline.js?v=46"></script>
+<script src="assets/journey.js?v=46"></script>
+<script src="assets/season.js?v=46"></script>
+<script src="assets/items.js?v=46"></script>
+  <script src="assets/gold.js?v=46"></script>
+  <script src="assets/ask.js?v=46"></script>
+  <script src="assets/ads.js?v=46"></script>
+  <script src="assets/energy.js?v=46"></script>
+  <script src="assets/daily.js?v=46"></script>
+  <script src="assets/unlock.js?v=46"></script>
+  <script src="assets/guide.js?v=46"></script>
+  <script src="assets/minigames.js?v=46"></script>
+  <script src="assets/quests.js?v=46"></script>
+  <script src="assets/offline.js?v=46"></script>
+  <script src="assets/telemetry.js?v=46"></script>
+<script src="assets/autowalk.js?v=46"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

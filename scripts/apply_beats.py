@@ -132,12 +132,22 @@ def main():
             if check_only: continue
 
         if check_only:
-            n = sum(len(v) for v in data['npcs'].values())
-            L = [len(re.sub(r'<[^>]+>', '', b['t'])) for v in data['npcs'].values() for b in v]
-            me = sum(1 for v in data['npcs'].values() for b in v if b.get('who') == 'me')
-            ch = sum(1 for v in data['npcs'].values() for b in v if b.get('chart'))
-            print('  대사 %d개 · 평균 %.1f자 · 최대 %d자 · 주인공 %d(%.0f%%) · 도해 %d(%.0f%%)'
-                  % (n, sum(L)/len(L), max(L), me, me/n*100, ch, ch/n*100))
+            # 유산 사진(docImg)의 글은 대사가 아니라 **캡션**이다. 출처까지 적으므로
+            # 길 수밖에 없고, 화면에서도 이름표 없이 사진 아래에 따로 뜬다.
+            # 길이·비율 통계에서 빼야 실제 대사가 어떤지 보인다.
+            beats = [b for v in data['npcs'].values() for b in v]
+            talk = [b for b in beats if not b.get('docImg')]
+            docs = len(beats) - len(talk)
+            L = [len(re.sub(r'<[^>]+>', '', b['t'])) for b in talk]
+            n = len(talk)
+            me = sum(1 for b in talk if b.get('who') == 'me')
+            ch = sum(1 for b in talk if b.get('chart'))
+            print('  대사 %d개 · 평균 %.1f자 · 최대 %d자 · 주인공 %d(%.0f%%) · 도해 %d(%.0f%%)%s'
+                  % (n, sum(L)/len(L), max(L), me, me/n*100, ch, ch/n*100,
+                     ' · 유산 사진 %d장' % docs if docs else ''))
+            for b in talk:
+                ln = len(re.sub(r'<[^>]+>', '', b['t']))
+                if ln > 45: print('     ⚠️  %d자: %s…' % (ln, b['t'][:30]))
             continue
 
         backup = path + '.bak'
