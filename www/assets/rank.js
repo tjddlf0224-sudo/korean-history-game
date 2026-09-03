@@ -97,6 +97,8 @@ window.Rank = (function(){
 
     const leveled = after.level > before.level;
     const promoted = after.tier.id !== before.tier.id;
+    // 신분이 바뀌면 주인공 옷도 갈아입어야 한다(챕터가 이 알림을 듣는다)
+    if (promoted) try { window.dispatchEvent(new Event('khg-rank-up')); } catch(e){}
     if (promoted)      setTimeout(() => Effects.promote(after.tier, after.level), 520);
     else if (leveled)  setTimeout(() => Effects.levelUp(after.level), 420);
 

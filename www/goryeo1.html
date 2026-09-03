@@ -487,9 +487,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=43"></script>
-<script src="assets/chart.js?v=43"></script>
-<script src="assets/audio.js?v=43"></script>
+<script src="assets/map/map_component.js?v=44"></script>
+<script src="assets/chart.js?v=44"></script>
+<script src="assets/audio.js?v=44"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -501,7 +501,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=43';   // 존댓말 전환
+const ART_V = '?v=44';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -634,10 +634,42 @@ const PLAYER_LOOK = { role: 'commoner', body: '#c94f4f', accent: '#e0b94a' };
    같으므로 보정이 없다 — 그냥 방향 이름 그대로 쓴다. */
 const DIR_SRC = { down:'down', up:'up', left:'left', right:'right' };
 const PLAYER_SPRITES = {};
-['down','up','left','right'].forEach(dir => {
-  const src = DIR_SRC[dir];
-  PLAYER_SPRITES[dir] = [0,1,2].map(i => { const im = new Image(); im.src = `assets/player/${src}_${i}.png` + ART_V; return im; });
-});
+
+/* 신분이 오르면 옷이 바뀐다. 노비로 시작해 왕까지 가는 게 이 게임의 뼈대인데
+   주인공만 내내 같은 옷이면 올릴 맛이 없다. 폴더 이름은 rank.js의 티어 id와
+   같은 말을 쓴다(nobi·yangin·jungin·yangban·jaesang·wang).
+   그림이 없거나 Rank가 아직 없으면 예전 그림으로 돌아간다 — 아트가 빠져도
+   게임은 돌아가야 한다. */
+const RANK_DIRS = ['nobi','yangin','jungin','yangban','jaesang','wang'];
+let playerSuit = null;
+
+function loadPlayerSprites(suit){
+  if (playerSuit === suit) return;
+  playerSuit = suit;
+  const base = suit ? `assets/player/${suit}/` : 'assets/player/';
+  ['down','up','left','right'].forEach(dir => {
+    const src = DIR_SRC[dir];
+    PLAYER_SPRITES[dir] = [0,1,2].map(i => {
+      const im = new Image();
+      // 신분 그림이 아직 없으면 예전 그림으로 조용히 돌아간다
+      if (suit) im.onerror = () => { im.onerror = null; im.src = `assets/player/${src}_${i}.png` + ART_V; };
+      im.src = base + `${src}_${i}.png` + ART_V;
+      return im;
+    });
+  });
+}
+
+function currentSuit(){
+  try {
+    const id = window.Rank && Rank.get && Rank.get().tier && Rank.get().tier.id;
+    return RANK_DIRS.indexOf(id) >= 0 ? id : null;
+  } catch(e){ return null; }
+}
+loadPlayerSprites(currentSuit());
+/* 승급할 때만 갈아 끼운다 — 매 프레임 묻지 않는다.
+   Rank가 아직 안 실렸을 수 있어 조금 뒤에 한 번 더 본다. */
+setTimeout(() => loadPlayerSprites(currentSuit()), 400);
+window.addEventListener('khg-rank-up', () => loadPlayerSprites(currentSuit()));
 const DIR_NAME = { u:'up', d:'down', l:'left', r:'right' };
 function drawPlayerSprite(px, py, facing, moving){
   ctx.fillStyle = 'rgba(0,0,0,.28)';
@@ -1692,38 +1724,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=43"></script>
-<script src="assets/streak.js?v=43"></script>
+<script src="assets/badges.js?v=44"></script>
+<script src="assets/streak.js?v=44"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=43"></script>
-  <script src="assets/fx.js?v=43"></script>
-  <script src="assets/deed.js?v=43"></script>
-  <script src="assets/inkwipe.js?v=43"></script>
-  <script src="assets/dash.js?v=43"></script>
-<script src="assets/juice.js?v=43"></script>
-  <script src="assets/difficulty.js?v=43"></script>
-  <script src="assets/nextauto.js?v=43"></script>
-<script src="assets/heroes_data.js?v=43"></script>
-<script src="assets/heroes.js?v=43"></script>
-<script src="assets/icons.js?v=43"></script>
-<script src="assets/srs.js?v=43"></script>
-<script src="assets/newsflash.js?v=43"></script>
-<script src="assets/timeline.js?v=43"></script>
-<script src="assets/journey.js?v=43"></script>
-<script src="assets/season.js?v=43"></script>
-<script src="assets/items.js?v=43"></script>
-  <script src="assets/gold.js?v=43"></script>
-  <script src="assets/ask.js?v=43"></script>
-  <script src="assets/ads.js?v=43"></script>
-  <script src="assets/energy.js?v=43"></script>
-  <script src="assets/daily.js?v=43"></script>
-  <script src="assets/unlock.js?v=43"></script>
-  <script src="assets/guide.js?v=43"></script>
-  <script src="assets/minigames.js?v=43"></script>
-  <script src="assets/quests.js?v=43"></script>
-  <script src="assets/offline.js?v=43"></script>
-  <script src="assets/telemetry.js?v=43"></script>
-<script src="assets/autowalk.js?v=43"></script>
+<script src="assets/rank.js?v=44"></script>
+  <script src="assets/fx.js?v=44"></script>
+  <script src="assets/deed.js?v=44"></script>
+  <script src="assets/inkwipe.js?v=44"></script>
+  <script src="assets/dash.js?v=44"></script>
+<script src="assets/juice.js?v=44"></script>
+  <script src="assets/difficulty.js?v=44"></script>
+  <script src="assets/nextauto.js?v=44"></script>
+<script src="assets/heroes_data.js?v=44"></script>
+<script src="assets/heroes.js?v=44"></script>
+<script src="assets/icons.js?v=44"></script>
+<script src="assets/srs.js?v=44"></script>
+<script src="assets/newsflash.js?v=44"></script>
+<script src="assets/timeline.js?v=44"></script>
+<script src="assets/journey.js?v=44"></script>
+<script src="assets/season.js?v=44"></script>
+<script src="assets/items.js?v=44"></script>
+  <script src="assets/gold.js?v=44"></script>
+  <script src="assets/ask.js?v=44"></script>
+  <script src="assets/ads.js?v=44"></script>
+  <script src="assets/energy.js?v=44"></script>
+  <script src="assets/daily.js?v=44"></script>
+  <script src="assets/unlock.js?v=44"></script>
+  <script src="assets/guide.js?v=44"></script>
+  <script src="assets/minigames.js?v=44"></script>
+  <script src="assets/quests.js?v=44"></script>
+  <script src="assets/offline.js?v=44"></script>
+  <script src="assets/telemetry.js?v=44"></script>
+<script src="assets/autowalk.js?v=44"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
