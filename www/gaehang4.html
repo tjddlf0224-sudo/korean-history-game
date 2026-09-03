@@ -1142,10 +1142,15 @@ const NPC_DATA = {
   gungnyeo_0: {
     name: '경복궁 궁녀', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21c0-4.2 2.9-7 6.5-7s6.5 2.8 6.5 7z"/></svg>', img: 'assets/portraits/extra_gungnyeo.png',
     beats: [
-      { who:'npc', t:'…그날 새벽 일을 물으시는 겁니까.' },
-      { who:'npc', t:'칼을 든 자들이 광화문을 넘어 들어왔습니다. 건청궁까지 곧장 올라왔지요.' },
-      { who:'npc', t:'중전마마께서 어디 계신지 대라 하였습니다. 저희는 아무도 입을 열지 않았습니다만…' },
-      { who:'npc', t:'…그 뒤의 일은 차마 입에 담지 못하겠습니다. 시신마저 뜰에서 태웠다 합니다.' },
+      { who:'npc', t:'…그날 새벽 일을 물으십니까.' },
+      { who:'me', t:'(고개를 끄덕인다) …예. 무슨 일이 있었는지.' },
+      { who:'npc', t:'칼을 든 자들이 광화문을 넘어 건청궁까지 올라왔습니다.',
+        chart:{ type:'map', title:'을미사변이 일어난 곳', pins:[ { x:42.5, y:90.3, n:'경복궁 건청궁', on:true } ] } },
+      { who:'npc', t:'중전마마 계신 곳을 대라 했으나, 아무도 입을 열지 않았습니다.',
+        chart:{ type:'stat', title:'을미사변', items:[ { v:'1895.10.8', l:'새벽' }, { v:'미우라', l:'일본 공사, 주모' } ] } },
+      { who:'me', t:'(말을 잇지 못한다)' },
+      { who:'npc', t:'…그 뒤는 차마 담지 못하겠습니다. 시신마저 뜰에서 태웠다 합니다.' },
+      { who:'me', t:'(고개를 숙인다)' },
     ],
     quizSeq: [
       { q:'1895년 일본이 경복궁에 침입해 명성황후를 시해한 사건은?',
@@ -1157,9 +1162,15 @@ const NPC_DATA = {
   jeopju_0: {
     name: '동학 접주', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V3"/><path d="M6 4h11l-2.5 4L17 12H6z"/></svg>', img: 'assets/portraits/extra_chonjang.png',
     beats: [
-      { who:'npc', t:'전주에서 화약을 맺고 우리는 흩어졌소. 이제 싸울 일은 없으리라 여겼지.' },
-      { who:'npc', t:'헌데 일본군이 경복궁을 넘어 들어갔다는 소식이 왔소. 청과 일본이 이 땅에서 서로 총을 겨눈다는 소식도.' },
-      { who:'npc', t:'남접과 북접이 논산에 모였소. 이번엔 탐관오리가 아니라 왜적을 치러 가는 것이오 — 두 번째 봉기요.' },
+      { who:'npc', t:'전주에서 화약을 맺고 우리는 흩어졌소.' },
+      { who:'me', t:'(조심스레) …헌데 왜 다시 모이십니까?' },
+      { who:'npc', t:'일본군이 경복궁에 들어갔다는 소식이 왔소.' },
+      { who:'npc', t:'남접과 북접이 논산에 모였소.',
+        chart:{ type:'map', title:'남접과 북접, 논산에 모이다', pins:[ { x:44.26, y:112.3, n:'논산', on:true }, { x:44.6, y:108.2, n:'공주' } ], legend:[ { k:'논산', v:'남·북접 집결' }, { k:'공주', v:'다음 목표' } ] } },
+      { who:'npc', t:'북접의 최시형 어른도 무력 항쟁을 허락하셨소.',
+        chart:{ type:'vs', title:'남접과 북접', left:{ n:'남접', s:'전봉준 — 삼례·논산' }, right:{ n:'북접', s:'손병희·최시형 — 강경에서 합류' } } },
+      { who:'npc', t:'이번엔 탐관오리가 아니라 왜적을 치러 가는 것이오.' },
+      { who:'me', t:'(주먹을 쥔다) …두 번째 봉기, 라고요.' },
     ],
     quizSeq: [
       { q:'일본군이 경복궁을 침범하고 청·일 군대가 충돌하자, 이에 맞서 동학 농민군 사이에서 있었던 사실로 옳은 것은?',
@@ -1171,12 +1182,18 @@ const NPC_DATA = {
   jeonbongjun_0: {
     name: '전봉준', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="3" x2="5" y2="21"/><path d="M5 4h14v9H5z"/></svg>', img: 'assets/portraits/jeonbongjun.png',
     beats: [
-      { who:'npc', t:'나를 녹두장군이라 부르더군. 고부에서 시작해 백산에서 격문을 돌리고, 황토현에서 관군을 깨뜨렸소.' },
-      { who:'npc', t:'전주성을 얻었으나 조정이 청에 군사를 청했다는 말을 들었소. 일본까지 들어오면 나라가 결딴나오. 그래서 화약을 맺고 물러났소.' },
-      { who:'npc', t:'허나 일본이 궁궐을 범하고 청과 싸움을 벌이자 다시 일어섰소. 남북접이 논산에서 만나 서울로 향했지.' },
-      { who:'npc', t:'우금치에서… 저들의 기관총 앞에 사람으로 맞섰소. 그 고개를 넘지 못했소.' },
-      { who:'npc', t:'거사를 앞두고 종이 한 장을 돌렸네. 그런데 이름을 세로로 적으면 맨 위에 쓴 자가 주모자로 몰리지 않겠나.' },
-      { who:'npc', t:'그래서 사발을 엎어 놓고 그 둘레를 따라 둥글게 이름을 적었네. 누가 먼저인지 알 수 없게 — 사람들이 사발통문이라 부르더군.' },
+      { who:'npc', t:'나를 녹두장군이라 부르더군.',
+        chart:{ type:'steps', title:'1차 봉기의 흐름', steps:[ { t:'고부에서 봉기' }, { t:'백산에서 격문' }, { t:'황토현에서 관군을 깨뜨림' }, { t:'전주성을 점령' } ] } },
+      { who:'me', t:'(지도를 짚으며) …그 다음엔 어찌 되었습니까?' },
+      { who:'npc', t:'조정이 청에 군사를 청했다는 말을 들었소. 화약을 맺고 물러났소.' },
+      { who:'npc', t:'허나 일본이 궁궐을 범하고 청과 싸움을 벌이자 다시 일어섰소.',
+        chart:{ type:'vs', title:'1차 봉기와 2차 봉기', left:{ n:'1차 봉기', s:'반봉건 — 탐관오리를 친다' }, right:{ n:'2차 봉기', s:'반외세 — 왜적을 친다' } } },
+      { who:'me', t:'(숨을 죽인다) …우금치에서는 어찌 되었습니까.' },
+      { who:'npc', t:'저들의 기관총 앞에 사람으로 맞섰소. 그 고개를 넘지 못했소.',
+        chart:{ type:'vs', title:'우금치, 무기의 차이', left:{ n:'농민군', s:'죽창·화승총' }, right:{ n:'관군·일본군', s:'기관총·근대 소총', win:true } } },
+      { who:'npc', t:'거사를 앞두고 종이 한 장을 돌렸네.' },
+      { who:'me', t:'(종이를 들여다본다) …사발을 엎어 놓고 적었군요.' },
+      { who:'npc', t:'그래서 사람들이 사발통문이라 부르더군.' },
     ],
     quizSeq: [
       { q:'고부 봉기로 시작해 황토현·전주성으로 이어진, 1894년 농민들의 대규모 봉기는?',
@@ -1190,9 +1207,15 @@ const NPC_DATA = {
   jipgang_0: {
     name: '집강소 집강', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5v19"/><path d="M5 21h14"/><path d="M3.5 6.5h17"/><path d="M3.5 6.5L1.5 11a2.5 2.5 0 005 0z"/><path d="M20.5 6.5L18.5 11a2.5 2.5 0 005 0z"/></svg>', img: 'assets/portraits/jipgang.png',
     beats: [
-      { who:'npc', t:'전주 화약을 맺고 우리는 고을마다 집강소를 두었소. 농민이 직접 고을 일을 보는 기구요.' },
-      { who:'npc', t:'조정과 약속한 열두 조목이 있었소. 탐관오리를 벌하고, 노비 문서를 불태우고, 과부의 재가를 허락하고, 토지를 고루 나누자고.' },
-      { who:'npc', t:'신분과 땅을 건드린 것이오. 그런 요구를 농민이 스스로 내건 적이 이전에 있었소?' },
+      { who:'npc', t:'전주 화약을 맺고 고을마다 집강소를 두었소.',
+        chart:{ type:'stat', title:'집강소', items:[ { v:'12개조', l:'폐정개혁안' } ] } },
+      { who:'npc', t:'(방문에 붙은 종이를 가리키며) 저기, 조목을 읽어 보게.' },
+      { who:'me', t:'(읽는다) "노비 문서를 불태운다"…' },
+      { who:'npc', t:'(고개를 끄덕이며) 다음도 읽어 보게.' },
+      { who:'me', t:'(읽는다) "청상 과부의 개가를 허락한다"…',
+        chart:{ type:'grid', title:'폐정개혁안 12개조 중', head:[ '갈래', '내용' ], rows:[ [ '신분', '노비 문서 소각·7종 천인 차별 개선' ], [ '혼인', '과부의 개가 허용' ], [ '토지', '고루 나누어 짓게 함(평균분작)' ], [ '탐관오리', '죄상을 조사해 엄히 벌함' ] ] } },
+      { who:'npc', t:'신분과 땅을 건드린 것이오.' },
+      { who:'me', t:'(종이를 내려놓는다) …이런 요구가, 예전에 있었습니까.' },
     ],
     quizSeq: [
       { q:'전주 화약 이후 동학 농민군이 전라도 각 고을에 설치해 개혁을 실행한 자치 기구는?',
@@ -1203,10 +1226,16 @@ const NPC_DATA = {
   gungug_0: {
     name: '군국기무처 관원', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="4" width="15" height="18" rx="1.5"/><rect x="9" y="2.5" width="6" height="3" rx="1"/><path d="M8 11h8M8 14.5h8M8 18h5"/></svg>', img: 'assets/portraits/gungug.png',
     beats: [
-      { who:'npc', t:'일본이 경복궁을 점령하고 개혁을 밀어붙였소. 군국기무처가 세워졌지.' },
-      { who:'npc', t:'신분제를 없앴소. 공사 노비 문서를 폐지하고, 과부의 재가를 허락하고, 조혼을 금했소. 과거제도 없앴고.' },
-      { who:'npc', t:'재정은 탁지아문 하나로 모으고, 도량형을 통일하고, 은본위 화폐를 쓰기로 했소.' },
-      { who:'npc', t:'뒤이어 홍범 14조를 반포하고, 지방 제도를 8도에서 23부로 고쳤소. 다만 이 모든 것이 일본의 그늘 아래 이루어졌다는 것이 문제였소.' },
+      { who:'npc', t:'일본이 경복궁을 점령하고 개혁을 밀어붙였소.',
+        chart:{ type:'stat', title:'갑오개혁의 시작', items:[ { v:'1894', l:'군국기무처 설치' } ] } },
+      { who:'me', t:'(문서를 넘겨보며) …이렇게나 많은 걸 한 번에 고칩니까?' },
+      { who:'npc', t:'신분제를 없앴소. 노비 문서를 폐지하고, 과거제도 없앴소.',
+        chart:{ type:'steps', title:'갑오개혁, 신분을 허무는 차례', steps:[ { t:'공사 노비 문서를 폐지' }, { t:'과부의 재가를 허락' }, { t:'조혼을 금함' }, { t:'과거제를 폐지' } ] } },
+      { who:'npc', t:'재정은 탁지아문으로 모으고, 은본위 화폐를 쓰기로 했소.' },
+      { who:'npc', t:'뒤이어 홍범 14조를 반포하고, 8도를 23부로 고쳤소.',
+        chart:{ type:'compare', title:'1차·2차 갑오개혁', cols:[ { h:'1차(군국기무처)', items:[ '신분제·과거제 폐지', '은본위 화폐' ] }, { h:'2차(김홍집·박영효 내각)', hi:true, items:[ '홍범 14조 반포', '8도→23부 개편' ] } ] } },
+      { who:'me', t:'(작게) …다만 그 모든 것이.' },
+      { who:'npc', t:'일본의 그늘 아래 이루어졌다는 것이 문제였소.' },
     ],
     quizSeq: [
       { q:'1894년 군국기무처를 중심으로 추진되어 신분제 폐지와 과거제 폐지를 담은 개혁은?',
@@ -1223,9 +1252,15 @@ const NPC_DATA = {
   eulmi_0: {
     name: '을미의병', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img: 'assets/portraits/eulmi.png',
     beats: [
-      { who:'npc', t:'일본 낭인들이 궁궐에 들어가 국모를 시해했소. 그러고도 시신을 불태웠소.' },
-      { who:'npc', t:'그 뒤 상투를 자르라는 명이 내렸소. 부모에게 받은 몸을 함부로 하지 않는 것이 효인데.' },
-      { who:'npc', t:'유인석 어른을 비롯한 유생들이 일어섰소. 이것이 첫 의병이오.' },
+      { who:'npc', t:'일본 낭인들이 궁궐에 들어가 국모를 시해했소.' },
+      { who:'npc', t:'(격문을 내밀며) 이걸 베껴 성문에 붙여 주게.' },
+      { who:'me', t:'(받아 적는다) …유인석, 격고팔도열읍.' },
+      { who:'npc', t:'그 뒤 상투를 자르라는 명까지 내렸소.',
+        chart:{ type:'timeline', title:'을미년의 사슬', marks:[ { y:'1895.10', t:'을미사변' }, { y:'1895.12', t:'단발령' }, { y:'1895말', t:'을미의병', on:true } ] } },
+      { who:'me', t:'(상투를 만지며) …부모께 받은 몸인데.' },
+      { who:'npc', t:'그러니 유인석·이소응 같은 유생들이 일어섰소.',
+        chart:{ type:'map', title:'을미의병이 일어난 곳', pins:[ { x:59.87, y:97.4, n:'제천(유인석)', on:true }, { x:53.28, y:85.6, n:'춘천(이소응)', on:true } ] } },
+      { who:'npc', t:'이것이 첫 의병이오.' },
     ],
     quizSeq: [
       { q:'을미사변과 단발령에 반발해 유생들이 주도한 최초의 의병은?',
