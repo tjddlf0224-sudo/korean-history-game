@@ -123,7 +123,7 @@ window.Srs = (function(){
     'gaehang4.html':'개항 4화','gaehang5.html':'개항 5화','ilje1.html':'일제 1화',
     'ilje2.html':'일제 2화','ilje_ch7.html':'일제 7화','hyeondae1.html':'현대 1화',
     'hyeondae2.html':'현대 2화','hyeondae3.html':'현대 3화','sesi.html':'시대통합',
-    'exam_practice.html':'기출문제',
+    'exam_practice.html':'기출변형',
   };
 
   function mount(){
