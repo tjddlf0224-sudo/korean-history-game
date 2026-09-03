@@ -51,6 +51,9 @@ window.Deed = (function(){
       font-family:"Gowun Batang",serif; font-size:15.5px; font-weight:700; cursor:pointer;
       box-shadow:0 6px 20px rgba(0,0,0,.5); display:none; }
     #dd-btn.on { display:block; }
+    /* 이미 본 것은 흐리게 — 새로 할 일과 구별된다 */
+    #dd-btn.seen { border-color:#5d7a67; color:#93ab9b;
+      background:rgba(18,22,17,.9); font-weight:400; }
     #dd-ov { position:absolute; inset:0; z-index:93; display:none; align-items:center;
       justify-content:center; background:rgba(9,11,8,.93); font-family:"Gowun Batang",serif; }
     #dd-ov.show { display:flex; }
@@ -92,12 +95,16 @@ window.Deed = (function(){
     const d = veil();
     d.querySelector('.tag').textContent = spec.tag || '';
     try {
+      // 두 번째부터는 이야기만 보여 준다 — 보상은 처음 한 번뿐이다
+      const first = !done(spec.id);
       for (const ln of (spec.lines || [])) await step(d, ln);
       mark(spec.id);
-      if (spec.gold && window.Gold) Gold.earn(spec.gold, spec.tag || '한 일');
-      if (spec.badge && window.Badges) Badges.earn(spec.badge);
-      if (spec.item && window.Items && Items.give) Items.give(spec.item);
-      if (spec.onDone) spec.onDone();
+      if (first){
+        if (spec.gold && window.Gold) Gold.earn(spec.gold, spec.tag || '한 일');
+        if (spec.badge && window.Badges) Badges.earn(spec.badge);
+        if (spec.item && window.Items && Items.give) Items.give(spec.item);
+        if (spec.onDone) spec.onDone();
+      }
     } finally {
       d.classList.remove('show');
       if (W) W.paused = wasPaused;
@@ -118,9 +125,13 @@ window.Deed = (function(){
     if (document.querySelector('.ov.show, #dlg-overlay.show, #quiz-overlay.show, ' +
         '#ms-ov.show, #ec-ov.show')){ b.classList.remove('on'); return; }
     for (const s of LIST){
-      if (s.zone !== W.zone || done(s.id)) continue;
+      if (s.zone !== W.zone) continue;
       if (Math.hypot(W.px - s.x, W.py - s.y) <= (s.range || 160)){
-        b.textContent = s.label || '해 보기';
+        // 한 번 본 것도 다시 볼 수 있다("다시 보고 싶은데"는 실제 제보다).
+        // 보상은 처음 한 번뿐이므로 반복해서 금을 캘 수는 없다.
+        const seen = done(s.id);
+        b.textContent = (s.label || '해 보기') + (seen ? ' · 다시 보기' : '');
+        b.classList.toggle('seen', seen);
         b.onclick = () => { b.classList.remove('on'); run(s, W); };
         b.classList.add('on');
         return;

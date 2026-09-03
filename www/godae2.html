@@ -303,8 +303,15 @@
   #dlg-stack { width: 100%; max-width: 640px; display: flex; flex-direction: column;
     align-items: stretch; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); }
   #dlg-stack #dlg-frame { margin: 0; max-width: none; }
+  /* 도해가 커지면 대사창을 화면 밖으로 밀어냈다(세로로 든 휴대폰은 게임
+     높이가 390px뿐이다. 6줄짜리 표는 2px, 지도만 있는 도해는 96px 넘쳤다).
+     --dlg-max-h 는 게임 높이의 80%이므로 그 62%면 대략 화면의 절반이다.
+     넘치는 만큼만 안에서 스크롤되고, 대사창은 언제나 다 보인다.
+     가로는 감춘다 — 도해가 옆으로 흐르면 안 된다. */
   .dlg-chart { margin: 0 0 9px 118px; border: 1px solid #51432c; border-radius: 12px;
-    overflow: hidden; background: #1f1810f2; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+    max-height: calc(var(--dlg-max-h, 320px) * .62); min-height: 0;
+    overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: #1f1810f2; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
   .dlg-chart[hidden] { display: none; }
   .dlg-chart[hidden] { display: none; }
   .dlg-chart table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -496,10 +503,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=49"></script>
-<script src="assets/map/map_component.js?v=49"></script>
-<script src="assets/chart.js?v=49"></script>
-<script src="assets/audio.js?v=49"></script>
+<script src="assets/errlog.js?v=51"></script>
+<script src="assets/map/map_component.js?v=51"></script>
+<script src="assets/chart.js?v=51"></script>
+<script src="assets/audio.js?v=51"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -511,7 +518,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=49';   // 존댓말 전환
+const ART_V = '?v=51';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -972,7 +979,9 @@ function updateHudGoal(){
 
 const World = {
   zone: 'sanggyeong', px: ZONES.sanggyeong.spawn.x, py: ZONES.sanggyeong.spawn.y,
-  facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
+  facing: 'd', speed: 135, // 화면상 speed*ZOOM(1.6) ≈ 216px/s로 전 챕터 동일
+  // 265px/s는 "너무 빠르다"는 제보를 받았다. 지도를 눈으로 읽으며
+  // 걸을 수 있는 속도로 낮췄다.
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
   paused: false,
@@ -1870,8 +1879,33 @@ const Dialog = {
     if (window.News) News.fire(this.key);
   }
 };
-document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
-document.getElementById('dlg-portrait').addEventListener('click', () => Dialog.next());
+/* 대화 넘기기 — 어디를 눌러도 넘어가고, 연타하면 연타한 만큼 넘어간다.
+
+   예전에는 #dlg-panel과 초상에만 click을 걸었다. 그런데 도해를 대화창
+   밖(#dlg-stack)으로 꺼낸 뒤로 **도해를 눌러도 아무 일이 없었다.**
+   도해는 대사 셋 중 하나에 붙으니 절반이 헛손질이 됐고, 그래서 "연타해도
+   느리다"는 제보가 나왔다. 이제 묶음 전체가 넘기는 자리다.
+
+   click 대신 pointerup을 쓴다 — 손을 뗀 즉시 넘어가고 연타를 그대로 센다.
+   다만 도해가 길면 안에서 스크롤되므로, **누른 채 움직였으면 넘기지 않는다.**
+   단추(이전·닫기)와 용어 풀이는 제 일을 하게 비켜 준다. */
+(function(){
+  const stack = document.getElementById('dlg-stack');
+  if (!stack) return;
+  const SKIP = 'button, a, .gloss-term, input, textarea, select';
+  let sx = 0, sy = 0, live = false;
+  stack.addEventListener('pointerdown', (e) => {
+    live = !(e.target.closest && e.target.closest(SKIP));
+    sx = e.clientX; sy = e.clientY;
+  });
+  stack.addEventListener('pointercancel', () => { live = false; });
+  stack.addEventListener('pointerup', (e) => {
+    if (!live) return;
+    live = false;
+    if (Math.hypot(e.clientX - sx, e.clientY - sy) > 12) return;   // 스크롤한 것
+    Dialog.next();
+  });
+})();
 
 /* ============ 모던 인트로 ============ */
 const INTRO_LINES = [
@@ -2024,39 +2058,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=49"></script>
-<script src="assets/streak.js?v=49"></script>
+<script src="assets/badges.js?v=51"></script>
+<script src="assets/streak.js?v=51"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=49"></script>
-  <script src="assets/fx.js?v=49"></script>
-  <script src="assets/deed.js?v=49"></script>
-  <script src="assets/inkwipe.js?v=49"></script>
-  <script src="assets/dash.js?v=49"></script>
-<script src="assets/juice.js?v=49"></script>
-  <script src="assets/difficulty.js?v=49"></script>
-  <script src="assets/nextauto.js?v=49"></script>
-<script src="assets/heroes_data.js?v=49"></script>
-<script src="assets/heroes.js?v=49"></script>
-<script src="assets/icons.js?v=49"></script>
-<script src="assets/srs.js?v=49"></script>
-<script src="assets/newsflash.js?v=49"></script>
-<script src="assets/timeline.js?v=49"></script>
-<script src="assets/journey.js?v=49"></script>
-<script src="assets/season.js?v=49"></script>
-<script src="assets/boss.js?v=49"></script>
-<script src="assets/items.js?v=49"></script>
-  <script src="assets/gold.js?v=49"></script>
-  <script src="assets/ask.js?v=49"></script>
-  <script src="assets/ads.js?v=49"></script>
-  <script src="assets/energy.js?v=49"></script>
-  <script src="assets/daily.js?v=49"></script>
-  <script src="assets/unlock.js?v=49"></script>
-  <script src="assets/guide.js?v=49"></script>
-  <script src="assets/minigames.js?v=49"></script>
-  <script src="assets/quests.js?v=49"></script>
-  <script src="assets/offline.js?v=49"></script>
-  <script src="assets/telemetry.js?v=49"></script>
-<script src="assets/autowalk.js?v=49"></script>
+<script src="assets/rank.js?v=51"></script>
+  <script src="assets/fx.js?v=51"></script>
+  <script src="assets/deed.js?v=51"></script>
+  <script src="assets/inkwipe.js?v=51"></script>
+  <script src="assets/dash.js?v=51"></script>
+<script src="assets/juice.js?v=51"></script>
+  <script src="assets/difficulty.js?v=51"></script>
+  <script src="assets/nextauto.js?v=51"></script>
+<script src="assets/heroes_data.js?v=51"></script>
+<script src="assets/heroes.js?v=51"></script>
+<script src="assets/icons.js?v=51"></script>
+<script src="assets/srs.js?v=51"></script>
+<script src="assets/newsflash.js?v=51"></script>
+<script src="assets/timeline.js?v=51"></script>
+<script src="assets/journey.js?v=51"></script>
+<script src="assets/season.js?v=51"></script>
+<script src="assets/boss.js?v=51"></script>
+<script src="assets/items.js?v=51"></script>
+  <script src="assets/gold.js?v=51"></script>
+  <script src="assets/ask.js?v=51"></script>
+  <script src="assets/ads.js?v=51"></script>
+  <script src="assets/energy.js?v=51"></script>
+  <script src="assets/daily.js?v=51"></script>
+  <script src="assets/unlock.js?v=51"></script>
+  <script src="assets/guide.js?v=51"></script>
+  <script src="assets/minigames.js?v=51"></script>
+  <script src="assets/quests.js?v=51"></script>
+  <script src="assets/offline.js?v=51"></script>
+  <script src="assets/telemetry.js?v=51"></script>
+<script src="assets/autowalk.js?v=51"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

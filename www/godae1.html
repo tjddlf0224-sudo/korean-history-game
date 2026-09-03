@@ -303,8 +303,15 @@
   #dlg-stack { width: 100%; max-width: 640px; display: flex; flex-direction: column;
     align-items: stretch; margin: 0 16px calc(16px + env(safe-area-inset-bottom)); }
   #dlg-stack #dlg-frame { margin: 0; max-width: none; }
+  /* 도해가 커지면 대사창을 화면 밖으로 밀어냈다(세로로 든 휴대폰은 게임
+     높이가 390px뿐이다. 6줄짜리 표는 2px, 지도만 있는 도해는 96px 넘쳤다).
+     --dlg-max-h 는 게임 높이의 80%이므로 그 62%면 대략 화면의 절반이다.
+     넘치는 만큼만 안에서 스크롤되고, 대사창은 언제나 다 보인다.
+     가로는 감춘다 — 도해가 옆으로 흐르면 안 된다. */
   .dlg-chart { margin: 0 0 9px 118px; border: 1px solid #51432c; border-radius: 12px;
-    overflow: hidden; background: #1f1810f2; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+    max-height: calc(var(--dlg-max-h, 320px) * .62); min-height: 0;
+    overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: #1f1810f2; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
   .dlg-chart[hidden] { display: none; }
   .dlg-chart[hidden] { display: none; }
   .dlg-chart table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -497,10 +504,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=49"></script>
-<script src="assets/map/map_component.js?v=49"></script>
-<script src="assets/chart.js?v=49"></script>
-<script src="assets/audio.js?v=49"></script>
+<script src="assets/errlog.js?v=51"></script>
+<script src="assets/map/map_component.js?v=51"></script>
+<script src="assets/chart.js?v=51"></script>
+<script src="assets/audio.js?v=51"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -512,7 +519,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=49';   // 존댓말 전환
+const ART_V = '?v=51';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -980,7 +987,9 @@ function updateHudGoal(){
 
 const World = {
   zone: 'hanseong', px: ZONES.hanseong.spawn.x, py: ZONES.hanseong.spawn.y,
-  facing: 'd', speed: 165, // 화면상 속도 = speed*ZOOM(1.6) ≈ 264px/s로 전 챕터 동일
+  facing: 'd', speed: 135, // 화면상 speed*ZOOM(1.6) ≈ 216px/s로 전 챕터 동일
+  // 265px/s는 "너무 빠르다"는 제보를 받았다. 지도를 눈으로 읽으며
+  // 걸을 수 있는 속도로 낮췄다.
   stick: { active: false, dx: 0, dy: 0 },
   keys: { l:false, r:false, u:false, d:false },
   paused: false,
@@ -1252,6 +1261,8 @@ const NPC_DATA = {
         chart:{ type:'kings', main:[ { name:'무령왕', note:'22담로' }, { name:'성왕', note:'사비 천도' }, { name:'위덕왕' }, { name:'혜왕' }, { name:'법왕' }, { name:'무왕', note:'서동요', active:true } ], cross:[ null, null, null, null, null, { name:'진평왕', dynasty:'신라', active:true } ] } },
       { who:'me', t:'미륵사는… 어떤 절이었습니까?' },
       { who:'npc', t:'탑과 금당을 셋씩 나란히 둔, 백제 최대의 절이었지.' },
+      { who:'doc', docImg:'assets/scenes/heritage_mireuksaji_tower.jpg',
+        t:'(익산 미륵사지 석탑. 현존하는 삼국 시대 석탑 중 가장 크며, 목탑의 짜임새를 그대로 돌에 옮긴 초기 백제 석탑 양식을 보여준다.)\n출처: 셀수스협동조합, 공유마당, 기증저작물(자유이용)' },
       { who:'npc', t:'웅진·사비·익산 — 세 도읍의 자취일세.',
         chart:{ type:'map', title:'백제역사유적지구', pins:[ { x:44.6, y:108.9, n:'공산성' }, { x:41.6, y:113.4, n:'부소산성' }, { x:42.3, y:116.2, n:'왕궁리', on:true } ], legend:[ { k:'2015년', v:'유네스코 세계유산 등재', on:true }, { k:'묶은 이름', v:'백제역사유적지구' } ] } },
       { who:'me', t:'세 곳 다… 가 보고 싶습니다.' },
@@ -1293,10 +1304,14 @@ const NPC_DATA = {
         chart:{ type:'map', title:'중원(충주) 고구려비', pins:[ { x:56.1, y:99.6, n:'충주', on:true } ], legend:[ { k:'매금', v:'신라 왕을 낮춰 부른 말', on:true }, { k:'뜻', v:'남한강까지 세력이 미침' } ] } },
       { who:'me', t:'한반도에 남은 고구려 비석은 이것뿐입니까?' },
       { who:'npc', t:'그렇다네. 하나뿐인 귀한 자취일세.' },
+      { who:'doc', docImg:'assets/scenes/heritage_jungwon_goguryeobi.jpg',
+        t:'(충주 고구려비. 한반도 안에 남은 유일한 고구려 비석으로, 5세기 장수왕 대에 고구려가 남한강 유역까지 세력을 뻗쳐 신라를 사실상 아래에 둔 정황을 보여준다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'우리 무덤엔 그림을 그리네. 지안, 옛 국내성 자리에 모였지.',
         chart:{ type:'grid', title:'국내성의 고분', head:[ '무덤', '그림·양식' ], rows:[ [ '무용총', '수렵도 — 사냥' ], [ '각저총', '씨름도' ], [ '장군총', '돌무지무덤' ] ] } },
       { who:'me', t:'사냥하는… 그런 그림도 그립니까?' },
       { who:'npc', t:'그렇지. 말 달리며 활 쏘는 모습이 생생하네.' },
+      { who:'doc', docImg:'assets/scenes/heritage_muyongchong_suryeopdo.jpg',
+        t:'(정기환 필 무용총 수렵도 모사도. 말을 타고 활을 쏘며 호랑이와 사슴을 사냥하는 고구려인의 힘찬 모습을 담았다.)\n출처: 국립중앙박물관(모사: 정기환), 공유마당, 공공누리 제1유형' },
       { who:'npc', t:'수나라 백만 대군이 왔을 때, 을지문덕이 시를 보냈지.',
         chart:{ type:'quote', title:'여수장우중문시', text:'그대의 신묘한 계책은 하늘의 이치를 다했고<br>오묘한 셈은 땅의 이치를 다했도다.', from:'을지문덕, 삼국사기' } },
       { who:'me', t:'그래서… 수나라 군사는 어찌 됐습니까?' },
@@ -1340,10 +1355,14 @@ const NPC_DATA = {
         chart:{ type:'compare', title:'백제 석탑의 두 대표', cols:[ { h:'정림사지 5층 석탑', hi:true, items:[ '사비 시기', '목탑 양식을 돌로' ] }, { h:'미륵사지 석탑', items:[ '무왕 때', '현존 최대 백제 석탑' ] } ] } },
       { who:'me', t:'목탑을… 돌로 옮겼단 말씀이군요.' },
       { who:'npc', t:'그렇지. 백제 석탑의 시작일세.' },
+      { who:'doc', docImg:'assets/scenes/heritage_jeongnimsaji_tower.jpg',
+        t:'(부여 정림사지 오층석탑. 목탑의 짜임새를 그대로 돌에 옮긴 초기 백제 석탑 양식을 보여주며, 미륵사지 석탑과 함께 백제 석탑의 두 대표작으로 꼽힌다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'죽은 뒤, 아들이 능산리에 절을 지어 나를 기렸네.',
         chart:{ type:'relic', title:'백제 금동대향로', items:[ { img:'geumdongdaehyangno', n:'금동대향로', s:'능산리 절터 출토, 도교·불교가 함께' } ] } },
       { who:'me', t:'봉황과 신선이… 새겨져 있다지요?' },
       { who:'npc', t:'그렇다네. 도교와 불교의 생각이 함께 담겼지.' },
+      { who:'doc', docImg:'assets/scenes/heritage_geumdong_daehyangno.jpg',
+        t:'(백제 금동대향로. 능산리 절터에서 출토되었으며, 봉황과 용, 산봉우리와 신선, 동물들을 정교하게 새겨 도교와 불교의 세계관을 함께 담아낸 백제 금속 공예의 걸작이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'진흥왕과 손잡고 한강 하류를 되찾았으나…',
         chart:{ type:'vs', title:'나·제 동맹의 끝', left:{ n:'성왕', s:'상류를 되찾아 줌' }, right:{ n:'진흥왕', s:'하류까지 삼킴', win:true }, mid:'배신' } },
       { who:'me', t:'그래서… 그 뒤 어찌 되셨습니까?' },
@@ -1387,6 +1406,8 @@ const NPC_DATA = {
         chart:{ type:'relic', title:'진흥왕 순수비', items:[ { img:'jinheungbi', n:'진흥왕 순수비', s:'북한산·창녕·황초령·마운령 네 곳' } ] } },
       { who:'me', t:'네 곳이나요? 다 손수 다녀오신 겁니까?' },
       { who:'npc', t:'그렇다네. 북한산비는 원래 비봉에 있었지.' },
+      { who:'doc', docImg:'assets/scenes/heritage_bukhansan_jinheungwang_sunsubi.jpg',
+        t:'(북한산 진흥왕 순수비. 555년 무렵 진흥왕이 한강 유역까지 영토를 넓힌 뒤 이를 기념해 세운 비석으로, 원래 북한산 비봉에 있었으나 훼손을 막기 위해 지금은 국립중앙박물관으로 옮겨 보존되고 있다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'할아버님 지증왕께선 나라 이름을 \'신라\'로 정하셨네.' },
       { who:'npc', t:'이사부를 보내 우산국도 복속시키셨지.',
         chart:{ type:'map', title:'지증왕이 넓힌 곳', pins:[ { x:74.6, y:117.6, n:'서라벌', on:true }, { x:98.6, y:91.9, n:'우산국' } ], legend:[ { k:'우산국', v:'지금의 울릉도', on:true }, { k:'이사부', v:'정벌한 장수' } ] } },
@@ -1770,8 +1791,33 @@ const Dialog = {
     if (window.News) News.fire(this.key);
   }
 };
-document.getElementById('dlg-panel').addEventListener('click', () => Dialog.next());
-document.getElementById('dlg-portrait').addEventListener('click', () => Dialog.next());
+/* 대화 넘기기 — 어디를 눌러도 넘어가고, 연타하면 연타한 만큼 넘어간다.
+
+   예전에는 #dlg-panel과 초상에만 click을 걸었다. 그런데 도해를 대화창
+   밖(#dlg-stack)으로 꺼낸 뒤로 **도해를 눌러도 아무 일이 없었다.**
+   도해는 대사 셋 중 하나에 붙으니 절반이 헛손질이 됐고, 그래서 "연타해도
+   느리다"는 제보가 나왔다. 이제 묶음 전체가 넘기는 자리다.
+
+   click 대신 pointerup을 쓴다 — 손을 뗀 즉시 넘어가고 연타를 그대로 센다.
+   다만 도해가 길면 안에서 스크롤되므로, **누른 채 움직였으면 넘기지 않는다.**
+   단추(이전·닫기)와 용어 풀이는 제 일을 하게 비켜 준다. */
+(function(){
+  const stack = document.getElementById('dlg-stack');
+  if (!stack) return;
+  const SKIP = 'button, a, .gloss-term, input, textarea, select';
+  let sx = 0, sy = 0, live = false;
+  stack.addEventListener('pointerdown', (e) => {
+    live = !(e.target.closest && e.target.closest(SKIP));
+    sx = e.clientX; sy = e.clientY;
+  });
+  stack.addEventListener('pointercancel', () => { live = false; });
+  stack.addEventListener('pointerup', (e) => {
+    if (!live) return;
+    live = false;
+    if (Math.hypot(e.clientX - sx, e.clientY - sy) > 12) return;   // 스크롤한 것
+    Dialog.next();
+  });
+})();
 
 /* ============ 모던 인트로 ============ */
 const INTRO_LINES = [
@@ -1923,38 +1969,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=49"></script>
-<script src="assets/streak.js?v=49"></script>
+<script src="assets/badges.js?v=51"></script>
+<script src="assets/streak.js?v=51"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=49"></script>
-  <script src="assets/fx.js?v=49"></script>
-  <script src="assets/deed.js?v=49"></script>
-  <script src="assets/inkwipe.js?v=49"></script>
-  <script src="assets/dash.js?v=49"></script>
-<script src="assets/juice.js?v=49"></script>
-  <script src="assets/difficulty.js?v=49"></script>
-  <script src="assets/nextauto.js?v=49"></script>
-<script src="assets/heroes_data.js?v=49"></script>
-<script src="assets/heroes.js?v=49"></script>
-<script src="assets/icons.js?v=49"></script>
-<script src="assets/srs.js?v=49"></script>
-<script src="assets/newsflash.js?v=49"></script>
-<script src="assets/timeline.js?v=49"></script>
-<script src="assets/journey.js?v=49"></script>
-<script src="assets/season.js?v=49"></script>
-<script src="assets/items.js?v=49"></script>
-  <script src="assets/gold.js?v=49"></script>
-  <script src="assets/ask.js?v=49"></script>
-  <script src="assets/ads.js?v=49"></script>
-  <script src="assets/energy.js?v=49"></script>
-  <script src="assets/daily.js?v=49"></script>
-  <script src="assets/unlock.js?v=49"></script>
-  <script src="assets/guide.js?v=49"></script>
-  <script src="assets/minigames.js?v=49"></script>
-  <script src="assets/quests.js?v=49"></script>
-  <script src="assets/offline.js?v=49"></script>
-  <script src="assets/telemetry.js?v=49"></script>
-<script src="assets/autowalk.js?v=49"></script>
+<script src="assets/rank.js?v=51"></script>
+  <script src="assets/fx.js?v=51"></script>
+  <script src="assets/deed.js?v=51"></script>
+  <script src="assets/inkwipe.js?v=51"></script>
+  <script src="assets/dash.js?v=51"></script>
+<script src="assets/juice.js?v=51"></script>
+  <script src="assets/difficulty.js?v=51"></script>
+  <script src="assets/nextauto.js?v=51"></script>
+<script src="assets/heroes_data.js?v=51"></script>
+<script src="assets/heroes.js?v=51"></script>
+<script src="assets/icons.js?v=51"></script>
+<script src="assets/srs.js?v=51"></script>
+<script src="assets/newsflash.js?v=51"></script>
+<script src="assets/timeline.js?v=51"></script>
+<script src="assets/journey.js?v=51"></script>
+<script src="assets/season.js?v=51"></script>
+<script src="assets/items.js?v=51"></script>
+  <script src="assets/gold.js?v=51"></script>
+  <script src="assets/ask.js?v=51"></script>
+  <script src="assets/ads.js?v=51"></script>
+  <script src="assets/energy.js?v=51"></script>
+  <script src="assets/daily.js?v=51"></script>
+  <script src="assets/unlock.js?v=51"></script>
+  <script src="assets/guide.js?v=51"></script>
+  <script src="assets/minigames.js?v=51"></script>
+  <script src="assets/quests.js?v=51"></script>
+  <script src="assets/offline.js?v=51"></script>
+  <script src="assets/telemetry.js?v=51"></script>
+<script src="assets/autowalk.js?v=51"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

@@ -41,7 +41,7 @@ window.Chart = (function(){
     s.textContent = `
     /* --- 제목 --- 무엇을 보여 주는 그림인지 먼저 밝힌다.
        제목 없이 '짐승 떼를 따라간다'만 뜨면 뜬금없다(실제 신고). */
-    .ch-title { padding:7px 12px 0; font-family:"Gowun Batang",serif; font-size:10.5px;
+    .ch-title { padding:8px 12px 0; font-family:"Gowun Batang",serif; font-size:12.5px;
       letter-spacing:.26em; color:#a89676; display:flex; align-items:center; gap:8px; }
     .ch-title::after { content:''; flex:1; height:1px;
       background:linear-gradient(90deg,rgba(240,201,107,.35),transparent); }
@@ -56,8 +56,8 @@ window.Chart = (function(){
       border:2px solid rgba(255,255,255,.3); }
     .ch-tl .m.on::before { background:#f0c96b; border-color:#fff3d4;
       box-shadow:0 0 10px rgba(240,201,107,.75); }
-    .ch-tl .y { font-size:10px; color:#a89676; font-variant-numeric:tabular-nums; }
-    .ch-tl .t { font-size:11.5px; color:#e6dbc2; line-height:1.35; margin-top:1px; }
+    .ch-tl .y { font-size:12px; color:#a89676; font-variant-numeric:tabular-nums; }
+    .ch-tl .t { font-size:13.5px; color:#e6dbc2; line-height:1.35; margin-top:1px; }
     .ch-tl .m.on .y { color:#f0c96b; }
     .ch-tl .m.on .t { color:#fff3d4; font-weight:700; }
 
@@ -66,9 +66,9 @@ window.Chart = (function(){
     .ch-cmp .col { flex:1 1 0; min-width:0; border-radius:7px; padding:7px 8px;
       background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); }
     .ch-cmp .col.hi { background:rgba(240,201,107,.14); border-color:rgba(240,201,107,.5); }
-    .ch-cmp .h { font-size:12px; font-weight:700; color:#f0c96b; text-align:center;
+    .ch-cmp .h { font-size:14px; font-weight:700; color:#f0c96b; text-align:center;
       padding-bottom:4px; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,.16); }
-    .ch-cmp li { font-size:11.5px; color:#e6dbc2; line-height:1.6; list-style:none;
+    .ch-cmp li { font-size:13.5px; color:#e6dbc2; line-height:1.6; list-style:none;
       padding-left:9px; position:relative; }
     .ch-cmp li::before { content:'·'; position:absolute; left:1px; color:#a89676; }
     .ch-cmp ul { margin:0; padding:0; }
@@ -79,56 +79,58 @@ window.Chart = (function(){
     .ch-cards .c img { width:100%; aspect-ratio:1/1; object-fit:contain; display:block;
       border-radius:7px; background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.14); }
     .ch-cards.face .c img { object-fit:cover; }
-    .ch-cards .n { font-size:11.5px; color:#f0c96b; margin-top:4px; line-height:1.3; }
-    .ch-cards .s { font-size:10.5px; color:#a89676; line-height:1.4; }
+    .ch-cards .n { font-size:13.5px; color:#f0c96b; margin-top:4px; line-height:1.3; }
+    .ch-cards .s { font-size:12px; color:#a89676; line-height:1.4; }
     .ch-cards .c.dim img { filter:grayscale(1) brightness(.5); }
 
     /* --- 사료 --- 옛 글을 그대로 보여 준다. 한능검은 사료를 자주 낸다 */
     .ch-quote { padding:11px 13px; }
-    .ch-quote .q { font-size:12.5px; line-height:1.85; color:#efe4cd;
+    .ch-quote .q { font-size:14.5px; line-height:1.85; color:#efe4cd;
       border-left:3px solid rgba(240,201,107,.6); padding-left:11px; }
     .ch-quote .q b { color:#f0c96b; }
-    .ch-quote .from { font-size:10.5px; color:#a89676; text-align:right; margin-top:6px; }
+    .ch-quote .from { font-size:12px; color:#a89676; text-align:right; margin-top:6px; }
 
     /* --- 숫자 --- 말로 "많다"고 하는 것보다 숫자 하나가 세다 */
     .ch-stat { display:flex; gap:8px; padding:10px 8px; justify-content:center; }
     .ch-stat .s { flex:1 1 0; text-align:center; }
-    .ch-stat .v { font-size:21px; font-weight:700; color:#f0c96b; line-height:1.1;
+    .ch-stat .v { font-size:24px; font-weight:700; color:#f0c96b; line-height:1.1;
       font-variant-numeric:tabular-nums; }
-    .ch-stat .l { font-size:10.5px; color:#a89676; margin-top:3px; line-height:1.35; }
+    .ch-stat .l { font-size:12.5px; color:#a89676; margin-top:3px; line-height:1.35; }
 
     /* --- 신분 구조 --- 위가 좁고 아래가 넓다는 것 자체가 내용이다 */
     .ch-pyr { padding:9px 8px; display:flex; flex-direction:column; align-items:center; gap:3px; }
-    .ch-pyr .t { border-radius:5px; padding:4px 10px; text-align:center; font-size:11.5px;
+    .ch-pyr .t { border-radius:5px; padding:5px 10px; text-align:center; font-size:13.5px;
       color:#e6dbc2; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); }
     .ch-pyr .t.hi { background:rgba(240,201,107,.18); border-color:rgba(240,201,107,.55);
       color:#fff3d4; font-weight:700; }
-    .ch-pyr .t s { display:block; font-size:10px; color:#a89676; text-decoration:none; }
+    .ch-pyr .t s { display:block; font-size:11.5px; color:#a89676; text-decoration:none; }
 
     /* --- 맞섬 --- 누가 누구와 붙었는지 한 줄로 */
     .ch-vs { display:flex; align-items:center; gap:8px; padding:10px 8px; }
     .ch-vs .side { flex:1 1 0; text-align:center; border-radius:7px; padding:7px 6px;
       background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); }
-    .ch-vs .side .n { font-size:12.5px; font-weight:700; color:#f0c96b; }
-    .ch-vs .side .s { font-size:10.5px; color:#a89676; line-height:1.45; margin-top:2px; }
-    .ch-vs .x { flex:none; font-size:12px; color:#d98a7a; font-weight:700; letter-spacing:.1em; }
+    .ch-vs .side .n { font-size:14.5px; font-weight:700; color:#f0c96b; }
+    .ch-vs .side .s { font-size:12.5px; color:#a89676; line-height:1.45; margin-top:2px; }
+    .ch-vs .x { flex:none; font-size:14px; color:#d98a7a; font-weight:700; letter-spacing:.1em; }
     .ch-vs .side.win { border-color:rgba(240,201,107,.55); background:rgba(240,201,107,.14); }
 
     /* --- 지도 --- 역사에서 '어디'는 '무엇'만큼 중요하다.
        한반도 윤곽은 실제 좌표(map/data/korea_outline.geojson)를 성기게 줄여 넣었다. */
     .ch-map { display:flex; align-items:center; gap:10px; padding:8px 10px; }
-    .ch-map svg { flex:none; width:94px; height:auto; }
+    .ch-map svg { flex:none; width:112px; height:auto; }
     /* 범례가 없으면 지도만 있는 것이니 가운데로 크게 — 옆이 비면 허전하다 */
     .ch-map.solo { justify-content:center; }
-    .ch-map.solo svg { width:150px; }
+    /* 지도만 있을 때는 높이로 잡는다 — 폭으로 잡으면 세로로 든 휴대폰
+       (게임 높이 390px)에서 대사창을 화면 밖으로 밀어냈다. */
+    .ch-map.solo svg { height:150px; width:auto; }
     .ch-map .land { fill:rgba(240,201,107,.13); stroke:rgba(240,201,107,.5); stroke-width:1.1;
       stroke-linejoin:round; }
     .ch-map .pin { fill:#6f6250; stroke:rgba(255,255,255,.35); stroke-width:1; }
     .ch-map .pin.on { fill:#f0c96b; stroke:#fff3d4; }
-    .ch-map .pn { font-size:6.6px; fill:#cdbfa4; font-family:"Gowun Batang",serif; }
+    .ch-map .pn { font-size:9px; fill:#cdbfa4; font-family:"Gowun Batang",serif; }
     .ch-map .pn.on { fill:#fff3d4; font-weight:700; }
     .ch-map .leg { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
-    .ch-map .leg .r { font-size:11px; color:#cdbfa4; line-height:1.4; display:flex; gap:6px; }
+    .ch-map .leg .r { font-size:13px; color:#cdbfa4; line-height:1.4; display:flex; gap:6px; }
     .ch-map .leg .r b { color:#f0c96b; font-weight:700; flex:none; }
     .ch-map .leg .r.on { color:#fff3d4; }
 
@@ -140,7 +142,7 @@ window.Chart = (function(){
        아니라 '흐르는 것'으로 보이게 한다. */
     .ch-steps { padding:9px 12px; display:flex; flex-direction:column; }
     .ch-steps .st { position:relative; display:flex; gap:10px; align-items:flex-start;
-      font-size:11.5px; padding:3px 0 8px; }
+      font-size:13.5px; padding:3px 0 9px; }
     .ch-steps .st:last-child { padding-bottom:1px; }
     /* 마디를 잇는 세로선 — 마지막 마디 아래로는 긋지 않는다 */
     .ch-steps .st::before { content:''; position:absolute; left:3.2px; top:12px; bottom:-1px;
@@ -154,7 +156,7 @@ window.Chart = (function(){
 
     /* --- 그림표 --- 여러 나라·여러 항목을 한눈에. 비교보다 촘촘하다 */
     .ch-grid { padding:8px; }
-    .ch-grid table { width:100%; border-collapse:collapse; font-size:11px; }
+    .ch-grid table { width:100%; border-collapse:collapse; font-size:13px; }
     .ch-grid th { color:#f0c96b; font-weight:700; padding:4px 5px; text-align:left;
       border-bottom:1px solid rgba(255,255,255,.18); white-space:nowrap; }
     .ch-grid td { color:#e6dbc2; padding:4px 5px; line-height:1.45;
@@ -166,7 +168,7 @@ window.Chart = (function(){
     .ch-call .im { position:relative; width:100%; border-radius:8px; overflow:hidden;
       background:rgba(0,0,0,.25); }
     .ch-call .im img { width:100%; display:block; }
-    .ch-call .tag { position:absolute; transform:translate(-50%,-50%); font-size:10px;
+    .ch-call .tag { position:absolute; transform:translate(-50%,-50%); font-size:11.5px;
       padding:2px 7px; border-radius:999px; white-space:nowrap;
       background:rgba(26,20,12,.92); border:1px solid #c9a24a; color:#f0c96b; }`;
     document.head.appendChild(s);
