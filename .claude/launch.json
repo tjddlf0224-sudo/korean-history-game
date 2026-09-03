@@ -4,8 +4,14 @@
     {
       "name": "korean-history-game",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8791", "--directory", "www"],
-      "port": 8791
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8912",
+        "--directory",
+        "www"
+      ],
+      "port": 8912
     }
   ]
 }

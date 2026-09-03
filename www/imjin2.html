@@ -496,9 +496,10 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=48"></script>
-<script src="assets/chart.js?v=48"></script>
-<script src="assets/audio.js?v=48"></script>
+<script src="assets/errlog.js?v=49"></script>
+<script src="assets/map/map_component.js?v=49"></script>
+<script src="assets/chart.js?v=49"></script>
+<script src="assets/audio.js?v=49"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -510,7 +511,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=48';   // 존댓말 전환
+const ART_V = '?v=49';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -521,8 +522,19 @@ function getViewportSize(){
   // 핀치줌이 걸리면 vv.width/height가 확대 배율만큼 줄어든다. 그 값을 그대로 쓰면
   // #wrap이 축소되면서 화면이 "확대된 채로" 굳어 되돌릴 수 없었다(실제 발생).
   // 줌이 걸린 동안은 레이아웃 뷰포트를 써서 레이아웃이 줌을 따라가지 않게 한다.
-  if (vv && (vv.scale || 1) <= 1.01) return { w: vv.width, h: vv.height };
-  return { w: window.innerWidth, h: window.innerHeight };
+  //
+  // 0은 값이 아니라 "아직 모른다"는 뜻이다. 화면이 숨겨진 채 페이지가 열리면
+  // visualViewport가 0×0을 주는데, 그 값이 그대로 들어가면 canvas.width가 0이 돼
+  // 아무것도 안 그려지고(검은 화면), portrait 판정(0 > 0 = false)까지 뒤집혀
+  // 세로 모드가 풀린다. 그래서 0이면 다음 것으로 물러난다.
+  const cands = [];
+  if (vv && (vv.scale || 1) <= 1.01) cands.push([vv.width, vv.height]);
+  cands.push([window.innerWidth, window.innerHeight]);
+  const de = document.documentElement;
+  if (de) cands.push([de.clientWidth, de.clientHeight]);
+  if (window.screen) cands.push([screen.width, screen.height]);
+  for (const [w, h] of cands) if (w > 0 && h > 0) return { w, h };
+  return null;   // 전부 0 — 예전 크기를 그대로 둔다
 }
 
 /* ============ 확대(핀치줌·더블탭줌) 차단 ============
@@ -541,7 +553,9 @@ document.addEventListener('touchend', function(e){
   __lastTouchEnd = now;
 }, { passive: false });
 function applyOrientation(){
-  const { w: iw, h: ih } = getViewportSize();
+  const vp = getViewportSize();
+  if (!vp) return;          // 크기를 모르는 동안은 손대지 않는다
+  const { w: iw, h: ih } = vp;
   const portrait = ih > iw;
   document.body.classList.toggle('rot', portrait);
   const w = portrait ? ih : iw;
@@ -1802,7 +1816,7 @@ function drawMinimap(){
   miniCtx.stroke();
 }
 
-function loop(t){
+function frame(t){
   if (!World.lastT) World.lastT = t;
   const dt = Math.min(0.05, (t - World.lastT) / 1000);
   World.lastT = t;
@@ -1815,44 +1829,72 @@ function loop(t){
     const nm = (ZONES[World.zone] && ZONES[World.zone].label) || '';
     if (zl && zl.textContent !== nm) zl.textContent = nm; }
   if (window.Deed) Deed.tick(World);
+}
+
+/* 한 프레임이 던진 예외로 게임이 영구히 검게 남던 것을 막는다.
+   예전에는 rAF 재예약이 본문 맨 끝에 있어서, 그리는 도중 예외가 한 번 나면
+   다음 프레임이 예약되지 않고 루프가 끝났다. HUD는 DOM이라 남고 캔버스만
+   새까맣게 남는다(실기기에서 그렇게 됐다). 이제는 예외를 삼키고 다음
+   프레임을 반드시 예약한다. 한 프레임 건너뛰는 편이 게임이 멈추는 것보다 낫다.
+   무엇이 터졌는지는 localStorage('khg_loop_err')에 한 번만 남겨 둔다. */
+function loop(t){
+  try { frame(t); }
+  catch(e){
+    if (!loop.reported){
+      loop.reported = true;
+      console.error('[loop]', e);
+      try {
+        localStorage.setItem('khg_loop_err', JSON.stringify({
+          at: new Date().toISOString(),
+          chapter: location.pathname.split('/').pop(),
+          zone: (typeof World !== 'undefined' && World.zone) || null,
+          msg: (e && e.message) || String(e),
+          stack: ((e && e.stack) || '').slice(0, 700) }));
+      } catch(_){}
+    }
+  }
+  /* 캔버스가 0×0으로 굳으면 아무것도 안 그려져 화면이 검다. 화면이 숨겨진 채
+     페이지가 열리면 visualViewport가 0을 주는데, 그때 잡힌 크기가 그대로
+     남는 경우가 있다. 창이 실제 크기를 갖게 되면 스스로 다시 잡는다. */
+  if (!canvas.width && (window.innerWidth | 0) > 0) applyOrientation();
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=48"></script>
-<script src="assets/streak.js?v=48"></script>
+<script src="assets/badges.js?v=49"></script>
+<script src="assets/streak.js?v=49"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=48"></script>
-  <script src="assets/fx.js?v=48"></script>
-  <script src="assets/deed.js?v=48"></script>
-  <script src="assets/inkwipe.js?v=48"></script>
-  <script src="assets/dash.js?v=48"></script>
-<script src="assets/juice.js?v=48"></script>
-  <script src="assets/difficulty.js?v=48"></script>
-  <script src="assets/nextauto.js?v=48"></script>
-<script src="assets/heroes_data.js?v=48"></script>
-<script src="assets/heroes.js?v=48"></script>
-<script src="assets/icons.js?v=48"></script>
-<script src="assets/srs.js?v=48"></script>
-<script src="assets/newsflash.js?v=48"></script>
-<script src="assets/timeline.js?v=48"></script>
-<script src="assets/journey.js?v=48"></script>
-<script src="assets/season.js?v=48"></script>
-<script src="assets/boss.js?v=48"></script>
-<script src="assets/items.js?v=48"></script>
-  <script src="assets/gold.js?v=48"></script>
-  <script src="assets/ask.js?v=48"></script>
-  <script src="assets/ads.js?v=48"></script>
-  <script src="assets/energy.js?v=48"></script>
-  <script src="assets/daily.js?v=48"></script>
-  <script src="assets/unlock.js?v=48"></script>
-  <script src="assets/guide.js?v=48"></script>
-  <script src="assets/minigames.js?v=48"></script>
-  <script src="assets/quests.js?v=48"></script>
-  <script src="assets/offline.js?v=48"></script>
-  <script src="assets/telemetry.js?v=48"></script>
-<script src="assets/autowalk.js?v=48"></script>
+<script src="assets/rank.js?v=49"></script>
+  <script src="assets/fx.js?v=49"></script>
+  <script src="assets/deed.js?v=49"></script>
+  <script src="assets/inkwipe.js?v=49"></script>
+  <script src="assets/dash.js?v=49"></script>
+<script src="assets/juice.js?v=49"></script>
+  <script src="assets/difficulty.js?v=49"></script>
+  <script src="assets/nextauto.js?v=49"></script>
+<script src="assets/heroes_data.js?v=49"></script>
+<script src="assets/heroes.js?v=49"></script>
+<script src="assets/icons.js?v=49"></script>
+<script src="assets/srs.js?v=49"></script>
+<script src="assets/newsflash.js?v=49"></script>
+<script src="assets/timeline.js?v=49"></script>
+<script src="assets/journey.js?v=49"></script>
+<script src="assets/season.js?v=49"></script>
+<script src="assets/boss.js?v=49"></script>
+<script src="assets/items.js?v=49"></script>
+  <script src="assets/gold.js?v=49"></script>
+  <script src="assets/ask.js?v=49"></script>
+  <script src="assets/ads.js?v=49"></script>
+  <script src="assets/energy.js?v=49"></script>
+  <script src="assets/daily.js?v=49"></script>
+  <script src="assets/unlock.js?v=49"></script>
+  <script src="assets/guide.js?v=49"></script>
+  <script src="assets/minigames.js?v=49"></script>
+  <script src="assets/quests.js?v=49"></script>
+  <script src="assets/offline.js?v=49"></script>
+  <script src="assets/telemetry.js?v=49"></script>
+<script src="assets/autowalk.js?v=49"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

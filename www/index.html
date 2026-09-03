@@ -485,32 +485,32 @@
 <script src="vendor/firebase/firebase-app-compat.js"></script>
 <script src="vendor/firebase/firebase-auth-compat.js"></script>
 <script src="vendor/firebase/firebase-firestore-compat.js"></script>
-<script src="assets/firebase_config.js?v=48"></script>
-<script src="assets/auth.js?v=48"></script>
-<script src="assets/board.js?v=48"></script>
-<script src="assets/audio.js?v=48"></script>
-<script src="assets/srs.js?v=48"></script>
-  <script src="assets/rank.js?v=48"></script>
-  <script src="assets/heroes_data.js?v=48"></script>
-  <script src="assets/heroes.js?v=48"></script>
-  <script src="assets/items.js?v=48"></script>
+<script src="assets/firebase_config.js?v=49"></script>
+<script src="assets/auth.js?v=49"></script>
+<script src="assets/board.js?v=49"></script>
+<script src="assets/audio.js?v=49"></script>
+<script src="assets/srs.js?v=49"></script>
+  <script src="assets/rank.js?v=49"></script>
+  <script src="assets/heroes_data.js?v=49"></script>
+  <script src="assets/heroes.js?v=49"></script>
+  <script src="assets/items.js?v=49"></script>
   <!-- 판 껍데기는 다른 모듈보다 먼저 — 각 화면이 필요한 것만 위에 덮어쓴다 -->
-  <script src="assets/panelskin.js?v=48"></script>
-  <script src="assets/gold.js?v=48"></script>
-  <script src="assets/ads.js?v=48"></script>
-  <script src="assets/energy.js?v=48"></script>
-  <script src="assets/daily.js?v=48"></script>
-  <script src="assets/unlock.js?v=48"></script>
-  <script src="assets/guide.js?v=48"></script>
-  <script src="assets/minigames.js?v=48"></script>
-  <script src="assets/quests.js?v=48"></script>
-  <script src="assets/journey.js?v=48"></script>
-  <script src="assets/fx.js?v=48"></script>
-  <script src="assets/season.js?v=48"></script>
-  <script src="assets/offline.js?v=48"></script>
-  <script src="assets/telemetry.js?v=48"></script>
-<script src="assets/badges.js?v=48"></script>
-<script src="assets/streak.js?v=48"></script>
+  <script src="assets/panelskin.js?v=49"></script>
+  <script src="assets/gold.js?v=49"></script>
+  <script src="assets/ads.js?v=49"></script>
+  <script src="assets/energy.js?v=49"></script>
+  <script src="assets/daily.js?v=49"></script>
+  <script src="assets/unlock.js?v=49"></script>
+  <script src="assets/guide.js?v=49"></script>
+  <script src="assets/minigames.js?v=49"></script>
+  <script src="assets/quests.js?v=49"></script>
+  <script src="assets/journey.js?v=49"></script>
+  <script src="assets/fx.js?v=49"></script>
+  <script src="assets/season.js?v=49"></script>
+  <script src="assets/offline.js?v=49"></script>
+  <script src="assets/telemetry.js?v=49"></script>
+<script src="assets/badges.js?v=49"></script>
+<script src="assets/streak.js?v=49"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>
@@ -523,8 +523,19 @@ function getViewportSize(){
   // 핀치줌이 걸리면 vv.width/height가 확대 배율만큼 줄어든다. 그 값을 그대로 쓰면
   // #wrap이 축소되면서 화면이 "확대된 채로" 굳어 되돌릴 수 없었다(실제 발생).
   // 줌이 걸린 동안은 레이아웃 뷰포트를 써서 레이아웃이 줌을 따라가지 않게 한다.
-  if (vv && (vv.scale || 1) <= 1.01) return { w: vv.width, h: vv.height };
-  return { w: window.innerWidth, h: window.innerHeight };
+  //
+  // 0은 값이 아니라 "아직 모른다"는 뜻이다. 화면이 숨겨진 채 페이지가 열리면
+  // visualViewport가 0×0을 주는데, 그 값이 그대로 들어가면 canvas.width가 0이 돼
+  // 아무것도 안 그려지고(검은 화면), portrait 판정(0 > 0 = false)까지 뒤집혀
+  // 세로 모드가 풀린다. 그래서 0이면 다음 것으로 물러난다.
+  const cands = [];
+  if (vv && (vv.scale || 1) <= 1.01) cands.push([vv.width, vv.height]);
+  cands.push([window.innerWidth, window.innerHeight]);
+  const de = document.documentElement;
+  if (de) cands.push([de.clientWidth, de.clientHeight]);
+  if (window.screen) cands.push([screen.width, screen.height]);
+  for (const [w, h] of cands) if (w > 0 && h > 0) return { w, h };
+  return null;   // 전부 0 — 예전 크기를 그대로 둔다
 }
 
 /* ============ 확대(핀치줌·더블탭줌) 차단 ============
@@ -543,7 +554,9 @@ document.addEventListener('touchend', function(e){
   __lastTouchEnd = now;
 }, { passive: false });
 function applyOrientation(){
-  const { w: iw, h: ih } = getViewportSize();
+  const vp = getViewportSize();
+  if (!vp) return;          // 크기를 모르는 동안은 손대지 않는다
+  const { w: iw, h: ih } = vp;
   const portrait = ih > iw;
   document.body.classList.toggle('rot', portrait);
   const w = portrait ? ih : iw;
@@ -1221,7 +1234,7 @@ document.addEventListener('keydown', (ev) => {
     }
   })();
 </script>
-<script src="assets/ask.js?v=48"></script>
-<script src="assets/tidy.js?v=48"></script>
+<script src="assets/ask.js?v=49"></script>
+<script src="assets/tidy.js?v=49"></script>
 </body>
 </html>
