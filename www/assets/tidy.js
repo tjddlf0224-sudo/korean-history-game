@@ -33,27 +33,89 @@
 */
 window.Tidy = (function(){
 
-  /* ---------- 선 그림. 24×24, 획만 있고 칠은 없다 ---------- */
+  /* ---------- 선 그림. 24×24.
+     mask가 아니라 background-image로 얹으므로 색을 마음껏 쓴다.
+     G=금 R=적 B=청 N=녹 C=백. 단청 오방색을 낮춘 색들이다. ---------- */
+  const G = '%23f0c96b', GD = '%23c9a24a', R = '%23d98a7a',
+        B = '%237fa8c4', N = '%238fbf9a', C = '%23efe4cd', D = '%232b1f0c';
+
   const I = {
-    att:   "<rect x='3' y='5' width='18' height='16' rx='2.5'/><path d='M3 10h18M8 3v4M16 3v4'/><path d='M8.7 15.2l2.2 2.2 4.4-4.4'/>",
-    box:   "<path d='M4.5 8.5h15v10.5a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5V8.5z'/><path d='M4.5 12.5h15'/><path d='M10 12.5v3h4v-3'/><path d='M6 8.5V6.5A2.5 2.5 0 0 1 8.5 4h7A2.5 2.5 0 0 1 18 6.5v2'/>",
-    quest: "<rect x='5' y='4.5' width='14' height='16.5' rx='2.2'/><path d='M9.2 4.5V3.4h5.6v1.1'/><path d='M8.8 12.2l2 2 4.4-4.4'/>",
-    mini:  "<rect x='4' y='4' width='16' height='16' rx='3.4'/><circle cx='8.7' cy='8.7' r='1.5' fill='%23000' stroke='none'/><circle cx='12' cy='12' r='1.5' fill='%23000' stroke='none'/><circle cx='15.3' cy='15.3' r='1.5' fill='%23000' stroke='none'/>",
-    srs:   "<path d='M20.2 12a8.2 8.2 0 1 1-2.5-5.9'/><path d='M20.5 3.6v5.2h-5.2'/><path d='M12 8.2v4.3l2.8 1.7'/>",
-    kings: "<path d='M4 18.5h16'/><path d='M4 18.5L2.9 8.2l5.3 3.9L12 5.6l3.8 6.5 5.3-3.9-1.1 10.3'/>",
-    badge: "<path d='M8 3l4 6 4-6'/><circle cx='12' cy='15' r='6'/><circle cx='12' cy='15' r='2.4'/>",
-    rank:  "<path d='M5 9.6l7-4.8 7 4.8'/><path d='M5 14.6l7-4.8 7 4.8'/><path d='M5 19.6l7-4.8 7 4.8'/>",
-    board: "<path d='M8.2 3.6h7.6v5.1a3.8 3.8 0 0 1-7.6 0V3.6z'/><path d='M8.2 5.4H5.4a2.8 2.8 0 0 0 2.8 3.6M15.8 5.4h2.8a2.8 2.8 0 0 1-2.8 3.6'/><path d='M12 12.5v3.4'/><path d='M8.6 20.4h6.8l-1-4.5h-4.8z'/>",
-    auth:  "<circle cx='12' cy='8.2' r='3.9'/><path d='M4.4 20.6a7.6 7.6 0 0 1 15.2 0'/>",
-    bgm:   "<path d='M4.5 9.5h3.2L12 5.8v12.4l-4.3-3.7H4.5z'/><path d='M15.6 9.4c1.3 1.2 1.3 4 0 5.2'/><path d='M18.2 6.9c2.6 2.6 2.6 8.6 0 11.2'/>",
-    mute:  "<path d='M4.5 9.5h3.2L12 5.8v12.4l-4.3-3.7H4.5z'/><path d='M16 9.8l4.4 4.4M20.4 9.8L16 14.2'/>",
-    reset: "<path d='M4.2 7h15.6'/><path d='M10 11v6M14 11v6'/><path d='M6.2 7l.9 12.2a1.6 1.6 0 0 0 1.6 1.5h6.6a1.6 1.6 0 0 0 1.6-1.5L17.8 7'/><path d='M9.4 7V5.2a1.2 1.2 0 0 1 1.2-1.2h2.8a1.2 1.2 0 0 1 1.2 1.2V7'/>",
-    close: "<path d='M6 6l12 12M18 6L6 18'/>",
+    // 출석 — 달력에 갈고리표. 오늘 온 것을 적는 자리다.
+    att: "<rect x='3.2' y='5.2' width='17.6' height='15.6' rx='2.6' fill='" + D + "' stroke='" + GD + "' stroke-width='1.5'/>" +
+         "<path d='M3.2 10h17.6' stroke='" + GD + "' stroke-width='1.5'/>" +
+         "<path d='M8 3v4M16 3v4' stroke='" + G + "' stroke-width='2' stroke-linecap='round'/>" +
+         "<path d='M8.6 15.4l2.3 2.3 4.5-4.6' stroke='" + N + "' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/>",
+
+    // 상자 — 뚜껑은 금, 몸은 어둡게, 자물쇠 한 점.
+    box: "<path d='M4.4 8.6h15.2v10.6a1.6 1.6 0 0 1-1.6 1.6H6a1.6 1.6 0 0 1-1.6-1.6z' fill='" + D + "' stroke='" + GD + "' stroke-width='1.5'/>" +
+         "<path d='M5.4 4.6h13.2a1.6 1.6 0 0 1 1.6 1.6v2.4H3.8V6.2a1.6 1.6 0 0 1 1.6-1.6z' fill='" + GD + "' stroke='" + G + "' stroke-width='1.3'/>" +
+         "<rect x='10.2' y='11.8' width='3.6' height='4.4' rx='.8' fill='" + G + "'/>",
+
+    // 할 일 — 종이에 갈고리표 둘. 하나는 이미 했고 하나는 남았다.
+    quest: "<rect x='4.8' y='4.4' width='14.4' height='16.6' rx='2.2' fill='" + D + "' stroke='" + GD + "' stroke-width='1.5'/>" +
+           "<rect x='9' y='2.6' width='6' height='3.4' rx='1.1' fill='" + G + "'/>" +
+           "<path d='M8.4 11.6l1.7 1.7 3.4-3.4' stroke='" + N + "' stroke-width='1.9' fill='none' stroke-linecap='round' stroke-linejoin='round'/>" +
+           "<path d='M8.4 16.6h7.2' stroke='" + C + "' stroke-width='1.6' stroke-linecap='round' opacity='.5'/>",
+
+    // 미니게임 — 주사위 둘. 앞은 금, 뒤는 어둡게 겹친다.
+    mini: "<rect x='2.6' y='7.4' width='11.6' height='11.6' rx='2.6' fill='" + D + "' stroke='" + GD + "' stroke-width='1.4'/>" +
+          "<circle cx='6.2' cy='11' r='1.25' fill='" + C + "'/><circle cx='10.6' cy='15.4' r='1.25' fill='" + C + "'/>" +
+          "<rect x='10.4' y='3.4' width='11' height='11' rx='2.5' fill='" + G + "' stroke='" + GD + "' stroke-width='1.2'/>" +
+          "<circle cx='13.8' cy='6.8' r='1.15' fill='" + D + "'/><circle cx='18' cy='11' r='1.15' fill='" + D + "'/>" +
+          "<circle cx='15.9' cy='8.9' r='1.15' fill='" + D + "'/>",
+
+    // 오답 복습 — 되돌아오는 화살표 안에서 ✗가 ○로 바뀐다.
+    srs: "<path d='M20.2 12a8.2 8.2 0 1 1-2.6-6' stroke='" + GD + "' stroke-width='1.9' fill='none' stroke-linecap='round'/>" +
+         "<path d='M20.6 3.6v5.2h-5.2' stroke='" + G + "' stroke-width='1.9' fill='none' stroke-linecap='round' stroke-linejoin='round'/>" +
+         "<path d='M8.4 9.4l4.2 4.2M12.6 9.4l-4.2 4.2' stroke='" + R + "' stroke-width='1.8' stroke-linecap='round'/>",
+
+    // 왕조 계보 — 왕관에 붉고 푸른 보석.
+    kings: "<path d='M3.6 18.4h16.8' stroke='" + GD + "' stroke-width='2' stroke-linecap='round'/>" +
+           "<path d='M3.8 18.4L2.6 7.6l5.4 3.9L12 5.2l4 6.3 5.4-3.9-1.2 10.8z' fill='" + G + "' stroke='" + GD + "' stroke-width='1.2' stroke-linejoin='round'/>" +
+           "<circle cx='12' cy='13.6' r='1.5' fill='" + R + "'/>" +
+           "<circle cx='6.9' cy='14.4' r='1.1' fill='" + B + "'/><circle cx='17.1' cy='14.4' r='1.1' fill='" + B + "'/>",
+
+    // 배지함 — 붉은 띠에 금빛 메달.
+    badge: "<path d='M8.4 2.6l3.6 5.4 3.6-5.4' stroke='" + R + "' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/>" +
+           "<circle cx='12' cy='15.2' r='6.1' fill='" + G + "' stroke='" + GD + "' stroke-width='1.3'/>" +
+           "<circle cx='12' cy='15.2' r='2.5' fill='" + D + "'/>",
+
+    // 계급 — 세 겹 갈매기. 위로 갈수록 밝아진다.
+    rank: "<path d='M5 19.6l7-4.8 7 4.8' stroke='" + GD + "' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' opacity='.55'/>" +
+          "<path d='M5 14.6l7-4.8 7 4.8' stroke='" + GD + "' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/>" +
+          "<path d='M5 9.6l7-4.8 7 4.8' stroke='" + G + "' stroke-width='2.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/>",
+
+    // 급제자 명단 — 금잔에 어두운 받침.
+    board: "<path d='M8 3.4h8v5.2a4 4 0 0 1-8 0z' fill='" + G + "' stroke='" + GD + "' stroke-width='1.2'/>" +
+           "<path d='M8 5.4H5.2a2.9 2.9 0 0 0 2.8 3.7M16 5.4h2.8a2.9 2.9 0 0 1-2.8 3.7' stroke='" + GD + "' stroke-width='1.5' fill='none' stroke-linecap='round'/>" +
+           "<path d='M12 12.6v3.2' stroke='" + GD + "' stroke-width='1.8' stroke-linecap='round'/>" +
+           "<path d='M8.4 20.6h7.2l-1-4.6h-5.2z' fill='" + D + "' stroke='" + GD + "' stroke-width='1.3' stroke-linejoin='round'/>",
+
+    // 로그인 — 사람. 얼굴은 밝게, 어깨는 푸르게.
+    auth: "<circle cx='12' cy='8' r='3.9' fill='" + C + "' stroke='" + GD + "' stroke-width='1.3'/>" +
+          "<path d='M4.4 20.8a7.6 7.6 0 0 1 15.2 0z' fill='" + B + "' stroke='" + GD + "' stroke-width='1.3' stroke-linejoin='round'/>",
+
+    // 배경음악 — 나팔은 금, 소리는 푸르게 퍼진다.
+    bgm: "<path d='M4.4 9.4h3.3L12 5.6v12.8l-4.3-3.8H4.4z' fill='" + G + "' stroke='" + GD + "' stroke-width='1.3' stroke-linejoin='round'/>" +
+         "<path d='M15.6 9.2c1.4 1.3 1.4 4.3 0 5.6' stroke='" + B + "' stroke-width='1.8' fill='none' stroke-linecap='round'/>" +
+         "<path d='M18.2 6.6c2.7 2.7 2.7 8.1 0 10.8' stroke='" + B + "' stroke-width='1.8' fill='none' stroke-linecap='round' opacity='.7'/>",
+
+    // 배경음악 끔 — 소리 자리에 붉은 ✗.
+    mute: "<path d='M4.4 9.4h3.3L12 5.6v12.8l-4.3-3.8H4.4z' fill='" + GD + "' stroke='" + GD + "' stroke-width='1.3' stroke-linejoin='round' opacity='.75'/>" +
+          "<path d='M15.8 9.6l4.6 4.6M20.4 9.6l-4.6 4.6' stroke='" + R + "' stroke-width='2' stroke-linecap='round'/>",
+
+    // 기록 초기화 — 되돌릴 수 없는 것이라 붉게 둔다.
+    reset: "<path d='M4.2 6.8h15.6' stroke='" + R + "' stroke-width='1.9' stroke-linecap='round'/>" +
+           "<path d='M9.4 6.8V5a1.2 1.2 0 0 1 1.2-1.2h2.8A1.2 1.2 0 0 1 14.6 5v1.8' stroke='" + R + "' stroke-width='1.6' fill='none' stroke-linecap='round'/>" +
+           "<path d='M6.2 6.8l.9 12.4a1.6 1.6 0 0 0 1.6 1.5h6.6a1.6 1.6 0 0 0 1.6-1.5l.9-12.4z' fill='" + D + "' stroke='" + R + "' stroke-width='1.5' stroke-linejoin='round'/>" +
+           "<path d='M10 10.6v6M14 10.6v6' stroke='" + R + "' stroke-width='1.5' stroke-linecap='round' opacity='.7'/>",
+
+    close: "<path d='M6 6l12 12M18 6L6 18' stroke='%23bfae90' stroke-width='2' stroke-linecap='round'/>",
   };
-  /* 가면으로 쓰려면 획이 불투명하기만 하면 된다 — 색은 바깥에서 입힌다 */
+
+  /* 그림 하나를 CSS가 쓸 수 있는 주소로 감싼다. 색은 그림이 스스로 갖는다. */
   function ico(d){
-    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' " +
-      "stroke='%23000' stroke-width='1.55' stroke-linecap='round' stroke-linejoin='round'>" + d + "</svg>";
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'>" + d + "</svg>";
     return 'url("data:image/svg+xml,' + svg.replace(/#/g, '%23') + '")';
   }
 
@@ -123,9 +185,8 @@ window.Tidy = (function(){
       border-radius:50%; border:1px solid #46381f; background:rgba(0,0,0,.28);
       font-size:0; color:transparent; display:flex; align-items:center; justify-content:center;
       cursor:pointer; transition:background .16s, border-color .16s; }
-    #menu-panel #mn-head #menu-close-btn::before { content:''; width:12px; height:12px;
-      background:#bfae90; -webkit-mask:${ico(I.close)} center/contain no-repeat;
-      mask:${ico(I.close)} center/contain no-repeat; }
+    #menu-panel #mn-head #menu-close-btn::before { content:''; width:13px; height:13px;
+      background:${ico(I.close)} center/contain no-repeat; }
     #menu-panel #mn-head #menu-close-btn:active { background:#2e2416; border-color:#6a5433; }
 
     /* ---- 묶음: 넓으면 두 줄로 앉는다 ---- */
@@ -155,9 +216,12 @@ window.Tidy = (function(){
        칸이 통째로 안 보이게 된다. 흐리게라도 보이는 쪽이 안전하다. */
     @keyframes mn-tile { from { opacity:.35; transform:translateY(6px); } to { opacity:1; transform:none; } }
     @media (prefers-reduced-motion:reduce){ #menu-modal.show .mtile { animation:none; } }
-    #menu-panel .mtile::before { content:''; flex:none; width:22px; height:22px;
-      background:linear-gradient(180deg,#e8c886,#c39c4c);
-      -webkit-mask:var(--i) center/contain no-repeat; mask:var(--i) center/contain no-repeat; }
+    /* mask로 씌우면 색이 하나로 뭉개진다. background-image로 얹어 그림이
+       제 색을 그대로 갖게 한다(로그인·배경음악처럼 안을 다시 쓰는 단추에도
+       안 지워지는 건 마찬가지다). */
+    #menu-panel .mtile::before { content:''; flex:none; width:25px; height:25px;
+      background:var(--i) center/contain no-repeat;
+      filter:drop-shadow(0 1px 2px rgba(0,0,0,.5)); }
     #menu-panel .mtile:active { transform:scale(.96); background:#2f2417; border-color:#6a5433; }
     /* 안에서 다시 그린 그림·사진은 감춘다 — 아이콘은 바깥에서 씌우고 있다 */
     #menu-panel .mtile > svg, #menu-panel .mtile img { display:none; }
@@ -167,7 +231,6 @@ window.Tidy = (function(){
       box-shadow:0 0 0 3px rgba(232,131,110,.16); }
     /* 되돌릴 수 없는 것 하나만 색을 달리해 둔다 */
     #menu-panel #menu-reset { color:#c9b3a8; }
-    #menu-panel #menu-reset::before { background:linear-gradient(180deg,#cf9782,#a56b57); }
 
     /* ---- 메뉴 단추에 점 — 안에 받을 것이 있으면 ---- */
     #menu-btn { position:relative; }
