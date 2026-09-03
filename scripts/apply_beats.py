@@ -53,6 +53,12 @@ def js_val(v, ind):
 def beats_js(beats, ind='    '):
     out = [ind + 'beats: [']
     for b in beats:
+        # 일부 NPC(ch0의 taejo_0·jongmyo_0)는 대화 중간에 퀴즈를 끼워 넣는다
+        # (beat.quiz — Dialog가 그 자리에서 바로 Quiz.open을 부른다). 't' 없이
+        # 'quiz'만 있는 항목은 그 퀴즈 원문을 그대로 옮긴다 — 손대지 않는다.
+        if 'quiz' in b and 't' not in b:
+            out.append(ind + '  { quiz: ' + js_val(b['quiz'], ind) + ' },')
+            continue
         line = ind + '  { who:' + js_str(b.get('who', 'npc')) + ', t:' + js_str(b['t'])
         for k in ('name', 'img', 'icon', 'docImg'):
             if b.get(k): line += ', %s:%s' % (k, js_str(b[k]))
@@ -143,8 +149,10 @@ def main():
             # 길 수밖에 없고, 화면에서도 이름표 없이 사진 아래에 따로 뜬다.
             # 길이·비율 통계에서 빼야 실제 대사가 어떤지 보인다.
             beats = [b for v in data['npcs'].values() for b in v]
-            talk = [b for b in beats if not b.get('docImg')]
-            docs = len(beats) - len(talk)
+            # 대화 중간에 끼우는 퀴즈(beat.quiz, 't' 없음)는 대사가 아니라
+            # 문제다 — 유산 사진(docImg)과 같은 이유로 통계에서 뺀다.
+            talk = [b for b in beats if not b.get('docImg') and 't' in b]
+            docs = sum(1 for b in beats if b.get('docImg'))
             L = [len(re.sub(r'<[^>]+>', '', b['t'])) for b in talk]
             n = len(talk)
             me = sum(1 for b in talk if b.get('who') == 'me')

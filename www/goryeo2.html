@@ -487,9 +487,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=47"></script>
-<script src="assets/chart.js?v=47"></script>
-<script src="assets/audio.js?v=47"></script>
+<script src="assets/map/map_component.js?v=48"></script>
+<script src="assets/chart.js?v=48"></script>
+<script src="assets/audio.js?v=48"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -501,7 +501,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=47';   // 존댓말 전환
+const ART_V = '?v=48';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1182,10 +1182,33 @@ const NPC_DATA = {
   ijagyeom_0: {
     name: '이자겸', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/ijagyeom.png',
     beats: [
-      { who:'npc', t:'나는 경원 이씨 가문 사람이오. 내 딸들을 예종과 인종, 두 임금께 잇달아 시집보냈으니 — 나는 인종의 외할아비이자 장인이기도 하오.' },
-      { who:'npc', t:'조정의 벼슬이란 벼슬은 우리 집안과 그 편에 선 이들 차지였소. "십팔자(十八子)가 왕이 된다"는 말까지 나돌았지 — 十八子를 합치면 오얏 리(李)가 되니, 내가 왕이 될 것이라는 뜻이었소.' },
-      { who:'npc', t:'어린 인종께서 나를 없애려 하시기에, 나는 척준경과 함께 궁궐에 불을 지르고 맞섰소. 1126년의 일이오. 한동안은 내가 이겼다고 여겼지.' },
-      { who:'npc', t:'허나 나는 척준경마저 홀대했소. 결국 인종께서 척준경을 구슬려 나를 쳤고, 나는 유배지에서 죽었소. 왕실의 위엄은 이미 땅에 떨어진 뒤였지.' },
+      { who:'npc', t:'(당당히 앉아 있다) 게 누구냐. 허락 없이 들라 하지 않았다.' },
+      { who:'me', t:'…이 댁이 크다더니, 정말이군요.' },
+      { who:'npc', t:'나는 경원 이씨, 이자겸이다.' },
+      { who:'npc', t:'내 딸을 예종께, 또 그 아들 인종께 시집보냈지.',
+        chart:{ type:'grid', title:'이자겸과 두 임금', head:[ '임금', '이자겸과의 관계' ], rows:[ [ '예종', '장인' ], [ '인종', '외할아비 겸 장인' ] ] } },
+      { who:'me', t:'그럼 두 임금 모두를 사위로 삼으신 겁니까?' },
+      { who:'npc', t:'임금의 외할아비이자 장인이다. 조정 벼슬도 다 우리 집안 차지였지.',
+        chart:{ type:'stat', title:'이자겸의 권세', items:[ { v:'2대', l:'예종·인종, 두 임금의 장인' }, { v:'십팔자', l:'왕이 된다는 도참' } ] } },
+      { who:'me', t:'…그 정도로 힘이 세셨습니까?' },
+      { who:'npc', t:'저잣거리에 떠도는 말이 있었지.' },
+      { who:'me', t:'대체 무슨 말이 떠돕니까?' },
+      { who:'npc', t:'십팔자(十八子)가 왕이 된다는 말.',
+        chart:{ type:'quote', title:'십팔자위왕(十八字爲王)', text:'十八子가 왕이 된다 — 합치면 <b>오얏 리(李)</b>', from:'당대의 참설' } },
+      { who:'me', t:'…합치면 오얏 리(李) 아닙니까?' },
+      { who:'npc', t:'그렇다. 내가 왕이 된다는 뜻이지.' },
+      { who:'npc', t:'(목소리가 낮아진다) 인종께서 나를 없애려 하셨다.',
+        chart:{ type:'vs', title:'왕과 외척', left:{ n:'인종', s:'외척을 치우려 한다' }, right:{ n:'이자겸', s:'권력을 지키려 한다' }, mid:'VS' } },
+      { who:'me', t:'그래서 어찌 대응하셨습니까?' },
+      { who:'npc', t:'척준경과 함께 궁궐에 불을 질렀다.' },
+      { who:'npc', t:'1126년의 일이다. 한동안은 내가 이겼다 여겼지.',
+        chart:{ type:'timeline', title:'이자겸의 난', marks:[ { y:'1126', t:'궁궐에 불지름', on:true }, { y:'1126.12', t:'유배지에서 죽음' } ] } },
+      { who:'me', t:'…그런데 그 뒤엔 어찌 되셨습니까?' },
+      { who:'npc', t:'(고개를 떨군다) 척준경마저 홀대한 게 화근이었다.' },
+      { who:'npc', t:'인종께서 그를 구슬려 나를 쳤네.',
+        chart:{ type:'vs', title:'이자겸의 오판', left:{ n:'이자겸', s:'척준경을 홀대했다' }, right:{ n:'인종·척준경', s:'손을 잡았다', win:true }, mid:'▶' } },
+      { who:'npc', t:'나는 유배지에서 죽었다. 왕실의 위엄도 그때 무너졌지.',
+        chart:{ type:'stat', title:'이자겸의 난, 그 결말', items:[ { v:'유배지', l:'이자겸의 최후' }, { v:'왕실 위엄', l:'크게 흔들림' } ] } },
     ],
     quizSeq: [
       { q:'예종·인종 두 임금에게 딸을 시집보내 외척으로 권력을 독점하다가, 1126년 척준경과 함께 반란을 일으킨 인물은?',
@@ -1199,11 +1222,39 @@ const NPC_DATA = {
   myocheong_0: {
     name: '묘청', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10.5" r="7"/><path d="M6 19h12M8 21.5h8"/><path d="M16.5 6v2M15.5 7h2"/></svg>', img: 'assets/portraits/myocheong.png',
     beats: [
-      { who:'npc', t:'나는 서경(평양) 사람이오. 풍수를 보니 개경의 기운은 다했고, 서경에 왕기가 서려 있소.' },
-      { who:'npc', t:'전하께 아뢰었소 — 서경으로 도읍을 옮기면 주변 삼십육국이 스스로 조공을 바치러 올 것이라고.' },
-      { who:'npc', t:'금이 세워지고 우리에게 사대하라 요구하니 조정이 술렁였소. 나는 칭제건원(황제를 칭하고 독자 연호를 씀)과 금 정벌까지 주장했소.' },
-      { who:'npc', t:'전하께서 서경 행차를 몇 번이나 하셨으나, 끝내 천도는 이루어지지 않았소. 나는 1135년 서경에서 나라를 세우고 대위(大爲)라 이름 지었소 — 국호까지 세운 반란이었소.' },
-      { who:'npc', t:'연호도 천개(天開)라 정했소. 하지만… 김부식이 이끄는 관군이 몰려왔고, 나는 그 안에서 살해되었다 하오. 성은 일 년을 버티다 무너졌소.' },
+      { who:'npc', t:'(나침반 같은 것을 들여다본다) …그대도 이 기운이 느껴지는가.' },
+      { who:'me', t:'그 기운이란 게 무엇입니까?' },
+      { who:'npc', t:'나는 서경 사람이다. 풍수를 보아 왔지.' },
+      { who:'npc', t:'개경의 기운은 다했다. 왕기는 서경에 있어.',
+        chart:{ type:'map', title:'개경과 서경', pins:[ { x:36.4, y:84.2, n:'개경' }, { x:25.0, y:67.6, n:'서경', on:true } ], legend:[ { k:'개경', v:'기운이 다했다고 보았다' }, { k:'서경', v:'왕기가 서렸다', on:true } ] } },
+      { who:'me', t:'…도읍을 옮기자는 말씀이군요.' },
+      { who:'npc', t:'서경으로 옮기면 나라가 흥하고, 삼십육국이 조공하러 올 것이다.',
+        chart:{ type:'quote', title:'묘청의 예언', text:'서경으로 도읍을 옮기면 <b>삼십육국이 스스로 조공</b>하리라', from:'묘청의 주장' } },
+      { who:'me', t:'전하께서는 뭐라 하셨습니까?' },
+      { who:'npc', t:'몇 번이나 서경에 행차하셨으나, 끝내 천도는 안 되었지.' },
+      { who:'me', t:'…그럼 이대로 포기하신 겁니까?' },
+      { who:'npc', t:'(눈빛이 달라진다) 아니. 나는 포기하지 않았다.' },
+      { who:'npc', t:'그사이 금이 일어나 우리에게 사대하라 했네.',
+        chart:{ type:'stat', title:'금의 요구', items:[ { v:'금', l:'거란·송을 밀어내고 등장' }, { v:'사대', l:'고려에 요구' } ] } },
+      { who:'npc', t:'조정이 술렁였지. 나는 황제를 칭하고 —' },
+      { who:'npc', t:'독자 연호를 쓰고, 금을 정벌하자 주장했다.',
+        chart:{ type:'vs', title:'서경파와 개경파', left:{ n:'묘청', s:'칭제건원·금 정벌' }, right:{ n:'김부식', s:'사대·화친 유지' }, mid:'VS' } },
+      { who:'me', t:'…그 뜻, 받아들여지지 않았군요.' },
+      { who:'npc', t:'(고개를 젓는다) 결국 나는 서경에서 군사를 일으켰다.',
+        chart:{ type:'stat', title:'서경 반란', items:[ { v:'1135', l:'인종 13년' }, { v:'서경', l:'군사를 일으킨 곳' } ] } },
+      { who:'npc', t:'1135년의 일이다. 국호를 대위(大爲)라 했지.',
+        chart:{ type:'quote', title:'묘청이 세운 나라', text:'국호 <b>대위(大爲)</b> · 연호 <b>천개(天開)</b>', from:'1135년 서경' } },
+      { who:'npc', t:'연호는 천개(天開)라 했네.' },
+      { who:'me', t:'…그 뒤엔 어찌 되었습니까?' },
+      { who:'npc', t:'김부식이 이끄는 관군이 몰려왔지.',
+        chart:{ type:'vs', title:'서경성을 둘러싼 싸움', left:{ n:'묘청', s:'대위국을 지키려 한다' }, right:{ n:'김부식', s:'관군을 이끌고 온다', win:true }, mid:'VS' } },
+      { who:'npc', t:'(목소리가 낮아진다) 나는… 내 편에게 배신당했다.' },
+      { who:'npc', t:'조광이 내 목을 베어 조정에 바쳤네.',
+        chart:{ type:'stat', title:'묘청의 최후', items:[ { v:'조광', l:'묘청을 배신하고 목을 벰' }, { v:'1년', l:'그래도 서경성은 버팀' } ] } },
+      { who:'me', t:'…믿었던 이들에게 배신당하신 겁니까?' },
+      { who:'npc', t:'그런데도 성은 일 년을 더 버텼지.' },
+      { who:'npc', t:'1136년, 결국 성은 무너졌네.',
+        chart:{ type:'timeline', title:'묘청의 난', marks:[ { y:'1135', t:'서경에서 반란', on:true }, { y:'1135', t:'조광, 묘청을 죽임' }, { y:'1136.2', t:'서경성 함락' } ] } },
     ],
     quizSeq: [
       { q:'묘청이 풍수도참을 내세워 서경(평양) 천도와 칭제건원, 금국 정벌을 주장하며 일으킨 사건은?',
@@ -1217,11 +1268,33 @@ const NPC_DATA = {
   gimbusik_0: {
     name: '김부식', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="18" height="4" rx="1"/><rect x="4" y="9" width="16" height="4" rx="1"/><rect x="5.5" y="4" width="13" height="4" rx="1"/></svg>', img: 'assets/portraits/gimbusik.png',
     beats: [
-      { who:'npc', t:'나는 개경의 문신이오. 묘청 저 사람의 서경 천도 주장에는 처음부터 동의하지 않았소.' },
-      { who:'npc', t:'도읍을 옮긴다고 하늘의 뜻이 바뀌겠소? 금과 맞서 싸우자는 것도 무모한 일이오. 사대를 통해 나라의 안정을 지키는 것이 우선이오.' },
-      { who:'npc', t:'결국 묘청이 서경에서 반란을 일으키니, 내가 관군을 이끌고 가 일 년 만에 성을 무너뜨렸소.' },
-      { who:'npc', t:'훗날 나는 임금의 명으로 「삼국사기」를 지었소. 우리 역사상 남아 있는 가장 오래된 정사(正史)요 — 유교적 합리주의를 바탕으로, 본기·열전 등을 나누어 적는 기전체로 엮었소.' },
-      { who:'npc', t:'…신채호라는 후대의 사람은 나를 두고, 이 서경 천도 운동의 진압을 사대주의가 자주 정신을 꺾은 사건이라 크게 비판했다고 들었소. 그의 말이 아주 틀렸다고는 못 하겠소.' },
+      { who:'npc', t:'(서안 앞에 앉아 있다) 나는 개경의 문신, 김부식이다.' },
+      { who:'me', t:'저 사람이… 묘청입니까?' },
+      { who:'npc', t:'그렇다. 처음부터 그의 뜻에 동의하지 않았지.' },
+      { who:'me', t:'어째서 그리 생각하십니까?' },
+      { who:'npc', t:'도읍을 옮긴다고 하늘의 뜻이 바뀌겠나.' },
+      { who:'npc', t:'금과 맞서 싸우자는 것도 무모한 일이다.' },
+      { who:'npc', t:'사대로 나라의 안정을 지키는 것이 우선이지.',
+        chart:{ type:'vs', title:'서경파와 개경파', left:{ n:'묘청', s:'칭제건원·금 정벌' }, right:{ n:'김부식', s:'사대·화친', win:true }, mid:'VS' } },
+      { who:'me', t:'결국 묘청이 반란을 일으켰지요.' },
+      { who:'npc', t:'그렇다. 내가 관군을 이끌고 가 일 년 만에 성을 무너뜨렸네.',
+        chart:{ type:'stat', title:'묘청의 난 진압', items:[ { v:'평서원수', l:'김부식의 직함' }, { v:'1년', l:'진압까지 걸린 기간' } ] } },
+      { who:'me', t:'(붓과 책이 쌓여 있다) …이건 무엇입니까?' },
+      { who:'npc', t:'「삼국사기」다. 임금의 명으로 짓고 있네.',
+        chart:{ type:'stat', title:'삼국사기', items:[ { v:'1145', l:'삼국사기 완성' }, { v:'인종', l:'명을 내린 왕' } ] } },
+      { who:'npc', t:'우리 역사상 남아 있는 가장 오래된 정사(正史)지.',
+        chart:{ type:'relic', title:'김부식이 지은 역사서', items:[ { img:'samguksagi', n:'삼국사기', s:'현존 최고(最古)의 역사서' } ] } },
+      { who:'me', t:'어떤 짜임으로 적으십니까?' },
+      { who:'npc', t:'본기·열전 등으로 나누어 적네. 기전체라 하지.',
+        chart:{ type:'steps', title:'삼국사기의 짜임(기전체)', steps:[ { t:'본기', s:'왕의 사적' }, { t:'열전', s:'인물의 사적' }, { t:'지·표', s:'제도와 연표' } ] } },
+      { who:'npc', t:'유교적 합리주의를 바탕으로 적었네.',
+        chart:{ type:'compare', title:'삼국사기와 삼국유사', cols:[ { h:'삼국사기', hi:true, items:[ '1145 · 김부식', '기전체', '유교적 합리주의' ] }, { h:'삼국유사', items:[ '훗날 · 일연', '설화·불교 중심' ] } ] } },
+      { who:'me', t:'…묘청의 일도 그 안에 적으셨습니까?' },
+      { who:'npc', t:'(붓을 멈춘다) …적었지. 훗날 신채호란 이가 나를 비판했다더군.' },
+      { who:'me', t:'구체적으로 무어라 했습니까?' },
+      { who:'npc', t:'이 진압이 사대 정신이 자주 정신을 꺾은 사건이라고.',
+        chart:{ type:'quote', title:'신채호의 평가', text:'묘청의 난을 <b>조선역사상 일천년래 제일대사건</b>이라 하였다', from:'신채호, 「조선사연구초」' } },
+      { who:'npc', t:'(잠시 말이 없다) …그 말이 아주 틀렸다고는 못 하겠네.' },
     ],
     quizSeq: [
       { q:'김부식이 왕명을 받아 편찬한, 현존하는 우리나라 최고(最古)의 역사서는?',
@@ -1232,18 +1305,45 @@ const NPC_DATA = {
   seohui_0: {
     name: '서희', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4.5a5.5 5.5 0 015.5 5.5c0 2.3-1.2 3.6-2.5 4.5V19h-3v-3.8A5.5 5.5 0 018 4.5z"/><path d="M14 9c1 .3 1.6 1 1.8 1.8M15.5 6.5c1.4.5 2.5 1.6 2.8 3"/></svg>', img: 'assets/portraits/seohui.png',
     beats: [
-      { who:'npc', t:'거란이 대군을 이끌고 왔을 때, 조정에서는 땅을 떼어 주고 화친하자는 말이 나왔소.' },
-      { who:'npc', t:'나는 소손녕을 만나 따졌소. 우리가 고구려를 이었으니 그 땅은 본래 우리 것이고, 여진이 길을 막아 거란과 통하지 못한 것뿐이라고.' },
-      { who:'npc', t:'그리하여 싸우지 않고 강동 6주를 얻었소. 뒷날 강감찬 장군이 귀주에서 거란을 크게 무찌른 것도 그 땅이 있었기에 가능했지.' },
-      { who:'npc', chart:{ type: 'flow', steps: [
-{ t: '거란', s: '993 서희<br>1019 귀주대첩' },
-{ t: '여진', s: '1107 윤관 별무반' },
-{ t: '몽골', s: '1231~ 6차 침입' },
-{ t: '홍건적·왜구', s: '고려 말' },
-], note: '<b>거·여·몽·홍왜</b>. 거란이 제일 먼저, 왜구가 제일 나중이오.' }, t:'고려가 맞선 상대를 차례로 놓고 보시게. 순서가 곧 답이오.' },
-      { who:'npc', t:'허나 거란이 그것으로 끝낸 것은 아니었소. 강조가 정변을 일으켜 왕을 갈아치운 것을 구실 삼아, 얼마 뒤 다시 대군을 몰고 내려왔지 — 2차 침입이오.' },
-      { who:'npc', t:'개경마저 함락될 위기에 놓이자 현종께서는 남쪽 나주까지 몸을 피하셨소. 임금이 그리 멀리까지 몽진한 것은 처음 있는 일이었지.' },
-      { who:'npc', t:'그때는 내가 아니라 양규 장군이 나섰소. 흥화진을 지켜 내고, 거란에게 넘어갔던 곽주성마저 급습해 되찾았지. 그 힘이 있었기에 훗날 강감찬 장군의 귀주대첩도 가능했던 것이오.' },
+      { who:'npc', t:'(막사 앞을 서성인다) 거란이 대군을 이끌고 왔다.' },
+      { who:'npc', t:'조정에서는 땅을 떼어 주고 화친하자는 말이 나왔지.' },
+      { who:'me', t:'…그리 땅을 떼어 주고 화친하시렵니까?' },
+      { who:'npc', t:'아니. 내가 직접 소손녕을 만나겠네.' },
+      { who:'npc', t:'묻겠네 — 저들이 우리더러 신라를 이었다 하면, 자네라면 뭐라 답하겠나?' },
+      { who:'me', t:'…우리는 신라가 아니라 고구려를 이었다, 그리 답하겠습니다.' },
+      { who:'npc', t:'(옅게 웃는다) 옳거니. 그리 말할 참이었네.',
+        chart:{ type:'compare', title:'고려는 무엇을 이었나', cols:[ { h:'거란의 주장', items:[ '고려는 신라를 이었다' ] }, { h:'서희의 반박', hi:true, items:[ '고려는 고구려를 이었다', '국호가 그 증거다' ] } ] } },
+      { who:'npc', t:'같이 가세. 옆에서 듣게.' },
+      { who:'npc', t:'(소손녕 앞에 선다) 우리는 고구려를 이었으니, 국호도 고려외다.' },
+      { who:'me', t:'(옆에서 지켜본다) …그럼 요동도 본래 우리 땅이란 말씀입니까?' },
+      { who:'npc', t:'(고개를 끄덕인다) 그렇네.' },
+      { who:'npc', t:'그대들과 통하지 못한 것은 여진이 길을 막았기 때문이오.' },
+      { who:'npc', t:'여진을 몰아내면 그 길도 트일 것이오.',
+        chart:{ type:'steps', title:'서희의 담판 논리', steps:[ { t:'우리는 고구려를 이었다', s:'신라 계승이 아니다' }, { t:'여진이 길을 막았다', s:'거란과 통하지 못한 까닭' }, { t:'여진을 몰아내면', s:'그대와도 길이 트인다' } ] } },
+      { who:'me', t:'…그 말에 소손녕이 물러가겠답니까?' },
+      { who:'npc', t:'(한숨 돌리며) 물러갔네. 우리는 싸우지 않았지.',
+        chart:{ type:'stat', title:'서희의 담판', items:[ { v:'993년', l:'거란 1차 침입' }, { v:'강동 6주', l:'싸우지 않고 얻은 땅' } ] } },
+      { who:'npc', t:'얻은 땅이 강동 6주일세.' },
+      { who:'me', t:'…그게 그 유명한 강동 6주군요.' },
+      { who:'npc', t:'뒷날 강감찬 장군이 귀주에서 거란을 크게 무찔렀지.',
+        chart:{ type:'stat', title:'귀주대첩', items:[ { v:'1019', l:'귀주대첩' }, { v:'강감찬', l:'거란을 크게 무찌름' } ] } },
+      { who:'npc', t:'그 땅이 있었기에 가능한 싸움이었네.',
+        chart:{ type:'flow', title:'고려가 맞선 네 적', steps:[ { t:'거란', s:'993 서희<br>1019 귀주대첩' }, { t:'여진', s:'1107 윤관 별무반' }, { t:'몽골', s:'1231~ 6차 침입' }, { t:'홍건적·왜구', s:'고려 말' } ], note:'<b>거·여·몽·홍왜</b>. 거란이 제일 먼저, 왜구가 제일 나중이오.' } },
+      { who:'me', t:'…거란이 이걸로 끝났습니까?' },
+      { who:'npc', t:'아니. 강조가 정변을 일으켜 왕을 갈아치우자,',
+        chart:{ type:'stat', title:'강조의 정변', items:[ { v:'강조', l:'정변으로 목종을 폐위' }, { v:'구실', l:'거란 2차 침입의 명분' } ] } },
+      { who:'npc', t:'그것을 구실 삼아 거란이 다시 몰려왔지 — 2차 침입일세.',
+        chart:{ type:'timeline', title:'거란의 세 차례 침입', marks:[ { y:'993', t:'1차 · 서희의 담판' }, { y:'1010', t:'2차 · 강조의 정변이 구실', on:true }, { y:'1019', t:'3차 · 귀주대첩' } ] } },
+      { who:'me', t:'…그럼 개경은 무사했습니까?' },
+      { who:'npc', t:'위태로웠지. 현종께서는 남쪽 나주까지 몸을 피하셨네.',
+        chart:{ type:'map', title:'현종의 나주 몽진', pins:[ { x:36.4, y:84.2, n:'개경' }, { x:38.7, y:130.7, n:'나주', on:true } ], legend:[ { k:'나주', v:'임금이 그리 멀리 피한 것은 처음', on:true } ] } },
+      { who:'npc', t:'임금이 그리 멀리까지 몽진한 것은 처음 있는 일이었네.' },
+      { who:'me', t:'그때도 어르신이 나서셨습니까?' },
+      { who:'npc', t:'아니, 그때는 양규 장군이 나섰지.',
+        chart:{ type:'stat', title:'양규 장군', items:[ { v:'흥화진', l:'지켜 낸 성' }, { v:'곽주성', l:'급습해 되찾음' } ] } },
+      { who:'npc', t:'흥화진을 지켜 내고, 곽주성마저 급습해 되찾았네.' },
+      { who:'me', t:'…양규 장군의 이야기도 대단하군요.' },
+      { who:'npc', t:'그 힘이 있었기에 훗날 귀주대첩도 가능했던 것이오.' },
     ],
     quizSeq: [
       { q:'거란의 1차 침입 때 소손녕과 담판하여 강동 6주를 얻어낸 인물은?',
@@ -1263,34 +1363,26 @@ const NPC_DATA = {
   yungwan_0: {
     name: '윤관', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21l1-6"/><path d="M5 15c-1.5-2-1.5-4.5 0-6.5C7 6 9 5 12 5h1l2-2 1.5 2.5L18 5l1 3-2 1"/><path d="M17 9v3.5c0 2-1 3.5-3 4.5"/><path d="M14 17l-1 4"/><path d="M9 15l-1.5 6"/><path d="M9 9.5c1 0 2 .3 2.5 1"/><circle cx="15.3" cy="8.3" r=".4" fill="currentColor" stroke="none"/></svg>', img: 'assets/portraits/yungwan.png',
     beats: [
-      { who:'npc', t:'여진은 말을 타고 오는데 우리는 걸어서 맞섰소. 이길 수가 없었지.' },
-      { who:'npc', chart:{ head: [
-'',
-'별무반',
-'삼별초',
-], rows: [
-[
-'시기',
-'1104년(윤관)',
-'1270년대(무신정권~대몽항쟁)',
-],
-[
-'상대',
-'여진',
-'몽골',
-],
-[
-'구성',
-'신기군·신보군·항마군',
-'좌별초·우별초·신의군',
-],
-[
-'암기',
-'이름에 \'3\'이 없음 → 여진',
-'이름의 \'삼(3)\' → 몽골',
-],
-] }, t:'그래서 새 군대를 만들자 청했소. 기병인 신기군, 보병인 신보군, 승려로 짜인 항마군 — 별무반이오.' },
-      { who:'npc', t:'그 군사로 여진을 몰아내고 동북 9성을 쌓았소. 다만 지키기가 어려워 이내 돌려주고 말았지만.' },
+      { who:'npc', t:'(부대를 사열하며) 여진은 말을 타고 오는데,' },
+      { who:'npc', t:'우리는 걸어서 맞섰다. 이길 수가 없었지.',
+        chart:{ type:'vs', title:'맞지 않는 싸움', left:{ n:'여진', s:'말을 탄 기병' }, right:{ n:'고려', s:'걸어서 맞선 보병' }, mid:'VS' } },
+      { who:'me', t:'…그렇게 패하신 겁니까?' },
+      { who:'npc', t:'그렇다. 그래서 임금께 새 군대를 만들자 청했네.' },
+      { who:'npc', t:'말 가진 자는 기병 — 신기군.' },
+      { who:'me', t:'(고개를 끄덕인다) 그럼 나머지는요?' },
+      { who:'npc', t:'말 없는 자는 보병 — 신보군, 승려는 항마군으로 묶었네.' },
+      { who:'npc', t:'이 셋을 합쳐 별무반이라 했지.',
+        chart:{ type:'grid', title:'별무반과 삼별초 — 헷갈리는 두 부대', hi:3, head:[ '', '별무반', '삼별초' ], rows:[ [ '시기', '1104년(윤관)', '1270년대(무신정권~대몽항쟁)' ], [ '상대', '여진', '몽골' ], [ '구성', '신기군·신보군·항마군', '좌별초·우별초·신의군' ], [ '암기', '이름에 \'3\'이 없음 → 여진', '이름의 \'삼(3)\' → 몽골' ] ] } },
+      { who:'me', t:'…그래서 여진을 몰아내셨습니까?' },
+      { who:'npc', t:'그 군사로 여진을 몰아냈네.' },
+      { who:'npc', t:'1107년, 아홉 개 성을 쌓았지 — 동북 9성일세.',
+        chart:{ type:'timeline', title:'윤관의 여진 정벌', marks:[ { y:'1104', t:'별무반 조직' }, { y:'1107', t:'동북 9성 축조', on:true }, { y:'1109', t:'여진에 반환' } ] } },
+      { who:'me', t:'그 땅을 그대로 지키셨습니까?' },
+      { who:'npc', t:'(한숨) 아니. 지키기가 너무 어려웠네.',
+        chart:{ type:'vs', title:'9성을 둘러싼 다툼', left:{ n:'고려', s:'지키기가 너무 어렵다' }, right:{ n:'여진', s:'끊임없이 돌려달라 한다' }, mid:'VS' } },
+      { who:'npc', t:'얼마 못 가 여진에게 돌려주고 말았지.',
+        chart:{ type:'stat', title:'동북 9성, 짧았던 땅', items:[ { v:'1107', l:'9성을 쌓다' }, { v:'1109', l:'여진에게 돌려주다' } ] } },
+      { who:'me', t:'…그래도 별무반은 대단한 시도였군요.' },
     ],
     quizSeq: [
       { q:'여진 정벌을 위해 윤관의 건의로 만들어진, 신기군·신보군·항마군으로 짜인 부대는?',
@@ -1301,14 +1393,49 @@ const NPC_DATA = {
   choechunghyeon_0: {
     name: '최충헌', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img: 'assets/portraits/choechunghyeon.png',
     beats: [
-      { who:'npc', t:'문신들이 무신을 개돼지 취급하던 시절이 있었다. 정중부와 이의방이 칼을 든 것도 그 때문이지.' },
-      { who:'npc', t:'나는 이의민을 베고 권력을 잡았다. 왕께 열 가지 폐단을 고치라 아뢰었고 — 봉사 10조다 — 실은 내 자리를 굳히는 일이었다.' },
-      { who:'npc', t:'교정도감을 두어 나랏일을 여기서 결정했다. 왕은 있으나, 정사는 내 손에서 나갔다.' },
-      { who:'npc', t:'무신정변이 왜 일어났는지 아나. 김부식의 아들 김돈중이 젊은 시절, 촛불로 정중부의 수염을 태운 일이 있었네.' },
-      { who:'npc', t:'무신은 잔치에서 춤이나 추게 하고, 수염까지 태워도 벌 하나 없었지. 그 쌓인 것이 1170년에 터졌네. 문신의 관을 쓴 자는 씨도 남기지 말라 — 그 말이 그때 나왔지.' },
-      { who:'npc', t:'이듬해인 1173년엔 문신 김보당이 가만있지 않았네. 쫓겨난 의종을 다시 세우겠다며 군사를 일으켰지 — 무신 정권에 맞선 첫 반란이었네. 허나 이내 진압되고 말았지.' },
-      { who:'npc', t:'이 자리는 내 아들 최우가 이어받을 걸세. 나는 관직에 오를 사람을 정하는 정방까지는 못 두었지만, 그 아이가 두어 인사권마저 완전히 손아귀에 넣을 것이야. 몽골이 쳐들어오면 강화도로 도읍을 옮기자 한 것도 그 아이지.' },
-      { who:'npc', t:'내 밑에 만적이라는 사노비가 있었네. 그자가 개경에서 노비들을 모아 놓고 신분 해방을 외치며 반란을 꾀했지 — 왕후장상의 씨가 어찌 따로 있겠느냐고 말이야. 허나 사전에 발각되어 뜻을 이루지는 못했네.' },
+      { who:'npc', t:'문신들이 무신을 개돼지 취급하던 시절이 있었다.',
+        chart:{ type:'stat', title:'무신 정권 100년', items:[ { v:'1170', l:'무신정변, 정권을 잡다' }, { v:'1270', l:'개경 환도로 막을 내림' } ] } },
+      { who:'me', t:'…그게 그토록 심했다는 겁니까?' },
+      { who:'npc', t:'정중부의 수염을 김돈중이 촛불로 태웠다.' },
+      { who:'npc', t:'벌 하나 받지 않았지. 그 쌓인 것이 1170년에 터졌네.',
+        chart:{ type:'quote', title:'무신정변의 함성', text:'문신의 관을 쓴 자는 <b>씨도 남기지 말라</b>', from:'1170년 무신정변' } },
+      { who:'me', t:'그게 바로 무신정변이군요.' },
+      { who:'npc', t:'정중부와 이의방이 칼을 들었지.' },
+      { who:'npc', t:'나는 그 뒤, 이의민을 베고 권력을 잡았다.',
+        chart:{ type:'timeline', title:'무신 정권, 세 번 주인이 바뀌다', marks:[ { y:'1170', t:'정중부·이의방' }, { y:'1179', t:'경대승' }, { y:'1196', t:'최충헌 집권', on:true } ] } },
+      { who:'me', t:'(긴장한다) …이의민을 베셨다고요?' },
+      { who:'npc', t:'그렇다. 왕께 열 가지 폐단을 고치라 아뢰었지.' },
+      { who:'npc', t:'봉사 10조라 했네. 실은 내 자리를 굳히는 일이었지.',
+        chart:{ type:'stat', title:'봉사 10조', items:[ { v:'10조', l:'왕에게 올린 개혁안' }, { v:'1196', l:'최충헌 집권한 해' } ] } },
+      { who:'me', t:'…그래도 그리 해도 되는 겁니까?' },
+      { who:'npc', t:'(대답 없이) 나는 이듬해 김보당의 난도 겪었네.' },
+      { who:'npc', t:'1173년, 쫓겨난 의종을 다시 세우겠다며 군사를 일으켰지.' },
+      { who:'npc', t:'무신 정권에 맞선 첫 반란이었네. 이내 진압되었지.',
+        chart:{ type:'vs', title:'김보당의 난', left:{ n:'김보당', s:'의종 복위 주장' }, right:{ n:'무신 정권', s:'이내 진압', win:true }, mid:'VS' } },
+      { who:'me', t:'그런데 어르신은 어찌 권력을 지키십니까?' },
+      { who:'npc', t:'교정도감을 두었네. 나랏일을 여기서 결정하지.' },
+      { who:'npc', t:'왕은 있으나, 정사는 내 손에서 나가네.',
+        chart:{ type:'pyramid', title:'최충헌 정권의 권력', tiers:[ { t:'왕', s:'자리만 지킨다' }, { t:'최충헌', s:'교정도감·도방을 쥔다', hi:true } ] } },
+      { who:'me', t:'위험할 때는 없으셨습니까?' },
+      { who:'npc', t:'왜 없겠나. 도방이 나를 지키지 — 내가 기른 사병들일세.',
+        chart:{ type:'compare', title:'최충헌의 두 기구', cols:[ { h:'교정도감', items:[ '국정 총괄', '인사·감찰·징세' ] }, { h:'도방', hi:true, items:[ '사병 조직', '신변 보호' ] } ] } },
+      { who:'me', t:'…사병이라니, 그래도 되는 겁니까?' },
+      { who:'npc', t:'(짧게) 그래야 살아남는다.' },
+      { who:'me', t:'…이 자리, 오래 지키실 수 있습니까?' },
+      { who:'npc', t:'이 자리는 내 아들 최우가 이어받을 것이다.' },
+      { who:'npc', t:'그 아이가 정방을 두어 인사권마저 완전히 쥘 걸세.',
+        chart:{ type:'grid', title:'최씨 정권, 아버지와 아들', head:[ '', '최충헌', '최우' ], rows:[ [ '기구', '교정도감·도방', '정방 추가' ], [ '몽골 침입', '—', '강화 천도 주도' ] ] } },
+      { who:'npc', t:'몽골이 쳐들어오면 강화도로 옮기자 한 것도 그 아이지.',
+        chart:{ type:'stat', title:'최우와 강화 천도', items:[ { v:'최우', l:'강화 천도를 주도' }, { v:'1232', l:'천도한 해' } ] } },
+      { who:'me', t:'(무거운 표정) 아래에서는… 다른 소리도 있었겠지요.' },
+      { who:'npc', t:'(잠시 침묵) …있었지. 내 밑에 만적이라는 사노비가 있었네.' },
+      { who:'npc', t:'개경에서 노비들을 모아 신분 해방을 외치며 반란을 꾀했지.' },
+      { who:'me', t:'…노비들이 그리 결의할 만큼 힘들었군요.' },
+      { who:'npc', t:'왕후장상의 씨가 어찌 따로 있겠느냐고 말이야.',
+        chart:{ type:'quote', title:'만적이 외친 말', text:'왕후장상(王侯將相)의 씨가 어찌 <b>따로 있겠는가</b>', from:'1198년 만적의 난' } },
+      { who:'me', t:'…그래서 어찌 되었습니까?' },
+      { who:'npc', t:'(짧게) 사전에 발각되어, 뜻을 이루지 못했네.',
+        chart:{ type:'stat', title:'만적의 난, 그 결말', items:[ { v:'1198', l:'만적의 난이 일어난 해' }, { v:'발각', l:'거사 전에 새어 나감' } ] } },
     ],
     quizSeq: [
       { q:'무신들이 문신에 대한 차별에 반발해 정권을 잡은 1170년의 사건은?',
@@ -1334,36 +1461,50 @@ const NPC_DATA = {
   sambyeolcho_0: {
     name: '삼별초 장수', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>', img: 'assets/portraits/sambyeolcho.png',
     beats: [
-      { who:'npc', chart:{ head: [
-'',
-'별무반',
-'삼별초',
-], rows: [
-[
-'시기',
-'1104년(윤관)',
-'1270년대(무신정권~대몽항쟁)',
-],
-[
-'상대',
-'여진',
-'몽골',
-],
-[
-'구성',
-'신기군·신보군·항마군',
-'좌별초·우별초·신의군',
-],
-[
-'암기',
-'이름에 \'3\'이 없음 → 여진',
-'이름의 \'삼(3)\' → 몽골',
-],
-] }, t:'몽골이 쳐들어오자 조정은 이 강화도로 옮겼소. 물을 두려워하는 저들을 막기에는 나았지.' },
-      { who:'npc', t:'허나 육지의 백성은 그대로 두었소. 처인성에서 김윤후가 살리타를 쏘아 죽인 것도, 충주에서 노비들이 성을 지킨 것도 다 백성의 힘이었소.' },
-      { who:'npc', t:'충주 다인철소에서도 그곳 주민들이 힘을 모아 몽골군을 막아 냈소. 조정은 그 공을 기려 다인철소를 익안현으로 올려 주었지 — 천대받던 소(所) 백성이 신분을 벗은 드문 일이었소.' },
-      { who:'npc', t:'조정이 개경으로 돌아가 항복하기로 하자 우리는 따르지 않았소. 강화에서 진도로, 진도에서 제주로 — 끝까지 싸웠소.' },
-      { who:'npc', t:'허나 1273년, 김방경이 이끄는 여몽연합군에게 끝내 진압되고 말았소. 그로써 삼별초의 항쟁도 막을 내렸소.' },
+      { who:'npc', t:'(갑주를 손질하며) 몽골이 쳐들어오자 조정은 이 강화도로 옮겼소.' },
+      { who:'me', t:'…왜 하필 섬입니까?' },
+      { who:'npc', t:'물을 두려워하는 자들이라, 여기까지 건너오지 못하지.',
+        chart:{ type:'timeline', title:'몽골 침입과 강화 천도', marks:[ { y:'1231', t:'몽골 1차 침입' }, { y:'1232', t:'강화 천도', on:true } ] } },
+      { who:'me', t:'(주위를 둘러본다) …육지 사람들은 어찌 되었습니까?' },
+      { who:'npc', t:'(표정이 어두워진다) 그대로 두었소. 죽고 싸운 건 백성이었네.' },
+      { who:'me', t:'…누가 맞섰습니까?' },
+      { who:'npc', t:'처인성에서 김윤후가 살리타를 쏘아 죽였소.',
+        chart:{ type:'stat', title:'백성이 지킨 땅', items:[ { v:'1232', l:'처인성 · 김윤후, 살리타 사살' }, { v:'충주', l:'노비들이 성을 지킴' } ] } },
+      { who:'npc', t:'충주에서는 노비들이 성을 지켰지.' },
+      { who:'me', t:'…승려나 노비가요?' },
+      { who:'npc', t:'그렇소. 조정이 아니라 백성이 막았소.',
+        chart:{ type:'compare', title:'누가 몽골과 싸웠나', cols:[ { h:'조정', items:[ '강화도로 피함' ] }, { h:'백성', hi:true, items:[ '처인성·충주에 남음', '직접 맞서 싸움' ] } ] } },
+      { who:'npc', t:'충주 다인철소에서도 그곳 주민들이 힘을 모았지.' },
+      { who:'npc', t:'몽골군을 막아 낸 공으로 조정이 그곳을 올려 주었소.',
+        chart:{ type:'vs', title:'다인철소, 신분이 바뀌다', left:{ n:'소(所)', s:'천대받던 신분' }, right:{ n:'익안현(縣)', s:'몽골을 막은 공', win:true }, mid:'▶' } },
+      { who:'npc', t:'소(所)가 현(縣)이 되었지 — 익안현이오.' },
+      { who:'me', t:'…천대받던 이들이 벗어난 겁니까?' },
+      { who:'npc', t:'드문 일이었지. 그만큼 절박했다는 뜻이오.',
+        chart:{ type:'stat', title:'다인철소의 항전', items:[ { v:'다인철소', l:'몽골군을 막은 소(所)' }, { v:'익안현', l:'그 공으로 승격됨' } ] } },
+      { who:'me', t:'(사경 흔적을 본다) …이건 무엇입니까?' },
+      { who:'npc', t:'대장경이오. 부처의 힘으로 몽골을 물리치려 했지.' },
+      { who:'npc', t:'허나 예전 것은 몽골군이 부인사에서 불태웠소.',
+        chart:{ type:'compare', title:'두 대장경', cols:[ { h:'초조대장경', items:[ '현종 때 새김', '부인사', '몽골군이 불태움' ] }, { h:'팔만대장경', hi:true, items:[ '강화도에서 다시 새김', '지금은 해인사' ] } ] } },
+      { who:'npc', t:'그래서 다시 새겼소. 이 강화도에서.' },
+      { who:'me', t:'…그 경판이 지금도 남아 있습니까?' },
+      { who:'npc', t:'해인사에 남아 있소. 팔만 장이 넘지.',
+        chart:{ type:'relic', title:'다시 새긴 대장경', items:[ { img:'palmandaejanggyeong', n:'팔만대장경', s:'강화도에서 새로 새김 · 지금은 해인사' } ] } },
+      { who:'npc', t:'(다시 표정이 굳는다) 그런데 조정은…' },
+      { who:'npc', t:'몽골에 항복하고 개경으로 돌아가기로 했소.',
+        chart:{ type:'stat', title:'개경 환도', items:[ { v:'1270', l:'개경 환도 결정' }, { v:'삼별초', l:'따르지 않고 항쟁' } ] } },
+      { who:'me', t:'…그래서 어찌하셨습니까?' },
+      { who:'npc', t:'우리는 따르지 않았소.' },
+      { who:'npc', t:'강화에서 진도로, 진도에서 제주로 — 끝까지 싸웠지.',
+        chart:{ type:'map', title:'삼별초, 끝까지 옮긴 길', pins:[ { x:35.6, y:87.6, n:'강화' }, { x:32.3, y:139.3, n:'진도' }, { x:36.2, y:154.8, n:'제주', on:true } ], legend:[ { k:'강화', v:'1232~1270 도읍' }, { k:'진도', v:'1270~1271' }, { k:'제주', v:'1271~1273 마지막 항전', on:true } ] } },
+      { who:'npc', t:'1270년에서 1273년까지, 삼 년을 버텼소.',
+        chart:{ type:'timeline', title:'삼별초 항쟁', marks:[ { y:'1270', t:'봉기·강화→진도', on:true }, { y:'1271', t:'진도 함락→제주로' }, { y:'1273', t:'제주 함락' } ] } },
+      { who:'me', t:'(숨을 죽이고 듣는다) …끝은 어찌 됐습니까?' },
+      { who:'npc', t:'1273년, 김방경이 이끄는 여몽연합군이 몰려왔소.',
+        chart:{ type:'stat', title:'삼별초 항쟁의 끝', items:[ { v:'1273', l:'삼별초 진압' }, { v:'김방경', l:'여몽연합군을 이끔' } ] } },
+      { who:'npc', t:'우리는… 거기서 끝났소.' },
+      { who:'me', t:'(아무 말도 하지 못한다)' },
+      { who:'npc', t:'(잠시 후) 그래도 우리가 끝까지 싸웠다는 것, 잊지 마시오.',
+        chart:{ type:'stat', title:'삼별초 항쟁', items:[ { v:'1270~1273', l:'항쟁 기간' }, { v:'강화→진도→제주', l:'옮겨간 길' } ] } },
     ],
     quizSeq: [
       { q:'몽골의 침입에 맞서 고려 조정이 도읍을 옮긴 곳은?',
@@ -1850,40 +1991,40 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=47"></script>
-<script src="assets/streak.js?v=47"></script>
+<script src="assets/badges.js?v=48"></script>
+<script src="assets/streak.js?v=48"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=47"></script>
-  <script src="assets/fx.js?v=47"></script>
-  <script src="assets/deed.js?v=47"></script>
-  <script src="assets/inkwipe.js?v=47"></script>
-  <script src="assets/moment.js?v=47"></script>
-  <script src="assets/dash.js?v=47"></script>
-<script src="assets/juice.js?v=47"></script>
-  <script src="assets/difficulty.js?v=47"></script>
-  <script src="assets/nextauto.js?v=47"></script>
-<script src="assets/heroes_data.js?v=47"></script>
-<script src="assets/heroes.js?v=47"></script>
-<script src="assets/icons.js?v=47"></script>
-<script src="assets/srs.js?v=47"></script>
-<script src="assets/newsflash.js?v=47"></script>
-<script src="assets/timeline.js?v=47"></script>
-<script src="assets/journey.js?v=47"></script>
-<script src="assets/season.js?v=47"></script>
-<script src="assets/boss.js?v=47"></script>
-<script src="assets/items.js?v=47"></script>
-  <script src="assets/gold.js?v=47"></script>
-  <script src="assets/ask.js?v=47"></script>
-  <script src="assets/ads.js?v=47"></script>
-  <script src="assets/energy.js?v=47"></script>
-  <script src="assets/daily.js?v=47"></script>
-  <script src="assets/unlock.js?v=47"></script>
-  <script src="assets/guide.js?v=47"></script>
-  <script src="assets/minigames.js?v=47"></script>
-  <script src="assets/quests.js?v=47"></script>
-  <script src="assets/offline.js?v=47"></script>
-  <script src="assets/telemetry.js?v=47"></script>
-<script src="assets/autowalk.js?v=47"></script>
+<script src="assets/rank.js?v=48"></script>
+  <script src="assets/fx.js?v=48"></script>
+  <script src="assets/deed.js?v=48"></script>
+  <script src="assets/inkwipe.js?v=48"></script>
+  <script src="assets/moment.js?v=48"></script>
+  <script src="assets/dash.js?v=48"></script>
+<script src="assets/juice.js?v=48"></script>
+  <script src="assets/difficulty.js?v=48"></script>
+  <script src="assets/nextauto.js?v=48"></script>
+<script src="assets/heroes_data.js?v=48"></script>
+<script src="assets/heroes.js?v=48"></script>
+<script src="assets/icons.js?v=48"></script>
+<script src="assets/srs.js?v=48"></script>
+<script src="assets/newsflash.js?v=48"></script>
+<script src="assets/timeline.js?v=48"></script>
+<script src="assets/journey.js?v=48"></script>
+<script src="assets/season.js?v=48"></script>
+<script src="assets/boss.js?v=48"></script>
+<script src="assets/items.js?v=48"></script>
+  <script src="assets/gold.js?v=48"></script>
+  <script src="assets/ask.js?v=48"></script>
+  <script src="assets/ads.js?v=48"></script>
+  <script src="assets/energy.js?v=48"></script>
+  <script src="assets/daily.js?v=48"></script>
+  <script src="assets/unlock.js?v=48"></script>
+  <script src="assets/guide.js?v=48"></script>
+  <script src="assets/minigames.js?v=48"></script>
+  <script src="assets/quests.js?v=48"></script>
+  <script src="assets/offline.js?v=48"></script>
+  <script src="assets/telemetry.js?v=48"></script>
+<script src="assets/autowalk.js?v=48"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
