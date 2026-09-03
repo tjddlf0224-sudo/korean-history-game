@@ -21,7 +21,13 @@
 window.Auto = (function(){
 
   const GRID = 16;          // 경로 탐색 격자
-  const REACH_NPC = 92;     // 이만큼 가까우면 도착으로 본다(대화 반경 108.8보다 조금 안쪽)
+  /* 이만큼 가까우면 도착으로 본다.
+     예전엔 92였는데, 대화 반경(108.8) 바로 안쪽이라 **한참 떨어진 채로**
+     말이 시작돼 어색했다. NPC 둘레 34px은 못 서고(canStand) 길찾기 격자가
+     16px이니, 실제로 닿을 수 있는 가장 가까운 칸은 대략 50px 언저리다.
+     그래서 52로 잡는다 — 눈에 보이기에 '앞에 서서' 말한다. */
+  const REACH_NPC = 52;
+  const TALK_RANGE = 108.8;   // 챕터의 INTERACT_RANGE와 같은 값
   const REACH_PT  = 14;     // 웨이포인트 통과 판정
 
   let on = false, path = [], goal = null, goalKind = '', lastZone = '', stuck = 0, lastPos = null;
@@ -222,7 +228,16 @@ window.Auto = (function(){
 
     // 다음 웨이포인트로
     while (path.length && Math.hypot(path[0][0] - World.px, path[0][1] - World.py) < REACH_PT) path.shift();
-    if (!path.length){ goal = null; return; }
+    if (!path.length){
+      // 길이 끝났는데 아직 52까지 못 붙었다 — 뒤가 막힌 자리라 더는 못 간다.
+      // 그래도 말이 닿는 거리면 여기서 건다. 안 그러면 같은 길을 무한히 다시 찾는다.
+      if (goalKind === 'npc' && dGoal < TALK_RANGE){
+        World.stick.dx = 0; World.stick.dy = 0;
+        World.checkNpc();
+        if (World.nearNpc){ path = []; goal = null; Stage.interact(); return; }
+      }
+      goal = null; return;
+    }
 
     const [wx, wy] = path[0];
     const dx = wx - World.px, dy = wy - World.py;
