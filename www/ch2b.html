@@ -1205,9 +1205,16 @@ const NPC_DATA = {
   sinsukju_0: {
     name: '신숙주', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h4"/></svg>', img: 'assets/portraits/sinsukju.png',
     beats: [
-      { who:'npc', t:'일본에 다녀왔습니다. 서장관으로 바다를 건넜지요.' },
-      { who:'npc', t:'가서 보니 저들의 사정을 우리가 너무 모르고 있었습니다. 지리도, 풍속도, 누가 어디를 다스리는지도요.' },
-      { who:'npc', t:'하여 보고 들은 것을 낱낱이 적어 책으로 묶었습니다. 이웃을 아는 것이 이웃을 다루는 첫걸음이니까요.' },
+      { who:'npc', t:'(책을 내밀며) 이 책, 한 번 펼쳐 보겠나?' },
+      { who:'me', t:'(받아서 펼쳐 본다) …해동제국기입니까?' },
+      { who:'npc', t:'그렇네. 성종 2년에 마친 책이네.',
+        chart:{ type:'stat', title:'해동제국기', items:[ { v:'1471년', l:'성종 2년 완성' }, { v:'7매', l:'실린 지도' } ] } },
+      { who:'npc', t:'일본만이 아니라 유구까지 두루 적었네.',
+        chart:{ type:'grid', title:'해동제국기의 짜임', head:[ '편', '내용' ], rows:[ [ '일본국기', '일본의 사정' ], [ '유구국기', '유구(오키나와)' ], [ '조빙응접기', '사신 맞는 법' ] ] } },
+      { who:'me', t:'(책장을 천천히 넘기며) …다녀와 보신 겁니까?' },
+      { who:'npc', t:'서장관으로 바다를 건너 보니, 저들을 너무 몰랐더군.' },
+      { who:'me', t:'(고개를 끄덕인다) …그래서 낱낱이 적으셨군요.' },
+      { who:'npc', t:'이웃을 알아야 제대로 다룰 수 있지 않겠나.' },
     ],
     quizSeq: [
       { q:'신숙주가 일본에 다녀와서 지은, 일본의 지리·풍속을 기록한 책은?', opts:['해동제국기','동국여지승람'], answer:0, src:[15,62,78],
@@ -1218,10 +1225,17 @@ const NPC_DATA = {
   ijongmu_0: {
     name: '이종무', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l2.5 3h13L21 17z"/><path d="M5.5 17V9h13v8"/><path d="M12 9V4M9 6h6"/></svg>', img: 'assets/portraits/extra_musin.png',
     beats: [
-      { who:'npc', t:'배 이백스물일곱 척, 군사 만칠천이었소. 거제 남쪽 주원방포를 떠나 대마도로 향했지.' },
-      { who:'npc', t:'왜구의 소굴을 치지 않고서는 남쪽 바다가 조용할 날이 없었소.' },
-      { who:'npc', t:'…물론 힘으로만 끝낼 일은 아니었소. 뒷날 대마도주와 약조를 맺어, 드나드는 배의 수를 못박았지.' },
-      { who:'npc', t:'치고 나서 길을 열어 준 것이오. 그래야 오래가오.' },
+      { who:'npc', t:'(지도를 짚으며) 예가 대마도일세.',
+        chart:{ type:'map', title:'대마도 정벌 (1419)', pins:[ { x:66, y:128, n:'거제' }, { x:76, y:144, n:'대마도', on:true } ], legend:[ { k:'거제', v:'주원방포에서 떠남' }, { k:'대마도', v:'왜구의 소굴', on:true } ] } },
+      { who:'me', t:'(지도를 본다) …왜구의 소굴입니까?' },
+      { who:'npc', t:'그렇네. 병선 이백스물일곱 척을 몰았지.',
+        chart:{ type:'stat', title:'대마도 정벌 규모', items:[ { v:'227척', l:'병선' }, { v:'17000명', l:'군사' } ] } },
+      { who:'me', t:'…군사가 그렇게나 많았습니까?' },
+      { who:'npc', t:'거제 남쪽 주원방포에서 배를 띄웠네.' },
+      { who:'npc', t:'(문서를 편다) 뒷날 대마도주와 이 약조를 맺었네.',
+        chart:{ type:'grid', title:'계해약조 (1443)', head:[ '조건', '내용' ], rows:[ [ '세견선', '한 해 50척' ], [ '세사미두', '200석' ] ] } },
+      { who:'me', t:'치고 나서 다시 길을 열어 준 거군요.' },
+      { who:'npc', t:'(끄덕인다) 그래야 오래가는 법일세.' },
     ],
     quizSeq: [
       { q:'이종무가 왜구의 근거지를 정벌한 사건은?', opts:['대마도 정벌','진주성 전투'], answer:0, src:[33],
@@ -1240,9 +1254,19 @@ const NPC_DATA = {
   nonong_0: {
     name: '늙은 농부', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="21" x2="12" y2="5"/><path d="M12 6c0-2 1.5-3.5 4-4"/><path d="M12 9c0-2-1.5-3.5-4-4"/><path d="M12 12c0-2 1.5-3.5 4-4"/><path d="M12 15c0-2-1.5-3.5-4-4"/></svg>', img: 'assets/portraits/nonong.png',
     beats: [
-      { who:'npc', t:'예순 해를 이 땅에서 농사지었소이다. 얼마 전 감사 어른이 사람을 보내, 우리가 어떻게 씨를 고르고 언제 물을 대는지 하나하나 물어 적어 가더이다.' },
-      { who:'npc', t:'중국 책에 적힌 대로 하면 이 땅에선 안 되는 게 많소. 논이 다르고 비가 다르고 흙이 다르니까요. 그걸 나라에서 이제야 물어봐 주니 반갑습디다.' },
-      { who:'npc', t:'…이렇게 이야기를 들어주는 이가 또 있을 줄은 몰랐구려. 늙은이 넋두리를 끝까지 들어주니 고맙소. 이 고마움, 잊지 않으리다.' },
+      { who:'npc', t:'(호미를 쥐어 주며) 자, 밭 좀 갈아 보겠나?' },
+      { who:'me', t:'(받아 흙을 뒤집는다) …생각보다 무겁습니다.' },
+      { who:'npc', t:'(웃으며) 벌써 예순 해째 하는 일일세.' },
+      { who:'me', t:'(다시 힘주어 판다) …됩니까, 이 정도면?' },
+      { who:'npc', t:'됐네. 며칠 전엔 감사 어른이 사람을 보내 캐물었소.',
+        chart:{ type:'steps', title:'농사직설이 나온 길', steps:[ { t:'노농에게 묻는다', s:'충청·전라·경상' }, { t:'정초·변효문이 정리한다' }, { t:'농사직설이 된다' } ] } },
+      { who:'me', t:'대체 무엇을 그리 캐물었습니까?' },
+      { who:'npc', t:'씨 고르는 법이며 물 대는 때며 — 하나하나 다.' },
+      { who:'npc', t:'충청·전라·경상 — 세 도에 사람을 보냈다 하오.',
+        chart:{ type:'stat', title:'농사직설을 위해 물은 곳', items:[ { v:'3도', l:'충청·전라·경상의 노농' } ] } },
+      { who:'npc', t:'중국 책대로 하면 이 땅엔 안 맞는 게 많다오, 나리.',
+        chart:{ type:'compare', title:'농서, 무엇이 다른가', cols:[ { h:'중국 농서', items:[ '중국 풍토 기준' ] }, { h:'농사직설', hi:true, items:[ '우리 풍토 기준', '노농의 말을 모음' ] } ] } },
+      { who:'npc', t:'(잠시 말이 없다) …늙은이 말을 들어주니 고맙구려.' },
     ],
     quizSeq: [
       { q:'세종이 각 도 감사에게 명해 나이 든 농부들의 경험을 조사하게 한 뒤, 그것을 바탕으로 펴낸 농서는?',
@@ -1253,9 +1277,21 @@ const NPC_DATA = {
   jeongcho_0: {
     name: '정초', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><line x1="7.5" y1="3" x2="7.5" y2="21"/></svg>', img: 'assets/portraits/jeongcho.png',
     beats: [
-      { who:'npc', t:'나는 정초일세. 전하의 명을 받아 변효문과 함께 이 조사들을 한 권으로 묶고 있네.' },
-      { who:'npc', t:'그동안 농사는 중국 농서를 베껴 가르쳤네. 허나 오방의 풍토가 다르니 곡식을 심고 가꾸는 법도 각기 마땅함이 있는 법이지.' },
-      { who:'npc', t:'씨앗을 고르고 갈무리하는 법, 논밭 가는 법, 벼와 기장과 조와 수수와 콩과 팥과 보리와 밀 기르는 법 — 우리 땅에서 실제로 되는 것만 적었네.' },
+      { who:'npc', t:'(책을 펼쳐 보이며) 이리 좀 와 보게.' },
+      { who:'me', t:'(들여다본다) …글자가 참 빽빽합니다.' },
+      { who:'npc', t:'농사직설일세. 내가 변효문과 함께 엮었네.',
+        chart:{ type:'relic', title:'농사직설', items:[ { img:'nongsajikseol', n:'농사직설', s:'정초·변효문이 엮음 (1429)' } ] } },
+      { who:'me', t:'이 책에 무엇을 적으셨습니까?' },
+      { who:'npc', t:'씨앗 고르는 법과 논밭 가는 법을 두루 적었네.' },
+      { who:'npc', t:'벼·기장·조·수수·콩·팥·보리·밀 — 여덟 가지일세.',
+        chart:{ type:'stat', title:'농사직설이 다룬 곡식', items:[ { v:'8가지', l:'벼·기장·조·수수·콩·팥·보리·밀' } ] } },
+      { who:'me', t:'(책장을 넘긴다) …노인들에게 물어 적으셨죠?' },
+      { who:'npc', t:'그렇네. 책상머리에서 지은 게 아닐세.' },
+      { who:'npc', t:'이전엔 그저 중국 책을 따랐을 뿐이네.',
+        chart:{ type:'compare', title:'농서, 무엇이 달라졌나', cols:[ { h:'이전 농서', items:[ '중국 책을 그대로 씀' ] }, { h:'농사직설', hi:true, items:[ '우리 풍토에 맞춤' ] } ] } },
+      { who:'me', t:'(고개를 끄덕인다) …그래서 다르게 적으셨군요.' },
+      { who:'npc', t:'그렇지. 그 이듬해엔 각 도에 두루 나눠주었네.',
+        chart:{ type:'stat', title:'농사직설이 퍼진 뒤', items:[ { v:'1429년', l:'편찬' }, { v:'1430년', l:'각 도에 나눠줌' } ] } },
     ],
     quizSeq: [
       { q:'세종의 명으로 농사직설을 편찬한 인물은?',
@@ -1269,14 +1305,20 @@ const NPC_DATA = {
   choeyundeok_0: {
     name: '최윤덕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>', img: 'assets/portraits/choeyundeok.png',
     beats: [
-      // 최윤덕은 평안도(압록강) 사람인데 여기는 두만강 진영이다. 억지로 붙여둔 게
-      // 아니라 실제 이력이 있다 — 1413년(태종 13) 경성등처절제사로 이 일대에
-      // 부임해 동맹가첩목아를 복속시켰다. 4군보다 20년 앞선 일이다.
-      { who:'npc', t:'나는 원래 압록강 쪽 사람일세. 오늘은 김 대감과 의논할 일이 있어 잠시 들렀네.' },
-      { who:'npc', t:'허나 이 땅이 낯설지는 않아. 젊어서 경성절제사로 바로 이 근방에 있었거든 — 그때 여진의 동맹가첩목아를 달래 복속시켰지. 벌써 스무 해 전 일일세.' },
-      { who:'npc', t:'김 대감이 두만강 쪽을 맡았다면, 압록강 쪽은 내가 맡았네. 전하의 명을 받아 여진의 이만주를 치러 올라산성까지 올라갔지.' },
-      { who:'npc', t:'그 싸움 끝에 압록강 상류에 네 고을을 새로 두었네. 여연·자성·무창·우예 — 이것이 4군일세.' },
-      { who:'npc', t:'다만 무력만으로는 끝나지 않아. 국경에 무역소를 두어 저들이 우리와 물건을 바꾸게도 했네. 치되 달래는 것, 둘을 함께 써야 국경이 조용하지.' },
+      { who:'npc', t:'(지도를 편다) 압록강 쪽은 내가 맡았네.' },
+      { who:'me', t:'(들여다본다) …여긴 두만강이 아니군요.' },
+      { who:'npc', t:'그렇지. 저긴 김 대감이 맡은 몫이라네.' },
+      { who:'npc', t:'난 이만주를 치러 올라산성까지 올랐네.' },
+      { who:'me', t:'그 싸움 뒤엔 어떻게 됐습니까?' },
+      { who:'npc', t:'이 네 고을을 새로 두었지.',
+        chart:{ type:'map', title:'4군', north:true, pins:[ { x:34, y:23, n:'여연', on:true }, { x:39, y:20, n:'우예', on:true }, { x:37, y:29, n:'자성', on:true }, { x:33, y:33, n:'무창', on:true } ], legend:[ { k:'4군', v:'최윤덕이 개척 (1433~1443)', on:true }, { k:'강', v:'압록강 상류' } ] } },
+      { who:'me', t:'여연·자성·무창·우예 — 네 곳이군요.' },
+      { who:'npc', t:'무려 열 해가 걸렸네.',
+        chart:{ type:'stat', title:'4군을 두기까지', items:[ { v:'10년', l:'1433~1443년' } ] } },
+      { who:'npc', t:'다만 무력만은 아닐세. 국경에 무역소도 두었지.',
+        chart:{ type:'vs', title:'국경을 지키는 두 가지', left:{ n:'친다', s:'이만주를 정벌' }, right:{ n:'달랜다', s:'무역소를 둔다' }, mid:'+' } },
+      { who:'me', t:'(고개를 끄덕인다) …치고 나서 달래셨군요.' },
+      { who:'npc', t:'그래야 국경이 오래도록 조용하네.' },
     ],
     quizSeq: [
       { q:'세종의 명으로 여진을 정벌하고 압록강 유역을 개척한 장군은?',
@@ -1290,9 +1332,18 @@ const NPC_DATA = {
   kim_0: {
     name: '김종서', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 2h3.4l1 11.8-2.7 2.4-2.7-2.4z" fill="currentColor" stroke="currentColor"/><line x1="6" y1="15.5" x2="18" y2="15.5"/><path d="M9.5 15.5v3h5v-3"/><line x1="12" y1="18.5" x2="12" y2="22"/></svg>', img: 'assets/portraits/kimjongseo.png',
     beats: [
-      { who:'npc', t:'여기가 우리 국경의 끝일세. 압록강과 두만강까지 우리 땅으로 확실히 그어놓아야, 후손들이 다시는 이 땅을 두고 다투지 않을 것이야.' },
-      { who:'npc', t:'내가 여기 여섯 곳에 진(鎭)을 두었네. 종성·온성·회령·경원·경흥·부령 — 강을 따라 늘어세운 여섯 개의 군사 거점이지. 진마다 성을 쌓고 군사를 두어, 여진이 강을 건너오면 곧바로 막게 했네.' },
-      { who:'npc', t:'이 여섯을 묶어 뭐라 부르는지 아나?' },
+      { who:'npc', t:'(성벽을 가리키며) 저 위로 올라가 보게.' },
+      { who:'me', t:'(성벽에 오른다) …저 강 너머가 다 여진 땅입니까?' },
+      { who:'npc', t:'그렇네. 저 강까지가 이제 우리 국경일세.' },
+      { who:'me', t:'(북쪽을 본다) …국경을 여기까지 밀어 올리셨군요.' },
+      { who:'npc', t:'여섯 곳에 진을 두었지. 강을 따라 늘어세웠네.',
+        chart:{ type:'map', title:'6진', north:true, pins:[ { x:80, y:7, n:'종성', on:true }, { x:86, y:5, n:'온성', on:true }, { x:82, y:15, n:'회령', on:true }, { x:85, y:8, n:'경원', on:true }, { x:91, y:9, n:'경흥', on:true }, { x:81, y:16, n:'부령', on:true } ], legend:[ { k:'6진', v:'김종서가 개척 (1434~1449)', on:true }, { k:'강', v:'두만강 하류' } ] } },
+      { who:'me', t:'(하나하나 센다) …한 번에 다 세지도 못하겠습니다.' },
+      { who:'npc', t:'진마다 성을 쌓고 군사를 두어 지켰네.',
+        chart:{ type:'steps', title:'진을 지키는 법', steps:[ { t:'성을 쌓는다' }, { t:'군사를 둔다' }, { t:'여진이 건너면 막는다' } ] } },
+      { who:'npc', t:'무려 열다섯 해가 걸렸네.',
+        chart:{ type:'stat', title:'6진을 두기까지', items:[ { v:'15년', l:'1434~1449년' } ] } },
+      { who:'npc', t:'이 여섯을 묶어서 뭐라 부르는지 아나?' },
     ],
     quizSeq: [
       { q:'김종서가 두만강 일대를 개척해 설치한 국경 방어 거점은?', opts:['6진','4군'], answer:0, src:[6,26,34,39,59,67,70,75],
@@ -1302,10 +1353,19 @@ const NPC_DATA = {
   kim_1: {
     name: '김종서', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 2h3.4l1 11.8-2.7 2.4-2.7-2.4z" fill="currentColor" stroke="currentColor"/><line x1="6" y1="15.5" x2="18" y2="15.5"/><path d="M9.5 15.5v3h5v-3"/><line x1="12" y1="18.5" x2="12" y2="22"/></svg>', img: 'assets/portraits/kimjongseo.png',
     beats: [
-      { who:'npc', t:'그저 땅만 넓힌다고 되는 일이 아닐세. 사람이 살아야 진짜 우리 땅이 되는 것이야.' },
-      { who:'npc', t:'그래서 삼남 — 충청·전라·경상의 백성들을 뽑아 이곳으로 옮겨 살게 하고 있네. 집과 땅을 주고 세금도 얼마간 덜어주지. 군사만 있는 땅은 지킬 뿐이지만, 백성이 농사짓고 아이를 낳는 땅은 비로소 우리 땅이 되는 걸세.' },
-      { who:'npc', t:'무역소만이 아닐세. 조공하러 온 여진 사신들을 위해 한양에도 북평관을 따로 세워 묵게 하고 물건을 사고팔게 했지.' },
-      { who:'npc', t:'이렇게 백성을 옮겨 심는 정책을 무엇이라 하는지 아나?' },
+      { who:'npc', t:'그저 땅만 넓혀서는 안 되는 법일세.' },
+      { who:'me', t:'그 사람을 어떻게 옮긴단 말입니까?' },
+      { who:'npc', t:'삼남 백성을 뽑아 이리 옮겨 살게 하네.',
+        chart:{ type:'steps', title:'사민정책', steps:[ { t:'삼남 백성을 뽑는다', s:'충청·전라·경상' }, { t:'북방으로 옮겨 산다' }, { t:'집·땅을 준다', s:'세금도 던다' } ] } },
+      { who:'me', t:'(둘러본다) …다들 새로 온 사람들이군요.' },
+      { who:'npc', t:'백성이 사는 땅이라야 비로소 우리 땅이 되네.' },
+      { who:'npc', t:'여진과도 국경에 무역소를 두어 오가게 했네.' },
+      { who:'me', t:'한양에도 그런 곳이 따로 있습니까?' },
+      { who:'npc', t:'있네. 북평관일세. 조공 여진 사신이 묵고 사고팔지.',
+        chart:{ type:'compare', title:'여진과 통하는 두 곳', cols:[ { h:'국경 무역소', items:[ '여진이 국경서 교역' ] }, { h:'한양 북평관', hi:true, items:[ '조공 사신이 묵는다', '사고판다' ] } ] } },
+      { who:'npc', t:'명나라는 또 다르네. 정해진 때마다 사신을 보내지.',
+        chart:{ type:'grid', title:'이웃을 다루는 법', head:[ '상대', '방식' ], rows:[ [ '명나라', '사대 (정기 사신)' ], [ '여진', '회유 (무역소·북평관)' ] ] } },
+      { who:'me', t:'(고개를 끄덕인다) …이웃마다 다루는 법이 다르군요.' },
     ],
     quizSeq: [
       { q:'조선이 새로 개척한 북방 지역에 남쪽 백성을 옮겨 살게 한 정책은?', opts:['사민정책','호패법'], answer:0, src:[6],
@@ -1321,9 +1381,14 @@ const NPC_DATA = {
   kim_2: {
     name: '김종서', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 2h3.4l1 11.8-2.7 2.4-2.7-2.4z" fill="currentColor" stroke="currentColor"/><line x1="6" y1="15.5" x2="18" y2="15.5"/><path d="M9.5 15.5v3h5v-3"/><line x1="12" y1="18.5" x2="12" y2="22"/></svg>', img: 'assets/portraits/kimjongseo.png',
     beats: [
-      { who:'npc', t:'왜구가 남쪽 바다를 계속 노략질한다더군. 전하께서 곧 큰 결단을 내리실 걸세.' },
-      { who:'npc', t:'허나 치는 것만으로는 끝나지 않네. 결국 저들이 굶주려 노략질하는 것이니, 길을 아주 막지는 않되 드나드는 배의 수를 못 박는 약조를 맺었지.' },
-      { who:'npc', t:'자, 그럼 내가 아는 걸 좀 시험해보겠나?' },
+      { who:'npc', t:'(지도를 다시 편다) 자, 정리해 보세.' },
+      { who:'me', t:'무엇을 정리한단 말입니까?' },
+      { who:'npc', t:'두만강과 압록강, 누가 어디를 맡았는지.',
+        chart:{ type:'vs', title:'국경을 나눠 맡다', left:{ n:'김종서', s:'두만강 · 6진' }, right:{ n:'최윤덕', s:'압록강 · 4군' }, mid:'＝' } },
+      { who:'me', t:'(지도를 짚어 본다) …나뉘어 있었군요.' },
+      { who:'npc', t:'이렇게 나란히 놓고 보니 한눈에 들어오네.',
+        chart:{ type:'map', title:'국경을 새로 긋다', north:true, pins:[ { x:34, y:23, n:'여연', on:true }, { x:39, y:20, n:'우예', on:true }, { x:37, y:29, n:'자성', on:true }, { x:33, y:33, n:'무창', on:true }, { x:80, y:7, n:'종성', on:true }, { x:86, y:5, n:'온성', on:true }, { x:82, y:15, n:'회령', on:true }, { x:85, y:8, n:'경원', on:true }, { x:91, y:9, n:'경흥', on:true }, { x:81, y:16, n:'부령', on:true } ], legend:[ { k:'최윤덕', v:'4군 · 압록강', on:true }, { k:'김종서', v:'6진 · 두만강', on:true } ] } },
+      { who:'npc', t:'(끄덕이며) 그럼 얼마나 아는지 시험해 보세.' },
     ],
     quizSeq: [
       { q:'두만강 유역에 6진을, 압록강 유역에 4군을 각각 개척한 인물의 조합으로 옳은 것은?', opts:['김종서(6진)·최윤덕(4군)','최윤덕(6진)·김종서(4군)'], answer:0, src:[34,39,46,59,67,70],
@@ -1333,7 +1398,9 @@ const NPC_DATA = {
   },
   kim_repeat: {
     name: '김종서', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 2h3.4l1 11.8-2.7 2.4-2.7-2.4z" fill="currentColor" stroke="currentColor"/><line x1="6" y1="15.5" x2="18" y2="15.5"/><path d="M9.5 15.5v3h5v-3"/><line x1="12" y1="18.5" x2="12" y2="22"/></svg>', img: 'assets/portraits/kimjongseo.png',
-    beats: [ { who:'npc', t:'전하께서 계신 집현전에도 들러보게. 요즘 편찮으시다는 소문이 있어 걱정이군.' } ],
+    beats: [
+      { who:'npc', t:'전하께서 계신 집현전에도 한번 들러보게. 요즘 편찮으시다니 걱정이군.' },
+    ],
     quiz: null
   }
 };

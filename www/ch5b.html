@@ -1098,10 +1098,20 @@ const NPC_DATA = {
   yusaeng_0: {
     name: '소수서원 유생', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 016.5 3H19v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M8 7.5h7M8 11h5"/></svg>', img: 'assets/portraits/extra_munsin.png',
     beats: [
-      { who:'npc', t:'여기서 글을 읽는 유생이올시다. 사당에는 매년 봄가을로 제를 올리지요.' },
-      { who:'npc', t:'이 땅에 성리학을 처음 들여온 고려의 어른을 모십니다. 원나라에서 주자의 글을 구해 오신 분이지요.' },
-      { who:'npc', t:'얼마 전 임금께서 친히 쓰신 편액이 내려왔습니다. 토지와 노비도 함께요.' },
-      { who:'npc', t:'그날로 서원의 이름이 바뀌었습니다. 나라가 인정한 첫 서원이 된 것이지요.' },
+      { who:'npc', t:'(책을 밀어주며) 이리 앉아 읽어보게.' },
+      { who:'me', t:'(앉아 편다) …이게 다 무슨 글입니까?' },
+      { who:'npc', t:'주자의 글일세. 예선 매일 이걸 읽지.' },
+      { who:'npc', t:'저기 강당과 기숙하는 방이 나뉘어 있네.',
+        chart:{ type:'grid', title:'서원의 짜임새', head:[ '공간', '쓰임' ], rows:[ [ '강당', '글을 배운다' ], [ '동재·서재', '기숙한다' ], [ '사당', '제사를 지낸다' ] ] } },
+      { who:'me', t:'(둘러본다) 향교와는 다른 겁니까?' },
+      { who:'npc', t:'다르지. 나라가 아니라 사림이 세운 걸세.',
+        chart:{ type:'compare', title:'서원과 향교', cols:[ { h:'서원', hi:true, items:[ '사림이 세운 사립', '제사와 교육을 겸함' ] }, { h:'향교', items:[ '나라가 세운 관학', '고을마다 하나씩' ] } ] } },
+      { who:'me', t:'(사당 쪽을 본다) 저긴 누굴 모십니까?' },
+      { who:'npc', t:'안향 선생일세. 원에서 주자 글을 처음 들여오셨지.',
+        chart:{ type:'stat', title:'안향과 성리학', items:[ { v:'원나라', l:'주자 글을 구해오다' }, { v:'고려 말', l:'처음 들여오다' } ] } },
+      { who:'npc', t:'봄가을로 제 올리고, 우린 앞에서 글을 읽네.' },
+      { who:'me', t:'…예서 세운 게 아니라, 임금이 인정한 겁니까?' },
+      { who:'npc', t:'그렇지. 그날로 이름이 소수서원이 되었네.' },
     ],
     quizSeq: [
       { q:'백운동서원에서 제사한, 이 땅에 성리학을 처음 들여온 고려의 인물은?',
@@ -1116,11 +1126,22 @@ const NPC_DATA = {
   josik_0: {
     name: '조식', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18l6-10 4 5.5"/><path d="M9 18l7-12 6 12"/></svg>', img: 'assets/portraits/josik.png',
     beats: [
-      { who:'npc', t:'나는 벼슬길에 나가지 않았네. 살면서 조정이 두 차례나 피로 물드는 걸 보았거든 — 그런 곳에 나가느니, 여기서 제자를 기르는 게 낫다 여겼지.' },
-      { who:'npc', t:'요즘 송도에 황진이라는 이가 있다더군. 시와 노래가 빼어나 사대부들이 줄을 선다지.' },
-      { who:'npc', t:'왕족 벽계수가 자기는 절대 흔들리지 않는다 큰소리쳤는데, 달밤에 그이가 부른 시조 한 수에 그만 나귀에서 떨어졌다는 이야기가 파다하네.' },
-      { who:'npc', t:'허나 서경덕 선생만은 끝내 흔들리지 않으셨다지. 그이가 스스로 선생을 스승으로 모시고, 박연폭포와 함께 셋을 송도삼절이라 불렀다더군.' },
-      { who:'npc', t:'경(敬)과 의(義), 이 두 글자를 늘 몸에 새기고 살았네. 학문은 반드시 행동으로 이어져야 하지.' },
+      { who:'npc', t:'(검을 어루만지며) 이 검을 좀 보게.' },
+      { who:'me', t:'(칼을 살핀다) …글자가 새겨져 있군요.',
+        chart:{ type:'quote', title:'조식의 경의검', text:'안으로 마음을 밝힘은 <b>경(敬)</b>,<br>밖으로 일을 끊어냄은 <b>의(義)</b>다.', from:'경의검 새김 · 내명자경 외단자의' } },
+      { who:'npc', t:'경(敬)과 의(義)일세. 늘 몸에 지녔지.' },
+      { who:'me', t:'벼슬은… 어찌 다 마다하셨습니까?' },
+      { who:'npc', t:'조정에 나가느니, 예서 제자를 기르는 게 낫네.' },
+      { who:'npc', t:'죽거든 그저 \'처사\'라 불러 달라 했네.' },
+      { who:'me', t:'(건물을 둘러본다) 여기가 산천재입니까?' },
+      { who:'npc', t:'그렇지. 지리산 아래, 덕산 땅에다 지었네.',
+        chart:{ type:'timeline', title:'조식의 생애', marks:[ { y:'1501', t:'태어나다' }, { y:'1561', t:'산천재를 짓다', on:true }, { y:'1572', t:'처사로 죽다' } ] } },
+      { who:'npc', t:'(퇴계 쪽을 가리키며) 저 사람과는 길이 다르지.',
+        chart:{ type:'compare', title:'같은 시대, 다른 길', cols:[ { h:'이황', items:[ '이(理)를 중시', '벼슬에 나감', '도산서당' ] }, { h:'조식', hi:true, items:[ '실천을 중시', '벼슬을 사양', '산천재' ] } ] } },
+      { who:'me', t:'…선생 문하에서는 어떤 이들이 나왔습니까?' },
+      { who:'npc', t:'왜란이 나자, 칼을 든 이들이 있었네.',
+        chart:{ type:'faces', title:'조식의 문인, 의병장이 되다', people:[ { img:'gwakjaeu', n:'곽재우', s:'경의를 실천, 의병장이 되다' } ] } },
+      { who:'npc', t:'정인홍도 그중 하나. 배운 대로 산 것이지.' },
     ],
     quizSeq: [
       { q:"지리산 자락 산천재에서 제자를 기르며 '경(敬)과 의(義)'를 강조한 학자는?", opts:['조식','이이'], answer:0, src:[8,31,68],
@@ -1129,7 +1150,9 @@ const NPC_DATA = {
   },
   josik_repeat: {
     name: '조식', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18l6-10 4 5.5"/><path d="M9 18l7-12 6 12"/></svg>', img: 'assets/portraits/josik.png',
-    beats: [ { who:'npc', t:'산은 늘 그 자리에 있네. 급할 것 없지.' } ],
+    beats: [
+      { who:'npc', t:'산은 늘 그 자리에 있네. 급할 것 없지.' },
+    ],
     quiz: null
   },
   /* 주세붕 — 서원의 시작(백운동서원 8문항, 사액 6문항). 5화가 서원을 다루면서
@@ -1137,11 +1160,20 @@ const NPC_DATA = {
   juseboong_0: {
     name: '주세붕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2.5" x2="12" y2="9"/><path d="M12 2.5l3.2 1.6-3.2 1.6z" fill="currentColor" stroke="none"/><rect x="4" y="9" width="16" height="12" rx="1"/><line x1="4" y1="14.5" x2="20" y2="14.5"/><rect x="10.5" y="16" width="3" height="5"/><circle cx="7.5" cy="11.7" r="0.6" fill="currentColor" stroke="none"/><circle cx="16.5" cy="11.7" r="0.6" fill="currentColor" stroke="none"/></svg>', img: 'assets/portraits/juseboong.png',
     beats: [
-      { who:'npc', t:'나는 풍기 군수로 있던 주세붕일세. 이런 곳을 처음 세울 때는 사람들이 다들 의심했지 — 나라의 향교가 있는데 굳이 왜 따로 짓느냐고.' },
-      { who:'npc', t:'허나 나는 안향 선생이 살던 그 고을에 사당을 세우고 싶었네. 이 땅에 성리학을 처음 들여온 분이니까. 그 사당에 글 읽는 집을 붙인 것이 시작일세.' },
-      { who:'doc', docImg:'assets/scenes/heritage_sosuseowon.jpg',
-        t:'(영주 소수서원 강학당. 1543년 풍기 군수 주세붕이 세운 백운동서원이 그 시작으로, 우리나라 최초의 서원이자 이황의 건의로 임금에게 편액을 받은 최초의 사액서원이다. 유네스코 세계유산 「한국의 서원」(2019)에 포함되어 있다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
-      { who:'npc', t:'훗날 퇴계(이황)가 그 뒤를 이어 풍기 군수가 되더니, 임금께 편액과 토지·노비를 내려달라 청했다더군. 그리하여 이름을 새로 받았지.' },
+      { who:'npc', t:'나는 주세붕일세. 풍기 고을 군수로 있었네.' },
+      { who:'me', t:'(둘러본다) …여기가 바로 그 서원입니까?' },
+      { who:'npc', t:'그렇지. 안향 선생을 기려 세웠네.',
+        chart:{ type:'stat', title:'백운동서원', items:[ { v:'1543년', l:'주세붕이 세우다' }, { v:'1550년', l:'사액을 받다' } ] } },
+      { who:'npc', t:'다들 물었지. 왜 향교 말고 따로 짓느냐고.',
+        chart:{ type:'vs', title:'향교와 서원', left:{ n:'향교', s:'나라가 세우다' }, right:{ n:'서원', s:'사림이 세우다', win:true }, mid:'다른 뿌리' } },
+      { who:'me', t:'…그래서 사람들에게 뭐라 답하셨습니까?' },
+      { who:'npc', t:'안향 선생이 사시던 이 고을에, 사당을 짓고 싶었네.' },
+      { who:'doc', t:'(영주 소수서원 강학당. 1543년 풍기 군수 주세붕이 세운 백운동서원이 그 시작으로, 우리나라 최초의 서원이자 이황의 건의로 임금에게 편액을 받은 최초의 사액서원이다. 유네스코 세계유산 「한국의 서원」(2019)에 포함되어 있다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_sosuseowon.jpg' },
+      { who:'me', t:'(사진을 본다) …이 모습 그대로 남아 있군요.' },
+      { who:'npc', t:'훗날 퇴계가 뒤이어 임금께 청을 올렸네.',
+        chart:{ type:'steps', title:'백운동서원, 사액을 받다', steps:[ { t:'백운동서원을 세운다', s:'주세붕 · 1543년' }, { t:'이황이 사액을 청한다', s:'풍기 군수 시절' }, { t:'편액·토지·노비를 받는다', s:'1550년' }, { t:'소수서원이라 부른다', s:'최초의 사액서원' } ] } },
+      { who:'npc', t:'그날로 이름이 소수서원이 되었네.',
+        chart:{ type:'faces', title:'백운동에서 소수서원으로', people:[ { img:'juseboong', n:'주세붕', s:'서원을 세우다' }, { img:'yihwang', n:'이황', s:'사액을 청하다' } ] } },
     ],
     quizSeq: [
       { q:'우리나라 최초의 서원을 세운 인물은?',
@@ -1155,11 +1187,27 @@ const NPC_DATA = {
   yihwang_0: {
     name: '이황', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><line x1="7.5" y1="3" x2="7.5" y2="21"/></svg>', img: 'assets/portraits/yihwang.png',
     beats: [
-      { who:'npc', t:'어서 오시게. 여기가 서원일세. 앞쪽은 글을 배우는 강당과 기숙하는 동재·서재요, 뒤쪽 담 안은 선현의 위패를 모신 사당이라네.' },
-      { who:'npc', t:'살면서 조정이 두 차례나 피로 물드는 걸 보았네. 우리 사림은 조정에서 밀려날 때마다 향촌으로 물러나 이런 곳을 세웠지.' },
-      { who:'npc', t:'이 서원의 시작은 풍기 군수 주세붕 어른이셨네. 고려의 유학자 안향을 기리며 백운동에 처음 세우셨지.' },
-      { who:'npc', t:'내가 임금께 청을 올려, 그 서원에 임금의 친필 현판과 토지·노비를 내려주십사 했네. 그리하여 나라가 공인한 첫 서원이 되었지.' },
-      { who:'npc', t:'글만으로는 부족하네. 나는 고을 사람들이 지킬 약속도 따로 만들어 시행했지 — 내가 사는 예안 고을의 이름을 붙였다네.' },
+      { who:'npc', t:'어서 오시게. 예가 서원일세.' },
+      { who:'npc', t:'사림이 세운 서원일세. 사화 때마다 물러나 지었지.',
+        chart:{ type:'flow', title:'사화에서 서원으로', steps:[ { t:'사화', s:'조정에서 밀려나다' }, { t:'서원', s:'향촌에 자리잡다' }, { t:'향약', s:'교화로 다지다' } ] } },
+      { who:'npc', t:'시작은 주세붕 어른, 뒤를 내가 이었네.' },
+      { who:'me', t:'…사액을 청하신 것도 어르신이십니까?' },
+      { who:'npc', t:'그렇네. 그리하여 소수서원이 되었지.' },
+      { who:'npc', t:'허나 나는 여기 오래 있지 않았네. 따로 집을 지었지.' },
+      { who:'me', t:'(따라간다) …이곳은 어디입니까?' },
+      { who:'npc', t:'도산서당일세. 예서 책을 읽고 가르쳤네.' },
+      { who:'npc', t:'임금께 성학십도도 올렸네.',
+        chart:{ type:'stat', title:'이황의 만년', items:[ { v:'1561년', l:'도산서당을 짓다' }, { v:'1568년', l:'성학십도를 올리다' }, { v:'10폭', l:'그림과 해설' } ] } },
+      { who:'me', t:'학문은 주로 어느 쪽에 무게를 두십니까?' },
+      { who:'npc', t:'나는 무엇보다 이(理)를 근본으로 보네.',
+        chart:{ type:'faces', title:'같은 시대, 다른 길', people:[ { img:'yihwang', n:'이황', s:'이(理) · 도산서당' }, { img:'josik', n:'조식', s:'실천 · 산천재' } ] } },
+      { who:'npc', t:'글만으론 부족하네. 규약도 따로 만들었지.' },
+      { who:'me', t:'(종이를 받는다) …제가 읽어봐도 되겠습니까?' },
+      { who:'npc', t:'그리하게. 예안향약이라 하는 규약일세.',
+        chart:{ type:'quote', title:'예안향약의 네 조목', text:'좋은 일은 서로 <b>권</b>하고, 잘못은 서로 <b>규</b>하며,<br>예의로 서로 <b>사귀고</b>, 어려움은 서로 <b>돕는다</b>.', from:'여씨향약 4대 강목 · 예안향약에 담다' } },
+      { who:'me', t:'(읽는다) …다 고을 사람이 지킬 약속이군요.' },
+      { who:'npc', t:'그렇네. 배움은 서원에서, 교화는 향약으로.',
+        chart:{ type:'grid', title:'서원과 향약', head:[ '', '구실' ], rows:[ [ '서원', '교육과 제사' ], [ '향약', '향촌의 교화' ] ] } },
     ],
     quizSeq: [
       { q:'사림이 지방에 세운 사설 교육기관으로, 선현에 제사를 지내고 유학을 가르친 곳은?',
@@ -1178,7 +1226,9 @@ const NPC_DATA = {
   },
   yihwang_repeat: {
     name: '이황', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><line x1="7.5" y1="3" x2="7.5" y2="21"/></svg>', img: 'assets/portraits/yihwang.png',
-    beats: [ { who:'npc', t:'…이 서원이 자네 눈에도 익숙해졌겠군. 다른 이들의 이야기도 들어보시게.' } ],
+    beats: [
+      { who:'npc', t:'…이 서원이 자네 눈에도 익숙해졌겠군. 다른 이들의 이야기도 들어보시게.' },
+    ],
     quiz: null
   }
 };
