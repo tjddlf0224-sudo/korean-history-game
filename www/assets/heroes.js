@@ -206,6 +206,14 @@ window.Heroes = (function(){
     #hero-ov .panel { width:min(92%,560px); max-height:88%; display:flex; flex-direction:column;
       background:#1a140c; border:1px solid #4a3c26; border-radius:16px; padding:16px; }
     #hero-ov h3 { margin:0 0 3px; font-size:17px; color:#f0c96b; text-align:center; }
+    /* 인물 도감·유물 도감을 오가는 탭. 예전엔 단추가 둘이라 서로 다른
+       도감으로 착각하기 쉬웠다 — 사실 하나의 '모은 것' 도감이 둘로 나뉜
+       것뿐이다. 대화를 먼저 하게 되니 인물 쪽이 먼저 채워진다 —
+       그래서 인물을 기본 탭으로 둔다. */
+    #hero-ov .dg-tabs { display:flex; gap:8px; justify-content:center; margin:0 0 10px; }
+    #hero-ov .dg-tab { padding:6px 16px; border-radius:999px; border:1px solid #4a3c26;
+      background:#241c12; color:#8d7f66; font-family:inherit; font-size:12.5px; cursor:pointer; }
+    #hero-ov .dg-tab.on { border-color:#c9a24a; background:#3a2c1a; color:#f0c96b; font-weight:700; }
     #hero-ov .cntline { text-align:center; font-size:12px; color:#b8a888; margin-bottom:12px; }
     #hero-ov .scroll { overflow-y:auto; -webkit-overflow-scrolling:touch; flex:1; }
     #hero-ov .era { font-size:12px; color:#c9a24a; letter-spacing:.12em; margin:14px 0 7px;
@@ -342,7 +350,9 @@ window.Heroes = (function(){
     if (!document.getElementById('hero-ov')){
       const d = document.createElement('div');
       d.id = 'hero-ov';
-      d.innerHTML = '<div class="panel"><h3>인물 도감</h3>' +
+      d.innerHTML = '<div class="panel">' +
+        '<div class="dg-tabs"><button class="dg-tab on" id="dgh-self">인물 도감</button>' +
+        '<button class="dg-tab" id="dgh-item">유물 도감</button></div>' +
         '<div class="cntline" id="hero-cnt"></div>' +
         '<div class="party" id="hero-party"></div>' +
         '<div class="scroll" id="hero-list"></div>' +
@@ -351,6 +361,9 @@ window.Heroes = (function(){
       L.appendChild(d);
       d.querySelector('#hero-close').onclick = () => d.classList.remove('show');
       d.onclick = e => { if (e.target === d) d.classList.remove('show'); };
+      // 유물 도감으로 건너간다 — 그쪽은 처음부터 열려 있어 잠글 이유가 없다
+      const t = d.querySelector('#dgh-item');
+      if (t) t.onclick = () => { d.classList.remove('show'); if (window.Items) Items.openBag(); };
     }
     renderBtn();
   }

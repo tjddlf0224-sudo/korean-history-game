@@ -294,6 +294,13 @@ window.Items = (function(){
     #bag-ov .panel { width:min(90%,520px); max-height:84%; overflow-y:auto;
       background:#1a140c; border:1px solid #4a3c26; border-radius:16px; padding:18px; }
     #bag-ov h3 { margin:0 0 4px; font-size:17px; color:#f0c96b; text-align:center; }
+    /* 인물 도감과 오가는 탭. 인물 도감은 양인부터라 그전엔 잠겨 있다 —
+       눌러도 도감이 없다는 뜻이 아니라, "아직" 이라는 뜻으로 보이게 한다. */
+    #bag-ov .dg-tabs { display:flex; gap:8px; justify-content:center; margin:0 0 10px; }
+    #bag-ov .dg-tab { padding:6px 16px; border-radius:999px; border:1px solid #4a3c26;
+      background:#241c12; color:#8d7f66; font-family:inherit; font-size:12.5px; cursor:pointer; }
+    #bag-ov .dg-tab.on { border-color:#c9a24a; background:#3a2c1a; color:#f0c96b; font-weight:700; }
+    #bag-ov .dg-tab.locked { opacity:.55; }
     #bag-ov .cntline { text-align:center; font-size:12px; color:#b8a888; margin-bottom:14px; }
     #bag-ov .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:9px; }
     #bag-ov .cell { background:#241c12; border:1px solid #3a2c1a; border-radius:11px;
@@ -490,9 +497,12 @@ window.Items = (function(){
       dock().appendChild(b);
     }
     if (!document.getElementById('bag-ov')){
+      const heroOn = !window.Unlock || Unlock.has('heroes');
       const d = document.createElement('div');
       d.id = 'bag-ov';
-      d.innerHTML = '<div class="panel"><h3>유물 도감</h3>' +
+      d.innerHTML = '<div class="panel">' +
+        `<div class="dg-tabs"><button class="dg-tab${heroOn ? '' : ' locked'}" id="dgb-hero">인물 도감</button>` +
+        '<button class="dg-tab on" id="dgb-self">유물 도감</button></div>' +
         '<div class="cntline" id="bag-cnt"></div>' +
         '<div class="grid" id="bag-grid"></div>' +
         '<div class="detail" id="bag-detail"></div>' +
@@ -500,6 +510,12 @@ window.Items = (function(){
       layer().appendChild(d);
       d.querySelector('#bag-close').onclick = () => d.classList.remove('show');
       d.onclick = e => { if (e.target === d) d.classList.remove('show'); };
+      // 인물 도감으로 건너간다 — 아직 양인이 아니면 열리는 대신 안내만 뜬다
+      const t = d.querySelector('#dgb-hero');
+      if (t) t.onclick = () => {
+        if (window.Unlock && !Unlock.has('heroes')){ Unlock.deny('heroes'); return; }
+        d.classList.remove('show'); if (window.Heroes) Heroes.openBook();
+      };
     }
     renderBag();
   }

@@ -206,19 +206,46 @@ window.Guide = (function(){
     });
   }
 
+  /* 어느 단계까지 왔는지 — 대화창을 도중에 닫는 등, 다음 단계 대상이
+     끝내 안 나타나 'defer'로 물러난 경우를 위한 것이다.
+     예전에는 이걸 안 남겨서, defer 한 번이면 다음 시도가 **처음(움직이기)부터**
+     다시 돌았다 — 대사를 다 듣고 문제까지 푼 사람에게 조이스틱 안내를
+     또 들이미는 꼴이었다(실제로 그랬다). 이제 물러난 그 단계에서 다시 잇는다. */
+  const PROG_KEY = KEY + '_prog';
+  function progress(id){
+    try { return (JSON.parse(localStorage.getItem(PROG_KEY)) || {})[id] || 0; }
+    catch(e){ return 0; }
+  }
+  function saveProgress(id, i){
+    try {
+      const m = JSON.parse(localStorage.getItem(PROG_KEY)) || {};
+      m[id] = i;
+      localStorage.setItem(PROG_KEY, JSON.stringify(m));
+    } catch(e){}
+  }
+  function clearProgress(id){
+    try {
+      const m = JSON.parse(localStorage.getItem(PROG_KEY)) || {};
+      delete m[id];
+      localStorage.setItem(PROG_KEY, JSON.stringify(m));
+    } catch(e){}
+  }
+
   const running = new Set();
   async function run(id, steps){
     if (has(id) || running.has(id)) return;
     running.add(id);
     try {
-      for (const s of steps){
-        const r = await step(s);
+      let i = progress(id);
+      for (; i < steps.length; i++){
+        const r = await step(steps[i]);
         if (r === 'skip'){ markAll(); return; }
-        if (r === 'defer') return;      // 적지 않고 물러난다 — 다음에 다시 시도한다
+        if (r === 'defer'){ saveProgress(id, i); return; }   // 이 단계에서 다시 시작
       }
       // **끝까지 간 뒤에** 적는다. 시작할 때 적으면, 화면이 아직 안 잡혀
       // 한 번 실패했을 때 그 가이드를 영영 못 보게 된다(실제로 그랬다).
       mark(id);
+      clearProgress(id);
     } finally { running.delete(id); }
   }
   function markAll(){
@@ -360,5 +387,5 @@ window.Guide = (function(){
   else init();
 
   return { run, step, has, mark, onUnlock, firstChapter,
-           reset(){ try { localStorage.removeItem(KEY); } catch(e){} } };
+           reset(){ try { localStorage.removeItem(KEY); localStorage.removeItem(PROG_KEY); } catch(e){} } };
 })();

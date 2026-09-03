@@ -55,13 +55,19 @@ window.News = (function(){
        읽는 사이에도 걸어다닐 수 있어야 흐름이 끊기지 않는다. */
     #nf-wrap { position:absolute; left:0; right:0; top:0; z-index:34; pointer-events:none;
       display:flex; justify-content:center; padding-top:calc(8px + env(safe-area-inset-top)); }
+    /* 시간이 되면 사라지는 게 아니라 **눌러야 사라진다** — 이 게임은 어디서도
+       시간으로 재촉하지 않는다는 원칙을 여기도 따른다. #nf-wrap은 손대지
+       않게(조이스틱을 덮지 않게) pointer-events:none 이지만, 띠 자체는
+       auto로 켜서 누를 수 있게 한다. */
     .nf { width:min(92%,520px); background:linear-gradient(180deg,#241a10f5,#16110af5);
-      border:1px solid #c9a24a; border-radius:12px; overflow:hidden;
+      border:1px solid #c9a24a; border-radius:12px; overflow:hidden; cursor:pointer;
       box-shadow:0 10px 34px rgba(0,0,0,.6); font-family:"Gowun Batang",serif;
-      transform:translateY(-130%); animation:nf-in 5.4s cubic-bezier(.2,.9,.25,1) forwards; }
+      pointer-events:auto; transform:translateY(-130%);
+      animation:nf-in .6s cubic-bezier(.2,.9,.25,1) forwards; }
     @keyframes nf-in {
-      0%{transform:translateY(-130%)} 9%{transform:translateY(6%)} 13%{transform:translateY(0)}
-      88%{transform:translateY(0); opacity:1} 100%{transform:translateY(-130%); opacity:0} }
+      0%{transform:translateY(-130%)} 70%{transform:translateY(6%)} 100%{transform:translateY(0)} }
+    .nf.leaving { animation:nf-out .34s cubic-bezier(.4,0,1,1) forwards; }
+    @keyframes nf-out { to { transform:translateY(-130%); opacity:0; } }
 
     /* 머리띠 — 매체에 따라 색이 다르다 */
     .nf .top { display:flex; align-items:center; gap:9px; padding:6px 12px; }
@@ -81,8 +87,9 @@ window.News = (function(){
     .nf .hl { font-size:16.5px; font-weight:700; color:#f7dd93; line-height:1.45;
       text-wrap:balance; text-shadow:0 1px 6px rgba(0,0,0,.7); }
     .nf .sub { font-size:12.5px; color:#cdbfa4; line-height:1.6; margin-top:4px; }
+    .nf .hint { font-size:10.5px; color:#8d7f66; margin-top:7px; text-align:right; }
 
-    @media (prefers-reduced-motion:reduce){ .nf { animation-duration:.01ms !important; } }`;
+    @media (prefers-reduced-motion:reduce){ .nf, .nf.leaving { animation-duration:.01ms !important; } }`;
     document.head.appendChild(st);
   }
 
@@ -133,15 +140,25 @@ window.News = (function(){
         (window.Icons ? Icons.svg(n.icon, 32) : (n.icon || '')) + '</div>' +
         '<div class="txt"><div class="hl">' + n.headline + '</div>' +
         (n.sub ? '<div class="sub">' + n.sub + '</div>' : '') +
+        '<div class="hint">눌러서 닫기</div>' +
       '</div></div>';
     wrap().appendChild(el);
     sfx();
     if (navigator.vibrate) navigator.vibrate([50, 60, 50]);
-    setTimeout(() => {
-      el.remove();
-      showing = false;
-      if (queue.length) render(queue.shift());
-    }, 5500);
+    el.addEventListener('click', () => {
+      let done = false;
+      const next = () => {
+        if (done) return; done = true;
+        el.remove();
+        showing = false;
+        if (queue.length) render(queue.shift());
+      };
+      el.classList.add('leaving');
+      el.addEventListener('animationend', next, { once: true });
+      // 화면이 숨어 있으면(탭 전환 등) CSS 애니메이션이 멈춰 animationend가
+      // 영영 안 온다 — 실패-안전으로 짧은 시간 뒤엔 무조건 지운다.
+      setTimeout(next, 500);
+    });
   }
 
   /* 이 자리에 걸린 속보가 있으면 띄운다. 없으면 조용히 넘어간다. */

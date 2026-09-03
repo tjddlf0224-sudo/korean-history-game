@@ -36,7 +36,7 @@
   #act-btn.show { opacity: 1; pointer-events: auto; }
 
   /* 공통 오버레이 */
-  .ov { position: absolute; inset: 0; z-index: 20; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
+  .ov { position: absolute; inset: 0; z-index: 26; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.35); }
   .ov.show { display: flex; }
   .ov.center { align-items: center; }
 
@@ -458,7 +458,7 @@
 </div>
 
 <script src="assets/map/map_component.js?v=7"></script>
-<script src="assets/audio.js?v=34"></script>
+<script src="assets/audio.js?v=36"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -470,7 +470,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=34';   // 존댓말 전환
+const ART_V = '?v=36';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -2084,39 +2084,39 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
-<script src="assets/badges.js?v=34"></script>
-<script src="assets/streak.js?v=34"></script>
+<script src="assets/badges.js?v=36"></script>
+<script src="assets/streak.js?v=36"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=34"></script>
-  <script src="assets/fx.js?v=34"></script>
-  <script src="assets/deed.js?v=34"></script>
-  <script src="assets/inkwipe.js?v=34"></script>
-  <script src="assets/dash.js?v=34"></script>
-<script src="assets/juice.js?v=34"></script>
-  <script src="assets/difficulty.js?v=34"></script>
-  <script src="assets/nextauto.js?v=34"></script>
-<script src="assets/heroes_data.js?v=34"></script>
-<script src="assets/heroes.js?v=34"></script>
-<script src="assets/icons.js?v=34"></script>
-<script src="assets/srs.js?v=34"></script>
-<script src="assets/newsflash.js?v=34"></script>
-<script src="assets/timeline.js?v=34"></script>
-<script src="assets/journey.js?v=34"></script>
-<script src="assets/season.js?v=34"></script>
-<script src="assets/items.js?v=34"></script>
-  <script src="assets/gold.js?v=34"></script>
-  <script src="assets/ask.js?v=34"></script>
-  <script src="assets/ads.js?v=34"></script>
-  <script src="assets/energy.js?v=34"></script>
-  <script src="assets/daily.js?v=34"></script>
-  <script src="assets/unlock.js?v=34"></script>
-  <script src="assets/guide.js?v=34"></script>
-  <script src="assets/minigames.js?v=34"></script>
-  <script src="assets/quests.js?v=34"></script>
-  <script src="assets/offline.js?v=34"></script>
-  <script src="assets/telemetry.js?v=34"></script>
-<script src="assets/autowalk.js?v=34"></script>
-<script src="assets/boss.js?v=34"></script>
+<script src="assets/rank.js?v=36"></script>
+  <script src="assets/fx.js?v=36"></script>
+  <script src="assets/deed.js?v=36"></script>
+  <script src="assets/inkwipe.js?v=36"></script>
+  <script src="assets/dash.js?v=36"></script>
+<script src="assets/juice.js?v=36"></script>
+  <script src="assets/difficulty.js?v=36"></script>
+  <script src="assets/nextauto.js?v=36"></script>
+<script src="assets/heroes_data.js?v=36"></script>
+<script src="assets/heroes.js?v=36"></script>
+<script src="assets/icons.js?v=36"></script>
+<script src="assets/srs.js?v=36"></script>
+<script src="assets/newsflash.js?v=36"></script>
+<script src="assets/timeline.js?v=36"></script>
+<script src="assets/journey.js?v=36"></script>
+<script src="assets/season.js?v=36"></script>
+<script src="assets/items.js?v=36"></script>
+  <script src="assets/gold.js?v=36"></script>
+  <script src="assets/ask.js?v=36"></script>
+  <script src="assets/ads.js?v=36"></script>
+  <script src="assets/energy.js?v=36"></script>
+  <script src="assets/daily.js?v=36"></script>
+  <script src="assets/unlock.js?v=36"></script>
+  <script src="assets/guide.js?v=36"></script>
+  <script src="assets/minigames.js?v=36"></script>
+  <script src="assets/quests.js?v=36"></script>
+  <script src="assets/offline.js?v=36"></script>
+  <script src="assets/telemetry.js?v=36"></script>
+<script src="assets/autowalk.js?v=36"></script>
+<script src="assets/boss.js?v=36"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

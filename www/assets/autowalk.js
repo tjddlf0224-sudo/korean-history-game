@@ -212,8 +212,10 @@ window.Auto = (function(){
     if (goalKind === 'npc' && dGoal < REACH_NPC){
       World.stick.dx = 0; World.stick.dy = 0;
       World.checkNpc();
-      // 대화창을 열어 주고 자동은 멈춘다 — 대사 넘기기는 손으로
-      if (World.nearNpc){ stop(); Stage.interact(); }
+      // 대화창만 열어 준다. Auto 자체는 끄지 않는다 — 대사·문제가 끝나면
+      // (World.paused가 풀리면) 다음 목표를 스스로 찾아 다시 걷는다.
+      // 끄고 싶으면 사람이 단추를 눌러야 한다("내가 끄지 않는 한 계속").
+      if (World.nearNpc){ path = []; goal = null; Stage.interact(); }
       else { path = []; goal = null; }
       return;
     }
