@@ -39,6 +39,13 @@ window.Chart = (function(){
     if (injected) return; injected = true;
     const s = document.createElement('style');
     s.textContent = `
+    /* --- 제목 --- 무엇을 보여 주는 그림인지 먼저 밝힌다.
+       제목 없이 '짐승 떼를 따라간다'만 뜨면 뜬금없다(실제 신고). */
+    .ch-title { padding:7px 12px 0; font-family:"Gowun Batang",serif; font-size:10.5px;
+      letter-spacing:.26em; color:#a89676; display:flex; align-items:center; gap:8px; }
+    .ch-title::after { content:''; flex:1; height:1px;
+      background:linear-gradient(90deg,rgba(240,201,107,.35),transparent); }
+
     /* --- 연표 --- 가로로 흐르는 시간 위에 사건을 얹는다 */
     .ch-tl { position:relative; display:flex; padding:14px 8px 8px; gap:2px; }
     .ch-tl::before { content:''; position:absolute; left:12px; right:12px; top:22px;
@@ -125,14 +132,25 @@ window.Chart = (function(){
     .ch-map .leg .r b { color:#f0c96b; font-weight:700; flex:none; }
     .ch-map .leg .r.on { color:#fff3d4; }
 
-    /* --- 차례 --- 만드는 순서·거치는 단계 */
-    .ch-steps { padding:8px 10px; display:flex; flex-direction:column; gap:5px; }
-    .ch-steps .st { display:flex; gap:8px; align-items:flex-start; font-size:11.5px; }
-    .ch-steps .no { flex:none; width:17px; height:17px; border-radius:50%; text-align:center;
-      line-height:17px; font-size:10px; font-weight:700; color:#2b1f0c;
-      background:linear-gradient(180deg,#efcd8b,#c9a24a); }
+    /* --- 차례 --- 만드는 순서·거치는 단계
+       처음엔 금색 번호 동그라미로 그렸다가 물렸다. 이 게임에서 금색으로
+       채운 동그라미는 '누르는 것'이고, 번호 붙은 짧은 항목 셋은 영락없이
+       문제 보기다 — 실제로 눌러 보려 했다는 신고를 받았다.
+       그래서 **세로선으로 잇고** 번호는 작은 글자로 낮춘다. 누를 것이
+       아니라 '흐르는 것'으로 보이게 한다. */
+    .ch-steps { padding:9px 12px; display:flex; flex-direction:column; }
+    .ch-steps .st { position:relative; display:flex; gap:10px; align-items:flex-start;
+      font-size:11.5px; padding:3px 0 8px; }
+    .ch-steps .st:last-child { padding-bottom:1px; }
+    /* 마디를 잇는 세로선 — 마지막 마디 아래로는 긋지 않는다 */
+    .ch-steps .st::before { content:''; position:absolute; left:3.2px; top:12px; bottom:-1px;
+      width:1.5px; border-radius:1px; background:rgba(240,201,107,.55); }
+    .ch-steps .st:last-child::before { display:none; }
+    .ch-steps .no { flex:none; width:8px; height:8px; margin-top:4.5px; border-radius:50%;
+      background:#e0bd76; box-shadow:0 0 0 2.5px rgba(240,201,107,.16); }
     .ch-steps .tx { flex:1; color:#e6dbc2; line-height:1.5; }
     .ch-steps .tx b { color:#f0c96b; }
+    .ch-steps .tx s { color:#a89676; text-decoration:none; }
 
     /* --- 그림표 --- 여러 나라·여러 항목을 한눈에. 비교보다 촘촘하다 */
     .ch-grid { padding:8px; }
@@ -235,9 +253,9 @@ window.Chart = (function(){
 
     /* 차례 — { steps:[{t:'거푸집을 빚는다', s:'흙이나 돌로'}] } */
     steps(c){
-      return '<div class="ch-steps">' + (c.steps || []).map(function(st, i){
-        return '<div class="st"><div class="no">' + (i + 1) + '</div><div class="tx"><b>' +
-          esc(st.t) + '</b>' + (st.s ? ' — ' + esc(st.s) : '') + '</div></div>';
+      return '<div class="ch-steps">' + (c.steps || []).map(function(st){
+        return '<div class="st"><i class="no"></i><div class="tx"><b>' + esc(st.t) + '</b>' +
+          (st.s ? ' <s>— ' + esc(st.s) + '</s>' : '') + '</div></div>';
       }).join('') + '</div>';
     },
 
@@ -321,11 +339,12 @@ window.Chart = (function(){
       if (!s) return '';
       return draw(s);
     }
+    const head = c.title ? '<div class="ch-title">' + esc(c.title) + '</div>' : '';
     const f = NEW[c.type] || OLD[c.type];
-    if (f) return f(c);
+    if (f) return head + f(c);
     // type이 없으면 표로 본다(예전부터 그랬다)
     if (c.head && c.rows){
-      return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
+      return head + '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
         + '</tr></thead><tbody>'
         + c.rows.map(r => '<tr>' + r.map(x => '<td>' + x + '</td>').join('') + '</tr>').join('')
         + '</tbody></table>';
