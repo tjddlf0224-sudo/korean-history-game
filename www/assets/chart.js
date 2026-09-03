@@ -25,7 +25,41 @@ window.Chart = (function(){
   /* 챕터가 const로 선언한 ART_V(캐시 무효화 꼬리표)를 쓴다.
      window.ART_V로는 안 잡힌다 — autowalk.js가 World를 부르는 것과 같다. */
   function v(){ try { return typeof ART_V !== 'undefined' ? ART_V : ''; } catch(e){ return ''; } }
-  function esc(s){ return String(s == null ? '' : s); }
+  /* 도해 안의 낯선 낱말도 누를 수 있게 한다.
+
+     "환호가 뭐야? 유저들도 모를 수 있으니까 누를 수 있게 만들어주고 누르면
+      설명이 나오게" — 제보. 대사(beat.t)는 챕터의 glossarize()를 지나지만
+     **도해는 지나지 않았다.** 그래서 도해에만 나오는 말은 눌러도 아무 설명이
+     없었다.
+
+     태그 안(<b>, 속성)은 건드리지 않고 글자 부분만 감싼다. 낱말을 한 번에
+     모아 정규식 한 벌로 바꾼다 — 하나씩 돌리면 방금 넣은 onclick 속성 안의
+     낱말을 또 잡는다.
+     이 함수는 esc를 대신한다. 원래 esc는 이스케이프를 하지 않았고(도해 글에
+     <b>를 그대로 쓴다) 그래서 여기에 끼워도 안전하다. */
+  let glossRe = null, glossKeys = '';
+  function esc(s){
+    s = String(s == null ? '' : s);
+    const G = window.GLOSS_TERMS;
+    if (!G || typeof openGlossary !== 'function') return s;
+    const keys = Object.keys(G);
+    if (!keys.length) return s;
+    const joined = keys.join('');
+    if (joined !== glossKeys){
+      glossKeys = joined;
+      glossRe = new RegExp('(' + keys
+        .map(function(k){ return k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); })
+        .sort(function(a, b){ return b.length - a.length; })   // 긴 말을 먼저
+        .join('|') + ')', 'g');
+    }
+    return s.split(/(<[^>]*>)/).map(function(seg){
+      if (seg.charAt(0) === '<') return seg;                   // 태그는 그대로
+      return seg.replace(glossRe, function(t){
+        return '<span class="gloss-term" onclick="event.stopPropagation();' +
+               'openGlossary(\'' + t + '\')">' + t + '</span>';
+      });
+    }).join('');
+  }
 
   /* 한반도 윤곽 — assets/map/data/korea_outline.geojson 의 실제 좌표를
      더글러스-포이커로 성기게 줄인 것(419점 → 1.5KB). 가로 100 × 세로 150 눈금. */

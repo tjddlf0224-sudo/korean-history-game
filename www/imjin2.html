@@ -503,10 +503,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/map/map_component.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/map/map_component.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -518,7 +518,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -611,16 +611,16 @@ const ZONES = {
     img: 'assets/scenes/imjin_uibyeong.png', label: '의병 진영',
     spawn: { x: 688, y: 170 },
     barriers: [
-      { x0:90, y0:230, x1:330, y1:490 },  // 창검 시렁
-      { x0:390, y0:170, x1:545, y1:290 },  // 검 시렁
-      { x0:815, y0:175, x1:995, y1:300 },  // 지도 탁자
-      { x0:1025, y0:85, x1:1290, y1:460 },  // 막사
-      { x0:1140, y0:480, x1:1290, y1:650 },  // 막사
-      { x0:745, y0:545, x1:895, y1:650 },  // 수레와 쌀가마
-      { x0:930, y0:535, x1:1075, y1:650 },  // 우물
-      { x0:0, y0:650, x1:565, y1:768 },  // 담장
-      { x0:640, y0:650, x1:1376, y1:768 },  // 담장
-    ],
+    { x0: 98, y0: 238, x1: 322, y1: 482 },
+    { x0: 398, y0: 178, x1: 537, y1: 282 },
+    { x0: 823, y0: 183, x1: 987, y1: 292 },
+    { x0: 1033, y0: 93, x1: 1282, y1: 452 },
+    { x0: 1148, y0: 488, x1: 1282, y1: 642 },
+    { x0: 753, y0: 553, x1: 887, y1: 642 },
+    { x0: 938, y0: 543, x1: 1067, y1: 642 },
+    { x0: 8, y0: 658, x1: 557, y1: 760 },
+    { x0: 648, y0: 658, x1: 1368, y1: 760 },
+  ],
     npcs: [
       { id:'gwakjaeu', name:'곽재우', x:430, y:400, img:'assets/portraits/gwakjaeu.png', look:{ role:'general', body:'#8a3a3a', accent:'#e0b94a' } },
       { id:'johun', name:'조헌', x:940, y:400, img:'assets/portraits/johun.png', look:{ role:'scholar', body:'#e8e4d8', accent:'#6b5636' } },
@@ -638,18 +638,18 @@ const ZONES = {
     img: 'assets/scenes/imjin_haengju.png', label: '행주산성',
     spawn: { x: 688, y: 300 },
     barriers: [
-      { x0:0, y0:0, x1:1376, y1:100 },  // 목책
-      { x0:430, y0:80, x1:500, y1:230 },  // 무기 거치대
-      { x0:855, y0:80, x1:930, y1:230 },  // 무기 거치대
-      { x0:515, y0:95, x1:640, y1:175 },  // 돌무더기
-      { x0:985, y0:110, x1:1105, y1:190 },  // 돌무더기
-      { x0:50, y0:265, x1:240, y1:455 },  // 초가 지붕
-      { x0:245, y0:415, x1:280, y1:565 },  // 깃대
-      { x0:1115, y0:265, x1:1295, y1:415 },  // 돌무더기
-      { x0:1000, y0:465, x1:1295, y1:565 },  // 목재와 통
-      { x0:0, y0:680, x1:1180, y1:768 },  // 강물
-      { x0:1350, y0:680, x1:1376, y1:768 },  // 강물
-    ],
+    { x0: 8, y0: 8, x1: 1368, y1: 92 },
+    { x0: 438, y0: 88, x1: 492, y1: 222 },
+    { x0: 863, y0: 88, x1: 922, y1: 222 },
+    { x0: 523, y0: 103, x1: 632, y1: 167 },
+    { x0: 993, y0: 118, x1: 1097, y1: 182 },
+    { x0: 58, y0: 273, x1: 232, y1: 447 },
+    { x0: 252, y0: 423, x1: 274, y1: 557 },
+    { x0: 1123, y0: 273, x1: 1287, y1: 407 },
+    { x0: 1008, y0: 473, x1: 1287, y1: 557 },
+    { x0: 8, y0: 688, x1: 1172, y1: 760 },
+    { x0: 1352, y0: 688, x1: 1374, y1: 760 },
+  ],
     npcs: [
       { id:'gwonyul', name:'권율', x:460, y:420, img:'assets/portraits/gwonyul.png', look:{ role:'general', body:'#5a4a4a', accent:'#c9a24a' } },
       { id:'haengju_yeoin', name:'행주산성 아낙', x:920, y:420, img:'assets/portraits/haengju_yeoin.png', look:{ role:'commoner', body:'#6b8a4a', accent:'#e8e4d8' } },
@@ -989,7 +989,10 @@ const World = {
   transitioning: false,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -1554,6 +1557,9 @@ const Quiz = {
     World.paused = false;
   }
 };
+/* 도해(chart.js)도 이 목록을 보고 낱말을 누를 수 있게 만든다.
+   const 선언은 window에 안 올라가므로 따로 알려 준다. */
+window.GLOSS_TERMS = GLOSSARY;
 
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
 /* drawChart는 assets/chart.js 로 옮겼다 — 서른여섯 곳에 복사돼
@@ -1898,39 +1904,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/deed.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/boss.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/deed.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/boss.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

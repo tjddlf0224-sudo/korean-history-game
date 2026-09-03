@@ -483,10 +483,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/map/map_component.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/map/map_component.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -498,7 +498,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -591,39 +591,34 @@ const ZONES = {
     img: 'assets/scenes/ch2_jiphyeonjeon.png', label: '집현전',
     spawn: { x: 688, y: 600 },
     barriers: [
-      { x0:0, y0:0, x1:645, y1:108 }, { x0:728, y0:0, x1:BG_W, y1:108 }, // 위쪽 서가(12시 방향 정문 앞은 비워둠 — 실제로 문짝이 그려져 있는 자리)
-      // 아래쪽 서가 — 6시 방향 창호지 문(간의대로 나가는 자리)은 비워둔다
-      { x0:0, y0:640, x1:625, y1:BG_H }, { x0:745, y0:640, x1:BG_W, y1:BG_H },
-      { x0:0, y0:0, x1:95, y1:BG_H },       // 좌측 서가
-      { x0:1290, y0:0, x1:BG_W, y1:BG_H },  // 우측 서가
-      // 책상/의자 배리어: 배경 이미지를 픽셀 단위로 직접 분석(어두운 윤곽선
-      // connected-component 검출)해서 실제 가구 외곽만 정확히 감쌈. 이전엔
-      // "책상 열" 하나를 세로로 크게 묶어서(y175~335) 막아버리는 바람에 두
-      // 책상 사이의 멀쩡한 마룻바닥까지 못 지나가는 문제가 있었음 — 이제
-      // 각 책상/의자 쌍마다 개별 사각형만 막고 나머지는 전부 마룻바닥으로 열림.
-      // (2026-08-22) 배경을 다시 픽셀로 재서 한 번 더 좁혔다. 그전에는 "의자 한 쌍"을
-      // 사각형 하나로 묶어 막고 있었는데, 두 의자 사이(예: 4행 1열 x223~260)를 실제로
-      // 재보니 어두운 픽셀 5~9%짜리 멀쩡한 마룻바닥이었다. 이제 의자도 하나씩 막는다.
-      // 1행 책상 5개 (y 187~258)
-      { x0:172, y0:187, x1:311, y1:258 }, { x0:384, y0:187, x1:527, y1:258 },
-      { x0:619, y0:187, x1:757, y1:258 }, { x0:848, y0:187, x1:997, y1:258 },
-      { x0:1065, y0:187, x1:1204, y1:258 },
-      // 2행 — 1·3열은 책상, 2·4·5열은 의자 두 개(사이는 통로)
-      { x0:172, y0:270, x1:311, y1:344 },   // 1열 책상
-      { x0:619, y0:270, x1:757, y1:344 },   // 3열 책상
-      { x0:403, y0:293, x1:440, y1:344 }, { x0:476, y0:293, x1:514, y1:344 },
-      { x0:863, y0:293, x1:901, y1:344 }, { x0:937, y0:293, x1:975, y1:344 },
-      { x0:1080, y0:293, x1:1118, y1:344 }, { x0:1152, y0:293, x1:1191, y1:344 },
-      // 3행 책상 5개 (y 437~508)
-      { x0:172, y0:437, x1:311, y1:508 }, { x0:387, y0:437, x1:527, y1:508 },
-      { x0:619, y0:437, x1:757, y1:508 }, { x0:850, y0:437, x1:989, y1:508 },
-      { x0:1065, y0:437, x1:1204, y1:508 },
-      // 4행 의자 — 1·2·4·5열에 두 개씩, 3열은 실제로 빈 바닥
-      { x0:184, y0:534, x1:223, y1:581 }, { x0:260, y0:534, x1:298, y1:581 },
-      { x0:401, y0:534, x1:440, y1:581 }, { x0:476, y0:534, x1:514, y1:581 },
-      { x0:863, y0:534, x1:901, y1:581 }, { x0:939, y0:534, x1:977, y1:581 },
-      { x0:1078, y0:534, x1:1117, y1:581 }, { x0:1153, y0:534, x1:1192, y1:581 },
-    ],
+    { x0: 8, y0: 8, x1: 637, y1: 100 },
+    { x0: 180, y0: 195, x1: 303, y1: 250 },
+    { x0: 392, y0: 195, x1: 519, y1: 250 },
+    { x0: 627, y0: 195, x1: 749, y1: 250 },
+    { x0: 856, y0: 195, x1: 989, y1: 250 },
+    { x0: 1073, y0: 195, x1: 1196, y1: 250 },
+    { x0: 180, y0: 278, x1: 303, y1: 336 },
+    { x0: 627, y0: 278, x1: 749, y1: 336 },
+    { x0: 410, y0: 301, x1: 432, y1: 336 },
+    { x0: 484, y0: 301, x1: 506, y1: 336 },
+    { x0: 871, y0: 301, x1: 893, y1: 336 },
+    { x0: 945, y0: 301, x1: 967, y1: 336 },
+    { x0: 1088, y0: 301, x1: 1110, y1: 336 },
+    { x0: 1160, y0: 301, x1: 1183, y1: 336 },
+    { x0: 180, y0: 445, x1: 303, y1: 500 },
+    { x0: 395, y0: 445, x1: 519, y1: 500 },
+    { x0: 627, y0: 445, x1: 749, y1: 500 },
+    { x0: 858, y0: 445, x1: 981, y1: 500 },
+    { x0: 1073, y0: 445, x1: 1196, y1: 500 },
+    { x0: 192, y0: 542, x1: 215, y1: 573 },
+    { x0: 268, y0: 542, x1: 290, y1: 573 },
+    { x0: 409, y0: 542, x1: 432, y1: 573 },
+    { x0: 484, y0: 542, x1: 506, y1: 573 },
+    { x0: 871, y0: 542, x1: 893, y1: 573 },
+    { x0: 947, y0: 542, x1: 969, y1: 573 },
+    { x0: 1086, y0: 542, x1: 1109, y1: 573 },
+    { x0: 1161, y0: 542, x1: 1184, y1: 573 },
+  ],
     npcs: [
       { id: 'sejong', name: '세종', x: 590, y: 385, img: 'assets/portraits/sejong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
       { id: 'sinsukju', name: '신숙주', x: 790, y: 385, img: 'assets/portraits/sinsukju.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
@@ -650,19 +645,15 @@ const ZONES = {
     img: 'assets/scenes/ch2_ganuidae.png', label: '간의대(관천대)',
     spawn: { x: 680, y: 560 },
     barriers: [
-      { x0:0, y0:0, x1:BG_W, y1:60 },          // 위쪽 난간
-      { x0:0, y0:660, x1:BG_W, y1:BG_H },      // 아래쪽 난간
-      { x0:0, y0:0, x1:60, y1:BG_H },          // 좌측 난간
-      { x0:1300, y0:0, x1:BG_W, y1:BG_H },     // 우측 난간
-      { x0:0, y0:0, x1:180, y1:120 },          // 좌상단 건물 모서리
-      { x0:0, y0:230, x1:240, y1:300 },        // 좌상 난간 가로줄기
-      { x0:380, y0:180, x1:660, y1:300 },      // 계단
-      { x0:215, y0:240, x1:375, y1:470 },      // 혼천의 대좌
-      { x0:170, y0:510, x1:280, y1:620 },      // 해시계(앙부일구) 1
-      { x0:485, y0:505, x1:595, y1:625 },      // 해시계 2
-      { x0:1130, y0:505, x1:1240, y1:625 },    // 해시계 3
-      { x0:1140, y0:110, x1:1250, y1:235 },    // 해시계 4
-    ],
+    { x0: 8, y0: 8, x1: 172, y1: 112 },
+    { x0: 8, y0: 238, x1: 232, y1: 292 },
+    { x0: 388, y0: 188, x1: 652, y1: 292 },
+    { x0: 223, y0: 248, x1: 367, y1: 462 },
+    { x0: 178, y0: 518, x1: 272, y1: 612 },
+    { x0: 493, y0: 513, x1: 587, y1: 617 },
+    { x0: 1138, y0: 513, x1: 1232, y1: 617 },
+    { x0: 1148, y0: 118, x1: 1242, y1: 227 },
+  ],
     npcs: [
       { id: 'jangyeongsil', name: '장영실', x: 430, y: 500, img: 'assets/portraits/jangyeongsil.png', look: { role: 'scholar', body: '#4a4a3d', accent: '#9ab0c9' } },
     ],
@@ -1011,7 +1002,10 @@ const World = {
   lastT: 0,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -2015,6 +2009,9 @@ function formatQuizSrc(src){
 const GLOSSARY = {
   '이두': '한자의 음(소리)과 훈(뜻)을 빌려 우리말 문장을 적던 표기법. 신라의 설총이 체계를 정리한 것으로 전해지며, 훈민정음이 만들어지기 전까지 한자로 우리말을 적는 대표적인 방법이었다.',
 };
+/* 도해(chart.js)도 이 목록을 보고 낱말을 누를 수 있게 만든다.
+   const 선언은 window에 안 올라가므로 따로 알려 준다. */
+window.GLOSS_TERMS = GLOSSARY;
 function escapeHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -2349,39 +2346,39 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/deed.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
-<script src="assets/boss.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/deed.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
+<script src="assets/boss.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

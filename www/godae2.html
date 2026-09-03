@@ -503,10 +503,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/map/map_component.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/map/map_component.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -518,7 +518,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -630,20 +630,20 @@ const ZONES = {
     img: 'assets/scenes/godae2_cheonghae.png', label: '청해진 포구',
     spawn: { x: 688, y: 280 },
     barriers: [
-      { x0:0, y0:0, x1:215, y1:335 },  // 석축 담
-      { x0:245, y0:0, x1:515, y1:155 },  // 기와집
-      { x0:545, y0:0, x1:800, y1:155 },  // 창고
-      { x0:815, y0:0, x1:1185, y1:170 },  // 창고와 항아리
-      { x0:195, y0:170, x1:245, y1:340 },  // 깃대
-      { x0:1085, y0:230, x1:1230, y1:390 },  // 그물 시렁
-      { x0:1255, y0:165, x1:1376, y1:410 },  // 소금 가마
-      { x0:0, y0:375, x1:300, y1:768 },  // 바다
-      { x0:300, y0:388, x1:410, y1:768 },  // 바다(왼쪽 나루터 다리 서쪽)
-      { x0:550, y0:388, x1:600, y1:768 },  // 바다(왼쪽 나루터 다리 동쪽)
-      { x0:600, y0:400, x1:850, y1:768 },  // 바다
-      { x0:995, y0:392, x1:1200, y1:768 },  // 바다(오른쪽 나루터 다리 동쪽)
-      { x0:1200, y0:400, x1:1376, y1:768 },  // 바다
-    ],
+    { x0: 8, y0: 8, x1: 207, y1: 327 },
+    { x0: 253, y0: 8, x1: 507, y1: 147 },
+    { x0: 553, y0: 8, x1: 792, y1: 147 },
+    { x0: 823, y0: 8, x1: 1177, y1: 162 },
+    { x0: 203, y0: 178, x1: 237, y1: 332 },
+    { x0: 1093, y0: 238, x1: 1222, y1: 382 },
+    { x0: 1263, y0: 173, x1: 1368, y1: 402 },
+    { x0: 8, y0: 383, x1: 292, y1: 760 },
+    { x0: 308, y0: 396, x1: 402, y1: 760 },
+    { x0: 558, y0: 396, x1: 592, y1: 760 },
+    { x0: 608, y0: 408, x1: 842, y1: 760 },
+    { x0: 1003, y0: 400, x1: 1192, y1: 760 },
+    { x0: 1208, y0: 408, x1: 1368, y1: 760 },
+  ],
     npcs: [
       { id:'jangbogo', name:'장보고', x:320, y:260, img:'assets/portraits/jangbogo.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'uisang', name:'의상', x:700, y:230, img:'assets/portraits/uisang.png', look:{ role:'scholar', body:'#8a6d3b', accent:'#e0b94a' } },
@@ -991,7 +991,10 @@ const World = {
   transitioning: false,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -1714,6 +1717,9 @@ const Quiz = {
     World.paused = false;
   }
 };
+/* 도해(chart.js)도 이 목록을 보고 낱말을 누를 수 있게 만든다.
+   const 선언은 window에 안 올라가므로 따로 알려 준다. */
+window.GLOSS_TERMS = GLOSSARY;
 
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
 /* drawChart는 assets/chart.js 로 옮겼다 — 서른여섯 곳에 복사돼
@@ -2058,39 +2064,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/deed.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/boss.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/deed.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/boss.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

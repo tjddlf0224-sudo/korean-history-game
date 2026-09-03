@@ -494,10 +494,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/map/map_component.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/map/map_component.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -509,7 +509,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -605,15 +605,15 @@ const ZONES = {
     img: 'assets/scenes/goryeo2_seogyeong.png', label: '서경',
     spawn: { x: 688, y: 600 },
     barriers: [
-      { x0:0, y0:0, x1:1376, y1:40 },  // 담장 위 기와지붕
-      { x0:455, y0:0, x1:905, y1:215 },  // 전각과 계단
-      { x0:0, y0:70, x1:60, y1:545 },  // 돌 등롱
-      { x0:55, y0:170, x1:295, y1:550 },  // 지도 탁자
-      { x0:955, y0:85, x1:1250, y1:215 },  // 병장기 시렁(창검걸이 3개)
-      { x0:1235, y0:85, x1:1376, y1:520 },  // 깃발과 깃대(두 조)
-      { x0:0, y0:700, x1:600, y1:768 },  // 강
-      { x0:790, y0:700, x1:1376, y1:768 },  // 강
-    ],
+    { x0: 8, y0: 8, x1: 1368, y1: 32 },
+    { x0: 463, y0: 8, x1: 897, y1: 207 },
+    { x0: 8, y0: 78, x1: 52, y1: 537 },
+    { x0: 63, y0: 178, x1: 287, y1: 542 },
+    { x0: 963, y0: 93, x1: 1242, y1: 207 },
+    { x0: 1243, y0: 93, x1: 1368, y1: 512 },
+    { x0: 8, y0: 708, x1: 592, y1: 760 },
+    { x0: 798, y0: 708, x1: 1368, y1: 760 },
+  ],
     npcs: [
       { id:'ijagyeom', name:'이자겸', x:688, y:250, img:'assets/portraits/ijagyeom.png', look:{ role:'scholar', body:'#5a3a3a', accent:'#e0b94a' } },
       { id:'myocheong', name:'묘청', x:500, y:400, img:'assets/portraits/myocheong.png', look:{ role:'scholar', body:'#4a3a5a', accent:'#e0b94a' } },
@@ -632,23 +632,23 @@ const ZONES = {
     img: 'assets/scenes/goryeo2_ganghwa.png', label: '강화 임시 도읍',
     spawn: { x: 688, y: 470 },
     barriers: [
-      { x0:0, y0:0, x1:240, y1:460 },  // 토성과 울성
-      { x0:0, y0:440, x1:310, y1:768 },  // 토성과 울성
-      { x0:280, y0:0, x1:935, y1:150 },  // 임시 궁궐
-      { x0:195, y0:155, x1:535, y1:335 },  // 초가 창고와 나무 더미
-      { x0:170, y0:330, x1:335, y1:485 },  // 초가 창고
-      { x0:315, y0:350, x1:465, y1:575 },  // 기와 창고
-      { x0:180, y0:480, x1:320, y1:575 },  // 가마니
-      { x0:420, y0:480, x1:505, y1:570 },  // 항아리
-      { x0:925, y0:0, x1:1376, y1:205 },  // 나무 골조와 목재
-      { x0:970, y0:230, x1:1376, y1:335 },  // 판각소
-      { x0:1000, y0:330, x1:1376, y1:530 },  // 작업대
-      { x0:1085, y0:415, x1:1376, y1:625 },  // 물통
-      { x0:830, y0:600, x1:890, y1:768 },  // 갯벌
-      { x0:1010, y0:600, x1:1376, y1:768 },  // 갯벌(나룻배 자리만 비움)
-      { x0:500, y0:690, x1:830, y1:768 },  // 갯벌
-      { x0:230, y0:725, x1:500, y1:768 },  // 갯벌
-    ],
+    { x0: 16, y0: 16, x1: 224, y1: 444 },
+    { x0: 16, y0: 456, x1: 294, y1: 752 },
+    { x0: 296, y0: 16, x1: 919, y1: 134 },
+    { x0: 211, y0: 171, x1: 519, y1: 319 },
+    { x0: 186, y0: 346, x1: 319, y1: 469 },
+    { x0: 331, y0: 366, x1: 449, y1: 559 },
+    { x0: 196, y0: 496, x1: 304, y1: 559 },
+    { x0: 436, y0: 496, x1: 489, y1: 554 },
+    { x0: 941, y0: 16, x1: 1360, y1: 189 },
+    { x0: 986, y0: 246, x1: 1360, y1: 319 },
+    { x0: 1016, y0: 346, x1: 1360, y1: 514 },
+    { x0: 1101, y0: 431, x1: 1360, y1: 609 },
+    { x0: 846, y0: 616, x1: 874, y1: 752 },
+    { x0: 1026, y0: 616, x1: 1360, y1: 752 },
+    { x0: 516, y0: 706, x1: 814, y1: 752 },
+    { x0: 246, y0: 736, x1: 484, y1: 758 },
+  ],
     npcs: [
       { id:'seohui', name:'서희', x:600, y:280, img:'assets/portraits/seohui.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'yungwan', name:'윤관', x:680, y:230, img:'assets/portraits/yungwan.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
@@ -994,7 +994,10 @@ const World = {
   transitioning: false,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -1619,6 +1622,9 @@ const GLOSSARY = {
 'sungnyeongjin',
 ] } },
 };
+/* 도해(chart.js)도 이 목록을 보고 낱말을 누를 수 있게 만든다.
+   const 선언은 window에 안 올라가므로 따로 알려 준다. */
+window.GLOSS_TERMS = GLOSSARY;
 function escapeHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -2067,40 +2073,40 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/deed.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/moment.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/boss.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/deed.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/moment.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/boss.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

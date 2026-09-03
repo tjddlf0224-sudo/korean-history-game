@@ -442,9 +442,9 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -456,7 +456,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -555,19 +555,16 @@ const ZONES = {
     img: 'assets/scenes/ch5_seowon.png', label: '서원',
     spawn: { x: 688, y: 560 },
     barriers: [
-      { x0:0, y0:0, x1:280, y1:BG_H },        // 좌측 바깥(개울·숲)
-      { x0:1100, y0:0, x1:BG_W, y1:BG_H },    // 우측 바깥(숲)
-      { x0:0, y0:700, x1:BG_W, y1:BG_H },     // 하단 바깥
-      { x0:500, y0:0, x1:1080, y1:200 },      // 사당 영역(담장 포함)
-      { x0:280, y0:205, x1:1100, y1:240 },    // 강학공간 북쪽 담
-      { x0:280, y0:205, x1:320, y1:650 },     // 서쪽 담
-      { x0:1060, y0:205, x1:1100, y1:650 },   // 동쪽 담
-      { x0:280, y0:610, x1:610, y1:650 },     // 남쪽 담(좌) — 정문 앞은 비움
-      { x0:770, y0:610, x1:1100, y1:650 },    // 남쪽 담(우)
-      { x0:515, y0:205, x1:860, y1:395 },     // 강당
-      { x0:330, y0:300, x1:440, y1:560 },     // 서재
-      { x0:925, y0:300, x1:1035, y1:560 },    // 동재
-    ],
+    { x0: 508, y0: 8, x1: 1072, y1: 192 },
+    { x0: 288, y0: 212, x1: 1092, y1: 234 },
+    { x0: 288, y0: 213, x1: 312, y1: 642 },
+    { x0: 1068, y0: 213, x1: 1092, y1: 642 },
+    { x0: 288, y0: 618, x1: 602, y1: 642 },
+    { x0: 778, y0: 618, x1: 1092, y1: 642 },
+    { x0: 523, y0: 213, x1: 852, y1: 387 },
+    { x0: 338, y0: 308, x1: 432, y1: 552 },
+    { x0: 933, y0: 308, x1: 1027, y1: 552 },
+  ],
     npcs: [
       { id: 'juseboong', name: '주세붕', x: 690, y: 450, img: 'assets/portraits/juseboong.png', look: { role: 'scholar', body: '#3d4a6b', accent: '#c9a24a' } },
       { id: 'josik', name: '조식', x: 560, y: 490, img: 'assets/portraits/josik.png', look: { role: 'scholar', body: '#4a4030', accent: '#7a9a5a' } },
@@ -914,7 +911,10 @@ const World = {
   lastT: 0,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -1744,38 +1744,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/deed.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/deed.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

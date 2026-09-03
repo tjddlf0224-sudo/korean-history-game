@@ -31,6 +31,10 @@ window.Auto = (function(){
   const REACH_PT  = 14;     // 웨이포인트 통과 판정
 
   let on = false, path = [], goal = null, goalKind = '', lastZone = '', stuck = 0, lastPos = null;
+  /* 이 구역에서 "가 봤지만 닿지 못한" 목표들. 배리어에 갇힌 NPC가 하나
+     있으면 예전에는 그 앞에서 영원히 서 있었다("auto를 켜도 못 지나가네").
+     한 번 못 닿아 본 목표는 건너뛰고 다음 목표로 간다. 구역이 바뀌면 잊는다. */
+  let unreachable = new Set();
 
   /* ---------------- 스타일 ---------------- */
   let injected = false;
@@ -142,15 +146,17 @@ window.Auto = (function(){
     if (!z) return null;
 
     for (const n of (z.npcs || [])){
+      if (unreachable.has('npc:' + n.id)) continue;   // 가 봤는데 못 닿은 곳
       let key = null;
       try { key = Stage.keyFor(n.id); } catch(e){}
       if (!key) continue;
       const seen = (typeof seenDialogKeys !== 'undefined') && seenDialogKeys.has(key);
       if (!seen) return { x:n.x, y:n.y, kind:'npc', id:n.id };
     }
-    for (const e of (z.exits || [])){
-      const r = e.rect;
-      return { x:(r.x0 + r.x1) / 2, y:(r.y0 + r.y1) / 2, kind:'exit' };
+    for (let i = 0; i < (z.exits || []).length; i++){
+      if (unreachable.has('exit:' + i)) continue;
+      const r = z.exits[i].rect;
+      return { x:(r.x0 + r.x1) / 2, y:(r.y0 + r.y1) / 2, kind:'exit', idx:i };
     }
     return null;
   }
@@ -158,6 +164,14 @@ window.Auto = (function(){
   /* ---------------- 길 찾기 ----------------
      배리어를 피해야 하므로 canStand로 격자 BFS를 돌린다. 목표가 바뀔 때만
      계산하고, 결과를 웨이포인트로 들고 간다(매 프레임 돌리면 무겁다). */
+  /* 지금 목표를 "이 구역에서는 못 닿는다"고 적어 둔다. 다음 pickGoal이
+     건너뛴다. 구역이 바뀌면 잊으므로, 되돌아오면 다시 해 본다. */
+  function markUnreachable(){
+    if (!goal) return;
+    if (goal.kind === 'npc' && goal.id != null) unreachable.add('npc:' + goal.id);
+    else if (goal.kind === 'exit' && goal.idx != null) unreachable.add('exit:' + goal.idx);
+  }
+
   function snap(v){ return Math.round(v / GRID) * GRID; }
 
   function findPath(sx, sy, tx, ty){
@@ -203,14 +217,18 @@ window.Auto = (function(){
     // 대화·퀴즈·보스전이 떠 있으면 손을 뗀다(World.update도 어차피 멈춘다)
     if (World.paused || World.transitioning || document.querySelector('.ov.show')) return;
 
-    if (World.zone !== lastZone){ lastZone = World.zone; path = []; goal = null; }
+    if (World.zone !== lastZone){
+      lastZone = World.zone; path = []; goal = null;
+      unreachable = new Set();     // 구역이 바뀌면 다시 다 해 본다
+    }
 
     if (!goal){
       goal = pickGoal();
       if (!goal){ stop(); return; }
       goalKind = goal.kind;
       path = findPath(World.px, World.py, goal.x, goal.y);
-      if (!path.length){ stop(); return; }
+      // 길이 아예 안 나오면 그 목표는 접고 다음 목표로 — 멈추지 않는다
+      if (!path.length){ markUnreachable(); goal = null; return; }
     }
 
     // 도착 판정
@@ -236,6 +254,10 @@ window.Auto = (function(){
         World.checkNpc();
         if (World.nearNpc){ path = []; goal = null; Stage.interact(); return; }
       }
+      // 길 끝까지 갔는데도 말이 안 닿는다 — 배리어에 갇힌 목표다.
+      // 접고 다음 목표로 간다(예전에는 여기서 같은 목표를 다시 골라
+      //  영원히 제자리였다 — "auto를 켜도 못 지나가네").
+      markUnreachable();
       goal = null; return;
     }
 

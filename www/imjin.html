@@ -494,10 +494,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/map/map_component.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/map/map_component.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -509,7 +509,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -604,9 +604,9 @@ const ZONES = {
     img: 'assets/scenes/imjin_tangeumdae.png', label: '충주 탄금대',
     spawn: { x: 750, y: 240 },
     barriers: [
-      { x0:0, y0:175, x1:210, y1:420 },  // 깃발과 병장기
-      { x0:0, y0:440, x1:1376, y1:768 },  // 남한강
-    ],
+    { x0: 8, y0: 183, x1: 202, y1: 412 },
+    { x0: 8, y0: 448, x1: 1368, y1: 760 },
+  ],
     npcs: [
       { id:'sinrip', name:'신립', x:688, y:350, img:'assets/portraits/sinrip.png', look:{ role:'general', body:'#4a3a3a', accent:'#8a6d3b' } },
       { id:'dongnae', name:'동래성 군졸', x:440, y:272, img:'assets/portraits/extra_gunsa.png', look:{ role:'general', body:'#5a4a3a', accent:'#8c8676' } },
@@ -627,23 +627,23 @@ const ZONES = {
     img: 'assets/scenes/imjin_hansando.png', label: '한산도 통제영',
     spawn: { x: 688, y: 330 },
     barriers: [
-      { x0:0, y0:0, x1:185, y1:190 },  // 화살통
-      { x0:185, y0:10, x1:335, y1:115 },  // 활 시렁
-      { x0:385, y0:0, x1:985, y1:220 },  // 통제영 본채
-      { x0:550, y0:100, x1:590, y1:285 },  // 깃대
-      { x0:0, y0:235, x1:235, y1:340 },  // 대포와 포탄
-      { x0:0, y0:350, x1:235, y1:475 },  // 대포와 포탄
-      { x0:0, y0:290, x1:65, y1:385 },  // 나무 더미
-      { x0:15, y0:460, x1:145, y1:535 },  // 통
-      { x0:995, y0:10, x1:1376, y1:135 },  // 초가 창고
-      { x0:1245, y0:125, x1:1376, y1:255 },  // 초가 창고
-      { x0:1175, y0:95, x1:1265, y1:185 },  // 소금 가마
-      { x0:1095, y0:315, x1:1376, y1:445 },  // 그물 시렁
-      { x0:1260, y0:460, x1:1350, y1:535 },  // 우물
-      { x0:110, y0:435, x1:1235, y1:768 },  // 바다
-      { x0:0, y0:530, x1:115, y1:768 },  // 바다
-      { x0:1230, y0:540, x1:1376, y1:768 },  // 바다
-    ],
+    { x0: 8, y0: 8, x1: 177, y1: 182 },
+    { x0: 193, y0: 18, x1: 327, y1: 107 },
+    { x0: 393, y0: 8, x1: 977, y1: 212 },
+    { x0: 558, y0: 108, x1: 582, y1: 277 },
+    { x0: 8, y0: 243, x1: 227, y1: 332 },
+    { x0: 8, y0: 358, x1: 227, y1: 467 },
+    { x0: 8, y0: 298, x1: 57, y1: 377 },
+    { x0: 23, y0: 468, x1: 137, y1: 527 },
+    { x0: 1003, y0: 18, x1: 1368, y1: 127 },
+    { x0: 1253, y0: 133, x1: 1368, y1: 247 },
+    { x0: 1183, y0: 103, x1: 1257, y1: 177 },
+    { x0: 1103, y0: 323, x1: 1368, y1: 437 },
+    { x0: 1268, y0: 468, x1: 1342, y1: 527 },
+    { x0: 118, y0: 443, x1: 1227, y1: 760 },
+    { x0: 8, y0: 538, x1: 107, y1: 760 },
+    { x0: 1238, y0: 548, x1: 1368, y1: 760 },
+  ],
     npcs: [
       { id:'yisunsin', name:'이순신', x:500, y:300, img:'assets/portraits/yisunsin.png', look:{ role:'general', body:'#3f5a6b', accent:'#c9a24a' } },
     ],
@@ -669,15 +669,15 @@ const ZONES = {
     img: 'assets/scenes/imjin_geobukseon_in.png', label: '거북선 안',
     spawn: { x: 688, y: 384 },
     barriers: [
-      { x0:0, y0:0, x1:1376, y1:150 },      // 위쪽 뱃전과 노
-      { x0:0, y0:620, x1:1376, y1:768 },    // 아래쪽 뱃전과 노
-      { x0:0, y0:0, x1:150, y1:768 },       // 뱃머리 쪽 좁아지는 곳
-      { x0:1226, y0:0, x1:1376, y1:768 },   // 배꼬리 쪽
-      { x0:150, y0:150, x1:300, y1:250 },   // 밧줄 사리와 통
-      { x0:150, y0:520, x1:320, y1:620 },   // 포탄 더미와 통
-      { x0:1080, y0:150, x1:1226, y1:260 },  // 궤짝
-      { x0:1080, y0:500, x1:1226, y1:620 },  // 포탄 더미
-    ],
+    { x0: 8, y0: 8, x1: 1368, y1: 142 },
+    { x0: 8, y0: 628, x1: 1368, y1: 760 },
+    { x0: 8, y0: 8, x1: 142, y1: 760 },
+    { x0: 1234, y0: 8, x1: 1368, y1: 760 },
+    { x0: 158, y0: 158, x1: 292, y1: 242 },
+    { x0: 158, y0: 528, x1: 312, y1: 612 },
+    { x0: 1088, y0: 158, x1: 1218, y1: 252 },
+    { x0: 1088, y0: 508, x1: 1218, y1: 612 },
+  ],
     npcs: [
       { id:'gyeokgun', name:'격군', x:420, y:250,
         img:'assets/portraits/gyeokgun.png', look:{ role:'commoner', body:'#d8d2c2', accent:'#8a7a5a' } },
@@ -693,13 +693,13 @@ const ZONES = {
     img: 'assets/scenes/imjin_jinju.png', label: '진주성 촉석루',
     spawn: { x: 688, y: 300 },
     barriers: [
-      { x0:15, y0:0, x1:155, y1:660 },  // 성벽 원형 포루
-      { x0:140, y0:395, x1:330, y1:560 },  // 포대
-      { x0:180, y0:295, x1:260, y1:395 },  // 창 시렁
-      { x0:310, y0:430, x1:420, y1:510 },  // 검 시렁
-      { x0:1090, y0:0, x1:1230, y1:510 },  // 성벽 누각
-      { x0:0, y0:560, x1:1376, y1:768 },  // 남강
-    ],
+    { x0: 23, y0: 8, x1: 147, y1: 652 },
+    { x0: 148, y0: 403, x1: 322, y1: 552 },
+    { x0: 188, y0: 303, x1: 252, y1: 387 },
+    { x0: 318, y0: 438, x1: 412, y1: 502 },
+    { x0: 1098, y0: 8, x1: 1222, y1: 502 },
+    { x0: 8, y0: 568, x1: 1368, y1: 760 },
+  ],
     npcs: [
       { id:'gimsimin', name:'김시민', x:430, y:400, img:'assets/portraits/gimsimin.png', look:{ role:'general', body:'#4f5d75', accent:'#8a6d3b' } },
       { id:'nongae', name:'논개', x:940, y:400, img:'assets/portraits/nongae.png', look:{ role:'commoner', body:'#7a4a5a', accent:'#d8c48a' } },
@@ -1036,7 +1036,10 @@ const World = {
   transitioning: false,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -1646,6 +1649,9 @@ const Quiz = {
     World.paused = false;
   }
 };
+/* 도해(chart.js)도 이 목록을 보고 낱말을 누를 수 있게 만든다.
+   const 선언은 window에 안 올라가므로 따로 알려 준다. */
+window.GLOSS_TERMS = GLOSSARY;
 
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
 /* drawChart는 assets/chart.js 로 옮겼다 — 서른여섯 곳에 복사돼
@@ -1960,39 +1966,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/moment.js?v=51"></script>
-  <script src="assets/encounter.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/moment.js?v=53"></script>
+  <script src="assets/encounter.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

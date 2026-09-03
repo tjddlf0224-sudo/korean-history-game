@@ -494,10 +494,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/map/map_component.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/map/map_component.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -509,7 +509,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -619,22 +619,22 @@ const ZONES = {
     img: 'assets/scenes/hugi3_sedo.png', label: '삼정이 무너진 고을',
     spawn: { x: 688, y: 470 },
     barriers: [
-      { x0:0, y0:0, x1:355, y1:145 },  // 밭
-      { x0:345, y0:0, x1:1015, y1:215 },  // 관아 담
-      { x0:575, y0:100, x1:805, y1:235 },  // 솟을대문
-      { x0:15, y0:140, x1:255, y1:545 },  // 환곡 창고
-      { x0:195, y0:465, x1:265, y1:525 },  // 됫박
-      { x0:485, y0:210, x1:575, y1:280 },  // 형틀
-      { x0:800, y0:220, x1:885, y1:295 },  // 수레
-      { x0:995, y0:0, x1:1376, y1:135 },  // 초가
-      { x0:1005, y0:170, x1:1295, y1:335 },  // 초가
-      { x0:1245, y0:205, x1:1376, y1:435 },  // 초가
-      { x0:1005, y0:395, x1:1255, y1:525 },  // 초가
-      { x0:1025, y0:500, x1:1295, y1:605 },  // 초가
-      { x0:1285, y0:515, x1:1376, y1:595 },  // 항아리
-      { x0:0, y0:595, x1:600, y1:768 },  // 갈라진 논
-      { x0:800, y0:635, x1:1376, y1:768 },  // 마른 논
-    ],
+    { x0: 18, y0: 18, x1: 337, y1: 127 },
+    { x0: 363, y0: 18, x1: 997, y1: 197 },
+    { x0: 593, y0: 118, x1: 787, y1: 217 },
+    { x0: 33, y0: 158, x1: 237, y1: 527 },
+    { x0: 213, y0: 483, x1: 247, y1: 507 },
+    { x0: 503, y0: 228, x1: 557, y1: 262 },
+    { x0: 818, y0: 238, x1: 867, y1: 277 },
+    { x0: 1013, y0: 18, x1: 1358, y1: 117 },
+    { x0: 1023, y0: 188, x1: 1277, y1: 317 },
+    { x0: 1263, y0: 223, x1: 1358, y1: 417 },
+    { x0: 1023, y0: 413, x1: 1237, y1: 507 },
+    { x0: 1043, y0: 518, x1: 1277, y1: 587 },
+    { x0: 1303, y0: 533, x1: 1358, y1: 577 },
+    { x0: 18, y0: 613, x1: 582, y1: 750 },
+    { x0: 818, y0: 653, x1: 1358, y1: 750 },
+  ],
     npcs: [
       { id:'imsul', name:'진주 농민', x:700, y:270, img:'assets/portraits/imsul.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
       { id:'choeje', name:'최제우', x:975, y:300, img:'assets/portraits/choeje.png', look:{ role:'scholar', body:'#4a4a58', accent:'#e0b94a' } },
@@ -972,7 +972,10 @@ const World = {
   transitioning: false,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -1572,6 +1575,9 @@ const Quiz = {
     World.paused = false;
   }
 };
+/* 도해(chart.js)도 이 목록을 보고 낱말을 누를 수 있게 만든다.
+   const 선언은 window에 안 올라가므로 따로 알려 준다. */
+window.GLOSS_TERMS = GLOSSARY;
 
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
 /* drawChart는 assets/chart.js 로 옮겼다 — 서른여섯 곳에 복사돼
@@ -1887,39 +1893,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/deed.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/boss.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/deed.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/boss.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

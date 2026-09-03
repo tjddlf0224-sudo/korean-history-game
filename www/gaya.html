@@ -494,10 +494,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/map/map_component.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/map/map_component.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -509,7 +509,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -600,26 +600,26 @@ const ZONES = {
     img: 'assets/scenes/gaya_gimhae.png', label: '김해 철 시장',
     spawn: { x: 688, y: 470 },
     barriers: [
-      { x0:0, y0:85, x1:330, y1:305 },  // 대장간
-      { x0:165, y0:260, x1:335, y1:345 },  // 모루
-      { x0:0, y0:300, x1:315, y1:475 },  // 덩이쇠 더미
-      { x0:0, y0:375, x1:135, y1:525 },  // 초가
-      { x0:325, y0:160, x1:505, y1:280 },  // 창고
-      { x0:390, y0:10, x1:1015, y1:140 },  // 고분과 담
-      { x0:615, y0:125, x1:805, y1:190 },  // 제단
-      { x0:455, y0:160, x1:1055, y1:220 },  // 개울
-      { x0:1015, y0:0, x1:1125, y1:255 },  // 개울
-      { x0:1015, y0:95, x1:1376, y1:255 },  // 초가집
-      { x0:985, y0:245, x1:1376, y1:465 },  // 장터
-      { x0:1095, y0:445, x1:1335, y1:565 },  // 말과 시렁
-      { x0:295, y0:375, x1:425, y1:525 },  // 버드나무
-      { x0:435, y0:495, x1:545, y1:575 },  // 상자와 통
-      { x0:745, y0:485, x1:1035, y1:645 },  // 수레
-      { x0:470, y0:530, x1:620, y1:768 },  // 배
-      { x0:745, y0:530, x1:850, y1:768 },  // 배
-      { x0:0, y0:600, x1:470, y1:768 },  // 강
-      { x0:850, y0:610, x1:1376, y1:768 },  // 강
-    ],
+    { x0: 32, y0: 117, x1: 298, y1: 273 },
+    { x0: 197, y0: 292, x1: 303, y1: 314 },
+    { x0: 32, y0: 332, x1: 283, y1: 443 },
+    { x0: 32, y0: 407, x1: 103, y1: 493 },
+    { x0: 357, y0: 192, x1: 473, y1: 248 },
+    { x0: 422, y0: 42, x1: 983, y1: 108 },
+    { x0: 647, y0: 146, x1: 773, y1: 168 },
+    { x0: 487, y0: 179, x1: 1023, y1: 201 },
+    { x0: 1047, y0: 32, x1: 1093, y1: 223 },
+    { x0: 1047, y0: 127, x1: 1344, y1: 223 },
+    { x0: 1017, y0: 277, x1: 1344, y1: 433 },
+    { x0: 1127, y0: 477, x1: 1303, y1: 533 },
+    { x0: 327, y0: 407, x1: 393, y1: 493 },
+    { x0: 467, y0: 524, x1: 513, y1: 546 },
+    { x0: 777, y0: 517, x1: 1003, y1: 613 },
+    { x0: 502, y0: 562, x1: 588, y1: 736 },
+    { x0: 777, y0: 562, x1: 818, y1: 736 },
+    { x0: 32, y0: 632, x1: 438, y1: 736 },
+    { x0: 882, y0: 642, x1: 1344, y1: 736 },
+  ],
     npcs: [
       { id:'suro', name:'금관가야 왕', x:420, y:330, img:'assets/portraits/suro.png', look:{ role:'king', body:'#4a5a6b', accent:'#c9a24a' } },
       { id:'ureuk', name:'우륵', x:700, y:240, img:'assets/portraits/ureuk.png', look:{ role:'scholar', body:'#5c4a6b', accent:'#d8c48a' } },
@@ -966,7 +966,10 @@ const World = {
   transitioning: false,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -1503,6 +1506,9 @@ const Quiz = {
     World.paused = false;
   }
 };
+/* 도해(chart.js)도 이 목록을 보고 낱말을 누를 수 있게 만든다.
+   const 선언은 window에 안 올라가므로 따로 알려 준다. */
+window.GLOSS_TERMS = GLOSSARY;
 
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
 /* drawChart는 assets/chart.js 로 옮겼다 — 서른여섯 곳에 복사돼
@@ -1817,38 +1823,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/deed.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/deed.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

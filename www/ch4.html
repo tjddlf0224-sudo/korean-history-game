@@ -433,9 +433,9 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=51"></script>
-<script src="assets/chart.js?v=51"></script>
-<script src="assets/audio.js?v=51"></script>
+<script src="assets/errlog.js?v=53"></script>
+<script src="assets/chart.js?v=53"></script>
+<script src="assets/audio.js?v=53"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -447,7 +447,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=51';   // 존댓말 전환
+const ART_V = '?v=53';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -542,22 +542,13 @@ const ZONES = {
     img: 'assets/scenes/ch4_hongmungwan.png', label: '홍문관',
     spawn: { x: 688, y: 560 },
     barriers: [
-      // 위/아래 벽은 '문 칸'만 얇게 만든다. 서가가 있는 구간은 두껍지만, 문
-      // 앞은 마룻바닥이 문턱까지 이어져 있어서(위 y105·아래 y695까지 바닥)
-      // 벽 하나로 뭉뚱그리면 문에서 한참 떨어진 데서 이동이 걸린다.
-      { x0:0, y0:0, x1:605, y1:148 },         // 위쪽 서가(좌)
-      { x0:800, y0:0, x1:BG_W, y1:148 },      // 위쪽 서가(우)
-      { x0:605, y0:0, x1:800, y1:103 },       // 12시 문짝
-      { x0:0, y0:636, x1:600, y1:BG_H },      // 아래쪽 서가(좌)
-      { x0:800, y0:636, x1:BG_W, y1:BG_H },   // 아래쪽 서가(우)
-      { x0:600, y0:698, x1:800, y1:BG_H },    // 6시 문짝
-      { x0:0, y0:0, x1:190, y1:BG_H },        // 좌측 서가 벽
-      { x0:1190, y0:0, x1:BG_W, y1:BG_H },    // 우측 서가 벽
-      { x0:545, y0:318, x1:832, y1:442 },     // 가운데 탁자
-      { x0:650, y0:278, x1:725, y1:320 },     // 방석(위)
-      { x0:595, y0:448, x1:670, y1:505 },     // 방석(아래 좌)
-      { x0:710, y0:448, x1:785, y1:505 },     // 방석(아래 우)
-    ],
+    { x0: 8, y0: 8, x1: 597, y1: 140 },
+    { x0: 613, y0: 8, x1: 792, y1: 95 },
+    { x0: 553, y0: 326, x1: 824, y1: 434 },
+    { x0: 658, y0: 286, x1: 717, y1: 312 },
+    { x0: 603, y0: 456, x1: 662, y1: 497 },
+    { x0: 718, y0: 456, x1: 777, y1: 497 },
+  ],
     npcs: [
       { id: 'seogeojeong', name: '서거정', x: 400, y: 380, img: 'assets/portraits/seogeojeong.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
     ],
@@ -578,27 +569,28 @@ const ZONES = {
     img: 'assets/scenes/ch4_gyeonggukdaejeon.png', label: '경국대전 편찬실',
     spawn: { x: 690, y: 590 },
     barriers: [
-      { x0:0, y0:0, x1:90, y1:BG_H },        // 좌측 벽·서가
-      { x0:1288, y0:0, x1:BG_W, y1:BG_H },   // 우측 벽·서가
-      { x0:0, y0:0, x1:BG_W, y1:95 },        // 위쪽 벽(가운데가 12시 문)
-      { x0:0, y0:724, x1:BG_W, y1:BG_H },    // 아래쪽 벽
-      { x0:83, y0:686, x1:375, y1:724 },     // 아래 활자 보관함(좌)
-      { x0:1013, y0:686, x1:1293, y1:724 },  // 아래 활자 보관함(우)
-      { x0:993, y0:95, x1:1240, y1:250 },    // 인쇄틀
-      // 1행 책상 3개 + 의자
-      { x0:160, y0:152, x1:320, y1:225 }, { x0:205, y0:240, x1:275, y1:296 },
-      { x0:410, y0:152, x1:575, y1:225 }, { x0:455, y0:240, x1:525, y1:300 },
-      { x0:640, y0:152, x1:803, y1:225 }, { x0:688, y0:240, x1:758, y1:296 },
-      // 가운데 책상(문서 더미 포함)
-      { x0:410, y0:338, x1:575, y1:412 }, { x0:415, y0:412, x1:570, y1:460 },
-      // 우측 중간 책상 2개
-      { x0:800, y0:399, x1:968, y1:479 }, { x0:1050, y0:399, x1:1216, y1:479 },
-      // 3행 책상 4개 + 의자
-      { x0:160, y0:544, x1:325, y1:616 }, { x0:213, y0:624, x1:273, y1:680 },
-      { x0:413, y0:544, x1:575, y1:616 }, { x0:465, y0:624, x1:525, y1:680 },
-      { x0:800, y0:544, x1:968, y1:616 }, { x0:858, y0:624, x1:916, y1:680 },
-      { x0:1050, y0:544, x1:1216, y1:616 }, { x0:1108, y0:624, x1:1163, y1:680 },
-    ],
+    { x0: 91, y0: 694, x1: 367, y1: 716 },
+    { x0: 1021, y0: 694, x1: 1285, y1: 716 },
+    { x0: 1001, y0: 103, x1: 1232, y1: 242 },
+    { x0: 168, y0: 160, x1: 312, y1: 217 },
+    { x0: 213, y0: 248, x1: 267, y1: 288 },
+    { x0: 418, y0: 160, x1: 567, y1: 217 },
+    { x0: 463, y0: 248, x1: 517, y1: 292 },
+    { x0: 648, y0: 160, x1: 795, y1: 217 },
+    { x0: 696, y0: 248, x1: 750, y1: 288 },
+    { x0: 418, y0: 346, x1: 567, y1: 404 },
+    { x0: 423, y0: 420, x1: 562, y1: 452 },
+    { x0: 808, y0: 407, x1: 960, y1: 471 },
+    { x0: 1058, y0: 407, x1: 1208, y1: 471 },
+    { x0: 168, y0: 552, x1: 317, y1: 608 },
+    { x0: 221, y0: 632, x1: 265, y1: 672 },
+    { x0: 421, y0: 552, x1: 567, y1: 608 },
+    { x0: 473, y0: 632, x1: 517, y1: 672 },
+    { x0: 808, y0: 552, x1: 960, y1: 608 },
+    { x0: 866, y0: 632, x1: 908, y1: 672 },
+    { x0: 1058, y0: 552, x1: 1208, y1: 608 },
+    { x0: 1116, y0: 632, x1: 1155, y1: 672 },
+  ],
     npcs: [
       { id: 'seongjong', name: '성종', x: 690, y: 300, img: 'assets/portraits/seongjong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
     ],
@@ -616,17 +608,17 @@ const ZONES = {
     img: 'assets/scenes/ch4_jibang_goeul.png', label: '지방 고을',
     spawn: { x: 680, y: 620 },
     barriers: [
-      { x0:55, y0:30, x1:595, y1:395 },       // 관아(官衙) 담장
-      { x0:710, y0:190, x1:990, y1:505 },     // 향교(鄕校) 담장
-      { x0:250, y0:485, x1:505, y1:635 },     // 향청(鄕廳) 담장
-      { x0:645, y0:35, x1:820, y1:140 },      // 초가집들
-      { x0:980, y0:95, x1:1165, y1:210 },
-      { x0:1110, y0:205, x1:1300, y1:320 },
-      { x0:1080, y0:405, x1:1260, y1:510 },
-      { x0:1005, y0:520, x1:1185, y1:630 },
-      { x0:785, y0:595, x1:940, y1:710 },
-      { x0:0, y0:490, x1:180, y1:610 },
-    ],
+    { x0: 63, y0: 38, x1: 587, y1: 387 },
+    { x0: 718, y0: 198, x1: 982, y1: 497 },
+    { x0: 258, y0: 493, x1: 497, y1: 627 },
+    { x0: 653, y0: 43, x1: 812, y1: 132 },
+    { x0: 988, y0: 103, x1: 1157, y1: 202 },
+    { x0: 1118, y0: 213, x1: 1292, y1: 312 },
+    { x0: 1088, y0: 413, x1: 1252, y1: 502 },
+    { x0: 1013, y0: 528, x1: 1177, y1: 622 },
+    { x0: 793, y0: 603, x1: 932, y1: 702 },
+    { x0: 8, y0: 498, x1: 172, y1: 602 },
+  ],
     npcs: [
       // 각 시설 대문 앞에 한 명씩. 기출 비중대로 관아(수령 13문항)가 가장 크고,
       // 향교 8문항, 유향소 6문항 순이다.
@@ -972,7 +964,10 @@ const World = {
   lastT: 0,
 
   canStand(x, y){
-    const pad = 16;
+    // 발자국. 예전 16은 네 귀퉁이가 32×32를 훑어, 모든 배리어가 사방
+    // 16px 부풀려졌다. 32px보다 좁은 틈이 전부 막혀 "지나갈 수가 없다"는
+    // 제보가 나왔다. 10이면 20×20 — 움집 사이 같은 틈으로 지나갈 수 있다.
+    const pad = 10;
     if (isBarrierPx(this.zone, x-pad, y-pad) || isBarrierPx(this.zone, x+pad, y-pad) ||
         isBarrierPx(this.zone, x-pad, y+pad) || isBarrierPx(this.zone, x+pad, y+pad)) return false;
     for (const n of ZONES[this.zone].npcs){ if (Math.hypot(n.x - x, n.y - y) < 34) return false; }
@@ -2047,38 +2042,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=51"></script>
-<script src="assets/streak.js?v=51"></script>
+<script src="assets/badges.js?v=53"></script>
+<script src="assets/streak.js?v=53"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=51"></script>
-  <script src="assets/fx.js?v=51"></script>
-  <script src="assets/deed.js?v=51"></script>
-  <script src="assets/inkwipe.js?v=51"></script>
-  <script src="assets/dash.js?v=51"></script>
-<script src="assets/juice.js?v=51"></script>
-  <script src="assets/difficulty.js?v=51"></script>
-  <script src="assets/nextauto.js?v=51"></script>
-<script src="assets/heroes_data.js?v=51"></script>
-<script src="assets/heroes.js?v=51"></script>
-<script src="assets/icons.js?v=51"></script>
-<script src="assets/srs.js?v=51"></script>
-<script src="assets/newsflash.js?v=51"></script>
-<script src="assets/timeline.js?v=51"></script>
-<script src="assets/journey.js?v=51"></script>
-<script src="assets/season.js?v=51"></script>
-<script src="assets/items.js?v=51"></script>
-  <script src="assets/gold.js?v=51"></script>
-  <script src="assets/ask.js?v=51"></script>
-  <script src="assets/ads.js?v=51"></script>
-  <script src="assets/energy.js?v=51"></script>
-  <script src="assets/daily.js?v=51"></script>
-  <script src="assets/unlock.js?v=51"></script>
-  <script src="assets/guide.js?v=51"></script>
-  <script src="assets/minigames.js?v=51"></script>
-  <script src="assets/quests.js?v=51"></script>
-  <script src="assets/offline.js?v=51"></script>
-  <script src="assets/telemetry.js?v=51"></script>
-<script src="assets/autowalk.js?v=51"></script>
+<script src="assets/rank.js?v=53"></script>
+  <script src="assets/fx.js?v=53"></script>
+  <script src="assets/deed.js?v=53"></script>
+  <script src="assets/inkwipe.js?v=53"></script>
+  <script src="assets/dash.js?v=53"></script>
+<script src="assets/juice.js?v=53"></script>
+  <script src="assets/difficulty.js?v=53"></script>
+  <script src="assets/nextauto.js?v=53"></script>
+<script src="assets/heroes_data.js?v=53"></script>
+<script src="assets/heroes.js?v=53"></script>
+<script src="assets/icons.js?v=53"></script>
+<script src="assets/srs.js?v=53"></script>
+<script src="assets/newsflash.js?v=53"></script>
+<script src="assets/timeline.js?v=53"></script>
+<script src="assets/journey.js?v=53"></script>
+<script src="assets/season.js?v=53"></script>
+<script src="assets/items.js?v=53"></script>
+  <script src="assets/gold.js?v=53"></script>
+  <script src="assets/ask.js?v=53"></script>
+  <script src="assets/ads.js?v=53"></script>
+  <script src="assets/energy.js?v=53"></script>
+  <script src="assets/daily.js?v=53"></script>
+  <script src="assets/unlock.js?v=53"></script>
+  <script src="assets/guide.js?v=53"></script>
+  <script src="assets/minigames.js?v=53"></script>
+  <script src="assets/quests.js?v=53"></script>
+  <script src="assets/offline.js?v=53"></script>
+  <script src="assets/telemetry.js?v=53"></script>
+<script src="assets/autowalk.js?v=53"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
