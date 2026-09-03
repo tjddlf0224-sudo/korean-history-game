@@ -1116,9 +1116,14 @@ const NPC_DATA = {
   jungjong_0: {
     name: '중종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/jungjong_king.png',
     beats: [
-      { who:'npc', t:'과인은 스스로 이 자리에 오른 것이 아니다. 신하들이 과인을 데려다 앉혔다.' },
-      { who:'npc', t:'박원종·성희안·유순정. 그들이 형님을 몰아내고 과인을 왕으로 세웠지.' },
-      { who:'npc', t:'…그러니 과인이 그들에게 무엇을 말할 수 있겠느냐. 조광조를 불러들인 것도, 끝내 내친 것도 과인이다.' },
+      { who:'npc', t:'(교서를 가리키며) 이 옥새, 한번 쥐어 보게.' },
+      { who:'me', t:'(쥐어 든다) …무겁습니다.' },
+      { who:'npc', t:'무겁지. 과인이 스스로 쥔 자리가 아니다.',
+        chart:{ type:'timeline', title:'연산군에서 중종으로', marks:[ { y:'1494년', t:'연산군 즉위' }, { y:'1506년', t:'중종반정', on:true } ] } },
+      { who:'npc', t:'박원종·성희안·유순정이 형님을 몰아내고 과인을 앉혔네.',
+        chart:{ type:'faces', title:'반정으로 갈린 두 왕', people:[ { img:'yeonsangun_king', n:'연산군', s:'폐위' }, { img:'jungjong_king', n:'중종', s:'옹립' } ] } },
+      { who:'me', t:'전하께서 스스로 정하신 일은 무엇입니까?' },
+      { who:'npc', t:'(잠시 말이 없다) …조광조를 부른 것도, 내친 것도 과인이다.' },
     ],
     quizSeq: [
       { q:'연산군을 몰아내고 중종을 세운 사건은?', opts:['중종반정','계유정난'], answer:0, src:[27,46,47,59,61],
@@ -1129,10 +1134,17 @@ const NPC_DATA = {
   yeonsangun_0: {
     name: '연산군', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/yeonsangun_king.png',
     beats: [
-      { who:'npc', t:'…과인의 어미가 어찌 죽었는지, 그대는 아는가.' },
-      { who:'npc', t:'폐비 윤씨. 사약을 받고 돌아가셨다. 과인은 그 일을 스무 해가 지나 알았다.' },
-      { who:'npc', t:'그 일에 관여한 자들을 하나도 남기지 않았다. 이미 죽은 자는 무덤에서 꺼내어 벌하였다.' },
-      { who:'npc', t:'…무섭다는 눈으로 보는군. 그래, 다들 그런 눈으로 과인을 본다.' },
+      { who:'npc', t:'(문서함을 가리키며) 게서 종이를 하나 찾아보게.',
+        chart:{ type:'faces', title:'갑자사화를 부른 왕', people:[ { img:'yeonsangun_king', n:'연산군', s:'재위 1494~1506' } ] } },
+      { who:'me', t:'(뒤적이다 찾는다) …폐비 윤씨, 사약이라 적혀 있습니다.' },
+      { who:'npc', t:'과인의 어미다. 스무 해가 지나서야 알았다.',
+        chart:{ type:'stat', title:'갑자사화의 규모', items:[ { v:'239명', l:'피화된 인원' }, { v:'절반↑', l:'사형된 비율' } ] } },
+      { who:'npc', t:'(한숨) 그 일에 관여한 자, 하나도 남기지 않았다.' },
+      { who:'me', t:'(문서를 넘기다 멈칫한다) …이렇게까지 하셨습니까.' },
+      { who:'npc', t:'이미 죽은 자도 무덤에서 꺼내어 벌하였지.' },
+      { who:'me', t:'무오사화보다 더 참혹했다고 들었습니다.',
+        chart:{ type:'vs', title:'무오사화와 갑자사화', left:{ n:'무오사화', s:'52명 처벌' }, right:{ n:'갑자사화', s:'239명 피화' }, mid:'1498→1504' } },
+      { who:'npc', t:'그래. 다들 두려운 눈으로 과인을 본다.' },
     ],
     quizSeq: [
       { q:'갑자사화는 어느 왕 때 일어났는가?', opts:['연산군','중종'], answer:0, src:[31,34,38,42,48,54,59,61,66,73],
@@ -1144,20 +1156,36 @@ const NPC_DATA = {
   },
   kimilson_repeat: {
     name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
-    beats: [ { who:'npc', t:'…이미 지나간 일이네. 다른 이들의 이야기도 들어보게.' } ],
+    beats: [
+      { who:'npc', t:'…이미 지나간 일이네. 다른 이들의 이야기도 들어보게.' },
+    ],
     quiz: null
   },
   jogwangjo_0: {
     name: '조광조', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.8-1.3-4-2-8-2v13c4 0 6.2.7 8 2 1.8-1.3 4-2 8-2V4c-4 0-6.2.7-8 2z"/><line x1="12" y1="6" x2="12" y2="19"/></svg>', img: 'assets/portraits/jogwangjo.png',
     beats: [
-      { who:'npc', t:'연산군을 몰아내고 새 임금을 세운 중종반정, 그 덕에 저 같은 사람도 이렇게 조정에 설 수 있었지요.' },
-      { who:'npc', t:'하지만 반정으로 왕이 바뀌었어도, 이 나라엔 아직 고칠 게 산더미입니다. 소격서부터 없애야 합니다 — 도교 제사를 지내는 그런 곳에, 나라 살림을 쓸 이유가 없지요.' },
-      { who:'npc', t:'현량과로 인재를 천거해서 뽑으면, 시험만으로는 알 수 없는 사람의 됨됨이까지 볼 수 있습니다.' },
-      { who:'npc', t:'그런데 어느 날, 궁궐 뜰의 나뭇잎에 글자가 돋아났다는 소문이 돌았습니다. 走肖爲王 — 주초가 왕이 된다. 走(주)와 肖(초)를 위아래로 붙이면 趙(조), 제 성씨입니다.' },
-      { who:'npc', t:'나뭇잎에 꿀로 그 넉 자를 써 두면 벌레가 단맛을 따라 갉아먹어 글자 모양이 남지요. 누군가 그렇게 해 두고는, 하늘이 낸 조짐이라며 임금께 가져갔다고 합니다.' },
-      { who:'npc', t:'…후대의 기록에 전하는 이야기라 정말 그랬는지는 알 수 없습니다. 다만 그런 이야기가 만들어질 만큼, 저를 치우고 싶어 한 이들이 많았다는 뜻이겠지요.' },
-      { who:'npc', t:'…내 개혁은 너무 빨랐습니다. 오래된 공신들이 위기감을 느꼈고, 결국 저를 비롯한 사림들을 몰아냈지요 — 기묘사화. 저는 유배지에서 사약을 받았습니다.' },
-      { who:'npc', t:'…내 뜻이 헛되지 않았기를. 자네가 기억해주게.' },
+      { who:'npc', t:'중종반정 덕에 저 같은 이도 조정에 설 수 있었지요.',
+        chart:{ type:'faces', title:'중종 대의 신진 사림', people:[ { img:'jogwangjo', n:'조광조', s:'현량과로 등용' } ] } },
+      { who:'me', t:'그런데 왜 그리 서두르셨습니까?' },
+      { who:'npc', t:'고칠 게 산더미였으니까요. 소격서부터 없애야 했습니다.',
+        chart:{ type:'compare', title:'훈구와 사림', cols:[ { h:'훈구', items:[ '반정 공신', '기득권 세력' ] }, { h:'사림', hi:true, items:[ '천거로 등용', '개혁을 추진' ] } ] } },
+      { who:'me', t:'소격서가 무엇을 하는 곳입니까?' },
+      { who:'npc', t:'하늘과 별에 제사 지내는 관청입니다. 나라 살림 쓸 이유가 없지요.' },
+      { who:'npc', t:'현량과로 인재를 천거해 뽑으면, 사람됨까지 볼 수 있습니다.',
+        chart:{ type:'grid', title:'조광조의 개혁', head:[ '정책', '내용' ], rows:[ [ '소격서 폐지', '도교 제사 관청 폐지' ], [ '현량과', '천거로 인재 등용' ], [ '위훈삭제', '공신 76인 훈작 삭탈' ] ] } },
+      { who:'npc', t:'(뜰을 가리키며) 저 나뭇잎 하나 주워 와 보게.' },
+      { who:'me', t:'(주워 든다) …어? 글자가 있습니다.',
+        chart:{ type:'quote', title:'나뭇잎에 새겨진 넉 자', text:'走肖爲王 — 走와 肖를 위아래로 붙이면 趙, 제 성씨입니다.', from:'전하는 이야기' } },
+      { who:'npc', t:'꿀로 넉 자를 써 두면, 벌레가 갉아먹어 글자가 남지요.' },
+      { who:'npc', t:'누군가 그리 해 두고 하늘의 조짐이라며 임금께 가져갔답니다.' },
+      { who:'me', t:'(나뭇잎을 내려놓는다) …후대의 이야기일 뿐이라면서요.' },
+      { who:'npc', t:'그렇습니다. 다만 저를 치우고 싶던 이가 많았다는 뜻이지요.' },
+      { who:'me', t:'그래서 어찌 되셨습니까?' },
+      { who:'npc', t:'제 개혁은 너무 빨랐습니다. 공신들이 위기감을 느꼈지요.' },
+      { who:'npc', t:'결국 사림이 쫓겨났습니다 — 기묘사화입니다.',
+        chart:{ type:'stat', title:'기묘사화, 1519년', items:[ { v:'11월', l:'조광조 등 축출' }, { v:'사약', l:'조광조의 최후' } ] } },
+      { who:'me', t:'…사약을, 정말 받으셨습니까?' },
+      { who:'npc', t:'(조용히) 예. 제 뜻이 헛되지 않았기를. 자네가 기억해주게.' },
     ],
     quiz: null,
     startsMini: 2
@@ -1165,8 +1193,17 @@ const NPC_DATA = {
   jogwangjo_1: {
     name: '조광조', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.8-1.3-4-2-8-2v13c4 0 6.2.7 8 2 1.8-1.3 4-2 8-2V4c-4 0-6.2.7-8 2z"/><line x1="12" y1="6" x2="12" y2="19"/></svg>', img: 'assets/portraits/jogwangjo.png',
     beats: [
-      { who:'npc', t:'다시 오셨군요. 제 이야기가 앞서 들으신 무오사화와 헷갈리실 법도 하지요.' },
-      { who:'npc', t:'개혁은 소격서와 현량과뿐이 아니었습니다. 「소학」을 널리 읽혀 어릴 때부터 사람의 도리를 배우게 하려 했고, 공납의 폐단을 고치고자 쌀로 걷자는 수미법도 건의했지요.' }
+      { who:'npc', t:'다시 오셨군요. 무오사화와 헷갈리시지요?' },
+      { who:'me', t:'두 사화 다 조광조 님 일인 줄 알았습니다.' },
+      { who:'npc', t:'아닙니다. 무오는 김일손의 사초, 저는 기묘사화지요.' },
+      { who:'npc', t:'개혁은 소격서·현량과뿐이 아니었습니다.',
+        chart:{ type:'steps', title:'조광조 개혁의 순서', steps:[ { t:'1518년, 소격서 폐지 주장' }, { t:'1519년, 현량과 시행' }, { t:'1519년, 위훈삭제' }, { t:'1519년 11월, 기묘사화' } ] } },
+      { who:'npc', t:'「소학」을 널리 읽혀 사람의 도리부터 가르치려 했지요.' },
+      { who:'me', t:'「소학」이라면 아이들이 배우는 책 아닙니까?' },
+      { who:'npc', t:'그렇습니다. 어릴 때부터 사람의 도리를 익히자는 뜻이지요.' },
+      { who:'me', t:'공납의 폐단은 어찌 고치려 하셨습니까?' },
+      { who:'npc', t:'현물 대신 쌀로 걷자 했지요 — 수미법입니다.',
+        chart:{ type:'compare', title:'수미법과 대동법', cols:[ { h:'수미법', items:[ '조광조 건의', '시행 못함' ] }, { h:'대동법', hi:true, items:[ '광해군부터', '결실을 맺음' ] } ] } },
     ],
     quizSeq: [
     ]
@@ -1175,23 +1212,27 @@ const NPC_DATA = {
   kimilson_0: {
     name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
     beats: [
-      { who:'npc', t:'무오사화의 서막이었지.' },
-      { who:'npc', name:'연산군', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img:'assets/portraits/yeonsangun.png', t:'김일손, 네놈이 쓴 사초에 무슨 내용이 있는지 내가 모를 줄 알았느냐. 세조 할아버님을 비방하는 글이라니!' },
-      { who:'npc', t:'신은 역사를 있는 그대로 기록했을 뿐입니다…' },
-      { who:'npc', t:'스승 김종직 선생의 「조의제문」을 사초에 실은 것이 빌미가 되어, 많은 사림 인사가 목숨을 잃었네 — 무오사화였지.' },
-      { who:'npc', t:'몇 년 뒤, 연산군은 자신의 생모 폐비 윤씨의 죽음에 관련된 이들을 찾아내 대규모로 숙청했네. 갑자사화 — 조선 전기 사화 중 가장 많은 희생자를 냈지.' },
-      { who:'npc', t:'그 성정이 하루아침에 생긴 게 아닐세. 세자 시절 이미 낌새가 있었지 — 아바마마 성종께서 손수 기르시던 사슴을 활로 쏘아 죽인 일도 있었다더군.' },
-      { who:'npc', t:'그렇게 폭정이 극에 달하자, 결국 신하들이 힘을 모아 연산군을 몰아내고 새 임금을 세웠네 — 중종반정이라 부르는 사건이었지.' },
-      { who:'npc', chart:{
-          head:['사화','연도','왕','불씨'],
-          rows:[['무오','1498','연산군','김일손의 사초 — 조의제문'],
-                ['갑자','1504','연산군','폐비 윤씨 사사 사건'],
-                ['기묘','1519','중종','주초위왕 — 조광조 제거'],
-                ['을사','1545','명종','외척 다툼 — 대윤과 소윤']],
-          note:'순서는 <b>“무오년에 갑자기 기묘하게 을씨년스럽다”</b>.<br>왕은 <b>연·연·중·명</b> — 앞의 둘이 연산군인 것만 잡으면 절반은 끝일세.'
-        },
-        t:'네 번의 사화를 한 눈에 놓고 보게. 이름만 외우면 반드시 엉키네.' },
-      { who:'npc', t:'…이제 네가 이 비극의 흐름을 얼마나 아는지 보여다오.' },
+      { who:'npc', t:'(사초 더미를 밀며) 자네도 한번 옮겨 적어 보게.',
+        chart:{ type:'stat', title:'사초란', items:[ { v:'사초', l:'사관의 초고 기록' }, { v:'실록', l:'훗날 이를 바탕으로 편찬' } ] } },
+      { who:'me', t:'(베껴 적다 멈칫한다) …스승님의 글이 왜 여기 있습니까?' },
+      { who:'npc', t:'「조의제문」일세. 자네가 방금 화근을 찾은 걸세.' },
+      { who:'me', t:'이게 무슨 뜻이길래…' },
+      { who:'npc', t:'(낮은 목소리로) 세조께서 단종의 자리를 뺏은 걸 빗댄 글이라 읽혔지.',
+        chart:{ type:'faces', title:'무오사화의 두 사람', people:[ { img:'kimilson', n:'김일손', s:'사관' }, { img:'yeonsangun', n:'연산군', s:'왕' } ] } },
+      { who:'npc', t:'김일손, 네 사초에 세조를 헐뜯는 글이 있다지!', name:'연산군', img:'assets/portraits/yeonsangun.png', icon:'<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>' },
+      { who:'npc', t:'신은 역사를 있는 그대로 적었을 뿐입니다.',
+        chart:{ type:'stat', title:'무오사화, 1498년', items:[ { v:'52명', l:'처벌된 인원' }, { v:'한 달', l:'마무리까지 걸린 기간' } ] } },
+      { who:'npc', t:'스승의 글이 빌미가 되어 사림이 목숨을 잃었네 — 무오사화.' },
+      { who:'npc', t:'몇 해 뒤, 폐비 윤씨의 죽음을 캐물어 또 숙청했지 — 갑자사화.',
+        chart:{ type:'timeline', title:'무오에서 중종반정까지', marks:[ { y:'1498', t:'무오사화' }, { y:'1504', t:'갑자사화' }, { y:'1506', t:'중종반정', on:true } ] } },
+      { who:'me', t:'…세자 시절부터 그런 낌새가 있었습니까?' },
+      { who:'npc', t:'성종께서 기르시던 사슴을, 세자 시절에 활로 쏘아 죽였다더군.' },
+      { who:'npc', t:'결국 신하들이 연산군을 몰아내고 새 임금을 세웠네 — 중종반정.',
+        chart:{ type:'vs', title:'중종반정, 1506년', left:{ n:'연산군', s:'폐위' }, right:{ n:'중종', s:'옹립' } } },
+      { who:'me', t:'네 번이나 이런 일이 있었단 겁니까?' },
+      { who:'npc', t:'그렇다네. 하나씩 놓고 봄세.',
+        chart:{ type:'grid', title:'네 번의 사화, 한눈에', head:[ '사화', '연도', '왕', '발단', '피해' ], rows:[ [ '무오', '1498', '연산군', '조의제문(사초)', '김일손 처형' ], [ '갑자', '1504', '연산군', '폐비 윤씨 사사', '한명회 부관참시' ], [ '기묘', '1519', '중종', '주초위왕', '조광조 사사' ], [ '을사', '1545', '명종', '대윤·소윤 다툼', '윤임 처형' ] ], note:'순서는 <b>“무오년에 갑자기 기묘하게 을씨년스럽다”</b>.<br>왕은 <b>연·연·중·명</b> — 앞의 둘이 연산군인 것만 잡으면 절반은 끝일세.' } },
+      { who:'npc', t:'이제 네가 이 흐름을 얼마나 아는지 보여다오.' },
     ],
     quiz: null,
     startsMini: 1
@@ -1199,7 +1240,10 @@ const NPC_DATA = {
   kimilson_1: {
     name: '김일손', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>', img: 'assets/portraits/kimilson.png',
     beats: [
-      { who:'npc', t:'다시 왔군. 무오사화와 갑자사화, 두 사건이 자꾸 뒤섞이지 않는가? 하나씩 정리해보세.' }
+      { who:'npc', t:'다시 왔군. 무오사화와 갑자사화, 자꾸 헷갈리지?',
+        chart:{ type:'timeline', title:'네 번의 사화', marks:[ { y:'1498', t:'무오' }, { y:'1504', t:'갑자' }, { y:'1519', t:'기묘' }, { y:'1545', t:'을사', on:true } ] } },
+      { who:'me', t:'네, 순서도 가물가물합니다.' },
+      { who:'npc', t:'(웃으며) 하나씩 짚어보세.' },
     ],
     quizSeq: [
       { q:'조의제문을 사초에 실어 무오사화의 빌미를 제공한 인물은?', opts:['김일손','조광조'], answer:0, src:[10,12,13,14,26,29,31,38,45,47,48,57,59,63,66,73,76],
@@ -1213,15 +1257,25 @@ const NPC_DATA = {
   },
   jogwangjo_repeat: {
     name: '조광조', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.8-1.3-4-2-8-2v13c4 0 6.2.7 8 2 1.8-1.3 4-2 8-2V4c-4 0-6.2.7-8 2z"/><line x1="12" y1="6" x2="12" y2="19"/></svg>', img: 'assets/portraits/jogwangjo.png',
-    beats: [ { who:'npc', t:'…이미 지나간 일입니다. 다른 이들의 이야기도 들어보시지요.' } ],
+    beats: [
+      { who:'npc', t:'…이미 지나간 일입니다. 다른 이들의 이야기도 들어보시지요.' },
+    ],
     quiz: null
   },
   commoner1_0: {
     name: '나인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><path d="M7.5 6h9l-1.2 7H8.7z"/><line x1="12" y1="13" x2="12" y2="16"/><line x1="9" y1="16" x2="9" y2="21"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="15" y1="16" x2="15" y2="21"/></svg>', img: 'assets/portraits/gungnyeo.png',
     beats: [
-      { who:'npc', t:'인종 임금께서 즉위 1년도 안 되어 세상을 떠나시니, 어린 명종을 대신해 문정왕후께서 수렴청정을 시작하셨지.' },
-      { who:'npc', t:'이번엔 윤임 대감 쪽 사람들이 쫓겨났다더군… 다음엔 또 누가 화를 입을지.' },
-      { who:'npc', t:'왕실 외척인 대윤과 소윤이 권력을 다투었고, 그 싸움에 또다시 많은 사림이 휘말렸네 — 을사사화라 하더군.' },
+      { who:'npc', t:'(목소리를 낮추며) 인종 전하께서 1년도 못 채우고 승하하셨네.',
+        chart:{ type:'grid', title:'왕위, 빠르게 바뀌다', head:[ '왕', '재위' ], rows:[ [ '인종', '1년 미만' ], [ '명종', '어린 나이에 즉위' ] ] } },
+      { who:'npc', t:'어린 명종을 대신해 문정왕후께서 수렴청정을 하신다더군.' },
+      { who:'me', t:'수렴청정이 무엇입니까?' },
+      { who:'npc', t:'발 뒤에서 왕대비가 대신 정치를 돌보는 걸세.' },
+      { who:'me', t:'수렴청정이라니… 왕대비의 힘이 크군요.' },
+      { who:'npc', t:'(주위를 살피며) 이번엔 윤임 대감 쪽이 쫓겨났다더군.' },
+      { who:'me', t:'윤임이면… 대윤 말입니까?' },
+      { who:'npc', t:'그렇지. 외척인 대윤과 소윤이 다퉜네.',
+        chart:{ type:'vs', title:'대윤과 소윤', left:{ n:'대윤', s:'윤임 · 밀려남' }, right:{ n:'소윤', s:'윤원형 · 승리' }, mid:'외척 다툼' } },
+      { who:'npc', t:'그 싸움에 사림도 또 휘말렸지 — 을사사화라 하더군.' },
     ],
     quiz: null,
     startsMini: 3
@@ -1229,7 +1283,10 @@ const NPC_DATA = {
   commoner1_1: {
     name: '나인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><path d="M7.5 6h9l-1.2 7H8.7z"/><line x1="12" y1="13" x2="12" y2="16"/><line x1="9" y1="16" x2="9" y2="21"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="15" y1="16" x2="15" y2="21"/></svg>', img: 'assets/portraits/gungnyeo.png',
     beats: [
-      { who:'npc', t:'또 왔는가? 을사사화 이야기, 좀 더 짚어볼까.' }
+      { who:'npc', t:'또 왔는가? 을사사화, 좀 더 짚어볼까.',
+        chart:{ type:'grid', title:'을사사화, 1545년', head:[ '갈래', '인물' ], rows:[ [ '대윤', '윤임 · 밀려남' ], [ '소윤', '윤원형 · 승리' ] ] } },
+      { who:'me', t:'윤임과 윤원형, 자꾸 헷갈립니다.' },
+      { who:'npc', t:'둘 다 외척일세. 다만 승자는 소윤—윤원형이었지.' },
     ],
     quizSeq: [
       { q:'을사사화는 어느 왕 즉위 초에 일어났는가?', opts:['명종','선조'], answer:0, src:[12,23,30,33,34,35,41,42,45,48,52,54,62,65,71,72,75],
@@ -1241,7 +1298,9 @@ const NPC_DATA = {
   },
   commoner1_repeat: {
     name: '나인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><path d="M7.5 6h9l-1.2 7H8.7z"/><line x1="12" y1="13" x2="12" y2="16"/><line x1="9" y1="16" x2="9" y2="21"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="15" y1="16" x2="15" y2="21"/></svg>', img: 'assets/portraits/gungnyeo.png',
-    beats: [ { who:'npc', t:'…나야 그저 소문으로 들었을 뿐이네.' } ],
+    beats: [
+      { who:'npc', t:'…나야 그저 소문으로 들었을 뿐이네.' },
+    ],
     quiz: null
   }
 };
