@@ -278,6 +278,13 @@
   #dlg-frame.alt-speaker #dlg-panel { background: #17222bee; border-color: #6f9bb5; }
   #dlg-frame.alt-speaker .dlg-name { color: #9fd0e8; }
   #dlg-frame.alt-speaker .dlg-portrait { border-color: #6f9bb5; box-shadow: 0 10px 22px rgba(0,0,0,.5), 0 0 0 2px #6f9bb5; }
+  /* 주인공이 말하는 차례(who:'me'). 색을 바꿔 '내가 말하는 중'을 알린다 —
+     끼어드는 인물(alt-speaker)과도 다른 색이라 셋이 안 섞인다. */
+  #dlg-frame.me-speaker #dlg-panel { background: #1d2417ee; border-color: #7faf8b; }
+  #dlg-frame.me-speaker .dlg-name { color: #bfe6cb; }
+  #dlg-frame.me-speaker .dlg-portrait { border-color: #7faf8b;
+    box-shadow: 0 10px 22px rgba(0,0,0,.5), 0 0 0 2px #7faf8b;
+    background-size: 150%; background-position: center 22%; image-rendering: pixelated; }
   /* 대화창 위에 띄우는 작은 표. 사화처럼 '이름이 넷인데 왕이 누구였나'가
      엉키는 것들은 글로만 읽어서는 안 남아서, 표로 한 번 보여 준다. */
   .dlg-chart { margin: 2px 0 10px; border: 1px solid rgba(255,255,255,.22); border-radius: 8px; overflow: hidden; }
@@ -471,8 +478,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=7"></script>
-<script src="assets/audio.js?v=36"></script>
+<script src="assets/map/map_component.js?v=37"></script>
+<script src="assets/chart.js?v=37"></script>
+<script src="assets/audio.js?v=37"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -484,7 +492,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=36';   // 존댓말 전환
+const ART_V = '?v=37';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1416,52 +1424,8 @@ const Quiz = {
 };
 
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
-function drawChart(c){
-  if (c.type === 'bar'){
-    // 데이터가 이미 퍼센트(예: 인구 비율)면 c.max:100을 준다 — 안 주면 이
-    // 묶음 안에서 제일 큰 값을 기준으로 상대 비교한다(예: 경공업 대 중화학
-    // 처럼 절대치가 아니라 서로 견주는 게 목적인 데이터). c.max를 빠뜨리면
-    // '70%'가 이 데이터의 최댓값이라는 이유만으로 막대가 꽉 차 버려서,
-    // 마치 70%가 100%인 것처럼 보이는 오해가 생긴다(실제로 지적받은 문제).
-    const max = c.max || Math.max.apply(null, c.bars.map(b => b.v));
-    return c.bars.map(b =>
-      '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
-      + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'
-      + '<div class="bar-val">' + (b.text || b.v) + '</div></div>').join('');
-  }
-  if (c.type === 'flow'){
-    return '<div class="flow">' + c.steps.map((s, i) =>
-      (i ? '<div class="flow-arrow">▶</div>' : '')
-      + '<div class="flow-step"><b>' + s.t + '</b>' + (s.s || '') + '</div>').join('') + '</div>';
-  }
-  if (c.type === 'tree'){
-    return '<div class="tree"><div class="tree-root">' + c.root + '</div><div class="tree-branch">'
-      + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
-          '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
-        ).join('') + '</div>').join('') + '</div></div>';
-  }
-  if (c.type === 'kings'){
-    // 왕위 계승 띠 — 지금 이 대사가 누구·어느 왕(들) 이야기인지 금색
-    // 테두리로 짚어 준다. main은 한 나라(왕조)의 계승 순서, cross는
-    // 같은 시기 다른 나라 왕(있을 때만 따로 한 줄 더).
-    // cross 항목이 null이면(main의 특정 칸과 짝을 맞추려고 비워 둔 자리)
-    // 자리만 차지하고 안 보이는 빈 칸으로 그린다.
-    const badge = (k) => !k ? '<div class="king-badge kb-spacer"></div>' :
-      '<div class="king-badge' + (k.active ? ' active' : '') + '">'
-      + (k.dynasty ? '<div class="kb-dynasty">' + k.dynasty + '</div>' : '')
-      + '<div class="kb-name">' + k.name + '</div>'
-      + (k.note ? '<div class="kb-note">' + k.note + '</div>' : '') + '</div>';
-    let out = '<div class="kings-row">' + c.main.map(badge).join('') + '</div>';
-    if (c.cross && c.cross.length){
-      out += '<div class="kings-row kings-cross">' + c.cross.map(badge).join('') + '</div>';
-    }
-    return out;
-  }
-  return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
-    + '</tr></thead><tbody>'
-    + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
-    + '</tbody></table>';
-}
+/* drawChart는 assets/chart.js 로 옮겼다 — 서른여섯 곳에 복사돼
+   판본이 셋으로 갈려 있었고, 종류를 더하려면 매번 다 고쳐야 했다. */
 
 /* NPC 이름표. 예전에는 글자만 챕터 색으로 찍었는데, 흙바닥이나 마루처럼
    비슷한 밝기 위에서는 읽히지가 않았다(5화 서원 마당에서 붉은 글씨가
@@ -1518,13 +1482,18 @@ const Dialog = {
     if (prevEl) prevEl.style.visibility = this.idx > 0 ? 'visible' : 'hidden';
     // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
     // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
-    const interjecting = !!beat.name && beat.name !== this.data.name;
-    document.getElementById('dlg-frame').classList.toggle('alt-speaker', interjecting);
+    const isMe = beat.who === 'me';
+    const interjecting = !isMe && !!beat.name && beat.name !== this.data.name;
+    const frameEl = document.getElementById('dlg-frame');
+    frameEl.classList.toggle('alt-speaker', interjecting);
+    frameEl.classList.toggle('me-speaker', isMe);
     const nameEl = document.getElementById('dlg-name');
-    if (nameEl) nameEl.textContent = beat.name || this.data.name;
+    if (nameEl) nameEl.textContent = isMe ? '나' : (beat.name || this.data.name);
     const portraitEl = document.getElementById('dlg-portrait');
     if (portraitEl){
-      const img = beat.img || (beat.name ? null : this.data.img);
+      // 주인공 차례면 주인공 얼굴로 바꾼다(걷기 스프라이트의 정면 한 컷)
+      const img = isMe ? 'assets/player/down_0.png'
+                       : (beat.img || (beat.name ? null : this.data.img));
       if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
       else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon || '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg>'; }
     }
@@ -1718,38 +1687,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=36"></script>
-<script src="assets/streak.js?v=36"></script>
+<script src="assets/badges.js?v=37"></script>
+<script src="assets/streak.js?v=37"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=36"></script>
-  <script src="assets/fx.js?v=36"></script>
-  <script src="assets/deed.js?v=36"></script>
-  <script src="assets/inkwipe.js?v=36"></script>
-  <script src="assets/dash.js?v=36"></script>
-<script src="assets/juice.js?v=36"></script>
-  <script src="assets/difficulty.js?v=36"></script>
-  <script src="assets/nextauto.js?v=36"></script>
-<script src="assets/heroes_data.js?v=36"></script>
-<script src="assets/heroes.js?v=36"></script>
-<script src="assets/icons.js?v=36"></script>
-<script src="assets/srs.js?v=36"></script>
-<script src="assets/newsflash.js?v=36"></script>
-<script src="assets/timeline.js?v=36"></script>
-<script src="assets/journey.js?v=36"></script>
-<script src="assets/season.js?v=36"></script>
-<script src="assets/items.js?v=36"></script>
-  <script src="assets/gold.js?v=36"></script>
-  <script src="assets/ask.js?v=36"></script>
-  <script src="assets/ads.js?v=36"></script>
-  <script src="assets/energy.js?v=36"></script>
-  <script src="assets/daily.js?v=36"></script>
-  <script src="assets/unlock.js?v=36"></script>
-  <script src="assets/guide.js?v=36"></script>
-  <script src="assets/minigames.js?v=36"></script>
-  <script src="assets/quests.js?v=36"></script>
-  <script src="assets/offline.js?v=36"></script>
-  <script src="assets/telemetry.js?v=36"></script>
-<script src="assets/autowalk.js?v=36"></script>
+<script src="assets/rank.js?v=37"></script>
+  <script src="assets/fx.js?v=37"></script>
+  <script src="assets/deed.js?v=37"></script>
+  <script src="assets/inkwipe.js?v=37"></script>
+  <script src="assets/dash.js?v=37"></script>
+<script src="assets/juice.js?v=37"></script>
+  <script src="assets/difficulty.js?v=37"></script>
+  <script src="assets/nextauto.js?v=37"></script>
+<script src="assets/heroes_data.js?v=37"></script>
+<script src="assets/heroes.js?v=37"></script>
+<script src="assets/icons.js?v=37"></script>
+<script src="assets/srs.js?v=37"></script>
+<script src="assets/newsflash.js?v=37"></script>
+<script src="assets/timeline.js?v=37"></script>
+<script src="assets/journey.js?v=37"></script>
+<script src="assets/season.js?v=37"></script>
+<script src="assets/items.js?v=37"></script>
+  <script src="assets/gold.js?v=37"></script>
+  <script src="assets/ask.js?v=37"></script>
+  <script src="assets/ads.js?v=37"></script>
+  <script src="assets/energy.js?v=37"></script>
+  <script src="assets/daily.js?v=37"></script>
+  <script src="assets/unlock.js?v=37"></script>
+  <script src="assets/guide.js?v=37"></script>
+  <script src="assets/minigames.js?v=37"></script>
+  <script src="assets/quests.js?v=37"></script>
+  <script src="assets/offline.js?v=37"></script>
+  <script src="assets/telemetry.js?v=37"></script>
+<script src="assets/autowalk.js?v=37"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

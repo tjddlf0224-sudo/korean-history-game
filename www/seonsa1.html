@@ -297,6 +297,13 @@
   #dlg-frame.alt-speaker #dlg-panel { background: #17222bee; border-color: #6f9bb5; }
   #dlg-frame.alt-speaker .dlg-name { color: #9fd0e8; }
   #dlg-frame.alt-speaker .dlg-portrait { border-color: #6f9bb5; box-shadow: 0 10px 22px rgba(0,0,0,.5), 0 0 0 2px #6f9bb5; }
+  /* 주인공이 말하는 차례(who:'me'). 색을 바꿔 '내가 말하는 중'을 알린다 —
+     끼어드는 인물(alt-speaker)과도 다른 색이라 셋이 안 섞인다. */
+  #dlg-frame.me-speaker #dlg-panel { background: #1d2417ee; border-color: #7faf8b; }
+  #dlg-frame.me-speaker .dlg-name { color: #bfe6cb; }
+  #dlg-frame.me-speaker .dlg-portrait { border-color: #7faf8b;
+    box-shadow: 0 10px 22px rgba(0,0,0,.5), 0 0 0 2px #7faf8b;
+    background-size: 150%; background-position: center 22%; image-rendering: pixelated; }
   /* 대화창 위에 띄우는 작은 표. 사화처럼 '이름이 넷인데 왕이 누구였나'가
      엉키는 것들은 글로만 읽어서는 안 남아서, 표로 한 번 보여 준다. */
   .dlg-chart { margin: 2px 0 10px; border: 1px solid rgba(255,255,255,.22); border-radius: 8px; overflow: hidden; }
@@ -488,8 +495,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=7"></script>
-<script src="assets/audio.js?v=36"></script>
+<script src="assets/map/map_component.js?v=37"></script>
+<script src="assets/chart.js?v=37"></script>
+<script src="assets/audio.js?v=37"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -501,7 +509,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=36';   // 존댓말 전환
+const ART_V = '?v=37';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1180,8 +1188,26 @@ const NPC_DATA = {
   gusukgi_0: {
     name: '뗀석기 사냥꾼', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 17c-1-1.5-1-3.5.5-5s2-3 4-3.5 3 .5 4.5-.5 4-1 5.5.5 2 3.5 1 5-2.5 3-5 3.5-3-.5-5 .5-4-.5-5.5-.5z"/></svg>', img: 'assets/portraits/gusukgi.png',
     beats: [
-      { who:'npc', t:'나는 무리를 따라 다니네. 짐승이 가는 곳으로 우리도 가지. 한곳에 머무는 법이 없어.' },
-      { who:'npc', t:'집이라 할 것도 없네. 동굴이나 바위 그늘에 며칠 묵다 떠나지. 이 돌은 그냥 깨뜨려 날을 세운 것일세 — 주먹도끼라 부르네.' },
+      { who:'npc', t:'(손짓으로 엎드리라 한다) …쉿.' },
+      { who:'me',  t:'(엎드린다)' },
+      { who:'npc', t:'저 발자국이 아직 젖어 있네. 방금 지나갔어.' },
+      { who:'npc', t:'따라가세. 짐승이 가는 곳으로 우리도 가는 걸세.' },
+      { who:'me',  t:'…마을은요? 돌아갈 집은 어디에 있습니까?',
+        chart:{ type:'steps', steps:[
+          { t:'짐승 떼를 따라간다' },
+          { t:'동굴·막집에 며칠 묵는다' },
+          { t:'또 떠난다', s:'집이라 할 것이 없다' } ] } },
+      { who:'npc', t:'집? (웃는다) 그런 건 없네. 동굴에서 며칠 자다 떠나지.' },
+      { who:'npc', t:'자, 이걸 쥐어 보게.' },
+      { who:'me',  t:'(돌을 받는다) …가장자리가 날카롭습니다.',
+        chart:{ type:'relic', items:[
+          { img:'jumeokdokki', n:'주먹도끼', s:'깨뜨려 날을 세운 뗀석기' } ] } },
+      { who:'npc', t:'깨뜨려 세운 날일세. 주먹도끼라 하네.' },
+      { who:'me',  t:'갈아서 만든 게 아니고요?' },
+      { who:'npc', t:'가는 법을 아는 자는 아직 없네. 그건 한참 뒤의 일이야.',
+        chart:{ type:'vs',
+          left:{ n:'뗀석기', s:'깨뜨린 날 — 지금', win:true },
+          right:{ n:'간석기', s:'갈아 낸 날 — 아직' }, mid:'▶' } },
     ],
     quizSeq: [
       { q:'한곳에 머물지 않고 무리 지어 이동하며, 동굴이나 막집에서 살고 뗀석기를 쓰던 시대는?',
@@ -1192,9 +1218,31 @@ const NPC_DATA = {
   sinseokgi_0: {
     name: '빗살무늬 아낙', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4v3.5c2.5 1 4 3.7 4 6.5 0 4-2.7 7-6 7s-6-3-6-7c0-2.8 1.5-5.5 4-6.5V3z"/><path d="M9 3h6"/><path d="M8 12h8"/></svg>', img: 'assets/portraits/sinseokgi.png',
     beats: [
-      { who:'npc', t:'우리는 강가에 자리를 잡았네. 움집을 파고 여럿이 모여 살지. 조와 피를 심어 거두고, 그물로 고기도 잡네.' },
-      { who:'npc', t:'이 그릇 보이는가? 밑이 뾰족해서 모래에 꽂아 세우지. 겉에 빗살 같은 무늬를 새겼다네. 곡식을 갈 때는 이 갈돌과 갈판을 쓰고.' },
-      { who:'npc', t:'옷은 어찌 짓는지 아는가? 가락바퀴로 실을 자아 뽑고, 뼈바늘로 꿰매어 지어 입는다네.' },
+      { who:'npc', t:'거기 그릇 좀 세워 주게. 손이 모자라서.' },
+      { who:'me',  t:'(그릇을 바닥에 놓는다) …어? 자꾸 넘어지는데요.' },
+      { who:'npc', t:'(웃으며) 바닥에 세우려 하니 그렇지. 모래에 꽂게.' },
+      { who:'me',  t:'(모래에 꽂는다) …아, 밑이 뾰족하군요.',
+        chart:{ type:'relic', items:[
+          { img:'bitsalmunui', n:'빗살무늬 토기', s:'밑이 뾰족해 모래에 꽂아 세운다' } ] } },
+      { who:'npc', t:'겉의 무늬가 보이는가. 빗으로 그은 것 같다 하여 빗살무늬라 하네.' },
+      { who:'me',  t:'그릇에 무엇을 담습니까?' },
+      { who:'npc', t:'조와 피를 거두어 담지. 이제 심어서 먹는다네.',
+        chart:{ type:'compare', cols:[
+          { h:'구석기', items:['따라다니며 잡는다','동굴·막집','뗀석기'] },
+          { h:'신석기', hi:true, items:['심어서 거둔다','움집에 모여 산다','간석기'] } ] } },
+      { who:'me',  t:'심는다면… 떠나지 않는다는 말씀이군요.' },
+      { who:'npc', t:'그렇지. 강가에 움집을 파고 여럿이 모여 사네.',
+        chart:{ type:'map', pins:[ { x:44.7, y:90.8, n:'암사동', on:true } ],
+          legend:[ { k:'왜 강가인가', v:'물과 물고기가 있다', on:true },
+                   { k:'움집', v:'땅을 파고 지붕을 덮는다' } ] } },
+      { who:'npc', t:'옳지, 이번엔 이 곡식을 갈아 보게.' },
+      { who:'me',  t:'(갈판에 문지른다) 돌이… 매끈합니다.' },
+      { who:'npc', t:'갈아서 만든 돌이니까. 깨서 쓰던 시절은 지났네.' },
+      { who:'npc', t:'(실을 자아 보이며) 옷도 이제 지어 입지.',
+        chart:{ type:'steps', steps:[
+          { t:'가락바퀴로 실을 뽑는다' },
+          { t:'뼈바늘로 꿰맨다' },
+          { t:'옷이 된다', s:'길쌈의 시작' } ] } },
     ],
     quizSeq: [
       { q:'농경과 정착 생활이 시작되고, 움집에 살며 간석기와 빗살무늬 토기를 쓴 시대는?',
@@ -1211,12 +1259,41 @@ const NPC_DATA = {
   cheongdonggi_0: {
     name: '송국리 군장', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 2h3.4l1 11.8-2.7 2.4-2.7-2.4z" fill="currentColor" stroke="currentColor"/><line x1="6" y1="15.5" x2="18" y2="15.5"/><path d="M9.5 15.5v3h5v-3"/><line x1="12" y1="18.5" x2="12" y2="22"/></svg>', img: 'assets/portraits/cheongdonggi.png',
     beats: [
-      { who:'npc', t:'이 마을은 내가 다스리네. 도랑을 파고 목책을 둘러 지키지. 아래쪽 무논에서는 벼를 키우고.' },
-      { who:'npc', t:'내 허리의 이 검이 보이는가. 청동으로 부어 만든 것일세. 아무나 가질 수 있는 물건이 아니지.' },
-      { who:'npc', t:'이 검은 대장간에서 두드려 만든 게 아닐세. 흙이나 돌로 거푸집(용범)을 빚어 그 틀에 청동물을 부어 굳혀 만들지.' },
-      { who:'npc', t:'내가 죽으면 저 큰 돌 아래 묻힐 걸세. 수백 사람이 달라붙어야 옮기는 돌이지 — 그만한 힘을 부릴 수 있는 자만 저기 눕는다네.' },
-      { who:'doc', docImg:'assets/scenes/heritage_ganghwa_bugeunri_dolmen.jpg',
-        t:'(강화 부근리 지석묘. 받침돌 두 개가 거대한 덮개돌을 떠받친 탁자식(북방식) 고인돌로, 덮개돌 무게만 약 53톤에 이른다. "고창·화순·강화 고인돌 유적"으로 유네스코 세계유산에 등재되었다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
+      { who:'npc', t:'멈추게. …목책 안으로 들어오려는 겐가?' },
+      { who:'me',  t:'(주위를 본다) 마을을 도랑과 울타리로 둘러쌌군요.' },
+      { who:'npc', t:'지킬 것이 생겼으니 둘렀지.',
+        chart:{ type:'steps', steps:[
+          { t:'벼농사로 곡식이 남는다' },
+          { t:'뺏으려는 자가 생긴다' },
+          { t:'도랑과 목책을 두른다', s:'환호 · 목책 마을' } ] } },
+      { who:'npc', t:'저 아래 무논이 보이는가. 벼를 키우네.' },
+      { who:'npc', t:'(칼 하나를 던져 준다) 그걸로 이삭을 잘라 보게.' },
+      { who:'me',  t:'(반달 모양 돌칼을 든다) …이삭만 자르는 겁니까?',
+        chart:{ type:'relic', items:[
+          { img:'bandal', n:'반달 돌칼', s:'벼 이삭을 자른다' } ] } },
+      { who:'npc', t:'줄기는 두고 이삭만. 그래야 손이 덜 가지.' },
+      { who:'me',  t:'(허리의 검을 본다) …그 검은 돌이 아니군요.' },
+      { who:'npc', t:'(툭 친다) 청동일세. 아무나 차는 물건이 아니지.',
+        chart:{ type:'relic', items:[
+          { img:'bipahyeong', n:'비파형 동검', s:'군장의 것' },
+          { img:'misongni', n:'미송리식 토기', s:'고조선 문화권의 표' } ] } },
+      { who:'me',  t:'대장간에서 두드려 만든 것입니까?' },
+      { who:'npc', t:'아닐세. 틀에 부어 굳힌 것이야.',
+        chart:{ type:'steps', steps:[
+          { t:'거푸집(용범)을 빚는다', s:'흙이나 돌로' },
+          { t:'청동을 녹여 붓는다' },
+          { t:'굳으면 틀을 깬다' } ] } },
+      { who:'npc', t:'저 언덕의 큰 돌이 보이는가. 내가 죽으면 저 아래 눕네.' },
+      { who:'me',  t:'…저걸 옮기려면 사람이 얼마나 필요합니까?',
+        chart:{ type:'stat', items:[
+          { v:'53t', l:'강화 부근리 덮개돌' },
+          { v:'6.5m', l:'그 길이' },
+          { v:'사적 137호', l:'지금은 국가유산' } ] } },
+      { who:'npc', t:'수백일세. 그만한 사람을 부리는 자만 저기 눕지.',
+        chart:{ type:'pyramid', tiers:[
+          { t:'군장', s:'청동검을 차고 고인돌에 눕는다', hi:true },
+          { t:'따르는 사람들' },
+          { t:'일하는 사람들' } ] } },
     ],
     quizSeq: [
       { q:'벼농사가 퍼지고 계급이 생겨났으며, 비파형 동검과 민무늬 토기를 쓴 시대는?',
@@ -1236,15 +1313,91 @@ const NPC_DATA = {
   dangun_0: {
     name: '고조선 제사장', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V6"/><path d="M12 9c0-3 3-4 5-4-1 3-2 5-5 5"/><path d="M12 13c0-3-3-4-5-4 1 3 2 5 5 5"/><path d="M12 17c0-2.5 2.5-3.5 4-3.5-1 2.5-1.5 4-4 4"/></svg>', img: 'assets/portraits/dangun.png',
     beats: [
-      { who:'npc', t:'우리 나라의 시작을 아는가. 하늘의 아들이 내려와 곰에서 사람이 된 여인과 혼인하여 단군왕검을 낳았다 하네. 제사와 정치를 한 사람이 함께 맡던 시절의 이야기지.' },
-      { who:'npc', t:'우리에겐 여덟 조목의 법이 있네. 사람을 죽인 자는 죽음으로 갚고, 남을 다치게 한 자는 곡식으로 갚고, 도둑질한 자는 그 집의 종이 된다 — 지금은 세 조목만 전한다네.' },
-      { who:'npc', t:'우리에게도 나라의 격에 맞는 벼슬이 있었네. 상, 대부, 장군 같은 관직을 두어 나랏일을 나누어 맡겼지.' },
-      { who:'npc', t:'부왕 시절엔 우리도 당당히 "왕"을 칭했네. 전국 칠웅의 하나인 연나라와도 대등하게 맞설 만큼 강성했지 — 그 뒤 이야기가 이어지네.' },
-      { who:'npc', t:'한창때는 힘도 셌지만, 한번은 연나라 장수 진개가 쳐들어와 서쪽 땅을 크게 빼앗기고 말았네. 그 바람에 나라의 중심이 동쪽으로 밀려났지.' },
-      { who:'npc', t:'뒷날 연나라에서 위만이란 자가 무리를 이끌고 들어와 준왕을 몰아내고 왕이 되었지. 철기를 널리 쓰고 중계 무역으로 이득을 챙기더군.' },
-      { who:'npc', t:'위만의 손자 우거왕 때에 이르러서는 한나라 무제가 대군을 몰고 왔네. 우리도 맞서 싸웠지만 끝내 왕검성이 무너지며 나라도 무너지고 말았지.' },
-      { who:'npc', t:'우리 북쪽뿐 아니라 남쪽 땅에도 나라들이 있었네 — 마한·진한·변한, 삼한이라 부르지. 신지·읍차 같은 군장이 다스리지만, 하늘에 제사 지내는 일만은 천군이 맡아 소도라는 신성한 곳에서 따로 행한다더군.' },
-      { who:'npc', t:'우리 말고도 이 땅엔 여러 나라가 있었지. 부여는 사출도로, 고구려는 서옥제로, 옥저는 민며느리제로, 동예는 책화로 저마다 풍습이 남달랐고, 영고·동맹·무천 같은 제천 행사도 즐겼다네.' },
+      { who:'npc', t:'마침 잘 왔네. 향을 들게. 손이 하나 모자라.' },
+      { who:'me',  t:'(향을 받아 든다) 무슨 제사입니까?' },
+      { who:'npc', t:'나라의 시작을 기리는 제사일세.' },
+      { who:'npc', t:'하늘의 아들이 내려와, 곰에서 사람이 된 여인과 혼인했지.',
+        chart:{ type:'steps', steps:[
+          { t:'환웅이 내려온다', s:'풍백·우사·운사를 데리고' },
+          { t:'곰이 사람이 된다', s:'웅녀' },
+          { t:'단군왕검이 난다' } ] } },
+      { who:'me',  t:'그 사이에서 난 이가… 단군왕검입니까?',
+        chart:{ type:'quote',
+          text:'환웅이 무리 <b>삼천</b>을 이끌고 태백산 꼭대기<br>' +
+               '<b>신단수</b> 아래에 내려와, 이곳을 <b>신시</b>라 하였다.',
+          from:'삼국유사 기이 고조선' } },
+      { who:'npc', t:'그렇지. 단군은 제사장, 왕검은 임금.' },
+      { who:'me',  t:'…한 사람이 둘을 다 합니까?',
+        chart:{ type:'vs', left:{ n:'단군', s:'하늘에 제사' },
+                right:{ n:'왕검', s:'사람을 다스림' }, mid:'＝' } },
+      { who:'npc', t:'(저쪽을 가리키며) 마침 재판이 열렸군. 가서 보게.' },
+      { who:'me',  t:'(끌려온 자가 있다) 무슨 죄입니까?' },
+      { who:'npc', t:'남의 것을 훔쳤네. 저 자는 이제 그 집의 종이 되지.',
+        chart:{ type:'quote',
+          text:'사람을 죽인 자는 <b>죽음</b>으로 갚는다.<br>' +
+               '남을 다치게 한 자는 <b>곡식</b>으로 갚는다.<br>' +
+               '도둑질한 자는 그 집의 <b>종</b>이 된다.',
+          from:'8조법 · 한서 지리지' } },
+      { who:'me',  t:'…벗어날 길은 없습니까?' },
+      { who:'npc', t:'오십만 전을 내면 되네. 낼 수 있다면 말이지.',
+        chart:{ type:'stat', items:[
+          { v:'8조', l:'본래 조목' },
+          { v:'3조', l:'지금 전하는 것' },
+          { v:'50만 전', l:'종을 벗는 값' } ] } },
+      { who:'me',  t:'값을 매긴다는 건… 돈도, 가진 것도 있다는 뜻이군요.' },
+      { who:'npc', t:'(고개를 끄덕인다) 법은 그런 것까지 말해 주지.',
+        chart:{ type:'compare', cols:[
+          { h:'법이 말하는 것', items:['목숨을 귀히 여긴다','노동력을 친다'] },
+          { h:'법이 감추는 것', hi:true,
+            items:['사유재산이 있다','신분이 갈린다','화폐를 쓴다'] } ] } },
+      { who:'npc', t:'나랏일은 상·대부·장군이 나누어 맡네.',
+        chart:{ type:'pyramid', tiers:[
+          { t:'왕', hi:true }, { t:'상 · 대부 · 장군' },
+          { t:'백성' }, { t:'종' } ] } },
+      { who:'me',  t:'왕이라 하셨습니까? 중국과 다투기도 했습니까?' },
+      { who:'npc', t:'부왕 때는 당당히 왕을 칭했지. 연나라와도 맞섰네.',
+        chart:{ type:'timeline', marks:[
+          { y:'BC 2333', t:'고조선' },
+          { y:'BC 4세기', t:'왕 칭함', on:true },
+          { y:'BC 3세기', t:'진개에 밀림' },
+          { y:'BC 194', t:'위만' },
+          { y:'BC 108', t:'멸망' } ] } },
+      { who:'npc', t:'(말이 잠시 끊긴다) …허나 진개가 쳐들어왔네.' },
+      { who:'npc', t:'서쪽 땅을 크게 잃고, 중심이 동쪽으로 밀렸지.',
+        chart:{ type:'map', north:true,
+          pins:[ { x:-14.3, y:36.3, n:'요동' }, { x:24.9, y:67.6, n:'왕검성', on:true } ],
+          legend:[ { k:'잃은 땅', v:'서쪽 2천여 리 (위략)' },
+                   { k:'새 경계', v:'만번한' },
+                   { k:'옮긴 중심', v:'동쪽으로', on:true } ] } },
+      { who:'npc', t:'뒷날 위만이 들어와 준왕을 몰아내고 왕이 되었네.' },
+      { who:'npc', t:'철기를 널리 쓰고, 가운데 서서 이득을 챙겼지.',
+        chart:{ type:'vs', left:{ n:'한나라' }, right:{ n:'남쪽 진국' },
+          mid:'고조선이 가운데' } },
+      { who:'me',  t:'…그 나라가 어찌 되었습니까?' },
+      { who:'npc', t:'그 손자 우거왕 때, 한 무제가 대군을 몰고 왔네.',
+        chart:{ type:'vs', left:{ n:'한 무제', s:'대군을 보냈다' },
+          right:{ n:'우거왕', s:'1년을 버텼다' }, mid:'VS' } },
+      { who:'npc', t:'왕검성이 무너지고… 나라도 함께 무너졌지.',
+        chart:{ type:'timeline', marks:[
+          { y:'BC 2333', t:'고조선' }, { y:'BC 4세기', t:'왕 칭함' },
+          { y:'BC 3세기', t:'진개에 밀림' }, { y:'BC 194', t:'위만' },
+          { y:'BC 108', t:'멸망', on:true } ] } },
+      { who:'me',  t:'남쪽에는 아무도 없었습니까?' },
+      { who:'npc', t:'있었지. 마한·진한·변한 — 삼한이라 하네.',
+        chart:{ type:'map',
+          pins:[ { x:38.6, y:121.6, n:'마한', on:true },
+                 { x:65.7, y:115.3, n:'진한', on:true },
+                 { x:61.4, y:127.9, n:'변한', on:true } ],
+          legend:[ { k:'마한', v:'가장 크다 — 뒷날 백제' },
+                   { k:'진한', v:'뒷날 신라' },
+                   { k:'변한', v:'뒷날 가야' } ] } },
+      { who:'npc', t:'거기선 군장이 다스리되, 제사는 천군이 따로 맡지.' },
+      { who:'me',  t:'…여기와 다르군요. 어르신은 둘 다 하시는데.',
+        chart:{ type:'compare', cols:[
+          { h:'고조선', items:['단군왕검 한 사람','제사와 정치가 하나'] },
+          { h:'삼한', hi:true,
+            items:['군장은 신지·읍차','제사는 천군이 따로','소도는 못 건드림'] } ] } },
+      { who:'npc', t:'눈이 밝군. 소도라는 땅엔 군장도 함부로 못 든다네.' },
     ],
     quizSeq: [
       { q:'단군왕검이 세웠다고 전해지는, 우리 역사상 최초의 국가는?',
@@ -1276,16 +1429,55 @@ const NPC_DATA = {
   dangun_1: {
     name: '고조선 제사장', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V6"/><path d="M12 9c0-3 3-4 5-4-1 3-2 5-5 5"/><path d="M12 13c0-3-3-4-5-4 1 3 2 5 5 5"/><path d="M12 17c0-2.5 2.5-3.5 4-3.5-1 2.5-1.5 4-4 4"/></svg>', img: 'assets/portraits/dangun.png',
     beats: [
-      { who:'npc', t:'더 궁금한 게 있으면 남쪽 길을 따라 쭉 내려가 보게. 부여·고구려·옥저·동예 사람들이 그 초기 국가의 땅에 살고 있으니, 직접 만나 이야기를 들어 보시게.' },
-    ]
+      { who:'npc', t:'(지도를 그리며) 이 땅엔 나라가 여럿일세.',
+        chart:{ type:'map', north:true,
+          pins:[ { x:36.4, y:-9, n:'부여', on:true },
+                 { x:19.3, y:31.6, n:'고구려', on:true },
+                 { x:50.6, y:53.4, n:'옥저', on:true },
+                 { x:70, y:80.5, n:'동예', on:true },
+                 { x:44.3, y:121.6, n:'삼한', on:true } ] } },
+      { who:'me',  t:'저마다 사는 법이 다릅니까?' },
+      { who:'npc', t:'다르지. 아주 달라.',
+        chart:{ type:'compare', cols:[
+          { h:'부여', items:['사출도','영고 12월'] },
+          { h:'고구려', items:['제가회의','서옥제','동맹 10월'] },
+          { h:'옥저', items:['민며느리제','가족 공동 무덤'] },
+          { h:'동예', items:['책화','무천 10월'] } ] } },
+      { who:'npc', t:'내 말만 듣지 말고, 직접 가서 물어보게. 그게 빠르네.' },
+    ],
   },
   buyeo_0: {
     name: '부여 사람', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21l1-6"/><path d="M5 15c-1.5-2-1.5-4.5 0-6.5C7 6 9 5 12 5h1l2-2 1.5 2.5L18 5l1 3-2 1"/><path d="M17 9v3.5c0 2-1 3.5-3 4.5"/><path d="M14 17l-1 4"/><path d="M9 15l-1.5 6"/><path d="M9 9.5c1 0 2 .3 2.5 1"/><circle cx="15.3" cy="8.3" r=".4" fill="currentColor" stroke="none"/></svg>', img: 'assets/portraits/buyeo.png',
     beats: [
-      { who:'npc', t:'나는 부여 사람이오. 우리 땅은 왕이 다스리는 중앙과, 마가·우가·저가·구가라는 네 갈래(加)가 저마다 나눠 다스리는 사출도로 이루어져 있소.' },
-      { who:'npc', t:'해마다 십이월이면 영고라는 제천 행사를 크게 치르오. 온 나라가 모여 하늘에 감사를 올리고 춤추고 노래하지.' },
-      { who:'npc', t:'가축의 발굽으로 점을 치기도 하오 — 소를 잡아 그 발굽이 갈라진 모양을 보고 길흉을 가늠하지, 우제점법이라 하오.' },
-      { who:'npc', t:'신분 높은 이가 죽으면 그를 따르던 사람들을 함께 묻는 순장의 풍습도 있소. 흉년이 들면 왕에게 그 책임을 묻기도 한다오.' },
+      { who:'npc', t:'(소 발굽을 내민다) 마침 잘 왔소. 이걸 불에 넣어 보시오.' },
+      { who:'me',  t:'(발굽을 불에 넣는다) …갈라집니다.' },
+      { who:'npc', t:'그 갈라진 모양으로 길흉을 봅니다. 우제점법이라 하오.' },
+      { who:'me',  t:'(주위를 둘러본다) 땅이 참 넓고 평평하군요.',
+        chart:{ type:'map', north:true,
+          pins:[ { x:36.4, y:-9, n:'부여', on:true } ],
+          legend:[ { k:'자리', v:'만주 지린 · 쑹화강', on:true },
+                   { k:'땅', v:'넓은 평야' } ] } },
+      { who:'npc', t:'넓으니 하나로 다스리지 못하오. 다섯으로 나누었지.' },
+      { who:'npc', t:'가운데는 왕이, 나머지 넷은 네 갈래가 맡소.',
+        chart:{ type:'grid', head:['갈래','가축','다스리는 규모'],
+          rows:[ ['마가','말','큰 곳은 수천 가'], ['우가','소','작은 곳은 수백 가'],
+                 ['저가','돼지',''], ['구가','개',''] ] } },
+      { who:'me',  t:'가축 이름을 벼슬에 붙였군요.' },
+      { who:'npc', t:'그 넷이 다스리는 길을 사출도라 하오.' },
+      { who:'me',  t:'(북소리가 들린다) 저건 무슨 소리입니까?' },
+      { who:'npc', t:'영고요. 십이월마다 온 나라가 모여 하늘에 절하오.',
+        chart:{ type:'grid', head:['나라','제천','달','그때 하는 일'],
+          rows:[ ['부여','영고','12월','죄수를 풀어 준다'],
+                 ['고구려','동맹','10월','주몽을 함께 기린다'],
+                 ['동예','무천','10월','밤낮으로 춤춘다'] ], hi:0 } },
+      { who:'npc', t:'그날은 갇힌 자도 풀어 주지. 좋은 날이니까.' },
+      { who:'me',  t:'…흉년이 들면 어떻게 됩니까?' },
+      { who:'npc', t:'(목소리를 낮춘다) 왕에게 책임을 묻기도 하오.',
+        chart:{ type:'pyramid', tiers:[
+          { t:'왕', s:'흉년이면 책임을 진다' },
+          { t:'마가 · 우가 · 저가 · 구가', s:'저마다 사출도를 다스린다', hi:true },
+          { t:'백성' } ] } },
+      { who:'npc', t:'귀한 이가 죽으면 따르던 사람도 함께 묻소. 순장이라 하지.' },
     ],
     quizSeq: [
       { q:'부여에서 왕이 다스리는 중앙 이외의 땅을 마가·우가·저가·구가 네 갈래가 나누어 다스리던 제도는?',
@@ -1299,10 +1491,28 @@ const NPC_DATA = {
   gogurin_0: {
     name: '고구려 사람', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3c6 3 6 15 0 18"/><path d="M6 3v18"/><path d="M3 12h17"/><path d="M17 9l3 3-3 3"/></svg>', img: 'assets/portraits/gogurin.png',
     beats: [
-      { who:'npc', t:'나는 압록강 가 졸본에서 나고 자란 고구려 사람이오. 우리도 부여처럼 여러 갈래(加)의 대가들이 있어, 이들이 모여 나랏일의 큰 것을 함께 정하오 — 제가회의라 하오.' },
-      { who:'npc', t:'혼인 풍습이 남다르오. 신랑이 신부 집 뒤꼍에 작은 집(서옥)을 짓고 살다가, 자식을 낳아 장성하면 비로소 아내를 데리고 본가로 돌아가지 — 서옥제라 하오.' },
-      { who:'npc', t:'우리도 시월에 동맹이라는 제천 행사를 여오. 온 나라가 모여 하늘과 시조인 주몽을 함께 기리지.' },
-      { who:'npc', t:'땅이 척박해 부지런히 싸워 곡식을 얻어야 했소. 그래서 일찍부터 사람들이 씩씩하고 정복에 능하다 하더군.' },
+      { who:'npc', t:'(나무를 나르며) 마침 잘 왔소. 그 기둥 좀 들어 주시오.' },
+      { who:'me',  t:'(같이 든다) 무엇을 짓는 겁니까?' },
+      { who:'npc', t:'집이오. 신부 집 뒤꼍에 짓는 작은 집.' },
+      { who:'me',  t:'…신랑이 처가에 들어가 삽니까?' },
+      { who:'npc', t:'그렇소. 이 집을 서옥이라 하지. 서옥제요.',
+        chart:{ type:'steps', steps:[
+          { t:'신부 집 뒤꼍에 작은 집을 짓는다', s:'서옥' },
+          { t:'신랑이 들어가 산다' },
+          { t:'자식이 자라면 아내를 데리고 돌아간다' } ] } },
+      { who:'me',  t:'(둘러본다) 땅이 온통 산이군요.' },
+      { who:'npc', t:'졸본이오. 압록강 지류 동가강 가지.',
+        chart:{ type:'map', north:true,
+          pins:[ { x:19.3, y:31.6, n:'졸본', on:true } ],
+          legend:[ { k:'자리', v:'압록강 지류 동가강', on:true },
+                   { k:'땅', v:'척박하다 — 정복으로 채운다' } ] } },
+      { who:'npc', t:'농사만으론 못 먹고사오. 그래서 나가 싸우지.' },
+      { who:'me',  t:'나랏일은 왕이 혼자 정합니까?' },
+      { who:'npc', t:'아니오. 대가들이 모여 정하오 — 제가회의라 하지.',
+        chart:{ type:'compare', cols:[
+          { h:'부여', items:['사출도','네 갈래가 나눠 맡음'] },
+          { h:'고구려', hi:true, items:['제가회의','대가들이 모여 정함'] } ] } },
+      { who:'npc', t:'시월엔 동맹을 여오. 하늘과 시조 주몽을 함께 기리지.' },
     ],
     quizSeq: [
       { q:'고구려에서 여러 갈래(部)의 대가들이 모여 나라의 중대사를 결정하던 귀족 합의체는?',
@@ -1316,10 +1526,31 @@ const NPC_DATA = {
   okjeo_0: {
     name: '옥저 사람', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c3-5 9-7 13-7 3 0 5 3 5 7s-2 7-5 7c-4 0-10-2-13-7z"/><path d="M20 8l3 4-3 4"/><circle cx="7" cy="11" r=".9" fill="currentColor" stroke="none"/></svg>', img: 'assets/portraits/okjeo.png',
     beats: [
-      { who:'npc', t:'우리 옥저는 동해 바닷가, 함경도 땅에 자리했소. 땅이 기름져 곡식과 물고기, 소금이 넉넉하지만… 힘이 약해 고구려에 조공을 바쳐야 했소.' },
-      { who:'npc', t:'왕이 없고 읍군이나 삼로라 불리는 우두머리들이 각 고을을 다스리오.' },
-      { who:'npc', t:'혼인은 이렇소 — 어린 여자아이를 미리 신랑 집에 데려다 키우다가, 다 자라면 여자 집에 돈을 치르고 정식으로 혼인하지. 민며느리제라 하오.' },
-      { who:'npc', t:'사람이 죽으면 임시로 묻어 살만 삭히고, 뼈만 추려 가족이 함께 쓰는 큰 목곽에 넣소 — 그래서 가족 모두의 뼈가 한곳에 모이게 되지.' },
+      { who:'npc', t:'(짐을 지고 있다) …거들어 주겠소? 무겁구려.' },
+      { who:'me',  t:'(짐을 나눠 든다) 소금이군요. 어디로 갑니까?' },
+      { who:'npc', t:'(한숨) 고구려로 가오. 바치러.' },
+      { who:'me',  t:'…파는 게 아니라 바치는 겁니까?' },
+      { who:'npc', t:'땅은 기름진데 힘이 없소. 곡식도 물고기도 소금도 넉넉한데.',
+        chart:{ type:'map',
+          pins:[ { x:50.6, y:53.4, n:'옥저', on:true }, { x:70, y:80.5, n:'동예' } ],
+          legend:[ { k:'옥저', v:'함흥 평야 · 함경 해안', on:true },
+                   { k:'동예', v:'그 남쪽 · 강원 북부' } ] } },
+      { who:'npc', t:'왕도 없소. 읍군·삼로가 고을을 맡을 뿐이지.' },
+      { who:'me',  t:'(아이를 본다) 저 아이는 누구 집 아이입니까?' },
+      { who:'npc', t:'우리 집 며느리요. 아직 어리지만.' },
+      { who:'me',  t:'…며느리요?' },
+      { who:'npc', t:'미리 데려다 키우오. 다 자라면 값을 치르고 혼인하지.',
+        chart:{ type:'compare', cols:[
+          { h:'고구려 서옥제', items:['신랑이 처가로 간다','자식 크면 돌아온다'] },
+          { h:'옥저 민며느리제', hi:true,
+            items:['신부를 미리 데려온다','자라면 값을 치른다'] } ] } },
+      { who:'npc', t:'(무덤을 가리키며) 저기가 우리 집 뼈가 모인 곳이오.' },
+      { who:'me',  t:'한 무덤에 온 가족을요?',
+        chart:{ type:'steps', steps:[
+          { t:'임시로 묻는다', s:'살을 삭힌다' },
+          { t:'뼈만 추린다' },
+          { t:'가족 목곽에 함께 넣는다', s:'가족 공동 무덤' } ] } },
+      { who:'npc', t:'살은 흙에 두고 뼈만 거두어 함께 눕히오.' },
     ],
     quizSeq: [
       { q:'옥저에서 어린 여자아이를 미리 신랑 집에서 키우다가 자란 뒤 대가를 치르고 정식 혼인하던 풍습은?',
@@ -1333,10 +1564,30 @@ const NPC_DATA = {
   dongye_0: {
     name: '동예 사람', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l8.5 16h-17z"/><path d="M8.7 10l1.6 1.6L12 9l2 3 1.7-2 2 4"/></svg>', img: 'assets/portraits/dongye.png',
     beats: [
-      { who:'npc', t:'나는 동예 사람이오. 우리도 옥저처럼 왕이 없고 읍군·삼로가 고을을 다스리며 고구려에 눌려 지내오.' },
-      { who:'npc', t:'해마다 시월이면 무천이라는 제천 행사를 여오. 밤낮으로 노래하고 춤을 추지.' },
-      { who:'npc', t:'우리에겐 책화라는 풍습이 있소. 다른 마을의 산이나 내를 함부로 침범하면, 소나 말, 노비로 배상해야 하오 — 마을마다 경계가 뚜렷하지.' },
-      { who:'npc', t:'같은 씨족끼리는 혼인하지 않는 족외혼도 지키오. 우리 땅에서 나는 단궁(짧은 활)과 과하마(작은 말), 반어피(바다표범 가죽)는 다른 나라에서도 알아준다오.' },
+      { who:'me',  t:'(냇물을 건넌다)' },
+      { who:'npc', t:'(막아선다) 거기 서시오! 지금 그 내를 넘었소.' },
+      { who:'me',  t:'…그냥 물일 뿐인데요?' },
+      { who:'npc', t:'우리 마을 경계요. 넘었으면 물어내야 하오.' },
+      { who:'me',  t:'무엇으로 갚습니까?' },
+      { who:'npc', t:'소나 말, 아니면 노비로. 책화라 하오.',
+        chart:{ type:'steps', steps:[
+          { t:'남의 마을 산이나 내를 넘는다' },
+          { t:'물어낸다', s:'소 · 말 · 노비로' },
+          { t:'경계가 지켜진다', s:'책화' } ] } },
+      { who:'npc', t:'(누그러진다) …모르고 넘었으니 이번은 넘어가겠소.' },
+      { who:'me',  t:'여기도 왕이 없습니까?' },
+      { who:'npc', t:'없소. 읍군·삼로가 맡고, 고구려에 눌려 지내오.',
+        chart:{ type:'grid', head:['나라','우두머리','왕'],
+          rows:[ ['부여','마가·우가 등','있음'], ['고구려','대가','있음'],
+                 ['옥저','읍군·삼로','없음'], ['동예','읍군·삼로','없음'] ], hi:3 } },
+      { who:'npc', t:'같은 씨족끼리는 혼인도 않소. 족외혼이라 하지.' },
+      { who:'me',  t:'(짐을 본다) 저건 무엇입니까?' },
+      { who:'npc', t:'우리 땅에서 나는 것들이오. 이건 어디 내놔도 안 빠지지.',
+        chart:{ type:'stat', items:[
+          { v:'단궁', l:'짧고 강한 활' },
+          { v:'과하마', l:'키 작은 말' },
+          { v:'반어피', l:'바다표범 가죽' } ] } },
+      { who:'npc', t:'시월엔 무천을 여오. 그땐 밤낮으로 춤을 추지.' },
     ],
     quizSeq: [
       { q:'동예에서 다른 마을의 영역을 함부로 침범하면 소나 말, 노비로 배상하게 한 풍습은?',
@@ -1535,49 +1786,8 @@ const Quiz = {
 };
 
 /* 대화창 위 시각자료. 종류를 안 주면 표로 그린다. */
-function drawChart(c){
-  if (c.type === 'bar'){
-    // 데이터가 이미 퍼센트(예: 인구 비율)면 c.max:100을 준다 — 안 주면 이
-    // 묶음 안에서 제일 큰 값을 기준으로 상대 비교한다(예: 경공업 대 중화학
-    // 처럼 절대치가 아니라 서로 견주는 게 목적인 데이터). c.max를 빠뜨리면
-    // '70%'가 이 데이터의 최댓값이라는 이유만으로 막대가 꽉 차 버려서,
-    // 마치 70%가 100%인 것처럼 보이는 오해가 생긴다(실제로 지적받은 문제).
-    const max = c.max || Math.max.apply(null, c.bars.map(b => b.v));
-    return c.bars.map(b =>
-      '<div class="bar-row"><div class="bar-label">' + b.label + '</div>'
-      + '<div class="bar-track"><i class="bar-fill" style="width:' + Math.round(b.v / max * 100) + '%"></i></div>'
-      + '<div class="bar-val">' + (b.text || b.v) + '</div></div>').join('');
-  }
-  if (c.type === 'flow'){
-    return '<div class="flow">' + c.steps.map((s, i) =>
-      (i ? '<div class="flow-arrow">▶</div>' : '')
-      + '<div class="flow-step"><b>' + s.t + '</b>' + (s.s || '') + '</div>').join('') + '</div>';
-  }
-  if (c.type === 'tree'){
-    return '<div class="tree"><div class="tree-root">' + c.root + '</div><div class="tree-branch">'
-      + c.cols.map(col => '<div class="tree-col">' + col.map(n =>
-          '<div class="tree-node"><b>' + n.t + '</b>' + (n.s ? '<span>' + n.s + '</span>' : '') + '</div>'
-        ).join('') + '</div>').join('') + '</div></div>';
-  }
-  if (c.type === 'kings'){
-    // 왕위 계승 띠 — 지금 이 대사가 누구·어느 왕(들) 이야기인지 금색
-    // 테두리로 짚어 준다. main은 한 나라(왕조)의 계승 순서, cross는
-    // 같은 시기 다른 나라 왕(있을 때만 따로 한 줄 더).
-    const badge = (k) => '<div class="king-badge' + (k.active ? ' active' : '') + '">'
-      + (k.dynasty ? '<div class="kb-dynasty">' + k.dynasty + '</div>' : '')
-      + '<div class="kb-name">' + k.name + '</div>'
-      + (k.note ? '<div class="kb-note">' + k.note + '</div>' : '') + '</div>';
-    let out = '<div class="kings-row">' + c.main.map(badge).join('') + '</div>';
-    if (c.cross && c.cross.length){
-      out += '<div class="kings-row kings-cross">' + c.cross.map(badge).join('') + '</div>';
-    }
-    return out;
-  }
-  return '<table><thead><tr>' + c.head.map(h => '<th>' + h + '</th>').join('')
-    + '</tr></thead><tbody>'
-    + c.rows.map(r => '<tr>' + r.map(v => '<td>' + v + '</td>').join('') + '</tr>').join('')
-    + '</tbody></table>';
-}
+/* drawChart는 assets/chart.js 로 옮겼다 — 서른여섯 곳에 복사돼
+   판본이 셋으로 갈려 있었고, 종류를 더하려면 매번 다 고쳐야 했다. */
 
 /* NPC 이름표. 예전에는 글자만 챕터 색으로 찍었는데, 흙바닥이나 마루처럼
    비슷한 밝기 위에서는 읽히지가 않았다(5화 서원 마당에서 붉은 글씨가
@@ -1647,13 +1857,18 @@ const Dialog = {
     if (prevEl) prevEl.style.visibility = this.idx > 0 ? 'visible' : 'hidden';
     // 이 beat만 다른 인물이 말하는가?(beats에 name이 따로 붙으면 끼어든 것)
     // 그 경우 대화창 색을 바꿔 화자가 바뀐 걸 바로 알아보게 한다.
-    const interjecting = !!beat.name && beat.name !== this.data.name;
-    document.getElementById('dlg-frame').classList.toggle('alt-speaker', interjecting);
+    const isMe = beat.who === 'me';
+    const interjecting = !isMe && !!beat.name && beat.name !== this.data.name;
+    const frameEl = document.getElementById('dlg-frame');
+    frameEl.classList.toggle('alt-speaker', interjecting);
+    frameEl.classList.toggle('me-speaker', isMe);
     const nameEl = document.getElementById('dlg-name');
-    if (nameEl) nameEl.textContent = beat.name || this.data.name;
+    if (nameEl) nameEl.textContent = isMe ? '나' : (beat.name || this.data.name);
     const portraitEl = document.getElementById('dlg-portrait');
     if (portraitEl){
-      const img = beat.img || (beat.name ? null : this.data.img);
+      // 주인공 차례면 주인공 얼굴로 바꾼다(걷기 스프라이트의 정면 한 컷)
+      const img = isMe ? 'assets/player/down_0.png'
+                       : (beat.img || (beat.name ? null : this.data.img));
       if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
       else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon || '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg>'; }
     }
@@ -1868,39 +2083,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=36"></script>
-<script src="assets/streak.js?v=36"></script>
+<script src="assets/badges.js?v=37"></script>
+<script src="assets/streak.js?v=37"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=36"></script>
-  <script src="assets/fx.js?v=36"></script>
-  <script src="assets/deed.js?v=36"></script>
-  <script src="assets/inkwipe.js?v=36"></script>
-  <script src="assets/dash.js?v=36"></script>
-<script src="assets/juice.js?v=36"></script>
-  <script src="assets/difficulty.js?v=36"></script>
-  <script src="assets/nextauto.js?v=36"></script>
-<script src="assets/heroes_data.js?v=36"></script>
-<script src="assets/heroes.js?v=36"></script>
-<script src="assets/icons.js?v=36"></script>
-<script src="assets/srs.js?v=36"></script>
-<script src="assets/newsflash.js?v=36"></script>
-<script src="assets/timeline.js?v=36"></script>
-<script src="assets/journey.js?v=36"></script>
-<script src="assets/season.js?v=36"></script>
-<script src="assets/boss.js?v=36"></script>
-<script src="assets/items.js?v=36"></script>
-  <script src="assets/gold.js?v=36"></script>
-  <script src="assets/ask.js?v=36"></script>
-  <script src="assets/ads.js?v=36"></script>
-  <script src="assets/energy.js?v=36"></script>
-  <script src="assets/daily.js?v=36"></script>
-  <script src="assets/unlock.js?v=36"></script>
-  <script src="assets/guide.js?v=36"></script>
-  <script src="assets/minigames.js?v=36"></script>
-  <script src="assets/quests.js?v=36"></script>
-  <script src="assets/offline.js?v=36"></script>
-  <script src="assets/telemetry.js?v=36"></script>
-<script src="assets/autowalk.js?v=36"></script>
+<script src="assets/rank.js?v=37"></script>
+  <script src="assets/fx.js?v=37"></script>
+  <script src="assets/deed.js?v=37"></script>
+  <script src="assets/inkwipe.js?v=37"></script>
+  <script src="assets/dash.js?v=37"></script>
+<script src="assets/juice.js?v=37"></script>
+  <script src="assets/difficulty.js?v=37"></script>
+  <script src="assets/nextauto.js?v=37"></script>
+<script src="assets/heroes_data.js?v=37"></script>
+<script src="assets/heroes.js?v=37"></script>
+<script src="assets/icons.js?v=37"></script>
+<script src="assets/srs.js?v=37"></script>
+<script src="assets/newsflash.js?v=37"></script>
+<script src="assets/timeline.js?v=37"></script>
+<script src="assets/journey.js?v=37"></script>
+<script src="assets/season.js?v=37"></script>
+<script src="assets/boss.js?v=37"></script>
+<script src="assets/items.js?v=37"></script>
+  <script src="assets/gold.js?v=37"></script>
+  <script src="assets/ask.js?v=37"></script>
+  <script src="assets/ads.js?v=37"></script>
+  <script src="assets/energy.js?v=37"></script>
+  <script src="assets/daily.js?v=37"></script>
+  <script src="assets/unlock.js?v=37"></script>
+  <script src="assets/guide.js?v=37"></script>
+  <script src="assets/minigames.js?v=37"></script>
+  <script src="assets/quests.js?v=37"></script>
+  <script src="assets/offline.js?v=37"></script>
+  <script src="assets/telemetry.js?v=37"></script>
+<script src="assets/autowalk.js?v=37"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
