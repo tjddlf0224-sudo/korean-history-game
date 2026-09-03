@@ -487,9 +487,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=44"></script>
-<script src="assets/chart.js?v=44"></script>
-<script src="assets/audio.js?v=44"></script>
+<script src="assets/map/map_component.js?v=45"></script>
+<script src="assets/chart.js?v=45"></script>
+<script src="assets/audio.js?v=45"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -501,7 +501,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=44';   // 존댓말 전환
+const ART_V = '?v=45';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1154,10 +1154,22 @@ const NPC_DATA = {
   beopheung_0: {
     name: '신라 법흥왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18z"/><rect x="4" y="19.5" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/beopheung_king.png',
     beats: [
-      { who:'npc', t:'과인은 신라의 왕이다. 이 김해 땅에 온 까닭을 묻는 것이냐.' },
-      { who:'npc', t:'532년, 이 나라의 왕이 스스로 과인에게 나라를 넘겼다. 싸움 없이 끝난 일이다.' },
-      { who:'npc', t:'과인은 그를 벌하지 않고 진골로 삼았다. 그 자손 가운데 뒷날 큰 장수가 나온다 — 김유신이다.' },
-      { who:'npc', t:'낙동강 하구의 철과 뱃길이 이제 신라의 것이 되었다.' },
+      { who:'npc', t:'(갑옷 차림으로 우뚝 서 있다) 게 섰거라.' },
+      { who:'me', t:'(화들짝 놀라며) 예서 어인 일이십니까?' },
+      { who:'npc', t:'이 김해 땅이, 이제 다 신라의 것이다.' },
+      { who:'me', t:'(둘러본다) 언제, 어찌 이리되었습니까?',
+        chart:{ type:'map', title:'금관가야, 신라 땅이 되다', pins:[ { x:70, y:127, n:'김해', on:true } ], legend:[ { k:'532년', v:'법흥왕에게 항복' } ] } },
+      { who:'npc', t:'532년, 금관가야 구형왕이 항복했다.' },
+      { who:'npc', t:'처자와 보물을 이끌고 왔다. 싸움은 없었다.' },
+      { who:'me', t:'싸우지도 않고 나라를 통째로 내주었군요.' },
+      { who:'npc', t:'과인은 그를 벌하지 않고 진골로 삼았다.',
+        chart:{ type:'pyramid', title:'항복한 왕, 진골이 되다', tiers:[ { t:'성골' }, { t:'진골', s:'구형왕 왕족이 편입', hi:true }, { t:'6두품 이하' } ] } },
+      { who:'npc', t:'이 나라, 무려 490년을 이어 왔다더군.',
+        chart:{ type:'timeline', title:'금관가야 490년', marks:[ { y:'42년', t:'김수로 즉위' }, { y:'532년', t:'법흥왕에게 항복', on:true } ] } },
+      { who:'me', t:'(조심스레) 항복한 왕의 후손은 어찌 되었습니까?' },
+      { who:'npc', t:'증손자 대에 큰 장수가 난다 — 김유신이다.' },
+      { who:'npc', t:'낙동강 어귀의 철과 뱃길, 이제 신라 몫이다.',
+        chart:{ type:'stat', title:'가야의 철, 신라로', items:[ { v:'낙동강 하구', l:'철과 뱃길의 길목' } ] } },
     ],
     quizSeq: [
       { q:'김해에 자리 잡아 전기 가야 연맹을 이끌었고, 532년 신라 법흥왕에게 항복한 나라는?',
@@ -1169,10 +1181,23 @@ const NPC_DATA = {
   ijinasi_0: {
     name: '대가야 왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19c2-6 5-9 9-9s7 3 9 9z"/><path d="M2 21h20"/></svg>', img: 'assets/portraits/ijinasi_king.png',
     beats: [
-      { who:'npc', t:'김해가 기울고 난 뒤, 가야의 중심은 이 고령으로 옮겨 왔다.' },
-      { who:'npc', t:'우리를 대가야라 부른다. 후기 가야 연맹을 이끄는 것은 이제 우리다.' },
-      { who:'npc', t:'지산동 등성이에 우리 왕들의 무덤이 늘어서 있다. 그 규모를 보면 우리가 어떤 나라였는지 알 것이다.' },
-      { who:'npc', t:'…허나 신라가 커지고 있다. 562년, 진흥왕의 군사가 이 고을에 이르렀을 때 우리 이야기도 끝났다.' },
+      { who:'npc', t:'(지팡이로 능선을 가리키며) 저 무덤들이 보이는가?' },
+      { who:'me', t:'(올려다본다) 줄줄이… 몇 개나 됩니까?',
+        chart:{ type:'stat', title:'지산동 44호분', items:[ { v:'25~27m', l:'봉분 지름' }, { v:'32명↑', l:'순장된 사람' } ] } },
+      { who:'npc', t:'지산동 고분군일세. 대가야 왕들이 잠들었네.' },
+      { who:'me', t:'(말을 잃는다) …그 많은 사람이 순장이라니.' },
+      { who:'npc', t:'왕의 힘을 보이는 것이지. 슬픈 풍습이었네.' },
+      { who:'npc', t:'우리는 이 고령에서 후기 가야 연맹을 이끌었네.',
+        chart:{ type:'map', title:'고령, 후기 가야 연맹의 중심', pins:[ { x:61, y:120, n:'고령', on:true } ] } },
+      { who:'me', t:'그럼 김해의 금관가야는 어찌 되었습니까?' },
+      { who:'npc', t:'김해가 기울고 난 뒤 중심이 이리로 옮겨 왔지.' },
+      { who:'npc', t:'이 나라, 열여섯 대 오백스무 해를 이었네.',
+        chart:{ type:'stat', title:'대가야, 열여섯 대', items:[ { v:'16대', l:'왕위를 이은 대수' }, { v:'520년', l:'나라를 지킨 햇수' } ] } },
+      { who:'npc', t:'(씁쓸히) 우리 시조와 그쪽 수로왕은 본디 형제라 전하네.',
+        chart:{ type:'vs', title:'대가야와 금관가야는 형제', left:{ n:'이진아시', s:'뇌질주일 — 대가야' }, right:{ n:'수로왕', s:'뇌질청예 — 금관가야' }, mid:'형제' } },
+      { who:'me', t:'형제였는데 어찌 서로 나뉘어 다투었습니까?' },
+      { who:'npc', t:'세월이 지나며 각자 다른 나라를 세운 게지.' },
+      { who:'npc', t:'…허나 562년, 진흥왕의 장수 이사부가 이르렀네.' },
     ],
     quizSeq: [
       { q:'고령을 중심으로 후기 가야 연맹을 이끌다가 562년 신라 진흥왕에게 멸망한 나라는?',
@@ -1187,10 +1212,27 @@ const NPC_DATA = {
   suro_0: {
     name: '금관가야 왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/suro.png',
     beats: [
-      { who:'npc', t:'이 나라는 김해에 터를 잡았네. 구지봉에 여섯 알이 내려왔다는 이야기, 들어 보았는가. 그 첫째가 우리 시조 김수로일세.' },
-      { who:'npc', t:'여섯 나라가 모여 연맹을 이루었지. 그 우두머리 자리를 오래 우리가 맡았네 — 전기 가야 연맹이라 부르더군.' },
-      { who:'npc', t:'허나 고구려 광개토대왕의 군대가 신라를 도우러 남쪽까지 내려온 뒤로 힘이 꺾였네. 그 뒤로는 고령의 대가야가 앞장섰지.' },
-      { who:'npc', t:'결국 532년, 우리 마지막 임금 구형왕께서 신라 법흥왕에게 나라를 넘기셨네. 뒷날 김유신이 그 핏줄일세.' },
+      { who:'npc', t:'(구지봉을 가리키며) 예서 아홉 우두머리가 노래를 불렀네.' },
+      { who:'npc', t:'따라 해 보게. 「거북아 거북아, 머리를 내밀어라.」' },
+      { who:'me', t:'(멋쩍게 따라 한다) 거북아… 머리를 내밀어라.' },
+      { who:'npc', t:'「내밀지 않으면 구워 먹으리.」 그리 빌었지.',
+        chart:{ type:'quote', title:'구지가', text:'거북아 거북아, 머리를 내밀어라.<br>내밀지 않으면 구워 먹으리.', from:'삼국유사 가락국기' } },
+      { who:'me', t:'(하늘을 올려다본다) 그래서 무엇이 내려왔습니까?' },
+      { who:'npc', t:'금빛 그릇에 담긴 황금알 여섯. 첫째가 나일세.',
+        chart:{ type:'stat', title:'구지봉에 내려온 것', items:[ { v:'6개', l:'황금알' }, { v:'1번째', l:'김수로' } ] } },
+      { who:'me', t:'(눈이 커진다) 황금알에서 태어나셨다고요?' },
+      { who:'npc', t:'그렇다네. 여섯 나라가 나를 우두머리로 세웠지.',
+        chart:{ type:'map', title:'김해를 중심으로 뭉친 여섯 나라', pins:[ { x:70, y:127, n:'김해', on:true } ], legend:[ { k:'6개 소국', v:'금관가야가 이끌었다' } ] } },
+      { who:'npc', t:'사람들은 전기 가야 연맹이라 부르더군.',
+        chart:{ type:'compare', title:'전기 연맹과 후기 연맹', cols:[ { h:'전기 가야 연맹', hi:true, items:[ '금관가야 중심', '김해' ] }, { h:'후기 가야 연맹', items:[ '대가야 중심', '고령' ] } ] } },
+      { who:'me', t:'(주변을 둘러본다) 이 무덤들은 다 무엇입니까?' },
+      { who:'npc', t:'대성동 고분군일세. 우리 왕들이 여기 묻혔네.',
+        chart:{ type:'stat', title:'대성동 고분군의 덩이쇠', items:[ { v:'110장', l:'덩이쇠' }, { v:'10겹', l:'쌓아 올린 모습' } ] } },
+      { who:'npc', t:'(표정이 흐려진다) 광개토대왕 군대가 남으로 내려온 뒤 힘이 꺾였네.' },
+      { who:'me', t:'(놀라며) 그 큰 나라가 어찌 그리되었습니까?' },
+      { who:'npc', t:'신라를 도우러 온 고구려군이 우리를 치고 지나갔지.' },
+      { who:'npc', t:'그 뒤로는 고령의 대가야가 앞장서 이끌었네.' },
+      { who:'npc', t:'(한숨) 결국 532년, 구형왕이 신라에 항복했네.' },
     ],
     quizSeq: [
       { q:'금관가야의 왕릉급 무덤이 모여 있어 가야의 철기 문화를 보여주는 김해의 고분군은?',
@@ -1201,9 +1243,22 @@ const NPC_DATA = {
   cheolsang_0: {
     name: '덩이쇠 상인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="8" cy="7" rx="3.2" ry="4.2" transform="rotate(-20 8 7)"/><ellipse cx="16" cy="12" rx="3.2" ry="4.2" transform="rotate(-20 16 12)"/><ellipse cx="9.5" cy="17.5" rx="3.2" ry="4.2" transform="rotate(-20 9.5 17.5)"/></svg>', img: 'assets/portraits/cheolsang.png',
     beats: [
-      { who:'npc', t:'이 검붉은 쇳덩이가 우리 밥줄일세. 납작하게 두들겨 놓은 것이라 덩이쇠라 부르지.' },
-      { who:'npc', t:'이걸 배에 실어 낙랑으로도 보내고 왜로도 보내네. 저기서는 이걸 돈처럼 쓰기도 한다더군.' },
-      { who:'npc', t:'철이 흔하니 갑옷도 흔하지. 말에게까지 갑옷을 입힌다네 — 그런 무구가 무덤에서 쏟아져 나올 걸세.' },
+      { who:'npc', t:'(쇳덩이 하나를 건네며) 이걸 한번 들어 보게.' },
+      { who:'me', t:'(받아 든다) …묵직하군요. 이게 무엇입니까?',
+        chart:{ type:'relic', title:'덩이쇠(철정)', items:[ { img:'deongiswe', n:'덩이쇠', s:'규격화한 쇳덩이 — 화폐처럼 썼다' } ] } },
+      { who:'npc', t:'덩이쇠일세. 납작하게 두드려서 편 쇠지.' },
+      { who:'npc', t:'쇳물을 녹여 여러 번 두드려서 이렇게 만드네.',
+        chart:{ type:'steps', title:'덩이쇠를 만드는 차례', steps:[ { t:'쇳물을 녹인다' }, { t:'두드려 편다', s:'납작하게' }, { t:'배에 실어 보낸다' } ] } },
+      { who:'npc', t:'크기가 일정해서 돈처럼 주고받기도 하네.' },
+      { who:'me', t:'(다시 살펴본다) 이걸 어디로 보냅니까?',
+        chart:{ type:'map', title:'덩이쇠가 팔려 간 곳', pins:[ { x:70, y:127, n:'김해', on:true }, { x:25, y:68, n:'낙랑' } ], legend:[ { k:'낙랑·대방', v:'중국 군현으로 수출' }, { k:'왜', v:'바다 건너로도 수출' } ] } },
+      { who:'npc', t:'배에 실어 낙랑과 대방으로, 왜로도 보내네.' },
+      { who:'me', t:'(고개를 갸웃하며) 왜는 어찌 철이 없습니까?' },
+      { who:'npc', t:'저들 쇠는 여물지 않아 여기서 실어 가지.' },
+      { who:'npc', t:'철이 흔하니 갑옷도 흔하네 — 말에게도 입히지.',
+        chart:{ type:'relic', title:'가야의 철제 무구', items:[ { img:'pangapot', n:'판갑옷', s:'철판을 이어 만든 갑옷' } ] } },
+      { who:'me', t:'(갑옷을 만져 본다) …이거 참 무겁겠습니다.' },
+      { who:'npc', t:'무겁지. 허나 철이 있어야 나라도 강해지네.' },
     ],
     quizSeq: [
       { q:'가야가 낙랑과 왜에 수출하며 화폐처럼 쓰이기도 한, 납작하게 편 철 소재는?',
@@ -1214,8 +1269,18 @@ const NPC_DATA = {
   wae_0: {
     name: '왜 사신', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16h18l-2 4H5z"/><line x1="12" y1="16" x2="12" y2="3"/><path d="M12 4l6 11h-6z"/></svg>', img: 'assets/portraits/wae.png',
     beats: [
-      { who:'npc', t:'바다 건너에서 왔습니다. 이곳 철이 없으면 우리 무기를 만들 수가 없지요.' },
-      { who:'npc', t:'철만 가져가는 것이 아닙니다. 그릇 굽는 법도 배워 갑니다 — 우리 쪽에서는 스에키라 부르게 될 것입니다.' },
+      { who:'npc', t:'(막 배에서 내리며) 먼 길을 왔습니다.',
+        chart:{ type:'map', title:'바다를 사이에 둔 가야와 왜', pins:[ { x:70, y:127, n:'김해', on:true } ], legend:[ { k:'왜', v:'바다 건너 섬나라' } ] } },
+      { who:'me', t:'(고개를 갸웃하며) 어디서 오셨습니까?' },
+      { who:'npc', t:'바다 건너 왜입니다. 철이 없으면 무기를 못 만듭니다.' },
+      { who:'me', t:'(놓인 그릇을 가리키며) 이건 무엇입니까?' },
+      { who:'npc', t:'가야의 토기입니다. 단단하고 푸르스름하지요.' },
+      { who:'npc', t:'이 단단한 굽는 법을 저희도 배워 갑니다.',
+        chart:{ type:'steps', title:'가야 토기, 왜로 건너가다', steps:[ { t:'가야에서 굽는 법을 배운다' }, { t:'왜로 가져간다' }, { t:'스에키로 남는다', s:'회청색 경질 토기' } ] } },
+      { who:'me', t:'(고개를 끄덕인다) 저희 것과는 다르군요.' },
+      { who:'npc', t:'예전 조몬 토기와는 비교가 안 됩니다.' },
+      { who:'npc', t:'이 기술로 지은 그릇을 스에키라 부르게 됩니다.',
+        chart:{ type:'vs', title:'가야 토기와 스에키', left:{ n:'가야 토기', s:'회청색 굳은 그릇' }, right:{ n:'스에키', s:'왜로 전해진 토기' }, mid:'전함' } },
     ],
     quizSeq: [
       { q:'가야 토기가 바다를 건너가 영향을 준, 일본의 회청색 경질 토기는?',
@@ -1226,36 +1291,25 @@ const NPC_DATA = {
   ureuk_0: {
     name: '우륵', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14" x2="21" y2="14"/><circle cx="8" cy="17" r="2" fill="currentColor" stroke="none"/><line x1="10" y1="17" x2="10" y2="6"/><circle cx="16" cy="19" r="2" fill="currentColor" stroke="none"/><line x1="18" y1="19" x2="18" y2="8"/></svg>', img: 'assets/portraits/ureuk.png',
     beats: [
-      { who:'npc', t:'나는 고령 대가야 사람일세. 가실왕의 명으로 악기를 만들고 열두 곡을 지었네.' },
-      { who:'npc', t:'열두 줄은 열두 달일세. 곡 이름도 가야 여러 고을에서 따왔지 — 나라가 하나라는 뜻을 담고 싶었네.' },
-      { who:'npc', t:'허나 나라가 어지러워지자 나는 신라로 넘어갔네. 진흥왕이 나를 국원, 지금의 충주에 살게 하고 제자를 붙여 주었지.' },
-      { who:'npc', t:'562년, 대가야가 무너졌다는 소식을 거기서 들었네. 이사부가 군사를 이끌었다더군.' },
-      { who:'npc', chart:{ head: [
-'',
-'금관가야',
-'대가야',
-], rows: [
-[
-'중심지',
-'김해',
-'고령',
-],
-[
-'시기',
-'전기 연맹',
-'후기 연맹',
-],
-[
-'멸망',
-'532년 법흥왕',
-'562년 진흥왕',
-],
-[
-'고분',
-'대성동',
-'지산동',
-],
-], note: '앞이 <b>김해·전기·532</b>, 뒤가 <b>고령·후기·562</b>. 30년 차이입니다.' }, t:'가야는 둘로 나눠 보면 헷갈리지 않습니다.' },
+      { who:'npc', t:'(가야금을 내밀며) 이걸 한번 뜯어 보게.' },
+      { who:'me', t:'(줄을 튕긴다) …줄이 몇인지 헤아려도 됩니까?',
+        chart:{ type:'relic', title:'가야금', items:[ { img:'gayageum', n:'가야금', s:'열두 줄 — 우륵이 지었다' } ] } },
+      { who:'npc', t:'열둘일세. 내가 가실왕의 명으로 만들었네.' },
+      { who:'npc', t:'가실왕은 「나라마다 말이 다르듯 음악도 다르다」 하셨네.' },
+      { who:'me', t:'(다시 뜯으며) 그래서 곡도 지으셨습니까?' },
+      { who:'npc', t:'열두 곡을 지었네. 열두 달을 뜻하지.',
+        chart:{ type:'stat', title:'우륵이 지은 것', items:[ { v:'12줄', l:'가야금 현' }, { v:'12곡', l:'우륵이 지은 곡' } ] } },
+      { who:'npc', t:'하가라도, 상가라도… 가야 고을 이름을 곡마다 붙였네.' },
+      { who:'me', t:'(고개를 끄덕인다) 고을마다 곡이 있었군요.' },
+      { who:'npc', t:'나라가 하나임을 노래로 이으려 했던 게지.' },
+      { who:'npc', t:'(씁쓸히) 나라가 어지러워지니 가얏고를 들고 신라로 넘어갔네.' },
+      { who:'npc', t:'제자 이문과 함께 진흥왕께 갔지. 국원, 지금의 충주에 살았네.',
+        chart:{ type:'map', title:'우륵이 옮겨 간 곳, 국원', pins:[ { x:56, y:100, n:'국원(충주)', on:true } ] } },
+      { who:'me', t:'그 뒤로는 이곳에서 어찌 지내셨습니까?' },
+      { who:'npc', t:'계고, 만덕, 법지에게 이 곡들을 전습했네.' },
+      { who:'npc', t:'562년, 대가야가 무너졌다는 소식을 그곳에서 들었네.' },
+      { who:'npc', t:'이사부 장군이 그 군사를 이끌었다더군.',
+        chart:{ type:'grid', title:'가야를 정리하면', head:[ '', '금관가야', '대가야' ], rows:[ [ '중심지', '김해', '고령' ], [ '시기', '전기 연맹', '후기 연맹' ], [ '멸망', '532년 법흥왕', '562년 진흥왕' ], [ '고분', '대성동', '지산동' ] ], note:'앞이 <b>김해·전기·532</b>, 뒤가 <b>고령·후기·562</b>. 30년 차이입니다.' } },
     ],
     quizSeq: [
       { q:'대가야 가실왕의 명으로 우륵이 만들었다고 전하는 열두 줄 현악기는?',
@@ -1687,38 +1741,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=44"></script>
-<script src="assets/streak.js?v=44"></script>
+<script src="assets/badges.js?v=45"></script>
+<script src="assets/streak.js?v=45"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=44"></script>
-  <script src="assets/fx.js?v=44"></script>
-  <script src="assets/deed.js?v=44"></script>
-  <script src="assets/inkwipe.js?v=44"></script>
-  <script src="assets/dash.js?v=44"></script>
-<script src="assets/juice.js?v=44"></script>
-  <script src="assets/difficulty.js?v=44"></script>
-  <script src="assets/nextauto.js?v=44"></script>
-<script src="assets/heroes_data.js?v=44"></script>
-<script src="assets/heroes.js?v=44"></script>
-<script src="assets/icons.js?v=44"></script>
-<script src="assets/srs.js?v=44"></script>
-<script src="assets/newsflash.js?v=44"></script>
-<script src="assets/timeline.js?v=44"></script>
-<script src="assets/journey.js?v=44"></script>
-<script src="assets/season.js?v=44"></script>
-<script src="assets/items.js?v=44"></script>
-  <script src="assets/gold.js?v=44"></script>
-  <script src="assets/ask.js?v=44"></script>
-  <script src="assets/ads.js?v=44"></script>
-  <script src="assets/energy.js?v=44"></script>
-  <script src="assets/daily.js?v=44"></script>
-  <script src="assets/unlock.js?v=44"></script>
-  <script src="assets/guide.js?v=44"></script>
-  <script src="assets/minigames.js?v=44"></script>
-  <script src="assets/quests.js?v=44"></script>
-  <script src="assets/offline.js?v=44"></script>
-  <script src="assets/telemetry.js?v=44"></script>
-<script src="assets/autowalk.js?v=44"></script>
+<script src="assets/rank.js?v=45"></script>
+  <script src="assets/fx.js?v=45"></script>
+  <script src="assets/deed.js?v=45"></script>
+  <script src="assets/inkwipe.js?v=45"></script>
+  <script src="assets/dash.js?v=45"></script>
+<script src="assets/juice.js?v=45"></script>
+  <script src="assets/difficulty.js?v=45"></script>
+  <script src="assets/nextauto.js?v=45"></script>
+<script src="assets/heroes_data.js?v=45"></script>
+<script src="assets/heroes.js?v=45"></script>
+<script src="assets/icons.js?v=45"></script>
+<script src="assets/srs.js?v=45"></script>
+<script src="assets/newsflash.js?v=45"></script>
+<script src="assets/timeline.js?v=45"></script>
+<script src="assets/journey.js?v=45"></script>
+<script src="assets/season.js?v=45"></script>
+<script src="assets/items.js?v=45"></script>
+  <script src="assets/gold.js?v=45"></script>
+  <script src="assets/ask.js?v=45"></script>
+  <script src="assets/ads.js?v=45"></script>
+  <script src="assets/energy.js?v=45"></script>
+  <script src="assets/daily.js?v=45"></script>
+  <script src="assets/unlock.js?v=45"></script>
+  <script src="assets/guide.js?v=45"></script>
+  <script src="assets/minigames.js?v=45"></script>
+  <script src="assets/quests.js?v=45"></script>
+  <script src="assets/offline.js?v=45"></script>
+  <script src="assets/telemetry.js?v=45"></script>
+<script src="assets/autowalk.js?v=45"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

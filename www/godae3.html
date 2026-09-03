@@ -487,9 +487,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=44"></script>
-<script src="assets/chart.js?v=44"></script>
-<script src="assets/audio.js?v=44"></script>
+<script src="assets/map/map_component.js?v=45"></script>
+<script src="assets/chart.js?v=45"></script>
+<script src="assets/audio.js?v=45"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -501,7 +501,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=44';   // 존댓말 전환
+const ART_V = '?v=45';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1159,9 +1159,25 @@ const NPC_DATA = {
   gyeonhwon_0: {
     name: '견훤', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l-2-4 4 1.5"/><path d="M19 8l2-4-4 1.5"/><circle cx="12" cy="12" r="7.5"/><circle cx="9" cy="11" r=".5" fill="currentColor" stroke="none"/><circle cx="15" cy="11" r=".5" fill="currentColor" stroke="none"/><path d="M9.5 15c1.7 1 3.3 1 5 0"/><path d="M6 9.5l2 1M18 9.5l-2 1M6.5 14l2.2-.5M17.5 14l-2.2-.5"/></svg>', img: 'assets/portraits/gyeonhwon.png',
     beats: [
-      { who:'npc', t:'나는 견훤이다. 서남해를 지키던 군인이었으나, 백성이 굶주리는 꼴을 보고 군사를 일으켰다.' },
-      { who:'npc', t:'완산주에 도읍을 정하고 나라 이름을 후백제라 하였다. 옛 백제의 원한을 갚겠노라 했지.' },
-      { who:'npc', t:'신라의 도읍까지 밀고 들어가 경애왕을 죽였다. …그 일로 인심이 등을 돌렸는지도 모르겠다.' },
+      { who:'npc', t:'(창을 세우고 나를 훑어본다) …웬 놈이냐.' },
+      { who:'me', t:'(움찔하며 물러선다) …그저 지나가던 나그네입니다.' },
+      { who:'npc', t:'나는 견훤이다. 서남해를 지키던 군졸이었지.' },
+      { who:'npc', t:'보아라, 이 땅엔 이제 나라가 셋으로 갈라졌다.',
+        chart:{ type:'faces', title:'후삼국의 세 사람', people:[ { img:'gyeonhwon', n:'견훤', s:'후백제' }, { img:'gungye', n:'궁예', s:'후고구려 → 태봉' }, { img:'wanggeon', n:'왕건', s:'훗날 고려' } ] } },
+      { who:'me', t:'…셋이나 됩니까? 신라 하나가 아니었습니까?' },
+      { who:'npc', t:'그중 하나가 나다. 굶주린 백성을 보다 못해 창을 들었지.' },
+      { who:'me', t:'…그래서 창을 들고, 나라까지 세우셨습니까?' },
+      { who:'npc', t:'900년, 완산주에 도읍을 세웠다. 나라 이름은 후백제.',
+        chart:{ type:'map', title:'후백제의 도읍', pins:[ { x:45, y:118, n:'완산주', on:true } ], legend:[ { k:'완산주', v:'지금의 전주', on:true }, { k:'900년', v:'후백제를 세운 해' } ] } },
+      { who:'npc', t:'완산에 도읍하여, 의자왕의 원한을 씻겠다 했다.',
+        chart:{ type:'quote', title:'견훤의 선언', text:'완산에 도읍하여 <b>의자왕</b>의 묵은 분함을<br>씻지 않겠는가.', from:'삼국사기 견훤열전' } },
+      { who:'me', t:'완산주라면… 지금의 전주를 말씀하시는 겁니까?' },
+      { who:'npc', t:'그렇다. 그곳에 새 왕궁을 세우고 도읍으로 삼았지.' },
+      { who:'npc', t:'927년, 신라의 도읍 경주까지 밀고 들어갔다.',
+        chart:{ type:'vs', title:'견훤의 마지막 승부수 (927)', left:{ n:'견훤', s:'경주까지 밀고 들어갔다' }, right:{ n:'경애왕', s:'그 자리에서 죽었다' }, mid:'VS' } },
+      { who:'me', t:'…그곳에서, 대체 무슨 일이 있었던 겁니까?' },
+      { who:'npc', t:'경애왕을 죽였다. …그 후로 인심이 돌아섰는지도 모르지.',
+        chart:{ type:'timeline', title:'견훤의 발자취', marks:[ { y:'892', t:'무진주에서 자립' }, { y:'900', t:'후백제 선포', on:true }, { y:'927', t:'경주 침공' } ] } },
     ],
     quizSeq: [
       { q:'완산주(전주)에 도읍을 정하고 후백제를 세운 인물은?',
@@ -1172,11 +1188,29 @@ const NPC_DATA = {
   gungye_0: {
     name: '궁예', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3.2"/></svg>', img: 'assets/portraits/gungye.png',
     beats: [
-      { who:'npc', t:'나는 궁예다. 신라의 왕자였다는 말도 있으나, 버림받아 절에 맡겨졌지.' },
-      { who:'npc', t:'송악을 근거로 후고구려를 세웠다. 뒤에 나라 이름을 마진, 다시 태봉으로 고쳤고 철원으로 옮겼다.' },
-      { who:'npc', t:'나는 미륵이다. 사람의 마음을 꿰뚫어 본다. …나를 의심하는 자는 살려두지 않는다.' },
-      { who:'npc', t:'나는 사람의 마음을 읽을 수 있네. 관심법(觀心法)이라 하지. 부처의 눈을 얻었으니 못 볼 것이 없어.' },
-      { who:'npc', t:'…내 아내도, 아들도, 신하들도 그렇게 읽어 냈네. 읽어 내고는 죽였지. 나중에는 아무도 내 앞에서 눈을 마주치지 못하더군.' },
+      { who:'npc', t:'(눈을 가늘게 뜨고 노려본다) …웬 놈이 예까지 왔느냐.' },
+      { who:'me', t:'(그 눈빛에 놀라, 그 자리에 얼어붙는다)' },
+      { who:'npc', t:'나는 궁예다. 신라 왕자였다는 이야기도 전해져 온다.' },
+      { who:'npc', t:'허나 갓난아기 때 버려져, 절에서 자랐지.',
+        chart:{ type:'faces', title:'궁예를 넘어선 사람', people:[ { img:'gungye', n:'궁예', s:'태봉의 왕' }, { img:'wanggeon', n:'왕건', s:'그를 몰아낸 신하' } ] } },
+      { who:'me', t:'…그런 분이, 어찌 나라까지 세우게 되셨습니까?' },
+      { who:'npc', t:'901년, 송악을 근거지 삼아 세웠다. 후고구려.',
+        chart:{ type:'map', title:'궁예가 세운 나라', pins:[ { x:36, y:84, n:'송악', on:true } ], legend:[ { k:'송악', v:'지금의 개성', on:true }, { k:'901년', v:'후고구려를 세운 해' } ] } },
+      { who:'me', t:'…국호가 이러저리 여러 번 바뀌었다 들었습니다.' },
+      { who:'npc', t:'처음엔 마진이라 했다가, 뒤에 태봉으로 고쳤다.' },
+      { who:'npc', t:'송악에 있던 도읍도, 뒤에 철원으로 옮겼지.',
+        chart:{ type:'timeline', title:'궁예, 국호를 세 번 바꾸다', marks:[ { y:'901', t:'후고구려' }, { y:'904', t:'마진' }, { y:'911', t:'태봉', on:true }, { y:'918', t:'왕건에게 축출' } ] } },
+      { who:'npc', t:'(내 눈을 피하지 마라) 나는 사람의 마음을 읽는다.' },
+      { who:'me', t:'(그 말이 무서워, 시선을 어디에 둘지 모른다) ……' },
+      { who:'npc', t:'관심법이라 하지. 부처의 눈을 얻었으니 못 볼 것이 없다.',
+        chart:{ type:'pyramid', title:'궁예가 세운 자리', tiers:[ { t:'미륵불', s:'궁예 스스로 칭한 이름', hi:true }, { t:'신광보살 · 청광보살', s:'두 아들' }, { t:'백성' } ] } },
+      { who:'npc', t:'(말이 잦아든다) …아내도, 두 아들도 그렇게 읽어 냈다.',
+        chart:{ type:'stat', title:'미륵을 자처한 뒤', items:[ { v:'911년', l:'미륵불을 자처하다' }, { v:'915년', l:'왕비와 두 아들을 죽이다' } ] } },
+      { who:'npc', t:'그렇게 마음을 읽어 내고는, 결국 죽이고 말았지.' },
+      { who:'me', t:'…그 모든 일에, 지금도 후회는 없으십니까?' },
+      { who:'npc', t:'(그 물음에도, 오래도록 아무 대답이 없다)' },
+      { who:'me', t:'…무엇이 진실인지, 아직 잘 모르겠습니다.',
+        chart:{ type:'vs', title:'궁예를 보는 두 눈', left:{ n:'미륵불', s:'스스로 칭한 이름' }, right:{ n:'폭군', s:'삼국사기가 그린 모습(고려 관점)' }, mid:'?' } },
     ],
     quizSeq: [
       { q:'송악을 근거로 후고구려를 세우고, 뒤에 국호를 마진·태봉으로 고친 인물은?',
@@ -1187,9 +1221,32 @@ const NPC_DATA = {
   choechiwon_0: {
     name: '최치원', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3l3 3-9.5 9.5-4 1 1-4L18 3z"/><line x1="4" y1="20" x2="7.5" y2="16.5"/></svg>', img: 'assets/portraits/choechiwon.png',
     beats: [
-      { who:'npc', t:'나는 최치원이라 하오. 열두 살에 당으로 건너가 과거에 급제하고, 황소의 난을 꾸짖는 격문으로 이름을 얻었소.' },
-      { who:'npc', t:'돌아와 나라를 고칠 방책 열 가지를 진성여왕께 올렸소. 허나 쓰이지 않았소.' },
-      { who:'npc', t:'…내가 아무리 애써도 육두품은 육두품이오. 골품이 사람의 끝을 정하는 나라에서는.' },
+      { who:'npc', t:'(붓을 놓는다) …육두품이 무엇인지 아는가?' },
+      { who:'me', t:'…신라에만 있는 엄격한 신분 제도 아닙니까?' },
+      { who:'npc', t:'그렇소. 아무리 애써도 오를 수 없는 벽이오.',
+        chart:{ type:'pyramid', title:'골품제와 관등 상한', tiers:[ { t:'진골', s:'이벌찬까지 — 끝이 없다' }, { t:'6두품', s:'아찬까지 — 여기서 막힌다', hi:true }, { t:'5두품 · 4두품', s:'그보다 낮다' } ] } },
+      { who:'me', t:'…6두품은 대체 얼마나 오를 수 있습니까?' },
+      { who:'npc', t:'나는 아찬까지요. 그 위 이벌찬은 진골의 자리요.' },
+      { who:'npc', t:'열두 살 어린 나이에, 당으로 홀로 건너갔소.',
+        chart:{ type:'stat', title:'최치원, 당으로 가다', items:[ { v:'857년', l:'태어난 해' }, { v:'868년', l:'열두 살, 당에 가다' }, { v:'874년', l:'열여덟, 빈공과 급제' } ] } },
+      { who:'me', t:'그리 어린 나이에, 혼자서 말입니까?' },
+      { who:'npc', t:'그곳에서 빈공과라는 어려운 과거에 급제했소.' },
+      { who:'npc', t:'당의 백성이 아닌, 외국인만 보는 과거였지.' },
+      { who:'npc', t:'황소의 난이 일자, 그를 꾸짖는 격문을 썼소.',
+        chart:{ type:'quote', title:'토황소격문(격황소서)', text:'천하의 사람들이 모두 <b>죽이기</b>를 생각할 뿐<br>아니라, 땅속 귀신들도 이미 죽이기를 의논했다.', from:'격황소서' } },
+      { who:'me', t:'…그 글이, 대체 얼마나 대단한 글이었습니까?' },
+      { who:'npc', t:'이 대목을 읽다, 황소가 침상에서 굴러떨어졌다 하오.' },
+      { who:'me', t:'(웃음을 참지 못하고) 그게 정말입니까?' },
+      { who:'npc', t:'백운소설이라는 책에 그리 전하오. 믿거나 말거나요.' },
+      { who:'npc', t:'신라로 다시 돌아와, 나라를 구할 방책을 올렸소.' },
+      { who:'npc', t:'894년, 그 개혁안의 이름은 시무 10여 조요.',
+        chart:{ type:'stat', title:'시무 10여 조', items:[ { v:'894년', l:'진성여왕께 올린 해' }, { v:'10여 조', l:'개혁안의 조목 수' } ] } },
+      { who:'me', t:'…그 귀한 방책은, 결국 받아들여졌습니까?' },
+      { who:'npc', t:'…아니오. 이번에도 진골 세력이 가로막았소.' },
+      { who:'npc', t:'그 뒤로는, 가야산 깊은 해인사로 들어가 은거했소.',
+        chart:{ type:'map', title:'최치원이 은거한 곳', pins:[ { x:59, y:119, n:'해인사', on:true } ], legend:[ { k:'가야산', v:'합천의 절, 해인사', on:true } ] } },
+      { who:'npc', t:'(한숨) 아무리 옳아도, 육두품은 육두품이오.',
+        chart:{ type:'compare', title:'당과 신라, 최치원의 두 얼굴', cols:[ { h:'당에서', items:[ '빈공과 급제', '문장으로 이름을 떨침' ] }, { h:'신라에서', hi:true, items:[ '시무 10여 조, 묵살', '육두품의 벽에 막힘' ] } ] } },
     ],
     quizSeq: [
       { q:'당에서 빈공과에 급제하고 「토황소격문」으로 이름을 떨쳤으며, 귀국 후 시무 10여 조를 올린 6두품 학자는?',
@@ -1203,15 +1260,24 @@ const NPC_DATA = {
   sinsunggyeom_0: {
     name: '신숭겸', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>', img: 'assets/portraits/sinsunggyeom.png',
     beats: [
-      { who:'npc', t:'나는 신숭겸이라 하오. 왕건 폐하를 뫼시는 장수요.' },
-      { who:'npc', t:'927년, 견훤이 신라 경주까지 쳐들어가 경애왕을 죽이자 폐하께서 신라를 구하러 내려오셨소. 헌데 견훤이 이곳 공산에서 되레 기다리고 있었지.' },
-      { who:'npc', t:'크게 졌소. 폐하께서 포위되시자 내가 갑옷을 바꿔 입고 대신 나서 싸우다 죽었소. 그래서 폐하는 살아 돌아가셨소.' },
-      { who:'npc', chart:{ type: 'flow', steps: [
-{ t: '927', s: '공산 전투<br>견훤 승' },
-{ t: '930', s: '고창 전투<br>왕건 승' },
-{ t: '935', s: '신라 항복<br>견훤 귀부' },
-{ t: '936', s: '일리천 전투<br>통일' },
-], note: '견훤에게 밀리던 흐름이 <b>고창 전투(930)</b>부터 뒤집힙니다.' }, t:'허나 3년 뒤, 고창(안동)에서는 전세가 뒤집혔소. 그 싸움에서 크게 이기며 주도권이 우리 쪽으로 넘어왔지.' },
+      { who:'npc', t:'나는 신숭겸이라 하오. 폐하를 가까이서 뫼시는 장수요.' },
+      { who:'me', t:'…낯빛에 짙은 그늘이 드리워 있으십니다.' },
+      { who:'npc', t:'(한참 말이 없다가) …공산 이야기를 하는 거요.' },
+      { who:'me', t:'공산이라면, 바로 이 앞산을 말씀하시는 겁니까?' },
+      { who:'npc', t:'그렇소. 927년, 바로 이 자리에서 크게 졌소.' },
+      { who:'npc', t:'앞서 견훤이 경주로 쳐들어가, 경애왕을 죽였소.',
+        chart:{ type:'map', title:'공산 전투의 자리', pins:[ { x:74, y:118, n:'경주' }, { x:66, y:117, n:'공산', on:true } ], legend:[ { k:'경주', v:'견훤이 경애왕을 죽인 곳' }, { k:'공산', v:'신숭겸이 전사한 곳', on:true } ] } },
+      { who:'me', t:'그래서 폐하께서 몸소 구하러 내려오셨군요.' },
+      { who:'npc', t:'그리하였다가, 이곳에서 견훤에게 도리어 에워싸였소.' },
+      { who:'npc', t:'(갑옷을 가리키며) 이 갑옷을, 폐하 것과 바꿔 입었소.' },
+      { who:'me', t:'…설마.' },
+      { who:'npc', t:'내가 폐하인 척 나서 싸우다 죽었소. 그래서 폐하는 사셨소.' },
+      { who:'me', t:'(고개를 숙인다)' },
+      { who:'npc', t:'(담담히) 후회는 없소. 그것이 내 소임이었소.',
+        chart:{ type:'stat', title:'신숭겸을 기려', items:[ { v:'장절', l:'태조가 내린 시호' }, { v:'지묘사', l:'명복을 빌며 세운 절' } ] } },
+      { who:'npc', t:'허나 3년 뒤, 고창에서 전세가 뒤집혔소.',
+        chart:{ type:'flow', title:'공산에서 통일까지', steps:[ { t:'927', s:'공산 전투<br>견훤 승' }, { t:'930', s:'고창 전투<br>왕건 승' }, { t:'935', s:'신라 항복<br>견훤 귀부' }, { t:'936', s:'일리천 전투<br>통일' } ] } },
+      { who:'me', t:'그 말씀, 오래오래 마음에 새겨 두겠습니다.' },
     ],
     quizSeq: [
       { q:'927년 견훤이 신라 경주를 침공하자 왕건이 구원에 나섰다가 견훤에게 크게 패해 신숭겸이 대신 전사한 싸움은?',
@@ -1225,12 +1291,36 @@ const NPC_DATA = {
   gyeongsunwang_0: {
     name: '경순왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/gyeongsunwang.png',
     beats: [
-      { who:'npc', t:'나는 경순왕, 신라의 마지막 임금이오.' },
-      { who:'npc', t:'견훤이 경주까지 쳐들어와 경애왕을 시해하고 나를 세웠으니, 처음부터 온전한 왕이 아니었소.' },
-      { who:'npc', t:'935년, 후백제에 큰 변고가 있었소. 견훤의 아들 신검이 아비를 금산사에 가두고 스스로 왕위에 올랐다더군.' },
-      { who:'npc', t:'견훤은 그 아들을 피해 우리 쪽도 아니고 고려로 도망쳐 왕건에게 몸을 맡겼소. 아비가 아들에게 쫓겨 원수의 나라로 간 셈이오.' },
-      { who:'npc', t:'나 또한 나라를 더는 지킬 수 없다 여겨, 그해 겨울 신하들과 의논 끝에 나라를 들어 왕건에게 바쳤소.' },
-      { who:'npc', t:'이듬해, 견훤까지 앞장세운 왕건의 군대가 일리천에서 신검을 무찔렀소. 그렇게 후삼국이 하나가 되었소.' },
+      { who:'npc', t:'나는 경순왕이오. 신라의, 마지막 임금이었지.' },
+      { who:'me', t:'…방금, 신라의 마지막 임금이라 하셨습니까?' },
+      { who:'npc', t:'(고개를 끄덕인다) 견훤이 경애왕을 죽였소.' },
+      { who:'npc', t:'그 뒤 비어 있던 왕좌에, 나를 억지로 앉혔소.' },
+      { who:'me', t:'처음부터, 온전한 왕은 아니었던 셈이군요.' },
+      { who:'npc', t:'그렇소.',
+        chart:{ type:'stat', title:'고려가 선 뒤', items:[ { v:'918년', l:'왕건, 고려를 세우다' }, { v:'935년', l:'경순왕, 항복하다' } ] } },
+      { who:'npc', t:'935년 3월, 후백제에 큰 변고가 있었소.' },
+      { who:'npc', t:'견훤의 아들 신검이, 아비를 금산사에 가두었소.',
+        chart:{ type:'timeline', title:'935년, 신라와 후백제', marks:[ { y:'935.3', t:'신검 정변, 견훤 유폐' }, { y:'935.6', t:'견훤, 고려로' }, { y:'935.11', t:'경순왕 항복', on:true }, { y:'936', t:'일리천, 통일' } ] } },
+      { who:'me', t:'…그 아들이, 친아비를 가두었단 말입니까?' },
+      { who:'npc', t:'견훤이 그 넷째 아들을 유난히 아끼신 것이 화근이었소.' },
+      { who:'npc', t:'석 달 갇혔다가, 여름에 나주로 도망쳤소.' },
+      { who:'npc', t:'그 길로 곧장 나주를 거쳐, 고려에 몸을 맡겼소.' },
+      { who:'me', t:'…아버지가 아들에게 쫓겨, 원수의 나라로 갔군요.' },
+      { who:'npc', t:'(씁쓸히) 그렇소.' },
+      { who:'me', t:'…같은 해에, 두 임금이 나라를 잃었군요.',
+        chart:{ type:'compare', title:'935년, 두 임금의 자리', cols:[ { h:'견훤', items:[ '아들 신검에게 쫓겨났다', '고려로 도망쳤다' ] }, { h:'경순왕', hi:true, items:[ '스스로 항복을 택했다', '신하들과 의논했다' ] } ] } },
+      { who:'npc', t:'그리고 나도, 그해 겨울 같은 길을 갔소.' },
+      { who:'me', t:'…대체 지금, 무슨 말씀을 하고 계신 겁니까?' },
+      { who:'npc', t:'신하들과 의논 끝에, 나라를 들어 바치기로 했소.' },
+      { who:'npc', t:'더는 지킬 수 없었소. 사방이 이미 남의 땅이었소.',
+        chart:{ type:'stat', title:'천 년 신라, 여기서 지다', items:[ { v:'56대', l:'혁거세부터 이때까지' }, { v:'992년', l:'신라가 이어온 햇수' } ] } },
+      { who:'me', t:'(차마 말을 잇지 못한 채, 한참을 서 있는다)' },
+      { who:'npc', t:'11월, 개경으로 갔소. 왕건이 교외까지 나와 맞았소.',
+        chart:{ type:'map', title:'경순왕이 간 길', pins:[ { x:74, y:118, n:'금성' }, { x:36, y:84, n:'개경', on:true } ], legend:[ { k:'금성', v:'경순왕이 떠난 곳' }, { k:'개경', v:'왕건이 맞아준 곳', on:true } ] } },
+      { who:'npc', t:'이듬해, 그 왕건이 마침내 신검마저 무찔렀소.',
+        chart:{ type:'vs', title:'일리천 전투 (936)', left:{ n:'왕건', s:'견훤을 앞세우다' }, right:{ n:'신검', s:'항복하다' }, mid:'VS' } },
+      { who:'npc', t:'그렇게, 후삼국이 비로소 하나가 되었소.',
+        chart:{ type:'map', title:'통일의 자리, 일리천', pins:[ { x:62, y:113, n:'일리천', on:true } ], legend:[ { k:'936년', v:'후백제를 무찌른 곳', on:true } ] } },
     ],
     quizSeq: [
       { q:'견훤을 금산사에 가두고 왕위를 빼앗아 견훤이 고려로 도망치게 만든 후백제의 인물은?',
@@ -1664,38 +1754,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=44"></script>
-<script src="assets/streak.js?v=44"></script>
+<script src="assets/badges.js?v=45"></script>
+<script src="assets/streak.js?v=45"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=44"></script>
-  <script src="assets/fx.js?v=44"></script>
-  <script src="assets/deed.js?v=44"></script>
-  <script src="assets/inkwipe.js?v=44"></script>
-  <script src="assets/dash.js?v=44"></script>
-<script src="assets/juice.js?v=44"></script>
-  <script src="assets/difficulty.js?v=44"></script>
-  <script src="assets/nextauto.js?v=44"></script>
-<script src="assets/heroes_data.js?v=44"></script>
-<script src="assets/heroes.js?v=44"></script>
-<script src="assets/icons.js?v=44"></script>
-<script src="assets/srs.js?v=44"></script>
-<script src="assets/newsflash.js?v=44"></script>
-<script src="assets/timeline.js?v=44"></script>
-<script src="assets/journey.js?v=44"></script>
-<script src="assets/season.js?v=44"></script>
-<script src="assets/items.js?v=44"></script>
-  <script src="assets/gold.js?v=44"></script>
-  <script src="assets/ask.js?v=44"></script>
-  <script src="assets/ads.js?v=44"></script>
-  <script src="assets/energy.js?v=44"></script>
-  <script src="assets/daily.js?v=44"></script>
-  <script src="assets/unlock.js?v=44"></script>
-  <script src="assets/guide.js?v=44"></script>
-  <script src="assets/minigames.js?v=44"></script>
-  <script src="assets/quests.js?v=44"></script>
-  <script src="assets/offline.js?v=44"></script>
-  <script src="assets/telemetry.js?v=44"></script>
-<script src="assets/autowalk.js?v=44"></script>
+<script src="assets/rank.js?v=45"></script>
+  <script src="assets/fx.js?v=45"></script>
+  <script src="assets/deed.js?v=45"></script>
+  <script src="assets/inkwipe.js?v=45"></script>
+  <script src="assets/dash.js?v=45"></script>
+<script src="assets/juice.js?v=45"></script>
+  <script src="assets/difficulty.js?v=45"></script>
+  <script src="assets/nextauto.js?v=45"></script>
+<script src="assets/heroes_data.js?v=45"></script>
+<script src="assets/heroes.js?v=45"></script>
+<script src="assets/icons.js?v=45"></script>
+<script src="assets/srs.js?v=45"></script>
+<script src="assets/newsflash.js?v=45"></script>
+<script src="assets/timeline.js?v=45"></script>
+<script src="assets/journey.js?v=45"></script>
+<script src="assets/season.js?v=45"></script>
+<script src="assets/items.js?v=45"></script>
+  <script src="assets/gold.js?v=45"></script>
+  <script src="assets/ask.js?v=45"></script>
+  <script src="assets/ads.js?v=45"></script>
+  <script src="assets/energy.js?v=45"></script>
+  <script src="assets/daily.js?v=45"></script>
+  <script src="assets/unlock.js?v=45"></script>
+  <script src="assets/guide.js?v=45"></script>
+  <script src="assets/minigames.js?v=45"></script>
+  <script src="assets/quests.js?v=45"></script>
+  <script src="assets/offline.js?v=45"></script>
+  <script src="assets/telemetry.js?v=45"></script>
+<script src="assets/autowalk.js?v=45"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

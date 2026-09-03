@@ -487,9 +487,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=44"></script>
-<script src="assets/chart.js?v=44"></script>
-<script src="assets/audio.js?v=44"></script>
+<script src="assets/map/map_component.js?v=45"></script>
+<script src="assets/chart.js?v=45"></script>
+<script src="assets/audio.js?v=45"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -501,7 +501,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=44';   // 존댓말 전환
+const ART_V = '?v=45';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1177,9 +1177,21 @@ const NPC_DATA = {
   gyebaek_0: {
     name: '계백', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img: 'assets/portraits/gyebaek.png',
     beats: [
-      { who:'npc', t:'나는 백제의 달솔 계백일세. 오천을 이끌고 여기 나왔네.' },
-      { who:'npc', t:'집을 나서기 전에 처자를 내 손으로 베었네. 살아남아 남의 종이 되느니… 그리 생각했지. 그 일을 잘했다고는 못 하겠네.' },
-      { who:'npc', t:'네 번을 이겼네. 다섯 번째에 무너졌지. 그것이 오천으로 오만을 상대한 값일세.' },
+      { who:'npc', t:'(투구를 쓴다) 오천이다. 신라군은 오만이라 하더군.',
+        chart:{ type:'stat', title:'황산벌의 병력', items:[ { v:'5,000', l:'백제 결사대' }, { v:'50,000', l:'신라군' } ] } },
+      { who:'me', t:'(마른침을 삼킨다) …열 배입니다. 승산이 있습니까?' },
+      { who:'npc', t:'없네. 그래도 나가야 하네. 물러설 곳이 없으니까.' },
+      { who:'npc', t:'(잠시 말이 없다) 오늘 아침, 처자를 내 손으로 베었네.' },
+      { who:'me', t:'…어찌 그런 일을 하셨습니까?' },
+      { who:'npc', t:'남의 종이 되어 사느니, 그리 정했네. 잘했다고는 못 하겠군.',
+        chart:{ type:'quote', title:'계백의 각오', text:'처자가 적국의 노비가 되어<br>살아서 욕보기보다는 <b>죽는 것이 낫다</b>.', from:'삼국사기 계백전' } },
+      { who:'npc', t:'가세. 험한 곳을 골라 영채를 셋 세워 기다렸네.',
+        chart:{ type:'map', title:'황산벌의 자리', pins:[ { x:44.3, y:112.3, n:'황산벌', on:true } ], legend:[ { k:'지금', v:'충남 논산' } ] } },
+      { who:'npc', t:'네 번 싸워 네 번 이겼네. 그러나 마지막이 남았지.',
+        chart:{ type:'steps', title:'황산벌 전투의 끝', steps:[ { t:'첫째~넷째', s:'모두 이겼다' }, { t:'다섯째', s:'오천이 오만에 무너지다' } ] } },
+      { who:'me', t:'(숨을 죽인다) …그런데 어찌 여기 계십니까?' },
+      { who:'npc', t:'다섯 번째에 무너졌네. 오천으로 오만을 막을 수는 없었지.' },
+      { who:'npc', t:'(칼자루를 고쳐 쥔다) …이제 마지막이군.' },
     ],
     quizSeq: [
       { q:'660년 오천의 결사대로 신라군에 맞서다 전사한 백제의 장수는?',
@@ -1190,9 +1202,25 @@ const NPC_DATA = {
   gwanchang_0: {
     name: '관창', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="7" r="2.6"/><circle cx="17" cy="10.5" r="2.6"/><circle cx="15" cy="16.5" r="2.6"/><circle cx="9" cy="16.5" r="2.6"/><circle cx="7" cy="10.5" r="2.6"/><circle cx="12" cy="12" r="2"/></svg>', img: 'assets/portraits/gwanchang.png',
     beats: [
-      { who:'npc', t:'저는 열여섯입니다. 아버지가 등을 떠미셨습니다 — "가서 이름을 세우라"고요.' },
-      { who:'npc', t:'홀로 말을 달려 적진에 뛰어들었다가 붙잡혔습니다. 계백 장군이 어리다며 돌려보내 주더군요.' },
-      { who:'npc', t:'그래서 다시 갔습니다. 두 번째에는 돌아오지 못했지요. …그 뒤로 우리 군사들이 달라졌다고 들었습니다.' },
+      { who:'npc', t:'(말고삐를 쥔다) 저는 열여섯입니다.' },
+      { who:'me', t:'(눈이 커진다) 혼자 가시는 겁니까?' },
+      { who:'npc', t:'아버지 품일 장군이 등을 떠미셨습니다. 「가서 이름을 세우라」 하셨지요.' },
+      { who:'me', t:'(주먹을 쥔다) …무섭지 않으십니까?' },
+      { who:'npc', t:'무섭습니다. 그래도 갑니다. (말을 달려 적진으로 나간다)' },
+      { who:'me', t:'(숨죽여 지켜본다) …무사하시길.' },
+      { who:'npc', t:'…붙잡혔습니다. 계백 장군 앞에 끌려갔지요.' },
+      { who:'npc', t:'저를 보더니, 어리다며 돌려보내 주었습니다.',
+        chart:{ type:'faces', title:'황산벌에서 마주친 두 사람', people:[ { img:'gyebaek', n:'계백', s:'백제의 장수' }, { img:'gwanchang', n:'관창', s:'열여섯 신라 화랑' } ] } },
+      { who:'me', t:'(안도한다) 그럼 살아 돌아오신 거군요.' },
+      { who:'npc', t:'(고개를 젓는다) 혼자서 다시 갔습니다.' },
+      { who:'me', t:'(말을 잇지 못한다) …왜 다시 가셨습니까?' },
+      { who:'npc', t:'한 번 살려 보내는 자비는 받았으니, 두 번은 안 됩니다.',
+        chart:{ type:'stat', title:'관창, 두 번의 돌격', items:[ { v:'16세', l:'관창의 나이' }, { v:'2번', l:'홀로 돌진한 횟수' } ] } },
+      { who:'npc', t:'(말이 없다)' },
+      { who:'me', t:'(눈시울을 붉힌다) …돌아오지 못하셨군요.' },
+      { who:'npc', t:'그 뒤로 우리 군사들 눈빛이 달라졌다 들었습니다.' },
+      { who:'npc', t:'원광 법사가 귀산과 추항에게 준 다섯 계율 중 하나였습니다.',
+        chart:{ type:'grid', title:'세속 5계', head:[ '계율', '뜻' ], rows:[ [ '사군이충', '충성으로 임금을 섬긴다' ], [ '사친이효', '효로 부모를 섬긴다' ], [ '교우이신', '믿음으로 벗을 사귄다' ], [ '임전무퇴', '싸움에서 물러서지 않는다' ], [ '살생유택', '가려서 죽인다' ] ], hi:3 } },
     ],
     quizSeq: [
       { q:'화랑도의 세속 5계 가운데, 싸움에 나아가 물러서지 않는다는 조항은?',
@@ -1203,18 +1231,46 @@ const NPC_DATA = {
   gimyusin_0: {
     name: '김유신', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>', img: 'assets/portraits/gimyusin.png',
     beats: [
-      { who:'npc', t:'나는 금관가야 왕실의 핏줄일세. 그래서 진골이면서도 늘 증명해야 했지.' },
-      { who:'npc', t:'김춘추와 손을 잡았네. 백제에 대야성을 빼앗기고 사위 내외까지 잃은 그가, 고구려에서도 문전박대당하고 끝내 당 태종을 직접 찾아가 군사 동맹을 맺었지 — 648년의 나당동맹일세. 그 힘으로 백제를 쳐 660년에 사비성이 떨어졌네.' },
-      { who:'npc', t:'고구려에는 연개소문이라는 자가 있었네. 642년, 정변을 일으켜 영류왕을 시해하고 대신들까지 죽인 뒤 스스로 대막리지에 올라 권력을 틀어쥐었지. 그가 세운 왕이 보장왕일세.' },
-      { who:'npc', t:'고구려는 더 오래 걸렸네. 앞서 당 태종이 몸소 대군을 이끌고 왔을 때도, 안시성 성주가 몇 달을 버텨 물리친 일이 있었지. 연개소문이 살아 있는 동안은 그렇게 굳건했네. 그가 죽은 뒤 아들들이 갈라서고서야, 668년 평양성이 무너졌지.' },
-      { who:'npc', chart:{ type: 'flow', steps: [
-{ t: '660', s: '백제 멸망 · 사비성' },
-{ t: '668', s: '고구려 멸망 · 평양성' },
-{ t: '676', s: '나당전쟁 승리 · 통일' },
-], note: '<b>육·육·칠</b>로 외우게 — 660, 668, 676. 진짜 통일은 마지막 676년일세.' }, t:'통일이 한 번에 된 게 아닐세. 세 단계를 나눠 보게.' },
-      { who:'npc', t:'허나 당은 처음부터 이 땅을 삼킬 셈이었어. 웅진도독부니 안동도호부니 하며 눌러앉더군.' },
-      { who:'npc', t:'내 젊은 날 이야기도 하나 하지. 기생 천관의 집에 드나들다 어머니께 크게 꾸중을 들었네.' },
-      { who:'npc', t:'다시는 가지 않겠다 맹세했는데, 어느 날 술에 취해 졸다 보니 말이 옛 길을 따라 그 집 앞에 서 있더군. 나는 그 자리에서 칼을 뽑아 애마의 목을 베고 돌아섰네. …그 뒤로 한 번도 돌아보지 않았지.' },
+      { who:'npc', t:'금관가야 왕족의 핏줄일세. 진골이면서도 늘 증명해야 했지.' },
+      { who:'me', t:'(귀를 기울인다) …무엇을 증명하십니까?' },
+      { who:'npc', t:'내 검이 진짜라는 것을 말일세. 김춘추와 손을 잡았네.' },
+      { who:'me', t:'(귀를 세운다) 그이가 누구입니까?' },
+      { who:'npc', t:'대야성에서 사위 내외를 잃은 사람이지.',
+        chart:{ type:'map', title:'대야성의 자리', pins:[ { x:59.6, y:122.1, n:'대야성', on:true } ], legend:[ { k:'지금', v:'경남 합천' } ] } },
+      { who:'npc', t:'그 뒤 고구려에 청병하러 갔다가, 되레 갇혔네.' },
+      { who:'me', t:'(놀라며) 무사히 구해 내셨습니까?' },
+      { who:'npc', t:'내가 군사를 몰아 국경까지 밀고 가 빼냈지.' },
+      { who:'npc', t:'결국 그는 당으로 건너가 태종을 직접 만났네.' },
+      { who:'npc', t:'648년, 태종을 설득해 나당동맹을 맺었지.',
+        chart:{ type:'faces', title:'나당동맹을 만든 두 사람', people:[ { img:'gimyusin', n:'김유신', s:'가야계 진골, 군사를 이끌다' }, { img:'muyeol_king', n:'무열왕 김춘추', s:'외교로 당을 끌어들이다' } ] } },
+      { who:'npc', t:'그 힘으로 백제를 쳐, 660년 사비성이 떨어졌네.',
+        chart:{ type:'stat', title:'백제의 멸망', items:[ { v:'660', l:'사비성 함락' }, { v:'김유신·소정방', l:'나당연합군' } ] } },
+      { who:'me', t:'(안도한다) …드디어입니까?' },
+      { who:'npc', t:'그렇지. 그러나 고구려는 아직이었네. 고구려엔 연개소문이 있었네.' },
+      { who:'npc', t:'642년, 정변을 일으켜 영류왕을 시해했지.',
+        chart:{ type:'timeline', title:'연개소문의 집권', marks:[ { y:'642', t:'정변·영류왕 시해', on:true }, { y:'645', t:'안시성' }, { y:'668', t:'평양성 함락' } ] } },
+      { who:'me', t:'(놀라며) …스스로 왕이 되었습니까?' },
+      { who:'npc', t:'아니, 스스로 대막리지에 올라 보장왕을 세워 실권을 쥐었네.' },
+      { who:'npc', t:'645년엔 당 태종이 몸소 대군을 끌고 왔네.' },
+      { who:'me', t:'(마른침을 삼킨다) 막아 냈습니까?' },
+      { who:'npc', t:'안시성 성주와 백성이 몇 달을 버텼지.',
+        chart:{ type:'map', title:'안시성의 자리', north:true, pins:[ { x:-17.9, y:41.1, n:'안시성', on:true } ] } },
+      { who:'npc', t:'연개소문이 살아 있는 동안은 굳건했네.' },
+      { who:'me', t:'(고개를 젓는다) 오래도 걸렸군요.' },
+      { who:'npc', t:'그가 죽자 아들들이 갈라섰고, 668년 평양성이 무너졌지.' },
+      { who:'npc', t:'통일은 한 번이 아니었네. 세 걸음이었지.',
+        chart:{ type:'flow', title:'통일까지 세 걸음', steps:[ { t:'660', s:'백제 멸망 · 사비성' }, { t:'668', s:'고구려 멸망 · 평양성' }, { t:'676', s:'나당전쟁 승리 · 통일' } ], note:'<b>육·육·칠</b>로 외우게 — 660, 668, 676.' } },
+      { who:'npc', t:'백제가 무너진 뒤에도 불씨는 남았네.' },
+      { who:'npc', t:'복신·도침·흑치상지가 부흥군을 일으켰지.' },
+      { who:'me', t:'(귀를 기울인다) …성공했습니까?' },
+      { who:'npc', t:'왜의 수군이 도우러 왔으나, 663년 백강에서 크게 졌네.',
+        chart:{ type:'stat', title:'백강 전투 663년', items:[ { v:'663', l:'백강 전투' }, { v:'왜 수군', l:'대패' }, { v:'부흥운동', l:'사실상 끝' } ] } },
+      { who:'npc', t:'지금까지 있었던 일, 전체를 한눈에 두면 이러하네.',
+        chart:{ type:'grid', title:'통일전쟁의 사건들', head:[ '연도', '사건' ], rows:[ [ '642', '연개소문 정변' ], [ '645', '안시성' ], [ '648', '나당동맹' ], [ '660', '백제 멸망' ], [ '663', '백강 전투' ], [ '668', '고구려 멸망' ], [ '676', '나당전쟁 승리' ] ] } },
+      { who:'npc', t:'허나 당은 처음부터 이 땅을 삼킬 셈이었어.' },
+      { who:'me', t:'…그게 문제였군요.' },
+      { who:'npc', t:'웅진도독부니 안동도호부니 하며 눌러앉더군.',
+        chart:{ type:'stat', title:'당이 설치한 기구', items:[ { v:'웅진도독부', l:'옛 백제 땅에' }, { v:'안동도호부', l:'옛 고구려 땅에' } ] } },
     ],
     quizSeq: [
       { q:'나당 연합군의 공격으로 660년에 무너진 나라는?',
@@ -1238,9 +1294,25 @@ const NPC_DATA = {
     name: '문무왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M2 19c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>', img: 'assets/portraits/munmu.png',
     beats: [
       { who:'npc', t:'아버지 무열왕의 뒤를 이어 전쟁을 마무리한 사람이 나일세.' },
-      { who:'npc', t:'고구려가 무너진 뒤에도 당은 물러가지 않았네. 그래서 나는 고구려 부흥군을 도왔지 — 안승을 보덕국왕으로 삼아 금마저에 살게 했네.' },
-      { who:'npc', t:'675년 매소성에서 당의 대군을 깨뜨렸고, 676년 기벌포에서 수군을 물리쳤네. 그제야 당이 물러갔지.' },
-      { who:'npc', t:'내가 죽거든 동해에 묻어 달라 했네. 용이 되어 왜구를 막겠다고. 사람들이 그 바위를 대왕암이라 부르더군.' },
+      { who:'me', t:'고구려가 무너진 뒤에도 싸움이 남았습니까?' },
+      { who:'npc', t:'당이 물러가지 않았네. 이 땅을 통째로 삼킬 셈이었지.' },
+      { who:'npc', t:'고구려 유민도 도왔네. 674년, 안승을 보덕국왕으로 세웠지.',
+        chart:{ type:'map', title:'안승의 보덕국', pins:[ { x:42.3, y:116.2, n:'금마저', on:true } ] } },
+      { who:'me', t:'(고개를 갸웃한다) …왜 도우셨습니까?' },
+      { who:'npc', t:'옛 고구려 땅에서 당을 함께 밀어낼 힘이 되었으니까.' },
+      { who:'npc', t:'675년, 매소성에서 당의 대군을 깨뜨렸네.',
+        chart:{ type:'timeline', title:'나당전쟁의 끝', marks:[ { y:'670', t:'전쟁 시작' }, { y:'675', t:'매소성 전투', on:true }, { y:'676', t:'기벌포 전투 · 통일', on:true } ] } },
+      { who:'me', t:'(눈을 크게 뜬다) 그것으로 끝났습니까?' },
+      { who:'npc', t:'아닐세. 이듬해 676년, 기벌포에서 수군마저 물리쳤네.' },
+      { who:'me', t:'(가만히 듣는다) …끈질기군요.' },
+      { who:'npc', t:'그제야 당이 물러갔지. 진짜 통일은 그해였네.' },
+      { who:'npc', t:'(먼 바다를 본다) 내가 죽거든 동해에 묻어 달라 했네.',
+        chart:{ type:'quote', title:'문무왕의 유언', text:'내가 죽은 뒤 바다의 <b>용</b>이 되어<br>나라를 지키고자 하니, 화장하여 동해에 장사 지내라.', from:'삼국사기 문무왕' } },
+      { who:'me', t:'…어째서입니까?' },
+      { who:'npc', t:'화장하여 장사 지내면, 용이 되어 나라를 지키겠다고.' },
+      { who:'npc', t:'사람들은 그 바위를 대왕암이라 부르네.',
+        chart:{ type:'map', title:'문무왕의 수중릉', pins:[ { x:78.2, y:119.1, n:'대왕암', on:true } ], legend:[ { k:'감포 앞바다', v:'경주 봉길리' } ] } },
+      { who:'npc', t:'(파도 소리) …여기서 늘 이 나라를 지키고 있네.' },
     ],
     quizSeq: [
       { q:'고구려가 멸망한 뒤 당을 몰아내기 위해 벌인 전쟁에서, 675년 신라가 당의 육군을 크게 이긴 싸움은?',
@@ -1254,19 +1326,30 @@ const NPC_DATA = {
   sinmun_0: {
     name: '신문왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 22c0-8 1-14 3-19"/><line x1="9.7" y1="14.5" x2="12.4" y2="14.2"/><line x1="10.6" y1="9" x2="13.1" y2="8.5"/><path d="M12 12.5c2-.5 4-2 4.5-4M11 7.5c1.8-.3 3.3-1.5 3.8-3.3"/></svg>', img: 'assets/portraits/sinmun.png',
     beats: [
-      { who:'npc', t:'통일은 아버지가 하셨고, 뒷수습은 내 몫이었네. 즉위하자마자 장인 김흠돌이 반란을 꾀했지 — 그 일을 빌미로 진골 귀족을 크게 쳐냈네.' },
-      { who:'npc', t:'나라 골격도 다시 짰네. 전국을 아홉 주로 나누고 다섯 곳에 소경을 두었지. 군대는 중앙에 아홉 서당, 지방에 열 개 정을 두었고.' },
-      { who:'npc', t:'682년에는 국학을 세워 유학으로 관리를 길렀네.' },
-      { who:'npc', chart:{ type: 'flow', steps: [
-{ t: '681', s: '김흠돌의 난 진압' },
-{ t: '682', s: '국학 설치' },
-{ t: '685', s: '9주 5소경' },
-{ t: '687', s: '관료전 지급' },
-{ t: '689', s: '녹읍 폐지' },
-], note: '관료전과 녹읍은 <b>서로 다른 땅</b>일세. 687년에 관료전을 <b>새로 주고</b>, 689년에는 원래 있던 녹읍을 <b>아예 없앴네</b>. 관료전은 조세만 걷지만 녹읍은 사람까지 부릴 수 있었으니, 약한 것으로 갈아 끼운 셈이지.' }, t:'내가 한 일을 해마다 늘어놓아 보겠네.' },
-      { who:'npc', t:'가장 손이 아팠던 건 땅일세. 687년에 관료전을 새로 만들어 관리에게 주었네 — 이건 조세만 거둘 수 있는 땅이야. 그리고 689년에는 원래부터 있던 녹읍을 아예 없앴네.' },
-      { who:'npc', t:'녹읍은 관료전과 달랐네. 조세는 물론이고 그 땅에 사는 사람까지 부릴 수 있는, 귀족의 훨씬 큰 특권이었지. 그러니 녹읍을 없앤 것이야말로 귀족의 힘을 꺾은 결정타였네.' },
-      { who:'npc', t:'동해에서 대나무를 얻어 피리를 만들었다는 이야기도 있네. 불면 나라가 편안해진다는 만파식적일세.' },
+      { who:'npc', t:'통일은 아버지가 하셨고, 뒷수습은 내 몫이었네.',
+        chart:{ type:'faces', title:'아버지와 아들', people:[ { img:'munmu_king', n:'문무왕', s:'통일을 이루다' }, { img:'sinmun_king', n:'신문왕', s:'제도를 정비하다' } ] } },
+      { who:'me', t:'(고개를 숙여 예를 표한다)' },
+      { who:'npc', t:'즉위하자마자 장인 김흠돌이 반란을 꾀했지.',
+        chart:{ type:'stat', title:'김흠돌의 난', items:[ { v:'681년', l:'김흠돌 반란' }, { v:'신문왕의 장인', l:'주모자' } ] } },
+      { who:'me', t:'(눈을 크게 뜬다) …장인이 말입니까?' },
+      { who:'npc', t:'(말이 없다) 진압하고, 그 일로 진골 귀족을 크게 쳐냈네.' },
+      { who:'npc', t:'그 뒤로 한 일을 해마다 늘어놓아 보겠네.',
+        chart:{ type:'flow', title:'신문왕의 개혁', steps:[ { t:'681', s:'김흠돌의 난 진압' }, { t:'682', s:'국학 설치' }, { t:'685', s:'9주 5소경' }, { t:'687', s:'관료전 지급' }, { t:'689', s:'녹읍 폐지' } ], note:'관료전과 녹읍은 <b>서로 다른 땅</b>이네. 687년에 <b>새로 주고</b>, 689년엔 원래 있던 걸 <b>없앴지</b>.' } },
+      { who:'me', t:'(궁금한 얼굴로) 나라 틀도 다시 짜셨습니까?' },
+      { who:'npc', t:'전국을 아홉 주로 나누고, 다섯 곳에 소경을 두었네.',
+        chart:{ type:'grid', title:'9주 5소경', head:[ '옛 땅', '소경' ], rows:[ [ '옛 신라 땅', '중원경(충주)' ], [ '옛 백제 땅', '서원경(청주)·남원경(남원)' ], [ '옛 가야 땅', '금관경(김해)' ] ] } },
+      { who:'npc', t:'682년엔 국학을 세워 유학으로 관리를 길렀지.',
+        chart:{ type:'stat', title:'국학', items:[ { v:'682년', l:'설치' }, { v:'유학', l:'가르친 내용' } ] } },
+      { who:'me', t:'(고개를 끄덕인다) …빠르게 움직이셨군요.' },
+      { who:'npc', t:'다급했으니까. 진골 귀족의 힘을 서둘러 꺾어야 했네.' },
+      { who:'me', t:'관료전과 녹읍은… 어떻게 다릅니까?' },
+      { who:'npc', t:'관료전은 세금만 걷는 땅. 녹읍은 사람까지 부리는 땅이었지.',
+        chart:{ type:'vs', title:'관료전과 녹읍', left:{ n:'관료전', s:'조세만 걷는다 · 687년 지급' }, right:{ n:'녹읍', s:'사람까지 부린다 · 689년 폐지' }, mid:'VS' } },
+      { who:'npc', t:'녹읍을 없앤 것이야말로 귀족의 힘을 꺾은 결정타였네.' },
+      { who:'npc', t:'(웃으며) 682년, 대나무를 얻어 피리를 만들었다는 얘기도 있네.' },
+      { who:'me', t:'(눈이 반짝인다) 만파식적 말씀이십니까?' },
+      { who:'npc', t:'그렇지. 불면 적병이 물러가고, 가뭄엔 비가 온다 하더군.',
+        chart:{ type:'quote', title:'만파식적', text:'불면 <b>적병이 물러가고</b> 가뭄엔 비가 오며,<br>바람과 물결이 잦아든다.', from:'삼국유사 기이 만파식적' } },
     ],
     quizSeq: [
       { q:'신문왕이 687년에 관료에게 새로 지급한, 조세만 거둘 수 있었던 토지는? (귀족이 사람까지 부리던 기존의 녹읍은 689년에 따로 폐지되었다)',
@@ -1725,39 +1808,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=44"></script>
-<script src="assets/streak.js?v=44"></script>
+<script src="assets/badges.js?v=45"></script>
+<script src="assets/streak.js?v=45"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=44"></script>
-  <script src="assets/fx.js?v=44"></script>
-  <script src="assets/deed.js?v=44"></script>
-  <script src="assets/inkwipe.js?v=44"></script>
-  <script src="assets/dash.js?v=44"></script>
-<script src="assets/juice.js?v=44"></script>
-  <script src="assets/difficulty.js?v=44"></script>
-  <script src="assets/nextauto.js?v=44"></script>
-<script src="assets/heroes_data.js?v=44"></script>
-<script src="assets/heroes.js?v=44"></script>
-<script src="assets/icons.js?v=44"></script>
-<script src="assets/srs.js?v=44"></script>
-<script src="assets/newsflash.js?v=44"></script>
-<script src="assets/timeline.js?v=44"></script>
-<script src="assets/journey.js?v=44"></script>
-<script src="assets/season.js?v=44"></script>
-<script src="assets/boss.js?v=44"></script>
-<script src="assets/items.js?v=44"></script>
-  <script src="assets/gold.js?v=44"></script>
-  <script src="assets/ask.js?v=44"></script>
-  <script src="assets/ads.js?v=44"></script>
-  <script src="assets/energy.js?v=44"></script>
-  <script src="assets/daily.js?v=44"></script>
-  <script src="assets/unlock.js?v=44"></script>
-  <script src="assets/guide.js?v=44"></script>
-  <script src="assets/minigames.js?v=44"></script>
-  <script src="assets/quests.js?v=44"></script>
-  <script src="assets/offline.js?v=44"></script>
-  <script src="assets/telemetry.js?v=44"></script>
-<script src="assets/autowalk.js?v=44"></script>
+<script src="assets/rank.js?v=45"></script>
+  <script src="assets/fx.js?v=45"></script>
+  <script src="assets/deed.js?v=45"></script>
+  <script src="assets/inkwipe.js?v=45"></script>
+  <script src="assets/dash.js?v=45"></script>
+<script src="assets/juice.js?v=45"></script>
+  <script src="assets/difficulty.js?v=45"></script>
+  <script src="assets/nextauto.js?v=45"></script>
+<script src="assets/heroes_data.js?v=45"></script>
+<script src="assets/heroes.js?v=45"></script>
+<script src="assets/icons.js?v=45"></script>
+<script src="assets/srs.js?v=45"></script>
+<script src="assets/newsflash.js?v=45"></script>
+<script src="assets/timeline.js?v=45"></script>
+<script src="assets/journey.js?v=45"></script>
+<script src="assets/season.js?v=45"></script>
+<script src="assets/boss.js?v=45"></script>
+<script src="assets/items.js?v=45"></script>
+  <script src="assets/gold.js?v=45"></script>
+  <script src="assets/ask.js?v=45"></script>
+  <script src="assets/ads.js?v=45"></script>
+  <script src="assets/energy.js?v=45"></script>
+  <script src="assets/daily.js?v=45"></script>
+  <script src="assets/unlock.js?v=45"></script>
+  <script src="assets/guide.js?v=45"></script>
+  <script src="assets/minigames.js?v=45"></script>
+  <script src="assets/quests.js?v=45"></script>
+  <script src="assets/offline.js?v=45"></script>
+  <script src="assets/telemetry.js?v=45"></script>
+<script src="assets/autowalk.js?v=45"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

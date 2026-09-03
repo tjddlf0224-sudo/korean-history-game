@@ -497,9 +497,9 @@
   </div>
 </div>
 
-<script src="assets/map/map_component.js?v=44"></script>
-<script src="assets/chart.js?v=44"></script>
-<script src="assets/audio.js?v=44"></script>
+<script src="assets/map/map_component.js?v=45"></script>
+<script src="assets/chart.js?v=45"></script>
+<script src="assets/audio.js?v=45"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -511,7 +511,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=44';   // 존댓말 전환
+const ART_V = '?v=45';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1187,13 +1187,22 @@ const NPC_DATA = {
   geunchogo_0: {
     name: '근초고왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/geunchogo.png',
     beats: [
-      { who:'npc', t:'나는 백제의 근초고왕일세. 마한의 남은 세력을 마저 정복해 백제의 땅을 남쪽 바다까지 넓혔지.' },
-      { who:'npc', t:'북으로도 밀고 올라갔네. 371년, 평양성까지 쳐서 고구려 고국원왕을 그 자리에서 전사시켰지.' },
-      { who:'npc', t:'왕위도 형제가 아니라 아들에게 곧장 물려주도록 했네. 부자 상속을 확실히 다진 것이지.' },
-      { who:'npc', t:'바다 건너 왜와도 가까이 지냈네. 가지가 일곱으로 뻗은 쇠칼 하나를 보냈다고 전하더군 — 칠지도라 부르는 그것 말일세.' },
-      { who:'npc', t:'박사 고흥에게 나라의 지난 일을 정리하게 했네. 「서기」라 이름 붙였지. 우리 손으로 남긴 첫 역사책일세.' },
-      { who:'npc', t:'내가 도읍으로 삼은 한성 자리, 지금의 풍납토성과 몽촌토성일세. 그 부근 석촌동엔 돌을 쌓아 올린 무덤들이 있는데, 우리 백제를 세운 이들이 본디 고구려에서 내려왔다는 걸 그 무덤 양식이 말해 주지.' },
-      { who:'npc', t:'나는 중국 동진에 사신을 보내 교류했네. 뒷날 무령왕 때는 양나라에 사신을 보냈는데, 그 모습을 그린 그림이 양직공도일세. 백제가 한때 중국 요서 지방까지 나아갔다는 이야기의 근거로 거론되기도 하지.' },
+      { who:'npc', t:'(지도를 편다) 마한 남은 땅, 이제 다 내 것일세.',
+        chart:{ type:'map', title:'근초고왕의 정복', pins:[ { x:44.7, y:90.8, n:'한성' }, { x:38.6, y:121.6, n:'마한', on:true } ], legend:[ { k:'마한', v:'남은 세력까지 정복', on:true }, { k:'남해안', v:'백제 땅이 여기까지' } ] } },
+      { who:'me', t:'정복만 하셨습니까? 북으로도 올라가셨습니까?' },
+      { who:'npc', t:'371년, 평양성을 쳐 고국원왕을 전사시켰네.',
+        chart:{ type:'timeline', title:'근초고왕이 세운 자취', marks:[ { y:'369', t:'치양성 승리' }, { y:'371', t:'평양성 · 고국원왕 전사', on:true }, { y:'375', t:'「서기」 편찬' } ] } },
+      { who:'npc', t:'그 뒤론 아들에게 곧장 왕위를 물렸지.' },
+      { who:'npc', t:'(칼 한 자루를 보인다) 왜에는 이런 걸 보냈네.',
+        chart:{ type:'relic', title:'칠지도', items:[ { img:'chiljido', n:'칠지도', s:'가지가 일곱인 쇠칼, 왜에 보냄' } ] } },
+      { who:'me', t:'가지가… 정말 일곱이나 되는군요.' },
+      { who:'npc', t:'고흥에게 「서기」를 짓게 했네. 백제 첫 역사책일세.' },
+      { who:'npc', t:'한성 곁 석촌동엔 돌무지무덤이 있네.',
+        chart:{ type:'compare', title:'무덤이 말해주는 것', cols:[ { h:'석촌동 고분군', hi:true, items:[ '돌무지무덤', '고구려식 양식' ] }, { h:'대성동 고분군', items:[ '금관가야 지배층 무덤' ] } ] } },
+      { who:'me', t:'그럼… 백제 왕실이 고구려에서 왔군요?' },
+      { who:'npc', t:'그렇지. 양나라에도 사신을 보냈네.' },
+      { who:'me', t:'그 사신을… 그림으로도 남겼습니까?' },
+      { who:'npc', t:'그렇지. 양직공도일세 — 요서 진출설의 근거로도 쓰이네.' },
     ],
     quizSeq: [
       { q:'4세기 백제의 전성기를 이끌며 마한의 남은 세력을 정복하고 평양성을 공격해 고구려 고국원왕을 전사시킨 왕은?',
@@ -1213,78 +1222,25 @@ const NPC_DATA = {
   muryeong_0: {
     name: '무령왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/muryeong.png',
     beats: [
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로', active: true },
-{ name: '성왕', note: '사비 천도' },
-], cross: [] }, t:'나는 백제의 무령왕일세. 고구려에 한성을 빼앗기고 남쪽으로 밀려난 뒤, 다시 나라를 일으켜 세우던 때였지.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로', active: true },
-{ name: '성왕', note: '사비 천도' },
-], cross: [] }, t:'지방을 다잡아야 했네. 그래서 스물두 곳에 왕족을 보내 다스리게 했지 — 담로라 하네.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로', active: true },
-{ name: '성왕', note: '사비 천도' },
-], cross: [] }, t:'내가 즉위하던 그 순간부터 순탄치 않았네. 나보다 앞서 계시던 동성왕께서 백가라는 신하의 손에 시해당하셨거든.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로', active: true },
-{ name: '성왕', note: '사비 천도' },
-], cross: [] }, t:'백가는 가림성(지금의 부여 임천)에 웅거하며 반기를 들었지. 내가 즉위하자마자 군사를 몰아 그 난을 평정하고서야 겨우 왕좌를 다잡을 수 있었네.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로', active: true },
-{ name: '성왕', note: '사비 천도' },
-], cross: [] }, t:'내 무덤은 벽돌로 쌓았다네. 중국 남조의 방식을 들여온 것일세. 지석에 내 이름과 죽은 해까지 새겨 두었지.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도' },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-{ name: '무왕', note: '서동요', active: true },
-], cross: [
-null,
-null,
-null,
-null,
-null,
-{ name: '진평왕', dynasty: '신라', active: true },
-] }, t:'내 뒤로 백 년쯤 지난 이야기지만, 재미난 게 있네. 훗날 무왕이 될 서동이 신라 진평왕의 딸 선화공주를 마음에 두었다지.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도' },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-{ name: '무왕', note: '서동요', active: true },
-], cross: [] }, t:'서동은 아이들에게 마를 나눠 주며 노래를 가르쳤네. "선화공주가 밤마다 서동을 만난다"고. 그 노래가 온 서라벌에 퍼져 공주가 쫓겨났고, 서동이 기다렸다가 아내로 맞았다는 게야 — 서동요일세.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도' },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-{ name: '무왕', note: '서동요', active: true },
-], cross: [] }, t:'왕이 된 무왕은 금마저(지금의 익산)에 큰 절을 세웠다더군 — 미륵사일세. 세 개의 탑과 금당을 나란히 둔, 백제 최대의 절이었다지.' },
-      { who:'doc', docImg:'assets/scenes/heritage_mireuksaji_tower.jpg',
-        t:'(익산 미륵사지 석탑. 현존하는 삼국 시대 석탑 중 가장 크며, 목탑의 짜임새를 그대로 돌에 옮긴 초기 백제 석탑 양식을 보여준다.)\n출처: 셀수스협동조합, 공유마당, 기증저작물(자유이용)' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도' },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-{ name: '무왕', note: '서동요', active: true },
-], cross: [] }, t:'웅진의 공산성, 사비의 부소산성, 그리고 익산의 왕궁리 유적까지 — 우리 백제가 세 곳을 도읍 삼아 지나온 자취일세.' },
-      { who:'doc', t:'(훗날의 이야기. 이 세 곳을 비롯한 백제의 자취는 2015년 백제역사유적지구라는 이름으로 유네스코 세계유산에 올랐다.)' },
+      { who:'npc', t:'나는 무령왕일세. 한성을 잃고 남으로 밀려난 뒤였지.',
+        chart:{ type:'kings', main:[ { name:'문주왕', note:'웅진 천도' }, { name:'동성왕' }, { name:'무령왕', note:'22담로', active:true }, { name:'성왕', note:'사비 천도' } ], cross:[  ] } },
+      { who:'me', t:'그 뒤로 나라를 다시 일으켜 세우셨습니까?' },
+      { who:'npc', t:'지방에 왕족 스물두 명을 보내 다스렸네 — 22담로일세.' },
+      { who:'npc', t:'즉위 전, 동성왕께서 백가에게 시해당하셨지.' },
+      { who:'me', t:'그 백가는 그 뒤에 어찌 됐습니까?' },
+      { who:'npc', t:'가림성에서 반기를 들었으나 즉위하자마자 평정했네.' },
+      { who:'me', t:'즉위부터 참으로 순탄치 않으셨군요.' },
+      { who:'npc', t:'내 무덤은 벽돌로 쌓았네. 중국 남조의 법일세.',
+        chart:{ type:'stat', title:'무령왕릉이 남긴 것', items:[ { v:'벽돌무덤', l:'중국 남조 양식' }, { v:'지석 2매', l:'이름과 사망년을 새김' }, { v:'매지권', l:'삼국 왕릉 중 유일' } ] } },
+      { who:'me', t:'이름까지 돌에 새겨 두었단 말씀입니까?' },
+      { who:'npc', t:'그래야 후세가 누구 무덤인지 알지 — 지석일세.' },
+      { who:'npc', t:'훗날 무왕은 서동요로 신라 공주를 얻었다더군.',
+        chart:{ type:'kings', main:[ { name:'무령왕', note:'22담로' }, { name:'성왕', note:'사비 천도' }, { name:'위덕왕' }, { name:'혜왕' }, { name:'법왕' }, { name:'무왕', note:'서동요', active:true } ], cross:[ null, null, null, null, null, { name:'진평왕', dynasty:'신라', active:true } ] } },
+      { who:'me', t:'미륵사는… 어떤 절이었습니까?' },
+      { who:'npc', t:'탑과 금당을 셋씩 나란히 둔, 백제 최대의 절이었지.' },
+      { who:'npc', t:'웅진·사비·익산 — 세 도읍의 자취일세.',
+        chart:{ type:'map', title:'백제역사유적지구', pins:[ { x:44.6, y:108.9, n:'공산성' }, { x:41.6, y:113.4, n:'부소산성' }, { x:42.3, y:116.2, n:'왕궁리', on:true } ], legend:[ { k:'2015년', v:'유네스코 세계유산 등재', on:true }, { k:'묶은 이름', v:'백제역사유적지구' } ] } },
+      { who:'me', t:'세 곳 다… 가 보고 싶습니다.' },
     ],
     quizSeq: [
       { q:'백제 무령왕이 지방 통제를 위해 왕족을 보내 다스리게 한 22개 행정 구역은?',
@@ -1307,20 +1263,30 @@ null,
   gwanggaeto_0: {
     name: '고구려 장수', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>', img: 'assets/portraits/gwanggaeto.png',
     beats: [
-      { who:'npc', t:'옛날 고국천왕 때는 을파소라는 재상을 뽑아 쓰셨네. 봄에 곡식이 떨어진 백성에게 나라 곳간을 열어 빌려주고, 가을 추수 뒤 갚게 하셨지 — 진대법이라 하네. 가난한 백성을 굶기지 않으려는 마음이었지.' },
-      { who:'npc', t:'우리 태왕께서는 북으로 만주를 넓히고, 남으로 신라를 도와 왜를 물리치셨네. 저 비석에 그 일이 새겨져 있지.' },
-      { who:'npc', t:'뒤를 이은 장수왕께서는 도읍을 평양으로 옮기시고 남쪽으로 밀고 내려가셨네. 백제의 한성을 무너뜨린 것이 그때일세.' },
-      { who:'npc', t:'그 남진의 자취는 충주에도 비석으로 남아 있네 — 중원고구려비일세. 신라 왕을 매금이라 낮춰 불렀으니, 그때 우리 세력이 남한강 유역까지 미쳤다는 뜻이지. 한반도에 남은 하나뿐인 고구려 비석이라네.' },
-      { who:'doc', docImg:'assets/scenes/heritage_jungwon_goguryeobi.jpg',
-        t:'(충주 고구려비. 한반도 안에 남은 유일한 고구려 비석으로, 5세기 장수왕 대에 고구려가 남한강 유역까지 세력을 뻗쳐 신라를 사실상 아래에 둔 정황을 보여준다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
-      { who:'npc', t:'우리 무덤 안에는 그림을 그린다네. 사냥하는 모습, 씨름하는 모습, 그리고 사방을 지키는 네 신령까지.' },
-      { who:'npc', t:'그 무덤들이 모여 있는 곳이 지안, 옛 국내성 자리일세. 무용총엔 사냥하는 수렵도가, 각저총엔 씨름하는 그림이 남아 있고, 돌을 계단처럼 쌓아 올린 장군총도 그 곁에 있지.' },
-      { who:'doc', docImg:'assets/scenes/heritage_muyongchong_suryeopdo.jpg',
-        t:'(정기환 필 무용총 수렵도 모사도. 말을 타고 활을 쏘며 호랑이와 사슴을 사냥하는 고구려인의 힘찬 모습을 담았다.)\n출처: 국립중앙박물관(모사: 정기환), 공유마당, 공공누리 제1유형' },
-      { who:'npc', t:'수나라가 백만 대군을 끌고 왔을 때, 을지문덕 장군이 적장 우중문에게 시를 한 수 보냈다네.' },
-      { who:'npc', t:'"그대의 신묘한 계책은 하늘의 이치를 다했고, 오묘한 셈은 땅의 이치를 다했도다. 싸움에 이겨 공이 이미 높으니, 만족함을 알고 그만두기를 바라노라." — 겉으로는 칭찬, 속으로는 조롱일세. 그러고는 살수에서 몰살시켰지.' },
-      { who:'npc', t:'고구려를 세운 주몽 이야기도 아는가. 알에서 태어났다 하여 버려졌는데, 짐승들이 밟지 않고 새들이 날개로 덮어 주었다지.' },
-      { who:'npc', t:'일곱 살에 스스로 활을 만들어 쏘았는데 백발백중이었네. 주몽이란 이름부터가 활 잘 쏘는 사람이라는 뜻일세.' },
+      { who:'npc', t:'고국천왕 때, 을파소가 재상이 되었네.' },
+      { who:'me', t:'재상이… 나랏일로 무얼 했습니까?' },
+      { who:'npc', t:'봄에 곡식을 꿔주고 가을에 갚게 했지 — 진대법일세.',
+        chart:{ type:'steps', title:'진대법', steps:[ { t:'봄에 곡식을 빌려준다' }, { t:'가을 추수 뒤 갚게 한다' }, { t:'굶는 백성이 준다' } ] } },
+      { who:'npc', t:'우리 태왕께선 만주까지 넓히셨네. 저 비석에 새겼지.',
+        chart:{ type:'relic', title:'광개토대왕릉비', items:[ { img:'gwanggaetobi', n:'광개토대왕릉비', s:'지린성 지안, 아들 장수왕이 세움' } ] } },
+      { who:'me', t:'무엇이… 저 비석에 새겨져 있습니까?' },
+      { who:'npc', t:'정복한 자취와, 무덤 지킬 이들의 이름일세.' },
+      { who:'npc', t:'장수왕은 평양으로 옮기고 남으로 내려왔네.',
+        chart:{ type:'timeline', title:'고구려의 남진', marks:[ { y:'427', t:'평양 천도' }, { y:'475', t:'한성 함락', on:true } ] } },
+      { who:'me', t:'그때 백제 왕은 어찌 됐습니까?' },
+      { who:'npc', t:'개로왕이 전사하고, 백제는 도읍을 잃었네.' },
+      { who:'npc', t:'그 남진의 자취가 충주에도 비석으로 남았네.',
+        chart:{ type:'map', title:'중원(충주) 고구려비', pins:[ { x:56.1, y:99.6, n:'충주', on:true } ], legend:[ { k:'매금', v:'신라 왕을 낮춰 부른 말', on:true }, { k:'뜻', v:'남한강까지 세력이 미침' } ] } },
+      { who:'me', t:'한반도에 남은 고구려 비석은 이것뿐입니까?' },
+      { who:'npc', t:'그렇다네. 하나뿐인 귀한 자취일세.' },
+      { who:'npc', t:'우리 무덤엔 그림을 그리네. 지안, 옛 국내성 자리에 모였지.',
+        chart:{ type:'grid', title:'국내성의 고분', head:[ '무덤', '그림·양식' ], rows:[ [ '무용총', '수렵도 — 사냥' ], [ '각저총', '씨름도' ], [ '장군총', '돌무지무덤' ] ] } },
+      { who:'me', t:'사냥하는… 그런 그림도 그립니까?' },
+      { who:'npc', t:'그렇지. 말 달리며 활 쏘는 모습이 생생하네.' },
+      { who:'npc', t:'수나라 백만 대군이 왔을 때, 을지문덕이 시를 보냈지.',
+        chart:{ type:'quote', title:'여수장우중문시', text:'그대의 신묘한 계책은 하늘의 이치를 다했고<br>오묘한 셈은 땅의 이치를 다했도다.', from:'을지문덕, 삼국사기' } },
+      { who:'me', t:'그래서… 수나라 군사는 어찌 됐습니까?' },
+      { who:'npc', t:'겉으론 칭찬, 속은 조롱이었지. 살수에서 크게 무찔렀네.' },
     ],
     quizSeq: [
       { q:'만주와 한반도 북부로 영토를 넓힌 고구려 왕의 업적을 새긴, 아들 장수왕이 세운 비석은?',
@@ -1346,107 +1312,28 @@ null,
   seongwang_0: {
     name: '백제 성왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/seongwang.png',
     beats: [
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [] }, t:'나는 백제 성왕일세. 즉위하고 얼마 지나지 않아 도읍을 웅진에서 사비로 옮겼네 — 좁은 웅진으로는 나라를 다시 일으키기 어려웠거든.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [] }, t:'나라 이름도 남부여로 고쳤네. 부여의 정통을 잇는다는 뜻을 담았지. 중앙에는 22부를, 지방에는 5방을 두어 다스림도 새로 짰네.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [] }, t:'벼슬의 등급도 촘촘히 나누었네. 으뜸은 좌평이니 여섯 자리를 두었고, 그 아래로 달솔을 비롯해 모두 열여섯 등급을 갖추었지.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [] }, t:'나랏일 가운데 재상을 뽑는 일만은 신하들에게 맡겼네. 부소산 아래 정사암이란 바위에 후보들의 이름을 적어 넣어 두면, 귀족들이 모여 의논한 뒤 이름 위에 도장 자국이 있는 이를 재상으로 삼았지.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [] }, t:'사비에 절도 여럿 세웠네. 정림사 터에 세운 다섯 층 탑은 나무로 짓던 목탑의 모습을 돌로 옮겨 놓은 것이라, 백제 석탑의 시작을 보여주지.' },
-      { who:'doc', docImg:'assets/scenes/heritage_jeongnimsaji_tower.jpg',
-        t:'(부여 정림사지 오층석탑. 목탑의 짜임새를 그대로 돌에 옮긴 초기 백제 석탑 양식을 보여주며, 미륵사지 석탑과 함께 백제 석탑의 두 대표작으로 꼽힌다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [] }, t:'내가 죽은 뒤, 아들 위덕왕이 나를 기려 능산리에 절을 지었다더군. 훗날 그 터에서 향로 하나가 나왔다지 — 봉황과 산봉우리, 신선과 짐승이 층층이 새겨진 금동대향로일세. 도교와 불교의 생각이 함께 담겨 있다더군.' },
-      { who:'doc', docImg:'assets/scenes/heritage_geumdong_daehyangno.jpg',
-        t:'(백제 금동대향로. 능산리 절터에서 출토되었으며, 봉황과 용, 산봉우리와 신선, 동물들을 정교하게 새겨 도교와 불교의 세계관을 함께 담아낸 백제 금속 공예의 걸작이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [
-null,
-null,
-null,
-{ name: '진흥왕', dynasty: '신라', active: true },
-null,
-null,
-null,
-] }, t:'신라 진흥왕과 손을 잡았네. 힘을 합쳐 고구려를 밀어내고, 백여 년 만에 한강 하류를 되찾았지.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [
-null,
-null,
-null,
-{ name: '진흥왕', dynasty: '신라', active: true },
-null,
-null,
-null,
-] }, t:'허나 진흥왕이 그 땅을 통째로 삼켜 버렸네. 나·제 동맹이 그렇게 깨졌지.' },
-      { who:'npc', chart:{ type: 'kings', main: [
-{ name: '문주왕', note: '웅진 천도' },
-{ name: '동성왕' },
-{ name: '무령왕', note: '22담로' },
-{ name: '성왕', note: '사비 천도', active: true },
-{ name: '위덕왕' },
-{ name: '혜왕' },
-{ name: '법왕' },
-], cross: [] }, t:'분을 참지 못해 신라를 쳤으나, 관산성에서 매복에 걸려 이 목숨을 잃었네. 554년의 일일세.' },
+      { who:'npc', t:'나는 성왕일세. 즉위하고 곧 사비로 도읍을 옮겼네.',
+        chart:{ type:'kings', main:[ { name:'문주왕', note:'웅진 천도' }, { name:'동성왕' }, { name:'무령왕', note:'22담로' }, { name:'성왕', note:'사비 천도', active:true }, { name:'위덕왕' }, { name:'혜왕' }, { name:'법왕' } ], cross:[  ] } },
+      { who:'me', t:'웅진이… 도읍 삼기엔 좁았습니까?' },
+      { who:'npc', t:'그렇지. 나라를 다시 일으키기엔 좁았네.' },
+      { who:'npc', t:'나라 이름도 남부여로 고쳤네. 부여의 정통을 잇는다는 뜻이지.' },
+      { who:'npc', t:'벼슬도 새로 짰지. 좌평 여섯을 으뜸으로 삼았네.',
+        chart:{ type:'stat', title:'백제 16관등제', items:[ { v:'좌평 6', l:'으뜸 벼슬' }, { v:'16등급', l:'모두 이만큼 나눔' } ] } },
+      { who:'me', t:'재상은… 왕께서 직접 뽑으십니까?' },
+      { who:'npc', t:'아닐세. 귀족들이 의논해 뽑았지.',
+        chart:{ type:'steps', title:'정사암회의', steps:[ { t:'후보 이름을 바위에 적는다' }, { t:'귀족들이 모여 의논한다' }, { t:'도장 자국 있는 이가 재상', s:'정사암' } ] } },
+      { who:'npc', t:'사비에 절도 여럿 세웠지. 정림사엔 다섯 층 탑을 놓았네.',
+        chart:{ type:'compare', title:'백제 석탑의 두 대표', cols:[ { h:'정림사지 5층 석탑', hi:true, items:[ '사비 시기', '목탑 양식을 돌로' ] }, { h:'미륵사지 석탑', items:[ '무왕 때', '현존 최대 백제 석탑' ] } ] } },
+      { who:'me', t:'목탑을… 돌로 옮겼단 말씀이군요.' },
+      { who:'npc', t:'그렇지. 백제 석탑의 시작일세.' },
+      { who:'npc', t:'죽은 뒤, 아들이 능산리에 절을 지어 나를 기렸네.',
+        chart:{ type:'relic', title:'백제 금동대향로', items:[ { img:'geumdongdaehyangno', n:'금동대향로', s:'능산리 절터 출토, 도교·불교가 함께' } ] } },
+      { who:'me', t:'봉황과 신선이… 새겨져 있다지요?' },
+      { who:'npc', t:'그렇다네. 도교와 불교의 생각이 함께 담겼지.' },
+      { who:'npc', t:'진흥왕과 손잡고 한강 하류를 되찾았으나…',
+        chart:{ type:'vs', title:'나·제 동맹의 끝', left:{ n:'성왕', s:'상류를 되찾아 줌' }, right:{ n:'진흥왕', s:'하류까지 삼킴', win:true }, mid:'배신' } },
+      { who:'me', t:'그래서… 그 뒤 어찌 되셨습니까?' },
+      { who:'npc', t:'분을 참지 못해 쳤으나, 관산성에서 목숨을 잃었네. 554년일세.' },
     ],
     quizSeq: [
       { q:'웅진에서 사비로 도읍을 옮기고 나라 이름을 남부여로 고친 백제의 왕은?',
@@ -1472,40 +1359,29 @@ null,
   jinheung_0: {
     name: '진흥왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img: 'assets/portraits/jinheung.png',
     beats: [
-      { who:'npc', t:'나는 신라의 진흥왕일세. 백제와 손잡고 고구려에게서 한강을 빼앗았다가, 이내 백제까지 밀어내고 한강 전부를 차지했지.' },
-      { who:'npc', t:'이 모두가 하루아침에 된 일은 아닐세. 할아버님 지증왕께서 나라 이름을 "신라"로 정하시고 "왕"이란 칭호도 그때 처음 쓰셨지. 이사부를 보내 우산국(지금의 울릉도)까지 복속시킨 것도 그분일세.' },
-      { who:'npc', t:'지증왕께서는 다스림의 틀도 갖추셨네. 서라벌에 시장을 열고 이를 감독하는 관청, 동시전을 두셨지. 나라 안 살림도 그렇게 자리를 잡아갔네.' },
-      { who:'npc', t:'뒤이어 법흥왕께서는 건원이라는 우리 스스로의 연호를 쓰시고, 율령을 반포해 나라의 틀을 세우셨네. 불교를 나라의 종교로 삼으려 하실 때는 이차돈이 목숨을 내놓아 그 뜻을 이루었지.' },
-      { who:'npc', t:'본디 백제와 나눠 갖기로 했던 땅일세. 성왕이 옛 도읍 한성 땅을 되찾아 주기에, 나는 그 틈을 타 한강 하류까지 마저 차지해 버렸지. 배신은 내가 한 셈이야. 성왕이 크게 노해 군사를 일으켰지만, 관산성에서 도리어 목숨을 잃었네. 미안한 마음이 없지 않지만, 그 땅이 훗날 통일의 밑천이 되었네.' },
-      { who:'npc', t:'한강을 쥐니 중국과 곧장 통할 수 있게 되더군. 그것이 훗날 삼국을 아우르는 밑천이 되었네.' },
-      { who:'npc', t:'내가 다녀간 곳마다 비석을 세웠네. 북한산에도, 창녕에도, 멀리 함경도 황초령과 마운령에도.' },
-      { who:'doc', docImg:'assets/scenes/heritage_bukhansan_jinheungwang_sunsubi.jpg',
-        t:'(북한산 진흥왕 순수비. 555년 무렵 진흥왕이 한강 유역까지 영토를 넓힌 뒤 이를 기념해 세운 비석으로, 원래 북한산 비봉에 있었으나 훼손을 막기 위해 지금은 국립중앙박물관으로 옮겨 보존되고 있다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
-      { who:'npc', chart:{ head: [
-'세기',
-'전성기',
-'왕',
-'한강',
-], rows: [
-[
-'4세기',
-'백제',
-'근초고왕',
-'차지',
-],
-[
-'5세기',
-'고구려',
-'장수왕',
-'빼앗음',
-],
-[
-'6세기',
-'신라',
-'진흥왕',
-'최종 차지',
-],
-], note: '한강을 쥔 나라가 그 세기의 주인일세. <b>백→고→신</b>, 4·5·6세기 순서로만 외우면 되네.' }, t:'세 나라가 한강을 번갈아 쥐었네. 순서를 한 줄로 놓고 보게.' },
+      { who:'npc', t:'나는 진흥왕일세. 한강을 마저 다 차지했네.' },
+      { who:'me', t:'마저… 그럼 절반은 이미 가지고 계셨습니까?' },
+      { who:'npc', t:'세 나라가 번갈아 한강을 쥐었지. 순서를 보게.',
+        chart:{ type:'grid', title:'한강을 쥔 나라', head:[ '세기', '전성기 나라', '왕' ], rows:[ [ '4세기', '백제', '근초고왕' ], [ '5세기', '고구려', '장수왕' ], [ '6세기', '신라', '진흥왕' ] ], hi:2 } },
+      { who:'me', t:'성왕과는 원래 나눠 갖기로 하셨다면서요?' },
+      { who:'npc', t:'그랬지. 허나 그 틈에 하류까지 내가 삼켰네.',
+        chart:{ type:'vs', title:'나·제 동맹의 끝', left:{ n:'성왕', s:'상류를 되찾아 줌' }, right:{ n:'진흥왕', s:'하류까지 삼킴', win:true }, mid:'배신' } },
+      { who:'npc', t:'성왕이 노해 쳐들어왔지만, 관산성에서 목숨을 잃었네.' },
+      { who:'me', t:'그 땅이 정말 그만한 값어치가 있었습니까?' },
+      { who:'npc', t:'한강을 쥐니 중국과 곧장 통하게 됐네.' },
+      { who:'npc', t:'다녀간 곳마다 비석을 세웠네 — 순수비일세.',
+        chart:{ type:'relic', title:'진흥왕 순수비', items:[ { img:'jinheungbi', n:'진흥왕 순수비', s:'북한산·창녕·황초령·마운령 네 곳' } ] } },
+      { who:'me', t:'네 곳이나요? 다 손수 다녀오신 겁니까?' },
+      { who:'npc', t:'그렇다네. 북한산비는 원래 비봉에 있었지.' },
+      { who:'npc', t:'할아버님 지증왕께선 나라 이름을 \'신라\'로 정하셨네.' },
+      { who:'npc', t:'이사부를 보내 우산국도 복속시키셨지.',
+        chart:{ type:'map', title:'지증왕이 넓힌 곳', pins:[ { x:74.6, y:117.6, n:'서라벌', on:true }, { x:98.6, y:91.9, n:'우산국' } ], legend:[ { k:'우산국', v:'지금의 울릉도', on:true }, { k:'이사부', v:'정벌한 장수' } ] } },
+      { who:'me', t:'시장도 나라가 감독을 했습니까?' },
+      { who:'npc', t:'동시전을 두어 서라벌 시장을 감독하셨지.' },
+      { who:'npc', t:'법흥왕께선 연호를 쓰고 율령을 반포하셨네.',
+        chart:{ type:'stat', title:'법흥왕이 다진 신라', items:[ { v:'건원', l:'독자 연호' }, { v:'율령', l:'나라의 기틀' }, { v:'이차돈', l:'순교로 불교 공인' } ] } },
+      { who:'me', t:'목숨까지 내놓으면서 지킨 뜻이군요.' },
+      { who:'npc', t:'그렇게 불교가 나라의 종교가 되었네.' },
     ],
     quizSeq: [
       { q:'한강 유역을 모두 차지하고 대가야를 정복했으며, 여러 곳에 순수비를 세운 신라 왕은?',
@@ -1528,9 +1404,17 @@ null,
   hwarang_0: {
     name: '화랑', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="7" r="2.6"/><circle cx="17" cy="10.5" r="2.6"/><circle cx="15" cy="16.5" r="2.6"/><circle cx="9" cy="16.5" r="2.6"/><circle cx="7" cy="10.5" r="2.6"/><circle cx="12" cy="12" r="2"/></svg>', img: 'assets/portraits/hwarang.png',
     beats: [
-      { who:'npc', t:'저는 화랑을 따르는 낭도입니다. 산천을 누비며 무예와 학문을 함께 닦지요. 진흥왕께서 나라의 인재를 기르시려 이 제도를 크게 하셨습니다.' },
-      { who:'npc', t:'저희에겐 지켜야 할 다섯 계율이 있습니다. 임금은 충으로, 어버이는 효로, 벗은 믿음으로, 싸움에는 물러섬이 없고, 산 것을 죽일 때는 가림이 있어야 한다고요.' },
-      { who:'npc', t:'…다만 아무나 높이 오르지는 못합니다. 뼈대와 두품으로 벼슬의 끝이 정해져 있으니까요.' },
+      { who:'npc', t:'저는 화랑을 따르는 낭도입니다.' },
+      { who:'me', t:'무얼 배우십니까? 무예입니까, 학문입니까?' },
+      { who:'npc', t:'무예와 학문을 함께 닦지요. 진흥왕께서 크게 하셨습니다.' },
+      { who:'npc', t:'저희에겐 지켜야 할 다섯 계율이 있습니다.',
+        chart:{ type:'quote', title:'세속오계', text:'임금은 <b>충</b>으로, 어버이는 <b>효</b>로<br>벗은 <b>믿음</b>으로, 싸움엔 물러섬 없이<br>살생은 가려서 한다.', from:'원광법사 · 삼국사기' } },
+      { who:'me', t:'누가… 그 계율을 정해 주셨습니까?' },
+      { who:'npc', t:'원광법사께서 젊은 낭도 둘에게 내려주셨지요.' },
+      { who:'npc', t:'…다만 아무나 높이 오르지는 못합니다.' },
+      { who:'me', t:'무엇이… 오르는 길을 가로막습니까?' },
+      { who:'npc', t:'뼈대입니다. 골품제가 벼슬의 끝을 가릅니다.',
+        chart:{ type:'pyramid', title:'골품제', tiers:[ { t:'진골', hi:true }, { t:'6두품', s:'뛰어나도 한계가 있다' }, { t:'5두품 · 4두품' } ] } },
     ],
     quizSeq: [
       { q:'진흥왕 때 국가 조직으로 정비되어 신라의 인재를 길러낸 청소년 수양 단체는?',
@@ -1997,38 +1881,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=44"></script>
-<script src="assets/streak.js?v=44"></script>
+<script src="assets/badges.js?v=45"></script>
+<script src="assets/streak.js?v=45"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=44"></script>
-  <script src="assets/fx.js?v=44"></script>
-  <script src="assets/deed.js?v=44"></script>
-  <script src="assets/inkwipe.js?v=44"></script>
-  <script src="assets/dash.js?v=44"></script>
-<script src="assets/juice.js?v=44"></script>
-  <script src="assets/difficulty.js?v=44"></script>
-  <script src="assets/nextauto.js?v=44"></script>
-<script src="assets/heroes_data.js?v=44"></script>
-<script src="assets/heroes.js?v=44"></script>
-<script src="assets/icons.js?v=44"></script>
-<script src="assets/srs.js?v=44"></script>
-<script src="assets/newsflash.js?v=44"></script>
-<script src="assets/timeline.js?v=44"></script>
-<script src="assets/journey.js?v=44"></script>
-<script src="assets/season.js?v=44"></script>
-<script src="assets/items.js?v=44"></script>
-  <script src="assets/gold.js?v=44"></script>
-  <script src="assets/ask.js?v=44"></script>
-  <script src="assets/ads.js?v=44"></script>
-  <script src="assets/energy.js?v=44"></script>
-  <script src="assets/daily.js?v=44"></script>
-  <script src="assets/unlock.js?v=44"></script>
-  <script src="assets/guide.js?v=44"></script>
-  <script src="assets/minigames.js?v=44"></script>
-  <script src="assets/quests.js?v=44"></script>
-  <script src="assets/offline.js?v=44"></script>
-  <script src="assets/telemetry.js?v=44"></script>
-<script src="assets/autowalk.js?v=44"></script>
+<script src="assets/rank.js?v=45"></script>
+  <script src="assets/fx.js?v=45"></script>
+  <script src="assets/deed.js?v=45"></script>
+  <script src="assets/inkwipe.js?v=45"></script>
+  <script src="assets/dash.js?v=45"></script>
+<script src="assets/juice.js?v=45"></script>
+  <script src="assets/difficulty.js?v=45"></script>
+  <script src="assets/nextauto.js?v=45"></script>
+<script src="assets/heroes_data.js?v=45"></script>
+<script src="assets/heroes.js?v=45"></script>
+<script src="assets/icons.js?v=45"></script>
+<script src="assets/srs.js?v=45"></script>
+<script src="assets/newsflash.js?v=45"></script>
+<script src="assets/timeline.js?v=45"></script>
+<script src="assets/journey.js?v=45"></script>
+<script src="assets/season.js?v=45"></script>
+<script src="assets/items.js?v=45"></script>
+  <script src="assets/gold.js?v=45"></script>
+  <script src="assets/ask.js?v=45"></script>
+  <script src="assets/ads.js?v=45"></script>
+  <script src="assets/energy.js?v=45"></script>
+  <script src="assets/daily.js?v=45"></script>
+  <script src="assets/unlock.js?v=45"></script>
+  <script src="assets/guide.js?v=45"></script>
+  <script src="assets/minigames.js?v=45"></script>
+  <script src="assets/quests.js?v=45"></script>
+  <script src="assets/offline.js?v=45"></script>
+  <script src="assets/telemetry.js?v=45"></script>
+<script src="assets/autowalk.js?v=45"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
