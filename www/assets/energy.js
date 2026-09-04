@@ -105,9 +105,15 @@ window.Energy = (function(){
     #eng-btn svg { width:16px; height:16px; flex:none; }
     #eng-btn.low { color:#e8836e; border-color:#7a3a2a; }
     #eng-ov { position:absolute; inset:0; z-index:93; display:none; align-items:center;
-      justify-content:center; background:rgba(8,6,3,.88); font-family:"Gowun Batang",serif; }
+      justify-content:center; background:rgba(8,6,3,.88); font-family:"Gowun Batang",serif;  overflow-y:auto; padding:10px; box-sizing:border-box;}
     #eng-ov.show { display:flex; }
-    #eng-ov .panel { width:min(92%,420px); background:#1a140c; border:1px solid #4a3c26;
+    #eng-ov .panel {
+      /* 가로로 누우면 게임 높이가 390px뿐이라 긴 창은 위아래가 잘렸다.
+         높이 미디어쿼리는 못 쓴다 — 세로로 든 휴대폰에서는 #wrap을 90도
+         돌려 쓰므로 화면 높이(844)와 게임 높이(390)가 다르다.
+         부모 기준 %로 잡고, 넘치면 창 안에서 스크롤되게 한다. */
+      max-height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      box-sizing:border-box; width:min(92%,420px); background:#1a140c; border:1px solid #4a3c26;
       border-radius:16px; padding:20px 18px; display:flex; flex-direction:column; gap:11px; }
     #eng-ov h3 { margin:0; font-size:17px; color:#8fd0e8; text-align:center; }
     #eng-ov .dots { display:flex; justify-content:center; gap:7px; margin:2px 0 4px; }
@@ -195,8 +201,8 @@ window.Energy = (function(){
       sub.innerHTML = n >= MAX
         ? '가득 찼습니다.'
         : `다음 한 개까지 ${fmt(nextIn())}<br>` +
-          '<span style="font-size:11.5px;color:#8d7f66">기력이 없어도 챕터는 그대로 진행된다.<br>' +
-          '다시 붙거나 서두를 때만 쓴다.</span>';
+          '<span style="font-size:11.5px;color:#8d7f66">기력이 없어도 챕터는 그대로 진행됩니다.<br>' +
+          '다시 붙거나 서두를 때만 씁니다.</span>';
     }
     const g = document.getElementById('eng-gold');
     if (g) g.disabled = !(window.Gold && Gold.get() >= GOLD_PER) || n >= MAX;

@@ -81,9 +81,15 @@ window.Gold = (function(){
       100%{opacity:0; transform:translateY(-26px)} }
 
     #gold-ov { position:absolute; inset:0; z-index:93; display:none; align-items:center;
-      justify-content:center; background:rgba(8,6,3,.88); font-family:"Gowun Batang",serif; }
+      justify-content:center; background:rgba(8,6,3,.88); font-family:"Gowun Batang",serif;  overflow-y:auto; padding:10px; box-sizing:border-box;}
     #gold-ov.show { display:flex; }
-    #gold-ov .panel { width:min(92%,460px); background:#1a140c; border:1px solid #4a3c26;
+    #gold-ov .panel {
+      /* 가로로 누우면 게임 높이가 390px뿐이라 긴 창은 위아래가 잘렸다.
+         높이 미디어쿼리는 못 쓴다 — 세로로 든 휴대폰에서는 #wrap을 90도
+         돌려 쓰므로 화면 높이(844)와 게임 높이(390)가 다르다.
+         부모 기준 %로 잡고, 넘치면 창 안에서 스크롤되게 한다. */
+      max-height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      box-sizing:border-box; width:min(92%,460px); background:#1a140c; border:1px solid #4a3c26;
       border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:12px; }
     #gold-ov h3 { margin:0; font-size:17px; color:#f0c96b; text-align:center; }
     #gold-ov .bal { text-align:center; font-size:13px; color:#b8a888; margin-top:-6px; }
@@ -206,7 +212,7 @@ window.Gold = (function(){
     if (!spend(price)){ say('금이 모자랍니다.'); return; }
     if (id === 'scan'){
       const n = scanSpots();
-      say(n ? `이 구역에 아직 ${n}곳이 남아 있다.` : '이 구역에는 남은 것이 없습니다.');
+      say(n ? `이 구역에 아직 ${n}곳이 남아 있습니다.` : '이 구역에는 남은 것이 없습니다.');
       document.getElementById('gold-ov').classList.remove('show');
     } else if (id === 'shield'){
       st.shield++; save(st); say('콤보를 한 번 지켜 줍니다.');

@@ -107,7 +107,13 @@ window.ErrLog = (function(){
     #errlog-ov { position:fixed; inset:0; z-index:99999; background:rgba(6,5,3,.94);
       font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
       overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px; box-sizing:border-box; }
-    #errlog-ov .panel { max-width:720px; margin:0 auto; color:#f0e6d2; font-size:12.5px; }
+    #errlog-ov .panel {
+      /* 가로로 누우면 게임 높이가 390px뿐이라 긴 창은 위아래가 잘렸다.
+         높이 미디어쿼리는 못 쓴다 — 세로로 든 휴대폰에서는 #wrap을 90도
+         돌려 쓰므로 화면 높이(844)와 게임 높이(390)가 다르다.
+         부모 기준 %로 잡고, 넘치면 창 안에서 스크롤되게 한다. */
+      max-height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      box-sizing:border-box; max-width:720px; margin:0 auto; color:#f0e6d2; font-size:12.5px; }
     #errlog-ov .top { position:sticky; top:0; display:flex; align-items:center; gap:6px;
       padding:8px 0 10px; background:rgba(6,5,3,.94); }
     #errlog-ov .top b { flex:1; font-size:14px; color:#f0c96b; }

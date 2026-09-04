@@ -198,7 +198,7 @@ window.Mini = (function(){
     if (window.Unlock && !Unlock.has(g.gate)){ Unlock.deny(g.gate); return; }
     if (freeLeft() <= 0){
       panel('<h3>오늘은 여기까지</h3>' +
-        '<div class="sub">무료 도전을 다 썼다.<br>광고를 보면 한 번 더 할 수 있다.</div>' +
+        '<div class="sub">무료 도전을 다 쓰셨습니다.<br>광고를 보시면 한 번 더 할 수 있습니다.</div>' +
         '<button id="mg-x">닫기</button>');
       document.getElementById('mg-x').onclick = open;
       return;
@@ -206,8 +206,8 @@ window.Mini = (function(){
     const q = g.make();
     if (!q){
       panel('<h3>' + g.name + '</h3>' +
-        '<div class="sub">아직 문제를 만들 만큼 모으지 못했다.<br>' +
-        '유물을 줍고 사람을 만나면 열린다.</div>' +
+        '<div class="sub">아직 문제를 만들 만큼 모으지 못했습니다.<br>' +
+        '유물을 줍고 사람을 만나면 열립니다.</div>' +
         '<button id="mg-x">닫기</button>');
       document.getElementById('mg-x').onclick = open;
       return;

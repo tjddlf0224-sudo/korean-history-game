@@ -113,24 +113,32 @@ window.Difficulty = (function(){
     if (injected) return; injected = true;
     const s = document.createElement('style');
     s.textContent = `
+    /* 가로로 누우면 게임 높이가 390px뿐이다. 예전에는 창에 높이 제한도
+       스크롤도 없어서 위아래가 그냥 잘렸다(제보: "위아래 스크롤도 안 되면서
+       위아래가 잘려"). 화면 높이를 넘으면 창 안에서 스크롤되게 한다.
+       높이 미디어쿼리는 쓸 수 없다 — 세로로 든 휴대폰에서 #wrap을 90도
+       돌려 쓰므로, 미디어쿼리가 보는 화면 높이(844)와 실제 게임 높이(390)가
+       다르다. 그래서 부모(#wrap) 기준인 %와 max-height로 잡는다. */
     #df-ov { position:absolute; inset:0; z-index:96; display:none; align-items:center;
-      justify-content:center; background:rgba(8,6,3,.92); font-family:"Gowun Batang",serif; }
+      justify-content:center; background:rgba(8,6,3,.92); font-family:"Gowun Batang",serif;
+      padding:10px; box-sizing:border-box; overflow-y:auto; }
     #df-ov.show { display:flex; }
     #df-ov .panel { width:min(92%,420px); background:#1a140c; border:1px solid #c9a24a;
-      border-radius:16px; padding:24px 20px; display:flex; flex-direction:column; gap:12px;
-      text-align:center; }
+      border-radius:16px; padding:18px 20px; display:flex; flex-direction:column; gap:9px;
+      text-align:center; max-height:100%; overflow-y:auto; box-sizing:border-box;
+      -webkit-overflow-scrolling:touch; }
     #df-ov .tag { font-size:12px; letter-spacing:.26em; color:#a89676; }
-    #df-ov .big { font-size:23px; font-weight:700; color:#f0c96b;
+    #df-ov .big { font-size:21px; font-weight:700; color:#f0c96b;
       text-shadow:0 0 24px rgba(240,201,107,.5); }
-    #df-ov .rate { font-size:34px; font-weight:700; color:#f5ecd8;
+    #df-ov .rate { font-size:29px; font-weight:700; color:#f5ecd8;
       font-variant-numeric:tabular-nums; line-height:1.2; }
-    #df-ov .ln { font-size:14px; color:#e6dbc2; line-height:1.85; }
+    #df-ov .ln { font-size:14px; color:#e6dbc2; line-height:1.65; }
     #df-ov .sm { font-size:12px; color:#8d7f66; line-height:1.7; }
-    #df-ov button { padding:13px; border-radius:11px; font-family:inherit; font-size:15px;
+    #df-ov button { padding:11px; border-radius:11px; font-family:inherit; font-size:15px;
       cursor:pointer; border:1px solid #4a3c26; background:#2a2013; color:#f5ecd8; }
     #df-ov button.hi { background:#3a2c1a; border-color:#c9a24a; color:#f0c96b; font-weight:700; }
     /* 축하 반짝임 — 애니메이션이 안 도는 환경도 있어서, 없어도 내용은 다 보인다 */
-    #df-ov .spark { font-size:30px; letter-spacing:.3em; color:#f0c96b; }`;
+    #df-ov .spark { font-size:24px; letter-spacing:.3em; color:#f0c96b; }`;
     document.head.appendChild(s);
   }
   function layer(){ return document.getElementById('wrap') || document.body; }
@@ -145,15 +153,15 @@ window.Difficulty = (function(){
     const pct = Math.round(rate() * 100);
     d.innerHTML = '<div class="panel">' +
       '<div class="spark">✦ ✦ ✦</div>' +
-      '<div class="tag">실 력 이  올 랐 다</div>' +
+      '<div class="tag">실 력 이  올 랐 습 니 다</div>' +
       `<div class="rate">${pct}%</div>` +
       `<div class="sm">최근 ${WINDOW}문항 첫 시도 정답률</div>` +
-      '<div class="big">보기를 넷으로 늘려 볼까?</div>' +
-      '<div class="ln">둘 중 하나를 고르는 것은 이제 쉬울 것이다.<br>' +
-      '넷 중 하나를 고르면 실제 시험과 더 가까워진다.</div>' +
-      '<button class="hi" id="df-up">넷으로 올린다</button>' +
-      '<button id="df-stay">지금이 좋다</button>' +
-      '<div class="sm">언제든 되돌릴 수 있다.</div></div>';
+      '<div class="big">보기를 넷으로 늘려 볼까요?</div>' +
+      '<div class="ln">둘 중 하나를 고르는 것은 이제 쉬우실 겁니다.<br>' +
+      '넷 중 하나를 고르면 실제 시험과 더 가까워집니다.</div>' +
+      '<button class="hi" id="df-up">넷으로 올리기</button>' +
+      '<button id="df-stay">지금이 좋아요</button>' +
+      '<div class="sm">언제든 되돌릴 수 있습니다.</div></div>';
     d.classList.add('show');
     d.querySelector('#df-up').onclick = () => {
       st.level = 4; save(st); d.classList.remove('show'); done();
@@ -168,10 +176,10 @@ window.Difficulty = (function(){
     const d = document.getElementById('df-ov');
     d.innerHTML = '<div class="panel">' +
       '<div class="spark">✦</div>' +
-      '<div class="big">이제 넷 중에 고른다</div>' +
-      '<div class="ln">어려워지면 언제든 다시 둘로 내릴 수 있다.<br>' +
-      '메뉴에서 <b>난이도</b>를 누르면 된다.</div>' +
-      '<button class="hi" id="df-ok">알겠다</button></div>';
+      '<div class="big">이제 넷 중에 고릅니다</div>' +
+      '<div class="ln">어려워지면 언제든 다시 둘로 내릴 수 있습니다.<br>' +
+      '메뉴에서 <b>난이도</b>를 누르시면 됩니다.</div>' +
+      '<button class="hi" id="df-ok">알겠습니다</button></div>';
     d.classList.add('show');
     d.querySelector('#df-ok').onclick = () => d.classList.remove('show');
   }
@@ -187,8 +195,8 @@ window.Difficulty = (function(){
       `<div class="big">지금은 ${st.level}지선다</div>` +
       (st.hist.length ? `<div class="sm">최근 ${st.hist.length}문항 첫 시도 정답률 ${pct}%</div>` : '') +
       (st.level === 2
-        ? '<button class="hi" id="df-up">넷으로 올린다</button>'
-        : '<button id="df-down">둘로 내린다</button>') +
+        ? '<button class="hi" id="df-up">넷으로 올리기</button>'
+        : '<button id="df-down">둘로 내리기</button>') +
       '<button id="df-x">닫기</button></div>';
     d.classList.add('show');
     const up = d.querySelector('#df-up'), dn = d.querySelector('#df-down');

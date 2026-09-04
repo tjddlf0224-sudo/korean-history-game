@@ -61,6 +61,13 @@
     background: #3a2f1a; flex: none; display:flex; align-items:center; justify-content:center; font-size:34px;
     background-size: cover; background-position: center top; border: 2px solid #51432c;
     box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
+  /* 주인공 초상만 **높이 기준**으로 키운다.
+     신분별 걷기 그림은 세로는 171로 같은데 가로가 88(노비)~136(양반)으로
+     제각각이다. cover는 짧은 쪽에 맞추므로, 가로가 넓은 신분일수록
+     전신이 작게 들어가 얼굴이 쪼그라든다. 높이로 고정하면 어느 신분이든
+     같은 자리에서 상반신이 잡힌다(148%는 노비의 지금 화면을 그대로 맞춘 값). */
+  .dlg-portrait.me-pic { background-size: auto 148%;
+    box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
   .dlg-name { font-weight: bold; font-size: 16px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; color: #afa38f; }
   .dlg-doc { display: none; width: 100%; border-radius: 10px; margin-bottom: 10px;
@@ -503,10 +510,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=53"></script>
-<script src="assets/map/map_component.js?v=53"></script>
-<script src="assets/chart.js?v=53"></script>
-<script src="assets/audio.js?v=53"></script>
+<script src="assets/errlog.js?v=54"></script>
+<script src="assets/map/map_component.js?v=54"></script>
+<script src="assets/chart.js?v=54"></script>
+<script src="assets/audio.js?v=54"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -518,7 +525,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=53';   // 존댓말 전환
+const ART_V = '?v=54';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1643,7 +1650,13 @@ const Dialog = {
     const portraitEl = document.getElementById('dlg-portrait');
     if (portraitEl){
       // 주인공 차례면 주인공 얼굴로 바꾼다(걷기 스프라이트의 정면 한 컷)
-      const img = isMe ? 'assets/player/down_0.png'
+      // 주인공 초상도 신분을 따라간다. 걷는 그림만 갈아입고 초상은 그대로라
+      // 노비 옷을 입고 걷다가 대화창에서는 현대 옷이 떴다(제보).
+      // currentSuit()은 rank.js의 티어 id를 준다 — 걷기 그림과 같은 폴더다.
+      portraitEl.classList.toggle('me-pic', isMe);
+      const suit = (typeof currentSuit === 'function') ? currentSuit() : null;
+      const mePic = suit ? `assets/player/${suit}/down_0.png` : 'assets/player/down_0.png';
+      const img = isMe ? mePic
                        : (beat.img || (beat.name ? null : this.data.img));
       if (img){ portraitEl.textContent = ''; portraitEl.style.backgroundImage = `url('${img}${ART_V}')`; }
       else { portraitEl.style.backgroundImage = 'none'; portraitEl.innerHTML = beat.icon || this.data.icon || '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7v1H4v-1z"/></svg>'; }
@@ -1904,39 +1917,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=53"></script>
-<script src="assets/streak.js?v=53"></script>
+<script src="assets/badges.js?v=54"></script>
+<script src="assets/streak.js?v=54"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=53"></script>
-  <script src="assets/fx.js?v=53"></script>
-  <script src="assets/deed.js?v=53"></script>
-  <script src="assets/inkwipe.js?v=53"></script>
-  <script src="assets/dash.js?v=53"></script>
-<script src="assets/juice.js?v=53"></script>
-  <script src="assets/difficulty.js?v=53"></script>
-  <script src="assets/nextauto.js?v=53"></script>
-<script src="assets/heroes_data.js?v=53"></script>
-<script src="assets/heroes.js?v=53"></script>
-<script src="assets/icons.js?v=53"></script>
-<script src="assets/srs.js?v=53"></script>
-<script src="assets/newsflash.js?v=53"></script>
-<script src="assets/timeline.js?v=53"></script>
-<script src="assets/journey.js?v=53"></script>
-<script src="assets/season.js?v=53"></script>
-<script src="assets/boss.js?v=53"></script>
-<script src="assets/items.js?v=53"></script>
-  <script src="assets/gold.js?v=53"></script>
-  <script src="assets/ask.js?v=53"></script>
-  <script src="assets/ads.js?v=53"></script>
-  <script src="assets/energy.js?v=53"></script>
-  <script src="assets/daily.js?v=53"></script>
-  <script src="assets/unlock.js?v=53"></script>
-  <script src="assets/guide.js?v=53"></script>
-  <script src="assets/minigames.js?v=53"></script>
-  <script src="assets/quests.js?v=53"></script>
-  <script src="assets/offline.js?v=53"></script>
-  <script src="assets/telemetry.js?v=53"></script>
-<script src="assets/autowalk.js?v=53"></script>
+<script src="assets/rank.js?v=54"></script>
+  <script src="assets/fx.js?v=54"></script>
+  <script src="assets/deed.js?v=54"></script>
+  <script src="assets/inkwipe.js?v=54"></script>
+  <script src="assets/dash.js?v=54"></script>
+<script src="assets/juice.js?v=54"></script>
+  <script src="assets/difficulty.js?v=54"></script>
+  <script src="assets/nextauto.js?v=54"></script>
+<script src="assets/heroes_data.js?v=54"></script>
+<script src="assets/heroes.js?v=54"></script>
+<script src="assets/icons.js?v=54"></script>
+<script src="assets/srs.js?v=54"></script>
+<script src="assets/newsflash.js?v=54"></script>
+<script src="assets/timeline.js?v=54"></script>
+<script src="assets/journey.js?v=54"></script>
+<script src="assets/season.js?v=54"></script>
+<script src="assets/boss.js?v=54"></script>
+<script src="assets/items.js?v=54"></script>
+  <script src="assets/gold.js?v=54"></script>
+  <script src="assets/ask.js?v=54"></script>
+  <script src="assets/ads.js?v=54"></script>
+  <script src="assets/energy.js?v=54"></script>
+  <script src="assets/daily.js?v=54"></script>
+  <script src="assets/unlock.js?v=54"></script>
+  <script src="assets/guide.js?v=54"></script>
+  <script src="assets/minigames.js?v=54"></script>
+  <script src="assets/quests.js?v=54"></script>
+  <script src="assets/offline.js?v=54"></script>
+  <script src="assets/telemetry.js?v=54"></script>
+<script src="assets/autowalk.js?v=54"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

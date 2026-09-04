@@ -153,9 +153,15 @@ window.Auth = (function(){
     #auth-ov.in .del { display:block; }
     #auth-ov { position:absolute; inset:0; z-index:9000; display:none;
       align-items:center; justify-content:center; background:rgba(8,6,3,.9);
-      font-family:"Gowun Batang",serif; }
+      font-family:"Gowun Batang",serif;  overflow-y:auto; padding:10px; box-sizing:border-box;}
     #auth-ov.show { display:flex; }
-    #auth-ov .panel { width:min(90%,380px); background:#1a140c; border:1px solid #4a3c26;
+    #auth-ov .panel {
+      /* 가로로 누우면 게임 높이가 390px뿐이라 긴 창은 위아래가 잘렸다.
+         높이 미디어쿼리는 못 쓴다 — 세로로 든 휴대폰에서는 #wrap을 90도
+         돌려 쓰므로 화면 높이(844)와 게임 높이(390)가 다르다.
+         부모 기준 %로 잡고, 넘치면 창 안에서 스크롤되게 한다. */
+      max-height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      box-sizing:border-box; width:min(90%,380px); background:#1a140c; border:1px solid #4a3c26;
       border-radius:16px; padding:22px 20px; display:flex; flex-direction:column; gap:12px; }
     #auth-ov h3 { margin:0; font-size:18px; color:#f0c96b; text-align:center; }
     #auth-ov .sub { text-align:center; font-size:12.5px; color:#b8a888;

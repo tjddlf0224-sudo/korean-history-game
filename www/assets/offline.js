@@ -83,9 +83,15 @@ window.Offline = (function(){
     const s = document.createElement('style');
     s.textContent = `
     #of-ov { position:absolute; inset:0; z-index:96; display:none; align-items:center;
-      justify-content:center; background:rgba(8,6,3,.92); font-family:"Gowun Batang",serif; }
+      justify-content:center; background:rgba(8,6,3,.92); font-family:"Gowun Batang",serif;  overflow-y:auto; padding:10px; box-sizing:border-box;}
     #of-ov.show { display:flex; }
-    #of-ov .panel { width:min(92%,400px); background:#1a140c; border:1px solid #c9a24a;
+    #of-ov .panel {
+      /* 가로로 누우면 게임 높이가 390px뿐이라 긴 창은 위아래가 잘렸다.
+         높이 미디어쿼리는 못 쓴다 — 세로로 든 휴대폰에서는 #wrap을 90도
+         돌려 쓰므로 화면 높이(844)와 게임 높이(390)가 다르다.
+         부모 기준 %로 잡고, 넘치면 창 안에서 스크롤되게 한다. */
+      max-height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      box-sizing:border-box; width:min(92%,400px); background:#1a140c; border:1px solid #c9a24a;
       border-radius:16px; padding:24px 20px; display:flex; flex-direction:column; gap:12px;
       text-align:center; }
     #of-ov .tag { font-size:12px; letter-spacing:.26em; color:#a89676; }

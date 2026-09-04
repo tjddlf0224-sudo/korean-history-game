@@ -57,6 +57,10 @@
     background: #8a6d3b; flex: none; display:flex; align-items:center; justify-content:center; font-size:34px;
     background-size: cover; background-position: center top; border: 2px solid #c9a24a;
     box-shadow: 0 10px 22px rgba(0,0,0,.5); z-index: 2; }
+  /* 주인공 초상만 높이 기준으로 키운다 — 신분별 걷기 그림은 세로는 171로
+     같은데 가로가 88(노비)~136(양반)으로 제각각이라, cover로 두면 가로가
+     넓은 신분일수록 전신이 작게 들어가 얼굴이 쪼그라든다. */
+  .dlg-portrait.me-pic { background-size: auto 148%; }
   .dlg-name { font-weight: bold; font-size: 17px; color: #f0c96b; }
   .dlg-tag { font-size: 11px; opacity: .7; }
   .dlg-doc { display: none; width: 100%; border-radius: 10px; margin-bottom: 10px;
@@ -483,10 +487,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=53"></script>
-<script src="assets/map/map_component.js?v=53"></script>
-<script src="assets/chart.js?v=53"></script>
-<script src="assets/audio.js?v=53"></script>
+<script src="assets/errlog.js?v=54"></script>
+<script src="assets/map/map_component.js?v=54"></script>
+<script src="assets/chart.js?v=54"></script>
+<script src="assets/audio.js?v=54"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -498,7 +502,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=53';   // 존댓말 전환
+const ART_V = '?v=54';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -1869,7 +1873,12 @@ const Dialog = {
     if (nameEl2) nameEl2.textContent = isMe ? '나' : (beat.name || this.data.name);
     const portEl2 = document.getElementById('dlg-portrait');
     if (portEl2){
-      const im = isMe ? 'assets/player/down_0.png' : (beat.img || this.data.img);
+      // 주인공 초상도 신분을 따라간다(걷기 그림과 같은 폴더)
+      portEl2.classList.toggle('me-pic', isMe);
+      const suit2 = (typeof currentSuit === 'function') ? currentSuit() : null;
+      const im = isMe ? (suit2 ? 'assets/player/' + suit2 + '/down_0.png'
+                               : 'assets/player/down_0.png')
+                      : (beat.img || this.data.img);
       if (im){ portEl2.textContent = ''; portEl2.style.backgroundImage = "url('" + im + "')"; }
       else { portEl2.style.backgroundImage = 'none'; portEl2.innerHTML = this.data.icon || ''; }
     }
@@ -2346,39 +2355,39 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
-<script src="assets/badges.js?v=53"></script>
-<script src="assets/streak.js?v=53"></script>
+<script src="assets/badges.js?v=54"></script>
+<script src="assets/streak.js?v=54"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=53"></script>
-  <script src="assets/fx.js?v=53"></script>
-  <script src="assets/deed.js?v=53"></script>
-  <script src="assets/inkwipe.js?v=53"></script>
-  <script src="assets/dash.js?v=53"></script>
-<script src="assets/juice.js?v=53"></script>
-  <script src="assets/difficulty.js?v=53"></script>
-  <script src="assets/nextauto.js?v=53"></script>
-<script src="assets/heroes_data.js?v=53"></script>
-<script src="assets/heroes.js?v=53"></script>
-<script src="assets/icons.js?v=53"></script>
-<script src="assets/srs.js?v=53"></script>
-<script src="assets/newsflash.js?v=53"></script>
-<script src="assets/timeline.js?v=53"></script>
-<script src="assets/journey.js?v=53"></script>
-<script src="assets/season.js?v=53"></script>
-<script src="assets/items.js?v=53"></script>
-  <script src="assets/gold.js?v=53"></script>
-  <script src="assets/ask.js?v=53"></script>
-  <script src="assets/ads.js?v=53"></script>
-  <script src="assets/energy.js?v=53"></script>
-  <script src="assets/daily.js?v=53"></script>
-  <script src="assets/unlock.js?v=53"></script>
-  <script src="assets/guide.js?v=53"></script>
-  <script src="assets/minigames.js?v=53"></script>
-  <script src="assets/quests.js?v=53"></script>
-  <script src="assets/offline.js?v=53"></script>
-  <script src="assets/telemetry.js?v=53"></script>
-<script src="assets/autowalk.js?v=53"></script>
-<script src="assets/boss.js?v=53"></script>
+<script src="assets/rank.js?v=54"></script>
+  <script src="assets/fx.js?v=54"></script>
+  <script src="assets/deed.js?v=54"></script>
+  <script src="assets/inkwipe.js?v=54"></script>
+  <script src="assets/dash.js?v=54"></script>
+<script src="assets/juice.js?v=54"></script>
+  <script src="assets/difficulty.js?v=54"></script>
+  <script src="assets/nextauto.js?v=54"></script>
+<script src="assets/heroes_data.js?v=54"></script>
+<script src="assets/heroes.js?v=54"></script>
+<script src="assets/icons.js?v=54"></script>
+<script src="assets/srs.js?v=54"></script>
+<script src="assets/newsflash.js?v=54"></script>
+<script src="assets/timeline.js?v=54"></script>
+<script src="assets/journey.js?v=54"></script>
+<script src="assets/season.js?v=54"></script>
+<script src="assets/items.js?v=54"></script>
+  <script src="assets/gold.js?v=54"></script>
+  <script src="assets/ask.js?v=54"></script>
+  <script src="assets/ads.js?v=54"></script>
+  <script src="assets/energy.js?v=54"></script>
+  <script src="assets/daily.js?v=54"></script>
+  <script src="assets/unlock.js?v=54"></script>
+  <script src="assets/guide.js?v=54"></script>
+  <script src="assets/minigames.js?v=54"></script>
+  <script src="assets/quests.js?v=54"></script>
+  <script src="assets/offline.js?v=54"></script>
+  <script src="assets/telemetry.js?v=54"></script>
+<script src="assets/autowalk.js?v=54"></script>
+<script src="assets/boss.js?v=54"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

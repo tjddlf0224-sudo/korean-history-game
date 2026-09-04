@@ -55,9 +55,15 @@ window.Deed = (function(){
     #dd-btn.seen { border-color:#5d7a67; color:#93ab9b;
       background:rgba(18,22,17,.9); font-weight:400; }
     #dd-ov { position:absolute; inset:0; z-index:93; display:none; align-items:center;
-      justify-content:center; background:rgba(9,11,8,.93); font-family:"Gowun Batang",serif; }
+      justify-content:center; background:rgba(9,11,8,.93); font-family:"Gowun Batang",serif;  overflow-y:auto; padding:10px; box-sizing:border-box;}
     #dd-ov.show { display:flex; }
-    #dd-ov .box { width:min(88%,540px); text-align:center; }
+    #dd-ov .box {
+      /* 가로로 누우면 게임 높이가 390px뿐이라 긴 창은 위아래가 잘렸다.
+         높이 미디어쿼리는 못 쓴다 — 세로로 든 휴대폰에서는 #wrap을 90도
+         돌려 쓰므로 화면 높이(844)와 게임 높이(390)가 다르다.
+         부모 기준 %로 잡고, 넘치면 창 안에서 스크롤되게 한다. */
+      max-height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      box-sizing:border-box; width:min(88%,540px); text-align:center; }
     #dd-ov .tag { font-size:12px; letter-spacing:.28em; color:#8fae97; margin-bottom:16px; }
     #dd-ov .ln { font-size:16px; line-height:2.05; color:#e9e4d4; }
     #dd-ov .ln b { color:#bfe6cb; }

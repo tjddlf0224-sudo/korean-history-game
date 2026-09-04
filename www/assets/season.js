@@ -200,7 +200,7 @@ window.Season = (function(){
     const rdy = p.all && !claimed();
     d.innerHTML = '<div class="panel">' +
       `<h3>이달의 시대 — ${p.era.name}</h3>` +
-      `<div class="sub">${daysLeft()}일 남았다 · 이 시대 챕터는 금을 두 배로 준다</div>` +
+      `<div class="sub">${daysLeft()}일 남았습니다 · 이 시대 챕터는 금을 두 배로 드립니다</div>` +
       rows +
       (rdy ? `<button class="hi" id="sn-claim">다 끝냈습니다 · 금 ${REWARD()} 받기</button>`
            : (claimed() ? '<button disabled>상을 받았습니다</button>' : '')) +

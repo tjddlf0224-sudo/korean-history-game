@@ -319,7 +319,7 @@ window.Heroes = (function(){
     ov.innerHTML = `<div class="card"><div class="face">${faceHtml(k)}</div>` +
       `<div class="eb">인 물 을  얻 었 다</div>` +
       `<div class="nm">${d.n}</div><div class="er">${d.e}</div>` +
-      (grade === 2 ? '<div class="star">★ 한 번에 모두 맞혔다</div>' : '');
+      (grade === 2 ? '<div class="star">★ 한 번에 모두 맞히셨습니다</div>' : '');
     layer().appendChild(ov);
     if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_ding');
     if (navigator.vibrate) navigator.vibrate([30, 40, 60]);

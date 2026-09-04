@@ -31,7 +31,7 @@ window.Timeline = (function(){
     st.textContent = `
     #tl-ov { position:absolute; inset:0; z-index:93; display:none; flex-direction:column;
       align-items:center; justify-content:center; background:rgba(8,6,3,.9);
-      font-family:"Gowun Batang",serif; padding:4% 6%; }
+      font-family:"Gowun Batang",serif; padding:4% 6%;  overflow-y:auto; padding:10px; box-sizing:border-box;}
     #tl-ov.show { display:flex; }
     #tl-ov .ttl { font-size:12px; letter-spacing:.26em; color:#a89676; flex:none; }
     #tl-ov .ask { font-size:clamp(15px,2.8vw,19px); font-weight:700; color:#f0c96b;
@@ -46,7 +46,13 @@ window.Timeline = (function(){
 
     #tl-ov .cards { display:flex; flex-direction:column; gap:8px; width:min(100%,560px);
       overflow-y:auto; flex:1 1 auto; }
-    #tl-ov .card { display:flex; gap:11px; align-items:flex-start; text-align:left;
+    #tl-ov .card {
+      /* 가로로 누우면 게임 높이가 390px뿐이라 긴 창은 위아래가 잘렸다.
+         높이 미디어쿼리는 못 쓴다 — 세로로 든 휴대폰에서는 #wrap을 90도
+         돌려 쓰므로 화면 높이(844)와 게임 높이(390)가 다르다.
+         부모 기준 %로 잡고, 넘치면 창 안에서 스크롤되게 한다. */
+      max-height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
+      box-sizing:border-box; display:flex; gap:11px; align-items:flex-start; text-align:left;
       background:#241c12; border:1px solid #4a3c26; border-radius:12px; padding:11px 13px;
       color:#f5ecd8; font-family:inherit; cursor:pointer; transition:border-color .15s, opacity .2s; }
     #tl-ov .card:hover { border-color:#c9a24a; }
@@ -134,7 +140,7 @@ window.Timeline = (function(){
           idx++;
           if (window.Juice) Juice.correct(!missed);
           if (idx >= order.length){
-            msg.innerHTML = missed ? '<b>순서를 맞췄다.</b>' : '<b>한 번에 맞췄다.</b>';
+            msg.innerHTML = missed ? '<b>순서를 맞추셨습니다.</b>' : '<b>한 번에 맞추셨습니다.</b>';
             if (window.Rank) Rank.addXp(missed ? 10 : 25, '연표 맞추기');
             setTimeout(() => { ov.classList.remove('show'); onDone && onDone(true); }, 1400);
           } else {
