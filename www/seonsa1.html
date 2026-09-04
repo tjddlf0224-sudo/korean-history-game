@@ -526,10 +526,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=54"></script>
-<script src="assets/map/map_component.js?v=54"></script>
-<script src="assets/chart.js?v=54"></script>
-<script src="assets/audio.js?v=54"></script>
+<script src="assets/errlog.js?v=56"></script>
+<script src="assets/map/map_component.js?v=56"></script>
+<script src="assets/chart.js?v=56"></script>
+<script src="assets/audio.js?v=56"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -541,7 +541,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=54';   // 존댓말 전환
+const ART_V = '?v=56';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1395,7 +1395,7 @@ const NPC_DATA = {
         chart:{ type:'timeline', title:'고조선이 강성하던 때', marks:[ { y:'BC 2333', t:'고조선' }, { y:'BC 4세기', t:'왕 칭함', on:true }, { y:'BC 3세기', t:'진개에 밀림' }, { y:'BC 194', t:'위만' }, { y:'BC 108', t:'멸망' } ] } },
       { who:'npc', t:'(말이 잠시 끊긴다) …허나 진개가 쳐들어왔네.' },
       { who:'npc', t:'서쪽 땅을 크게 잃고, 중심이 동쪽으로 밀렸지.',
-        chart:{ type:'map', title:'진개의 침입으로 잃은 땅', north:true, pins:[ { x:-14.3, y:36.3, n:'요동' }, { x:24.9, y:67.6, n:'왕검성', on:true } ], legend:[ { k:'잃은 땅', v:'서쪽 2천여 리 (위략)' }, { k:'새 경계', v:'만번한' }, { k:'옮긴 중심', v:'동쪽으로', on:true } ] } },
+        chart:{ type:'map', title:'진개의 침입으로 잃은 땅', north:true, areas:[ { pts:'-18,0 12,-6 22,20 14,48 -18,50', n:'잃은 땅', tx:-16, ty:27 } ], pins:[ { x:-14.3, y:36.3, n:'요동' }, { x:24.9, y:67.6, n:'왕검성', on:true } ], legend:[ { k:'잃은 땅', v:'서쪽 2천여 리 (위략)' }, { k:'새 경계', v:'만번한' }, { k:'옮긴 중심', v:'동쪽으로', on:true } ] } },
       { who:'npc', t:'뒷날 위만이 들어와 준왕을 몰아내고 왕이 되었네.' },
       { who:'npc', t:'철기를 널리 쓰고, 가운데 서서 이득을 챙겼지.',
         chart:{ type:'vs', title:'위만조선의 중계 무역', left:{ n:'한나라' }, right:{ n:'남쪽 진국' }, mid:'고조선이 가운데' } },
@@ -1428,9 +1428,7 @@ const NPC_DATA = {
       { q:'고조선이 부왕 시기에 왕을 칭하고 전국 7웅의 하나인 연나라와 대등하게 맞설 만큼 강성했음을 보여 주는 사실로 옳은 것은?',
         opts:['부왕이 왕을 칭하며 연나라와 대등한 세력을 이루었다','기자가 고조선으로 망명해 와 왕이 되었다'], answer:0, src:[59],
         feedback:['기자 동래설은 후대에 덧붙여진 이야기로, 부왕과는 관련이 없어요.','정답! 고조선은 부왕 시기 왕을 칭하며 연나라와 대등하게 맞설 만큼 강성했으나, 훗날 진개의 침략으로 서쪽 땅을 잃고 약화되었어요.'] },
-      { q:'영고·동맹·무천 같은 제천 행사를 열고, 사출도·민며느리제·책화 같은 풍습을 남긴 나라들은?',
-        opts:['부여·고구려·옥저·동예','신라·백제·가야'], answer:0, src:[13, 22, 30, 40, 47, 53],
-        feedback:['신라·백제·가야는 그보다 뒤인 삼국 시대의 나라들이에요.','정답! 초기 국가들입니다. 저 남쪽 길로 가면 그 나라 사람들을 직접 만나 볼 수 있네.'] },
+      
       { q:'진개의 침략, 위만의 집권, 우거왕의 한 무제 항전 중 가장 먼저 일어난 사건은?',
         opts:['진개의 침략','우거왕의 한 무제 항전'], answer:0, src:[78],
         feedback:['우거왕이 한 무제에 맞서 싸운 것은 기원전 109~108년으로, 셋 중 가장 나중에 벌어진 일이에요.','정답! 진개의 침략은 기원전 3세기의 일로 가장 앞서고, 뒤이어 위만이 집권했으며(기원전 2세기 초), 우거왕의 한 무제 항전(기원전 109~108)이 가장 나중이에요.'] },
@@ -1443,7 +1441,17 @@ const NPC_DATA = {
     name: '고조선 제사장', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V6"/><path d="M12 9c0-3 3-4 5-4-1 3-2 5-5 5"/><path d="M12 13c0-3-3-4-5-4 1 3 2 5 5 5"/><path d="M12 17c0-2.5 2.5-3.5 4-3.5-1 2.5-1.5 4-4 4"/></svg>', img: 'assets/portraits/dangun.png',
     beats: [
       { who:'npc', t:'(지도를 그리며) 이 땅엔 나라가 여럿일세.',
-        chart:{ type:'map', title:'여러 나라가 선 자리', north:true, pins:[ { x:36.4, y:-9, n:'부여', on:true }, { x:19.3, y:31.6, n:'고구려', on:true }, { x:50.6, y:53.4, n:'옥저', on:true }, { x:70, y:80.5, n:'동예', on:true }, { x:44.3, y:121.6, n:'삼한', on:true } ] } },
+        chart:{ type:'map', title:'여러 나라가 선 자리', north:true,
+          /* 나라마다 색을 달리해 영역을 보여 준다 — 핀만으로는 어디까지가
+             그 나라인지 알 수 없다. 부여·고구려는 한반도 밖(만주)이라
+             윤곽선 위쪽 빈 자리에 놓인다. */
+          areas:[
+            { pts:'12,-40 58,-36 64,-8 40,10 14,0',    n:'부여',   tx:30, ty:-16, c:'#7fa8c4' },
+            { pts:'-8,12 34,4 48,26 40,48 2,46',        n:'고구려', tx:8,  ty:30,  c:'#d98a7a' },
+            { pts:'44,34 60,30 68,58 56,74 44,60',      n:'옥저',   tx:48, ty:48,  c:'#8fbf9a' },
+            { pts:'58,70 76,66 82,90 68,100 56,90',     n:'동예',   tx:62, ty:84,  c:'#c9a9d1' },
+            { pts:'20,104 66,100 74,124 50,143 24,131', n:'삼한',   tx:34, ty:120, c:'#d8b25e' } ],
+          pins:[ { x:36.4, y:-9, n:'부여', on:true }, { x:19.3, y:31.6, n:'고구려', on:true }, { x:50.6, y:53.4, n:'옥저', on:true }, { x:70, y:80.5, n:'동예', on:true }, { x:44.3, y:121.6, n:'삼한', on:true } ] } },
       { who:'me', t:'저마다 사는 법이 다릅니까?' },
       { who:'npc', t:'다르지. 아주 달라.',
         chart:{ type:'compare', title:'초기 국가의 풍속', cols:[ { h:'부여', items:[ '사출도', '영고 12월' ] }, { h:'고구려', items:[ '제가회의', '서옥제', '동맹 10월' ] }, { h:'옥저', items:[ '민며느리제', '가족 공동 무덤' ] }, { h:'동예', items:[ '책화', '무천 10월' ] } ] } },
@@ -1564,6 +1572,9 @@ const NPC_DATA = {
       { q:'동예의 특산물로 함께 자주 묶여 나오는, 짧은 활·작은 말·바다표범 가죽 세 가지는?',
         opts:['단궁·과하마·반어피','비파형동검·명도전·거친무늬거울'], answer:0, src:[8, 18, 22, 24, 28, 30, 31, 33, 34, 36, 42, 45],
         feedback:['비파형동검·명도전·거친무늬거울은 고조선의 문화 범위를 보여주는 유물이에요.','정답! 단궁·과하마·반어피입니다.'] },
+      { q:'영고·동맹·무천 같은 제천 행사를 열고, 사출도·민며느리제·책화 같은 풍습을 남긴 나라들은?',
+        opts:['부여·고구려·옥저·동예','신라·백제·가야'], answer:0, src:[13, 22, 30, 40, 47, 53],
+        feedback:['신라·백제·가야는 그보다 뒤인 삼국 시대의 나라들이에요.','정답! 초기 국가들입니다. 저 남쪽 길로 가면 그 나라 사람들을 직접 만나 볼 수 있네.'] },
     ],
     endsChapter: true
   },
@@ -2145,39 +2156,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=54"></script>
-<script src="assets/streak.js?v=54"></script>
+<script src="assets/badges.js?v=56"></script>
+<script src="assets/streak.js?v=56"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=54"></script>
-  <script src="assets/fx.js?v=54"></script>
-  <script src="assets/deed.js?v=54"></script>
-  <script src="assets/inkwipe.js?v=54"></script>
-  <script src="assets/dash.js?v=54"></script>
-<script src="assets/juice.js?v=54"></script>
-  <script src="assets/difficulty.js?v=54"></script>
-  <script src="assets/nextauto.js?v=54"></script>
-<script src="assets/heroes_data.js?v=54"></script>
-<script src="assets/heroes.js?v=54"></script>
-<script src="assets/icons.js?v=54"></script>
-<script src="assets/srs.js?v=54"></script>
-<script src="assets/newsflash.js?v=54"></script>
-<script src="assets/timeline.js?v=54"></script>
-<script src="assets/journey.js?v=54"></script>
-<script src="assets/season.js?v=54"></script>
-<script src="assets/boss.js?v=54"></script>
-<script src="assets/items.js?v=54"></script>
-  <script src="assets/gold.js?v=54"></script>
-  <script src="assets/ask.js?v=54"></script>
-  <script src="assets/ads.js?v=54"></script>
-  <script src="assets/energy.js?v=54"></script>
-  <script src="assets/daily.js?v=54"></script>
-  <script src="assets/unlock.js?v=54"></script>
-  <script src="assets/guide.js?v=54"></script>
-  <script src="assets/minigames.js?v=54"></script>
-  <script src="assets/quests.js?v=54"></script>
-  <script src="assets/offline.js?v=54"></script>
-  <script src="assets/telemetry.js?v=54"></script>
-<script src="assets/autowalk.js?v=54"></script>
+<script src="assets/rank.js?v=56"></script>
+  <script src="assets/fx.js?v=56"></script>
+  <script src="assets/deed.js?v=56"></script>
+  <script src="assets/inkwipe.js?v=56"></script>
+  <script src="assets/dash.js?v=56"></script>
+<script src="assets/juice.js?v=56"></script>
+  <script src="assets/difficulty.js?v=56"></script>
+  <script src="assets/nextauto.js?v=56"></script>
+<script src="assets/heroes_data.js?v=56"></script>
+<script src="assets/heroes.js?v=56"></script>
+<script src="assets/icons.js?v=56"></script>
+<script src="assets/srs.js?v=56"></script>
+<script src="assets/newsflash.js?v=56"></script>
+<script src="assets/timeline.js?v=56"></script>
+<script src="assets/journey.js?v=56"></script>
+<script src="assets/season.js?v=56"></script>
+<script src="assets/boss.js?v=56"></script>
+<script src="assets/items.js?v=56"></script>
+  <script src="assets/gold.js?v=56"></script>
+  <script src="assets/ask.js?v=56"></script>
+  <script src="assets/ads.js?v=56"></script>
+  <script src="assets/energy.js?v=56"></script>
+  <script src="assets/daily.js?v=56"></script>
+  <script src="assets/unlock.js?v=56"></script>
+  <script src="assets/guide.js?v=56"></script>
+  <script src="assets/minigames.js?v=56"></script>
+  <script src="assets/quests.js?v=56"></script>
+  <script src="assets/offline.js?v=56"></script>
+  <script src="assets/telemetry.js?v=56"></script>
+<script src="assets/autowalk.js?v=56"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

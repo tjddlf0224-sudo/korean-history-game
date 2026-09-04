@@ -293,6 +293,13 @@ window.Items = (function(){
     #bag-ov.show { display:flex; }
     #bag-ov .panel { width:min(90%,520px); max-height:84%; overflow-y:auto;
       background:#1a140c; border:1px solid #4a3c26; border-radius:16px; padding:18px; }
+    /* 오른쪽 위 닫기 — 아래쪽 '닫기'는 목록이 길면 한참 내려야 나온다.
+       가로로 누우면 더 그렇다. 스크롤해도 늘 보이게 sticky로 붙인다. */
+    #bag-ov .pnl-x { position:sticky; top:-4px; z-index:3; display:flex;
+      justify-content:flex-end; margin:-6px -6px 2px 0; }
+    #bag-ov .xbtn, #hero-ov .xbtn { width:30px; height:30px; border-radius:50%; flex:none;
+      border:1px solid #6b5636; background:rgba(26,20,12,.95); color:#e0d5bd;
+      font-size:14px; line-height:1; cursor:pointer; font-family:inherit; }
     #bag-ov h3 { margin:0 0 4px; font-size:17px; color:#f0c96b; text-align:center; }
     /* 인물 도감과 오가는 탭. 인물 도감은 양인부터라 그전엔 잠겨 있다 —
        눌러도 도감이 없다는 뜻이 아니라, "아직" 이라는 뜻으로 보이게 한다. */
@@ -501,6 +508,7 @@ window.Items = (function(){
       const d = document.createElement('div');
       d.id = 'bag-ov';
       d.innerHTML = '<div class="panel">' +
+        '<div class="pnl-x"><button class="xbtn" id="bag-x" aria-label="닫기">✕</button></div>' +
         `<div class="dg-tabs"><button class="dg-tab${heroOn ? '' : ' locked'}" id="dgb-hero">인물 도감</button>` +
         '<button class="dg-tab on" id="dgb-self">유물 도감</button></div>' +
         '<div class="cntline" id="bag-cnt"></div>' +
@@ -509,6 +517,7 @@ window.Items = (function(){
         '<button class="close" id="bag-close">닫기</button></div>';
       layer().appendChild(d);
       d.querySelector('#bag-close').onclick = () => d.classList.remove('show');
+      d.querySelector('#bag-x').onclick = () => d.classList.remove('show');
       d.onclick = e => { if (e.target === d) d.classList.remove('show'); };
       // 인물 도감으로 건너간다 — 아직 양인이 아니면 열리는 대신 안내만 뜬다
       const t = d.querySelector('#dgb-hero');

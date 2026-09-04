@@ -205,6 +205,8 @@ window.Heroes = (function(){
     #hero-ov.show { display:flex; }
     #hero-ov .panel { width:min(92%,560px); max-height:88%; display:flex; flex-direction:column;
       background:#1a140c; border:1px solid #4a3c26; border-radius:16px; padding:16px; }
+    /* 오른쪽 위 닫기 — 아래쪽 '닫기'는 목록이 길면 한참 내려야 나온다. */
+    #hero-ov .pnl-x { display:flex; justify-content:flex-end; margin:-6px -6px 2px 0; flex:none; }
     #hero-ov h3 { margin:0 0 3px; font-size:17px; color:#f0c96b; text-align:center; }
     /* 인물 도감·유물 도감을 오가는 탭. 예전엔 단추가 둘이라 서로 다른
        도감으로 착각하기 쉬웠다 — 사실 하나의 '모은 것' 도감이 둘로 나뉜
@@ -351,6 +353,7 @@ window.Heroes = (function(){
       const d = document.createElement('div');
       d.id = 'hero-ov';
       d.innerHTML = '<div class="panel">' +
+        '<div class="pnl-x"><button class="xbtn" id="hero-x" aria-label="닫기">✕</button></div>' +
         '<div class="dg-tabs"><button class="dg-tab on" id="dgh-self">인물 도감</button>' +
         '<button class="dg-tab" id="dgh-item">유물 도감</button></div>' +
         '<div class="cntline" id="hero-cnt"></div>' +
@@ -360,6 +363,7 @@ window.Heroes = (function(){
         '<button class="close" id="hero-close">닫기</button></div>';
       L.appendChild(d);
       d.querySelector('#hero-close').onclick = () => d.classList.remove('show');
+      d.querySelector('#hero-x').onclick = () => d.classList.remove('show');
       d.onclick = e => { if (e.target === d) d.classList.remove('show'); };
       // 유물 도감으로 건너간다 — 그쪽은 처음부터 열려 있어 잠글 이유가 없다
       const t = d.querySelector('#dgh-item');

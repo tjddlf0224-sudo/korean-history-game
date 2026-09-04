@@ -161,6 +161,16 @@ window.Chart = (function(){
       stroke-linejoin:round; }
     .ch-map .pin { fill:#6f6250; stroke:rgba(255,255,255,.35); stroke-width:1; }
     .ch-map .pin.on { fill:#f0c96b; stroke:#fff3d4; }
+    /* 잃은 땅 같은 '범위'는 빗금으로 — 붉은기를 써서 핀(금색)과 구별한다 */
+    .ch-map .lost { fill:url(#chHatch); stroke:#d98a7a; stroke-width:1;
+      stroke-dasharray:3.5 2.5; opacity:.92; }
+    /* 나라 영역 — 색으로 갈라 보여 준다. 핀만 찍으면 "어디까지가 그 나라인지"를
+       알 수 없다는 제보를 받았다. 옅게 칠하고 테두리를 진하게 해서, 겹쳐도
+       아래 것이 비쳐 보이게 한다. */
+    .ch-map .terr { fill-opacity:.24; stroke-width:1.1; stroke-opacity:.95;
+      stroke-linejoin:round; }
+    .ch-map .an { font-size:9px; fill:#eab6a8; font-weight:700;
+      font-family:"Gowun Batang",serif; }
     .ch-map .pn { font-size:9px; fill:#cdbfa4; font-family:"Gowun Batang",serif; }
     .ch-map .pn.on { fill:#fff3d4; font-weight:700; }
     .ch-map .leg { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
@@ -279,11 +289,29 @@ window.Chart = (function(){
         return '<div class="r' + (l.on ? ' on' : '') + '"><b>' + esc(l.k) + '</b><span>' +
                esc(l.v) + '</span></div>';
       }).join('');
+      /* 빗금 영역 — "잃은 땅"처럼 **범위**를 말할 때 쓴다.
+         핀만 찍으면 어디를 가리키는지 알 수 없다는 제보를 받았다
+         ("지도는 나오는데 어디를 뜻하는건지 모르겠어").
+         areas:[{ pts:'x,y x,y …', n:'잃은 땅', tx:.., ty:.. }]
+         좌표는 핀과 같은 눈금(가로 100 · 세로 150)을 쓴다. */
+      const areas = (c.areas || []).map(function(a){
+        // c(색)를 주면 나라 영역, 안 주면 빗금(잃은 땅)
+        const cls = a.c ? 'terr' : 'lost';
+        const st = a.c ? ' style="fill:' + a.c + ';stroke:' + a.c + '"' : '';
+        return '<polygon class="' + cls + '" points="' + a.pts + '"' + st + '/>' +
+          (a.n ? '<text class="an" x="' + (a.tx || 0) + '" y="' + (a.ty || 0) + '"' +
+                 (a.c ? ' style="fill:' + a.c + '"' : '') + '>' + esc(a.n) + '</text>' : '');
+      }).join('');
+      // 빗금 무늬는 쓸 때만 넣는다(한 번에 한 도해만 뜨므로 id가 겹치지 않는다)
+      const defs = /class="lost"/.test(areas) ? '<defs><pattern id="chHatch" width="4.5" height="4.5"' +
+        ' patternUnits="userSpaceOnUse" patternTransform="rotate(45)">' +
+        '<line x1="0" y1="0" x2="0" y2="4.5" stroke="#d98a7a" stroke-width="1.3"/>' +
+        '</pattern></defs>' : '';
       // 부여·고구려는 한반도 밖(만주)에 있다. north:true면 위쪽을 더 보여 준다.
       const box = c.north ? '-20 -48 140 212' : '-14 -10 128 168';
       return '<div class="ch-map' + (leg ? '' : ' solo') + '">' +
-        '<svg viewBox="' + box + '" xmlns="http://www.w3.org/2000/svg">' +
-        '<path class="land" d="' + KOREA_PATH + '"/>' + pins + '</svg>' +
+        '<svg viewBox="' + box + '" xmlns="http://www.w3.org/2000/svg">' + defs +
+        '<path class="land" d="' + KOREA_PATH + '"/>' + areas + pins + '</svg>' +
         (leg ? '<div class="leg">' + leg + '</div>' : '') + '</div>';
     },
 
