@@ -485,32 +485,33 @@
 <script src="vendor/firebase/firebase-app-compat.js"></script>
 <script src="vendor/firebase/firebase-auth-compat.js"></script>
 <script src="vendor/firebase/firebase-firestore-compat.js"></script>
-<script src="assets/firebase_config.js?v=57"></script>
-<script src="assets/auth.js?v=57"></script>
-<script src="assets/board.js?v=57"></script>
-<script src="assets/audio.js?v=57"></script>
-<script src="assets/srs.js?v=57"></script>
-  <script src="assets/rank.js?v=57"></script>
-  <script src="assets/heroes_data.js?v=57"></script>
-  <script src="assets/heroes.js?v=57"></script>
-  <script src="assets/items.js?v=57"></script>
+<script src="assets/zoomwarn.js?v=59"></script>
+<script src="assets/firebase_config.js?v=59"></script>
+<script src="assets/auth.js?v=59"></script>
+<script src="assets/board.js?v=59"></script>
+<script src="assets/audio.js?v=59"></script>
+<script src="assets/srs.js?v=59"></script>
+  <script src="assets/rank.js?v=59"></script>
+  <script src="assets/heroes_data.js?v=59"></script>
+  <script src="assets/heroes.js?v=59"></script>
+  <script src="assets/items.js?v=59"></script>
   <!-- 판 껍데기는 다른 모듈보다 먼저 — 각 화면이 필요한 것만 위에 덮어쓴다 -->
-  <script src="assets/panelskin.js?v=57"></script>
-  <script src="assets/gold.js?v=57"></script>
-  <script src="assets/ads.js?v=57"></script>
-  <script src="assets/energy.js?v=57"></script>
-  <script src="assets/daily.js?v=57"></script>
-  <script src="assets/unlock.js?v=57"></script>
-  <script src="assets/guide.js?v=57"></script>
-  <script src="assets/minigames.js?v=57"></script>
-  <script src="assets/quests.js?v=57"></script>
-  <script src="assets/journey.js?v=57"></script>
-  <script src="assets/fx.js?v=57"></script>
-  <script src="assets/season.js?v=57"></script>
-  <script src="assets/offline.js?v=57"></script>
-  <script src="assets/telemetry.js?v=57"></script>
-<script src="assets/badges.js?v=57"></script>
-<script src="assets/streak.js?v=57"></script>
+  <script src="assets/panelskin.js?v=59"></script>
+  <script src="assets/gold.js?v=59"></script>
+  <script src="assets/ads.js?v=59"></script>
+  <script src="assets/energy.js?v=59"></script>
+  <script src="assets/daily.js?v=59"></script>
+  <script src="assets/unlock.js?v=59"></script>
+  <script src="assets/guide.js?v=59"></script>
+  <script src="assets/minigames.js?v=59"></script>
+  <script src="assets/quests.js?v=59"></script>
+  <script src="assets/journey.js?v=59"></script>
+  <script src="assets/fx.js?v=59"></script>
+  <script src="assets/season.js?v=59"></script>
+  <script src="assets/offline.js?v=59"></script>
+  <script src="assets/telemetry.js?v=59"></script>
+<script src="assets/badges.js?v=59"></script>
+<script src="assets/streak.js?v=59"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>
@@ -544,6 +545,12 @@ function getViewportSize(){
 ['gesturestart','gesturechange','gestureend'].forEach(function(ev){
   document.addEventListener(ev, function(e){ e.preventDefault(); }, { passive: false });
 });
+document.addEventListener('touchstart', function(e){
+  // touchmove만 막으면 두 손가락이 **닿는 순간**은 통과한다. 시작부터 막는다.
+  // (레이아웃과 무관한 이벤트 처리다 — 예전에 viewport meta를 함께 건드렸다가
+  //  화면이 통째로 어긋났다. 그건 넣지 않는다.)
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
 document.addEventListener('touchmove', function(e){
   if (e.touches.length > 1) e.preventDefault();          // 두 손가락 = 핀치
 }, { passive: false });
@@ -1234,7 +1241,7 @@ document.addEventListener('keydown', (ev) => {
     }
   })();
 </script>
-<script src="assets/ask.js?v=57"></script>
-<script src="assets/tidy.js?v=57"></script>
+<script src="assets/ask.js?v=59"></script>
+<script src="assets/tidy.js?v=59"></script>
 </body>
 </html>
