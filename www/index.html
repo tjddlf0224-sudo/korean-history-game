@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>타임슬립 한국사 · 한능검 심화 기출 — 챕터 목록</title>
 <meta name="description" content="한국사능력검정시험(한능검) 심화 대비 게임. 선사부터 현대까지 36화를 걸어다니며, 기출 415문항을 이야기로 푼다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,8 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gugi&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; word-break: keep-all; overflow-wrap: break-word; }
-  /* 사파리가 글자 크기를 제멋대로 키워 레이아웃을 밀지 않게 한다 */
-  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; overscroll-behavior:none;
     background:#15110c; font-family: "Gowun Batang", -apple-system, "Malgun Gothic", serif; color:#f5ecd8; }
 
@@ -487,32 +485,32 @@
 <script src="vendor/firebase/firebase-app-compat.js"></script>
 <script src="vendor/firebase/firebase-auth-compat.js"></script>
 <script src="vendor/firebase/firebase-firestore-compat.js"></script>
-<script src="assets/firebase_config.js?v=58"></script>
-<script src="assets/auth.js?v=58"></script>
-<script src="assets/board.js?v=58"></script>
-<script src="assets/audio.js?v=58"></script>
-<script src="assets/srs.js?v=58"></script>
-  <script src="assets/rank.js?v=58"></script>
-  <script src="assets/heroes_data.js?v=58"></script>
-  <script src="assets/heroes.js?v=58"></script>
-  <script src="assets/items.js?v=58"></script>
+<script src="assets/firebase_config.js?v=57"></script>
+<script src="assets/auth.js?v=57"></script>
+<script src="assets/board.js?v=57"></script>
+<script src="assets/audio.js?v=57"></script>
+<script src="assets/srs.js?v=57"></script>
+  <script src="assets/rank.js?v=57"></script>
+  <script src="assets/heroes_data.js?v=57"></script>
+  <script src="assets/heroes.js?v=57"></script>
+  <script src="assets/items.js?v=57"></script>
   <!-- 판 껍데기는 다른 모듈보다 먼저 — 각 화면이 필요한 것만 위에 덮어쓴다 -->
-  <script src="assets/panelskin.js?v=58"></script>
-  <script src="assets/gold.js?v=58"></script>
-  <script src="assets/ads.js?v=58"></script>
-  <script src="assets/energy.js?v=58"></script>
-  <script src="assets/daily.js?v=58"></script>
-  <script src="assets/unlock.js?v=58"></script>
-  <script src="assets/guide.js?v=58"></script>
-  <script src="assets/minigames.js?v=58"></script>
-  <script src="assets/quests.js?v=58"></script>
-  <script src="assets/journey.js?v=58"></script>
-  <script src="assets/fx.js?v=58"></script>
-  <script src="assets/season.js?v=58"></script>
-  <script src="assets/offline.js?v=58"></script>
-  <script src="assets/telemetry.js?v=58"></script>
-<script src="assets/badges.js?v=58"></script>
-<script src="assets/streak.js?v=58"></script>
+  <script src="assets/panelskin.js?v=57"></script>
+  <script src="assets/gold.js?v=57"></script>
+  <script src="assets/ads.js?v=57"></script>
+  <script src="assets/energy.js?v=57"></script>
+  <script src="assets/daily.js?v=57"></script>
+  <script src="assets/unlock.js?v=57"></script>
+  <script src="assets/guide.js?v=57"></script>
+  <script src="assets/minigames.js?v=57"></script>
+  <script src="assets/quests.js?v=57"></script>
+  <script src="assets/journey.js?v=57"></script>
+  <script src="assets/fx.js?v=57"></script>
+  <script src="assets/season.js?v=57"></script>
+  <script src="assets/offline.js?v=57"></script>
+  <script src="assets/telemetry.js?v=57"></script>
+<script src="assets/badges.js?v=57"></script>
+<script src="assets/streak.js?v=57"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>
@@ -546,11 +544,6 @@ function getViewportSize(){
 ['gesturestart','gesturechange','gestureend'].forEach(function(ev){
   document.addEventListener(ev, function(e){ e.preventDefault(); }, { passive: false });
 });
-document.addEventListener('touchstart', function(e){
-  // touchmove만 막으면 두 손가락이 **닿는 순간**은 통과한다. 기기에 따라
-  // 그때 이미 확대가 시작돼 되돌릴 수 없었다(실제 제보). 시작부터 막는다.
-  if (e.touches.length > 1) e.preventDefault();
-}, { passive: false });
 document.addEventListener('touchmove', function(e){
   if (e.touches.length > 1) e.preventDefault();          // 두 손가락 = 핀치
 }, { passive: false });
@@ -1241,7 +1234,7 @@ document.addEventListener('keydown', (ev) => {
     }
   })();
 </script>
-<script src="assets/ask.js?v=58"></script>
-<script src="assets/tidy.js?v=58"></script>
+<script src="assets/ask.js?v=57"></script>
+<script src="assets/tidy.js?v=57"></script>
 </body>
 </html>
