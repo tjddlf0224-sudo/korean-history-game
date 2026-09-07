@@ -157,13 +157,13 @@ window.Chart = (function(){
        재 보니 도해가 쓸 수 있는 높이는 236px인데 147px만 쓰고 있었고,
        범례는 378px 폭을 차지하면서 내용은 39px 높이뿐이라 옆이 텅 비었다.
        --dlg-max-h 는 게임 높이의 80%다. 그 60%면 대략 화면의 절반이다. */
-    .ch-map svg { flex:none; height:calc(var(--dlg-max-h, 320px) * .60); width:auto;
+    .ch-map svg { flex:none; height:calc(var(--dlg-max-h, 320px) * .70); width:auto;
       display:block; }
     /* 범례가 없으면 지도만 있는 것이니 가운데로 크게 — 옆이 비면 허전하다 */
     .ch-map.solo { justify-content:center; }
     /* 지도만 있을 때는 높이로 잡는다 — 폭으로 잡으면 세로로 든 휴대폰
        (게임 높이 390px)에서 대사창을 화면 밖으로 밀어냈다. */
-    .ch-map.solo svg { height:calc(var(--dlg-max-h, 320px) * .66); width:auto; max-width:none; }
+    .ch-map.solo svg { height:calc(var(--dlg-max-h, 320px) * .80); width:auto; max-width:none; }
     .ch-map .land { fill:rgba(240,201,107,.13); stroke:rgba(240,201,107,.5); stroke-width:1.1;
       stroke-linejoin:round; }
     .ch-map .pin { fill:#6f6250; stroke:rgba(255,255,255,.35); stroke-width:1; }
@@ -180,32 +180,6 @@ window.Chart = (function(){
       font-family:"Gowun Batang",serif; }
     .ch-map .pn { font-size:7.6px; fill:#cdbfa4; font-family:"Gowun Batang",serif; }
     .ch-map .pn.on { fill:#fff3d4; font-weight:700; }
-    /* 지도를 감싼 단추 — 겉보기는 지도 그대로, 모서리에 확대 표시만 둔다 */
-    /* max-width를 svg와 단추 양쪽에 걸었더니 서로 물려 폭이 74px로 눌렸다.
-       단추는 지도를 그대로 감싸기만 한다(flex:none 이라 줄어들지 않는다). */
-    .ch-map .mapbtn { flex:none; position:relative; padding:0; border:0; background:none;
-      cursor:pointer; line-height:0; display:block; }
-    .ch-map .mapbtn .zoom { position:absolute; right:2px; bottom:2px; width:20px; height:20px;
-      border-radius:6px; background:rgba(26,20,12,.85); border:1px solid #6b5636;
-      color:#e0d5bd; font-size:11px; line-height:18px; text-align:center; }
-    /* 크게 보기 — 게임 화면을 통째로 쓴다. #wrap 안에 넣어야 세로로 든
-       휴대폰에서 글자 방향이 게임과 같다. */
-    #chmap-ov { position:absolute; inset:0; z-index:98; display:none; flex-direction:column;
-      background:rgba(8,6,3,.96); font-family:"Gowun Batang",serif; padding:8px;
-      box-sizing:border-box; }
-    #chmap-ov.show { display:flex; }
-    #chmap-ov .hd { display:flex; align-items:center; gap:8px; flex:none; }
-    #chmap-ov .hd .t { flex:1; font-size:13px; letter-spacing:.2em; color:#a89676; }
-    #chmap-ov .hd .x { width:30px; height:30px; border-radius:50%; border:1px solid #6b5636;
-      background:rgba(26,20,12,.95); color:#e0d5bd; font-size:14px; cursor:pointer;
-      font-family:inherit; flex:none; }
-    #chmap-ov .bd { flex:1; min-height:0; display:flex; align-items:center;
-      justify-content:center; gap:12px; }
-    #chmap-ov svg { height:100%; width:auto; max-width:60%; }
-    #chmap-ov .leg { flex:0 1 auto; min-width:0; display:flex; flex-direction:column; gap:5px; }
-    #chmap-ov .leg .r { font-size:14px; color:#cdbfa4; line-height:1.5; display:flex; gap:7px; }
-    #chmap-ov .leg .r b { color:#f0c96b; font-weight:700; flex:none; }
-    #chmap-ov .pn { font-size:5.2px; }
     .ch-map .leg { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
     .ch-map .leg .r { font-size:13px; color:#cdbfa4; line-height:1.4; display:flex; gap:6px; }
     .ch-map .leg .r b { color:#f0c96b; font-weight:700; flex:none; }
@@ -350,10 +324,12 @@ window.Chart = (function(){
          pointerup)가 이걸 대사 넘김으로 세지 않는다 — 그쪽이 button을
          건너뛰기 때문이다. */
       lastMap = c;
-      return '<div class="ch-map' + (leg ? '' : ' solo') + '">' +
-        '<button class="mapbtn" type="button" aria-label="지도 크게 보기" ' +
-        'onclick="event.stopPropagation();Chart.bigMap()">' + svg +
-        '<span class="zoom">⤢</span></button>' +
+      /* 전체보기 단추는 뺐다 — "그러지말고 그냥 조금 더 키우고 위아래
+         스크롤이 가능하게" 라는 요청. 지도를 키우고, 넘치는 만큼은
+         도해 칸 안에서 스크롤한다(.dlg-chart 가 overflow-y:auto 다).
+         대화 넘기기는 누른 채 12px 넘게 움직이면 스크롤로 보므로
+         지도를 밀어 내려도 대사가 넘어가지 않는다. */
+      return '<div class="ch-map' + (leg ? '' : ' solo') + '">' + svg +
         (leg ? '<div class="leg">' + leg + '</div>' : '') + '</div>';
     },
 
@@ -458,39 +434,7 @@ window.Chart = (function(){
     return '';
   }
 
-  /* ---------------- 지도 크게 보기 ----------------
-     대화창 위 자리는 넓고 낮은데 한반도는 세로로 길다. 아무리 키워도
-     그 칸에서는 한계가 있어서, 게임 화면을 통째로 쓰는 판을 따로 연다
-     (서희 편의 큰 지도처럼 "큼지막하게" 라는 요청).
-     #wrap 안에 넣는다 — 바깥에 두면 세로로 든 휴대폰에서 글자 방향이
-     게임과 어긋난다. */
-  function bigMap(){
-    if (!lastMap) return;
-    css();
-    let d = document.getElementById('chmap-ov');
-    if (!d){
-      d = document.createElement('div');
-      d.id = 'chmap-ov';
-      (document.getElementById('wrap') || document.body).appendChild(d);
-      // 빈 곳을 눌러도 닫힌다
-      d.addEventListener('click', function(e){ if (e.target === d) close(); });
-    }
-    const c = lastMap;
-    // 같은 그리기 함수를 다시 쓴다 — 두 벌로 갈리면 반드시 어긋난다
-    const html = NEW.map(c);          // 같은 그리기 함수를 그대로 쓴다
-    const tmp = document.createElement('div'); tmp.innerHTML = html;
-    const svg = tmp.querySelector('svg');
-    const leg = tmp.querySelector('.leg');
-    d.innerHTML = '<div class="hd"><div class="t">' + esc(c.title || '지도') + '</div>' +
-      '<button class="x" type="button" aria-label="닫기">✕</button></div>' +
-      '<div class="bd">' + (svg ? svg.outerHTML : '') +
-      (leg ? leg.outerHTML : '') + '</div>';
-    d.querySelector('.x').onclick = function(e){ e.stopPropagation(); close(); };
-    d.classList.add('show');
-    function close(){ d.classList.remove('show'); }
-  }
-
-  return { draw, define, VISUALS, bigMap,
+  return { draw, define, VISUALS,
            types: Object.keys(NEW).concat(Object.keys(OLD)) };
 })();
 
