@@ -35,7 +35,10 @@ window.Badges = {
     } catch(e){}
     // 챕터 안에서 획득했다면(playFanfare가 있는 화면) 바로 알려준다.
     if (typeof playFanfare === 'function'){
-      playFanfare('<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3l4 6 4-6"/><circle cx="12" cy="15" r="6"/><circle cx="12" cy="15" r="2.5"/></svg> 배지 획득: ' + Badges.label(id));
+      // playFanfare 는 36개 챕터 전부 textContent 로 그린다. 그래서 여기에
+      // SVG를 넣으면 그림이 아니라 **태그가 글자로** 뜬다(실제 제보:
+      // '쇠 두드려보기 마지막에 이런 영어가 떠'). 글자만 넘긴다.
+      playFanfare('배지 획득 · ' + Badges.label(id));
     }
     return true;
   },
