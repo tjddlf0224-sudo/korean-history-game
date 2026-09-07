@@ -222,6 +222,16 @@ window.Auto = (function(){
       unreachable = new Set();     // 구역이 바뀌면 다시 다 해 본다
     }
 
+    /* 챕터를 다 끝냈으면 '다음 화로 가기'를 누른다.
+       예전에는 이걸 몰라서, 할 일이 없어지면 남은 출구만 오갔다
+       ("Auto일 때 다음화로 가기가 안 먹히고 계속 맵만 이동"). */
+    const nx = document.getElementById('next-chapter-btn');
+    if (nx && nx.classList.contains('show')){
+      stop();
+      nx.click();
+      return;
+    }
+
     if (!goal){
       goal = pickGoal();
       if (!goal){ stop(); return; }

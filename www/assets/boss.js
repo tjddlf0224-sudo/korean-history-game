@@ -62,7 +62,13 @@ window.Boss = (function(){
       box-shadow:0 0 30px rgba(0,0,0,.6), inset 0 12px 30px rgba(0,0,0,.5); }
     .bs-silhouette span { font-family:"Gowun Batang",serif; font-size:15px; font-weight:700;
       color:#e9c979; letter-spacing:.14em; text-shadow:0 2px 8px rgba(0,0,0,.9); }
-    .bs-enemy { bottom:22%; right:13%; height:56%; }
+    /* 보스를 조금 내렸다 — 예전 bottom:22%/height:56% 는 머리 꼭대기가
+       무대 높이의 22%에 걸려, 왼쪽 위 체력창(top:5% + 약 54px) 아래로
+       들어가 얼굴이 가려졌다("Hp박스에 얼굴이 가려지지 않게").
+       bottom:6%/height:54% 면 머리가 무대의 40% 자리에서 시작해
+       가로모드(무대 약 200px)에서 20px 넘게 여유가 생긴다.
+       하반신이 아래 문제창 쪽으로 내려오는 것은 괜찮다고 하셨다. */
+    .bs-enemy { bottom:6%; right:13%; height:54%; }
     .bs-enemy img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.2s ease-in-out infinite; }
     .bs-self { bottom:3%; left:11%; height:48%; }
@@ -77,17 +83,17 @@ window.Boss = (function(){
     /* 이름 + 체력 */
     .bs-info { position:absolute; z-index:6; width:38%; max-width:230px;
       background:rgba(16,11,5,.74); border:1px solid rgba(240,201,107,.42);
-      border-radius:10px; padding:7px 10px; }
+      border-radius:10px; padding:5px 10px; }
     /* 내 정보가 왼쪽 위, 상대가 오른쪽 위 — 각자 자기 캐릭터 쪽 위에 붙는다 */
     .bs-info-p { top:5%; left:5%; }
     .bs-info-e { top:5%; right:5%; }
-    .bs-info .nm { font-size:13px; font-weight:700; color:#f0c96b; margin-bottom:5px; }
+    .bs-info .nm { font-size:13px; font-weight:700; color:#f0c96b; margin-bottom:3px; }
     .bs-hp { height:9px; border-radius:999px; background:rgba(0,0,0,.6);
       border:1px solid rgba(240,201,107,.3); overflow:hidden; }
     .bs-hp i { display:block; height:100%; border-radius:999px;
       background:linear-gradient(90deg,#b6483c,#e0705f); transition:width .45s cubic-bezier(.2,.8,.3,1); }
     .bs-info-p .bs-hp i { background:linear-gradient(90deg,#c9962e,#f0c96b); }
-    .bs-hptxt { font-size:10px; color:#c9bda6; margin-top:3px; text-align:right;
+    .bs-hptxt { font-size:10px; color:#c9bda6; margin-top:2px; text-align:right;
       font-variant-numeric:tabular-nums; }
 
     /* 연속 정답 배율 — 정보창이 위쪽 양옆을 쓰므로 가운데 위에 둔다 */
