@@ -514,11 +514,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=71"></script>
-<script src="assets/zoomwarn.js?v=71"></script>
-<script src="assets/map/map_component.js?v=71"></script>
-<script src="assets/chart.js?v=71"></script>
-<script src="assets/audio.js?v=71"></script>
+<script src="assets/errlog.js?v=72"></script>
+<script src="assets/zoomwarn.js?v=72"></script>
+<script src="assets/map/map_component.js?v=72"></script>
+<script src="assets/chart.js?v=72"></script>
+<script src="assets/audio.js?v=72"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -530,7 +530,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=71';   // 존댓말 전환
+const ART_V = '?v=72';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1231,7 +1231,12 @@ const NPC_DATA = {
     name: '근초고왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/geunchogo.png',
     beats: [
       { who:'npc', t:'(지도를 편다) 마한 남은 땅, 이제 다 내 것일세.',
-        chart:{ type:'map', title:'근초고왕의 정복', pins:[ { x:44.7, y:90.8, n:'한성' }, { x:38.6, y:121.6, n:'마한', on:true } ], legend:[ { k:'마한', v:'남은 세력까지 정복', on:true }, { k:'남해안', v:'백제 땅이 여기까지' } ] } },
+        chart:{ type:'map',
+          /* 371년 최대 영역 — 남 영산강 · 동 낙동강 서쪽 · 북 대방고지
+             근거: 참고자료/역사지도/역사지도_자료.md (출처 URL 포함)
+             좌표: scripts/build_era_maps.py 가 실제 위경도에서 찍는다.
+             바다로 넘겨 그려도 chart.js가 육지로 잘라 낸다. */
+          areas:[ { pts:'9,69 51,77 60,125 41,139 20,125', n:'백제', tx:31, ty:103, c:'#d8b25e' }, { pts:'56,117 70,122 73,133 56,136', n:'가야(영향권)', tx:61, ty:126, c:'#8fbf9a' } ], title:'근초고왕의 정복', pins:[ { x:44.7, y:90.8, n:'한성' }, { x:38.6, y:121.6, n:'마한', on:true } ], legend:[ { k:'마한', v:'남은 세력까지 정복', on:true }, { k:'남해안', v:'백제 땅이 여기까지' } ] } },
       { who:'me', t:'정복만 하셨습니까? 북으로도 올라가셨습니까?' },
       { who:'npc', t:'371년, 평양성을 쳐 고국원왕을 전사시켰네.',
         chart:{ type:'timeline', title:'근초고왕이 세운 자취', marks:[ { y:'369', t:'치양성 승리' }, { y:'371', t:'평양성 · 고국원왕 전사', on:true }, { y:'375', t:'「서기」 편찬' } ] } },
@@ -1321,7 +1326,12 @@ const NPC_DATA = {
       { who:'me', t:'그때 백제 왕은 어찌 됐습니까?' },
       { who:'npc', t:'개로왕이 전사하고, 백제는 도읍을 잃었네.' },
       { who:'npc', t:'그 남진의 자취가 충주에도 비석으로 남았네.',
-        chart:{ type:'map', title:'중원(충주) 고구려비', pins:[ { x:56.1, y:99.6, n:'충주', on:true } ], legend:[ { k:'매금', v:'신라 왕을 낮춰 부른 말', on:true }, { k:'뜻', v:'남한강까지 세력이 미침' } ] } },
+        chart:{ type:'map',
+          /* 장수왕 남진 — 남 아산만·남양만~죽령. 이 비석이 그 증거다
+             근거: 참고자료/역사지도/역사지도_자료.md (출처 URL 포함)
+             좌표: scripts/build_era_maps.py 가 실제 위경도에서 찍는다.
+             바다로 넘겨 그려도 chart.js가 육지로 잘라 낸다. */
+          areas:[ { pts:'-29,11 94,2 103,27 71,101 40,101 3,74 -29,46', n:'고구려', tx:34, ty:46, c:'#d98a7a' } ], title:'중원(충주) 고구려비', pins:[ { x:56.1, y:99.6, n:'충주', on:true } ], legend:[ { k:'매금', v:'신라 왕을 낮춰 부른 말', on:true }, { k:'뜻', v:'남한강까지 세력이 미침' } ] } },
       { who:'me', t:'한반도에 남은 고구려 비석은 이것뿐입니까?' },
       { who:'npc', t:'그렇다네. 하나뿐인 귀한 자취일세.' },
       { who:'doc', docImg:'assets/scenes/heritage_jungwon_goguryeobi.jpg',
@@ -1998,38 +2008,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=71"></script>
-<script src="assets/streak.js?v=71"></script>
+<script src="assets/badges.js?v=72"></script>
+<script src="assets/streak.js?v=72"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=71"></script>
-  <script src="assets/fx.js?v=71"></script>
-  <script src="assets/deed.js?v=71"></script>
-  <script src="assets/inkwipe.js?v=71"></script>
-  <script src="assets/dash.js?v=71"></script>
-<script src="assets/juice.js?v=71"></script>
-  <script src="assets/difficulty.js?v=71"></script>
-  <script src="assets/nextauto.js?v=71"></script>
-<script src="assets/heroes_data.js?v=71"></script>
-<script src="assets/heroes.js?v=71"></script>
-<script src="assets/icons.js?v=71"></script>
-<script src="assets/srs.js?v=71"></script>
-<script src="assets/newsflash.js?v=71"></script>
-<script src="assets/timeline.js?v=71"></script>
-<script src="assets/journey.js?v=71"></script>
-<script src="assets/season.js?v=71"></script>
-<script src="assets/items.js?v=71"></script>
-  <script src="assets/gold.js?v=71"></script>
-  <script src="assets/ask.js?v=71"></script>
-  <script src="assets/ads.js?v=71"></script>
-  <script src="assets/energy.js?v=71"></script>
-  <script src="assets/daily.js?v=71"></script>
-  <script src="assets/unlock.js?v=71"></script>
-  <script src="assets/guide.js?v=71"></script>
-  <script src="assets/minigames.js?v=71"></script>
-  <script src="assets/quests.js?v=71"></script>
-  <script src="assets/offline.js?v=71"></script>
-  <script src="assets/telemetry.js?v=71"></script>
-<script src="assets/autowalk.js?v=71"></script>
+<script src="assets/rank.js?v=72"></script>
+  <script src="assets/fx.js?v=72"></script>
+  <script src="assets/deed.js?v=72"></script>
+  <script src="assets/inkwipe.js?v=72"></script>
+  <script src="assets/dash.js?v=72"></script>
+<script src="assets/juice.js?v=72"></script>
+  <script src="assets/difficulty.js?v=72"></script>
+  <script src="assets/nextauto.js?v=72"></script>
+<script src="assets/heroes_data.js?v=72"></script>
+<script src="assets/heroes.js?v=72"></script>
+<script src="assets/icons.js?v=72"></script>
+<script src="assets/srs.js?v=72"></script>
+<script src="assets/newsflash.js?v=72"></script>
+<script src="assets/timeline.js?v=72"></script>
+<script src="assets/journey.js?v=72"></script>
+<script src="assets/season.js?v=72"></script>
+<script src="assets/items.js?v=72"></script>
+  <script src="assets/gold.js?v=72"></script>
+  <script src="assets/ask.js?v=72"></script>
+  <script src="assets/ads.js?v=72"></script>
+  <script src="assets/energy.js?v=72"></script>
+  <script src="assets/daily.js?v=72"></script>
+  <script src="assets/unlock.js?v=72"></script>
+  <script src="assets/guide.js?v=72"></script>
+  <script src="assets/minigames.js?v=72"></script>
+  <script src="assets/quests.js?v=72"></script>
+  <script src="assets/offline.js?v=72"></script>
+  <script src="assets/telemetry.js?v=72"></script>
+<script src="assets/autowalk.js?v=72"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
