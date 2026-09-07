@@ -529,11 +529,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=69"></script>
-<script src="assets/zoomwarn.js?v=69"></script>
-<script src="assets/map/map_component.js?v=69"></script>
-<script src="assets/chart.js?v=69"></script>
-<script src="assets/audio.js?v=69"></script>
+<script src="assets/errlog.js?v=71"></script>
+<script src="assets/zoomwarn.js?v=71"></script>
+<script src="assets/map/map_component.js?v=71"></script>
+<script src="assets/chart.js?v=71"></script>
+<script src="assets/audio.js?v=71"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -545,7 +545,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=69';   // 존댓말 전환
+const ART_V = '?v=71';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1456,11 +1456,13 @@ const NPC_DATA = {
              그 나라인지 알 수 없다. 부여·고구려는 한반도 밖(만주)이라
              윤곽선 위쪽 빈 자리에 놓인다. */
           areas:[
-            { pts:'12,-40 58,-36 64,-8 40,10 14,0',    n:'부여',   tx:30, ty:-16, c:'#7fa8c4' },
-            { pts:'-8,12 34,4 48,26 40,48 2,46',        n:'고구려', tx:8,  ty:30,  c:'#d98a7a' },
-            { pts:'44,34 60,30 68,58 56,74 44,60',      n:'옥저',   tx:48, ty:48,  c:'#8fbf9a' },
-            { pts:'58,70 76,66 82,90 68,100 56,90',     n:'동예',   tx:62, ty:84,  c:'#c9a9d1' },
-            { pts:'20,104 66,100 74,124 50,143 24,131', n:'삼한',   tx:34, ty:120, c:'#d8b25e' } ],
+            /* 영역은 자료(iCloud 참고자료/역사지도/역사지도_자료.md)의
+               경계를 실제 위경도로 옮긴 것이다. scripts/build_era_maps.py 가
+               찍어 낸다. 바다 쪽으로 넉넉히 넘겨 그려도 chart.js가 육지로
+               잘라 내므로(clip-path) 화면에는 육지만 칠해진다.
+               부여 북 눈강·송화강 / 고구려 남 살수(청천강) / 옥저 남한계 정평 /
+               동예 정평~강원 북단 / 삼한 한강 이남 */
+            { pts:'-9,-47 86,-47 93,11 31,11 -9,-2', n:'부여', tx:31, ty:-21, c:'#7fa8c4' }, { pts:'4,11 94,11 94,46 43,65 9,60 0,39', n:'고구려', tx:29, ty:32, c:'#d98a7a' }, { pts:'46,47 103,11 103,39 49,55', n:'옥저', tx:69, ty:39, c:'#8fbf9a' }, { pts:'47,54 86,54 86,90 47,90', n:'동예', tx:63, ty:71, c:'#c9a9d1' }, { pts:'23,90 80,90 80,153 23,153', n:'삼한', tx:46, ty:122, c:'#d8b25e' } ],
           pins:[ { x:36.4, y:-9, n:'부여', on:true }, { x:19.3, y:31.6, n:'고구려', on:true }, { x:50.6, y:53.4, n:'옥저', on:true }, { x:70, y:80.5, n:'동예', on:true }, { x:44.3, y:121.6, n:'삼한', on:true } ] } },
       { who:'me', t:'저마다 사는 법이 다릅니까?' },
       { who:'npc', t:'다르지. 아주 달라.',
@@ -2166,39 +2168,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=69"></script>
-<script src="assets/streak.js?v=69"></script>
+<script src="assets/badges.js?v=71"></script>
+<script src="assets/streak.js?v=71"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=69"></script>
-  <script src="assets/fx.js?v=69"></script>
-  <script src="assets/deed.js?v=69"></script>
-  <script src="assets/inkwipe.js?v=69"></script>
-  <script src="assets/dash.js?v=69"></script>
-<script src="assets/juice.js?v=69"></script>
-  <script src="assets/difficulty.js?v=69"></script>
-  <script src="assets/nextauto.js?v=69"></script>
-<script src="assets/heroes_data.js?v=69"></script>
-<script src="assets/heroes.js?v=69"></script>
-<script src="assets/icons.js?v=69"></script>
-<script src="assets/srs.js?v=69"></script>
-<script src="assets/newsflash.js?v=69"></script>
-<script src="assets/timeline.js?v=69"></script>
-<script src="assets/journey.js?v=69"></script>
-<script src="assets/season.js?v=69"></script>
-<script src="assets/boss.js?v=69"></script>
-<script src="assets/items.js?v=69"></script>
-  <script src="assets/gold.js?v=69"></script>
-  <script src="assets/ask.js?v=69"></script>
-  <script src="assets/ads.js?v=69"></script>
-  <script src="assets/energy.js?v=69"></script>
-  <script src="assets/daily.js?v=69"></script>
-  <script src="assets/unlock.js?v=69"></script>
-  <script src="assets/guide.js?v=69"></script>
-  <script src="assets/minigames.js?v=69"></script>
-  <script src="assets/quests.js?v=69"></script>
-  <script src="assets/offline.js?v=69"></script>
-  <script src="assets/telemetry.js?v=69"></script>
-<script src="assets/autowalk.js?v=69"></script>
+<script src="assets/rank.js?v=71"></script>
+  <script src="assets/fx.js?v=71"></script>
+  <script src="assets/deed.js?v=71"></script>
+  <script src="assets/inkwipe.js?v=71"></script>
+  <script src="assets/dash.js?v=71"></script>
+<script src="assets/juice.js?v=71"></script>
+  <script src="assets/difficulty.js?v=71"></script>
+  <script src="assets/nextauto.js?v=71"></script>
+<script src="assets/heroes_data.js?v=71"></script>
+<script src="assets/heroes.js?v=71"></script>
+<script src="assets/icons.js?v=71"></script>
+<script src="assets/srs.js?v=71"></script>
+<script src="assets/newsflash.js?v=71"></script>
+<script src="assets/timeline.js?v=71"></script>
+<script src="assets/journey.js?v=71"></script>
+<script src="assets/season.js?v=71"></script>
+<script src="assets/boss.js?v=71"></script>
+<script src="assets/items.js?v=71"></script>
+  <script src="assets/gold.js?v=71"></script>
+  <script src="assets/ask.js?v=71"></script>
+  <script src="assets/ads.js?v=71"></script>
+  <script src="assets/energy.js?v=71"></script>
+  <script src="assets/daily.js?v=71"></script>
+  <script src="assets/unlock.js?v=71"></script>
+  <script src="assets/guide.js?v=71"></script>
+  <script src="assets/minigames.js?v=71"></script>
+  <script src="assets/quests.js?v=71"></script>
+  <script src="assets/offline.js?v=71"></script>
+  <script src="assets/telemetry.js?v=71"></script>
+<script src="assets/autowalk.js?v=71"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

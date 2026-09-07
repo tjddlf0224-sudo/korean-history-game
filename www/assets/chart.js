@@ -37,6 +37,7 @@ window.Chart = (function(){
      낱말을 또 잡는다.
      이 함수는 esc를 대신한다. 원래 esc는 이스케이프를 하지 않았고(도해 글에
      <b>를 그대로 쓴다) 그래서 여기에 끼워도 안전하다. */
+  let mapSeq = 0;              // clipPath id를 유일하게 만드는 번호
   let lastMap = null;          // 마지막으로 그린 지도 — '크게 보기'가 쓴다
   let glossRe = null, glossKeys = '';
   function esc(s){
@@ -331,7 +332,11 @@ window.Chart = (function(){
          고구려가 만주 어디쯤인지 보인다(예전에는 허공에 떠 있었다).
          영역 칠하기는 **육지로 잘라 낸다**(clip-path) — 손으로 찍은 좌표가
          바다로 번지는 일이 기하학적으로 불가능해진다. */
-      const clip = '<clipPath id="chLand">' +
+      /* clipPath의 id는 문서에서 유일해야 한다. 한 화면에 지도가 둘 뜨면
+         (실제로 시험 중에 겪었다) 뒤엣것이 앞엣것의 clipPath를 가리켜
+         엉뚱하게 잘리거나 아예 안 잘린다. 그릴 때마다 번호를 붙인다. */
+      const cid = 'chLand' + (++mapSeq);
+      const clip = '<clipPath id="' + cid + '">' +
         '<path d="' + KOREA_PATH + '"/><path d="' + MAINLAND_PATH + '"/>' +
         '</clipPath>';
       const svg = '<svg viewBox="' + box + '" xmlns="http://www.w3.org/2000/svg">' +
@@ -339,7 +344,7 @@ window.Chart = (function(){
         '<path class="far" d="' + MAINLAND_PATH + '"/>' +
         '<path class="far isle" d="' + ISLE_PATH + '"/>' +
         '<path class="land" d="' + KOREA_PATH + '"/>' +
-        (areas ? '<g clip-path="url(#chLand)">' + areas + '</g>' : '') +
+        (areas ? '<g clip-path="url(#' + cid + ')">' + areas + '</g>' : '') +
         pins + '</svg>';
       /* 대화창 안에서는 아무리 키워도 한계가 있다 — 한반도는 세로로 길고
          대화창 위 자리는 넓고 낮다. 그래서 **눌러 크게 보기**를 함께 둔다
