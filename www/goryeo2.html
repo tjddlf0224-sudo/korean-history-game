@@ -504,11 +504,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=72"></script>
-<script src="assets/zoomwarn.js?v=72"></script>
-<script src="assets/map/map_component.js?v=72"></script>
-<script src="assets/chart.js?v=72"></script>
-<script src="assets/audio.js?v=72"></script>
+<script src="assets/errlog.js?v=74"></script>
+<script src="assets/zoomwarn.js?v=74"></script>
+<script src="assets/map/map_component.js?v=74"></script>
+<script src="assets/chart.js?v=74"></script>
+<script src="assets/audio.js?v=74"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -520,7 +520,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=72';   // 존댓말 전환
+const ART_V = '?v=74';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -622,14 +622,14 @@ const ZONES = {
     img: 'assets/scenes/goryeo2_seogyeong.png', label: '서경',
     spawn: { x: 688, y: 600 },
     barriers: [
-    { x0: 8, y0: 8, x1: 1368, y1: 32 },
-    { x0: 463, y0: 8, x1: 897, y1: 207 },
-    { x0: 8, y0: 78, x1: 52, y1: 537 },
-    { x0: 63, y0: 178, x1: 287, y1: 542 },
-    { x0: 963, y0: 93, x1: 1242, y1: 207 },
-    { x0: 1243, y0: 93, x1: 1368, y1: 512 },
-    { x0: 8, y0: 708, x1: 592, y1: 760 },
-    { x0: 798, y0: 708, x1: 1368, y1: 760 },
+    { x0: 2, y0: 2, x1: 1374, y1: 38 },
+    { x0: 457, y0: 2, x1: 903, y1: 213 },
+    { x0: 2, y0: 72, x1: 58, y1: 543 },
+    { x0: 57, y0: 172, x1: 293, y1: 548 },
+    { x0: 957, y0: 87, x1: 1248, y1: 213 },
+    { x0: 1237, y0: 87, x1: 1374, y1: 518 },
+    { x0: 2, y0: 702, x1: 598, y1: 766 },
+    { x0: 792, y0: 702, x1: 1374, y1: 766 },
   ],
     npcs: [
       { id:'ijagyeom', name:'이자겸', x:688, y:250, img:'assets/portraits/ijagyeom.png', look:{ role:'scholar', body:'#5a3a3a', accent:'#e0b94a' } },
@@ -649,22 +649,22 @@ const ZONES = {
     img: 'assets/scenes/goryeo2_ganghwa.png', label: '강화 임시 도읍',
     spawn: { x: 688, y: 470 },
     barriers: [
-    { x0: 16, y0: 16, x1: 224, y1: 444 },
-    { x0: 16, y0: 456, x1: 294, y1: 752 },
-    { x0: 296, y0: 16, x1: 919, y1: 134 },
-    { x0: 211, y0: 171, x1: 519, y1: 319 },
-    { x0: 186, y0: 346, x1: 319, y1: 469 },
-    { x0: 331, y0: 366, x1: 449, y1: 559 },
-    { x0: 196, y0: 496, x1: 304, y1: 559 },
-    { x0: 436, y0: 496, x1: 489, y1: 554 },
-    { x0: 941, y0: 16, x1: 1360, y1: 189 },
-    { x0: 986, y0: 246, x1: 1360, y1: 319 },
-    { x0: 1016, y0: 346, x1: 1360, y1: 514 },
-    { x0: 1101, y0: 431, x1: 1360, y1: 609 },
-    { x0: 846, y0: 616, x1: 874, y1: 752 },
-    { x0: 1026, y0: 616, x1: 1360, y1: 752 },
-    { x0: 516, y0: 706, x1: 814, y1: 752 },
-    { x0: 246, y0: 736, x1: 484, y1: 758 },
+    { x0: 2, y0: 2, x1: 238, y1: 458 },
+    { x0: 2, y0: 442, x1: 308, y1: 766 },
+    { x0: 282, y0: 2, x1: 933, y1: 148 },
+    { x0: 197, y0: 157, x1: 533, y1: 333 },
+    { x0: 172, y0: 332, x1: 333, y1: 483 },
+    { x0: 317, y0: 352, x1: 463, y1: 573 },
+    { x0: 182, y0: 482, x1: 318, y1: 573 },
+    { x0: 422, y0: 482, x1: 503, y1: 568 },
+    { x0: 927, y0: 2, x1: 1374, y1: 203 },
+    { x0: 972, y0: 232, x1: 1374, y1: 333 },
+    { x0: 1002, y0: 332, x1: 1374, y1: 528 },
+    { x0: 1087, y0: 417, x1: 1374, y1: 623 },
+    { x0: 832, y0: 602, x1: 888, y1: 766 },
+    { x0: 1012, y0: 602, x1: 1374, y1: 766 },
+    { x0: 502, y0: 692, x1: 828, y1: 766 },
+    { x0: 232, y0: 727, x1: 498, y1: 766 },
   ],
     npcs: [
       { id:'seohui', name:'서희', x:600, y:280, img:'assets/portraits/seohui.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
@@ -1893,6 +1893,12 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    /* 피버(화면 테두리가 금빛으로 타오르는 연출)를 접는다.
+       Juice.reset()은 "챕터·퀴즈 묶음을 벗어날 때 조용히 접는다"고 만들어
+       놓고 **아무 데서도 부르지 않았다**. 그래서 한 번 켜지면 맵을 걸어
+       다니는 내내 남아 있었다(제보: "이 화면효과가 계속되네").
+       피버는 문제를 푸는 동안의 것이다 — 지도 위에서는 뜻이 없다. */
+    if (window.Juice && Juice.reset) Juice.reset();
     // 대화·퀴즈가 열려 있던 동안 화면이 잠깐 백그라운드로 갔다 오는 등의
     // 이유로 배경음악이 끊기거나 다른 트랙처럼 들리는 제보가 있어, 대화가
     // 끝날 때마다 이 구역의 정식 배경음악을 다시 한 번 틀어 준다(이미
@@ -2096,40 +2102,40 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=72"></script>
-<script src="assets/streak.js?v=72"></script>
+<script src="assets/badges.js?v=74"></script>
+<script src="assets/streak.js?v=74"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=72"></script>
-  <script src="assets/fx.js?v=72"></script>
-  <script src="assets/deed.js?v=72"></script>
-  <script src="assets/inkwipe.js?v=72"></script>
-  <script src="assets/moment.js?v=72"></script>
-  <script src="assets/dash.js?v=72"></script>
-<script src="assets/juice.js?v=72"></script>
-  <script src="assets/difficulty.js?v=72"></script>
-  <script src="assets/nextauto.js?v=72"></script>
-<script src="assets/heroes_data.js?v=72"></script>
-<script src="assets/heroes.js?v=72"></script>
-<script src="assets/icons.js?v=72"></script>
-<script src="assets/srs.js?v=72"></script>
-<script src="assets/newsflash.js?v=72"></script>
-<script src="assets/timeline.js?v=72"></script>
-<script src="assets/journey.js?v=72"></script>
-<script src="assets/season.js?v=72"></script>
-<script src="assets/boss.js?v=72"></script>
-<script src="assets/items.js?v=72"></script>
-  <script src="assets/gold.js?v=72"></script>
-  <script src="assets/ask.js?v=72"></script>
-  <script src="assets/ads.js?v=72"></script>
-  <script src="assets/energy.js?v=72"></script>
-  <script src="assets/daily.js?v=72"></script>
-  <script src="assets/unlock.js?v=72"></script>
-  <script src="assets/guide.js?v=72"></script>
-  <script src="assets/minigames.js?v=72"></script>
-  <script src="assets/quests.js?v=72"></script>
-  <script src="assets/offline.js?v=72"></script>
-  <script src="assets/telemetry.js?v=72"></script>
-<script src="assets/autowalk.js?v=72"></script>
+<script src="assets/rank.js?v=74"></script>
+  <script src="assets/fx.js?v=74"></script>
+  <script src="assets/deed.js?v=74"></script>
+  <script src="assets/inkwipe.js?v=74"></script>
+  <script src="assets/moment.js?v=74"></script>
+  <script src="assets/dash.js?v=74"></script>
+<script src="assets/juice.js?v=74"></script>
+  <script src="assets/difficulty.js?v=74"></script>
+  <script src="assets/nextauto.js?v=74"></script>
+<script src="assets/heroes_data.js?v=74"></script>
+<script src="assets/heroes.js?v=74"></script>
+<script src="assets/icons.js?v=74"></script>
+<script src="assets/srs.js?v=74"></script>
+<script src="assets/newsflash.js?v=74"></script>
+<script src="assets/timeline.js?v=74"></script>
+<script src="assets/journey.js?v=74"></script>
+<script src="assets/season.js?v=74"></script>
+<script src="assets/boss.js?v=74"></script>
+<script src="assets/items.js?v=74"></script>
+  <script src="assets/gold.js?v=74"></script>
+  <script src="assets/ask.js?v=74"></script>
+  <script src="assets/ads.js?v=74"></script>
+  <script src="assets/energy.js?v=74"></script>
+  <script src="assets/daily.js?v=74"></script>
+  <script src="assets/unlock.js?v=74"></script>
+  <script src="assets/guide.js?v=74"></script>
+  <script src="assets/minigames.js?v=74"></script>
+  <script src="assets/quests.js?v=74"></script>
+  <script src="assets/offline.js?v=74"></script>
+  <script src="assets/telemetry.js?v=74"></script>
+<script src="assets/autowalk.js?v=74"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

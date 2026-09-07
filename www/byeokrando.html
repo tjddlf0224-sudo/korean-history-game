@@ -504,11 +504,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=72"></script>
-<script src="assets/zoomwarn.js?v=72"></script>
-<script src="assets/map/map_component.js?v=72"></script>
-<script src="assets/chart.js?v=72"></script>
-<script src="assets/audio.js?v=72"></script>
+<script src="assets/errlog.js?v=74"></script>
+<script src="assets/zoomwarn.js?v=74"></script>
+<script src="assets/map/map_component.js?v=74"></script>
+<script src="assets/chart.js?v=74"></script>
+<script src="assets/audio.js?v=74"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -520,7 +520,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=72';   // 존댓말 전환
+const ART_V = '?v=74';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -617,20 +617,20 @@ const ZONES = {
     img: 'assets/scenes/goryeo_byeokrando.png', label: '벽란도 포구',
     spawn: { x: 688, y: 470 },
     barriers: [
-    { x0: 14, y0: 14, x1: 1362, y1: 176 },
-    { x0: 69, y0: 139, x1: 191, y1: 206 },
-    { x0: 69, y0: 284, x1: 151, y1: 346 },
-    { x0: 204, y0: 294, x1: 331, y1: 351 },
-    { x0: 1114, y0: 114, x1: 1301, y1: 206 },
-    { x0: 1099, y0: 234, x1: 1256, y1: 341 },
-    { x0: 1239, y0: 299, x1: 1291, y1: 336 },
-    { x0: 14, y0: 379, x1: 271, y1: 754 },
-    { x0: 434, y0: 379, x1: 626, y1: 754 },
-    { x0: 744, y0: 379, x1: 991, y1: 754 },
-    { x0: 1119, y0: 379, x1: 1362, y1: 754 },
-    { x0: 299, y0: 614, x1: 406, y1: 754 },
-    { x0: 654, y0: 614, x1: 716, y1: 754 },
-    { x0: 1019, y0: 604, x1: 1091, y1: 754 },
+    { x0: 12, y0: 12, x1: 1364, y1: 178 },
+    { x0: 67, y0: 137, x1: 193, y1: 208 },
+    { x0: 67, y0: 282, x1: 153, y1: 348 },
+    { x0: 202, y0: 292, x1: 333, y1: 353 },
+    { x0: 1112, y0: 112, x1: 1303, y1: 208 },
+    { x0: 1097, y0: 232, x1: 1258, y1: 343 },
+    { x0: 1237, y0: 297, x1: 1293, y1: 338 },
+    { x0: 12, y0: 377, x1: 273, y1: 756 },
+    { x0: 432, y0: 377, x1: 628, y1: 756 },
+    { x0: 742, y0: 377, x1: 993, y1: 756 },
+    { x0: 1117, y0: 377, x1: 1364, y1: 756 },
+    { x0: 297, y0: 612, x1: 408, y1: 756 },
+    { x0: 652, y0: 612, x1: 718, y1: 756 },
+    { x0: 1017, y0: 602, x1: 1093, y1: 756 },
   ],
     npcs: [
       { id:'jeonsigwa', name:'전시과 담당 관리', x:300, y:250, img:'assets/portraits/jeonsigwa.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
@@ -1633,6 +1633,12 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    /* 피버(화면 테두리가 금빛으로 타오르는 연출)를 접는다.
+       Juice.reset()은 "챕터·퀴즈 묶음을 벗어날 때 조용히 접는다"고 만들어
+       놓고 **아무 데서도 부르지 않았다**. 그래서 한 번 켜지면 맵을 걸어
+       다니는 내내 남아 있었다(제보: "이 화면효과가 계속되네").
+       피버는 문제를 푸는 동안의 것이다 — 지도 위에서는 뜻이 없다. */
+    if (window.Juice && Juice.reset) Juice.reset();
     // 대화·퀴즈가 열려 있던 동안 화면이 잠깐 백그라운드로 갔다 오는 등의
     // 이유로 배경음악이 끊기거나 다른 트랙처럼 들리는 제보가 있어, 대화가
     // 끝날 때마다 이 구역의 정식 배경음악을 다시 한 번 틀어 준다(이미
@@ -1837,38 +1843,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=72"></script>
-<script src="assets/streak.js?v=72"></script>
+<script src="assets/badges.js?v=74"></script>
+<script src="assets/streak.js?v=74"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=72"></script>
-  <script src="assets/fx.js?v=72"></script>
-  <script src="assets/deed.js?v=72"></script>
-  <script src="assets/inkwipe.js?v=72"></script>
-  <script src="assets/dash.js?v=72"></script>
-<script src="assets/juice.js?v=72"></script>
-  <script src="assets/difficulty.js?v=72"></script>
-  <script src="assets/nextauto.js?v=72"></script>
-<script src="assets/heroes_data.js?v=72"></script>
-<script src="assets/heroes.js?v=72"></script>
-<script src="assets/icons.js?v=72"></script>
-<script src="assets/srs.js?v=72"></script>
-<script src="assets/newsflash.js?v=72"></script>
-<script src="assets/timeline.js?v=72"></script>
-<script src="assets/journey.js?v=72"></script>
-<script src="assets/season.js?v=72"></script>
-<script src="assets/items.js?v=72"></script>
-  <script src="assets/gold.js?v=72"></script>
-  <script src="assets/ask.js?v=72"></script>
-  <script src="assets/ads.js?v=72"></script>
-  <script src="assets/energy.js?v=72"></script>
-  <script src="assets/daily.js?v=72"></script>
-  <script src="assets/unlock.js?v=72"></script>
-  <script src="assets/guide.js?v=72"></script>
-  <script src="assets/minigames.js?v=72"></script>
-  <script src="assets/quests.js?v=72"></script>
-  <script src="assets/offline.js?v=72"></script>
-  <script src="assets/telemetry.js?v=72"></script>
-<script src="assets/autowalk.js?v=72"></script>
+<script src="assets/rank.js?v=74"></script>
+  <script src="assets/fx.js?v=74"></script>
+  <script src="assets/deed.js?v=74"></script>
+  <script src="assets/inkwipe.js?v=74"></script>
+  <script src="assets/dash.js?v=74"></script>
+<script src="assets/juice.js?v=74"></script>
+  <script src="assets/difficulty.js?v=74"></script>
+  <script src="assets/nextauto.js?v=74"></script>
+<script src="assets/heroes_data.js?v=74"></script>
+<script src="assets/heroes.js?v=74"></script>
+<script src="assets/icons.js?v=74"></script>
+<script src="assets/srs.js?v=74"></script>
+<script src="assets/newsflash.js?v=74"></script>
+<script src="assets/timeline.js?v=74"></script>
+<script src="assets/journey.js?v=74"></script>
+<script src="assets/season.js?v=74"></script>
+<script src="assets/items.js?v=74"></script>
+  <script src="assets/gold.js?v=74"></script>
+  <script src="assets/ask.js?v=74"></script>
+  <script src="assets/ads.js?v=74"></script>
+  <script src="assets/energy.js?v=74"></script>
+  <script src="assets/daily.js?v=74"></script>
+  <script src="assets/unlock.js?v=74"></script>
+  <script src="assets/guide.js?v=74"></script>
+  <script src="assets/minigames.js?v=74"></script>
+  <script src="assets/quests.js?v=74"></script>
+  <script src="assets/offline.js?v=74"></script>
+  <script src="assets/telemetry.js?v=74"></script>
+<script src="assets/autowalk.js?v=74"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

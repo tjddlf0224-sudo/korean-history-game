@@ -436,10 +436,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=72"></script>
-<script src="assets/zoomwarn.js?v=72"></script>
-<script src="assets/chart.js?v=72"></script>
-<script src="assets/audio.js?v=72"></script>
+<script src="assets/errlog.js?v=74"></script>
+<script src="assets/zoomwarn.js?v=74"></script>
+<script src="assets/chart.js?v=74"></script>
+<script src="assets/audio.js?v=74"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -451,7 +451,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=72';   // 존댓말 전환
+const ART_V = '?v=74';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -552,12 +552,12 @@ const ZONES = {
     img: 'assets/scenes/ch4_hongmungwan.png', label: '홍문관',
     spawn: { x: 688, y: 560 },
     barriers: [
-    { x0: 8, y0: 8, x1: 597, y1: 140 },
-    { x0: 613, y0: 8, x1: 792, y1: 95 },
-    { x0: 553, y0: 326, x1: 824, y1: 434 },
-    { x0: 658, y0: 286, x1: 717, y1: 312 },
-    { x0: 603, y0: 456, x1: 662, y1: 497 },
-    { x0: 718, y0: 456, x1: 777, y1: 497 },
+    { x0: 2, y0: 2, x1: 603, y1: 146 },
+    { x0: 607, y0: 2, x1: 798, y1: 101 },
+    { x0: 547, y0: 320, x1: 830, y1: 440 },
+    { x0: 652, y0: 280, x1: 723, y1: 318 },
+    { x0: 597, y0: 450, x1: 668, y1: 503 },
+    { x0: 712, y0: 450, x1: 783, y1: 503 },
   ],
     npcs: [
       { id: 'seogeojeong', name: '서거정', x: 400, y: 380, img: 'assets/portraits/seogeojeong.png', look: { role: 'scholar', body: '#3d5a6b', accent: '#c9a24a' } },
@@ -579,27 +579,27 @@ const ZONES = {
     img: 'assets/scenes/ch4_gyeonggukdaejeon.png', label: '경국대전 편찬실',
     spawn: { x: 690, y: 590 },
     barriers: [
-    { x0: 91, y0: 694, x1: 367, y1: 716 },
-    { x0: 1021, y0: 694, x1: 1285, y1: 716 },
-    { x0: 1001, y0: 103, x1: 1232, y1: 242 },
-    { x0: 168, y0: 160, x1: 312, y1: 217 },
-    { x0: 213, y0: 248, x1: 267, y1: 288 },
-    { x0: 418, y0: 160, x1: 567, y1: 217 },
-    { x0: 463, y0: 248, x1: 517, y1: 292 },
-    { x0: 648, y0: 160, x1: 795, y1: 217 },
-    { x0: 696, y0: 248, x1: 750, y1: 288 },
-    { x0: 418, y0: 346, x1: 567, y1: 404 },
-    { x0: 423, y0: 420, x1: 562, y1: 452 },
-    { x0: 808, y0: 407, x1: 960, y1: 471 },
-    { x0: 1058, y0: 407, x1: 1208, y1: 471 },
-    { x0: 168, y0: 552, x1: 317, y1: 608 },
-    { x0: 221, y0: 632, x1: 265, y1: 672 },
-    { x0: 421, y0: 552, x1: 567, y1: 608 },
-    { x0: 473, y0: 632, x1: 517, y1: 672 },
-    { x0: 808, y0: 552, x1: 960, y1: 608 },
-    { x0: 866, y0: 632, x1: 908, y1: 672 },
-    { x0: 1058, y0: 552, x1: 1208, y1: 608 },
-    { x0: 1116, y0: 632, x1: 1155, y1: 672 },
+    { x0: 85, y0: 688, x1: 373, y1: 722 },
+    { x0: 1015, y0: 688, x1: 1291, y1: 722 },
+    { x0: 995, y0: 97, x1: 1238, y1: 248 },
+    { x0: 162, y0: 154, x1: 318, y1: 223 },
+    { x0: 207, y0: 242, x1: 273, y1: 294 },
+    { x0: 412, y0: 154, x1: 573, y1: 223 },
+    { x0: 457, y0: 242, x1: 523, y1: 298 },
+    { x0: 642, y0: 154, x1: 801, y1: 223 },
+    { x0: 690, y0: 242, x1: 756, y1: 294 },
+    { x0: 412, y0: 340, x1: 573, y1: 410 },
+    { x0: 417, y0: 414, x1: 568, y1: 458 },
+    { x0: 802, y0: 401, x1: 966, y1: 477 },
+    { x0: 1052, y0: 401, x1: 1214, y1: 477 },
+    { x0: 162, y0: 546, x1: 323, y1: 614 },
+    { x0: 215, y0: 626, x1: 271, y1: 678 },
+    { x0: 415, y0: 546, x1: 573, y1: 614 },
+    { x0: 467, y0: 626, x1: 523, y1: 678 },
+    { x0: 802, y0: 546, x1: 966, y1: 614 },
+    { x0: 860, y0: 626, x1: 914, y1: 678 },
+    { x0: 1052, y0: 546, x1: 1214, y1: 614 },
+    { x0: 1110, y0: 626, x1: 1161, y1: 678 },
   ],
     npcs: [
       { id: 'seongjong', name: '성종', x: 690, y: 300, img: 'assets/portraits/seongjong.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
@@ -618,16 +618,16 @@ const ZONES = {
     img: 'assets/scenes/ch4_jibang_goeul.png', label: '지방 고을',
     spawn: { x: 680, y: 620 },
     barriers: [
-    { x0: 63, y0: 38, x1: 587, y1: 387 },
-    { x0: 718, y0: 198, x1: 982, y1: 497 },
-    { x0: 258, y0: 493, x1: 497, y1: 627 },
-    { x0: 653, y0: 43, x1: 812, y1: 132 },
-    { x0: 988, y0: 103, x1: 1157, y1: 202 },
-    { x0: 1118, y0: 213, x1: 1292, y1: 312 },
-    { x0: 1088, y0: 413, x1: 1252, y1: 502 },
-    { x0: 1013, y0: 528, x1: 1177, y1: 622 },
-    { x0: 793, y0: 603, x1: 932, y1: 702 },
-    { x0: 8, y0: 498, x1: 172, y1: 602 },
+    { x0: 57, y0: 32, x1: 593, y1: 393 },
+    { x0: 712, y0: 192, x1: 988, y1: 503 },
+    { x0: 252, y0: 487, x1: 503, y1: 633 },
+    { x0: 647, y0: 37, x1: 818, y1: 138 },
+    { x0: 982, y0: 97, x1: 1163, y1: 208 },
+    { x0: 1112, y0: 207, x1: 1298, y1: 318 },
+    { x0: 1082, y0: 407, x1: 1258, y1: 508 },
+    { x0: 1007, y0: 522, x1: 1183, y1: 628 },
+    { x0: 787, y0: 597, x1: 938, y1: 708 },
+    { x0: 2, y0: 492, x1: 178, y1: 608 },
   ],
     npcs: [
       // 각 시설 대문 앞에 한 명씩. 기출 비중대로 관아(수령 13문항)가 가장 크고,
@@ -1713,6 +1713,12 @@ const Dialog = {
   },
   afterQuiz(){
     World.paused = false;
+    /* 피버(화면 테두리가 금빛으로 타오르는 연출)를 접는다.
+       Juice.reset()은 "챕터·퀴즈 묶음을 벗어날 때 조용히 접는다"고 만들어
+       놓고 **아무 데서도 부르지 않았다**. 그래서 한 번 켜지면 맵을 걸어
+       다니는 내내 남아 있었다(제보: "이 화면효과가 계속되네").
+       피버는 문제를 푸는 동안의 것이다 — 지도 위에서는 뜻이 없다. */
+    if (window.Juice && Juice.reset) Juice.reset();
     // 대화·퀴즈가 열려 있던 동안 화면이 잠깐 백그라운드로 갔다 오는 등의
     // 이유로 배경음악이 끊기거나 다른 트랙처럼 들리는 제보가 있어, 대화가
     // 끝날 때마다 이 구역의 정식 배경음악을 다시 한 번 틀어 준다(이미
@@ -2052,38 +2058,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=72"></script>
-<script src="assets/streak.js?v=72"></script>
+<script src="assets/badges.js?v=74"></script>
+<script src="assets/streak.js?v=74"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=72"></script>
-  <script src="assets/fx.js?v=72"></script>
-  <script src="assets/deed.js?v=72"></script>
-  <script src="assets/inkwipe.js?v=72"></script>
-  <script src="assets/dash.js?v=72"></script>
-<script src="assets/juice.js?v=72"></script>
-  <script src="assets/difficulty.js?v=72"></script>
-  <script src="assets/nextauto.js?v=72"></script>
-<script src="assets/heroes_data.js?v=72"></script>
-<script src="assets/heroes.js?v=72"></script>
-<script src="assets/icons.js?v=72"></script>
-<script src="assets/srs.js?v=72"></script>
-<script src="assets/newsflash.js?v=72"></script>
-<script src="assets/timeline.js?v=72"></script>
-<script src="assets/journey.js?v=72"></script>
-<script src="assets/season.js?v=72"></script>
-<script src="assets/items.js?v=72"></script>
-  <script src="assets/gold.js?v=72"></script>
-  <script src="assets/ask.js?v=72"></script>
-  <script src="assets/ads.js?v=72"></script>
-  <script src="assets/energy.js?v=72"></script>
-  <script src="assets/daily.js?v=72"></script>
-  <script src="assets/unlock.js?v=72"></script>
-  <script src="assets/guide.js?v=72"></script>
-  <script src="assets/minigames.js?v=72"></script>
-  <script src="assets/quests.js?v=72"></script>
-  <script src="assets/offline.js?v=72"></script>
-  <script src="assets/telemetry.js?v=72"></script>
-<script src="assets/autowalk.js?v=72"></script>
+<script src="assets/rank.js?v=74"></script>
+  <script src="assets/fx.js?v=74"></script>
+  <script src="assets/deed.js?v=74"></script>
+  <script src="assets/inkwipe.js?v=74"></script>
+  <script src="assets/dash.js?v=74"></script>
+<script src="assets/juice.js?v=74"></script>
+  <script src="assets/difficulty.js?v=74"></script>
+  <script src="assets/nextauto.js?v=74"></script>
+<script src="assets/heroes_data.js?v=74"></script>
+<script src="assets/heroes.js?v=74"></script>
+<script src="assets/icons.js?v=74"></script>
+<script src="assets/srs.js?v=74"></script>
+<script src="assets/newsflash.js?v=74"></script>
+<script src="assets/timeline.js?v=74"></script>
+<script src="assets/journey.js?v=74"></script>
+<script src="assets/season.js?v=74"></script>
+<script src="assets/items.js?v=74"></script>
+  <script src="assets/gold.js?v=74"></script>
+  <script src="assets/ask.js?v=74"></script>
+  <script src="assets/ads.js?v=74"></script>
+  <script src="assets/energy.js?v=74"></script>
+  <script src="assets/daily.js?v=74"></script>
+  <script src="assets/unlock.js?v=74"></script>
+  <script src="assets/guide.js?v=74"></script>
+  <script src="assets/minigames.js?v=74"></script>
+  <script src="assets/quests.js?v=74"></script>
+  <script src="assets/offline.js?v=74"></script>
+  <script src="assets/telemetry.js?v=74"></script>
+<script src="assets/autowalk.js?v=74"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

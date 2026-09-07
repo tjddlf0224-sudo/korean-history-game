@@ -434,10 +434,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=72"></script>
-<script src="assets/zoomwarn.js?v=72"></script>
-<script src="assets/chart.js?v=72"></script>
-<script src="assets/audio.js?v=72"></script>
+<script src="assets/errlog.js?v=74"></script>
+<script src="assets/zoomwarn.js?v=74"></script>
+<script src="assets/chart.js?v=74"></script>
+<script src="assets/audio.js?v=74"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -449,7 +449,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=72';   // 존댓말 전환
+const ART_V = '?v=74';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -547,10 +547,10 @@ const ZONES = {
     img: 'assets/scenes/ch3_gungya.png', label: '궁궐 야간',
     spawn: { x: 350, y: 500 },
     barriers: [
-    { x0: 468, y0: 8, x1: 902, y1: 172 },
-    { x0: 468, y0: 703, x1: 902, y1: 760 },
-    { x0: 8, y0: 8, x1: 162, y1: 760 },
-    { x0: 1218, y0: 8, x1: 1368, y1: 760 },
+    { x0: 462, y0: 2, x1: 908, y1: 178 },
+    { x0: 462, y0: 697, x1: 908, y1: 766 },
+    { x0: 2, y0: 2, x1: 168, y1: 766 },
+    { x0: 1212, y0: 2, x1: 1374, y1: 766 },
   ],
     npcs: [
       { id: 'sejo', name: '세조', x: 650, y: 380, img: 'assets/portraits/sejo.png', look: { role: 'king', body: '#5a1f24', accent: '#b06a3a' } },
@@ -574,12 +574,12 @@ const ZONES = {
     img: 'assets/scenes/ch3_ganghwado.png', label: '영월 청령포',
     spawn: { x: 700, y: 495 },
     barriers: [
-    { x0: 413, y0: 193, x1: 442, y1: 577 },
-    { x0: 448, y0: 190, x1: 927, y1: 212 },
-    { x0: 908, y0: 193, x1: 942, y1: 577 },
-    { x0: 418, y0: 536, x1: 654, y1: 577 },
-    { x0: 751, y0: 536, x1: 937, y1: 577 },
-    { x0: 498, y0: 213, x1: 797, y1: 407 },
+    { x0: 407, y0: 187, x1: 448, y1: 583 },
+    { x0: 442, y0: 185, x1: 933, y1: 218 },
+    { x0: 902, y0: 187, x1: 948, y1: 583 },
+    { x0: 412, y0: 530, x1: 660, y1: 583 },
+    { x0: 745, y0: 530, x1: 943, y1: 583 },
+    { x0: 492, y0: 207, x1: 803, y1: 413 },
   ],
     npcs: [
       { id: 'danjong', name: '노산군', x: 600, y: 465, img: 'assets/portraits/danjong.png', look: { role: 'commoner', body: '#e8e2d2', accent: '#6b5636' } },
@@ -1501,6 +1501,9 @@ const Dialog = {
     }
   },
   afterQuiz(){
+    /* 피버 연출을 접는다 — Juice.reset()이 만들어져 있는데 아무 데서도
+       부르지 않아, 한 번 켜지면 맵에서도 계속 남았다(실제 제보). */
+    if (window.Juice && Juice.reset) Juice.reset();
     if (this.data.startsBoss){
       BGM.play('bgm_boss_quiz', {fadeMs:500});
       Quiz.openSequence(BOSS_QUESTIONS, (score, total) => Stage.finishBoss(score, total));
@@ -1834,39 +1837,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=72"></script>
-<script src="assets/streak.js?v=72"></script>
+<script src="assets/badges.js?v=74"></script>
+<script src="assets/streak.js?v=74"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=72"></script>
-  <script src="assets/fx.js?v=72"></script>
-  <script src="assets/inkwipe.js?v=72"></script>
-  <script src="assets/dash.js?v=72"></script>
-<script src="assets/juice.js?v=72"></script>
-  <script src="assets/difficulty.js?v=72"></script>
-  <script src="assets/nextauto.js?v=72"></script>
-<script src="assets/heroes_data.js?v=72"></script>
-<script src="assets/heroes.js?v=72"></script>
-<script src="assets/icons.js?v=72"></script>
-<script src="assets/srs.js?v=72"></script>
-<script src="assets/newsflash.js?v=72"></script>
-<script src="assets/timeline.js?v=72"></script>
-<script src="assets/journey.js?v=72"></script>
-<script src="assets/season.js?v=72"></script>
-<script src="assets/boss.js?v=72"></script>
-  <script src="assets/encounter.js?v=72"></script>
-<script src="assets/items.js?v=72"></script>
-  <script src="assets/gold.js?v=72"></script>
-  <script src="assets/ask.js?v=72"></script>
-  <script src="assets/ads.js?v=72"></script>
-  <script src="assets/energy.js?v=72"></script>
-  <script src="assets/daily.js?v=72"></script>
-  <script src="assets/unlock.js?v=72"></script>
-  <script src="assets/guide.js?v=72"></script>
-  <script src="assets/minigames.js?v=72"></script>
-  <script src="assets/quests.js?v=72"></script>
-  <script src="assets/offline.js?v=72"></script>
-  <script src="assets/telemetry.js?v=72"></script>
-<script src="assets/autowalk.js?v=72"></script>
+<script src="assets/rank.js?v=74"></script>
+  <script src="assets/fx.js?v=74"></script>
+  <script src="assets/inkwipe.js?v=74"></script>
+  <script src="assets/dash.js?v=74"></script>
+<script src="assets/juice.js?v=74"></script>
+  <script src="assets/difficulty.js?v=74"></script>
+  <script src="assets/nextauto.js?v=74"></script>
+<script src="assets/heroes_data.js?v=74"></script>
+<script src="assets/heroes.js?v=74"></script>
+<script src="assets/icons.js?v=74"></script>
+<script src="assets/srs.js?v=74"></script>
+<script src="assets/newsflash.js?v=74"></script>
+<script src="assets/timeline.js?v=74"></script>
+<script src="assets/journey.js?v=74"></script>
+<script src="assets/season.js?v=74"></script>
+<script src="assets/boss.js?v=74"></script>
+  <script src="assets/encounter.js?v=74"></script>
+<script src="assets/items.js?v=74"></script>
+  <script src="assets/gold.js?v=74"></script>
+  <script src="assets/ask.js?v=74"></script>
+  <script src="assets/ads.js?v=74"></script>
+  <script src="assets/energy.js?v=74"></script>
+  <script src="assets/daily.js?v=74"></script>
+  <script src="assets/unlock.js?v=74"></script>
+  <script src="assets/guide.js?v=74"></script>
+  <script src="assets/minigames.js?v=74"></script>
+  <script src="assets/quests.js?v=74"></script>
+  <script src="assets/offline.js?v=74"></script>
+  <script src="assets/telemetry.js?v=74"></script>
+<script src="assets/autowalk.js?v=74"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
