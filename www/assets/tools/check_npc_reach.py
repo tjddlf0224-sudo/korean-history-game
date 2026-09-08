@@ -4,7 +4,10 @@
 check_reachability.js 는 구역과 출구를 보고, 이건 **인물**을 본다.
 NPC를 새로 세우거나 옮긴 뒤에는 이걸 돌린다.
 
-판정은 챕터의 로직 그대로 — canStand(pad 16), 대화 사거리 108.8.
+판정은 챕터의 로직 그대로 — canStand의 발자국(pad)과 대화 사거리 108.8.
+**pad는 챕터에서 직접 읽는다.** 예전에는 16으로 박아 두었는데, 게임이 10으로
+바뀐 뒤에도 검사기만 16으로 남아 멀쩡히 닿는 NPC를 '갈 수 없음'으로 신고했다.
+숫자를 두 군데 적어 두면 반드시 어긋난다.
 스폰에서 BFS로 닿는 칸 중에 사거리 안에 드는 칸이 하나라도 있어야 한다.
 
   python3 assets/tools/check_npc_reach.py
@@ -14,7 +17,7 @@ import re
 import sys
 from collections import deque
 
-PAD, INTERACT, STEP = 16, 108.8, 8
+PAD_FALLBACK, INTERACT, STEP = 16, 108.8, 8
 SKIP = ('_', 'index', 'ending', 'exam', 'prologue', 'ch0_phaser')
 
 
@@ -41,7 +44,13 @@ def zones_of(html):
     return out
 
 
-def reachable(bars, spawn, w, h):
+def pad_of(html):
+    """챕터의 canStand가 쓰는 발자국을 그대로 가져온다."""
+    m = re.search(r'const pad = (\d+);', html)
+    return int(m.group(1)) if m else PAD_FALLBACK
+
+
+def reachable(bars, spawn, w, h, PAD=PAD_FALLBACK):
     def barrier(x, y):
         return any(x0 <= x <= x1 and y0 <= y <= y1 for x0, y0, x1, y1 in bars)
 
@@ -71,12 +80,13 @@ def main():
         if f.startswith(SKIP):
             continue
         html = open(f, encoding='utf-8').read()
+        pad = pad_of(html)
         m = re.search(r'BG_W\s*=\s*(\d+)[\s\S]{0,80}?BG_H\s*=\s*(\d+)', html)
         W, H = (int(m.group(1)), int(m.group(2))) if m else (1376, 768)
         for zid, z in zones_of(html).items():
             if not z['npcs'] or not z['spawn']:
                 continue
-            cells = reachable(z['bars'], z['spawn'], W, H)
+            cells = reachable(z['bars'], z['spawn'], W, H, pad)
             for nid, x, y in z['npcs']:
                 total += 1
                 if not any((x - cx) ** 2 + (y - cy) ** 2 < INTERACT ** 2 for cx, cy in cells):

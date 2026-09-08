@@ -38,6 +38,20 @@ GRID = 16
 NPC_R = 34
 
 
+def split_objects(s):
+    """최상위 { ... } 항목만 나눈다. 안에 look:{...} 같은 중첩이 있어도 된다.
+       예전에는 [^{}]* 로 잡아서, 중첩이 있는 NPC 항목을 통째로 놓쳤다 —
+       그 바람에 NPC 검사가 조용히 건너뛰어졌다."""
+    out, d, st = [], 0, None
+    for i, ch in enumerate(s):
+        if ch == '{':
+            if d == 0: st = i
+            d += 1
+        elif ch == '}':
+            d -= 1
+            if d == 0: out.append(s[st:i + 1])
+    return out
+
 def num(s, key):
     m = re.search(key + r'\s*:\s*(-?[\d.]+)', s)
     return float(m.group(1)) if m else None
@@ -97,7 +111,7 @@ def parse_chapter(path):
         mn = re.search(r'npcs:\s*\[', blk)
         if mn:
             e = balanced(blk, blk.index('[', mn.end() - 1), '[', ']')
-            for nm in re.finditer(r'\{([^{}]*)\}', blk[mn.end():e]):
+            for nm in [type('M',(),{'group':lambda self,i,t=t: t})() for t in split_objects(blk[mn.end():e])]:
                 t = nm.group(1)
                 x, y = num(t, r'\bx'), num(t, r'\by')
                 idm = re.search(r"id:\s*'([^']*)'", t)

@@ -19,8 +19,12 @@ const SKIP = new Set(['index.html', '_smoke.html', 'ch0_phaser.html', 'exam_prac
 /* 게임 쪽 상수·판정과 반드시 같아야 하는 값들 (chapter HTML에서 그대로 읽어옴) */
 function extractConsts(src){
   const m = src.match(/const BG_W = (\d+), BG_H = (\d+), ZOOM = ([\d.]+);/);
+  // 발자국(pad)은 챕터에서 직접 읽는다. 예전에는 16으로 박아 두었는데
+  // 게임이 10으로 바뀐 뒤에도 검사기만 16이라, 멀쩡히 닿는 NPC를
+  // '갈 수 없음'으로 신고했다. 숫자를 두 군데 적으면 반드시 어긋난다.
+  const pm = src.match(/const pad = (\d+);/);
   if (!m) return null;
-  return { BG_W: +m[1], BG_H: +m[2], ZOOM: +m[3] };
+  return { BG_W: +m[1], BG_H: +m[2], ZOOM: +m[3], PAD: pm ? +pm[1] : 16 };
 }
 
 /* `const ZONES = { ... };` 블록만 중괄호 균형으로 잘라내 그대로 평가한다.
@@ -65,7 +69,7 @@ function makeCanStand(zone, C){
     return false;
   }
   return function canStand(x, y, ignoreNpcs){
-    const pad = 16;
+    const pad = C.PAD;
     if (isBarrierPx(x - pad, y - pad) || isBarrierPx(x + pad, y - pad) ||
         isBarrierPx(x - pad, y + pad) || isBarrierPx(x + pad, y + pad)) return false;
     if (!ignoreNpcs){
