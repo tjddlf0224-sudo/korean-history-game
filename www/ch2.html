@@ -490,11 +490,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=81"></script>
-<script src="assets/zoomwarn.js?v=81"></script>
-<script src="assets/map/map_component.js?v=81"></script>
-<script src="assets/chart.js?v=81"></script>
-<script src="assets/audio.js?v=81"></script>
+<script src="assets/errlog.js?v=82"></script>
+<script src="assets/zoomwarn.js?v=82"></script>
+<script src="assets/map/map_component.js?v=82"></script>
+<script src="assets/chart.js?v=82"></script>
+<script src="assets/audio.js?v=82"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -506,7 +506,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=81';   // 존댓말 전환
+const ART_V = '?v=82';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -606,13 +606,13 @@ const ZONES = {
     spawn: { x: 688, y: 600 },
     barriers: [
     { x0: 648, y0: 0, x1: 744, y1: 8 },
-    { x0: 1224, y0: 0, x1: 1336, y1: 72 },
+    { x0: 1224, y0: 0, x1: 1336, y1: 104 },
     { x0: 8, y0: 8, x1: 648, y1: 104 },
-    { x0: 728, y0: 8, x1: 1224, y1: 72 },
+    { x0: 728, y0: 8, x1: 1224, y1: 104 },
     { x0: 1336, y0: 8, x1: 1376, y1: 56 },
     { x0: 1336, y0: 56, x1: 1368, y1: 768 },
-    { x0: 1304, y0: 72, x1: 1336, y1: 768 },
     { x0: 8, y0: 104, x1: 72, y1: 312 },
+    { x0: 1304, y0: 104, x1: 1336, y1: 768 },
     { x0: 0, y0: 184, x1: 8, y1: 280 },
     { x0: 184, y0: 200, x1: 296, y1: 216 },
     { x0: 408, y0: 200, x1: 504, y1: 216 },
@@ -671,14 +671,14 @@ const ZONES = {
     // (원래 있던 12시 정문은 권농 들녘·국경 진영으로 가는 문이었으나, 2화
     // 분리 후 그 두 무대가 3화(ch2b.html)로 옮겨가면서 정문도 함께 없앴다.)
     exits: [
-      { rect:{x0:630,y0:735,x1:740,y1:768}, to:'ganuidae', spawn:{x:130,y:510}, label:'간의대로' },
+      { rect:{x0:630,y0:735,x1:740,y1:768}, to:'ganuidae', spawn:{x:112,y:168}, label:'간의대로' },
     ],
   },
   ganuidae: {
     // 간의대 — 세종의 천문 관측대. 기출 2위 개념(세종 문화·과학 53문항/45회차)인데
     // 그동안 배경만 만들어두고 안 쓰고 있었다. 장영실 대사와 직결되는 무대.
     img: 'assets/scenes/ch2_ganuidae.png', label: '간의대(관천대)',
-    spawn: { x: 130, y: 510 },   // 서쪽 문 바로 안
+    spawn: { x: 112, y: 168 },   // 왼쪽 위 문 바로 안
     barriers: [
     { x0: 8, y0: 8, x1: 168, y1: 40 },
     { x0: 8, y0: 40, x1: 152, y1: 56 },
@@ -692,14 +692,13 @@ const ZONES = {
     { x0: 8, y0: 104, x1: 72, y1: 120 },
     { x0: 1144, y0: 104, x1: 1256, y1: 232 },
     { x0: 8, y0: 248, x1: 392, y1: 296 },
-    // 서쪽 담장. 가운데 y 460~560을 터서 문으로 삼는다.
-    // 전에는 출구가 아래쪽 난간 위에 얹혀 있어 담을 뚫고 나가는 꼴이었다.
-    { x0: 24, y0: 296, x1: 40, y1: 460 },
-    { x0: 24, y0: 560, x1: 40, y1: 728 },
+    { x0: 24, y0: 296, x1: 40, y1: 456 },
     { x0: 216, y0: 296, x1: 376, y1: 472 },
-    { x0: 168, y0: 504, x1: 280, y1: 616 },
-    { x0: 488, y0: 504, x1: 600, y1: 616 },
     { x0: 1128, y0: 504, x1: 1240, y1: 616 },
+    { x0: 200, y0: 536, x1: 232, y1: 584 },
+    { x0: 520, y0: 536, x1: 552, y1: 568 },
+    { x0: 24, y0: 552, x1: 40, y1: 728 },
+    { x0: 520, y0: 568, x1: 536, y1: 584 },
     { x0: 40, y0: 712, x1: 1320, y1: 728 },
     { x0: 1336, y0: 712, x1: 1368, y1: 728 },
     { x0: 168, y0: 728, x1: 264, y1: 744 },
@@ -712,7 +711,9 @@ const ZONES = {
       { id:'sp_angbu',  x:533, y:550, item:'angbuilgu',  label:'해시계 받침돌' },
       { id:'sp_jagyeok', x:220, y:557, item:'jagyeongnu', label:'물시계 부품 궤짝' },
     ],
-    exits: [ { rect:{x0:24,y0:460,x1:96,y1:560}, to:'jiphyeonjeon', spawn:{x:688,y:560}, label:'집현전으로' } ],
+    // 문은 왼쪽 위. 위 모서리에서 열 칸쯤 내려온 자리다(제보).
+    // 그림에서도 그 위로 층계가 나 있어, 계단을 올라 나가는 셈이 된다.
+    exits: [ { rect:{x0:8,y0:128,x1:88,y1:208}, to:'jiphyeonjeon', spawn:{x:688,y:560}, label:'집현전으로' } ],
   },
 };
 // 배경은 같은 이름의 .webp를 먼저 찾고, 없으면 스펙에 적힌 .png로 되돌아간다.
@@ -2408,39 +2409,39 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
-<script src="assets/badges.js?v=81"></script>
-<script src="assets/streak.js?v=81"></script>
+<script src="assets/badges.js?v=82"></script>
+<script src="assets/streak.js?v=82"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=81"></script>
-  <script src="assets/fx.js?v=81"></script>
-  <script src="assets/deed.js?v=81"></script>
-  <script src="assets/inkwipe.js?v=81"></script>
-  <script src="assets/dash.js?v=81"></script>
-<script src="assets/juice.js?v=81"></script>
-  <script src="assets/difficulty.js?v=81"></script>
-  <script src="assets/nextauto.js?v=81"></script>
-<script src="assets/heroes_data.js?v=81"></script>
-<script src="assets/heroes.js?v=81"></script>
-<script src="assets/icons.js?v=81"></script>
-<script src="assets/srs.js?v=81"></script>
-<script src="assets/newsflash.js?v=81"></script>
-<script src="assets/timeline.js?v=81"></script>
-<script src="assets/journey.js?v=81"></script>
-<script src="assets/season.js?v=81"></script>
-<script src="assets/items.js?v=81"></script>
-  <script src="assets/gold.js?v=81"></script>
-  <script src="assets/ask.js?v=81"></script>
-  <script src="assets/ads.js?v=81"></script>
-  <script src="assets/energy.js?v=81"></script>
-  <script src="assets/daily.js?v=81"></script>
-  <script src="assets/unlock.js?v=81"></script>
-  <script src="assets/guide.js?v=81"></script>
-  <script src="assets/minigames.js?v=81"></script>
-  <script src="assets/quests.js?v=81"></script>
-  <script src="assets/offline.js?v=81"></script>
-  <script src="assets/telemetry.js?v=81"></script>
-<script src="assets/autowalk.js?v=81"></script>
-<script src="assets/boss.js?v=81"></script>
+<script src="assets/rank.js?v=82"></script>
+  <script src="assets/fx.js?v=82"></script>
+  <script src="assets/deed.js?v=82"></script>
+  <script src="assets/inkwipe.js?v=82"></script>
+  <script src="assets/dash.js?v=82"></script>
+<script src="assets/juice.js?v=82"></script>
+  <script src="assets/difficulty.js?v=82"></script>
+  <script src="assets/nextauto.js?v=82"></script>
+<script src="assets/heroes_data.js?v=82"></script>
+<script src="assets/heroes.js?v=82"></script>
+<script src="assets/icons.js?v=82"></script>
+<script src="assets/srs.js?v=82"></script>
+<script src="assets/newsflash.js?v=82"></script>
+<script src="assets/timeline.js?v=82"></script>
+<script src="assets/journey.js?v=82"></script>
+<script src="assets/season.js?v=82"></script>
+<script src="assets/items.js?v=82"></script>
+  <script src="assets/gold.js?v=82"></script>
+  <script src="assets/ask.js?v=82"></script>
+  <script src="assets/ads.js?v=82"></script>
+  <script src="assets/energy.js?v=82"></script>
+  <script src="assets/daily.js?v=82"></script>
+  <script src="assets/unlock.js?v=82"></script>
+  <script src="assets/guide.js?v=82"></script>
+  <script src="assets/minigames.js?v=82"></script>
+  <script src="assets/quests.js?v=82"></script>
+  <script src="assets/offline.js?v=82"></script>
+  <script src="assets/telemetry.js?v=82"></script>
+<script src="assets/autowalk.js?v=82"></script>
+<script src="assets/boss.js?v=82"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
