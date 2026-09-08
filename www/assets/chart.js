@@ -159,19 +159,19 @@ window.Chart = (function(){
 
     /* --- 지도 --- 역사에서 '어디'는 '무엇'만큼 중요하다.
        한반도 윤곽은 실제 좌표(map/data/korea_outline.geojson)를 성기게 줄여 넣었다. */
-    .ch-map { display:flex; align-items:center; gap:10px; padding:8px 10px; }
+    .ch-map { display:flex; align-items:flex-start; gap:10px; padding:8px 10px; }
     /* 지도는 **높이 기준**으로 잡는다. 폭으로 잡으면 세로로 긴 한반도가
        112px에 눌려 지명이 겹쳤다(제보: "지도가 너무 작아서 글자도 겹치고").
        재 보니 도해가 쓸 수 있는 높이는 236px인데 147px만 쓰고 있었고,
        범례는 378px 폭을 차지하면서 내용은 39px 높이뿐이라 옆이 텅 비었다.
        --dlg-max-h 는 게임 높이의 80%다. 그 60%면 대략 화면의 절반이다. */
-    .ch-map svg { flex:none; height:calc(var(--dlg-max-h, 320px) * .70); width:auto;
+    .ch-map svg { flex:none; height:calc(var(--dlg-max-h, 320px) * 1.28); width:auto;
       display:block; }
     /* 범례가 없으면 지도만 있는 것이니 가운데로 크게 — 옆이 비면 허전하다 */
     .ch-map.solo { justify-content:center; }
     /* 지도만 있을 때는 높이로 잡는다 — 폭으로 잡으면 세로로 든 휴대폰
        (게임 높이 390px)에서 대사창을 화면 밖으로 밀어냈다. */
-    .ch-map.solo svg { height:calc(var(--dlg-max-h, 320px) * .80); width:auto; max-width:none; }
+    .ch-map.solo svg { height:calc(var(--dlg-max-h, 320px) * 1.45); width:auto; max-width:none; }
     /* 주변 육지 — 한반도보다 훨씬 옅게. 배경이지 주인공이 아니다. */
     .ch-map .far { fill:rgba(240,201,107,.05); stroke:rgba(240,201,107,.2);
       stroke-width:.8; stroke-linejoin:round; }
@@ -183,15 +183,25 @@ window.Chart = (function(){
     /* 잃은 땅 같은 '범위'는 빗금으로 — 붉은기를 써서 핀(금색)과 구별한다 */
     .ch-map .lost { fill:url(#chHatch); stroke:#d98a7a; stroke-width:1;
       stroke-dasharray:3.5 2.5; opacity:.92; }
+    /* 영역 테두리 아래에 넓고 흐린 선을 한 겹 더 깐다. 납작한 단색 도형이
+       아니라 가장자리가 번지는 물빛처럼 보이게 하는 것이 목적이다. */
+    .ch-map .terr-b { fill:none; stroke-width:3.4; stroke-opacity:.20;
+      stroke-linejoin:round; stroke-linecap:round; }
     /* 나라 영역 — 색으로 갈라 보여 준다. 핀만 찍으면 "어디까지가 그 나라인지"를
        알 수 없다는 제보를 받았다. 옅게 칠하고 테두리를 진하게 해서, 겹쳐도
        아래 것이 비쳐 보이게 한다. */
-    .ch-map .terr { fill-opacity:.24; stroke-width:1.1; stroke-opacity:.95;
+    /* 칠은 위아래로 옅어지는 그러데이션을 인라인으로 받는다(fill:url(#…)).
+       그래서 여기서는 fill-opacity를 1로 두고 투명도는 그러데이션에 맡긴다. */
+    .ch-map .terr { fill-opacity:1; stroke-width:1.05; stroke-opacity:.9;
       stroke-linejoin:round; }
-    .ch-map .an { font-size:9px; fill:#eab6a8; font-weight:700;
-      font-family:"Gowun Batang",serif; }
-    .ch-map .pn { font-size:7.6px; fill:#cdbfa4; font-family:"Gowun Batang",serif; }
-    .ch-map .pn.on { fill:#fff3d4; font-weight:700; }
+    /* 글자에 어두운 테를 두른다(paint-order). 영역 위든 바다 위든 읽힌다 —
+       겹쳐 보이던 지명이 이것만으로도 크게 나아진다. */
+    .ch-map .an, .ch-map .pn { paint-order:stroke fill; stroke:#17110a;
+      stroke-width:2.2px; stroke-linejoin:round; }
+    .ch-map .an { font-size:8.2px; fill:#eab6a8; font-weight:700;
+      font-family:"Gowun Batang",serif; text-anchor:middle; }
+    .ch-map .pn { font-size:6.6px; fill:#d8caae; font-family:"Gowun Batang",serif; }
+    .ch-map .pn.on { fill:#fff3d4; font-weight:700; stroke-width:2.6px; }
     .ch-map .leg { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
     .ch-map .leg .r { font-size:13px; color:#cdbfa4; line-height:1.4; display:flex; gap:6px; }
     .ch-map .leg .r b { color:#f0c96b; font-weight:700; flex:none; }
@@ -298,65 +308,124 @@ window.Chart = (function(){
     /* 지도 — { pins:[{x:52, y:30, n:'부여', on:true}], legend:[{k:'부여', v:'만주'}] }
        눈금은 가로 100 · 세로 150. 한반도 밖(만주·요동)도 찍을 수 있게 넉넉히 둔다. */
     map(c){
-      const pins = (c.pins || []).map(function(p){
-        return '<circle class="pin' + (p.on ? ' on' : '') + '" cx="' + p.x + '" cy="' + p.y +
-          '" r="' + (p.on ? 3.4 : 2.6) + '"/>' +
-          (p.n ? '<text class="pn' + (p.on ? ' on' : '') + '" x="' + (p.x + 4.5) +
-                 '" y="' + (p.y + 2.4) + '">' + esc(p.n) + '</text>' : '');
+      /* 눈금은 가로 100 · 세로 150. 글자 크기도 이 눈금 위의 값이라,
+         지도를 키워도 겹침은 그대로다 — 겹침은 크기가 아니라 **자리**의
+         문제다. 그래서 아래에서 이름표 자리를 직접 계산해 비켜 놓는다.
+         (제보: "지도가 조그마니까 글씨도 겹쳐지는거잖아") */
+      const PN = 6.6, AN = 8.2;               // 지명 · 영역 이름 글자 크기
+      const seq = ++mapSeq;
+      let defs = '';
+
+      /* 글자 폭 어림. 한글은 한 글자가 거의 정사각이고 로마자·숫자는 절반쯤. */
+      function textW(t, fs){
+        let w = 0;
+        for (const ch of String(t)) w += /[\x00-\x7F]/.test(ch) ? 0.54 : 1.0;
+        return w * fs;
+      }
+      /* 놓인 것들의 자리(사각형). 새 이름표는 여기 걸리지 않는 곳에 앉힌다. */
+      const taken = [];
+      function hits(b){
+        return taken.some(function(o){
+          return b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0;
+        });
+      }
+
+      /* ── 영역 ── 색으로 갈라 보여 준다. 납작한 단색 대신
+         위아래로 옅어지는 물빛을 깔고, 테두리를 두 겹(넓고 흐린 것 + 좁고
+         또렷한 것)으로 둘러 가장자리가 살아 있게 한다. */
+      const areas = (c.areas || []).map(function(a, i){
+        if (!a.c){
+          // 색이 없으면 '잃은 땅' — 빗금으로
+          return '<polygon class="lost" points="' + a.pts + '"/>';
+        }
+        const gid = 'chT' + seq + '_' + i;
+        defs += '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0.35" y2="1">' +
+          '<stop offset="0" stop-color="' + a.c + '" stop-opacity=".38"/>' +
+          '<stop offset="1" stop-color="' + a.c + '" stop-opacity=".13"/></linearGradient>';
+        return '<polygon class="terr-b" points="' + a.pts + '" style="stroke:' + a.c + '"/>' +
+          '<polygon class="terr" points="' + a.pts + '" style="fill:url(#' + gid + ');stroke:' + a.c + '"/>';
       }).join('');
+
+      /* 영역 이름은 글쓴이가 자리를 정해 둔다. 먼저 자리를 잡아 두고,
+         지명은 그 자리를 피해 앉힌다 — 나라 이름이 더 큰 정보라서다. */
+      const anames = (c.areas || []).filter(function(a){ return a.n; }).map(function(a){
+        const x = a.tx || 0, y = a.ty || 0, w = textW(a.n, AN);
+        taken.push({ x0: x - w / 2 - 1, x1: x + w / 2 + 1, y0: y - AN * .85, y1: y + AN * .3 });
+        return '<text class="an" x="' + x + '" y="' + y + '"' +
+               (a.c ? ' style="fill:' + a.c + '"' : '') + '>' + esc(a.n) + '</text>';
+      }).join('');
+
+      /* ── 지명 ── 점은 그대로 두고 **이름표만** 옮긴다.
+         ① 오른쪽이 답답하면 왼쪽에 붙인다.
+         ② 그래도 겹치면 위아래로 한 칸씩 밀어 빈자리를 찾는다.
+         못 찾으면 원래 자리에 둔다 — 없애는 것보다는 낫다. */
+      const P = (c.pins || []).slice().sort(function(a, b){ return a.y - b.y; });
+      P.forEach(function(p){ taken.push({ x0: p.x - 3.6, x1: p.x + 3.6, y0: p.y - 3.6, y1: p.y + 3.6 }); });
+
+      const pins = P.map(function(p){
+        const r = p.on ? 3.4 : 2.6;
+        let out = '<circle class="pin' + (p.on ? ' on' : '') + '" cx="' + p.x +
+                  '" cy="' + p.y + '" r="' + r + '"/>';
+        if (!p.n) return out;
+        const w = textW(p.n, PN), gap = r + 2.2;
+        // 오른쪽 끝(가로 눈금 100 기준 62 넘어)이면 왼쪽부터 본다
+        const sides = (p.side === 'left' || (!p.side && p.x > 62)) ? ['left', 'right'] : ['right', 'left'];
+        let best = null;
+        for (const side of sides){
+          for (let d = 0; d <= 26 && !best; d += 2){
+            for (const dy of (d === 0 ? [0] : [d, -d])){
+              const x = p.x + (side === 'right' ? gap : -gap), y = p.y + 2.2 + dy;
+              const b = { x0: side === 'right' ? x - 1 : x - w - 1,
+                          x1: side === 'right' ? x + w + 1 : x + 1,
+                          y0: y - PN * .85, y1: y + PN * .3 };
+              if (!hits(b)){ best = { x: x, y: y, side: side, b: b }; break; }
+            }
+          }
+          if (best) break;
+        }
+        if (!best){
+          const x = p.x + gap, y = p.y + 2.2;
+          best = { x: x, y: y, side: 'right',
+                   b: { x0: x - 1, x1: x + w + 1, y0: y - PN * .85, y1: y + PN * .3 } };
+        }
+        taken.push(best.b);
+        return out + '<text class="pn' + (p.on ? ' on' : '') + '" x="' + best.x + '" y="' + best.y +
+          '" text-anchor="' + (best.side === 'right' ? 'start' : 'end') + '">' + esc(p.n) + '</text>';
+      }).join('');
+
       const leg = (c.legend || []).map(function(l){
         return '<div class="r' + (l.on ? ' on' : '') + '"><b>' + esc(l.k) + '</b><span>' +
                esc(l.v) + '</span></div>';
       }).join('');
-      /* 빗금 영역 — "잃은 땅"처럼 **범위**를 말할 때 쓴다.
-         핀만 찍으면 어디를 가리키는지 알 수 없다는 제보를 받았다
-         ("지도는 나오는데 어디를 뜻하는건지 모르겠어").
-         areas:[{ pts:'x,y x,y …', n:'잃은 땅', tx:.., ty:.. }]
-         좌표는 핀과 같은 눈금(가로 100 · 세로 150)을 쓴다. */
-      const areas = (c.areas || []).map(function(a){
-        // c(색)를 주면 나라 영역, 안 주면 빗금(잃은 땅)
-        const cls = a.c ? 'terr' : 'lost';
-        const st = a.c ? ' style="fill:' + a.c + ';stroke:' + a.c + '"' : '';
-        return '<polygon class="' + cls + '" points="' + a.pts + '"' + st + '/>' +
-          (a.n ? '<text class="an" x="' + (a.tx || 0) + '" y="' + (a.ty || 0) + '"' +
-                 (a.c ? ' style="fill:' + a.c + '"' : '') + '>' + esc(a.n) + '</text>' : '');
-      }).join('');
-      // 빗금 무늬는 쓸 때만 넣는다(한 번에 한 도해만 뜨므로 id가 겹치지 않는다)
-      const defs = /class="lost"/.test(areas) ? '<defs><pattern id="chHatch" width="4.5" height="4.5"' +
-        ' patternUnits="userSpaceOnUse" patternTransform="rotate(45)">' +
-        '<line x1="0" y1="0" x2="0" y2="4.5" stroke="#d98a7a" stroke-width="1.3"/>' +
-        '</pattern></defs>' : '';
+
+      // 빗금 무늬는 쓸 때만
+      if (/class="lost"/.test(areas))
+        defs += '<pattern id="chHatch' + seq + '" width="4.5" height="4.5"' +
+          ' patternUnits="userSpaceOnUse" patternTransform="rotate(45)">' +
+          '<line x1="0" y1="0" x2="0" y2="4.5" stroke="#d98a7a" stroke-width="1.3"/></pattern>';
+
       // 부여·고구려는 한반도 밖(만주)에 있다. north:true면 위쪽을 더 보여 준다.
       const box = c.north ? '-20 -48 140 212' : '-14 -10 128 168';
       /* 주변 육지를 먼저 옅게 깔고 그 위에 한반도를 그린다. 그래야 부여·
          고구려가 만주 어디쯤인지 보인다(예전에는 허공에 떠 있었다).
          영역 칠하기는 **육지로 잘라 낸다**(clip-path) — 손으로 찍은 좌표가
-         바다로 번지는 일이 기하학적으로 불가능해진다. */
-      /* clipPath의 id는 문서에서 유일해야 한다. 한 화면에 지도가 둘 뜨면
-         (실제로 시험 중에 겪었다) 뒤엣것이 앞엣것의 clipPath를 가리켜
-         엉뚱하게 잘리거나 아예 안 잘린다. 그릴 때마다 번호를 붙인다. */
-      const cid = 'chLand' + (++mapSeq);
+         바다로 번지는 일이 기하학적으로 불가능해진다.
+         clipPath의 id는 문서에서 유일해야 한다. 한 화면에 지도가 둘 뜨면
+         뒤엣것이 앞엣것의 clipPath를 가리켜 엉뚱하게 잘린다. */
+      const cid = 'chLand' + seq;
       const clip = '<clipPath id="' + cid + '">' +
-        '<path d="' + KOREA_PATH + '"/><path d="' + MAINLAND_PATH + '"/>' +
-        '</clipPath>';
+        '<path d="' + KOREA_PATH + '"/><path d="' + MAINLAND_PATH + '"/></clipPath>';
       const svg = '<svg viewBox="' + box + '" xmlns="http://www.w3.org/2000/svg">' +
-        defs + clip +
+        '<defs>' + defs + clip + '</defs>' +
         '<path class="far" d="' + MAINLAND_PATH + '"/>' +
         '<path class="far isle" d="' + ISLE_PATH + '"/>' +
         '<path class="land" d="' + KOREA_PATH + '"/>' +
         (areas ? '<g clip-path="url(#' + cid + ')">' + areas + '</g>' : '') +
-        pins + '</svg>';
-      /* 대화창 안에서는 아무리 키워도 한계가 있다 — 한반도는 세로로 길고
-         대화창 위 자리는 넓고 낮다. 그래서 **눌러 크게 보기**를 함께 둔다
-         (서희 편의 큰 지도처럼). 단추로 감싸면 대화 넘기기(#dlg-stack의
-         pointerup)가 이걸 대사 넘김으로 세지 않는다 — 그쪽이 button을
-         건너뛰기 때문이다. */
+        anames + pins + '</svg>';
+      /* 지도는 도해 칸보다 크게 그린다. 넘치는 만큼은 손가락으로 위아래로
+         밀어 본다(.dlg-chart 가 overflow-y:auto). 누른 채 12px 넘게 움직이면
+         대사 넘김으로 세지 않으므로, 밀어도 대사가 넘어가지 않는다. */
       lastMap = c;
-      /* 전체보기 단추는 뺐다 — "그러지말고 그냥 조금 더 키우고 위아래
-         스크롤이 가능하게" 라는 요청. 지도를 키우고, 넘치는 만큼은
-         도해 칸 안에서 스크롤한다(.dlg-chart 가 overflow-y:auto 다).
-         대화 넘기기는 누른 채 12px 넘게 움직이면 스크롤로 보므로
-         지도를 밀어 내려도 대사가 넘어가지 않는다. */
       return '<div class="ch-map' + (leg ? '' : ' solo') + '">' + svg +
         (leg ? '<div class="leg">' + leg + '</div>' : '') + '</div>';
     },

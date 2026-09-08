@@ -514,11 +514,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=86"></script>
-<script src="assets/zoomwarn.js?v=86"></script>
-<script src="assets/map/map_component.js?v=86"></script>
-<script src="assets/chart.js?v=86"></script>
-<script src="assets/audio.js?v=86"></script>
+<script src="assets/errlog.js?v=87"></script>
+<script src="assets/zoomwarn.js?v=87"></script>
+<script src="assets/map/map_component.js?v=87"></script>
+<script src="assets/chart.js?v=87"></script>
+<script src="assets/audio.js?v=87"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -530,7 +530,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=86';   // 존댓말 전환
+const ART_V = '?v=87';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1414,8 +1414,12 @@ const NPC_DATA = {
       { who:'npc', t:'그렇다네. 도교와 불교의 생각이 함께 담겼지.' },
       { who:'doc', docImg:'assets/scenes/heritage_geumdong_daehyangno.jpg',
         t:'(백제 금동대향로. 능산리 절터에서 출토되었으며, 봉황과 용, 산봉우리와 신선, 동물들을 정교하게 새겨 도교와 불교의 세계관을 함께 담아낸 백제 금속 공예의 걸작이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
-      { who:'npc', t:'진흥왕과 손잡고 한강 하류를 되찾았으나…',
+      // 말끝을 흐리고 끝나 무슨 일인지 알 수 없었다(제보: "설명하다가 마네").
+      // 배신이라는 말을 성왕 입으로 분명히 하게 고친다.
+      { who:'npc', t:'진흥왕과 손잡고 한강 하류를 되찾았네. 헌데 그가 곧 그 땅마저 앗아 갔지.',
         chart:{ type:'vs', title:'나·제 동맹의 끝', left:{ n:'성왕', s:'상류를 되찾아 줌' }, right:{ n:'진흥왕', s:'하류까지 삼킴', win:true }, mid:'배신' } },
+      { who:'me', t:'함께 싸워 놓고… 등을 돌린 것입니까?' },
+      { who:'npc', t:'배신일세. 백이십 년을 이어 온 나·제 동맹이 그날로 끝났네.' },
       { who:'me', t:'그래서… 그 뒤 어찌 되셨습니까?' },
       { who:'npc', t:'분을 참지 못해 쳤으나, 관산성에서 목숨을 잃었네. 554년일세.' },
     ],
@@ -2035,38 +2039,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=86"></script>
-<script src="assets/streak.js?v=86"></script>
+<script src="assets/badges.js?v=87"></script>
+<script src="assets/streak.js?v=87"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=86"></script>
-  <script src="assets/fx.js?v=86"></script>
-  <script src="assets/deed.js?v=86"></script>
-  <script src="assets/inkwipe.js?v=86"></script>
-  <script src="assets/dash.js?v=86"></script>
-<script src="assets/juice.js?v=86"></script>
-  <script src="assets/difficulty.js?v=86"></script>
-  <script src="assets/nextauto.js?v=86"></script>
-<script src="assets/heroes_data.js?v=86"></script>
-<script src="assets/heroes.js?v=86"></script>
-<script src="assets/icons.js?v=86"></script>
-<script src="assets/srs.js?v=86"></script>
-<script src="assets/newsflash.js?v=86"></script>
-<script src="assets/timeline.js?v=86"></script>
-<script src="assets/journey.js?v=86"></script>
-<script src="assets/season.js?v=86"></script>
-<script src="assets/items.js?v=86"></script>
-  <script src="assets/gold.js?v=86"></script>
-  <script src="assets/ask.js?v=86"></script>
-  <script src="assets/ads.js?v=86"></script>
-  <script src="assets/energy.js?v=86"></script>
-  <script src="assets/daily.js?v=86"></script>
-  <script src="assets/unlock.js?v=86"></script>
-  <script src="assets/guide.js?v=86"></script>
-  <script src="assets/minigames.js?v=86"></script>
-  <script src="assets/quests.js?v=86"></script>
-  <script src="assets/offline.js?v=86"></script>
-  <script src="assets/telemetry.js?v=86"></script>
-<script src="assets/autowalk.js?v=86"></script>
+<script src="assets/rank.js?v=87"></script>
+  <script src="assets/fx.js?v=87"></script>
+  <script src="assets/deed.js?v=87"></script>
+  <script src="assets/inkwipe.js?v=87"></script>
+  <script src="assets/dash.js?v=87"></script>
+<script src="assets/juice.js?v=87"></script>
+  <script src="assets/difficulty.js?v=87"></script>
+  <script src="assets/nextauto.js?v=87"></script>
+<script src="assets/heroes_data.js?v=87"></script>
+<script src="assets/heroes.js?v=87"></script>
+<script src="assets/icons.js?v=87"></script>
+<script src="assets/srs.js?v=87"></script>
+<script src="assets/newsflash.js?v=87"></script>
+<script src="assets/timeline.js?v=87"></script>
+<script src="assets/journey.js?v=87"></script>
+<script src="assets/season.js?v=87"></script>
+<script src="assets/items.js?v=87"></script>
+  <script src="assets/gold.js?v=87"></script>
+  <script src="assets/ask.js?v=87"></script>
+  <script src="assets/ads.js?v=87"></script>
+  <script src="assets/energy.js?v=87"></script>
+  <script src="assets/daily.js?v=87"></script>
+  <script src="assets/unlock.js?v=87"></script>
+  <script src="assets/guide.js?v=87"></script>
+  <script src="assets/minigames.js?v=87"></script>
+  <script src="assets/quests.js?v=87"></script>
+  <script src="assets/offline.js?v=87"></script>
+  <script src="assets/telemetry.js?v=87"></script>
+<script src="assets/autowalk.js?v=87"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
