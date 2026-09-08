@@ -108,17 +108,17 @@
   <button id="skip">건너뛰기</button>
 </div>
 
-<script src="assets/items.js?v=85"></script>
-<script src="assets/heroes_data.js?v=85"></script>
-<script src="assets/icons.js?v=85"></script>
-<script src="assets/heroes.js?v=85"></script>
-<script src="assets/badges.js?v=85"></script>
-<script src="assets/rank.js?v=85"></script>
-<script src="assets/journey.js?v=85"></script>
-  <script src="assets/fx.js?v=85"></script>
-  <script src="assets/nextauto.js?v=85"></script>
-  <script src="assets/dash.js?v=85"></script>
-<script src="assets/season.js?v=85"></script>
+<script src="assets/items.js?v=86"></script>
+<script src="assets/heroes_data.js?v=86"></script>
+<script src="assets/icons.js?v=86"></script>
+<script src="assets/heroes.js?v=86"></script>
+<script src="assets/badges.js?v=86"></script>
+<script src="assets/rank.js?v=86"></script>
+<script src="assets/journey.js?v=86"></script>
+  <script src="assets/fx.js?v=86"></script>
+  <script src="assets/nextauto.js?v=86"></script>
+  <script src="assets/dash.js?v=86"></script>
+<script src="assets/season.js?v=86"></script>
 <script>
 /* ============ 엔딩 — 독서실에서 깨어난다 ============
 
@@ -229,10 +229,31 @@ document.addEventListener('keydown', (e) => {
 
 /* 가로모드 고정 — 다른 화면과 같은 처리 */
 const wrapEl = document.getElementById('wrap');
+/* 사파리 툴바에 가리는 만큼을 깎는다 — 자세한 까닭은 각 챕터의 같은 함수 주석에.
+   svw·svh는 "브라우저 UI가 펼쳐진 상태"의 크기라, 그것으로 깎으면 항상 보인다. */
+let __svProbe = null;
+function safeViewport(){
+  try {
+    if (!document.body) return null;
+    if (!__svProbe || !__svProbe.isConnected){
+      __svProbe = document.createElement('div');
+      __svProbe.style.cssText = 'position:fixed;top:0;left:0;width:100svw;height:100svh;' +
+        'visibility:hidden;pointer-events:none;z-index:-1';
+      document.body.appendChild(__svProbe);
+    }
+    const r = __svProbe.getBoundingClientRect();
+    return (r.width > 0 && r.height > 0) ? r : null;
+  } catch (e) { return null; }
+}
+function clampToSafe(w, h){
+  const sv = safeViewport();
+  if (sv){ w = Math.min(w, sv.width); h = Math.min(h, sv.height); }
+  return { w: Math.round(w), h: Math.round(h) };
+}
 function getViewportSize(){
   const vv = window.visualViewport;
-  if (vv && (vv.scale || 1) <= 1.01) return { w: vv.width, h: vv.height };
-  return { w: window.innerWidth, h: window.innerHeight };
+  if (vv && (vv.scale || 1) <= 1.01) return clampToSafe(vv.width, vv.height);
+  return clampToSafe(window.innerWidth, window.innerHeight);
 }
 function applyOrientation(){
   const { w: iw, h: ih } = getViewportSize();

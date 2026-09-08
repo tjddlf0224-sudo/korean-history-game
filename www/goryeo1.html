@@ -504,11 +504,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=85"></script>
-<script src="assets/zoomwarn.js?v=85"></script>
-<script src="assets/map/map_component.js?v=85"></script>
-<script src="assets/chart.js?v=85"></script>
-<script src="assets/audio.js?v=85"></script>
+<script src="assets/errlog.js?v=86"></script>
+<script src="assets/zoomwarn.js?v=86"></script>
+<script src="assets/map/map_component.js?v=86"></script>
+<script src="assets/chart.js?v=86"></script>
+<script src="assets/audio.js?v=86"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -520,12 +520,39 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=85';   // 존댓말 전환
+const ART_V = '?v=86';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
    그쪽이 실제 보이는 영역을 더 정확히 반영하므로 우선 사용한다. */
+/* 사파리 툴바에 가리는 만큼을 깎는다.
+   innerHeight·visualViewport는 툴바가 접혔을 때의 값을 그대로 줄 때가 있다.
+   그 값으로 #wrap을 키우면, 세로 모드에서 90도 돌아 있는 탓에 게임의
+   **오른쪽이 기기 아래쪽**으로 가서 툴바 밑에 깔린다 — 탐색 버튼이 딱 그
+   자리라 가려졌다(제보: "오른쪽 탐색버튼이 가려지는 거 보이지?").
+   svw·svh는 "브라우저 UI가 펼쳐진 상태"의 크기라, 그것으로 깎으면 항상 보인다.
+   svw/svh를 모르는 브라우저에서는 크기가 0으로 나오므로 그냥 넘어간다. */
+let __svProbe = null;
+function safeViewport(){
+  try {
+    if (!document.body) return null;
+    if (!__svProbe || !__svProbe.isConnected){
+      __svProbe = document.createElement('div');
+      __svProbe.style.cssText = 'position:fixed;top:0;left:0;width:100svw;height:100svh;' +
+        'visibility:hidden;pointer-events:none;z-index:-1';
+      document.body.appendChild(__svProbe);
+    }
+    const r = __svProbe.getBoundingClientRect();
+    return (r.width > 0 && r.height > 0) ? r : null;
+  } catch (e) { return null; }
+}
+function clampToSafe(w, h){
+  const sv = safeViewport();
+  if (sv){ w = Math.min(w, sv.width); h = Math.min(h, sv.height); }
+  return { w: Math.round(w), h: Math.round(h) };
+}
+
 function getViewportSize(){
   const vv = window.visualViewport;
   // 핀치줌이 걸리면 vv.width/height가 확대 배율만큼 줄어든다. 그 값을 그대로 쓰면
@@ -542,7 +569,7 @@ function getViewportSize(){
   const de = document.documentElement;
   if (de) cands.push([de.clientWidth, de.clientHeight]);
   if (window.screen) cands.push([screen.width, screen.height]);
-  for (const [w, h] of cands) if (w > 0 && h > 0) return { w, h };
+  for (const [w, h] of cands) if (w > 0 && h > 0) return clampToSafe(w, h);
   return null;   // 전부 0 — 예전 크기를 그대로 둔다
 }
 
@@ -1964,38 +1991,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=85"></script>
-<script src="assets/streak.js?v=85"></script>
+<script src="assets/badges.js?v=86"></script>
+<script src="assets/streak.js?v=86"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=85"></script>
-  <script src="assets/fx.js?v=85"></script>
-  <script src="assets/deed.js?v=85"></script>
-  <script src="assets/inkwipe.js?v=85"></script>
-  <script src="assets/dash.js?v=85"></script>
-<script src="assets/juice.js?v=85"></script>
-  <script src="assets/difficulty.js?v=85"></script>
-  <script src="assets/nextauto.js?v=85"></script>
-<script src="assets/heroes_data.js?v=85"></script>
-<script src="assets/heroes.js?v=85"></script>
-<script src="assets/icons.js?v=85"></script>
-<script src="assets/srs.js?v=85"></script>
-<script src="assets/newsflash.js?v=85"></script>
-<script src="assets/timeline.js?v=85"></script>
-<script src="assets/journey.js?v=85"></script>
-<script src="assets/season.js?v=85"></script>
-<script src="assets/items.js?v=85"></script>
-  <script src="assets/gold.js?v=85"></script>
-  <script src="assets/ask.js?v=85"></script>
-  <script src="assets/ads.js?v=85"></script>
-  <script src="assets/energy.js?v=85"></script>
-  <script src="assets/daily.js?v=85"></script>
-  <script src="assets/unlock.js?v=85"></script>
-  <script src="assets/guide.js?v=85"></script>
-  <script src="assets/minigames.js?v=85"></script>
-  <script src="assets/quests.js?v=85"></script>
-  <script src="assets/offline.js?v=85"></script>
-  <script src="assets/telemetry.js?v=85"></script>
-<script src="assets/autowalk.js?v=85"></script>
+<script src="assets/rank.js?v=86"></script>
+  <script src="assets/fx.js?v=86"></script>
+  <script src="assets/deed.js?v=86"></script>
+  <script src="assets/inkwipe.js?v=86"></script>
+  <script src="assets/dash.js?v=86"></script>
+<script src="assets/juice.js?v=86"></script>
+  <script src="assets/difficulty.js?v=86"></script>
+  <script src="assets/nextauto.js?v=86"></script>
+<script src="assets/heroes_data.js?v=86"></script>
+<script src="assets/heroes.js?v=86"></script>
+<script src="assets/icons.js?v=86"></script>
+<script src="assets/srs.js?v=86"></script>
+<script src="assets/newsflash.js?v=86"></script>
+<script src="assets/timeline.js?v=86"></script>
+<script src="assets/journey.js?v=86"></script>
+<script src="assets/season.js?v=86"></script>
+<script src="assets/items.js?v=86"></script>
+  <script src="assets/gold.js?v=86"></script>
+  <script src="assets/ask.js?v=86"></script>
+  <script src="assets/ads.js?v=86"></script>
+  <script src="assets/energy.js?v=86"></script>
+  <script src="assets/daily.js?v=86"></script>
+  <script src="assets/unlock.js?v=86"></script>
+  <script src="assets/guide.js?v=86"></script>
+  <script src="assets/minigames.js?v=86"></script>
+  <script src="assets/quests.js?v=86"></script>
+  <script src="assets/offline.js?v=86"></script>
+  <script src="assets/telemetry.js?v=86"></script>
+<script src="assets/autowalk.js?v=86"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
