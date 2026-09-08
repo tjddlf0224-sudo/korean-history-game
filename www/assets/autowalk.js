@@ -145,7 +145,22 @@ window.Auto = (function(){
     const z = ZONES[World.zone];
     if (!z) return null;
 
-    for (const n of (z.npcs || [])){
+    /* 어느 차례로 갈 것인가.
+       예전에는 ZONES의 npcs 배열 순서로 갔는데, 화면 위 '다음 목표'는
+       챕터가 따로 정한 차례를 쓴다. 둘이 어긋나면 목표는 '덩이쇠 상인'인데
+       발은 우륵에게 가 있는 꼴이 된다(제보: "auto모드로는 왜 우륵 먼저 가?").
+       그래서 챕터가 알려 준 차례(window.GOAL_ORDER)를 먼저 따르고,
+       그 목록에 없는 인물은 뒤에 붙여 npcs 순서대로 본다. */
+    const byId = {};
+    for (const n of (z.npcs || [])) byId[n.id] = n;
+    const ordered = [];
+    for (const row of (window.GOAL_ORDER || [])){
+      const id = Array.isArray(row) ? row[0] : row;
+      if (byId[id]) { ordered.push(byId[id]); byId[id] = null; }
+    }
+    for (const n of (z.npcs || [])) if (byId[n.id]) ordered.push(n);
+
+    for (const n of ordered){
       if (unreachable.has('npc:' + n.id)) continue;   // 가 봤는데 못 닿은 곳
       let key = null;
       try { key = Stage.keyFor(n.id); } catch(e){}
