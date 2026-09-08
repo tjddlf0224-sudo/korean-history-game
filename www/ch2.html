@@ -490,11 +490,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=80"></script>
-<script src="assets/zoomwarn.js?v=80"></script>
-<script src="assets/map/map_component.js?v=80"></script>
-<script src="assets/chart.js?v=80"></script>
-<script src="assets/audio.js?v=80"></script>
+<script src="assets/errlog.js?v=81"></script>
+<script src="assets/zoomwarn.js?v=81"></script>
+<script src="assets/map/map_component.js?v=81"></script>
+<script src="assets/chart.js?v=81"></script>
+<script src="assets/audio.js?v=81"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -506,7 +506,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=80';   // 존댓말 전환
+const ART_V = '?v=81';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -614,25 +614,25 @@ const ZONES = {
     { x0: 1304, y0: 72, x1: 1336, y1: 768 },
     { x0: 8, y0: 104, x1: 72, y1: 312 },
     { x0: 0, y0: 184, x1: 8, y1: 280 },
-    { x0: 168, y0: 184, x1: 312, y1: 232 },
-    { x0: 392, y0: 184, x1: 520, y1: 232 },
-    { x0: 616, y0: 184, x1: 760, y1: 232 },
-    { x0: 856, y0: 184, x1: 1000, y1: 248 },
-    { x0: 1064, y0: 184, x1: 1208, y1: 248 },
-    { x0: 168, y0: 296, x1: 312, y1: 344 },
-    { x0: 616, y0: 296, x1: 760, y1: 312 },
+    { x0: 184, y0: 200, x1: 296, y1: 216 },
+    { x0: 408, y0: 200, x1: 504, y1: 216 },
+    { x0: 632, y0: 200, x1: 744, y1: 232 },
+    { x0: 1080, y0: 200, x1: 1192, y1: 232 },
+    { x0: 856, y0: 216, x1: 968, y1: 232 },
+    { x0: 184, y0: 296, x1: 296, y1: 312 },
+    { x0: 632, y0: 296, x1: 744, y1: 312 },
     { x0: 8, y0: 312, x1: 56, y1: 768 },
-    { x0: 408, y0: 312, x1: 440, y1: 344 },
-    { x0: 472, y0: 312, x1: 520, y1: 344 },
+    { x0: 408, y0: 312, x1: 424, y1: 344 },
+    { x0: 488, y0: 312, x1: 504, y1: 344 },
     { x0: 872, y0: 312, x1: 904, y1: 344 },
     { x0: 936, y0: 312, x1: 968, y1: 344 },
     { x0: 1080, y0: 312, x1: 1112, y1: 344 },
     { x0: 1160, y0: 312, x1: 1192, y1: 344 },
-    { x0: 168, y0: 440, x1: 312, y1: 488 },
-    { x0: 392, y0: 440, x1: 520, y1: 488 },
-    { x0: 616, y0: 440, x1: 760, y1: 488 },
-    { x0: 856, y0: 440, x1: 968, y1: 488 },
-    { x0: 1096, y0: 440, x1: 1208, y1: 488 },
+    { x0: 184, y0: 456, x1: 296, y1: 472 },
+    { x0: 408, y0: 456, x1: 504, y1: 472 },
+    { x0: 632, y0: 456, x1: 744, y1: 472 },
+    { x0: 872, y0: 456, x1: 952, y1: 472 },
+    { x0: 1096, y0: 456, x1: 1192, y1: 472 },
     { x0: 56, y0: 488, x1: 72, y1: 600 },
     { x0: 184, y0: 552, x1: 216, y1: 584 },
     { x0: 264, y0: 552, x1: 296, y1: 584 },
@@ -2408,39 +2408,39 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
-<script src="assets/badges.js?v=80"></script>
-<script src="assets/streak.js?v=80"></script>
+<script src="assets/badges.js?v=81"></script>
+<script src="assets/streak.js?v=81"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=80"></script>
-  <script src="assets/fx.js?v=80"></script>
-  <script src="assets/deed.js?v=80"></script>
-  <script src="assets/inkwipe.js?v=80"></script>
-  <script src="assets/dash.js?v=80"></script>
-<script src="assets/juice.js?v=80"></script>
-  <script src="assets/difficulty.js?v=80"></script>
-  <script src="assets/nextauto.js?v=80"></script>
-<script src="assets/heroes_data.js?v=80"></script>
-<script src="assets/heroes.js?v=80"></script>
-<script src="assets/icons.js?v=80"></script>
-<script src="assets/srs.js?v=80"></script>
-<script src="assets/newsflash.js?v=80"></script>
-<script src="assets/timeline.js?v=80"></script>
-<script src="assets/journey.js?v=80"></script>
-<script src="assets/season.js?v=80"></script>
-<script src="assets/items.js?v=80"></script>
-  <script src="assets/gold.js?v=80"></script>
-  <script src="assets/ask.js?v=80"></script>
-  <script src="assets/ads.js?v=80"></script>
-  <script src="assets/energy.js?v=80"></script>
-  <script src="assets/daily.js?v=80"></script>
-  <script src="assets/unlock.js?v=80"></script>
-  <script src="assets/guide.js?v=80"></script>
-  <script src="assets/minigames.js?v=80"></script>
-  <script src="assets/quests.js?v=80"></script>
-  <script src="assets/offline.js?v=80"></script>
-  <script src="assets/telemetry.js?v=80"></script>
-<script src="assets/autowalk.js?v=80"></script>
-<script src="assets/boss.js?v=80"></script>
+<script src="assets/rank.js?v=81"></script>
+  <script src="assets/fx.js?v=81"></script>
+  <script src="assets/deed.js?v=81"></script>
+  <script src="assets/inkwipe.js?v=81"></script>
+  <script src="assets/dash.js?v=81"></script>
+<script src="assets/juice.js?v=81"></script>
+  <script src="assets/difficulty.js?v=81"></script>
+  <script src="assets/nextauto.js?v=81"></script>
+<script src="assets/heroes_data.js?v=81"></script>
+<script src="assets/heroes.js?v=81"></script>
+<script src="assets/icons.js?v=81"></script>
+<script src="assets/srs.js?v=81"></script>
+<script src="assets/newsflash.js?v=81"></script>
+<script src="assets/timeline.js?v=81"></script>
+<script src="assets/journey.js?v=81"></script>
+<script src="assets/season.js?v=81"></script>
+<script src="assets/items.js?v=81"></script>
+  <script src="assets/gold.js?v=81"></script>
+  <script src="assets/ask.js?v=81"></script>
+  <script src="assets/ads.js?v=81"></script>
+  <script src="assets/energy.js?v=81"></script>
+  <script src="assets/daily.js?v=81"></script>
+  <script src="assets/unlock.js?v=81"></script>
+  <script src="assets/guide.js?v=81"></script>
+  <script src="assets/minigames.js?v=81"></script>
+  <script src="assets/quests.js?v=81"></script>
+  <script src="assets/offline.js?v=81"></script>
+  <script src="assets/telemetry.js?v=81"></script>
+<script src="assets/autowalk.js?v=81"></script>
+<script src="assets/boss.js?v=81"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
