@@ -504,11 +504,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=84"></script>
-<script src="assets/zoomwarn.js?v=84"></script>
-<script src="assets/map/map_component.js?v=84"></script>
-<script src="assets/chart.js?v=84"></script>
-<script src="assets/audio.js?v=84"></script>
+<script src="assets/errlog.js?v=85"></script>
+<script src="assets/zoomwarn.js?v=85"></script>
+<script src="assets/map/map_component.js?v=85"></script>
+<script src="assets/chart.js?v=85"></script>
+<script src="assets/audio.js?v=85"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -520,7 +520,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=84';   // 존댓말 전환
+const ART_V = '?v=85';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -719,19 +719,24 @@ const ZONES = {
     img: 'assets/scenes/gaehang1_ganghwa.png', label: '강화도 연무당',
     spawn: { x: 688, y: 470 },
     barriers: [
-    { x0: 327, y0: 2, x1: 1008, y1: 218 },
-    { x0: 1072, y0: 2, x1: 1374, y1: 563 },
-    { x0: 1097, y0: 142, x1: 1228, y1: 233 },
-    { x0: 1157, y0: 462, x1: 1268, y1: 538 },
-    { x0: 1092, y0: 297, x1: 1128, y1: 533 },
-    { x0: 2, y0: 152, x1: 233, y1: 608 },
-    { x0: 82, y0: 252, x1: 288, y1: 333 },
-    { x0: 82, y0: 397, x1: 268, y1: 473 },
-    { x0: 242, y0: 477, x1: 328, y1: 548 },
-    { x0: 2, y0: 547, x1: 333, y1: 618 },
-    { x0: 2, y0: 557, x1: 398, y1: 766 },
-    { x0: 402, y0: 587, x1: 898, y1: 766 },
-    { x0: 902, y0: 557, x1: 1374, y1: 766 },
+    { x0: 328, y0: 8, x1: 360, y1: 24 },
+    { x0: 376, y0: 8, x1: 1016, y1: 24 },
+    { x0: 1064, y0: 8, x1: 1368, y1: 168 },
+    { x0: 376, y0: 24, x1: 1000, y1: 200 },
+    { x0: 8, y0: 152, x1: 280, y1: 232 },
+    { x0: 1096, y0: 168, x1: 1368, y1: 200 },
+    { x0: 1256, y0: 200, x1: 1368, y1: 552 },
+    { x0: 8, y0: 232, x1: 232, y1: 248 },
+    { x0: 8, y0: 248, x1: 184, y1: 344 },
+    { x0: 184, y0: 280, x1: 280, y1: 328 },
+    { x0: 184, y0: 328, x1: 232, y1: 344 },
+    { x0: 8, y0: 344, x1: 152, y1: 456 },
+    { x0: 152, y0: 408, x1: 248, y1: 456 },
+    { x0: 8, y0: 456, x1: 136, y1: 760 },
+    { x0: 1112, y0: 472, x1: 1256, y1: 552 },
+    { x0: 136, y0: 504, x1: 232, y1: 760 },
+    { x0: 248, y0: 504, x1: 328, y1: 552 },
+    { x0: 232, y0: 600, x1: 1368, y1: 760 },
   ],
     npcs: [
       { id:'daewongun', name:'흥선대원군', x:330, y:250, img:'assets/portraits/daewongun.png', look:{ role:'king', body:'#4a4a58', accent:'#c9a24a' } },
@@ -1990,38 +1995,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=84"></script>
-<script src="assets/streak.js?v=84"></script>
+<script src="assets/badges.js?v=85"></script>
+<script src="assets/streak.js?v=85"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=84"></script>
-  <script src="assets/fx.js?v=84"></script>
-  <script src="assets/deed.js?v=84"></script>
-  <script src="assets/inkwipe.js?v=84"></script>
-  <script src="assets/dash.js?v=84"></script>
-<script src="assets/juice.js?v=84"></script>
-  <script src="assets/difficulty.js?v=84"></script>
-  <script src="assets/nextauto.js?v=84"></script>
-<script src="assets/heroes_data.js?v=84"></script>
-<script src="assets/heroes.js?v=84"></script>
-<script src="assets/icons.js?v=84"></script>
-<script src="assets/srs.js?v=84"></script>
-<script src="assets/newsflash.js?v=84"></script>
-<script src="assets/timeline.js?v=84"></script>
-<script src="assets/journey.js?v=84"></script>
-<script src="assets/season.js?v=84"></script>
-<script src="assets/items.js?v=84"></script>
-  <script src="assets/gold.js?v=84"></script>
-  <script src="assets/ask.js?v=84"></script>
-  <script src="assets/ads.js?v=84"></script>
-  <script src="assets/energy.js?v=84"></script>
-  <script src="assets/daily.js?v=84"></script>
-  <script src="assets/unlock.js?v=84"></script>
-  <script src="assets/guide.js?v=84"></script>
-  <script src="assets/minigames.js?v=84"></script>
-  <script src="assets/quests.js?v=84"></script>
-  <script src="assets/offline.js?v=84"></script>
-  <script src="assets/telemetry.js?v=84"></script>
-<script src="assets/autowalk.js?v=84"></script>
+<script src="assets/rank.js?v=85"></script>
+  <script src="assets/fx.js?v=85"></script>
+  <script src="assets/deed.js?v=85"></script>
+  <script src="assets/inkwipe.js?v=85"></script>
+  <script src="assets/dash.js?v=85"></script>
+<script src="assets/juice.js?v=85"></script>
+  <script src="assets/difficulty.js?v=85"></script>
+  <script src="assets/nextauto.js?v=85"></script>
+<script src="assets/heroes_data.js?v=85"></script>
+<script src="assets/heroes.js?v=85"></script>
+<script src="assets/icons.js?v=85"></script>
+<script src="assets/srs.js?v=85"></script>
+<script src="assets/newsflash.js?v=85"></script>
+<script src="assets/timeline.js?v=85"></script>
+<script src="assets/journey.js?v=85"></script>
+<script src="assets/season.js?v=85"></script>
+<script src="assets/items.js?v=85"></script>
+  <script src="assets/gold.js?v=85"></script>
+  <script src="assets/ask.js?v=85"></script>
+  <script src="assets/ads.js?v=85"></script>
+  <script src="assets/energy.js?v=85"></script>
+  <script src="assets/daily.js?v=85"></script>
+  <script src="assets/unlock.js?v=85"></script>
+  <script src="assets/guide.js?v=85"></script>
+  <script src="assets/minigames.js?v=85"></script>
+  <script src="assets/quests.js?v=85"></script>
+  <script src="assets/offline.js?v=85"></script>
+  <script src="assets/telemetry.js?v=85"></script>
+<script src="assets/autowalk.js?v=85"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
