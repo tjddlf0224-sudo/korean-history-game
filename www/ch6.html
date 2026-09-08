@@ -507,11 +507,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=83"></script>
-<script src="assets/zoomwarn.js?v=83"></script>
-<script src="assets/map/map_component.js?v=83"></script>
-<script src="assets/chart.js?v=83"></script>
-<script src="assets/audio.js?v=83"></script>
+<script src="assets/errlog.js?v=84"></script>
+<script src="assets/zoomwarn.js?v=84"></script>
+<script src="assets/map/map_component.js?v=84"></script>
+<script src="assets/chart.js?v=84"></script>
+<script src="assets/audio.js?v=84"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -523,7 +523,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=83';   // 존댓말 전환
+const ART_V = '?v=84';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -647,7 +647,48 @@ const ZONES = {
   apttul: {
     img: 'assets/scenes/ch6_apttul.png', label: '근정전 앞뜰',
     spawn: { x: 688, y: 200 },
-    barriers: [],
+    barriers: [
+    { x0: 1144, y0: 8, x1: 1160, y1: 40 },
+    { x0: 200, y0: 24, x1: 216, y1: 88 },
+    { x0: 1160, y0: 24, x1: 1176, y1: 72 },
+    { x0: 184, y0: 72, x1: 200, y1: 120 },
+    { x0: 1176, y0: 72, x1: 1192, y1: 120 },
+    { x0: 168, y0: 104, x1: 184, y1: 168 },
+    { x0: 1192, y0: 104, x1: 1208, y1: 168 },
+    { x0: 152, y0: 152, x1: 168, y1: 216 },
+    { x0: 440, y0: 152, x1: 616, y1: 168 },
+    { x0: 776, y0: 152, x1: 952, y1: 168 },
+    { x0: 1208, y0: 152, x1: 1224, y1: 200 },
+    { x0: 1224, y0: 184, x1: 1240, y1: 248 },
+    { x0: 136, y0: 200, x1: 152, y1: 248 },
+    { x0: 376, y0: 216, x1: 616, y1: 232 },
+    { x0: 776, y0: 216, x1: 1000, y1: 232 },
+    { x0: 120, y0: 232, x1: 136, y1: 296 },
+    { x0: 1240, y0: 248, x1: 1256, y1: 312 },
+    { x0: 104, y0: 296, x1: 120, y1: 328 },
+    { x0: 1256, y0: 296, x1: 1272, y1: 344 },
+    { x0: 88, y0: 312, x1: 104, y1: 408 },
+    { x0: 1272, y0: 328, x1: 1288, y1: 360 },
+    { x0: 1288, y0: 344, x1: 1304, y1: 472 },
+    { x0: 72, y0: 392, x1: 88, y1: 456 },
+    { x0: 56, y0: 456, x1: 72, y1: 520 },
+    { x0: 1304, y0: 456, x1: 1320, y1: 520 },
+    { x0: 40, y0: 504, x1: 56, y1: 584 },
+    { x0: 1320, y0: 504, x1: 1336, y1: 552 },
+    { x0: 1336, y0: 536, x1: 1352, y1: 584 },
+    { x0: 24, y0: 568, x1: 40, y1: 744 },
+    { x0: 1352, y0: 568, x1: 1368, y1: 696 },
+    { x0: 8, y0: 648, x1: 24, y1: 712 },
+    { x0: 1368, y0: 648, x1: 1376, y1: 680 },
+    { x0: 40, y0: 680, x1: 568, y1: 712 },
+    { x0: 824, y0: 680, x1: 1352, y1: 696 },
+    { x0: 824, y0: 696, x1: 840, y1: 768 },
+    { x0: 56, y0: 712, x1: 72, y1: 728 },
+    { x0: 104, y0: 712, x1: 120, y1: 728 },
+    { x0: 376, y0: 712, x1: 568, y1: 728 },
+    { x0: 40, y0: 728, x1: 56, y1: 744 },
+    { x0: 552, y0: 728, x1: 568, y1: 768 },
+  ],
     npcs: [
       { id: 'seonjo', name: '선조', x: 688, y: 330, img: 'assets/portraits/seonjo.png', look: { role: 'king', body: '#7a2f3d', accent: '#e0b94a' } },
       { id: 'hwangyungil', name: '황윤길', x: 400, y: 470, img: 'assets/portraits/hwangyungil.png', look: { role: 'scholar', body: '#5a3a3a', accent: '#d8c48a' } },
@@ -655,18 +696,80 @@ const ZONES = {
     ],
     exits: [
       { rect:{x0:600,y0:0,x1:790,y1:60}, to:'jojeong', spawn:{x:690,y:660}, label:'회의장으로' },
-      { rect:{x0:600,y0:710,x1:790,y1:BG_H}, to:'doseong', spawn:{x:688,y:160}, label:'도성 거리로' },
+      { rect:{x0:600,y0:710,x1:790,y1:BG_H}, to:'doseong', spawn:{x:848,y:168}, label:'도성 거리로' },
     ],
   },
   doseong: {
     img: 'assets/scenes/ch6_doseong.png', label: '한양 도성 거리',
     spawn: { x: 688, y: 200 },
-    barriers: [],
+    barriers: [
+    { x0: 584, y0: 8, x1: 648, y1: 136 },
+    { x0: 936, y0: 8, x1: 952, y1: 136 },
+    { x0: 0, y0: 24, x1: 584, y1: 136 },
+    { x0: 648, y0: 24, x1: 760, y1: 136 },
+    { x0: 952, y0: 24, x1: 1376, y1: 136 },
+    { x0: 152, y0: 136, x1: 456, y1: 152 },
+    { x0: 184, y0: 152, x1: 456, y1: 200 },
+    { x0: 184, y0: 200, x1: 440, y1: 216 },
+    { x0: 184, y0: 216, x1: 296, y1: 248 },
+    { x0: 328, y0: 216, x1: 440, y1: 232 },
+    { x0: 488, y0: 216, x1: 568, y1: 232 },
+    { x0: 296, y0: 232, x1: 424, y1: 248 },
+    { x0: 984, y0: 280, x1: 1240, y1: 296 },
+    { x0: 984, y0: 296, x1: 1000, y1: 424 },
+    { x0: 1016, y0: 296, x1: 1048, y1: 312 },
+    { x0: 1224, y0: 296, x1: 1240, y1: 328 },
+    { x0: 1032, y0: 312, x1: 1048, y1: 408 },
+    { x0: 1208, y0: 312, x1: 1224, y1: 616 },
+    { x0: 0, y0: 328, x1: 408, y1: 344 },
+    { x0: 0, y0: 344, x1: 392, y1: 360 },
+    { x0: 136, y0: 360, x1: 168, y1: 376 },
+    { x0: 152, y0: 376, x1: 168, y1: 408 },
+    { x0: 1144, y0: 376, x1: 1208, y1: 392 },
+    { x0: 1224, y0: 376, x1: 1336, y1: 408 },
+    { x0: 136, y0: 392, x1: 152, y1: 424 },
+    { x0: 1048, y0: 392, x1: 1144, y1: 408 },
+    { x0: 1336, y0: 392, x1: 1352, y1: 504 },
+    { x0: 120, y0: 408, x1: 136, y1: 456 },
+    { x0: 1176, y0: 408, x1: 1208, y1: 456 },
+    { x0: 1224, y0: 408, x1: 1256, y1: 424 },
+    { x0: 1272, y0: 408, x1: 1336, y1: 424 },
+    { x0: 1224, y0: 424, x1: 1240, y1: 600 },
+    { x0: 1256, y0: 424, x1: 1304, y1: 520 },
+    { x0: 1320, y0: 424, x1: 1336, y1: 584 },
+    { x0: 104, y0: 440, x1: 120, y1: 520 },
+    { x0: 1192, y0: 456, x1: 1208, y1: 504 },
+    { x0: 1304, y0: 472, x1: 1320, y1: 584 },
+    { x0: 1240, y0: 488, x1: 1256, y1: 536 },
+    { x0: 1352, y0: 488, x1: 1368, y1: 568 },
+    { x0: 88, y0: 504, x1: 104, y1: 616 },
+    { x0: 328, y0: 504, x1: 344, y1: 584 },
+    { x0: 984, y0: 504, x1: 1000, y1: 616 },
+    { x0: 1272, y0: 520, x1: 1304, y1: 552 },
+    { x0: 1336, y0: 520, x1: 1352, y1: 584 },
+    { x0: 312, y0: 536, x1: 328, y1: 616 },
+    { x0: 1256, y0: 536, x1: 1272, y1: 552 },
+    { x0: 296, y0: 552, x1: 312, y1: 616 },
+    { x0: 1288, y0: 552, x1: 1304, y1: 600 },
+    { x0: 104, y0: 568, x1: 296, y1: 616 },
+    { x0: 1240, y0: 568, x1: 1288, y1: 600 },
+    { x0: 0, y0: 584, x1: 88, y1: 616 },
+    { x0: 1096, y0: 584, x1: 1176, y1: 600 },
+    { x0: 1000, y0: 600, x1: 1112, y1: 616 },
+    { x0: 1176, y0: 600, x1: 1208, y1: 616 },
+    { x0: 0, y0: 728, x1: 1376, y1: 744 },
+    { x0: 72, y0: 744, x1: 168, y1: 760 },
+    { x0: 328, y0: 744, x1: 408, y1: 760 },
+    { x0: 616, y0: 744, x1: 696, y1: 760 },
+    { x0: 792, y0: 744, x1: 888, y1: 760 },
+  ],
     npcs: [
       { id: 'gunjol', name: '늙은 군졸', x: 688, y: 440, img: 'assets/portraits/gunjol.png', look: { role: 'commoner', body: '#5a5a4a', accent: '#8a7a5a' } },
     ],
     exits: [
-      { rect:{x0:600,y0:0,x1:790,y1:60}, to:'apttul', spawn:{x:688,y:660}, label:'앞뜰로' },
+      // 출구가 담장 위에 얹혀 있었다(제보). 홍살문 기둥 사이로 트인 곳은
+    // x 776~920 한 자리뿐이라 거기로 옮긴다.
+    { rect:{x0:768,y0:0,x1:928,y1:56}, to:'apttul', spawn:{x:688,y:660}, label:'앞뜰로' },
     ],
   },
 };
@@ -1897,38 +2000,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=83"></script>
-<script src="assets/streak.js?v=83"></script>
+<script src="assets/badges.js?v=84"></script>
+<script src="assets/streak.js?v=84"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=83"></script>
-  <script src="assets/fx.js?v=83"></script>
-  <script src="assets/deed.js?v=83"></script>
-  <script src="assets/inkwipe.js?v=83"></script>
-  <script src="assets/dash.js?v=83"></script>
-<script src="assets/juice.js?v=83"></script>
-  <script src="assets/difficulty.js?v=83"></script>
-  <script src="assets/nextauto.js?v=83"></script>
-<script src="assets/heroes_data.js?v=83"></script>
-<script src="assets/heroes.js?v=83"></script>
-<script src="assets/icons.js?v=83"></script>
-<script src="assets/srs.js?v=83"></script>
-<script src="assets/newsflash.js?v=83"></script>
-<script src="assets/timeline.js?v=83"></script>
-<script src="assets/journey.js?v=83"></script>
-<script src="assets/season.js?v=83"></script>
-<script src="assets/items.js?v=83"></script>
-  <script src="assets/gold.js?v=83"></script>
-  <script src="assets/ask.js?v=83"></script>
-  <script src="assets/ads.js?v=83"></script>
-  <script src="assets/energy.js?v=83"></script>
-  <script src="assets/daily.js?v=83"></script>
-  <script src="assets/unlock.js?v=83"></script>
-  <script src="assets/guide.js?v=83"></script>
-  <script src="assets/minigames.js?v=83"></script>
-  <script src="assets/quests.js?v=83"></script>
-  <script src="assets/offline.js?v=83"></script>
-  <script src="assets/telemetry.js?v=83"></script>
-<script src="assets/autowalk.js?v=83"></script>
+<script src="assets/rank.js?v=84"></script>
+  <script src="assets/fx.js?v=84"></script>
+  <script src="assets/deed.js?v=84"></script>
+  <script src="assets/inkwipe.js?v=84"></script>
+  <script src="assets/dash.js?v=84"></script>
+<script src="assets/juice.js?v=84"></script>
+  <script src="assets/difficulty.js?v=84"></script>
+  <script src="assets/nextauto.js?v=84"></script>
+<script src="assets/heroes_data.js?v=84"></script>
+<script src="assets/heroes.js?v=84"></script>
+<script src="assets/icons.js?v=84"></script>
+<script src="assets/srs.js?v=84"></script>
+<script src="assets/newsflash.js?v=84"></script>
+<script src="assets/timeline.js?v=84"></script>
+<script src="assets/journey.js?v=84"></script>
+<script src="assets/season.js?v=84"></script>
+<script src="assets/items.js?v=84"></script>
+  <script src="assets/gold.js?v=84"></script>
+  <script src="assets/ask.js?v=84"></script>
+  <script src="assets/ads.js?v=84"></script>
+  <script src="assets/energy.js?v=84"></script>
+  <script src="assets/daily.js?v=84"></script>
+  <script src="assets/unlock.js?v=84"></script>
+  <script src="assets/guide.js?v=84"></script>
+  <script src="assets/minigames.js?v=84"></script>
+  <script src="assets/quests.js?v=84"></script>
+  <script src="assets/offline.js?v=84"></script>
+  <script src="assets/telemetry.js?v=84"></script>
+<script src="assets/autowalk.js?v=84"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
