@@ -168,6 +168,7 @@ window.Chart = (function(){
        재 보니 도해가 쓸 수 있는 높이는 236px인데 147px만 쓰고 있었고,
        범례는 378px 폭을 차지하면서 내용은 39px 높이뿐이라 옆이 텅 비었다.
        --dlg-max-h 는 게임 높이의 80%다. 그 60%면 대략 화면의 절반이다. */
+    .ch-map .mfit { flex:none; }
     .ch-map svg { flex:none; height:calc(var(--dlg-max-h, 320px) * 1.28); width:auto;
       display:block; }
     /* 범례가 없으면 지도만 있는 것이니 가운데로 크게 — 옆이 비면 허전하다 */
@@ -461,7 +462,10 @@ window.Chart = (function(){
       const foc = fy === null ? '' :
         ' data-focus="' + ((fy - BY0) / (BY1 - BY0)).toFixed(4) + '"';
       if (fy !== null) focusSoon();
-      return '<div class="ch-map' + (leg ? '' : ' solo') + '"' + foc + '>' + svg +
+      /* SVG를 div로 감싼다. SVG 원소에는 offsetTop·offsetHeight가 없어
+         자리를 잴 수가 없다 — 첫 판이 그래서 조용히 어긋났다. */
+      return '<div class="ch-map' + (leg ? '' : ' solo') + '"' + foc + '>' +
+        '<div class="mfit">' + svg + '</div>' +
         (leg ? '<div class="leg">' + leg + '</div>' : '') + '</div>';
     },
 
@@ -543,25 +547,37 @@ window.Chart = (function(){
      챕터 서른여섯 곳의 붙이는 코드를 건드리지 않으려고 이렇게 한다 —
      drawChart()가 문자열만 돌려주기 때문에 여기서 DOM을 잡을 수가 없다. */
   let focusQueued = false;
+  /* 화면 좌표(getBoundingClientRect)는 쓸 수 없다 — 세로 모드에서는 #wrap이
+     90도 돌아 있어 가로세로가 뒤바뀐 값이 나온다. offsetTop·offsetHeight는
+     변형과 무관한 배치 값이라 회전이 걸려도 그대로다. */
+  function offTop(node){
+    let t = 0;
+    while (node){ t += node.offsetTop; node = node.offsetParent; }
+    return t;
+  }
+  function applyFocus(){
+    for (const el of document.querySelectorAll('.ch-map[data-focus]')){
+      const r = parseFloat(el.getAttribute('data-focus'));
+      const box = el.querySelector('.mfit');
+      if (!box || !(r >= 0)){ el.removeAttribute('data-focus'); continue; }
+      let sc = el.parentElement;
+      while (sc && sc.scrollHeight <= sc.clientHeight + 2) sc = sc.parentElement;
+      if (!sc) continue;              // 아직 자리가 안 잡혔다 — 다음 기회에
+      const top = offTop(box) - offTop(sc);
+      const want = top + box.offsetHeight * r - sc.clientHeight / 2;
+      sc.scrollTop = Math.max(0, Math.min(sc.scrollHeight - sc.clientHeight, want));
+      el.removeAttribute('data-focus');
+    }
+  }
   function focusSoon(){
-    if (focusQueued || typeof requestAnimationFrame !== 'function') return;
-    focusQueued = true;
-    requestAnimationFrame(function(){
-      focusQueued = false;
-      const list = document.querySelectorAll('.ch-map[data-focus]');
-      for (const el of list){
-        const r = parseFloat(el.getAttribute('data-focus'));
-        el.removeAttribute('data-focus');
-        const svg = el.querySelector('svg');
-        if (!svg || !(r >= 0)) continue;
-        let sc = el.parentElement;
-        while (sc && sc.scrollHeight <= sc.clientHeight + 2) sc = sc.parentElement;
-        if (!sc) continue;
-        const top = svg.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop;
-        const want = top + svg.offsetHeight * r - sc.clientHeight / 2;
-        sc.scrollTop = Math.max(0, Math.min(sc.scrollHeight - sc.clientHeight, want));
-      }
-    });
+    if (typeof requestAnimationFrame !== 'function') return;
+    if (!focusQueued){
+      focusQueued = true;
+      requestAnimationFrame(function(){ focusQueued = false; applyFocus(); });
+    }
+    // 글꼴이 늦게 오면 높이가 한 번 더 바뀐다. 두 번 더 확인한다.
+    setTimeout(applyFocus, 80);
+    setTimeout(applyFocus, 260);
   }
 
   /* 이름으로 부르는 도해를 여기 쌓는다. 여러 챕터가 같은 그림을 쓸 때만 등록한다 —
