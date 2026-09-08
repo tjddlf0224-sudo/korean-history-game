@@ -85,6 +85,8 @@ def parse_chapter(path):
         return None
     j = balanced(s, s.find('{', i), '{', '}')
     body = s[s.find('{', i) + 1:j]
+    # BG_W·BG_H를 숫자로. 안 그러면 그 항목이 조용히 빠진다.
+    body = body.replace('BG_W', str(int(bw))).replace('BG_H', str(int(bh)))
 
     zones = {}
     # 최상위 키만 — 두 칸 들여쓰기로 시작하는 `이름: {`

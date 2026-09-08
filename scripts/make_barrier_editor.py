@@ -91,6 +91,10 @@ def parse(path):
     i = s.find('const ZONES = {')
     end = balanced(s, s.find('{', i))
     body = s[s.find('{', i) + 1:end]
+    # BG_W·BG_H를 숫자로 바꿔 놓는다. 이걸 안 하면 x1:BG_W 같은 항목이
+    # 숫자로 안 읽혀 통째로 버려진다 — ch6 조정 회의장의 문이 편집기에서
+    # 사라진 이유가 이것이었다(제보: "조정회의장에 출입문이 없어?").
+    body = body.replace('BG_W', str(int(bw))).replace('BG_H', str(int(bh)))
 
     out = []
     for m in re.finditer(r'\n  (\w+):\s*\{', body):
