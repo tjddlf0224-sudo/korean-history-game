@@ -201,12 +201,16 @@ window.Chart = (function(){
     /* 글자에 어두운 테를 두른다(paint-order). 영역 위든 바다 위든 읽힌다 —
        겹쳐 보이던 지명이 이것만으로도 크게 나아진다. */
     .ch-map .an, .ch-map .pn { paint-order:stroke fill; stroke:#17110a;
-      stroke-width:2.2px; stroke-linejoin:round; }
-    .ch-map .an { font-size:8.2px; fill:#eab6a8; font-weight:700;
+      stroke-width:1.5px; stroke-linejoin:round; }
+    .ch-map .an { font-size:5.6px; fill:#eab6a8; font-weight:700;
       font-family:"Gowun Batang",serif; text-anchor:middle; }
-    .ch-map .pn { font-size:6.6px; fill:#d8caae; font-family:"Gowun Batang",serif; }
-    .ch-map .pn.on { fill:#fff3d4; font-weight:700; stroke-width:2.6px; }
-    .ch-map .leg { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+    .ch-map .pn { font-size:4.6px; fill:#d8caae; font-family:"Gowun Batang",serif; }
+    .ch-map .pn.on { fill:#fff3d4; font-weight:700; stroke-width:1.8px; }
+    /* 지도가 도해 칸보다 길어서, 가운데를 보고 있으면 범례가 위로 밀려
+       안 보였다(제보: "위에서만 보이고 가운데에서는 안 보이네").
+       스크롤을 따라오게 붙여 둔다. */
+    .ch-map .leg { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;
+      position:sticky; top:6px; align-self:flex-start; }
     .ch-map .leg .r { font-size:15px; color:#cdbfa4; line-height:1.4; display:flex; gap:6px; }
     .ch-map .leg .r b { color:#f0c96b; font-weight:700; flex:none; }
     .ch-map .leg .r.on { color:#fff3d4; }
@@ -316,7 +320,11 @@ window.Chart = (function(){
          지도를 키워도 겹침은 그대로다 — 겹침은 크기가 아니라 **자리**의
          문제다. 그래서 아래에서 이름표 자리를 직접 계산해 비켜 놓는다.
          (제보: "지도가 조그마니까 글씨도 겹쳐지는거잖아") */
-      const PN = 6.6, AN = 8.2;               // 지명 · 영역 이름 글자 크기
+      /* 눈금 위 글자 크기. 지도를 1.83배로 키웠으므로 그만큼 나눠 둔다 —
+         안 그러면 화면에서 글자만 커 보인다(제보: "지도가 글씨가 너무 커졌어.
+         지도의 글씨 크기는 전이 나았어"). 아래 CSS와 반드시 같은 값이어야
+         이름표 자리 계산이 맞는다. */
+      const PN = 4.6, AN = 5.6;
       const seq = ++mapSeq;
       let defs = '';
       /* 그림틀(viewBox) 안쪽 경계. 이름표가 이 밖으로 나가면 잘린다 —
