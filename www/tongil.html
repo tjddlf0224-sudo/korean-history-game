@@ -504,11 +504,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=77"></script>
-<script src="assets/zoomwarn.js?v=77"></script>
-<script src="assets/map/map_component.js?v=77"></script>
-<script src="assets/chart.js?v=77"></script>
-<script src="assets/audio.js?v=77"></script>
+<script src="assets/errlog.js?v=78"></script>
+<script src="assets/zoomwarn.js?v=78"></script>
+<script src="assets/map/map_component.js?v=78"></script>
+<script src="assets/chart.js?v=78"></script>
+<script src="assets/audio.js?v=78"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -520,7 +520,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=77';   // 존댓말 전환
+const ART_V = '?v=78';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -634,6 +634,11 @@ const ZONES = {
     { x0: 1292, y0: 512, x1: 1364, y1: 756 },
   ],
     npcs: [
+      // 무왕(600~641)은 의자왕 바로 앞이다. 고대 1화(4~6세기)에서는
+      // 무령왕이 백 년 뒤 일을 이야기하는 꼴이라 이리로 옮겼다.
+      // 초상은 아직 없다 — 필드는 실루엣, 대화창은 아이콘으로 뜬다.
+      { id:'muwang', name:'무왕', x:1000, y:320,
+        look: { role: 'king', body: '#6b4a7a', accent: '#e0b94a' } },
       { id:'gyebaek', name:'계백', x:450, y:250, img:'assets/portraits/gyebaek.png', look:{ role:'general', body:'#5a4a4a', accent:'#8a6d3b' } },
       { id:'gwanchang', name:'관창', x:700, y:230, img:'assets/portraits/gwanchang.png', look:{ role:'commoner', body:'#7a6a4a', accent:'#d8c48a' } },
       { id:'gimyusin', name:'김유신', x:650, y:560, img:'assets/portraits/gimyusin.png', look:{ role:'general', body:'#4f5d75', accent:'#c9a24a' } },
@@ -969,6 +974,7 @@ function updateHudGoal(){
   // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
+      ['muwang', '무왕과 대화하기'],
       ['gyebaek', '계백과 대화하기'],
       ['gwanchang', '관창과 대화하기'],
       ['gimyusin', '김유신과 대화하기'],
@@ -1217,6 +1223,33 @@ window.addEventListener('keyup', e=>{
    아래 대사는 위 사료를 참고해 새로 창작한 것이며 원문을 그대로 옮긴 것이 아님.
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
+  muwang_0: {
+    name: '무왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M3 8l4 4 5-7 5 7 4-4v9H3z"/></svg>',
+    beats: [
+      { who:'npc', t:'(돌을 고르다 고개를 든다) 마침 잘 왔네. 이것 좀 들어 주게.' },
+      { who:'me', t:'(든다) …무겁습니다. 어디에 쓰십니까?' },
+      { who:'npc', t:'탑을 세우네. 익산 금마저에 절을 짓고 있지.',
+        chart:{ type:'map', title:'무왕이 절을 세운 곳', pins:[ { x:42.9, y:117.4, n:'익산', on:true }, { x:41.6, y:113.4, n:'사비' } ] } },
+      { who:'me', t:'절 이름이 무엇입니까?' },
+      { who:'npc', t:'미륵사일세. 탑과 금당을 셋씩 나란히 둘 참이야.',
+        chart:{ type:'grid', title:'미륵사의 짜임', head:['자리','수'], rows:[ ['탑','셋'], ['금당','셋'] ], hi:0 } },
+      { who:'me', t:'…셋씩이나요. 그럼 우리나라에서 가장 큰 절이 되겠습니다.' },
+      { who:'doc', docImg:'assets/scenes/heritage_mireuksaji_tower.jpg',
+        t:'(익산 미륵사지 석탑. 현존하는 삼국 시대 석탑 중 가장 크며, 목탑의 짜임새를 그대로 돌에 옮긴 초기 백제 석탑 양식을 보여준다.)\n출처: 셀수스협동조합, 공유마당, 기증저작물(자유이용)' },
+      { who:'me', t:'도읍을 이곳 익산으로 옮기시는 겁니까?' },
+      { who:'npc', t:'(잠시 말이 없다) …그건 훗날 사람들이 다툴 일일세.',
+        chart:{ type:'compare', title:'익산 왕궁리 유적을 보는 두 갈래', cols:[ { h:'천도설', items:[ '사비에서 익산으로 옮기려 했다' ] }, { h:'별도설', hi:true, items:[ '제2의 도읍으로 삼았다' ] } ], note:'확정된 사실이 아니라 학설이다. 우리역사넷도 "천도를 시도했거나 별도로 기능했다는 학설"이라고만 쓴다.' } },
+      { who:'npc', t:'나는 본디 서동이라 불렸네. 마를 캐어 팔던 아이였지.' },
+      { who:'me', t:'그 서동요의…?' },
+      { who:'npc', t:'노래 하나로 신라 공주를 얻었다더군. 삼국유사의 이야기일세.',
+        chart:{ type:'kings', main:[ { name:'위덕왕' }, { name:'혜왕' }, { name:'법왕' }, { name:'무왕', note:'서동요·미륵사', active:true }, { name:'의자왕', note:'백제 마지막' } ], cross:[ null, null, null, null, null ] } },
+    ],
+    quizSeq: [
+      { q:'백제 무왕이 금마저(익산)에 세운, 세 탑과 세 금당을 나란히 둔 백제 최대의 사찰은?',
+        opts:['미륵사','불국사'], answer:0, src:[78],
+        feedback:['불국사는 통일 신라 경덕왕 때 세워진 절이에요.','정답! 미륵사입니다. 서동요의 주인공 무왕이 익산에 세웠어요.'] },
+    ],
+  },
   gyebaek_0: {
     name: '계백', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 7"/><path d="M4 4l0 4M4 4l4 0"/><path d="M11 11L4.5 17.5"/><path d="M4.5 17.5v2.5M4.5 17.5h-2.5"/><line x1="3" y1="21" x2="5.5" y2="18.5"/><path d="M20 4l-7 7"/><path d="M20 4l0 4M20 4l-4 0"/><path d="M13 11l6.5 6.5"/><line x1="21" y1="21" x2="18.5" y2="18.5"/></svg>', img: 'assets/portraits/gyebaek.png',
     beats: [
@@ -1432,6 +1465,7 @@ function startChapterBoss(onDone){
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
+    if (id === 'muwang') return 'muwang_0';
     if (id === 'gyebaek') return 'gyebaek_' + Math.min(Stage.state.talkStage, 0);
     if (id === 'gwanchang') return 'gwanchang_0';
     if (id === 'gimyusin') return 'gimyusin_0';
@@ -1919,39 +1953,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=77"></script>
-<script src="assets/streak.js?v=77"></script>
+<script src="assets/badges.js?v=78"></script>
+<script src="assets/streak.js?v=78"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=77"></script>
-  <script src="assets/fx.js?v=77"></script>
-  <script src="assets/deed.js?v=77"></script>
-  <script src="assets/inkwipe.js?v=77"></script>
-  <script src="assets/dash.js?v=77"></script>
-<script src="assets/juice.js?v=77"></script>
-  <script src="assets/difficulty.js?v=77"></script>
-  <script src="assets/nextauto.js?v=77"></script>
-<script src="assets/heroes_data.js?v=77"></script>
-<script src="assets/heroes.js?v=77"></script>
-<script src="assets/icons.js?v=77"></script>
-<script src="assets/srs.js?v=77"></script>
-<script src="assets/newsflash.js?v=77"></script>
-<script src="assets/timeline.js?v=77"></script>
-<script src="assets/journey.js?v=77"></script>
-<script src="assets/season.js?v=77"></script>
-<script src="assets/boss.js?v=77"></script>
-<script src="assets/items.js?v=77"></script>
-  <script src="assets/gold.js?v=77"></script>
-  <script src="assets/ask.js?v=77"></script>
-  <script src="assets/ads.js?v=77"></script>
-  <script src="assets/energy.js?v=77"></script>
-  <script src="assets/daily.js?v=77"></script>
-  <script src="assets/unlock.js?v=77"></script>
-  <script src="assets/guide.js?v=77"></script>
-  <script src="assets/minigames.js?v=77"></script>
-  <script src="assets/quests.js?v=77"></script>
-  <script src="assets/offline.js?v=77"></script>
-  <script src="assets/telemetry.js?v=77"></script>
-<script src="assets/autowalk.js?v=77"></script>
+<script src="assets/rank.js?v=78"></script>
+  <script src="assets/fx.js?v=78"></script>
+  <script src="assets/deed.js?v=78"></script>
+  <script src="assets/inkwipe.js?v=78"></script>
+  <script src="assets/dash.js?v=78"></script>
+<script src="assets/juice.js?v=78"></script>
+  <script src="assets/difficulty.js?v=78"></script>
+  <script src="assets/nextauto.js?v=78"></script>
+<script src="assets/heroes_data.js?v=78"></script>
+<script src="assets/heroes.js?v=78"></script>
+<script src="assets/icons.js?v=78"></script>
+<script src="assets/srs.js?v=78"></script>
+<script src="assets/newsflash.js?v=78"></script>
+<script src="assets/timeline.js?v=78"></script>
+<script src="assets/journey.js?v=78"></script>
+<script src="assets/season.js?v=78"></script>
+<script src="assets/boss.js?v=78"></script>
+<script src="assets/items.js?v=78"></script>
+  <script src="assets/gold.js?v=78"></script>
+  <script src="assets/ask.js?v=78"></script>
+  <script src="assets/ads.js?v=78"></script>
+  <script src="assets/energy.js?v=78"></script>
+  <script src="assets/daily.js?v=78"></script>
+  <script src="assets/unlock.js?v=78"></script>
+  <script src="assets/guide.js?v=78"></script>
+  <script src="assets/minigames.js?v=78"></script>
+  <script src="assets/quests.js?v=78"></script>
+  <script src="assets/offline.js?v=78"></script>
+  <script src="assets/telemetry.js?v=78"></script>
+<script src="assets/autowalk.js?v=78"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

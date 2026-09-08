@@ -514,11 +514,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=77"></script>
-<script src="assets/zoomwarn.js?v=77"></script>
-<script src="assets/map/map_component.js?v=77"></script>
-<script src="assets/chart.js?v=77"></script>
-<script src="assets/audio.js?v=77"></script>
+<script src="assets/errlog.js?v=78"></script>
+<script src="assets/zoomwarn.js?v=78"></script>
+<script src="assets/map/map_component.js?v=78"></script>
+<script src="assets/chart.js?v=78"></script>
+<script src="assets/audio.js?v=78"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -530,7 +530,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=77';   // 존댓말 전환
+const ART_V = '?v=78';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1282,13 +1282,10 @@ const NPC_DATA = {
         chart:{ type:'stat', title:'무령왕릉이 남긴 것', items:[ { v:'벽돌무덤', l:'중국 남조 양식' }, { v:'지석 2매', l:'이름과 사망년을 새김' }, { v:'매지권', l:'삼국 왕릉 중 유일' } ] } },
       { who:'me', t:'이름까지 돌에 새겨 두었단 말씀입니까?' },
       { who:'npc', t:'그래야 후세가 누구 무덤인지 알지 — 지석일세.' },
-      { who:'npc', t:'훗날 무왕은 서동요로 신라 공주를 얻었다더군.',
-        chart:{ type:'kings', main:[ { name:'무령왕', note:'22담로' }, { name:'성왕', note:'사비 천도' }, { name:'위덕왕' }, { name:'혜왕' }, { name:'법왕' }, { name:'무왕', note:'서동요', active:true } ], cross:[ null, null, null, null, null, { name:'진평왕', dynasty:'신라', active:true } ] } },
-      { who:'me', t:'미륵사는… 어떤 절이었습니까?' },
-      { who:'npc', t:'탑과 금당을 셋씩 나란히 둔, 백제 최대의 절이었지.' },
-      { who:'doc', docImg:'assets/scenes/heritage_mireuksaji_tower.jpg',
-        t:'(익산 미륵사지 석탑. 현존하는 삼국 시대 석탑 중 가장 크며, 목탑의 짜임새를 그대로 돌에 옮긴 초기 백제 석탑 양식을 보여준다.)\n출처: 셀수스협동조합, 공유마당, 기증저작물(자유이용)' },
-      { who:'npc', t:'웅진·사비·익산 — 세 도읍의 자취일세.',
+      // 익산은 도읍이라 단정할 수 없다. 우리역사넷은 왕궁리 유적을 두고
+      // "천도를 시도했거나 별도로 기능했다는 학설"이라고만 쓴다.
+      // 익산 이야기는 고대 3화의 무왕이 학설까지 함께 말한다.
+      { who:'npc', t:'웅진과 사비 — 두 도읍의 자취일세.',
         chart:{ type:'map', title:'백제역사유적지구', pins:[ { x:44.6, y:108.9, n:'공산성' }, { x:41.6, y:113.4, n:'부소산성' }, { x:42.3, y:116.2, n:'왕궁리', on:true } ], legend:[ { k:'2015년', v:'유네스코 세계유산 등재', on:true }, { k:'묶은 이름', v:'백제역사유적지구' } ] } },
       { who:'me', t:'세 곳 다… 가 보고 싶습니다.' },
     ],
@@ -1302,9 +1299,6 @@ const NPC_DATA = {
       { q:'동성왕을 시해하고 가림성에서 반기를 들었으나, 무령왕 즉위 초에 진압된 반란은?',
         opts:['백가의 난','이자겸의 난'], answer:0, src:[78],
         feedback:['이자겸의 난은 훨씬 뒤인 고려 인종 때 일어난 사건이에요.','정답! 백가의 난입니다. 무령왕이 즉위하자마자 평정하고서야 왕권을 다잡았어요.'] },
-      { q:'백제 무왕이 금마저(익산)에 세운, 세 탑과 세 금당을 나란히 둔 백제 최대의 사찰은?',
-        opts:['미륵사','불국사'], answer:0, src:[78],
-        feedback:['불국사는 통일 신라 경덕왕 때 세워진 절이에요.','정답! 미륵사입니다. 서동요의 주인공 무왕이 세운 절이지요.'] },
       { q:'공주 공산성, 부여 부소산성, 익산 왕궁리 유적 등 백제의 여러 도읍 유적을 묶어 2015년 유네스코 세계유산으로 등재한 것은?',
         opts:['백제역사유적지구','고인돌 유적지구'], answer:0, src:[29],
         feedback:['고인돌 유적지구는 고창·화순·강화의 청동기 시대 고인돌을 묶어 등재한 유산이에요.','정답! 백제역사유적지구입니다. 웅진·사비·익산 세 시기의 백제 유적을 함께 아우르고 있어요.'] },
@@ -2014,38 +2008,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=77"></script>
-<script src="assets/streak.js?v=77"></script>
+<script src="assets/badges.js?v=78"></script>
+<script src="assets/streak.js?v=78"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=77"></script>
-  <script src="assets/fx.js?v=77"></script>
-  <script src="assets/deed.js?v=77"></script>
-  <script src="assets/inkwipe.js?v=77"></script>
-  <script src="assets/dash.js?v=77"></script>
-<script src="assets/juice.js?v=77"></script>
-  <script src="assets/difficulty.js?v=77"></script>
-  <script src="assets/nextauto.js?v=77"></script>
-<script src="assets/heroes_data.js?v=77"></script>
-<script src="assets/heroes.js?v=77"></script>
-<script src="assets/icons.js?v=77"></script>
-<script src="assets/srs.js?v=77"></script>
-<script src="assets/newsflash.js?v=77"></script>
-<script src="assets/timeline.js?v=77"></script>
-<script src="assets/journey.js?v=77"></script>
-<script src="assets/season.js?v=77"></script>
-<script src="assets/items.js?v=77"></script>
-  <script src="assets/gold.js?v=77"></script>
-  <script src="assets/ask.js?v=77"></script>
-  <script src="assets/ads.js?v=77"></script>
-  <script src="assets/energy.js?v=77"></script>
-  <script src="assets/daily.js?v=77"></script>
-  <script src="assets/unlock.js?v=77"></script>
-  <script src="assets/guide.js?v=77"></script>
-  <script src="assets/minigames.js?v=77"></script>
-  <script src="assets/quests.js?v=77"></script>
-  <script src="assets/offline.js?v=77"></script>
-  <script src="assets/telemetry.js?v=77"></script>
-<script src="assets/autowalk.js?v=77"></script>
+<script src="assets/rank.js?v=78"></script>
+  <script src="assets/fx.js?v=78"></script>
+  <script src="assets/deed.js?v=78"></script>
+  <script src="assets/inkwipe.js?v=78"></script>
+  <script src="assets/dash.js?v=78"></script>
+<script src="assets/juice.js?v=78"></script>
+  <script src="assets/difficulty.js?v=78"></script>
+  <script src="assets/nextauto.js?v=78"></script>
+<script src="assets/heroes_data.js?v=78"></script>
+<script src="assets/heroes.js?v=78"></script>
+<script src="assets/icons.js?v=78"></script>
+<script src="assets/srs.js?v=78"></script>
+<script src="assets/newsflash.js?v=78"></script>
+<script src="assets/timeline.js?v=78"></script>
+<script src="assets/journey.js?v=78"></script>
+<script src="assets/season.js?v=78"></script>
+<script src="assets/items.js?v=78"></script>
+  <script src="assets/gold.js?v=78"></script>
+  <script src="assets/ask.js?v=78"></script>
+  <script src="assets/ads.js?v=78"></script>
+  <script src="assets/energy.js?v=78"></script>
+  <script src="assets/daily.js?v=78"></script>
+  <script src="assets/unlock.js?v=78"></script>
+  <script src="assets/guide.js?v=78"></script>
+  <script src="assets/minigames.js?v=78"></script>
+  <script src="assets/quests.js?v=78"></script>
+  <script src="assets/offline.js?v=78"></script>
+  <script src="assets/telemetry.js?v=78"></script>
+<script src="assets/autowalk.js?v=78"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
