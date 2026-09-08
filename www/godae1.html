@@ -514,11 +514,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=88"></script>
-<script src="assets/zoomwarn.js?v=88"></script>
-<script src="assets/map/map_component.js?v=88"></script>
-<script src="assets/chart.js?v=88"></script>
-<script src="assets/audio.js?v=88"></script>
+<script src="assets/errlog.js?v=89"></script>
+<script src="assets/zoomwarn.js?v=89"></script>
+<script src="assets/map/map_component.js?v=89"></script>
+<script src="assets/chart.js?v=89"></script>
+<script src="assets/audio.js?v=89"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -530,7 +530,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=88';   // 존댓말 전환
+const ART_V = '?v=89';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1463,15 +1463,23 @@ const NPC_DATA = {
       { who:'npc', t:'그렇다네. 북한산비는 원래 비봉에 있었지.' },
       { who:'doc', docImg:'assets/scenes/heritage_bukhansan_jinheungwang_sunsubi.jpg',
         t:'(북한산 진흥왕 순수비. 555년 무렵 진흥왕이 한강 유역까지 영토를 넓힌 뒤 이를 기념해 세운 비석으로, 원래 북한산 비봉에 있었으나 훼손을 막기 위해 지금은 국립중앙박물관으로 옮겨 보존되고 있다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
-      { who:'npc', t:'할아버님 지증왕께선 나라 이름을 \'신라\'로 정하셨네.' },
+      /* 여기부터 법흥왕 이야기가 끝날 때까지 계보를 띄워 둔다. 다른 그림이
+         있는 대사는 그쪽을 살리고, 없는 대사에만 붙인다. 이야기하는 임금이
+         누구냐에 따라 강조가 옮겨 간다(제보). */
+      { who:'npc', t:'할아버님 지증왕께선 나라 이름을 \'신라\'로 정하셨네.',
+        chart:{ type:'kings', title:'신라를 키운 세 임금', main:[ { name:'지증왕', note:'국호 신라·우산국', active:true }, { name:'법흥왕', note:'율령·불교 공인' }, { name:'진흥왕', note:'한강·순수비' } ], cross:[  ] } },
       { who:'npc', t:'이사부를 보내 우산국도 복속시키셨지.',
         chart:{ type:'map', title:'지증왕이 넓힌 곳', pins:[ { x:74.6, y:117.6, n:'서라벌', on:true }, { x:98.6, y:91.9, n:'우산국' } ], legend:[ { k:'우산국', v:'지금의 울릉도', on:true }, { k:'이사부', v:'정벌한 장수' } ] } },
-      { who:'me', t:'시장도 나라가 감독을 했습니까?' },
-      { who:'npc', t:'동시전을 두어 서라벌 시장을 감독하셨지.' },
+      { who:'me', t:'시장도 나라가 감독을 했습니까?',
+        chart:{ type:'kings', title:'신라를 키운 세 임금', main:[ { name:'지증왕', note:'국호 신라·우산국', active:true }, { name:'법흥왕', note:'율령·불교 공인' }, { name:'진흥왕', note:'한강·순수비' } ], cross:[  ] } },
+      { who:'npc', t:'동시전을 두어 서라벌 시장을 감독하셨지.',
+        chart:{ type:'kings', title:'신라를 키운 세 임금', main:[ { name:'지증왕', note:'국호 신라·우산국', active:true }, { name:'법흥왕', note:'율령·불교 공인' }, { name:'진흥왕', note:'한강·순수비' } ], cross:[  ] } },
       { who:'npc', t:'법흥왕께선 연호를 쓰고 율령을 반포하셨네.',
         chart:{ type:'stat', title:'법흥왕이 다진 신라', items:[ { v:'건원', l:'독자 연호' }, { v:'율령', l:'나라의 기틀' }, { v:'이차돈', l:'순교로 불교 공인' } ] } },
-      { who:'me', t:'목숨까지 내놓으면서 지킨 뜻이군요.' },
-      { who:'npc', t:'그렇게 불교가 나라의 종교가 되었네.' },
+      { who:'me', t:'목숨까지 내놓으면서 지킨 뜻이군요.',
+        chart:{ type:'kings', title:'신라를 키운 세 임금', main:[ { name:'지증왕', note:'국호 신라·우산국' }, { name:'법흥왕', note:'율령·불교 공인', active:true }, { name:'진흥왕', note:'한강·순수비' } ], cross:[  ] } },
+      { who:'npc', t:'그렇게 불교가 나라의 종교가 되었네.',
+        chart:{ type:'kings', title:'신라를 키운 세 임금', main:[ { name:'지증왕', note:'국호 신라·우산국' }, { name:'법흥왕', note:'율령·불교 공인', active:true }, { name:'진흥왕', note:'한강·순수비' } ], cross:[  ] } },
     ],
     quizSeq: [
       { q:'한강 유역을 모두 차지하고 대가야를 정복했으며, 여러 곳에 순수비를 세운 신라 왕은?',
@@ -2039,38 +2047,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=88"></script>
-<script src="assets/streak.js?v=88"></script>
+<script src="assets/badges.js?v=89"></script>
+<script src="assets/streak.js?v=89"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=88"></script>
-  <script src="assets/fx.js?v=88"></script>
-  <script src="assets/deed.js?v=88"></script>
-  <script src="assets/inkwipe.js?v=88"></script>
-  <script src="assets/dash.js?v=88"></script>
-<script src="assets/juice.js?v=88"></script>
-  <script src="assets/difficulty.js?v=88"></script>
-  <script src="assets/nextauto.js?v=88"></script>
-<script src="assets/heroes_data.js?v=88"></script>
-<script src="assets/heroes.js?v=88"></script>
-<script src="assets/icons.js?v=88"></script>
-<script src="assets/srs.js?v=88"></script>
-<script src="assets/newsflash.js?v=88"></script>
-<script src="assets/timeline.js?v=88"></script>
-<script src="assets/journey.js?v=88"></script>
-<script src="assets/season.js?v=88"></script>
-<script src="assets/items.js?v=88"></script>
-  <script src="assets/gold.js?v=88"></script>
-  <script src="assets/ask.js?v=88"></script>
-  <script src="assets/ads.js?v=88"></script>
-  <script src="assets/energy.js?v=88"></script>
-  <script src="assets/daily.js?v=88"></script>
-  <script src="assets/unlock.js?v=88"></script>
-  <script src="assets/guide.js?v=88"></script>
-  <script src="assets/minigames.js?v=88"></script>
-  <script src="assets/quests.js?v=88"></script>
-  <script src="assets/offline.js?v=88"></script>
-  <script src="assets/telemetry.js?v=88"></script>
-<script src="assets/autowalk.js?v=88"></script>
+<script src="assets/rank.js?v=89"></script>
+  <script src="assets/fx.js?v=89"></script>
+  <script src="assets/deed.js?v=89"></script>
+  <script src="assets/inkwipe.js?v=89"></script>
+  <script src="assets/dash.js?v=89"></script>
+<script src="assets/juice.js?v=89"></script>
+  <script src="assets/difficulty.js?v=89"></script>
+  <script src="assets/nextauto.js?v=89"></script>
+<script src="assets/heroes_data.js?v=89"></script>
+<script src="assets/heroes.js?v=89"></script>
+<script src="assets/icons.js?v=89"></script>
+<script src="assets/srs.js?v=89"></script>
+<script src="assets/newsflash.js?v=89"></script>
+<script src="assets/timeline.js?v=89"></script>
+<script src="assets/journey.js?v=89"></script>
+<script src="assets/season.js?v=89"></script>
+<script src="assets/items.js?v=89"></script>
+  <script src="assets/gold.js?v=89"></script>
+  <script src="assets/ask.js?v=89"></script>
+  <script src="assets/ads.js?v=89"></script>
+  <script src="assets/energy.js?v=89"></script>
+  <script src="assets/daily.js?v=89"></script>
+  <script src="assets/unlock.js?v=89"></script>
+  <script src="assets/guide.js?v=89"></script>
+  <script src="assets/minigames.js?v=89"></script>
+  <script src="assets/quests.js?v=89"></script>
+  <script src="assets/offline.js?v=89"></script>
+  <script src="assets/telemetry.js?v=89"></script>
+<script src="assets/autowalk.js?v=89"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
