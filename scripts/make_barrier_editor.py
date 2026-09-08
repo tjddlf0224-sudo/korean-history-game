@@ -139,6 +139,22 @@ def parse(path):
                 v = [num(t, kk) for kk in ('x0', 'y0', 'x1', 'y1')]
                 if None not in v: exits.append([round(x) for x in v])
 
+        # 유물(spots). npcs와는 다른 배열이라 따로 읽는다 —
+        # 이걸 안 보여 주면 배리어를 칠하다 유물을 파묻어도 알 수가 없다.
+        # 실제로 3차 때 벽란도 건원중보가 지붕째 막혀 파묻혔다.
+        spots = []
+        mp = re.search(r'spots:\s*\[', blk)
+        if mp:
+            e4 = balanced(blk, blk.index('[', mp.end() - 1), '[', ']')
+            for t in split_objects(blk[mp.end():e4]):
+                x, y = num(t, r'\bx'), num(t, r'\by')
+                idm = re.search(r"id:\s*'([^']*)'", t)
+                lbm = re.search(r"label:\s*'([^']*)'", t)
+                if x is not None and y is not None:
+                    spots.append({'id': idm.group(1) if idm else '?',
+                                  'name': lbm.group(1) if lbm else '',
+                                  'x': round(x), 'y': round(y)})
+
         sp = re.search(r'spawn:\s*\{([^{}]*)\}', blk)
         spawn = None
         if sp:
@@ -152,7 +168,7 @@ def parse(path):
             'label': lab.group(1) if lab else m.group(1),
             'w': round(bw), 'h': round(bh),
             'img': img.group(1) if img else None,
-            'barriers': bars, 'npcs': npcs, 'exits': exits, 'spawn': spawn,
+            'barriers': bars, 'npcs': npcs, 'spots': spots, 'exits': exits, 'spawn': spawn,
         })
     return out
 

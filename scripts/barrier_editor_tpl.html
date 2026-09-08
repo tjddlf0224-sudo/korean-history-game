@@ -1,0 +1,484 @@
+<title>배리어 손보기</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap">
+<style>
+  :root{
+    --ink:#161109; --panel:#211a10; --panel2:#2b2214; --line:#4a3c26;
+    --gold:#f0c96b; --gold-dim:#a89676; --cream:#e6dbc2;
+    --block:#d9584a; --walk:#7fbf8f; --npc:#7fa8c4;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--cream);
+    font-family:"Gowun Batang",-apple-system,"Malgun Gothic",serif;
+    -webkit-text-size-adjust:100%}
+  .wrap{display:grid;grid-template-columns:228px 1fr;height:100dvh}
+  @media (max-width:760px){ .wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr} }
+
+  aside{background:var(--panel);border-right:1px solid var(--line);
+    display:flex;flex-direction:column;min-height:0}
+  aside h1{margin:0;padding:13px 14px 5px;font-size:15px;color:var(--gold);letter-spacing:.08em}
+  aside .sub{padding:0 14px 9px;font-size:11.5px;color:var(--gold-dim);line-height:1.65}
+  .zlist{overflow-y:auto;flex:1;min-height:0;padding-bottom:8px}
+  @media (max-width:760px){ .zlist{max-height:26dvh} }
+  .zgrp{padding:8px 14px 3px;font-size:10.5px;letter-spacing:.16em;color:var(--gold-dim)}
+  .zbtn{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;
+    padding:7px 14px;background:none;border:0;color:var(--cream);cursor:pointer;
+    font-family:inherit;font-size:13px;border-left:3px solid transparent}
+  .zbtn:hover{background:var(--panel2)}
+  .zbtn[aria-current="true"]{background:var(--panel2);border-left-color:var(--gold);color:var(--gold)}
+  .zbtn em{font-style:normal;font-size:11px;color:var(--gold-dim);font-variant-numeric:tabular-nums}
+  .zbtn.dirty em{color:var(--gold)}
+  .zbtn.dirty::after{content:'●';color:var(--gold);font-size:9px;align-self:center}
+
+  main{display:flex;flex-direction:column;min-width:0;min-height:0}
+  .bar{display:flex;flex-wrap:wrap;align-items:center;gap:7px;
+    padding:9px 13px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .bar .name{font-size:14px;color:var(--gold);margin-right:auto}
+  .bar .name small{color:var(--gold-dim);font-size:11px;margin-left:7px}
+  button.t{padding:6px 11px;border-radius:8px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--cream);font-family:inherit;font-size:12.5px;cursor:pointer}
+  button.t[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);background:#3a2c1a}
+  button.t:disabled{opacity:.4;cursor:default}
+  button.t:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{border:0;border-radius:0;border-left:1px solid var(--line)}
+  .seg button:first-child{border-left:0}
+
+  .stage{flex:1;min-height:0;overflow:auto;padding:12px;background:#0d0a06}
+  .holder{position:relative;line-height:0;touch-action:none;margin:0 auto;width:max-content}
+  canvas{display:block;border:1px solid var(--line);border-radius:6px}
+
+  .legend{display:flex;flex-wrap:wrap;gap:13px;padding:9px 13px;
+    border-top:1px solid var(--line);background:var(--panel);font-size:11.5px;
+    color:var(--gold-dim);align-items:center}
+  .key{display:flex;align-items:center;gap:6px}
+  .sw{width:13px;height:13px;border-radius:3px;flex:none}
+
+  dialog{border:1px solid var(--gold);border-radius:12px;background:var(--panel);
+    color:var(--cream);max-width:min(92vw,620px);padding:0}
+  dialog::backdrop{background:rgba(8,6,3,.82)}
+  dialog .hd{padding:13px 16px;border-bottom:1px solid var(--line);font-size:14px;color:var(--gold)}
+  dialog .bd{padding:14px 16px;font-size:12.5px;line-height:1.75}
+  dialog textarea{width:100%;height:180px;background:var(--ink);color:var(--cream);
+    border:1px solid var(--line);border-radius:8px;padding:9px;
+    font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.5}
+  dialog .ft{padding:11px 16px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+  .hint{font-size:11.5px;color:var(--gold-dim);line-height:1.7}
+</style>
+
+<div class="wrap">
+  <aside>
+    <h1>배리어 손보기</h1>
+    <p class="sub">칸을 눌러 <b style="color:var(--block)">막고</b> ·
+      <b style="color:var(--walk)">엽니다</b>. 끌면 여러 칸을 한 번에 칠합니다.</p>
+    <div class="zlist" id="zlist"></div>
+  </aside>
+
+  <main>
+    <div class="bar">
+      <div class="name" id="zname">—</div>
+      <div class="seg">
+        <button class="t" id="zFit" aria-pressed="false">맞춤</button>
+        <button class="t" id="z1" aria-pressed="true">1배</button>
+        <button class="t" id="z2" aria-pressed="false">2배</button>
+      </div>
+      <button class="t" id="mWalk" aria-pressed="true">걸을 수 있는 칸</button>
+      <button class="t" id="undo" disabled>되돌리기</button>
+      <button class="t" id="reset" disabled>원래대로</button>
+      <button class="t" id="out">내보내기</button>
+      <span id="saved" style="font-size:11px;color:var(--gold-dim);white-space:nowrap"></span>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="holder" id="holder"><canvas id="cv"></canvas></div>
+    </div>
+
+    <div class="legend">
+      <span class="key"><i class="sw" style="background:rgba(217,88,74,.45);border:1px solid #d9584a"></i>막힌 칸</span>
+      <span class="key"><i class="sw" style="background:rgba(127,191,143,.42)"></i>걸을 수 있는 칸</span>
+      <span class="key"><i class="sw" style="background:#7fa8c4;border-radius:50%"></i>인물(둘레 원 안에 설 자리가 있어야 말을 건다)</span>
+      <span class="key"><i class="sw" style="background:#f0c96b;border-radius:50%"></i>시작 자리</span>
+      <span class="key"><i class="sw" style="background:#c08adf;transform:rotate(45deg)"></i>유물(둘레 원 안에 설 자리가 있어야 줍는다)</span>
+      <span id="tally" style="margin-left:auto;color:var(--cream)"></span>
+    </div>
+  </main>
+</div>
+
+<dialog id="dlg">
+  <div class="hd">고친 것 내보내기</div>
+  <div class="bd">
+    <p class="hint" id="dhint"></p>
+    <textarea id="dtext" readonly></textarea>
+  </div>
+  <div class="ft">
+    <button class="t" id="dcopy">복사</button>
+    <button class="t" id="dclose">닫기</button>
+  </div>
+</dialog>
+
+<script>
+const ZONES = /*__ZONES__*/[];
+
+/* 게임과 같은 눈금 — 길찾기 격자도 16px이고 canStand의 발자국은 pad 10이다. */
+const G = 16, PAD = 10, NPC_R = 34, EDGE = 6;
+/* 말이 닿아야 하는 거리. 게임의 대화 사거리는 108.8이지만, 검사기는
+   'NPC 앞까지 걸어갈 수 있는가'를 48로 본다 — 겨우 사거리에 걸치는 것과
+   앞에 서는 것은 다르다. 편집기도 48을 기준으로 보여 준다. */
+const NPC_REACH = 48;
+/* 유물은 대화보다 넉넉하게 잡혀 있다 — items.js의 RANGE가 128이다.
+   스쳐 지나가도 걸리라고 그렇게 두었다. */
+const SPOT_REACH = 128;
+
+/* 인물 둘레(반경 34)는 어차피 설 수 없는 자리다. 거기에 배리어를 칠하면
+   말을 걸 자리만 줄어든다. 그래서 칠하지 못하게 막는다. */
+function nearNpc(z, x, y){
+  return z.npcs.some(n => (n.x-x)**2 + (n.y-y)**2 < (NPC_R + G)**2);
+}
+
+let zi = 0, zoom = 1, showWalk = true;
+const grids = new Map();     // 구역 → Uint8Array (칸마다 막힘 여부)
+const dirty = new Set();
+const undos = [];
+
+const key = z => z.chapter + '#' + z.zone;
+const cur = () => ZONES[zi];
+const cols = z => Math.floor(z.w / G) + 1;
+const rows = z => Math.floor(z.h / G) + 1;
+
+/* 지금의 사각형 배리어를 칸 격자로 옮긴다. 칸의 한가운데가 사각형 안에
+   들어가면 막힌 칸으로 본다 — 게임이 픽셀로 판단하던 것을 칸으로 옮기는
+   것이라, 22px보다 얇은 배리어는 한 칸으로 뭉쳐진다. */
+function fillGrid(z, rects){
+  const C = cols(z), R = rows(z), g = new Uint8Array(C * R);
+  for (let r = 0; r < R; r++)
+    for (let c = 0; c < C; c++){
+      const x = c * G, y = r * G;
+      let on = 0;
+      for (const b of rects)
+        if (x >= b[0] && x <= b[2] && y >= b[1] && y <= b[3]){ on = 1; break; }
+      g[r * C + c] = on;
+    }
+  return g;
+}
+function gridOf(z){
+  const k = key(z);
+  if (grids.has(k)) return grids.get(k);
+  // 저장해 둔 것이 있으면 그것으로 짓는다. 없으면 지금 게임의 배리어로.
+  const g = fillGrid(z, saved[k] || z.barriers);
+  grids.set(k, g);
+  return g;
+}
+
+/* ── 자동 저장 ──────────────────────────────────────────────────────
+   칠한 것이 이 페이지 메모리에만 있어서, 페이지가 새로 게시되자 통째로
+   날아간 적이 있다. 다시는 그러지 않게 칠할 때마다 브라우저에 남긴다.
+   같은 주소에 다시 게시해도 저장분은 그대로 남는다. */
+const SAVE_KEY = 'barrier-editor.v1';
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}') || {}; } catch (e) { saved = {}; }
+
+function stamp(n){
+  const el = document.getElementById('saved');
+  if (!el) return;
+  const t = new Date().toTimeString().slice(0, 5);
+  el.textContent = n === 0 ? '' : '자동 저장됨 ' + t;
+}
+function persist(){
+  try {
+    const o = {};
+    for (const k of dirty){
+      const z = ZONES.find(x => key(x) === k);
+      if (z) o[k] = toRects(z, gridOf(z));
+    }
+    localStorage.setItem(SAVE_KEY, JSON.stringify(o));
+    saved = o;
+    stamp(Object.keys(o).length);
+  } catch (e) { /* 저장이 막힌 브라우저에서도 편집 자체는 되게 둔다 */ }
+}
+
+/* ── 구역 목록 ── */
+const zlist = document.getElementById('zlist');
+function buildList(){
+  let last = ''; zlist.innerHTML = '';
+  ZONES.forEach((z, i) => {
+    if (z.chapter !== last){
+      last = z.chapter;
+      const h = document.createElement('div');
+      h.className = 'zgrp'; h.textContent = z.chapter.replace('.html','');
+      zlist.appendChild(h);
+    }
+    const b = document.createElement('button');
+    b.className = 'zbtn'; b.dataset.i = i;
+    b.innerHTML = '<span></span><em></em>';
+    b.querySelector('span').textContent = z.label;
+    b.onclick = () => { zi = i; undos.length = 0; draw(); syncList(); };
+    zlist.appendChild(b);
+  });
+  syncList();
+}
+function syncList(){
+  [...zlist.querySelectorAll('.zbtn')].forEach(b => {
+    const i = +b.dataset.i, z = ZONES[i], g = gridOf(z);
+    b.setAttribute('aria-current', i === zi ? 'true' : 'false');
+    b.classList.toggle('dirty', dirty.has(key(z)));
+    let n = 0; for (const v of g) if (v) n++;
+    b.querySelector('em').textContent = n;
+  });
+}
+
+/* ── 그리기 ── */
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+const stage = document.getElementById('stage');
+const imgCache = new Map();
+function image(z){
+  if (!imgCache.has(z.thumb)){
+    const im = new Image(); im.src = z.thumb || '';
+    im.onload = () => { if (cur().thumb === z.thumb) draw(); };
+    imgCache.set(z.thumb, im);
+  }
+  return imgCache.get(z.thumb);
+}
+
+function blockedPx(z, g, x, y){
+  if (x < EDGE || y < EDGE || x >= z.w - EDGE || y >= z.h - EDGE) return true;
+  const c = Math.round(x / G), r = Math.round(y / G);
+  if (c < 0 || r < 0 || c >= cols(z) || r >= rows(z)) return true;
+  return !!g[r * cols(z) + c];
+}
+function canStand(z, g, x, y){
+  for (const [dx,dy] of [[-PAD,-PAD],[PAD,-PAD],[-PAD,PAD],[PAD,PAD]])
+    if (blockedPx(z, g, x+dx, y+dy)) return false;
+  for (const n of z.npcs) if ((n.x-x)**2 + (n.y-y)**2 < NPC_R*NPC_R) return false;
+  return true;
+}
+
+let S = 1;      // 화면 배율
+function draw(){
+  const z = cur(), g = gridOf(z), C = cols(z), R = rows(z);
+  S = zoom === 0 ? Math.min(1, (stage.clientWidth - 26) / z.w) : zoom;
+  cv.width = Math.round(z.w * S); cv.height = Math.round(z.h * S);
+
+  const im = image(z);
+  if (im.complete && im.naturalWidth) ctx.drawImage(im, 0, 0, cv.width, cv.height);
+  else { ctx.fillStyle = '#0d0a06'; ctx.fillRect(0,0,cv.width,cv.height); }
+
+  const cell = G * S;
+  if (showWalk){
+    ctx.fillStyle = 'rgba(127,191,143,.42)';
+    for (let r = 0; r < R; r++)
+      for (let c = 0; c < C; c++)
+        if (canStand(z, g, c*G, r*G))
+          ctx.fillRect(c*cell - cell/2 + 1, r*cell - cell/2 + 1, cell - 2, cell - 2);
+  }
+  ctx.fillStyle = 'rgba(217,88,74,.45)';
+  for (let r = 0; r < R; r++)
+    for (let c = 0; c < C; c++)
+      if (g[r*C + c])
+        ctx.fillRect(c*cell - cell/2, r*cell - cell/2, cell, cell);
+
+  // 칸 눈금 — 어디를 누르는지 보이게. 배율이 작으면 생략한다.
+  if (cell >= 9){
+    ctx.strokeStyle = 'rgba(240,201,107,.13)'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let c = 0; c <= C; c++){ const x = c*cell - cell/2;
+      ctx.moveTo(x, 0); ctx.lineTo(x, cv.height); }
+    for (let r = 0; r <= R; r++){ const y = r*cell - cell/2;
+      ctx.moveTo(0, y); ctx.lineTo(cv.width, y); }
+    ctx.stroke();
+  }
+
+  ctx.strokeStyle = 'rgba(240,201,107,.85)'; ctx.lineWidth = 1.6;
+  ctx.setLineDash([6,4]);
+  z.exits.forEach(e => ctx.strokeRect(e[0]*S, e[1]*S, (e[2]-e[0])*S, (e[3]-e[1])*S));
+  ctx.setLineDash([]);
+  /* 인물 — 크게, 이름까지. 안 보이면 어디를 비워 둬야 할지 알 수 없다.
+     둘레의 파란 원은 **말이 닿아야 하는 거리(48px)** 다. 이 원 안에 설
+     자리가 하나도 없으면 그 인물에게 말을 못 건다. */
+  z.npcs.forEach(n => {
+    const x = n.x*S, y = n.y*S;
+    ctx.strokeStyle = 'rgba(127,168,196,.75)'; ctx.lineWidth = 1.5;
+    ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.arc(x, y, NPC_REACH*S, 0, 7); ctx.stroke();
+    ctx.setLineDash([]);
+    // 서지 못하는 자리(반경 34) — 여기는 칠해도 소용없다
+    ctx.fillStyle = 'rgba(127,168,196,.16)';
+    ctx.beginPath(); ctx.arc(x, y, NPC_R*S, 0, 7); ctx.fill();
+    ctx.fillStyle = '#7fa8c4'; ctx.strokeStyle = '#0d0a06'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, 8, 0, 7); ctx.fill(); ctx.stroke();
+    const t = n.name || n.id;
+    ctx.font = '600 13px "Gowun Batang",serif';
+    const w = ctx.measureText(t).width;
+    ctx.fillStyle = 'rgba(13,10,6,.86)';
+    ctx.fillRect(x - w/2 - 5, y - 30, w + 10, 18);
+    ctx.fillStyle = '#cfe2ee'; ctx.textAlign = 'center';
+    ctx.fillText(t, x, y - 17);
+    ctx.textAlign = 'start';
+  });
+  /* 유물 — 배리어에 파묻히기 쉬운 것들이다. 둘레 원(128px) 안에 설 자리가
+     하나도 없으면 그 유물은 영영 못 줍는다. */
+  (z.spots || []).forEach(sp => {
+    const x = sp.x*S, y = sp.y*S;
+    ctx.strokeStyle = 'rgba(192,138,223,.6)'; ctx.lineWidth = 1.4;
+    ctx.setLineDash([4,5]);
+    ctx.beginPath(); ctx.arc(x, y, SPOT_REACH*S, 0, 7); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.save();
+    ctx.translate(x, y); ctx.rotate(Math.PI/4);
+    ctx.fillStyle = '#c08adf'; ctx.strokeStyle = '#0d0a06'; ctx.lineWidth = 2;
+    ctx.fillRect(-7,-7,14,14); ctx.strokeRect(-7,-7,14,14);
+    ctx.restore();
+    const t = sp.name || sp.id;
+    ctx.font = '600 12px "Gowun Batang",serif';
+    const w = ctx.measureText(t).width;
+    ctx.fillStyle = 'rgba(13,10,6,.86)';
+    ctx.fillRect(x - w/2 - 5, y + 12, w + 10, 17);
+    ctx.fillStyle = '#e2cdf2'; ctx.textAlign = 'center';
+    ctx.fillText(t, x, y + 25);
+    ctx.textAlign = 'start';
+  });
+  if (z.spawn){
+    const x = z.spawn[0]*S, y = z.spawn[1]*S;
+    ctx.fillStyle = '#f0c96b'; ctx.strokeStyle = '#0d0a06'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, 8, 0, 7); ctx.fill(); ctx.stroke();
+    ctx.font = '600 12px "Gowun Batang",serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#f0c96b'; ctx.fillText('시작', x, y - 15); ctx.textAlign = 'start';
+  }
+
+  document.getElementById('zname').innerHTML = z.label +
+    ' <small>' + z.chapter.replace('.html','') + ' · ' + z.zone + '</small>';
+  let stand = 0, all = 0, blk = 0;
+  for (let r = 0; r < R; r++)
+    for (let c = 0; c < C; c++){
+      all++; if (g[r*C+c]) blk++;
+      if (canStand(z, g, c*G, r*G)) stand++;
+    }
+  document.getElementById('tally').textContent =
+    '막힌 칸 ' + blk + ' · 걸을 수 있는 칸 ' + Math.round(stand/all*100) + '%';
+  document.getElementById('reset').disabled = !dirty.has(key(z));
+  document.getElementById('undo').disabled = !undos.length;
+}
+
+/* ── 칠하기 ── */
+const holder = document.getElementById('holder');
+let painting = false, paintTo = 1, touched = null;
+
+function cellAt(ev){
+  const r = cv.getBoundingClientRect();
+  const x = (ev.clientX - r.left) / S, y = (ev.clientY - r.top) / S;
+  return [Math.round(x / G), Math.round(y / G)];
+}
+function paint(ev){
+  const z = cur(), g = gridOf(z), C = cols(z), R = rows(z);
+  const [c, r] = cellAt(ev);
+  if (c < 0 || r < 0 || c >= C || r >= R) return;
+  const i = r * C + c;
+  // 인물이 선 자리는 막지 못한다. 막으면 말을 걸 수 없게 된다.
+  if (paintTo === 1 && nearNpc(z, c*G, r*G)) return;
+  if (touched.has(i) || g[i] === paintTo) return;
+  touched.add(i);
+  undos.push([key(z), i, g[i]]);
+  g[i] = paintTo;
+  dirty.add(key(z));
+  draw();
+}
+holder.addEventListener('pointerdown', ev => {
+  ev.preventDefault();
+  holder.setPointerCapture(ev.pointerId);
+  const z = cur(), g = gridOf(z), C = cols(z);
+  const [c, r] = cellAt(ev);
+  const i = r * C + c;
+  paintTo = (i >= 0 && i < g.length && g[i]) ? 0 : 1;   // 누른 칸의 반대로
+  painting = true; touched = new Set();
+  paint(ev); syncList();
+});
+holder.addEventListener('pointermove', ev => { if (painting) paint(ev); });
+holder.addEventListener('pointerup', () => { painting = false; syncList(); persist(); });
+holder.addEventListener('pointercancel', () => { painting = false; });
+
+/* ── 단추 ── */
+function setZoom(v, el){
+  zoom = v;
+  ['zFit','z1','z2'].forEach(id =>
+    document.getElementById(id).setAttribute('aria-pressed', String(id === el)));
+  draw();
+}
+document.getElementById('zFit').onclick = () => setZoom(0, 'zFit');
+document.getElementById('z1').onclick  = () => setZoom(1, 'z1');
+document.getElementById('z2').onclick  = () => setZoom(2, 'z2');
+document.getElementById('mWalk').onclick = e => {
+  showWalk = !showWalk;
+  e.currentTarget.setAttribute('aria-pressed', String(showWalk)); draw();
+};
+document.getElementById('undo').onclick = () => {
+  const u = undos.pop(); if (!u) return;
+  const [k, i, prev] = u;
+  grids.get(k)[i] = prev;
+  if (!undos.some(x => x[0] === k)) dirty.delete(k);
+  draw(); syncList(); persist();
+};
+document.getElementById('reset').onclick = () => {
+  const z = cur();
+  grids.delete(key(z)); dirty.delete(key(z));
+  undos.length = 0; draw(); syncList(); persist();
+};
+
+/* ── 칸 격자를 다시 사각형으로 ──
+   가로로 이어진 칸을 한 줄씩 묶고, 위아래로 같은 구간이면 합친다.
+   사각형이 적을수록 게임의 배리어 검사가 가벼워진다. */
+function toRects(z, g){
+  const C = cols(z), R = rows(z), used = new Uint8Array(g.length), out = [];
+  for (let r = 0; r < R; r++){
+    let c = 0;
+    while (c < C){
+      if (!g[r*C+c] || used[r*C+c]){ c++; continue; }
+      let c2 = c; while (c2+1 < C && g[r*C+c2+1] && !used[r*C+c2+1]) c2++;
+      let r2 = r;
+      while (r2+1 < R){
+        let ok = true;
+        for (let k = c; k <= c2; k++)
+          if (!g[(r2+1)*C+k] || used[(r2+1)*C+k]){ ok = false; break; }
+        if (!ok) break;
+        r2++;
+      }
+      for (let rr = r; rr <= r2; rr++) for (let cc = c; cc <= c2; cc++) used[rr*C+cc] = 1;
+      out.push([ Math.max(0, c*G - G/2), Math.max(0, r*G - G/2),
+                 Math.min(z.w, c2*G + G/2), Math.min(z.h, r2*G + G/2) ].map(Math.round));
+      c = c2 + 1;
+    }
+  }
+  return out;
+}
+
+const dlg = document.getElementById('dlg');
+document.getElementById('out').onclick = () => {
+  const out = {};
+  for (const k of dirty){
+    const z = ZONES.find(x => key(x) === k);
+    out[k] = toRects(z, gridOf(z));
+  }
+  const n = Object.keys(out).length;
+  document.getElementById('dhint').textContent = n
+    ? '고친 구역 ' + n + '곳입니다. 아래를 복사해 클로드에게 그대로 주세요.'
+    : '아직 고친 곳이 없습니다.';
+  document.getElementById('dtext').value = JSON.stringify(out);
+  dlg.showModal();
+};
+document.getElementById('dcopy').onclick = async e => {
+  const ta = document.getElementById('dtext');
+  try { await navigator.clipboard.writeText(ta.value); e.currentTarget.textContent = '복사했습니다'; }
+  catch { ta.select(); e.currentTarget.textContent = '길게 눌러 복사하세요'; }
+  setTimeout(() => { e.currentTarget.textContent = '복사'; }, 1800);
+};
+document.getElementById('dclose').onclick = () => dlg.close();
+
+// 저장해 둔 구역을 '고친 곳'으로 표시해 둔다 — 내보내기에 그대로 실린다.
+for (const k of Object.keys(saved)) if (ZONES.some(z => key(z) === k)) dirty.add(k);
+buildList(); draw();
+if (Object.keys(saved).length){
+  stamp(Object.keys(saved).length);
+  const el = document.querySelector('aside .sub');
+  if (el) el.insertAdjacentHTML('afterend',
+    '<p class="sub" style="color:var(--walk)">지난 작업 ' + Object.keys(saved).length +
+    '곳을 되살렸습니다.</p>');
+}
+addEventListener('resize', () => { if (zoom === 0) draw(); });
+</script>
