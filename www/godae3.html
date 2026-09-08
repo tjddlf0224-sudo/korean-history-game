@@ -316,13 +316,13 @@
     background: #1f1810f2; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
   .dlg-chart[hidden] { display: none; }
   .dlg-chart[hidden] { display: none; }
-  .dlg-chart table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .dlg-chart table { width: 100%; border-collapse: collapse; font-size: 15px; }
   .dlg-chart th, .dlg-chart td { padding: 4px 7px; text-align: left; line-height: 1.35;
     border-bottom: 1px solid rgba(255,255,255,.12); }
   .dlg-chart th { background: rgba(255,255,255,.10); font-weight: bold; white-space: nowrap; }
   .dlg-chart td:first-child { font-weight: bold; white-space: nowrap; }
   .dlg-chart tr:last-child td { border-bottom: 0; }
-  .dlg-chart .chart-note { padding: 6px 8px; font-size: 11.5px; line-height:1.45;
+  .dlg-chart .chart-note { padding: 6px 8px; font-size: 13px; line-height:1.45;
     background: rgba(255,255,255,.07); border-top: 1px solid rgba(255,255,255,.12); }
   /* 표가 뜬 칸에서는 대사가 짧아야 한 화면에 다 들어온다. */
   #dlg-panel.has-chart .dlg-box { font-size: 15px; min-height: 0; }
@@ -331,7 +331,7 @@
      flow — 순서가 중요한 것(삼국 통일, 대외 항쟁 차례)
      tree — 갈라져 나가는 것(붕당 계보, 왕위 계승) */
   .dlg-chart .bar-row { display:flex; align-items:center; gap:8px; padding:4px 8px;
-    border-bottom:1px solid rgba(255,255,255,.10); font-size:11.5px; }
+    border-bottom:1px solid rgba(255,255,255,.10); font-size:13px; }
   .dlg-chart .bar-row:last-of-type { border-bottom:0; }
   .dlg-chart .bar-label { flex:0 0 74px; font-weight:bold; }
   .dlg-chart .bar-track { flex:1; height:14px; border-radius:4px; background:rgba(0,0,0,.35);
@@ -346,18 +346,18 @@
   .dlg-chart .bar-val { flex:0 0 auto; color:#f0c96b; font-weight:bold; white-space:nowrap; }
   .dlg-chart .flow { display:flex; flex-wrap:wrap; align-items:stretch; gap:5px; padding:8px; }
   .dlg-chart .flow-step { flex:1 1 0; min-width:78px; padding:5px 6px; border-radius:6px;
-    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); font-size:11.5px; line-height:1.35; }
-  .dlg-chart .flow-step b { display:block; font-size:12.5px; margin-bottom:1px; }
-  .dlg-chart .flow-arrow { align-self:center; opacity:.55; font-size:12px; }
-  .dlg-chart .tree { padding:8px; font-size:11.5px; }
+    background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); font-size:13px; line-height:1.35; }
+  .dlg-chart .flow-step b { display:block; font-size:14px; margin-bottom:1px; }
+  .dlg-chart .flow-arrow { align-self:center; opacity:.55; font-size:13px; }
+  .dlg-chart .tree { padding:8px; font-size:13px; }
   .dlg-chart .tree-root { display:inline-block; padding:3px 9px; border-radius:6px; font-weight:bold;
     background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.2); }
   .dlg-chart .tree-branch { display:flex; gap:6px; margin-top:6px; }
   .dlg-chart .tree-col { flex:1; border-top:1px solid rgba(255,255,255,.2); padding-top:6px; }
   .dlg-chart .tree-node { padding:3px 7px; border-radius:5px; background:rgba(255,255,255,.09);
     border:1px solid rgba(255,255,255,.16); margin-bottom:4px; }
-  .dlg-chart .tree-node b { font-size:12px; }
-  .dlg-chart .tree-node span { display:block; opacity:.8; font-size:10.5px; }
+  .dlg-chart .tree-node b { font-size:14px; }
+  .dlg-chart .tree-node span { display:block; opacity:.8; font-size:12.5px; }
   /* 왕위 계승 띠 — 지금 대사가 누구(들) 이야기인지 금색으로 짚어 준다.
      main(같은 왕조 계승 순서)과 cross(같은 시기 다른 나라 왕)를 줄을
      나눠 보여준다 — 다른 나라를 같은 줄에 섞으면 마치 왕위를 이은
@@ -368,10 +368,10 @@
     background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); }
   .dlg-chart .king-badge.active { background:rgba(240,201,107,.20); border-color:#f0c96b;
     box-shadow:0 0 0 1px #f0c96b, 0 0 10px rgba(240,201,107,.45); }
-  .dlg-chart .kb-dynasty { font-size:9px; opacity:.7; margin-bottom:1px; }
-  .dlg-chart .kb-name { font-size:12px; font-weight:bold; }
+  .dlg-chart .kb-dynasty { font-size:11px; opacity:.7; margin-bottom:1px; }
+  .dlg-chart .kb-name { font-size:13.5px; font-weight:bold; }
   .dlg-chart .king-badge.active .kb-name { color:#f0c96b; }
-  .dlg-chart .kb-note { font-size:9.5px; opacity:.8; line-height:1.3; margin-top:2px; }
+  .dlg-chart .kb-note { font-size:11.5px; opacity:.8; line-height:1.3; margin-top:2px; }
 
   /* 다음 목표 안내 — 배경 위에 그냥 얹힌 작은 글자라 눈에 잘 안 띈다는
      피드백을 받고 글자를 키우고 빛나게 했다. 알약 배경·테두리는 "구려
@@ -504,11 +504,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=87"></script>
-<script src="assets/zoomwarn.js?v=87"></script>
-<script src="assets/map/map_component.js?v=87"></script>
-<script src="assets/chart.js?v=87"></script>
-<script src="assets/audio.js?v=87"></script>
+<script src="assets/errlog.js?v=88"></script>
+<script src="assets/zoomwarn.js?v=88"></script>
+<script src="assets/map/map_component.js?v=88"></script>
+<script src="assets/chart.js?v=88"></script>
+<script src="assets/audio.js?v=88"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -520,7 +520,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=87';   // 존댓말 전환
+const ART_V = '?v=88';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1892,38 +1892,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=87"></script>
-<script src="assets/streak.js?v=87"></script>
+<script src="assets/badges.js?v=88"></script>
+<script src="assets/streak.js?v=88"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=87"></script>
-  <script src="assets/fx.js?v=87"></script>
-  <script src="assets/deed.js?v=87"></script>
-  <script src="assets/inkwipe.js?v=87"></script>
-  <script src="assets/dash.js?v=87"></script>
-<script src="assets/juice.js?v=87"></script>
-  <script src="assets/difficulty.js?v=87"></script>
-  <script src="assets/nextauto.js?v=87"></script>
-<script src="assets/heroes_data.js?v=87"></script>
-<script src="assets/heroes.js?v=87"></script>
-<script src="assets/icons.js?v=87"></script>
-<script src="assets/srs.js?v=87"></script>
-<script src="assets/newsflash.js?v=87"></script>
-<script src="assets/timeline.js?v=87"></script>
-<script src="assets/journey.js?v=87"></script>
-<script src="assets/season.js?v=87"></script>
-<script src="assets/items.js?v=87"></script>
-  <script src="assets/gold.js?v=87"></script>
-  <script src="assets/ask.js?v=87"></script>
-  <script src="assets/ads.js?v=87"></script>
-  <script src="assets/energy.js?v=87"></script>
-  <script src="assets/daily.js?v=87"></script>
-  <script src="assets/unlock.js?v=87"></script>
-  <script src="assets/guide.js?v=87"></script>
-  <script src="assets/minigames.js?v=87"></script>
-  <script src="assets/quests.js?v=87"></script>
-  <script src="assets/offline.js?v=87"></script>
-  <script src="assets/telemetry.js?v=87"></script>
-<script src="assets/autowalk.js?v=87"></script>
+<script src="assets/rank.js?v=88"></script>
+  <script src="assets/fx.js?v=88"></script>
+  <script src="assets/deed.js?v=88"></script>
+  <script src="assets/inkwipe.js?v=88"></script>
+  <script src="assets/dash.js?v=88"></script>
+<script src="assets/juice.js?v=88"></script>
+  <script src="assets/difficulty.js?v=88"></script>
+  <script src="assets/nextauto.js?v=88"></script>
+<script src="assets/heroes_data.js?v=88"></script>
+<script src="assets/heroes.js?v=88"></script>
+<script src="assets/icons.js?v=88"></script>
+<script src="assets/srs.js?v=88"></script>
+<script src="assets/newsflash.js?v=88"></script>
+<script src="assets/timeline.js?v=88"></script>
+<script src="assets/journey.js?v=88"></script>
+<script src="assets/season.js?v=88"></script>
+<script src="assets/items.js?v=88"></script>
+  <script src="assets/gold.js?v=88"></script>
+  <script src="assets/ask.js?v=88"></script>
+  <script src="assets/ads.js?v=88"></script>
+  <script src="assets/energy.js?v=88"></script>
+  <script src="assets/daily.js?v=88"></script>
+  <script src="assets/unlock.js?v=88"></script>
+  <script src="assets/guide.js?v=88"></script>
+  <script src="assets/minigames.js?v=88"></script>
+  <script src="assets/quests.js?v=88"></script>
+  <script src="assets/offline.js?v=88"></script>
+  <script src="assets/telemetry.js?v=88"></script>
+<script src="assets/autowalk.js?v=88"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

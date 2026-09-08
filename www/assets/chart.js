@@ -84,7 +84,10 @@ window.Chart = (function(){
     s.textContent = `
     /* --- 제목 --- 무엇을 보여 주는 그림인지 먼저 밝힌다.
        제목 없이 '짐승 떼를 따라간다'만 뜨면 뜬금없다(실제 신고). */
-    .ch-title { padding:8px 12px 0; font-family:"Gowun Batang",serif; font-size:12.5px;
+    /* 도해 글자는 한 벌로 맞춘다 — 본문 15 · 이름 15.5 · 보조 13 · 제목 14.
+       도해마다 12~14.5px로 제각각이라 '뒤죽박죽'해 보였다(제보).
+       기준은 도해가 떠 있을 때의 대사 크기(15px)다. */
+    .ch-title { padding:8px 12px 0; font-family:"Gowun Batang",serif; font-size:14px;
       letter-spacing:.26em; color:#a89676; display:flex; align-items:center; gap:8px; }
     .ch-title::after { content:''; flex:1; height:1px;
       background:linear-gradient(90deg,rgba(240,201,107,.35),transparent); }
@@ -99,8 +102,8 @@ window.Chart = (function(){
       border:2px solid rgba(255,255,255,.3); }
     .ch-tl .m.on::before { background:#f0c96b; border-color:#fff3d4;
       box-shadow:0 0 10px rgba(240,201,107,.75); }
-    .ch-tl .y { font-size:12px; color:#a89676; font-variant-numeric:tabular-nums; }
-    .ch-tl .t { font-size:13.5px; color:#e6dbc2; line-height:1.35; margin-top:1px; }
+    .ch-tl .y { font-size:13px; color:#a89676; font-variant-numeric:tabular-nums; }
+    .ch-tl .t { font-size:15px; color:#e6dbc2; line-height:1.35; margin-top:1px; }
     .ch-tl .m.on .y { color:#f0c96b; }
     .ch-tl .m.on .t { color:#fff3d4; font-weight:700; }
 
@@ -109,9 +112,9 @@ window.Chart = (function(){
     .ch-cmp .col { flex:1 1 0; min-width:0; border-radius:7px; padding:7px 8px;
       background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); }
     .ch-cmp .col.hi { background:rgba(240,201,107,.14); border-color:rgba(240,201,107,.5); }
-    .ch-cmp .h { font-size:14px; font-weight:700; color:#f0c96b; text-align:center;
+    .ch-cmp .h { font-size:15.5px; font-weight:700; color:#f0c96b; text-align:center;
       padding-bottom:4px; margin-bottom:5px; border-bottom:1px solid rgba(255,255,255,.16); }
-    .ch-cmp li { font-size:13.5px; color:#e6dbc2; line-height:1.6; list-style:none;
+    .ch-cmp li { font-size:15px; color:#e6dbc2; line-height:1.6; list-style:none;
       padding-left:9px; position:relative; }
     .ch-cmp li::before { content:'·'; position:absolute; left:1px; color:#a89676; }
     .ch-cmp ul { margin:0; padding:0; }
@@ -122,39 +125,39 @@ window.Chart = (function(){
     .ch-cards .c img { width:100%; aspect-ratio:1/1; object-fit:contain; display:block;
       border-radius:7px; background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.14); }
     .ch-cards.face .c img { object-fit:cover; }
-    .ch-cards .n { font-size:13.5px; color:#f0c96b; margin-top:4px; line-height:1.3; }
-    .ch-cards .s { font-size:12px; color:#a89676; line-height:1.4; }
+    .ch-cards .n { font-size:15px; color:#f0c96b; margin-top:4px; line-height:1.3; }
+    .ch-cards .s { font-size:13px; color:#a89676; line-height:1.4; }
     .ch-cards .c.dim img { filter:grayscale(1) brightness(.5); }
 
     /* --- 사료 --- 옛 글을 그대로 보여 준다. 한능검은 사료를 자주 낸다 */
     .ch-quote { padding:11px 13px; }
-    .ch-quote .q { font-size:14.5px; line-height:1.85; color:#efe4cd;
+    .ch-quote .q { font-size:15.5px; line-height:1.85; color:#efe4cd;
       border-left:3px solid rgba(240,201,107,.6); padding-left:11px; }
     .ch-quote .q b { color:#f0c96b; }
-    .ch-quote .from { font-size:12px; color:#a89676; text-align:right; margin-top:6px; }
+    .ch-quote .from { font-size:13px; color:#a89676; text-align:right; margin-top:6px; }
 
     /* --- 숫자 --- 말로 "많다"고 하는 것보다 숫자 하나가 세다 */
     .ch-stat { display:flex; gap:8px; padding:10px 8px; justify-content:center; }
     .ch-stat .s { flex:1 1 0; text-align:center; }
-    .ch-stat .v { font-size:24px; font-weight:700; color:#f0c96b; line-height:1.1;
+    .ch-stat .v { font-size:26px; font-weight:700; color:#f0c96b; line-height:1.1;
       font-variant-numeric:tabular-nums; }
-    .ch-stat .l { font-size:12.5px; color:#a89676; margin-top:3px; line-height:1.35; }
+    .ch-stat .l { font-size:13px; color:#a89676; margin-top:3px; line-height:1.35; }
 
     /* --- 신분 구조 --- 위가 좁고 아래가 넓다는 것 자체가 내용이다 */
     .ch-pyr { padding:9px 8px; display:flex; flex-direction:column; align-items:center; gap:3px; }
-    .ch-pyr .t { border-radius:5px; padding:5px 10px; text-align:center; font-size:13.5px;
+    .ch-pyr .t { border-radius:5px; padding:5px 10px; text-align:center; font-size:15px;
       color:#e6dbc2; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); }
     .ch-pyr .t.hi { background:rgba(240,201,107,.18); border-color:rgba(240,201,107,.55);
       color:#fff3d4; font-weight:700; }
-    .ch-pyr .t s { display:block; font-size:11.5px; color:#a89676; text-decoration:none; }
+    .ch-pyr .t s { display:block; font-size:13px; color:#a89676; text-decoration:none; }
 
     /* --- 맞섬 --- 누가 누구와 붙었는지 한 줄로 */
     .ch-vs { display:flex; align-items:center; gap:8px; padding:10px 8px; }
     .ch-vs .side { flex:1 1 0; text-align:center; border-radius:7px; padding:7px 6px;
       background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.16); }
-    .ch-vs .side .n { font-size:14.5px; font-weight:700; color:#f0c96b; }
-    .ch-vs .side .s { font-size:12.5px; color:#a89676; line-height:1.45; margin-top:2px; }
-    .ch-vs .x { flex:none; font-size:14px; color:#d98a7a; font-weight:700; letter-spacing:.1em; }
+    .ch-vs .side .n { font-size:15.5px; font-weight:700; color:#f0c96b; }
+    .ch-vs .side .s { font-size:13px; color:#a89676; line-height:1.45; margin-top:2px; }
+    .ch-vs .x { flex:none; font-size:15px; color:#d98a7a; font-weight:700; letter-spacing:.1em; }
     .ch-vs .side.win { border-color:rgba(240,201,107,.55); background:rgba(240,201,107,.14); }
 
     /* --- 지도 --- 역사에서 '어디'는 '무엇'만큼 중요하다.
@@ -203,7 +206,7 @@ window.Chart = (function(){
     .ch-map .pn { font-size:6.6px; fill:#d8caae; font-family:"Gowun Batang",serif; }
     .ch-map .pn.on { fill:#fff3d4; font-weight:700; stroke-width:2.6px; }
     .ch-map .leg { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
-    .ch-map .leg .r { font-size:13px; color:#cdbfa4; line-height:1.4; display:flex; gap:6px; }
+    .ch-map .leg .r { font-size:15px; color:#cdbfa4; line-height:1.4; display:flex; gap:6px; }
     .ch-map .leg .r b { color:#f0c96b; font-weight:700; flex:none; }
     .ch-map .leg .r.on { color:#fff3d4; }
 
@@ -215,7 +218,7 @@ window.Chart = (function(){
        아니라 '흐르는 것'으로 보이게 한다. */
     .ch-steps { padding:9px 12px; display:flex; flex-direction:column; }
     .ch-steps .st { position:relative; display:flex; gap:10px; align-items:flex-start;
-      font-size:13.5px; padding:3px 0 9px; }
+      font-size:15px; padding:3px 0 9px; }
     .ch-steps .st:last-child { padding-bottom:1px; }
     /* 마디를 잇는 세로선 — 마지막 마디 아래로는 긋지 않는다 */
     .ch-steps .st::before { content:''; position:absolute; left:3.2px; top:12px; bottom:-1px;
@@ -229,7 +232,7 @@ window.Chart = (function(){
 
     /* --- 그림표 --- 여러 나라·여러 항목을 한눈에. 비교보다 촘촘하다 */
     .ch-grid { padding:8px; }
-    .ch-grid table { width:100%; border-collapse:collapse; font-size:13px; }
+    .ch-grid table { width:100%; border-collapse:collapse; font-size:15px; }
     .ch-grid th { color:#f0c96b; font-weight:700; padding:4px 5px; text-align:left;
       border-bottom:1px solid rgba(255,255,255,.18); white-space:nowrap; }
     .ch-grid td { color:#e6dbc2; padding:4px 5px; line-height:1.45;
@@ -241,7 +244,7 @@ window.Chart = (function(){
     .ch-call .im { position:relative; width:100%; border-radius:8px; overflow:hidden;
       background:rgba(0,0,0,.25); }
     .ch-call .im img { width:100%; display:block; }
-    .ch-call .tag { position:absolute; transform:translate(-50%,-50%); font-size:11.5px;
+    .ch-call .tag { position:absolute; transform:translate(-50%,-50%); font-size:13px;
       padding:2px 7px; border-radius:999px; white-space:nowrap;
       background:rgba(26,20,12,.92); border:1px solid #c9a24a; color:#f0c96b; }`;
     document.head.appendChild(s);
@@ -315,6 +318,13 @@ window.Chart = (function(){
       const PN = 6.6, AN = 8.2;               // 지명 · 영역 이름 글자 크기
       const seq = ++mapSeq;
       let defs = '';
+      /* 그림틀(viewBox) 안쪽 경계. 이름표가 이 밖으로 나가면 잘린다 —
+         울릉도(우산국)처럼 동쪽 끝에 있는 곳이 실제로 잘렸다(제보). */
+      const BX0 = c.north ? -20 : -14, BY0 = c.north ? -48 : -10;
+      const BX1 = BX0 + (c.north ? 140 : 128), BY1 = BY0 + (c.north ? 212 : 168);
+      function inside(b){
+        return b.x0 >= BX0 + 1 && b.x1 <= BX1 - 1 && b.y0 >= BY0 + 1 && b.y1 <= BY1 - 1;
+      }
 
       /* 글자 폭 어림. 한글은 한 글자가 거의 정사각이고 로마자·숫자는 절반쯤. */
       function textW(t, fs){
@@ -349,7 +359,9 @@ window.Chart = (function(){
       /* 영역 이름은 글쓴이가 자리를 정해 둔다. 먼저 자리를 잡아 두고,
          지명은 그 자리를 피해 앉힌다 — 나라 이름이 더 큰 정보라서다. */
       const anames = (c.areas || []).filter(function(a){ return a.n; }).map(function(a){
-        const x = a.tx || 0, y = a.ty || 0, w = textW(a.n, AN);
+        const w = textW(a.n, AN);
+        const x = Math.min(BX1 - 1 - w / 2, Math.max(BX0 + 1 + w / 2, a.tx || 0));
+        const y = Math.min(BY1 - 2, Math.max(BY0 + AN, a.ty || 0));
         taken.push({ x0: x - w / 2 - 1, x1: x + w / 2 + 1, y0: y - AN * .85, y1: y + AN * .3 });
         return '<text class="an" x="' + x + '" y="' + y + '"' +
                (a.c ? ' style="fill:' + a.c + '"' : '') + '>' + esc(a.n) + '</text>';
@@ -378,15 +390,23 @@ window.Chart = (function(){
               const b = { x0: side === 'right' ? x - 1 : x - w - 1,
                           x1: side === 'right' ? x + w + 1 : x + 1,
                           y0: y - PN * .85, y1: y + PN * .3 };
-              if (!hits(b)){ best = { x: x, y: y, side: side, b: b }; break; }
+              if (inside(b) && !hits(b)){ best = { x: x, y: y, side: side, b: b }; break; }
             }
           }
           if (best) break;
         }
         if (!best){
-          const x = p.x + gap, y = p.y + 2.2;
-          best = { x: x, y: y, side: 'right',
-                   b: { x0: x - 1, x1: x + w + 1, y0: y - PN * .85, y1: y + PN * .3 } };
+          // 빈자리가 없으면 겹치더라도 **틀 안**에는 반드시 들어오게 민다.
+          // 겹친 글자는 읽기 어려울 뿐이지만, 잘린 글자는 아예 못 읽는다.
+          const side = p.x > (BX0 + BX1) / 2 ? 'left' : 'right';
+          let x = p.x + (side === 'right' ? gap : -gap);
+          const y = Math.min(BY1 - 2, Math.max(BY0 + PN, p.y + 2.2));
+          if (side === 'right') x = Math.min(x, BX1 - 1 - w);
+          else x = Math.max(x, BX0 + 1 + w);
+          best = { x: x, y: y, side: side,
+                   b: { x0: side === 'right' ? x - 1 : x - w - 1,
+                        x1: side === 'right' ? x + w + 1 : x + 1,
+                        y0: y - PN * .85, y1: y + PN * .3 } };
         }
         taken.push(best.b);
         return out + '<text class="pn' + (p.on ? ' on' : '') + '" x="' + best.x + '" y="' + best.y +
