@@ -8,7 +8,9 @@
   청해진 나루터 통행 불가).
 
 무엇을 보장하나 — 챕터의 판정 로직을 그대로 옮겼다
-  · canStand: 몸 상자 pad=16의 네 귀퉁이가 배리어에 닿지 않을 것
+  · canStand: 몸 상자의 네 귀퉁이가 배리어에 닿지 않을 것
+    (pad는 챕터에서 직접 읽는다 — 16으로 박아 두었다가 게임이 10으로
+     바뀐 뒤에도 검사기만 16이라 어긋난 적이 있다)
   · NPC 반발: 기존 NPC와 34px 안으로 겹치지 않을 것
   · 대화 사거리: INTERACT_RANGE=108.8 안에 **스폰에서 걸어 닿는** 칸이 있을 것
     (서 있을 자리 자체는 NPC가 막고 서므로 걸을 수 있을 필요가 없다)
@@ -24,10 +26,16 @@ import re
 import sys
 from collections import deque
 
-PAD = 16            # canStand의 몸 상자 반폭
+PAD_FALLBACK = 16   # canStand의 몸 상자 반폭 — 챕터에서 못 읽었을 때만
 NPC_BLOCK = 34      # NPC 반발 거리
 INTERACT = 108.8    # 대화 사거리
 STEP = 8            # 격자 간격
+
+
+def pad_of(html):
+    """챕터의 canStand가 쓰는 발자국을 그대로 가져온다."""
+    m = re.search(r'const pad = (\d+);', html)
+    return int(m.group(1)) if m else PAD_FALLBACK
 
 
 def parse_zone(html, zone):
@@ -60,7 +68,7 @@ def parse_zone(html, zone):
     }
 
 
-def make_walk(bars, w, h):
+def make_walk(bars, w, h, PAD=PAD_FALLBACK):
     def barrier(x, y):
         return any(x0 <= x <= x1 and y0 <= y <= y1 for x0, y0, x1, y1 in bars)
 
@@ -100,7 +108,7 @@ def main():
         W, H = int(m.group(1)), int(m.group(2))
     else:
         W, H = 1376, 768
-    can = make_walk(z['barriers'], W, H)
+    can = make_walk(z["barriers"], W, H, pad_of(html))
     walk = reachable(can, z['spawn'], W, H)
     print(f'{f} · {zone} — 걸어 닿는 칸 {len(walk)}개 (격자 {STEP}px)')
 
