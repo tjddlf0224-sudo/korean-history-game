@@ -155,7 +155,10 @@ def parse(path):
                                   'name': lbm.group(1) if lbm else '',
                                   'x': round(x), 'y': round(y)})
 
-        sp = re.search(r'spawn:\s*\{([^{}]*)\}', blk)
+        # 구역의 시작 자리만. 그냥 spawn을 찾으면 exits 안의 **도착 좌표**를
+        # 집어온다 — 그건 건너편 구역의 좌표라 엉뚱한 자리에 표가 찍힌다.
+        # 유배지에서 실제로 그랬다(제보: "시작 자리가 이상하네").
+        sp = re.search(r'\n    spawn:\s*\{([^{}]*)\}', blk)
         spawn = None
         if sp:
             x, y = num(sp.group(1), 'x'), num(sp.group(1), 'y')

@@ -38,7 +38,8 @@ def zones_of(html):
         if nm:
             for e in re.finditer(r"\{\s*id:\s*'(\w+)'[^}]*?x:\s*(\d+),\s*y:\s*(\d+)", nm.group(1)):
                 npcs.append((e.group(1), int(e.group(2)), int(e.group(3))))
-        sp = re.search(r'spawn:\s*\{\s*x:\s*(\d+),\s*y:\s*(\d+)', b)
+        # 구역의 시작 자리만 — exits 안의 도착 좌표를 집어오면 안 된다
+        sp = re.search(r'\n    spawn:\s*\{\s*x:\s*(\d+),\s*y:\s*(\d+)', b)
         out[zid] = dict(bars=bars, npcs=npcs,
                         spawn=(int(sp.group(1)), int(sp.group(2))) if sp else None)
     return out
