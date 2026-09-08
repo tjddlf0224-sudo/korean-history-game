@@ -446,7 +446,22 @@ window.Chart = (function(){
          밀어 본다(.dlg-chart 가 overflow-y:auto). 누른 채 12px 넘게 움직이면
          대사 넘김으로 세지 않으므로, 밀어도 대사가 넘어가지 않는다. */
       lastMap = c;
-      return '<div class="ch-map' + (leg ? '' : ' solo') + '">' + svg +
+      /* 지도가 도해 칸보다 커진 뒤로, 열면 늘 **맨 위**(만주 쪽 빈 하늘)가
+         보였다(제보: "처음에 윗부분이 나오니까 이상해").
+         그래서 '볼 곳'의 세로 위치를 함께 실어 보내고, 그려진 직후에
+         그 자리가 한가운데 오도록 도해 칸을 밀어 둔다.
+         볼 곳은 강조한 핀(on) → 영역 이름 → 핀들의 한가운데 순으로 고른다. */
+      let fy = null;
+      const onPin = (c.pins || []).find(function(p){ return p.on; });
+      if (onPin) fy = onPin.y;
+      else if ((c.areas || []).some(function(a){ return a.ty; }))
+        fy = (c.areas || []).filter(function(a){ return a.ty; })[0].ty;
+      else if ((c.pins || []).length)
+        fy = c.pins.reduce(function(a, p){ return a + p.y; }, 0) / c.pins.length;
+      const foc = fy === null ? '' :
+        ' data-focus="' + ((fy - BY0) / (BY1 - BY0)).toFixed(4) + '"';
+      if (fy !== null) focusSoon();
+      return '<div class="ch-map' + (leg ? '' : ' solo') + '"' + foc + '>' + svg +
         (leg ? '<div class="leg">' + leg + '</div>' : '') + '</div>';
     },
 
@@ -523,6 +538,31 @@ window.Chart = (function(){
       return out;
     },
   };
+
+  /* 그림이 붙자마자(다음 프레임) 도해 칸을 밀어, 볼 곳이 한가운데 오게 한다.
+     챕터 서른여섯 곳의 붙이는 코드를 건드리지 않으려고 이렇게 한다 —
+     drawChart()가 문자열만 돌려주기 때문에 여기서 DOM을 잡을 수가 없다. */
+  let focusQueued = false;
+  function focusSoon(){
+    if (focusQueued || typeof requestAnimationFrame !== 'function') return;
+    focusQueued = true;
+    requestAnimationFrame(function(){
+      focusQueued = false;
+      const list = document.querySelectorAll('.ch-map[data-focus]');
+      for (const el of list){
+        const r = parseFloat(el.getAttribute('data-focus'));
+        el.removeAttribute('data-focus');
+        const svg = el.querySelector('svg');
+        if (!svg || !(r >= 0)) continue;
+        let sc = el.parentElement;
+        while (sc && sc.scrollHeight <= sc.clientHeight + 2) sc = sc.parentElement;
+        if (!sc) continue;
+        const top = svg.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop;
+        const want = top + svg.offsetHeight * r - sc.clientHeight / 2;
+        sc.scrollTop = Math.max(0, Math.min(sc.scrollHeight - sc.clientHeight, want));
+      }
+    });
+  }
 
   /* 이름으로 부르는 도해를 여기 쌓는다. 여러 챕터가 같은 그림을 쓸 때만 등록한다 —
      한 챕터에서만 쓰는 것은 그 챕터가 chart:{...}로 직접 넘기는 편이 낫다. */

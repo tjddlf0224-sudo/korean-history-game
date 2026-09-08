@@ -436,10 +436,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=90"></script>
-<script src="assets/zoomwarn.js?v=90"></script>
-<script src="assets/chart.js?v=90"></script>
-<script src="assets/audio.js?v=90"></script>
+<script src="assets/errlog.js?v=91"></script>
+<script src="assets/zoomwarn.js?v=91"></script>
+<script src="assets/chart.js?v=91"></script>
+<script src="assets/audio.js?v=91"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -451,7 +451,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=90';   // 존댓말 전환
+const ART_V = '?v=91';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -639,7 +639,7 @@ const ZONES = {
       // 아니다. 대사 내용도 인종·명종 교체와 문정왕후 수렴청정 같은 궁중 소식이라
       // 궁녀가 훨씬 자연스럽다(초상 gungnyeo.png는 여태 안 쓰이고 있었다).
       { id: 'commoner1', name: '나인', x: 480, y: 380, img: 'assets/portraits/gungnyeo.png', look: { role: 'commoner', body: '#4a4a58', accent: '#8a7a5a' } },
-      { id:'yeonsangun', name:'연산군', x:240, y:280, img: 'assets/portraits/yeonsangun_king.png', look:{ role:'king', body:'#5c2f2f', accent:'#e0b94a' } },
+      { id:'yeonsangun', name:'연산군', x:240, y:280, look:{ role:'king', body:'#5c2f2f', accent:'#e0b94a' } },
     ],
     exits: [
       { rect:{x0:0,y0:340,x1:60,y1:460}, to:'sago', spawn:{x:1290,y:380}, label:'사초 사고로' },
@@ -688,7 +688,7 @@ const ZONES = {
   ], // 초가집
     npcs: [
       { id: 'jogwangjo', name: '조광조', x: 900, y: 600, img: 'assets/portraits/jogwangjo.png', look: { role: 'scholar', body: '#3a5040', accent: '#c9a24a' } },
-      { id:'jungjong', name:'중종', x:640, y:600, img: 'assets/portraits/jungjong_king.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
+      { id:'jungjong', name:'중종', x:640, y:600, look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
     ],
     exits: [ { rect:{x0:625,y0:665,x1:750,y1:760}, to:'pokjeong', spawn:{x:1300,y:400}, label:'궁궐로' } ],
   },
@@ -1954,38 +1954,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=90"></script>
-<script src="assets/streak.js?v=90"></script>
+<script src="assets/badges.js?v=91"></script>
+<script src="assets/streak.js?v=91"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=90"></script>
-  <script src="assets/fx.js?v=90"></script>
-  <script src="assets/deed.js?v=90"></script>
-  <script src="assets/inkwipe.js?v=90"></script>
-  <script src="assets/dash.js?v=90"></script>
-<script src="assets/juice.js?v=90"></script>
-  <script src="assets/difficulty.js?v=90"></script>
-  <script src="assets/nextauto.js?v=90"></script>
-<script src="assets/heroes_data.js?v=90"></script>
-<script src="assets/heroes.js?v=90"></script>
-<script src="assets/icons.js?v=90"></script>
-<script src="assets/srs.js?v=90"></script>
-<script src="assets/newsflash.js?v=90"></script>
-<script src="assets/timeline.js?v=90"></script>
-<script src="assets/journey.js?v=90"></script>
-<script src="assets/season.js?v=90"></script>
-<script src="assets/items.js?v=90"></script>
-  <script src="assets/gold.js?v=90"></script>
-  <script src="assets/ask.js?v=90"></script>
-  <script src="assets/ads.js?v=90"></script>
-  <script src="assets/energy.js?v=90"></script>
-  <script src="assets/daily.js?v=90"></script>
-  <script src="assets/unlock.js?v=90"></script>
-  <script src="assets/guide.js?v=90"></script>
-  <script src="assets/minigames.js?v=90"></script>
-  <script src="assets/quests.js?v=90"></script>
-  <script src="assets/offline.js?v=90"></script>
-  <script src="assets/telemetry.js?v=90"></script>
-<script src="assets/autowalk.js?v=90"></script>
+<script src="assets/rank.js?v=91"></script>
+  <script src="assets/fx.js?v=91"></script>
+  <script src="assets/deed.js?v=91"></script>
+  <script src="assets/inkwipe.js?v=91"></script>
+  <script src="assets/dash.js?v=91"></script>
+<script src="assets/juice.js?v=91"></script>
+  <script src="assets/difficulty.js?v=91"></script>
+  <script src="assets/nextauto.js?v=91"></script>
+<script src="assets/heroes_data.js?v=91"></script>
+<script src="assets/heroes.js?v=91"></script>
+<script src="assets/icons.js?v=91"></script>
+<script src="assets/srs.js?v=91"></script>
+<script src="assets/newsflash.js?v=91"></script>
+<script src="assets/timeline.js?v=91"></script>
+<script src="assets/journey.js?v=91"></script>
+<script src="assets/season.js?v=91"></script>
+<script src="assets/items.js?v=91"></script>
+  <script src="assets/gold.js?v=91"></script>
+  <script src="assets/ask.js?v=91"></script>
+  <script src="assets/ads.js?v=91"></script>
+  <script src="assets/energy.js?v=91"></script>
+  <script src="assets/daily.js?v=91"></script>
+  <script src="assets/unlock.js?v=91"></script>
+  <script src="assets/guide.js?v=91"></script>
+  <script src="assets/minigames.js?v=91"></script>
+  <script src="assets/quests.js?v=91"></script>
+  <script src="assets/offline.js?v=91"></script>
+  <script src="assets/telemetry.js?v=91"></script>
+<script src="assets/autowalk.js?v=91"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

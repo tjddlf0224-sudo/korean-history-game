@@ -504,11 +504,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=90"></script>
-<script src="assets/zoomwarn.js?v=90"></script>
-<script src="assets/map/map_component.js?v=90"></script>
-<script src="assets/chart.js?v=90"></script>
-<script src="assets/audio.js?v=90"></script>
+<script src="assets/errlog.js?v=91"></script>
+<script src="assets/zoomwarn.js?v=91"></script>
+<script src="assets/map/map_component.js?v=91"></script>
+<script src="assets/chart.js?v=91"></script>
+<script src="assets/audio.js?v=91"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -520,7 +520,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=90';   // 존댓말 전환
+const ART_V = '?v=91';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -669,8 +669,8 @@ const ZONES = {
       { id:'ureuk', name:'우륵', x:700, y:240, img:'assets/portraits/ureuk.png', look:{ role:'scholar', body:'#5c4a6b', accent:'#d8c48a' } },
       { id:'cheolsang', name:'덩이쇠 상인', x:980, y:350, img:'assets/portraits/cheolsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
       { id:'wae', name:'왜 사신', x:688, y:640, img:'assets/portraits/wae.png', look:{ role:'commoner', body:'#5a6b5a', accent:'#b8a888' } },
-      { id:'ijinasi', name:'대가야 왕', x:512, y:480, img: 'assets/portraits/ijinasi_king.png', look:{ role:'king', body:'#5c4a2f', accent:'#e0b94a' } },
-      { id:'beopheung', name:'신라 법흥왕', x:872, y:472, img: 'assets/portraits/beopheung_king.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
+      { id:'ijinasi', name:'대가야 왕', x:512, y:480, look:{ role:'king', body:'#5c4a2f', accent:'#e0b94a' } },
+      { id:'beopheung', name:'신라 법흥왕', x:872, y:472, look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -1228,7 +1228,7 @@ const NPC_DATA = {
       { who:'me', t:'(화들짝 놀라며) 예서 어인 일이십니까?' },
       { who:'npc', t:'이 김해 땅이, 이제 다 신라의 것이다.' },
       { who:'me', t:'(둘러본다) 언제, 어찌 이리되었습니까?',
-        chart:{ type:'map', title:'금관가야, 신라 땅이 되다', pins:[ { x:70, y:127, n:'김해', on:true } ], legend:[ { k:'532년', v:'법흥왕에게 항복' } ] } },
+        chart:{ type:'map', title:'금관가야, 신라 땅이 되다', areas:[ { pts:'58.7,128.1 60.9,126.0 63.0,126.8 66.9,127.4 69.7,127.4 71.1,128.7 65.7,133.4 61.7,131.5 58.0,131.1', c:'#7fc4bd', n:'가야 연맹', tx:61, ty:122 } ], pins:[ { x:70, y:127, n:'김해', on:true } ], legend:[ { k:'532년', v:'법흥왕에게 항복' } ] } },
       { who:'npc', t:'532년, 금관가야 구형왕이 항복했다.' },
       { who:'npc', t:'처자와 보물을 이끌고 왔다. 싸움은 없었다.' },
       { who:'me', t:'싸우지도 않고 나라를 통째로 내주었군요.' },
@@ -1292,7 +1292,7 @@ const NPC_DATA = {
         chart:{ type:'stat', title:'구지봉에 내려온 것', items:[ { v:'6개', l:'황금알' }, { v:'1번째', l:'김수로' } ] } },
       { who:'me', t:'(눈이 커진다) 황금알에서 태어나셨다고요?' },
       { who:'npc', t:'그렇다네. 여섯 나라가 나를 우두머리로 세웠지.',
-        chart:{ type:'map', title:'김해를 중심으로 뭉친 여섯 나라', pins:[ { x:70, y:127, n:'김해', on:true } ], legend:[ { k:'6개 소국', v:'금관가야가 이끌었다' } ] } },
+        chart:{ type:'map', title:'김해를 중심으로 뭉친 여섯 나라', areas:[ { pts:'58.7,128.1 60.9,126.0 63.0,126.8 66.9,127.4 69.7,127.4 71.1,128.7 65.7,133.4 61.7,131.5 58.0,131.1', c:'#7fc4bd', n:'가야 연맹', tx:61, ty:122 } ], pins:[ { x:70, y:127, n:'김해', on:true } ], legend:[ { k:'6개 소국', v:'금관가야가 이끌었다' } ] } },
       { who:'npc', t:'사람들은 전기 가야 연맹이라 부르더군.',
         chart:{ type:'compare', title:'전기 연맹과 후기 연맹', cols:[ { h:'전기 가야 연맹', hi:true, items:[ '금관가야 중심', '김해' ] }, { h:'후기 가야 연맹', items:[ '대가야 중심', '고령' ] } ] } },
       { who:'me', t:'(주변을 둘러본다) 이 무덤들은 다 무엇입니까?' },
@@ -1321,7 +1321,7 @@ const NPC_DATA = {
         chart:{ type:'steps', title:'덩이쇠를 만드는 차례', steps:[ { t:'쇳물을 녹인다' }, { t:'두드려 편다', s:'납작하게' }, { t:'배에 실어 보낸다' } ] } },
       { who:'npc', t:'크기가 일정해서 돈처럼 주고받기도 하네.' },
       { who:'me', t:'(다시 살펴본다) 이걸 어디로 보냅니까?',
-        chart:{ type:'map', title:'덩이쇠가 팔려 간 곳', pins:[ { x:70, y:127, n:'김해', on:true }, { x:25, y:68, n:'낙랑' } ], legend:[ { k:'낙랑·대방', v:'중국 군현으로 수출' }, { k:'왜', v:'바다 건너로도 수출' } ] } },
+        chart:{ type:'map', title:'덩이쇠가 팔려 간 곳', areas:[ { pts:'58.7,128.1 60.9,126.0 63.0,126.8 66.9,127.4 69.7,127.4 71.1,128.7 65.7,133.4 61.7,131.5 58.0,131.1', c:'#7fc4bd', n:'가야 연맹', tx:61, ty:122 } ], pins:[ { x:70, y:127, n:'김해', on:true }, { x:25, y:68, n:'낙랑' } ], legend:[ { k:'낙랑·대방', v:'중국 군현으로 수출' }, { k:'왜', v:'바다 건너로도 수출' } ] } },
       { who:'npc', t:'배에 실어 낙랑과 대방으로, 왜로도 보내네.' },
       { who:'me', t:'(고개를 갸웃하며) 왜는 어찌 철이 없습니까?' },
       { who:'npc', t:'저들 쇠는 여물지 않아 여기서 실어 가지.' },
@@ -1879,38 +1879,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=90"></script>
-<script src="assets/streak.js?v=90"></script>
+<script src="assets/badges.js?v=91"></script>
+<script src="assets/streak.js?v=91"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=90"></script>
-  <script src="assets/fx.js?v=90"></script>
-  <script src="assets/deed.js?v=90"></script>
-  <script src="assets/inkwipe.js?v=90"></script>
-  <script src="assets/dash.js?v=90"></script>
-<script src="assets/juice.js?v=90"></script>
-  <script src="assets/difficulty.js?v=90"></script>
-  <script src="assets/nextauto.js?v=90"></script>
-<script src="assets/heroes_data.js?v=90"></script>
-<script src="assets/heroes.js?v=90"></script>
-<script src="assets/icons.js?v=90"></script>
-<script src="assets/srs.js?v=90"></script>
-<script src="assets/newsflash.js?v=90"></script>
-<script src="assets/timeline.js?v=90"></script>
-<script src="assets/journey.js?v=90"></script>
-<script src="assets/season.js?v=90"></script>
-<script src="assets/items.js?v=90"></script>
-  <script src="assets/gold.js?v=90"></script>
-  <script src="assets/ask.js?v=90"></script>
-  <script src="assets/ads.js?v=90"></script>
-  <script src="assets/energy.js?v=90"></script>
-  <script src="assets/daily.js?v=90"></script>
-  <script src="assets/unlock.js?v=90"></script>
-  <script src="assets/guide.js?v=90"></script>
-  <script src="assets/minigames.js?v=90"></script>
-  <script src="assets/quests.js?v=90"></script>
-  <script src="assets/offline.js?v=90"></script>
-  <script src="assets/telemetry.js?v=90"></script>
-<script src="assets/autowalk.js?v=90"></script>
+<script src="assets/rank.js?v=91"></script>
+  <script src="assets/fx.js?v=91"></script>
+  <script src="assets/deed.js?v=91"></script>
+  <script src="assets/inkwipe.js?v=91"></script>
+  <script src="assets/dash.js?v=91"></script>
+<script src="assets/juice.js?v=91"></script>
+  <script src="assets/difficulty.js?v=91"></script>
+  <script src="assets/nextauto.js?v=91"></script>
+<script src="assets/heroes_data.js?v=91"></script>
+<script src="assets/heroes.js?v=91"></script>
+<script src="assets/icons.js?v=91"></script>
+<script src="assets/srs.js?v=91"></script>
+<script src="assets/newsflash.js?v=91"></script>
+<script src="assets/timeline.js?v=91"></script>
+<script src="assets/journey.js?v=91"></script>
+<script src="assets/season.js?v=91"></script>
+<script src="assets/items.js?v=91"></script>
+  <script src="assets/gold.js?v=91"></script>
+  <script src="assets/ask.js?v=91"></script>
+  <script src="assets/ads.js?v=91"></script>
+  <script src="assets/energy.js?v=91"></script>
+  <script src="assets/daily.js?v=91"></script>
+  <script src="assets/unlock.js?v=91"></script>
+  <script src="assets/guide.js?v=91"></script>
+  <script src="assets/minigames.js?v=91"></script>
+  <script src="assets/quests.js?v=91"></script>
+  <script src="assets/offline.js?v=91"></script>
+  <script src="assets/telemetry.js?v=91"></script>
+<script src="assets/autowalk.js?v=91"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

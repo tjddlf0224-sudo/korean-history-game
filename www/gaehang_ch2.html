@@ -416,10 +416,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=90"></script>
-<script src="assets/zoomwarn.js?v=90"></script>
-<script src="assets/chart.js?v=90"></script>
-<script src="assets/audio.js?v=90"></script>
+<script src="assets/errlog.js?v=91"></script>
+<script src="assets/zoomwarn.js?v=91"></script>
+<script src="assets/chart.js?v=91"></script>
+<script src="assets/audio.js?v=91"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -430,7 +430,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=90';   // 존댓말 전환
+const ART_V = '?v=91';   // 존댓말 전환
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
@@ -573,7 +573,7 @@ const ZONES = {
       { id: 'daewongun', name: '흥선대원군', x: 700, y: 460, img: 'assets/portraits/daewongun.png', look: { role: 'king', body: '#3a2a1e', accent: '#e0954a' } },
       { id: 'soldier', name: '무위영 병사', x: 470, y: 560, img: 'assets/portraits/muwiyeong_soldier.png', look: { role: 'general', body: '#5a4a3a', accent: '#8c8676', headband:true } },      // 조약을 맺은 것은 대원군이 아니라 조정(고종)이고, 별기군 이야기는
       // 별기군에게 듣는 것이 맞다. 자리는 place_npcs.py 로 골랐다.
-      { id: 'gojong', name: '고종', x: 960, y: 456, img: 'assets/portraits/gojong_king.png', look: { role: 'king', body: '#3a4a6b', accent: '#e0b94a' } },
+      { id: 'gojong', name: '고종', x: 960, y: 456, look: { role: 'king', body: '#3a4a6b', accent: '#e0b94a' } },
       { id: 'byeolgigun', name: '별기군 교련병', x: 392, y: 312, img: 'assets/portraits/byeolgigun.png', look: { role: 'general', body: '#4a5a4a', accent: '#c9a24a' } },
     ],
     exits: [],
@@ -1581,38 +1581,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=90"></script>
-<script src="assets/streak.js?v=90"></script>
+<script src="assets/badges.js?v=91"></script>
+<script src="assets/streak.js?v=91"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=90"></script>
-  <script src="assets/fx.js?v=90"></script>
-  <script src="assets/deed.js?v=90"></script>
-  <script src="assets/inkwipe.js?v=90"></script>
-  <script src="assets/dash.js?v=90"></script>
-<script src="assets/juice.js?v=90"></script>
-  <script src="assets/difficulty.js?v=90"></script>
-  <script src="assets/nextauto.js?v=90"></script>
-<script src="assets/heroes_data.js?v=90"></script>
-<script src="assets/heroes.js?v=90"></script>
-<script src="assets/icons.js?v=90"></script>
-<script src="assets/srs.js?v=90"></script>
-<script src="assets/newsflash.js?v=90"></script>
-<script src="assets/timeline.js?v=90"></script>
-<script src="assets/journey.js?v=90"></script>
-<script src="assets/season.js?v=90"></script>
-<script src="assets/items.js?v=90"></script>
-  <script src="assets/gold.js?v=90"></script>
-  <script src="assets/ask.js?v=90"></script>
-  <script src="assets/ads.js?v=90"></script>
-  <script src="assets/energy.js?v=90"></script>
-  <script src="assets/daily.js?v=90"></script>
-  <script src="assets/unlock.js?v=90"></script>
-  <script src="assets/guide.js?v=90"></script>
-  <script src="assets/minigames.js?v=90"></script>
-  <script src="assets/quests.js?v=90"></script>
-  <script src="assets/offline.js?v=90"></script>
-  <script src="assets/telemetry.js?v=90"></script>
-<script src="assets/autowalk.js?v=90"></script>
+<script src="assets/rank.js?v=91"></script>
+  <script src="assets/fx.js?v=91"></script>
+  <script src="assets/deed.js?v=91"></script>
+  <script src="assets/inkwipe.js?v=91"></script>
+  <script src="assets/dash.js?v=91"></script>
+<script src="assets/juice.js?v=91"></script>
+  <script src="assets/difficulty.js?v=91"></script>
+  <script src="assets/nextauto.js?v=91"></script>
+<script src="assets/heroes_data.js?v=91"></script>
+<script src="assets/heroes.js?v=91"></script>
+<script src="assets/icons.js?v=91"></script>
+<script src="assets/srs.js?v=91"></script>
+<script src="assets/newsflash.js?v=91"></script>
+<script src="assets/timeline.js?v=91"></script>
+<script src="assets/journey.js?v=91"></script>
+<script src="assets/season.js?v=91"></script>
+<script src="assets/items.js?v=91"></script>
+  <script src="assets/gold.js?v=91"></script>
+  <script src="assets/ask.js?v=91"></script>
+  <script src="assets/ads.js?v=91"></script>
+  <script src="assets/energy.js?v=91"></script>
+  <script src="assets/daily.js?v=91"></script>
+  <script src="assets/unlock.js?v=91"></script>
+  <script src="assets/guide.js?v=91"></script>
+  <script src="assets/minigames.js?v=91"></script>
+  <script src="assets/quests.js?v=91"></script>
+  <script src="assets/offline.js?v=91"></script>
+  <script src="assets/telemetry.js?v=91"></script>
+<script src="assets/autowalk.js?v=91"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
