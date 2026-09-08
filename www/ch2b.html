@@ -493,11 +493,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=97"></script>
-<script src="assets/zoomwarn.js?v=97"></script>
-<script src="assets/map/map_component.js?v=97"></script>
-<script src="assets/chart.js?v=97"></script>
-<script src="assets/audio.js?v=97"></script>
+<script src="assets/errlog.js?v=98"></script>
+<script src="assets/zoomwarn.js?v=98"></script>
+<script src="assets/map/map_component.js?v=98"></script>
+<script src="assets/chart.js?v=98"></script>
+<script src="assets/audio.js?v=98"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -509,7 +509,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=97';   // 존댓말 전환
+const ART_V = '?v=98';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -1386,9 +1386,10 @@ const NPC_DATA = {
       { who:'npc', t:'그렇지. 저긴 김 대감이 맡은 몫이라네.' },
       { who:'npc', t:'난 이만주를 치러 올라산성까지 올랐네.' },
       { who:'me', t:'그 싸움 뒤엔 어떻게 됐습니까?' },
-      { who:'npc', t:'이 네 고을을 새로 두었지.',
+      // 네 고을 이름이 지도에만 있어, 주인공이 처음 듣는 이름을 줄줄 외웠다(제보).
+      { who:'npc', t:'여연·자성·무창·우예 — 이 네 고을을 새로 두었지.',
         chart:{ type:'map', title:'4군', north:true, pins:[ { x:34, y:23, n:'여연', on:true }, { x:39, y:20, n:'우예', on:true }, { x:37, y:29, n:'자성', on:true }, { x:33, y:33, n:'무창', on:true } ], legend:[ { k:'4군', v:'최윤덕이 개척 (1433~1443)', on:true }, { k:'강', v:'압록강 상류' } ] } },
-      { who:'me', t:'여연·자성·무창·우예 — 네 곳이군요.' },
+      { who:'me', t:'…압록강 상류를 죄다 아우르셨군요.' },
       { who:'npc', t:'무려 열 해가 걸렸네.',
         chart:{ type:'stat', title:'4군을 두기까지', items:[ { v:'10년', l:'1433~1443년' } ] } },
       { who:'npc', t:'다만 무력만은 아닐세. 국경에 무역소도 두었지.',
@@ -2022,38 +2023,38 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
-<script src="assets/badges.js?v=97"></script>
-<script src="assets/streak.js?v=97"></script>
+<script src="assets/badges.js?v=98"></script>
+<script src="assets/streak.js?v=98"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=97"></script>
-  <script src="assets/fx.js?v=97"></script>
-  <script src="assets/inkwipe.js?v=97"></script>
-  <script src="assets/deed.js?v=97"></script>
-  <script src="assets/dash.js?v=97"></script>
-<script src="assets/juice.js?v=97"></script>
-  <script src="assets/difficulty.js?v=97"></script>
-  <script src="assets/nextauto.js?v=97"></script>
-<script src="assets/heroes_data.js?v=97"></script>
-<script src="assets/heroes.js?v=97"></script>
-<script src="assets/icons.js?v=97"></script>
-<script src="assets/srs.js?v=97"></script>
-<script src="assets/newsflash.js?v=97"></script>
-<script src="assets/timeline.js?v=97"></script>
-<script src="assets/journey.js?v=97"></script>
-<script src="assets/season.js?v=97"></script>
-<script src="assets/items.js?v=97"></script>
-  <script src="assets/gold.js?v=97"></script>
-  <script src="assets/ask.js?v=97"></script>
-  <script src="assets/ads.js?v=97"></script>
-  <script src="assets/energy.js?v=97"></script>
-  <script src="assets/daily.js?v=97"></script>
-  <script src="assets/unlock.js?v=97"></script>
-  <script src="assets/guide.js?v=97"></script>
-  <script src="assets/minigames.js?v=97"></script>
-  <script src="assets/quests.js?v=97"></script>
-  <script src="assets/offline.js?v=97"></script>
-  <script src="assets/telemetry.js?v=97"></script>
-<script src="assets/autowalk.js?v=97"></script>
+<script src="assets/rank.js?v=98"></script>
+  <script src="assets/fx.js?v=98"></script>
+  <script src="assets/inkwipe.js?v=98"></script>
+  <script src="assets/deed.js?v=98"></script>
+  <script src="assets/dash.js?v=98"></script>
+<script src="assets/juice.js?v=98"></script>
+  <script src="assets/difficulty.js?v=98"></script>
+  <script src="assets/nextauto.js?v=98"></script>
+<script src="assets/heroes_data.js?v=98"></script>
+<script src="assets/heroes.js?v=98"></script>
+<script src="assets/icons.js?v=98"></script>
+<script src="assets/srs.js?v=98"></script>
+<script src="assets/newsflash.js?v=98"></script>
+<script src="assets/timeline.js?v=98"></script>
+<script src="assets/journey.js?v=98"></script>
+<script src="assets/season.js?v=98"></script>
+<script src="assets/items.js?v=98"></script>
+  <script src="assets/gold.js?v=98"></script>
+  <script src="assets/ask.js?v=98"></script>
+  <script src="assets/ads.js?v=98"></script>
+  <script src="assets/energy.js?v=98"></script>
+  <script src="assets/daily.js?v=98"></script>
+  <script src="assets/unlock.js?v=98"></script>
+  <script src="assets/guide.js?v=98"></script>
+  <script src="assets/minigames.js?v=98"></script>
+  <script src="assets/quests.js?v=98"></script>
+  <script src="assets/offline.js?v=98"></script>
+  <script src="assets/telemetry.js?v=98"></script>
+<script src="assets/autowalk.js?v=98"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
