@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=101"></script>
-<script src="assets/zoomwarn.js?v=101"></script>
-<script src="assets/map/map_component.js?v=101"></script>
-<script src="assets/chart.js?v=101"></script>
-<script src="assets/audio.js?v=101"></script>
+<script src="assets/errlog.js?v=102"></script>
+<script src="assets/zoomwarn.js?v=102"></script>
+<script src="assets/map/map_component.js?v=102"></script>
+<script src="assets/chart.js?v=102"></script>
+<script src="assets/audio.js?v=102"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=101';   // 존댓말 전환
+const ART_V = '?v=102';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -776,7 +776,7 @@ const ZONES = {
       { id:'sinheon', name:'접견대관', x:700, y:240, img:'assets/portraits/sinheon.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'choeikhyeon', name:'최익현', x:1060, y:280, img:'assets/portraits/choeikhyeon.png', look:{ role:'scholar', body:'#4a5a68', accent:'#e0b94a' } },
       { id:'gaehwa', name:'개화파 관원', x:760, y:500, img:'assets/portraits/gaehwa.png', look:{ role:'scholar', body:'#5c4a2f', accent:'#c9a24a' } },
-      { id:'kimhongjip', name:'김홍집', x:500, y:460, look:{ role:'scholar', body:'#3a4a3a', accent:'#a9c9a4' } },
+      { id:'kimhongjip', name:'김홍집', x:500, y:460, img: 'assets/portraits/kimhongjip.png', look:{ role:'scholar', body:'#3a4a3a', accent:'#a9c9a4' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -1451,7 +1451,7 @@ const NPC_DATA = {
     ]
   },
   kimhongjip_0: {
-    name: '김홍집', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6z"/><path d="M4 6l8-3 8 3"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="16" y2="15"/></svg>',
+    name: '김홍집', img: 'assets/portraits/kimhongjip.png', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6z"/><path d="M4 6l8-3 8 3"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="16" y2="15"/></svg>',
     beats: [
       { who:'npc', t:'나는 김홍집이라 하오. 1880년 2차 수신사로 일본에 다녀왔소.' },
       { who:'me', t:'무엇을 보고 오셨습니까?' },
@@ -2032,38 +2032,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=101"></script>
-<script src="assets/streak.js?v=101"></script>
+<script src="assets/badges.js?v=102"></script>
+<script src="assets/streak.js?v=102"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=101"></script>
-  <script src="assets/fx.js?v=101"></script>
-  <script src="assets/deed.js?v=101"></script>
-  <script src="assets/inkwipe.js?v=101"></script>
-  <script src="assets/dash.js?v=101"></script>
-<script src="assets/juice.js?v=101"></script>
-  <script src="assets/difficulty.js?v=101"></script>
-  <script src="assets/nextauto.js?v=101"></script>
-<script src="assets/heroes_data.js?v=101"></script>
-<script src="assets/heroes.js?v=101"></script>
-<script src="assets/icons.js?v=101"></script>
-<script src="assets/srs.js?v=101"></script>
-<script src="assets/newsflash.js?v=101"></script>
-<script src="assets/timeline.js?v=101"></script>
-<script src="assets/journey.js?v=101"></script>
-<script src="assets/season.js?v=101"></script>
-<script src="assets/items.js?v=101"></script>
-  <script src="assets/gold.js?v=101"></script>
-  <script src="assets/ask.js?v=101"></script>
-  <script src="assets/ads.js?v=101"></script>
-  <script src="assets/energy.js?v=101"></script>
-  <script src="assets/daily.js?v=101"></script>
-  <script src="assets/unlock.js?v=101"></script>
-  <script src="assets/guide.js?v=101"></script>
-  <script src="assets/minigames.js?v=101"></script>
-  <script src="assets/quests.js?v=101"></script>
-  <script src="assets/offline.js?v=101"></script>
-  <script src="assets/telemetry.js?v=101"></script>
-<script src="assets/autowalk.js?v=101"></script>
+<script src="assets/rank.js?v=102"></script>
+  <script src="assets/fx.js?v=102"></script>
+  <script src="assets/deed.js?v=102"></script>
+  <script src="assets/inkwipe.js?v=102"></script>
+  <script src="assets/dash.js?v=102"></script>
+<script src="assets/juice.js?v=102"></script>
+  <script src="assets/difficulty.js?v=102"></script>
+  <script src="assets/nextauto.js?v=102"></script>
+<script src="assets/heroes_data.js?v=102"></script>
+<script src="assets/heroes.js?v=102"></script>
+<script src="assets/icons.js?v=102"></script>
+<script src="assets/srs.js?v=102"></script>
+<script src="assets/newsflash.js?v=102"></script>
+<script src="assets/timeline.js?v=102"></script>
+<script src="assets/journey.js?v=102"></script>
+<script src="assets/season.js?v=102"></script>
+<script src="assets/items.js?v=102"></script>
+  <script src="assets/gold.js?v=102"></script>
+  <script src="assets/ask.js?v=102"></script>
+  <script src="assets/ads.js?v=102"></script>
+  <script src="assets/energy.js?v=102"></script>
+  <script src="assets/daily.js?v=102"></script>
+  <script src="assets/unlock.js?v=102"></script>
+  <script src="assets/guide.js?v=102"></script>
+  <script src="assets/minigames.js?v=102"></script>
+  <script src="assets/quests.js?v=102"></script>
+  <script src="assets/offline.js?v=102"></script>
+  <script src="assets/telemetry.js?v=102"></script>
+<script src="assets/autowalk.js?v=102"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

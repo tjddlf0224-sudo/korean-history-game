@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=101"></script>
-<script src="assets/zoomwarn.js?v=101"></script>
-<script src="assets/map/map_component.js?v=101"></script>
-<script src="assets/chart.js?v=101"></script>
-<script src="assets/audio.js?v=101"></script>
+<script src="assets/errlog.js?v=102"></script>
+<script src="assets/zoomwarn.js?v=102"></script>
+<script src="assets/map/map_component.js?v=102"></script>
+<script src="assets/chart.js?v=102"></script>
+<script src="assets/audio.js?v=102"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=101';   // 존댓말 전환
+const ART_V = '?v=102';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -671,7 +671,7 @@ const ZONES = {
       // 무령왕이 백 년 뒤 일을 이야기하는 꼴이라 이리로 옮겼다.
       // 초상은 아직 없다 — 필드는 실루엣, 대화창은 아이콘으로 뜬다.
       { id:'muwang', name:'무왕', x:1000, y:320,
-        look: { role: 'king', body: '#6b4a7a', accent: '#e0b94a' } },
+        img: 'assets/portraits/muwang.png', look: { role: 'king', body: '#6b4a7a', accent: '#e0b94a' } },
       { id:'gyebaek', name:'계백', x:450, y:250, img:'assets/portraits/gyebaek.png', look:{ role:'general', body:'#5a4a4a', accent:'#8a6d3b' } },
       { id:'gwanchang', name:'관창', x:700, y:230, img:'assets/portraits/gwanchang.png', look:{ role:'commoner', body:'#7a6a4a', accent:'#d8c48a' } },
       { id:'gimyusin', name:'김유신', x:650, y:560, img:'assets/portraits/gimyusin.png', look:{ role:'general', body:'#4f5d75', accent:'#c9a24a' } },
@@ -1261,7 +1261,7 @@ window.addEventListener('keyup', e=>{
    보스전 없는 컷신 중심 에필로그 — 조선 전기 MVP의 엔딩이자 조선후기로 이어지는 티저.) ============ */
 const NPC_DATA = {
   muwang_0: {
-    name: '무왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M3 8l4 4 5-7 5 7 4-4v9H3z"/></svg>',
+    name: '무왕', img: 'assets/portraits/muwang.png', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M3 8l4 4 5-7 5 7 4-4v9H3z"/></svg>',
     beats: [
       { who:'npc', t:'(돌을 고르다 고개를 든다) 마침 잘 왔네. 이것 좀 들어 주게.' },
       { who:'me', t:'(든다) …무겁습니다. 어디에 쓰십니까?' },
@@ -1990,39 +1990,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=101"></script>
-<script src="assets/streak.js?v=101"></script>
+<script src="assets/badges.js?v=102"></script>
+<script src="assets/streak.js?v=102"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=101"></script>
-  <script src="assets/fx.js?v=101"></script>
-  <script src="assets/deed.js?v=101"></script>
-  <script src="assets/inkwipe.js?v=101"></script>
-  <script src="assets/dash.js?v=101"></script>
-<script src="assets/juice.js?v=101"></script>
-  <script src="assets/difficulty.js?v=101"></script>
-  <script src="assets/nextauto.js?v=101"></script>
-<script src="assets/heroes_data.js?v=101"></script>
-<script src="assets/heroes.js?v=101"></script>
-<script src="assets/icons.js?v=101"></script>
-<script src="assets/srs.js?v=101"></script>
-<script src="assets/newsflash.js?v=101"></script>
-<script src="assets/timeline.js?v=101"></script>
-<script src="assets/journey.js?v=101"></script>
-<script src="assets/season.js?v=101"></script>
-<script src="assets/boss.js?v=101"></script>
-<script src="assets/items.js?v=101"></script>
-  <script src="assets/gold.js?v=101"></script>
-  <script src="assets/ask.js?v=101"></script>
-  <script src="assets/ads.js?v=101"></script>
-  <script src="assets/energy.js?v=101"></script>
-  <script src="assets/daily.js?v=101"></script>
-  <script src="assets/unlock.js?v=101"></script>
-  <script src="assets/guide.js?v=101"></script>
-  <script src="assets/minigames.js?v=101"></script>
-  <script src="assets/quests.js?v=101"></script>
-  <script src="assets/offline.js?v=101"></script>
-  <script src="assets/telemetry.js?v=101"></script>
-<script src="assets/autowalk.js?v=101"></script>
+<script src="assets/rank.js?v=102"></script>
+  <script src="assets/fx.js?v=102"></script>
+  <script src="assets/deed.js?v=102"></script>
+  <script src="assets/inkwipe.js?v=102"></script>
+  <script src="assets/dash.js?v=102"></script>
+<script src="assets/juice.js?v=102"></script>
+  <script src="assets/difficulty.js?v=102"></script>
+  <script src="assets/nextauto.js?v=102"></script>
+<script src="assets/heroes_data.js?v=102"></script>
+<script src="assets/heroes.js?v=102"></script>
+<script src="assets/icons.js?v=102"></script>
+<script src="assets/srs.js?v=102"></script>
+<script src="assets/newsflash.js?v=102"></script>
+<script src="assets/timeline.js?v=102"></script>
+<script src="assets/journey.js?v=102"></script>
+<script src="assets/season.js?v=102"></script>
+<script src="assets/boss.js?v=102"></script>
+<script src="assets/items.js?v=102"></script>
+  <script src="assets/gold.js?v=102"></script>
+  <script src="assets/ask.js?v=102"></script>
+  <script src="assets/ads.js?v=102"></script>
+  <script src="assets/energy.js?v=102"></script>
+  <script src="assets/daily.js?v=102"></script>
+  <script src="assets/unlock.js?v=102"></script>
+  <script src="assets/guide.js?v=102"></script>
+  <script src="assets/minigames.js?v=102"></script>
+  <script src="assets/quests.js?v=102"></script>
+  <script src="assets/offline.js?v=102"></script>
+  <script src="assets/telemetry.js?v=102"></script>
+<script src="assets/autowalk.js?v=102"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
