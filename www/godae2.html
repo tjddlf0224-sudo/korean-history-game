@@ -519,12 +519,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=114"></script>
-<script src="assets/zoomwarn.js?v=114"></script>
-<script src="assets/map/map_component.js?v=114"></script>
-<script src="assets/chart.js?v=114"></script>
-<script src="assets/companions.js?v=114"></script>
-<script src="assets/audio.js?v=114"></script>
+<script src="assets/errlog.js?v=115"></script>
+<script src="assets/zoomwarn.js?v=115"></script>
+<script src="assets/map/map_component.js?v=115"></script>
+<script src="assets/chart.js?v=115"></script>
+<script src="assets/companions.js?v=115"></script>
+<script src="assets/audio.js?v=115"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -536,7 +536,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=114';   // 존댓말 전환
+const ART_V = '?v=115';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1569,6 +1569,7 @@ const NPC_DATA = {
       { who:'me', t:'(푸르스름한 종을 본다) 절에 걸 종입니까?' },
       { who:'npc', t:'그렇소. 오대산 상원사에 걸 종이오. 725년, 성덕왕 때 부어 낸 것이지.',
         chart:{ type:'relic', title:'상원사 동종', items:[ { img:'sangwonsajong', n:'상원사 동종', s:'725년 · 지금 남은 한국 종 가운데 가장 오래됨' } ] } },
+      { who:'doc', docImg:'assets/scenes/heritage_sangwonsa_bell.jpg', t:'(평창 상원사 동종(국보). 725년 성덕왕 때 만든, 지금 남아 있는 한국 범종 가운데 가장 오래된 종이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'me', t:'꼭대기에 용이 붙어 있군요.' },
       { who:'npc', t:'용뉴라 하오. 그 옆 대롱은 음통 — 소리를 맑게 하지. 몸통엔 하늘을 나는 비천이 악기를 켜오.',
         chart:{ type:'grid', title:'신라 종의 생김새', head:[ '부분', '하는 일' ], rows:[ [ '용뉴', '종을 거는 용 모양 고리' ], [ '음통', '소리를 고르는 대롱 — 신라 종만의 것' ], [ '비천상', '악기를 연주하는 하늘 사람' ] ], hi:1 } },
@@ -1577,6 +1578,7 @@ const NPC_DATA = {
       { who:'me', t:'어디 말입니까?' },
       { who:'npc', t:'문무왕께서 궁 곁에 못을 파고 섬을 쌓으셨지. 동궁과 월지요. 손님을 맞고 잔치를 여는 곳이오.',
         chart:{ type:'stat', title:'동궁과 월지', items:[ { v:'674년', l:'문무왕 때 못을 팜' }, { v:'잔치', l:'나라의 경사·손님맞이' }, { v:'주령구', l:'못에서 나온 14면 주사위' } ] } },
+      { who:'doc', docImg:'assets/scenes/heritage_donggung_wolji.jpg', t:'(경주 동궁과 월지(사적). 문무왕 때 판 못과 복원한 건물로, 신라 왕궁의 별궁이자 잔치를 열던 곳이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'me', t:'(속으로) 뒷날 폐허가 된 뒤 안압지라고 불리다가, 지금은 본디 이름을 되찾았지.' },
     ],
     quizSeq: [
@@ -2323,39 +2325,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=114"></script>
-<script src="assets/streak.js?v=114"></script>
+<script src="assets/badges.js?v=115"></script>
+<script src="assets/streak.js?v=115"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=114"></script>
-  <script src="assets/fx.js?v=114"></script>
-  <script src="assets/deed.js?v=114"></script>
-  <script src="assets/inkwipe.js?v=114"></script>
-  <script src="assets/dash.js?v=114"></script>
-<script src="assets/juice.js?v=114"></script>
-  <script src="assets/difficulty.js?v=114"></script>
-  <script src="assets/nextauto.js?v=114"></script>
-<script src="assets/heroes_data.js?v=114"></script>
-<script src="assets/heroes.js?v=114"></script>
-<script src="assets/icons.js?v=114"></script>
-<script src="assets/srs.js?v=114"></script>
-<script src="assets/newsflash.js?v=114"></script>
-<script src="assets/timeline.js?v=114"></script>
-<script src="assets/journey.js?v=114"></script>
-<script src="assets/season.js?v=114"></script>
-<script src="assets/boss.js?v=114"></script>
-<script src="assets/items.js?v=114"></script>
-  <script src="assets/gold.js?v=114"></script>
-  <script src="assets/ask.js?v=114"></script>
-  <script src="assets/ads.js?v=114"></script>
-  <script src="assets/energy.js?v=114"></script>
-  <script src="assets/daily.js?v=114"></script>
-  <script src="assets/unlock.js?v=114"></script>
-  <script src="assets/guide.js?v=114"></script>
-  <script src="assets/minigames.js?v=114"></script>
-  <script src="assets/quests.js?v=114"></script>
-  <script src="assets/offline.js?v=114"></script>
-  <script src="assets/telemetry.js?v=114"></script>
-<script src="assets/autowalk.js?v=114"></script>
+<script src="assets/rank.js?v=115"></script>
+  <script src="assets/fx.js?v=115"></script>
+  <script src="assets/deed.js?v=115"></script>
+  <script src="assets/inkwipe.js?v=115"></script>
+  <script src="assets/dash.js?v=115"></script>
+<script src="assets/juice.js?v=115"></script>
+  <script src="assets/difficulty.js?v=115"></script>
+  <script src="assets/nextauto.js?v=115"></script>
+<script src="assets/heroes_data.js?v=115"></script>
+<script src="assets/heroes.js?v=115"></script>
+<script src="assets/icons.js?v=115"></script>
+<script src="assets/srs.js?v=115"></script>
+<script src="assets/newsflash.js?v=115"></script>
+<script src="assets/timeline.js?v=115"></script>
+<script src="assets/journey.js?v=115"></script>
+<script src="assets/season.js?v=115"></script>
+<script src="assets/boss.js?v=115"></script>
+<script src="assets/items.js?v=115"></script>
+  <script src="assets/gold.js?v=115"></script>
+  <script src="assets/ask.js?v=115"></script>
+  <script src="assets/ads.js?v=115"></script>
+  <script src="assets/energy.js?v=115"></script>
+  <script src="assets/daily.js?v=115"></script>
+  <script src="assets/unlock.js?v=115"></script>
+  <script src="assets/guide.js?v=115"></script>
+  <script src="assets/minigames.js?v=115"></script>
+  <script src="assets/quests.js?v=115"></script>
+  <script src="assets/offline.js?v=115"></script>
+  <script src="assets/telemetry.js?v=115"></script>
+<script src="assets/autowalk.js?v=115"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

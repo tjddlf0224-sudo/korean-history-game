@@ -56,7 +56,27 @@
 | `assets/scenes/heritage_dongnimmun.jpg` | 서울 독립문(2023년 정기조사 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=7651089, ccbaKdcd=13·ccbaAsno=0000320000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `gaehang5.html` 서재필(seojaepil_0) |
 | `assets/scenes/heritage_deoksugung_junghwajeon.jpg` | 덕수궁 중화전 및 중화문 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, imgHeritage ccimId=6408147, ccbaKdcd=12·ccbaAsno=0008190000000·ccbaCtcd=11) — 사용자 직접 다운로드(2026-08) | `gaehang5.html` 고종(gojong_0) |
 
+| `assets/scenes/heritage_gosagwansudo.jpg` | 강희안 「고사관수도」(물을 바라보는 선비) — 화첩 여백을 잘라 그림만 남김 | 강희안 / 국립중앙박물관 소장 | 공공누리 제1유형(출처표시) | 국립중앙박물관 소장품 페이지(museum.go.kr relicId=373)에서 "공공누리 1유형 - 출처표시" 확인(2026-09-18). 사용자 직접 다운로드 | `ch2.html` 안견(angyeon_0) |
+| `assets/scenes/heritage_chochungdo.jpg` | 전 신사임당 필 「초충도」 중 한 폭(수박과 들쥐) — 위쪽 색상표를 잘라 냄 | 국립중앙박물관 소장 | 공공누리 제1유형(출처표시) | 국립중앙박물관 소장품 페이지(relicId=2061, "전 신사임당필 초충도")에서 KOGL 1유형 확인(2026-09-18). 사용자 직접 다운로드 | `ch5b.html` 신사임당(saimdang_0) |
+| `assets/scenes/heritage_donggung_wolji.jpg` | 경주 동궁과 월지 제3건물(2015년 촬영) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae2.html` 범종 장인(jongjangin_0) |
+| `assets/scenes/heritage_sangwonsa_bell.jpg` | 평창 상원사 동종(국보, 2014년 국보 동산 앱사진) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae2.html` 범종 장인(jongjangin_0) |
+| `assets/scenes/heritage_hwasun_daegokri.jpg` | 화순 대곡리 청동기 일괄(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `seonsa1.html` 변한 철 상인(byeonhan_0) |
+| `assets/scenes/heritage_suncheongja.jpg` | 청자 참외모양 병(국보, 문화재대관) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_buseoksa_sojo.jpg` | 영주 부석사 소조여래좌상(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_danyang_jeokseongbi.jpg` | 단양 신라 적성비(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 진흥왕(jinheung_0) |
+| `assets/scenes/heritage_woljeongsa_tower.jpg` | 평창 월정사 팔각 구층석탑(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_imsinseogiseok.jpg` | 경주 임신서기석(보물, 파일명 "임신서기명석") | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 화랑(hwarang_0) |
+| `assets/scenes/heritage_yeonga7.jpg` | 금동 연가7년명 여래입상(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 고구려 장수(gwanggaeto_0) |
+| `assets/scenes/heritage_bunhwangsa_tower.jpg` | 경주 분황사 모전석탑(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 선덕 여왕(seondeok_0) |
+| `assets/scenes/heritage_gwanchoksa_mireuk.jpg` | 논산 관촉사 석조미륵보살입상(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_hwangnyongsaji.jpg` | 경주 황룡사지 남쪽 상공(사적) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 선덕 여왕(seondeok_0) |
+
 ## 확인했지만 보류한 이미지
+
+- (2026-09-18) **보물 경주 호우총 출토 청동 광개토대왕명 호우** — 받은 파일이 255×219px로 너무 작아 보류. 국가유산포털에서 큰 사진으로 다시 받으면 넣는다.
+- (2026-09-18) **곤여만국전도** — 받은 파일이 지도 부분이 아닌 글자 부분만 찍힌 사진이라 보류. 지도 전체가 보이는 사진으로 다시 받으면 넣는다.
+- (2026-09-18) 부여 정림사지 오층석탑 정면 — 이미 `heritage_jeongnimsaji_tower.jpg`로 쓰고 있는 같은 사진이라 추가하지 않음.
+
 
 | 파일 | 사유 |
 |---|---|

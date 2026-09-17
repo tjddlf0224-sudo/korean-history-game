@@ -519,12 +519,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=114"></script>
-<script src="assets/zoomwarn.js?v=114"></script>
-<script src="assets/map/map_component.js?v=114"></script>
-<script src="assets/chart.js?v=114"></script>
-<script src="assets/companions.js?v=114"></script>
-<script src="assets/audio.js?v=114"></script>
+<script src="assets/errlog.js?v=115"></script>
+<script src="assets/zoomwarn.js?v=115"></script>
+<script src="assets/map/map_component.js?v=115"></script>
+<script src="assets/chart.js?v=115"></script>
+<script src="assets/companions.js?v=115"></script>
+<script src="assets/audio.js?v=115"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -536,7 +536,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=114';   // 존댓말 전환
+const ART_V = '?v=115';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1436,6 +1436,8 @@ const NPC_DATA = {
       { who:'me', t:'무늬를 새기고… 색을 메운다는 겁니까?' },
       { who:'npc', t:'상감청자라 하오. 고려만의 솜씨였소.' },
       { who:'doc', t:'(청자 상감운학문 매병. 구름과 학 무늬를 상감기법으로 새겨 넣은, 고려 상감청자의 대표작이다.)\n출처: 국립중앙박물관, 공유마당, 공공누리 제1유형', docImg:'assets/scenes/heritage_cheongja_sanggam.jpg' },
+      { who:'npc', t:'상감보다 먼저, 무늬 없이 빛깔만으로 멋을 낸 순청자가 있었소.' },
+      { who:'doc', docImg:'assets/scenes/heritage_suncheongja.jpg', t:'(청자 참외모양 병(국보). 12세기 순청자의 대표작으로, 무늬 없이 비색과 참외 모양만으로 아름다움을 냈다. 인종의 무덤에서 나왔다고 전한다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'지방 호족들이 세운 불상도 저마다 개성이 있었소.',
         chart:{ type:'vs', title:'고려 초기 지방 불상', left:{ n:'이천동 마애여래입상', s:'거대하다' }, right:{ n:'하사창동 철조여래좌상', s:'소박하다' }, mid:'≠' } },
       { who:'me', t:'같은 시대인데… 이리 다릅니까?' },
@@ -1446,6 +1448,9 @@ const NPC_DATA = {
       { who:'npc', t:'오대산 월정사엔 팔각으로 아홉 층을 올린 탑도 섰소.' },
       { who:'doc', t:'(안동 이천동 마애여래입상. 자연 암벽에 몸을 새기고 그 위에 따로 조각한 머리를 얹은, 고려 초기 지방 불상의 개성을 보여준다.)\n출처: 국가유산청, 국가유산포털, 공공누리(출처표시)', docImg:'assets/scenes/heritage_icheondong_seokbul.jpg' },
       { who:'doc', t:'(하남 하사창동 철조 석가여래좌상. 쇠로 만든 소박한 조형이 특징인 고려 초기 불상이다.)\n출처: 국가유산청, 국가유산포털, 공공누리(출처표시)', docImg:'assets/scenes/heritage_hasachangdong_buddha.jpg' },
+      { who:'doc', docImg:'assets/scenes/heritage_gwanchoksa_mireuk.jpg', t:'(논산 관촉사 석조미륵보살입상(국보). 높이 18m에 이르는 고려 초의 거대한 석불로, 은진미륵이라고도 부른다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
+      { who:'doc', docImg:'assets/scenes/heritage_buseoksa_sojo.jpg', t:'(영주 부석사 소조여래좌상(국보). 무량수전 안에 모신 고려의 불상으로, 흙으로 빚어 만들었다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
+      { who:'doc', docImg:'assets/scenes/heritage_woljeongsa_tower.jpg', t:'(평창 월정사 팔각 구층석탑(국보). 고려 전기에 유행한 다각 다층탑의 대표작이다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'내가 뜬 뒤, 몽골이 쳐들어오자 강화도에서 대장경판을 새겼다 들었소.' },
       { who:'me', t:'그 많은 걸… 다 새겼단 말입니까?' },
       { who:'npc', t:'부처님 힘으로 나라를 지키고자 함이었지.',
@@ -2092,38 +2097,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=114"></script>
-<script src="assets/streak.js?v=114"></script>
+<script src="assets/badges.js?v=115"></script>
+<script src="assets/streak.js?v=115"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=114"></script>
-  <script src="assets/fx.js?v=114"></script>
-  <script src="assets/deed.js?v=114"></script>
-  <script src="assets/inkwipe.js?v=114"></script>
-  <script src="assets/dash.js?v=114"></script>
-<script src="assets/juice.js?v=114"></script>
-  <script src="assets/difficulty.js?v=114"></script>
-  <script src="assets/nextauto.js?v=114"></script>
-<script src="assets/heroes_data.js?v=114"></script>
-<script src="assets/heroes.js?v=114"></script>
-<script src="assets/icons.js?v=114"></script>
-<script src="assets/srs.js?v=114"></script>
-<script src="assets/newsflash.js?v=114"></script>
-<script src="assets/timeline.js?v=114"></script>
-<script src="assets/journey.js?v=114"></script>
-<script src="assets/season.js?v=114"></script>
-<script src="assets/items.js?v=114"></script>
-  <script src="assets/gold.js?v=114"></script>
-  <script src="assets/ask.js?v=114"></script>
-  <script src="assets/ads.js?v=114"></script>
-  <script src="assets/energy.js?v=114"></script>
-  <script src="assets/daily.js?v=114"></script>
-  <script src="assets/unlock.js?v=114"></script>
-  <script src="assets/guide.js?v=114"></script>
-  <script src="assets/minigames.js?v=114"></script>
-  <script src="assets/quests.js?v=114"></script>
-  <script src="assets/offline.js?v=114"></script>
-  <script src="assets/telemetry.js?v=114"></script>
-<script src="assets/autowalk.js?v=114"></script>
+<script src="assets/rank.js?v=115"></script>
+  <script src="assets/fx.js?v=115"></script>
+  <script src="assets/deed.js?v=115"></script>
+  <script src="assets/inkwipe.js?v=115"></script>
+  <script src="assets/dash.js?v=115"></script>
+<script src="assets/juice.js?v=115"></script>
+  <script src="assets/difficulty.js?v=115"></script>
+  <script src="assets/nextauto.js?v=115"></script>
+<script src="assets/heroes_data.js?v=115"></script>
+<script src="assets/heroes.js?v=115"></script>
+<script src="assets/icons.js?v=115"></script>
+<script src="assets/srs.js?v=115"></script>
+<script src="assets/newsflash.js?v=115"></script>
+<script src="assets/timeline.js?v=115"></script>
+<script src="assets/journey.js?v=115"></script>
+<script src="assets/season.js?v=115"></script>
+<script src="assets/items.js?v=115"></script>
+  <script src="assets/gold.js?v=115"></script>
+  <script src="assets/ask.js?v=115"></script>
+  <script src="assets/ads.js?v=115"></script>
+  <script src="assets/energy.js?v=115"></script>
+  <script src="assets/daily.js?v=115"></script>
+  <script src="assets/unlock.js?v=115"></script>
+  <script src="assets/guide.js?v=115"></script>
+  <script src="assets/minigames.js?v=115"></script>
+  <script src="assets/quests.js?v=115"></script>
+  <script src="assets/offline.js?v=115"></script>
+  <script src="assets/telemetry.js?v=115"></script>
+<script src="assets/autowalk.js?v=115"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

@@ -520,12 +520,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=114"></script>
-<script src="assets/zoomwarn.js?v=114"></script>
-<script src="assets/map/map_component.js?v=114"></script>
-<script src="assets/chart.js?v=114"></script>
-<script src="assets/companions.js?v=114"></script>
-<script src="assets/audio.js?v=114"></script>
+<script src="assets/errlog.js?v=115"></script>
+<script src="assets/zoomwarn.js?v=115"></script>
+<script src="assets/map/map_component.js?v=115"></script>
+<script src="assets/chart.js?v=115"></script>
+<script src="assets/companions.js?v=115"></script>
+<script src="assets/audio.js?v=115"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -537,7 +537,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=114';   // 존댓말 전환
+const ART_V = '?v=115';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1454,6 +1454,7 @@ const NPC_DATA = {
       { who:'npc', t:'그렇다네. 하나뿐인 귀한 자취일세.' },
       { who:'doc', docImg:'assets/scenes/heritage_jungwon_goguryeobi.jpg',
         t:'(충주 고구려비. 한반도 안에 남은 유일한 고구려 비석으로, 5세기 장수왕 대에 고구려가 남한강 유역까지 세력을 뻗쳐 신라를 사실상 아래에 둔 정황을 보여준다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
+      { who:'doc', docImg:'assets/scenes/heritage_yeonga7.jpg', t:'(금동 연가7년명 여래입상(국보). 고구려에서 만든 불상인데 경남 의령에서 발견되었다. 뒷면에 연가 7년이라는 글자가 새겨져 있다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'우리 무덤엔 그림을 그리네. 지안, 옛 국내성 자리에 모였지.',
         chart:{ type:'grid', title:'국내성의 고분', head:[ '무덤', '그림·양식' ], rows:[ [ '무용총', '수렵도 — 사냥' ], [ '각저총', '씨름도' ], [ '장군총', '돌무지무덤' ] ] } },
       { who:'me', t:'사냥하는… 그런 그림도 그립니까?' },
@@ -1585,6 +1586,7 @@ const NPC_DATA = {
       { who:'me', t:'그 비에는 무엇을 새기셨습니까?' },
       { who:'npc', t:'성을 얻는 데 힘을 보탠 그 고을 사람 야이차에게 상을 준 일일세. 새 땅의 민심을 얻어야 했으니까.',
         chart:{ type:'relic', title:'단양 신라 적성비', items:[ { img:'jeokseongbi', n:'단양 신라 적성비', s:'남한강 상류 진출 · 공을 세운 이에게 포상' } ] } },
+      { who:'doc', docImg:'assets/scenes/heritage_danyang_jeokseongbi.jpg', t:'(단양 신라 적성비(국보). 진흥왕이 남한강 상류의 적성을 차지한 뒤 공을 세운 사람에게 상을 준 내용을 새겼다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       /* 여기부터 법흥왕 이야기가 끝날 때까지 계보를 띄워 둔다. 다른 그림이
          있는 대사는 그쪽을 살리고, 없는 대사에만 붙인다. 이야기하는 임금이
          누구냐에 따라 강조가 옮겨 간다(제보). */
@@ -1649,6 +1651,7 @@ const NPC_DATA = {
       { who:'npc', t:'원광법사께서 젊은 낭도 둘에게 내려주셨지요.' },
       { who:'npc', t:'(냇돌 하나를 내민다) 저도 벗과 함께 이렇게 맹세를 새겼습니다.',
         chart:{ type:'quote', title:'임신서기석', text:'임신년 6월 16일, 두 사람이 함께 맹세하여 적는다.<br>충성의 길을 지키고, <b>시경·상서·예기·춘추</b>를<br>3년 동안 차례로 익히기로 한다.', from:'임신서기석 · 뜻을 풀어 옮김' } },
+      { who:'doc', docImg:'assets/scenes/heritage_imsinseogiseok.jpg', t:'(경주 임신서기석(보물). 신라의 두 청년이 충성을 다하고 유교 경전을 익히겠다고 맹세한 글을 새긴 돌이다. 국립경주박물관 소장.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'me', t:'유교 경전을 익히겠다는 맹세로군요. 무예만 닦는 게 아니었습니다.' },
       { who:'npc', t:'…다만 아무나 높이 오르지는 못합니다.' },
       { who:'me', t:'무엇이… 오르는 길을 가로막습니까?' },
@@ -1681,8 +1684,10 @@ const NPC_DATA = {
       { who:'npc', t:'있었지. 그래서 자장의 말을 따라 황룡사에 아홉 층 탑을 세웠네. 층마다 이웃 나라 하나씩을 누른다는 뜻일세.',
         chart:{ type:'grid', title:'황룡사 9층 목탑', head:[ '무엇', '내용' ], rows:[ [ '건의', '승려 자장' ], [ '세운 이', '백제 장인 아비지를 불러옴' ], [ '뜻', '아홉 층 = 둘레 아홉 나라를 누름' ], [ '뒷날', '고려 때 몽골 침입(1238)으로 불타 터만 남음' ] ], hi:0 } },
       { who:'me', t:'(속으로) …이 탑은 고려 때 몽골군에 불타 터만 남게 된다.' },
+      { who:'doc', docImg:'assets/scenes/heritage_hwangnyongsaji.jpg', t:'(경주 황룡사지(사적)를 남쪽 하늘에서 본 모습. 9층 목탑은 고려 때 몽골 침입으로 불타 지금은 넓은 절터와 주춧돌만 남았다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'분황사엔 돌을 벽돌처럼 다듬어 쌓은 탑을 세웠네.',
         chart:{ type:'compare', title:'선덕 여왕 때의 두 탑', cols:[ { h:'황룡사 9층 목탑', items:[ '나무로 지음', '지금은 터만 남음' ] }, { h:'분황사 모전 석탑', hi:true, items:[ '돌을 벽돌 모양으로 깎아 쌓음', '남아 있는 신라 석탑 가운데 가장 오래됨' ] } ] } },
+      { who:'doc', docImg:'assets/scenes/heritage_bunhwangsa_tower.jpg', t:'(경주 분황사 모전석탑(국보). 돌을 벽돌 모양으로 다듬어 쌓았으며, 남아 있는 신라 석탑 가운데 가장 오래되었다(634년).)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'me', t:'돌인데 벽돌처럼 보이는군요.' },
       { who:'npc', t:'그래서 모전 석탑이라 하지. 별을 살피는 대도 쌓았네 — 첨성대일세.' },
     ],
@@ -2273,38 +2278,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=114"></script>
-<script src="assets/streak.js?v=114"></script>
+<script src="assets/badges.js?v=115"></script>
+<script src="assets/streak.js?v=115"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=114"></script>
-  <script src="assets/fx.js?v=114"></script>
-  <script src="assets/deed.js?v=114"></script>
-  <script src="assets/inkwipe.js?v=114"></script>
-  <script src="assets/dash.js?v=114"></script>
-<script src="assets/juice.js?v=114"></script>
-  <script src="assets/difficulty.js?v=114"></script>
-  <script src="assets/nextauto.js?v=114"></script>
-<script src="assets/heroes_data.js?v=114"></script>
-<script src="assets/heroes.js?v=114"></script>
-<script src="assets/icons.js?v=114"></script>
-<script src="assets/srs.js?v=114"></script>
-<script src="assets/newsflash.js?v=114"></script>
-<script src="assets/timeline.js?v=114"></script>
-<script src="assets/journey.js?v=114"></script>
-<script src="assets/season.js?v=114"></script>
-<script src="assets/items.js?v=114"></script>
-  <script src="assets/gold.js?v=114"></script>
-  <script src="assets/ask.js?v=114"></script>
-  <script src="assets/ads.js?v=114"></script>
-  <script src="assets/energy.js?v=114"></script>
-  <script src="assets/daily.js?v=114"></script>
-  <script src="assets/unlock.js?v=114"></script>
-  <script src="assets/guide.js?v=114"></script>
-  <script src="assets/minigames.js?v=114"></script>
-  <script src="assets/quests.js?v=114"></script>
-  <script src="assets/offline.js?v=114"></script>
-  <script src="assets/telemetry.js?v=114"></script>
-<script src="assets/autowalk.js?v=114"></script>
+<script src="assets/rank.js?v=115"></script>
+  <script src="assets/fx.js?v=115"></script>
+  <script src="assets/deed.js?v=115"></script>
+  <script src="assets/inkwipe.js?v=115"></script>
+  <script src="assets/dash.js?v=115"></script>
+<script src="assets/juice.js?v=115"></script>
+  <script src="assets/difficulty.js?v=115"></script>
+  <script src="assets/nextauto.js?v=115"></script>
+<script src="assets/heroes_data.js?v=115"></script>
+<script src="assets/heroes.js?v=115"></script>
+<script src="assets/icons.js?v=115"></script>
+<script src="assets/srs.js?v=115"></script>
+<script src="assets/newsflash.js?v=115"></script>
+<script src="assets/timeline.js?v=115"></script>
+<script src="assets/journey.js?v=115"></script>
+<script src="assets/season.js?v=115"></script>
+<script src="assets/items.js?v=115"></script>
+  <script src="assets/gold.js?v=115"></script>
+  <script src="assets/ask.js?v=115"></script>
+  <script src="assets/ads.js?v=115"></script>
+  <script src="assets/energy.js?v=115"></script>
+  <script src="assets/daily.js?v=115"></script>
+  <script src="assets/unlock.js?v=115"></script>
+  <script src="assets/guide.js?v=115"></script>
+  <script src="assets/minigames.js?v=115"></script>
+  <script src="assets/quests.js?v=115"></script>
+  <script src="assets/offline.js?v=115"></script>
+  <script src="assets/telemetry.js?v=115"></script>
+<script src="assets/autowalk.js?v=115"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
