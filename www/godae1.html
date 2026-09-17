@@ -520,11 +520,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=104"></script>
-<script src="assets/zoomwarn.js?v=104"></script>
-<script src="assets/map/map_component.js?v=104"></script>
-<script src="assets/chart.js?v=104"></script>
-<script src="assets/audio.js?v=104"></script>
+<script src="assets/errlog.js?v=105"></script>
+<script src="assets/zoomwarn.js?v=105"></script>
+<script src="assets/map/map_component.js?v=105"></script>
+<script src="assets/chart.js?v=105"></script>
+<script src="assets/audio.js?v=105"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -536,7 +536,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=104';   // 존댓말 전환
+const ART_V = '?v=105';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -762,6 +762,7 @@ const ZONES = {
       { id:'seongwang', name:'백제 성왕', x:540, y:470, img:'assets/portraits/seongwang.png', look:{ role:'king', body:'#5a3a5a', accent:'#c9a24a' } },
       { id:'jinheung', name:'진흥왕', x:1030, y:330, img:'assets/portraits/jinheung.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
       { id:'hwarang', name:'화랑', x:1090, y:430, img:'assets/portraits/hwarang.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'seondeok', name:'선덕 여왕', x:950, y:600, img:'assets/portraits/seondeok_f.png', look:{ role:'king', body:'#8a2f3a', accent:'#e0b94a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
@@ -1069,7 +1070,8 @@ function updateHudGoal(){
       ['gwanggaeto', '고구려 장수와 대화하기'],
       ['seongwang', '백제 성왕과 대화하기'],
       ['jinheung', '진흥왕과 대화하기'],
-      ['hwarang', '화랑과 대화하기']
+      ['hwarang', '화랑과 대화하기'],
+      ['seondeok', '선덕 여왕과 대화하기']
     ];
     /* 자동 걷기도 같은 차례를 따라야 한다. autowalk는 원래 ZONES의
        npcs 배열 순서로 갔는데, 그 순서와 이 목록이 달라 목표는
@@ -1341,6 +1343,13 @@ const NPC_DATA = {
       { who:'npc', t:'그렇지. 양나라에도 사신을 보냈네.' },
       { who:'me', t:'그 사신을… 그림으로도 남겼습니까?' },
       { who:'npc', t:'그렇지. 양직공도일세 — 요서 진출설의 근거로도 쓰이네.' },
+      { who:'me', t:'이 나라의 틀은 누가 처음 잡았습니까?' },
+      { who:'npc', t:'고이왕이시지. 좌평 여섯을 두고 벼슬을 열여섯 등급으로 나누셨네.',
+        chart:{ type:'stat', title:'고이왕이 짠 백제의 벼슬', items:[ { v:'6좌평', l:'으뜸 벼슬' }, { v:'16관등', l:'벼슬의 등급' }, { v:'관복', l:'등급마다 옷 색을 달리' } ] } },
+      { who:'npc', t:'벼슬마다 옷 색도 정하고, 율령도 펴셨다고 전하네.' },
+      { who:'me', t:'불교는 언제 들어왔습니까?' },
+      { who:'npc', t:'내 손자 침류왕 때일세. 384년, 동진에서 마라난타가 건너왔지.',
+        chart:{ type:'grid', title:'삼국의 불교 수용', head:[ '나라', '왕', '어디서' ], rows:[ [ '고구려', '소수림왕 · 372', '전진 — 순도' ], [ '백제', '침류왕 · 384', '동진 — 마라난타' ], [ '신라', '법흥왕 · 527 공인', '이차돈의 순교' ] ], hi:1 } },
     ],
     quizSeq: [
       { q:'4세기 백제의 전성기를 이끌며 마한의 남은 세력을 정복하고 평양성을 공격해 고구려 고국원왕을 전사시킨 왕은?',
@@ -1352,6 +1361,12 @@ const NPC_DATA = {
       { q:'백제 한성 시기의 도읍 유적인 풍납토성·몽촌토성 부근에 있으며, 돌무지무덤 양식이 고구려와 닮아 백제 지배층의 뿌리를 보여주는 무덤군은?',
         opts:['석촌동 고분군','대성동 고분군'], answer:0, src:[29, 19, 10],
         feedback:['대성동 고분군은 금관가야의 지배층 무덤이 모여 있는 곳이에요.','정답! 석촌동 고분군입니다. 고구려식 돌무지무덤이 남아 있어 백제 건국 세력이 고구려계임을 보여줘요.'] },
+      { q:'백제에서 좌평을 정점으로 삼고 그 아래 달솔 등을 둔, 모두 열여섯 등급으로 이루어진 관등제는?',
+        opts:['16관등제','신라 17관등제'], answer:0, src:[78],
+        feedback:['신라 17관등제는 이벌찬부터 조위까지 열일곱 등급으로 나눈 신라의 관등제예요.','정답! 백제의 16관등제입니다. 고이왕 때 6좌평과 함께 마련했어요.'] },
+      { q:'동진에서 온 승려 마라난타를 통해 불교를 받아들인 백제의 왕은?',
+        opts:['침류왕','소수림왕'], answer:0, src:[32, 65, 73],
+        feedback:['소수림왕은 전진에서 온 순도를 통해 불교를 받아들인 고구려의 왕이에요.','정답! 침류왕입니다. 384년의 일이에요.'] },
       { q:'중국 양나라에 파견된 백제 사신의 모습을 그린 그림으로, 백제의 요서 지방 진출설을 뒷받침하는 자료로 거론되는 것은?',
         opts:['양직공도','천상열차분야지도'], answer:0, src:[14],
         feedback:['천상열차분야지도는 조선 태조 때 만든 천문도예요.','정답! 양직공도입니다. 백제 사신의 복식과 모습을 담고 있어요.'] },
@@ -1401,10 +1416,20 @@ const NPC_DATA = {
       { who:'me', t:'재상이… 나랏일로 무얼 했습니까?' },
       { who:'npc', t:'봄에 곡식을 꿔주고 가을에 갚게 했지 — 진대법일세.',
         chart:{ type:'steps', title:'진대법', steps:[ { t:'봄에 곡식을 빌려준다' }, { t:'가을 추수 뒤 갚게 한다' }, { t:'굶는 백성이 준다' } ] } },
+      { who:'npc', t:'미천왕께선 313년 낙랑군을 몰아내셨네. 대동강 가가 온전히 우리 땅이 됐지.' },
       { who:'npc', t:'우리 태왕께선 만주까지 넓히셨네. 저 비석에 새겼지.',
         chart:{ type:'relic', title:'광개토대왕릉비', items:[ { img:'gwanggaetobi', n:'광개토대왕릉비', s:'지린성 지안, 아들 장수왕이 세움' } ] } },
       { who:'me', t:'무엇이… 저 비석에 새겨져 있습니까?' },
       { who:'npc', t:'정복한 자취와, 무덤 지킬 이들의 이름일세.' },
+      { who:'npc', t:'태왕께선 영락이라는 연호를 쓰셨네. 중국과 대등하다는 뜻이지.',
+        chart:{ type:'stat', title:'광개토대왕', items:[ { v:'영락', l:'고구려의 연호' }, { v:'400년', l:'신라에 쳐들어온 왜를 물리침' }, { v:'만주', l:'요동까지 넓힘' } ] } },
+      { who:'npc', t:'왜에 시달리던 신라에 군사 오만을 보내 구해 주기도 하셨지.' },
+      { who:'npc', t:'신라 왕실에도 태왕을 기리는 그릇이 건너갔다네.' },
+      { who:'me', t:'(속으로) 훗날 경주 호우총에서 태왕의 이름을 새긴 그 그릇이 나온다. 고구려의 힘이 신라까지 미쳤다는 증거다.',
+        chart:{ type:'relic', title:'경주 호우총에서 나온 고구려 그릇', items:[ { img:'houmyeong', n:'호우명 그릇', s:'바닥에 광개토대왕의 이름' } ] } },
+      { who:'npc', t:'절에선 금동 불상도 빚네. 뒷면에 연가 7년이라 해를 새기지.' },
+      { who:'me', t:'(속으로) 그 불상은 훗날 고구려 땅이 아닌 경남 의령에서 발견된다.',
+        chart:{ type:'relic', title:'고구려 불상', items:[ { img:'yeonga7', n:'연가 7년명 금동 여래 입상', s:'고구려에서 만듦 · 경남 의령 출토' } ] } },
       { who:'npc', t:'장수왕은 평양으로 옮기고 남으로 내려왔네.',
         chart:{ type:'timeline', title:'고구려의 남진', marks:[ { y:'427', t:'평양 천도' }, { y:'475', t:'한성 함락', on:true } ] } },
       { who:'me', t:'그때 백제 왕은 어찌 됐습니까?' },
@@ -1426,6 +1451,8 @@ const NPC_DATA = {
       { who:'npc', t:'그렇지. 말 달리며 활 쏘는 모습이 생생하네.' },
       { who:'doc', docImg:'assets/scenes/heritage_muyongchong_suryeopdo.jpg',
         t:'(정기환 필 무용총 수렵도 모사도. 말을 타고 활을 쏘며 호랑이와 사슴을 사냥하는 고구려인의 힘찬 모습을 담았다.)\n출처: 국립중앙박물관(모사: 정기환), 공유마당, 공공누리 제1유형' },
+      { who:'npc', t:'뒤로 가면 돌로 방을 짜고 흙을 덮었지. 굴식 돌방무덤일세. 벽화도 그 방 안에 그린다네.',
+        chart:{ type:'compare', title:'고구려 무덤의 두 모양', cols:[ { h:'돌무지무덤', items:[ '초기', '돌을 계단처럼 쌓음', '장군총' ] }, { h:'굴식 돌방무덤', hi:true, items:[ '후기', '돌방 + 흙 봉분', '벽화 — 사신도(강서대묘)' ] } ] } },
       { who:'npc', t:'수나라 백만 대군이 왔을 때, 을지문덕이 시를 보냈지.',
         chart:{ type:'quote', title:'여수장우중문시', text:'그대의 신묘한 계책은 하늘의 이치를 다했고<br>오묘한 셈은 땅의 이치를 다했도다.', from:'을지문덕, 삼국사기' } },
       { who:'me', t:'그래서… 수나라 군사는 어찌 됐습니까?' },
@@ -1450,6 +1477,18 @@ const NPC_DATA = {
       { q:'중국 지린성 지안(集安)에 있는 고구려 초기 도읍으로, 무용총·각저총·장군총 등이 자리한 곳은?',
         opts:['국내성','평양성'], answer:0, src:[44, 10],
         feedback:['평양성은 장수왕이 천도한 이후의 고구려 도읍이에요.','정답! 국내성입니다. 주변에 무용총(수렵도)·각저총(씨름도)·장군총(돌무지무덤) 등 많은 고분이 남아 있어요.'] },
+      { q:'광개토대왕이 사용한 고구려의 연호는?',
+        opts:['영락','건원'], answer:0, src:[28],
+        feedback:['건원은 신라 법흥왕이 쓴 연호예요.','정답! 영락입니다. 중국과 대등하다는 자신감을 보여 줘요.'] },
+      { q:'경주 호우총에서 출토되어 5세기 고구려와 신라의 밀접한 관계를 보여 주는 유물은?',
+        opts:['호우명 그릇','칠지도'], answer:0, src:[9, 65],
+        feedback:['칠지도는 백제가 왜에 보낸 칼로, 백제와 왜의 교류를 보여 줘요.','정답! 호우명 그릇입니다. 바닥에 광개토대왕의 이름이 새겨져 있어요.'] },
+      { q:'고구려에서 만들어졌으나 경남 의령에서 출토된 금동 불상은?',
+        opts:['연가 7년명 금동 여래 입상','서산 마애 삼존불'], answer:0, src:[30, 52],
+        feedback:['서산 마애 삼존불은 백제의 바위 불상으로, "백제의 미소"라 불려요.','정답! 연가 7년명 금동 여래 입상입니다.'] },
+      { q:'돌로 널방을 만들고 흙으로 봉분을 덮은 무덤으로, 방 안 벽과 천장에 사신도 같은 벽화를 그릴 수 있었던 무덤 양식은?',
+        opts:['굴식 돌방무덤','돌무지덧널무덤'], answer:0, src:[27, 30, 37, 39, 45, 52, 57, 65, 68, 73],
+        feedback:['돌무지덧널무덤은 신라의 무덤으로, 구조상 벽화를 그릴 수 없어요.','정답! 굴식 돌방무덤입니다. 강서대묘의 사신도가 대표적이에요.'] },
     ]
   },
   seongwang_0: {
@@ -1460,8 +1499,8 @@ const NPC_DATA = {
       { who:'me', t:'웅진이… 도읍 삼기엔 좁았습니까?' },
       { who:'npc', t:'그렇지. 나라를 다시 일으키기엔 좁았네.' },
       { who:'npc', t:'나라 이름도 남부여로 고쳤네. 부여의 정통을 잇는다는 뜻이지.' },
-      { who:'npc', t:'벼슬도 새로 짰지. 좌평 여섯을 으뜸으로 삼았네.',
-        chart:{ type:'stat', title:'백제 16관등제', items:[ { v:'좌평 6', l:'으뜸 벼슬' }, { v:'16등급', l:'모두 이만큼 나눔' } ] } },
+      { who:'npc', t:'관청도 새로 짰지. 나랏일을 스물두 관청에 나누었네.',
+        chart:{ type:'stat', title:'성왕이 다시 짠 사비의 틀', items:[ { v:'22부', l:'나랏일을 맡은 관청' }, { v:'5부', l:'서울을 나눔' }, { v:'5방', l:'지방을 나눔' } ] } },
       { who:'me', t:'재상은… 왕께서 직접 뽑으십니까?' },
       { who:'npc', t:'아닐세. 귀족들이 의논해 뽑았지.',
         chart:{ type:'steps', title:'정사암회의', steps:[ { t:'후보 이름을 바위에 적는다' }, { t:'귀족들이 모여 의논한다' }, { t:'도장 자국 있는 이가 재상', s:'정사암' } ] } },
@@ -1469,6 +1508,7 @@ const NPC_DATA = {
         chart:{ type:'compare', title:'백제 석탑의 두 대표', cols:[ { h:'정림사지 5층 석탑', hi:true, items:[ '사비 시기', '목탑 양식을 돌로' ] }, { h:'미륵사지 석탑', items:[ '무왕 때', '현존 최대 백제 석탑' ] } ] } },
       { who:'me', t:'목탑을… 돌로 옮겼단 말씀이군요.' },
       { who:'npc', t:'그렇지. 백제 석탑의 시작일세.' },
+      { who:'me', t:'(탑 아래 몸돌을 쓸어 본다 · 속으로) …뒷날 당나라 장수 소정방이 이 돌에 백제를 무너뜨린 공을 새기지. 그래서 한동안 평제탑이라 불린다.' },
       { who:'doc', docImg:'assets/scenes/heritage_jeongnimsaji_tower.jpg',
         t:'(부여 정림사지 오층석탑. 목탑의 짜임새를 그대로 돌에 옮긴 초기 백제 석탑 양식을 보여주며, 미륵사지 석탑과 함께 백제 석탑의 두 대표작으로 꼽힌다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
       { who:'npc', t:'죽은 뒤, 아들이 능산리에 절을 지어 나를 기렸네.',
@@ -1493,15 +1533,18 @@ const NPC_DATA = {
       { q:'신라 진흥왕과 함께 한강 하류를 되찾았다가 곧 빼앗기자 이를 되찾으려 신라를 공격했지만 전사한 싸움은?',
         opts:['관산성 전투','황산벌 전투'], answer:0, src:[59, 78],
         feedback:['황산벌 전투는 660년 백제 멸망 직전 계백이 최후 항전을 벌인 싸움이에요.','정답! 관산성 전투입니다. 554년 성왕이 이 싸움에서 전사했어요.'] },
-      { q:'백제에서 좌평을 정점으로 삼고 그 아래 달솔 등을 둔, 모두 열여섯 등급으로 이루어진 관등제는?',
-        opts:['16관등제','신라 17관등제'], answer:0, src:[78],
-        feedback:['신라 17관등제는 이벌찬부터 조위까지 열일곱 등급으로 나눈 신라의 관등제예요.','정답! 백제의 16관등제입니다. 6좌평을 정점으로 달솔 등 열여섯 등급을 두었어요.'] },
+      { q:'사비로 도읍을 옮긴 뒤 중앙 관청을 22부로 정비한 백제의 왕은?',
+        opts:['성왕','고이왕'], answer:0, src:[46, 53, 57, 69, 77],
+        feedback:['고이왕은 6좌평·16관등을 마련한 3세기의 왕이에요.','정답! 성왕입니다. 서울은 5부, 지방은 5방으로도 나눴어요.'] },
       { q:'백제에서 귀족들이 부소산성 부근의 바위에 모여 재상 후보를 의논해 뽑던 회의는?',
         opts:['정사암회의','화백회의'], answer:0, src:[24],
         feedback:['화백회의는 신라 귀족들이 만장일치로 국가 중대사를 결정하던 회의예요.','정답! 정사암회의입니다. 백제 귀족 세력이 왕권을 견제하는 힘을 보여줘요.'] },
       { q:'백제 사비 시기에 세워졌으며, 목탑 양식을 이어받은 석탑으로 백제 석탑의 초기 모습을 보여주는 것은?',
         opts:['정림사지 5층 석탑','미륵사지 석탑'], answer:0, src:[34, 24, 10],
         feedback:['미륵사지 석탑은 무왕이 익산에 세운 미륵사에 있는, 현존 최대의 백제 석탑이에요.','정답! 정림사지 5층 석탑입니다. 목탑의 짜임새를 돌로 옮긴 백제 석탑의 대표작이에요.'] },
+      { q:'백제를 멸망시킨 당의 소정방이 그 공을 새겨 넣어 한때 "평제탑"이라 잘못 불린 탑은?',
+        opts:['정림사지 5층 석탑','분황사 모전 석탑'], answer:0, src:[34, 24, 10],
+        feedback:['분황사 모전 석탑은 신라 선덕 여왕 때 돌을 벽돌 모양으로 깎아 쌓은 탑이에요.','정답! 정림사지 5층 석탑입니다. "백제를 평정했다"는 글이 새겨져 평제탑이라 불렸어요.'] },
       { q:'부여 능산리사지에서 출토되었으며, 도교와 불교의 사상이 함께 반영된 백제의 국보는?',
         opts:['백제 금동대향로','산수무늬 벽돌'], answer:0, src:[64, 34],
         feedback:['산수무늬 벽돌도 도교 사상이 담긴 백제 유물이지만, 능산리사지 출토품은 아니에요.','정답! 백제 금동대향로입니다. 봉황과 신선, 산과 짐승이 층층이 새겨진 걸작이에요.'] },
@@ -1526,9 +1569,17 @@ const NPC_DATA = {
       { who:'npc', t:'그렇다네. 북한산비는 원래 비봉에 있었지.' },
       { who:'doc', docImg:'assets/scenes/heritage_bukhansan_jinheungwang_sunsubi.jpg',
         t:'(북한산 진흥왕 순수비. 555년 무렵 진흥왕이 한강 유역까지 영토를 넓힌 뒤 이를 기념해 세운 비석으로, 원래 북한산 비봉에 있었으나 훼손을 막기 위해 지금은 국립중앙박물관으로 옮겨 보존되고 있다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형' },
+      { who:'npc', t:'순수비보다 앞서 세운 비도 있네. 남한강 상류 적성을 차지하고 세웠지.' },
+      { who:'me', t:'그 비에는 무엇을 새기셨습니까?' },
+      { who:'npc', t:'성을 얻는 데 힘을 보탠 그 고을 사람 야이차에게 상을 준 일일세. 새 땅의 민심을 얻어야 했으니까.',
+        chart:{ type:'relic', title:'단양 신라 적성비', items:[ { img:'jeokseongbi', n:'단양 신라 적성비', s:'남한강 상류 진출 · 공을 세운 이에게 포상' } ] } },
       /* 여기부터 법흥왕 이야기가 끝날 때까지 계보를 띄워 둔다. 다른 그림이
          있는 대사는 그쪽을 살리고, 없는 대사에만 붙인다. 이야기하는 임금이
          누구냐에 따라 강조가 옮겨 간다(제보). */
+      { who:'npc', t:'(족보를 편다) 우리 김씨가 대를 이어 임금이 된 것은 내물 마립간 때부터일세.',
+        chart:{ type:'steps', title:'신라 임금의 칭호', steps:[ { t:'거서간', s:'박혁거세' }, { t:'차차웅', s:'제사장' }, { t:'이사금', s:'박·석·김이 돌아가며' }, { t:'마립간', s:'내물 — 김씨가 세습' }, { t:'왕', s:'지증왕 때부터' } ] } },
+      { who:'me', t:'마립간이라면…?' },
+      { who:'npc', t:'대군장이란 뜻이지. 할아버님 지증왕께서 비로소 \'왕\'이라 부르셨네.' },
       { who:'npc', t:'할아버님 지증왕께선 나라 이름을 \'신라\'로 정하셨네.',
         chart:{ type:'kings', title:'신라를 키운 세 임금', main:[ { name:'지증왕', note:'국호 신라·우산국', active:true }, { name:'법흥왕', note:'율령·불교 공인' }, { name:'진흥왕', note:'한강·순수비' } ], cross:[  ] } },
       { who:'npc', t:'이사부를 보내 우산국도 복속시키셨지.',
@@ -1548,6 +1599,12 @@ const NPC_DATA = {
       { q:'한강 유역을 모두 차지하고 대가야를 정복했으며, 여러 곳에 순수비를 세운 신라 왕은?',
         opts:['진흥왕','법흥왕'], answer:0, src:[35, 52, 69],
         feedback:['법흥왕은 율령 반포와 불교 공인으로 체제를 다진 왕이에요.','정답! 진흥왕입니다. 한강 확보로 중국과 직접 통하는 길을 열었어요.'] },
+      { q:'진흥왕이 남한강 상류로 진출한 뒤, 공을 세운 사람에게 상을 준 내용을 새겨 세운 비석은?',
+        opts:['단양 신라 적성비','충주 고구려비'], answer:0, src:[31],
+        feedback:['충주 고구려비는 고구려 장수왕 때 남한강 유역까지 세력을 뻗친 자취예요.','정답! 단양 신라 적성비입니다.'] },
+      { q:'신라에서 김씨의 왕위 세습이 시작되고 "마립간"이라는 칭호를 쓴 왕은?',
+        opts:['내물 마립간','지증왕'], answer:0, src:[6, 9, 17, 20, 36, 40, 59, 71, 75],
+        feedback:['지증왕은 마립간 대신 "왕"이라는 칭호를 처음 쓴 임금이에요.','정답! 내물 마립간입니다.'] },
       { q:'진흥왕이 정복지를 돌아본 것을 기념해 세운 비석을 무엇이라 하나?',
         opts:['순수비','척화비'], answer:0, src:[35, 69],
         feedback:['척화비는 훨씬 뒷날 흥선대원군이 세운 비석이에요.','정답! 순수비입니다. 북한산·창녕·황초령·마운령에 남아 있어요.'] },
@@ -1572,6 +1629,9 @@ const NPC_DATA = {
         chart:{ type:'quote', title:'세속오계', text:'임금은 <b>충</b>으로, 어버이는 <b>효</b>로<br>벗은 <b>믿음</b>으로, 싸움엔 물러섬 없이<br>살생은 가려서 한다.', from:'원광법사 · 삼국사기' } },
       { who:'me', t:'누가… 그 계율을 정해 주셨습니까?' },
       { who:'npc', t:'원광법사께서 젊은 낭도 둘에게 내려주셨지요.' },
+      { who:'npc', t:'(냇돌 하나를 내민다) 저도 벗과 함께 이렇게 맹세를 새겼습니다.',
+        chart:{ type:'quote', title:'임신서기석', text:'임신년 6월 16일, 두 사람이 함께 맹세하여 적는다.<br>충성의 길을 지키고, <b>시경·상서·예기·춘추</b>를<br>3년 동안 차례로 익히기로 한다.', from:'임신서기석 · 뜻을 풀어 옮김' } },
+      { who:'me', t:'유교 경전을 익히겠다는 맹세로군요. 무예만 닦는 게 아니었습니다.' },
       { who:'npc', t:'…다만 아무나 높이 오르지는 못합니다.' },
       { who:'me', t:'무엇이… 오르는 길을 가로막습니까?' },
       { who:'npc', t:'뼈대입니다. 골품제가 벼슬의 끝을 가릅니다.',
@@ -1584,6 +1644,38 @@ const NPC_DATA = {
       { q:'출신 신분에 따라 오를 수 있는 관등과 일상생활까지 제한한 신라의 신분 제도는?',
         opts:['골품제','음서제'], answer:0, src:[37, 43, 55],
         feedback:['음서제는 고려·조선에서 공신이나 고위 관료의 자손을 관직에 올린 제도예요.','정답! 골품제입니다. 6두품은 아무리 뛰어나도 오를 수 있는 관등에 한계가 있었어요.'] },
+      { q:'신라의 두 청년이 유교 경전을 익히고 나라에 충성하기로 맹세한 내용을 새긴 돌은?',
+        opts:['임신서기석','단양 신라 적성비'], answer:0, src:[7, 28, 34, 35, 41, 45, 61, 66, 69, 77],
+        feedback:['단양 신라 적성비는 진흥왕이 남한강 상류로 진출한 뒤 세운 비석이에요.','정답! 임신서기석입니다. 신라 청년들이 유학을 공부했음을 보여 줘요.'] },
+    ],
+  },
+  seondeok_0: {
+    name: '선덕 여왕', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/seondeok_f.png',
+    beats: [
+      { who:'npc', t:'(모란 한 송이를 내민다) 멀리서 온 이라 들었네. 이 꽃에 향기가 있겠는가?' },
+      { who:'me', t:'(꽃에 코를 댄다) …향이 없습니다.' },
+      { who:'npc', t:'당 황제가 보낸 모란 그림에 나비가 없었지. 그걸 보고 알았네.' },
+      { who:'npc', t:'나는 선덕일세. 이 나라의 첫 여왕이지.',
+        chart:{ type:'kings', title:'진흥왕 뒤의 신라', main:[ { name:'진흥왕' }, { name:'진지왕' }, { name:'진평왕' }, { name:'선덕 여왕', note:'632~647', active:true }, { name:'진덕 여왕' }, { name:'무열왕' } ], cross:[  ] } },
+      { who:'me', t:'여왕이라고 업신여기는 이웃은 없었습니까?' },
+      { who:'npc', t:'있었지. 그래서 자장의 말을 따라 황룡사에 아홉 층 탑을 세웠네. 층마다 이웃 나라 하나씩을 누른다는 뜻일세.',
+        chart:{ type:'grid', title:'황룡사 9층 목탑', head:[ '무엇', '내용' ], rows:[ [ '건의', '승려 자장' ], [ '세운 이', '백제 장인 아비지를 불러옴' ], [ '뜻', '아홉 층 = 둘레 아홉 나라를 누름' ], [ '뒷날', '고려 때 몽골 침입(1238)으로 불타 터만 남음' ] ], hi:0 } },
+      { who:'me', t:'(속으로) …이 탑은 고려 때 몽골군에 불타 터만 남게 된다.' },
+      { who:'npc', t:'분황사엔 돌을 벽돌처럼 다듬어 쌓은 탑을 세웠네.',
+        chart:{ type:'compare', title:'선덕 여왕 때의 두 탑', cols:[ { h:'황룡사 9층 목탑', items:[ '나무로 지음', '지금은 터만 남음' ] }, { h:'분황사 모전 석탑', hi:true, items:[ '돌을 벽돌 모양으로 깎아 쌓음', '남아 있는 신라 석탑 가운데 가장 오래됨' ] } ] } },
+      { who:'me', t:'돌인데 벽돌처럼 보이는군요.' },
+      { who:'npc', t:'그래서 모전 석탑이라 하지. 별을 살피는 대도 쌓았네 — 첨성대일세.' },
+    ],
+    quizSeq: [
+      { q:'자장의 건의로 선덕 여왕 때 세워졌으며, 주변 아홉 나라를 누르려는 뜻을 담은 탑은?',
+        opts:['황룡사 9층 목탑','미륵사지 석탑'], answer:0, src:[8, 25],
+        feedback:['미륵사지 석탑은 백제 무왕이 익산에 세운 석탑이에요.','정답! 황룡사 9층 목탑입니다. 고려 때 몽골 침입으로 불타 없어졌어요.'] },
+      { q:'돌을 벽돌 모양으로 다듬어 쌓았으며, 현재 남아 있는 신라 석탑 가운데 가장 오래된 탑은?',
+        opts:['분황사 모전 석탑','불국사 3층 석탑'], answer:0, src:[18, 28, 46, 67],
+        feedback:['불국사 3층 석탑(석가탑)은 통일 신라 경덕왕 때의 탑이에요.','정답! 분황사 모전 석탑입니다. 선덕 여왕 때(634) 세웠어요.'] },
+      { q:'신라 최초의 여왕으로, 첨성대를 세우고 황룡사 9층 목탑을 조성한 왕은?',
+        opts:['선덕 여왕','진성 여왕'], answer:0, src:[9],
+        feedback:['진성 여왕은 신라 말 원종·애노의 난이 일어났던 때의 왕이에요.','정답! 선덕 여왕입니다.'] },
     ],
     endsChapter: true
   },
@@ -1597,6 +1689,7 @@ const Stage = {
     if (id === 'seongwang') return 'seongwang_0';
     if (id === 'jinheung') return 'jinheung_0';
     if (id === 'hwarang') return 'hwarang_0';
+    if (id === 'seondeok') return 'seondeok_0';
     return null;
   },
   interact(){
@@ -1618,6 +1711,12 @@ const seenDialogKeys = new Set();
 const GLOSSARY = {
   '웅진': '지금의 충청남도 공주. 475년 백제가 고구려에 한성(서울)을 빼앗기고 문주왕 때 이곳으로 도읍을 옮겼다.',
   '사비': '지금의 충청남도 부여. 538년 성왕이 웅진에서 이곳으로 도읍을 옮기고 국호를 남부여로 고쳤다.',
+  '영락': '광개토대왕이 쓴 고구려의 연호. 중국 왕조와 대등하다는 자신감을 보여 준다. 광개토대왕릉비에 "영락 5년" 등으로 나온다.',
+  '마립간': '신라 임금의 칭호로 "대군장"이라는 뜻. 내물 마립간 때부터 김씨가 왕위를 이었고, 지증왕 때 "왕"으로 바뀌었다.',
+  '굴식 돌방무덤': '돌로 널방(시신을 두는 방)과 통로를 만들고 흙으로 덮은 무덤. 방이 있어 벽화를 그릴 수 있었다. 고구려 후기와 백제, 통일 신라에서 널리 만들었다.',
+  '모전 석탑': '돌을 벽돌(塼) 모양으로 깎아 쌓은 탑. 분황사 모전 석탑이 대표적이며, 남아 있는 신라 석탑 가운데 가장 오래되었다.',
+  '평제탑': '부여 정림사지 오층 석탑의 옛 별명. 백제를 멸망시킨 당의 소정방이 탑 몸돌에 "백제를 평정했다"는 글을 새겨 그렇게 불렸다.',
+  '22부': '백제 성왕이 사비 천도 뒤 정비한 중앙 관청. 왕실 일을 맡는 내관 12부와 나랏일을 맡는 외관 10부로 나뉘었다.',
 };
 /* 도해(chart.js)도 이 목록을 보고 낱말을 누를 수 있게 만든다.
    const 선언은 window에 안 올라가므로 따로 알려 준다. */
@@ -2110,38 +2209,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=104"></script>
-<script src="assets/streak.js?v=104"></script>
+<script src="assets/badges.js?v=105"></script>
+<script src="assets/streak.js?v=105"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=104"></script>
-  <script src="assets/fx.js?v=104"></script>
-  <script src="assets/deed.js?v=104"></script>
-  <script src="assets/inkwipe.js?v=104"></script>
-  <script src="assets/dash.js?v=104"></script>
-<script src="assets/juice.js?v=104"></script>
-  <script src="assets/difficulty.js?v=104"></script>
-  <script src="assets/nextauto.js?v=104"></script>
-<script src="assets/heroes_data.js?v=104"></script>
-<script src="assets/heroes.js?v=104"></script>
-<script src="assets/icons.js?v=104"></script>
-<script src="assets/srs.js?v=104"></script>
-<script src="assets/newsflash.js?v=104"></script>
-<script src="assets/timeline.js?v=104"></script>
-<script src="assets/journey.js?v=104"></script>
-<script src="assets/season.js?v=104"></script>
-<script src="assets/items.js?v=104"></script>
-  <script src="assets/gold.js?v=104"></script>
-  <script src="assets/ask.js?v=104"></script>
-  <script src="assets/ads.js?v=104"></script>
-  <script src="assets/energy.js?v=104"></script>
-  <script src="assets/daily.js?v=104"></script>
-  <script src="assets/unlock.js?v=104"></script>
-  <script src="assets/guide.js?v=104"></script>
-  <script src="assets/minigames.js?v=104"></script>
-  <script src="assets/quests.js?v=104"></script>
-  <script src="assets/offline.js?v=104"></script>
-  <script src="assets/telemetry.js?v=104"></script>
-<script src="assets/autowalk.js?v=104"></script>
+<script src="assets/rank.js?v=105"></script>
+  <script src="assets/fx.js?v=105"></script>
+  <script src="assets/deed.js?v=105"></script>
+  <script src="assets/inkwipe.js?v=105"></script>
+  <script src="assets/dash.js?v=105"></script>
+<script src="assets/juice.js?v=105"></script>
+  <script src="assets/difficulty.js?v=105"></script>
+  <script src="assets/nextauto.js?v=105"></script>
+<script src="assets/heroes_data.js?v=105"></script>
+<script src="assets/heroes.js?v=105"></script>
+<script src="assets/icons.js?v=105"></script>
+<script src="assets/srs.js?v=105"></script>
+<script src="assets/newsflash.js?v=105"></script>
+<script src="assets/timeline.js?v=105"></script>
+<script src="assets/journey.js?v=105"></script>
+<script src="assets/season.js?v=105"></script>
+<script src="assets/items.js?v=105"></script>
+  <script src="assets/gold.js?v=105"></script>
+  <script src="assets/ask.js?v=105"></script>
+  <script src="assets/ads.js?v=105"></script>
+  <script src="assets/energy.js?v=105"></script>
+  <script src="assets/daily.js?v=105"></script>
+  <script src="assets/unlock.js?v=105"></script>
+  <script src="assets/guide.js?v=105"></script>
+  <script src="assets/minigames.js?v=105"></script>
+  <script src="assets/quests.js?v=105"></script>
+  <script src="assets/offline.js?v=105"></script>
+  <script src="assets/telemetry.js?v=105"></script>
+<script src="assets/autowalk.js?v=105"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
