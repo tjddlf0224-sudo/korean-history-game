@@ -535,11 +535,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=112"></script>
-<script src="assets/zoomwarn.js?v=112"></script>
-<script src="assets/map/map_component.js?v=112"></script>
-<script src="assets/chart.js?v=112"></script>
-<script src="assets/audio.js?v=112"></script>
+<script src="assets/errlog.js?v=113"></script>
+<script src="assets/zoomwarn.js?v=113"></script>
+<script src="assets/map/map_component.js?v=113"></script>
+<script src="assets/chart.js?v=113"></script>
+<script src="assets/companions.js?v=113"></script>
+<script src="assets/audio.js?v=113"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -551,7 +552,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=112';   // 존댓말 전환
+const ART_V = '?v=113';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -727,6 +728,7 @@ const ZONES = {
         label:'밭 가장자리' },
     ],
     npcs: [
+      { id:'chadol', name:'꼬마', x:540, y:560, look:{ role:'commoner', body:'#8a5a32', accent:'#d9c3a0' } },
       { id:'gusukgi', name:'뗀석기 사냥꾼', x:400, y:560, img:'assets/portraits/gusukgi.png', look:{ role:'commoner', body:'#6b5a44', accent:'#8a7a5a' } },
       { id:'sinseokgi', name:'빗살무늬 아낙', x:690, y:310, img:'assets/portraits/sinseokgi.png', look:{ role:'commoner', body:'#a89878', accent:'#6b5636' } },
       { id:'cheongdonggi', name:'송국리 군장', x:1020, y:470, img:'assets/portraits/cheongdonggi.png', look:{ role:'general', body:'#5c4a2f', accent:'#c9a24a' } },
@@ -1069,6 +1071,7 @@ function updateHudGoal(){
   const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
     const order = [
       ['gusukgi', '뗀석기 사냥꾼과 대화하기'],
+      ['chadol', '돌을 가져간 꼬마 쫓아가기'],
       ['sinseokgi', '빗살무늬 아낙과 대화하기'],
       ['cheongdonggi', '송국리 군장과 대화하기'],
       ['dangun', '고조선 제사장과 대화하기'],
@@ -1228,6 +1231,7 @@ const World = {
     for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
     for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
+    if (window.Party) Party.draw(ctx, this, camX, camY, ZOOM);   // 동료가 주인공 뒤에 서게 먼저 그린다
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     if (this.nearNpcShown){
       const n = this.nearNpcShown;
@@ -1349,6 +1353,33 @@ const NPC_DATA = {
         feedback:['신석기는 정착해 농사를 짓고 간석기를 쓰던 시대예요.','정답! 구석기 시대입니다. 주먹도끼·찍개 같은 뗀석기를 썼어요.'] },
     ]
   },
+  chadol_0: {
+    name: '꼬마', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M6 15l3-8 5-2 4 5-1 7-6 2z"/></svg>',
+    partyJoin: 'chadol',
+    beats: [
+      { who:'me', t:'(손을 펴 본다) …어? 쥐고 있던 돌조각이 없어!' },
+      { who:'npc', t:'(돌조각을 머리 위로 흔든다) 우가! 반짝!' },
+      { who:'me', t:'그거 내 거야. 돌려줄래?' },
+      { who:'npc', t:'(등 뒤로 감추고 도리도리) 아니! 내 거!' },
+      { who:'me', t:'(속으로) 말이 서툴다. 아직 말보다 손짓이 먼저인 때구나.' },
+      { who:'npc', t:'(강 건너를 가리키다 입술이 삐죽) 엄마… 아빠… 저기… 없어.' },
+      { who:'me', t:'무리가 짐승을 따라 떠나 버렸구나. 너만 두고.' },
+      { who:'npc', t:'(돌조각을 꼭 쥔다) 이거… 단단해. 안 깨져.' },
+      { who:'me', t:'차돌처럼 단단하지. 그럼 너는 차돌이다. 차돌이.' },
+      Party.say('chadol', 'smile', '차돌이! 차돌이! (깡충깡충)'),
+      { who:'me', t:'(돌조각을 들여다본다) 돌을 깨뜨리고 떼어 내어 날을 세운 것 — 이게 뗀석기다.',
+        chart:{ type:'relic', title:'차돌이가 가져간 돌', items:[ { img:'jumeokdokki', n:'뗀석기', s:'깨뜨리고 떼어 내어 날을 세움' } ] } },
+      Party.say('chadol', 'sly', '(주머니를 톡톡) 같이 가. 반짝 더 많이.'),
+      { who:'me', t:'…따라오겠다고? 나는 아주 먼 데로 가는데.' },
+      Party.say('chadol', 'smile', '먼 데! 좋아! (벌써 앞장선다)'),
+      { who:'me', t:'(속으로) 혼자 남겨지는 게 무서운 거겠지. …좋아, 같이 가자.' },
+    ],
+    quizSeq: [
+      { q:'구석기 사람들이 돌을 깨뜨리거나 떼어 내어 만든 도구는?',
+        opts:['뗀석기','간석기'], answer:0, src:[38, 50, 53, 66, 71, 76, 79],
+        feedback:['간석기는 돌을 갈아서 만든 신석기 시대의 도구예요.','정답! 뗀석기입니다. 주먹도끼·찍개·슴베찌르개가 대표적이에요.'] },
+    ],
+  },
   sinseokgi_0: {
     name: '빗살무늬 아낙', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4v3.5c2.5 1 4 3.7 4 6.5 0 4-2.7 7-6 7s-6-3-6-7c0-2.8 1.5-5.5 4-6.5V3z"/><path d="M9 3h6"/><path d="M8 12h8"/></svg>', img: 'assets/portraits/sinseokgi.png',
     beats: [
@@ -1358,6 +1389,7 @@ const NPC_DATA = {
       { who:'me', t:'(모래에 꽂는다) …아, 밑이 뾰족하군요.',
         chart:{ type:'relic', title:'신석기의 그릇', items:[ { img:'bitsalmunui', n:'빗살무늬 토기', s:'밑이 뾰족해 모래에 꽂아 세운다' } ] } },
       { who:'npc', t:'겉의 무늬가 보이는가. 빗으로 그은 것 같다 하여 빗살무늬라 하네.' },
+      Party.say('chadol', 'shock', '그릇이… 뾰족! 서라, 서라! (자꾸 넘어진다)'),
       { who:'me', t:'그릇에 무엇을 담습니까?' },
       { who:'npc', t:'조와 피를 거두어 담지. 이제 심어서 먹는다네.',
         chart:{ type:'compare', title:'구석기와 신석기', cols:[ { h:'구석기', items:[ '이동 생활 — 따라다니며 잡는다', '동굴·막집', '뗀석기' ] }, { h:'신석기', hi:true, items:[ '심어서 거둔다', '움집에 모여 산다', '간석기' ] } ] } },
@@ -1406,6 +1438,8 @@ const NPC_DATA = {
       { who:'me', t:'(허리의 검을 본다) …그 검은 돌이 아니군요.' },
       { who:'npc', t:'(툭 친다) 청동일세. 아무나 차는 물건이 아니지.',
         chart:{ type:'relic', title:'고조선 문화권을 알려주는 유물', items:[ { img:'bipahyeong', n:'비파형 동검', s:'군장의 것' }, { img:'misongni', n:'미송리식 토기', s:'이 둘이 나오면 고조선 문화권' } ] } },
+      Party.say('chadol', 'sly', '(검을 뚫어지게 본다) 반짝… 반짝…'),
+      { who:'npc', t:'(검을 감싸 쥐며) 이 꼬마 눈빛 보게. 손대면 혼난다!' },
       { who:'me', t:'대장간에서 두드려 만든 것입니까?' },
       { who:'npc', t:'아닐세. 틀에 부어 굳힌 것이야.',
         chart:{ type:'steps', title:'청동검을 만드는 차례', steps:[ { t:'거푸집(용범)을 빚는다', s:'흙이나 돌로' }, { t:'청동을 녹여 붓는다' }, { t:'굳으면 틀을 깬다' } ] } },
@@ -1751,6 +1785,7 @@ function startChapterBoss(onDone){
 const Stage = {
   state: { talkStage: 0 },
   keyFor(id){
+    if (id === 'chadol') return 'chadol_0';
     if (id === 'gusukgi') return 'gusukgi_' + Math.min(Stage.state.talkStage, 0);
     if (id === 'sinseokgi') return 'sinseokgi_0';
     if (id === 'cheongdonggi') return 'cheongdonggi_0';
@@ -2328,39 +2363,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=112"></script>
-<script src="assets/streak.js?v=112"></script>
+<script src="assets/badges.js?v=113"></script>
+<script src="assets/streak.js?v=113"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=112"></script>
-  <script src="assets/fx.js?v=112"></script>
-  <script src="assets/deed.js?v=112"></script>
-  <script src="assets/inkwipe.js?v=112"></script>
-  <script src="assets/dash.js?v=112"></script>
-<script src="assets/juice.js?v=112"></script>
-  <script src="assets/difficulty.js?v=112"></script>
-  <script src="assets/nextauto.js?v=112"></script>
-<script src="assets/heroes_data.js?v=112"></script>
-<script src="assets/heroes.js?v=112"></script>
-<script src="assets/icons.js?v=112"></script>
-<script src="assets/srs.js?v=112"></script>
-<script src="assets/newsflash.js?v=112"></script>
-<script src="assets/timeline.js?v=112"></script>
-<script src="assets/journey.js?v=112"></script>
-<script src="assets/season.js?v=112"></script>
-<script src="assets/boss.js?v=112"></script>
-<script src="assets/items.js?v=112"></script>
-  <script src="assets/gold.js?v=112"></script>
-  <script src="assets/ask.js?v=112"></script>
-  <script src="assets/ads.js?v=112"></script>
-  <script src="assets/energy.js?v=112"></script>
-  <script src="assets/daily.js?v=112"></script>
-  <script src="assets/unlock.js?v=112"></script>
-  <script src="assets/guide.js?v=112"></script>
-  <script src="assets/minigames.js?v=112"></script>
-  <script src="assets/quests.js?v=112"></script>
-  <script src="assets/offline.js?v=112"></script>
-  <script src="assets/telemetry.js?v=112"></script>
-<script src="assets/autowalk.js?v=112"></script>
+<script src="assets/rank.js?v=113"></script>
+  <script src="assets/fx.js?v=113"></script>
+  <script src="assets/deed.js?v=113"></script>
+  <script src="assets/inkwipe.js?v=113"></script>
+  <script src="assets/dash.js?v=113"></script>
+<script src="assets/juice.js?v=113"></script>
+  <script src="assets/difficulty.js?v=113"></script>
+  <script src="assets/nextauto.js?v=113"></script>
+<script src="assets/heroes_data.js?v=113"></script>
+<script src="assets/heroes.js?v=113"></script>
+<script src="assets/icons.js?v=113"></script>
+<script src="assets/srs.js?v=113"></script>
+<script src="assets/newsflash.js?v=113"></script>
+<script src="assets/timeline.js?v=113"></script>
+<script src="assets/journey.js?v=113"></script>
+<script src="assets/season.js?v=113"></script>
+<script src="assets/boss.js?v=113"></script>
+<script src="assets/items.js?v=113"></script>
+  <script src="assets/gold.js?v=113"></script>
+  <script src="assets/ask.js?v=113"></script>
+  <script src="assets/ads.js?v=113"></script>
+  <script src="assets/energy.js?v=113"></script>
+  <script src="assets/daily.js?v=113"></script>
+  <script src="assets/unlock.js?v=113"></script>
+  <script src="assets/guide.js?v=113"></script>
+  <script src="assets/minigames.js?v=113"></script>
+  <script src="assets/quests.js?v=113"></script>
+  <script src="assets/offline.js?v=113"></script>
+  <script src="assets/telemetry.js?v=113"></script>
+<script src="assets/autowalk.js?v=113"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

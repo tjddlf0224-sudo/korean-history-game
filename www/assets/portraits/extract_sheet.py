@@ -5,8 +5,8 @@ crop_and_key_v5.py는 시트 하나마다 SRC/COLS/ROWS/LABELS를 손으로 고�
 앞으로 찍을 시트가 18장이라 그 방식은 반드시 어긋난다. 시트별 격자와 이름을
 아래 SHEETS에 미리 적어 두고, 쓸 때는 파일과 키만 준다.
 
-  python3 extract_sheet.py ~/Downloads/Gemini_....png sheet1   # 한 장
-  python3 extract_sheet.py --all ~/Downloads                    # 다섯 장 한꺼번에
+  python3 extract_sheet.py _source_art/Gemini_....png sheet1   # 한 장
+  python3 extract_sheet.py --all                                # 다섯 장 한꺼번에 (기본 _source_art)
 
 --all은 폴더에서 sheet1~sheet5로 시작하는 파일을 찾아 순서대로 처리한다.
 다섯 장을 다 받은 뒤 이름만 sheet1.png … sheet5.png로 바꿔 두고 한 번 돌리면
@@ -26,6 +26,8 @@ from PIL import Image
 from scipy import ndimage
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# 받은 시트는 프로젝트의 _source_art/에 둔다(다운로드 폴더는 정리되면 사라진다).
+SRC_DIR = os.path.normpath(os.path.join(HERE, '..', '..', '..', '_source_art'))
 
 # 챕터별 시트 구성 — 제미나이_프롬프트.md의 프롬프트와 순서가 정확히 같아야 한다.
 SHEETS = {
@@ -231,7 +233,7 @@ def find_sheets(folder):
 def main():
     args = sys.argv[1:]
     if args and args[0] == '--all':
-        folder = args[1] if len(args) > 1 else os.path.expanduser('~/Downloads')
+        folder = args[1] if len(args) > 1 else SRC_DIR
         pairs = find_sheets(folder)
         if not pairs:
             print('처리할 시트가 없다.')
@@ -243,7 +245,7 @@ def main():
 
     if len(args) < 2:
         print('사용법: python3 extract_sheet.py <시트.png> <시트키>')
-        print('        python3 extract_sheet.py --all <폴더>   (기본 ~/Downloads)\n')
+        print('        python3 extract_sheet.py --all <폴더>   (기본 _source_art)\n')
         print('등록된 시트:')
         for k, (c, r, names) in SHEETS.items():
             live = [n for n in names if n]

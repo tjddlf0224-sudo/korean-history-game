@@ -282,8 +282,8 @@ TEMPLATE = r'''<meta charset="utf-8">
         <code>www/assets/scenes/</code>에 넣고,
         <code>python3 www/assets/scenes/to_webp.py</code>를 한 번 돌린다.</li>
       <li><b>NPC 시트</b> — 다섯 장을 <b>다 받은 뒤</b> 이름만 <code>sheet1.png</code> …
-        <code>sheet5.png</code>로 바꿔 두고
-        <code>python3 www/assets/portraits/extract_sheet.py --all ~/Downloads</code>.
+        <code>sheet5.png</code>로 바꿔 <code>_source_art/</code>에 넣고
+        <code>python3 www/assets/portraits/extract_sheet.py --all</code>.
         한 장씩 뽑아 조건이 달라지면 인물끼리 밝기가 어긋난다.</li>
       <li>확인은 <code>python3 www/assets/tools/check_all.py</code>.</li>
     </ol>

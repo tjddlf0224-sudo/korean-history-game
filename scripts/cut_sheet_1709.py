@@ -5,12 +5,14 @@
 - 인물: 마젠타 키 → 덩어리 묶기 → 좌→우(위→아래) 순서로 이름 붙이기 → 높이 312.
 - 유물: 4×4 칸 안쪽만(격자선·영어 글자 제외) 잘라 160×160.
 """
+import os
 import sys
 import numpy as np
 from PIL import Image, ImageFilter
 from scipy import ndimage
 
-DL = '/Users/yunsismac/Downloads/'
+# 원본 시트는 프로젝트의 _source_art/에 둔다(다운로드 폴더는 정리되면 사라진다).
+DL = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '_source_art') + '/'
 OUT_P = '/Users/yunsismac/Korean-History-Game/www/assets/portraits/'
 OUT_I = '/Users/yunsismac/Korean-History-Game/www/assets/items/'
 

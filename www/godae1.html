@@ -520,11 +520,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=112"></script>
-<script src="assets/zoomwarn.js?v=112"></script>
-<script src="assets/map/map_component.js?v=112"></script>
-<script src="assets/chart.js?v=112"></script>
-<script src="assets/audio.js?v=112"></script>
+<script src="assets/errlog.js?v=113"></script>
+<script src="assets/zoomwarn.js?v=113"></script>
+<script src="assets/map/map_component.js?v=113"></script>
+<script src="assets/chart.js?v=113"></script>
+<script src="assets/companions.js?v=113"></script>
+<script src="assets/audio.js?v=113"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -536,7 +537,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=112';   // 존댓말 전환
+const ART_V = '?v=113';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -762,6 +763,7 @@ const ZONES = {
       { id:'seongwang', name:'백제 성왕', x:540, y:470, img:'assets/portraits/seongwang.png', look:{ role:'king', body:'#5a3a5a', accent:'#c9a24a' } },
       { id:'jinheung', name:'진흥왕', x:1030, y:330, img:'assets/portraits/jinheung.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
       { id:'hwarang', name:'화랑', x:1090, y:430, img:'assets/portraits/hwarang.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'bau', name:'덩치 큰 청년', x:1100, y:600, look:{ role:'general', body:'#2f3d6b', accent:'#8a3a6a' } },
       { id:'seondeok', name:'선덕 여왕', x:950, y:600, img:'assets/portraits/seondeok_f.png', look:{ role:'king', body:'#8a2f3a', accent:'#e0b94a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
@@ -1073,7 +1075,8 @@ function updateHudGoal(){
       ['seongwang', '백제 성왕과 대화하기'],
       ['jinheung', '진흥왕과 대화하기'],
       ['hwarang', '화랑과 대화하기'],
-      ['seondeok', '선덕 여왕과 대화하기']
+      ['seondeok', '선덕 여왕과 대화하기'],
+      ['bau', '덩치 큰 청년과 대화하기']
     ];
     /* 자동 걷기도 같은 차례를 따라야 한다. autowalk는 원래 ZONES의
        npcs 배열 순서로 갔는데, 그 순서와 이 목록이 달라 목표는
@@ -1224,6 +1227,7 @@ const World = {
     for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
     for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
+    if (window.Party) Party.draw(ctx, this, camX, camY, ZOOM);   // 동료가 주인공 뒤에 서게 먼저 그린다
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     if (this.nearNpcShown){
       const n = this.nearNpcShown;
@@ -1671,6 +1675,8 @@ const NPC_DATA = {
       { who:'npc', t:'당 황제가 보낸 모란 그림에 나비가 없었지. 그걸 보고 알았네.' },
       { who:'npc', t:'나는 선덕일세. 이 나라의 첫 여왕이지.',
         chart:{ type:'kings', title:'진흥왕 뒤의 신라', main:[ { name:'진흥왕' }, { name:'진지왕' }, { name:'진평왕' }, { name:'선덕 여왕', note:'632~647', active:true }, { name:'진덕 여왕' }, { name:'무열왕' } ], cross:[  ] } },
+      Party.say('chadol', 'sly', '(여왕의 금관을 올려다본다) 반짝… 제일 큰 반짝…'),
+      { who:'me', t:'(차돌이 손을 꼭 붙잡는다) 저건 절대 안 돼.' },
       { who:'me', t:'여왕이라고 업신여기는 이웃은 없었습니까?' },
       { who:'npc', t:'있었지. 그래서 자장의 말을 따라 황룡사에 아홉 층 탑을 세웠네. 층마다 이웃 나라 하나씩을 누른다는 뜻일세.',
         chart:{ type:'grid', title:'황룡사 9층 목탑', head:[ '무엇', '내용' ], rows:[ [ '건의', '승려 자장' ], [ '세운 이', '백제 장인 아비지를 불러옴' ], [ '뜻', '아홉 층 = 둘레 아홉 나라를 누름' ], [ '뒷날', '고려 때 몽골 침입(1238)으로 불타 터만 남음' ] ], hi:0 } },
@@ -1691,6 +1697,41 @@ const NPC_DATA = {
         opts:['선덕 여왕','진성 여왕'], answer:0, src:[9],
         feedback:['진성 여왕은 신라 말 원종·애노의 난이 일어났던 때의 왕이에요.','정답! 선덕 여왕입니다.'] },
     ],
+  },
+  bau_0: {
+    name: '덩치 큰 청년', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M12 3a4 4 0 110 8 4 4 0 010-8zM4 22c0-5 3.6-9 8-9s8 4 8 9z"/></svg>',
+    partyJoin: 'bau',
+    beats: [
+      { who:'npc', t:'(두루마리를 거꾸로 든 채 끙끙) 자왈… 자왈… 그다음이 뭐였더라.' },
+      Party.say('chadol', 'sly', '(두루마리의 금실 끈을 확 잡아당긴다) 반짝 끈!'),
+      { who:'npc', t:'어, 어이 꼬마! 그건 할머님께 받은 책이다! (차돌이를 한 손으로 번쩍 든다)' },
+      { who:'me', t:'(깜짝) 사람을… 한 손으로?' },
+      { who:'npc', t:'(차돌이를 살포시 내려놓는다) 미안하오. 힘 조절이 서툴러서. 다들 나를 바우라 부르오.' },
+      Party.say('chadol', 'shock', '(눈이 동그래진다) …바우. 큰 바위.'),
+      { who:'npc', t:'본래 이름이야 따로 있소만, 집안 어른들은 그 이름에 걸맞게 글이나 읽으라 하시지.' },
+      { who:'me', t:'글 읽는 집안이십니까?' },
+      { who:'npc', t:'(목소리를 낮춘다) 할아버님 대까지 우리 집안은 성골이었소. 진지왕께서 자리에서 물러나시자 우리도 진골로 내려앉았지.',
+        chart:{ type:'steps', title:'성골이 끊기기까지', steps:[ { t:'579 · 진지왕 폐위', s:'그 후손은 진골로 내려감' }, { t:'진평왕 · 선덕 여왕 · 진덕 여왕', s:'성골 왕이 이어짐' }, { t:'654 · 진덕 여왕이 죽음', s:'성골 남자가 없어 성골 왕이 끊김' }, { t:'김춘추(무열왕) 즉위', s:'진골 출신 첫 왕' } ] } },
+      { who:'npc', t:'그러니 칼 대신 붓을 쥐라 하시오. 핏줄로 안 되면 학식으로라도 집안을 세우라고.' },
+      Party.say('chadol', 'sly', '(청년의 허리를 가리킨다) 저거… 반짝!'),
+      { who:'npc', t:'(고리 달린 칼을 쓱 뽑아, 떨어지는 나뭇잎을 두 동강 낸다) …아차. 또 이랬군. 이건 비밀이오.' },
+      { who:'me', t:'(속으로) 붓보다 칼이 훨씬 어울리는 사람이다.' },
+      { who:'npc', t:'그대는 먼 데서 왔다지? 앞일을 아는 사람 같다고 궁 안에서 수군대더군.' },
+      { who:'me', t:'…조금은 압니다.' },
+      { who:'npc', t:'그럼 나도 데려가 주시오! 앞일을 알면 어른들 앞에서 똑똑한 척 좀 해 볼 수 있지 않겠소.' },
+      Party.say('bau', 'oops', '배우고 때때로 익히면 또한 기쁘지 아니한가… 어? 방금 내가 뭐라 했소?'),
+      { who:'me', t:'(웃음을 참는다) 「논어」 첫 구절이네요. 글도 꽤 읽으셨는데요.' },
+      Party.say('chadol', 'smile', '바우! 바우! 같이!'),
+      { who:'me', t:'(속으로) 곧 성골이 끊기고 진골 김춘추가 왕이 된다. 이 사람 집안 이야기가 곧 역사다.' },
+    ],
+    quizSeq: [
+      { q:'진덕 여왕이 죽은 뒤 신라에서 진골 출신으로는 처음 왕위에 오른 인물은?',
+        opts:['김춘추(태종 무열왕)','김유신'], answer:0, src:[20, 26, 48, 73, 78],
+        feedback:['김유신은 가야 왕족 출신의 장군으로, 왕위에 오르지 않았어요.','정답! 김춘추입니다. 이때부터 진골 출신 왕이 이어져요.'] },
+      { q:'신라 골품제에서 왕위에 오를 수 있었으나 진덕 여왕을 끝으로 끊긴 신분은?',
+        opts:['성골','6두품'], answer:0, src:[37, 43, 55],
+        feedback:['6두품은 학문과 실무에 뛰어나도 오를 수 있는 관등에 한계가 있던 신분이에요.','정답! 성골입니다.'] },
+    ],
     endsChapter: true
   },
 };
@@ -1704,6 +1745,7 @@ const Stage = {
     if (id === 'jinheung') return 'jinheung_0';
     if (id === 'hwarang') return 'hwarang_0';
     if (id === 'seondeok') return 'seondeok_0';
+    if (id === 'bau') return 'bau_0';
     return null;
   },
   interact(){
@@ -2223,38 +2265,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=112"></script>
-<script src="assets/streak.js?v=112"></script>
+<script src="assets/badges.js?v=113"></script>
+<script src="assets/streak.js?v=113"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=112"></script>
-  <script src="assets/fx.js?v=112"></script>
-  <script src="assets/deed.js?v=112"></script>
-  <script src="assets/inkwipe.js?v=112"></script>
-  <script src="assets/dash.js?v=112"></script>
-<script src="assets/juice.js?v=112"></script>
-  <script src="assets/difficulty.js?v=112"></script>
-  <script src="assets/nextauto.js?v=112"></script>
-<script src="assets/heroes_data.js?v=112"></script>
-<script src="assets/heroes.js?v=112"></script>
-<script src="assets/icons.js?v=112"></script>
-<script src="assets/srs.js?v=112"></script>
-<script src="assets/newsflash.js?v=112"></script>
-<script src="assets/timeline.js?v=112"></script>
-<script src="assets/journey.js?v=112"></script>
-<script src="assets/season.js?v=112"></script>
-<script src="assets/items.js?v=112"></script>
-  <script src="assets/gold.js?v=112"></script>
-  <script src="assets/ask.js?v=112"></script>
-  <script src="assets/ads.js?v=112"></script>
-  <script src="assets/energy.js?v=112"></script>
-  <script src="assets/daily.js?v=112"></script>
-  <script src="assets/unlock.js?v=112"></script>
-  <script src="assets/guide.js?v=112"></script>
-  <script src="assets/minigames.js?v=112"></script>
-  <script src="assets/quests.js?v=112"></script>
-  <script src="assets/offline.js?v=112"></script>
-  <script src="assets/telemetry.js?v=112"></script>
-<script src="assets/autowalk.js?v=112"></script>
+<script src="assets/rank.js?v=113"></script>
+  <script src="assets/fx.js?v=113"></script>
+  <script src="assets/deed.js?v=113"></script>
+  <script src="assets/inkwipe.js?v=113"></script>
+  <script src="assets/dash.js?v=113"></script>
+<script src="assets/juice.js?v=113"></script>
+  <script src="assets/difficulty.js?v=113"></script>
+  <script src="assets/nextauto.js?v=113"></script>
+<script src="assets/heroes_data.js?v=113"></script>
+<script src="assets/heroes.js?v=113"></script>
+<script src="assets/icons.js?v=113"></script>
+<script src="assets/srs.js?v=113"></script>
+<script src="assets/newsflash.js?v=113"></script>
+<script src="assets/timeline.js?v=113"></script>
+<script src="assets/journey.js?v=113"></script>
+<script src="assets/season.js?v=113"></script>
+<script src="assets/items.js?v=113"></script>
+  <script src="assets/gold.js?v=113"></script>
+  <script src="assets/ask.js?v=113"></script>
+  <script src="assets/ads.js?v=113"></script>
+  <script src="assets/energy.js?v=113"></script>
+  <script src="assets/daily.js?v=113"></script>
+  <script src="assets/unlock.js?v=113"></script>
+  <script src="assets/guide.js?v=113"></script>
+  <script src="assets/minigames.js?v=113"></script>
+  <script src="assets/quests.js?v=113"></script>
+  <script src="assets/offline.js?v=113"></script>
+  <script src="assets/telemetry.js?v=113"></script>
+<script src="assets/autowalk.js?v=113"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

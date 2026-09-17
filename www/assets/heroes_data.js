@@ -3,11 +3,12 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 216명 */
+   인물 218명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
     dangun: { n:'고조선 제사장', p:'dangun.png', e:'선사·초기국가', r:'scholar', ch:{'seonsa1.html':['dangun_0']} },
+    jumeokdokki: { n:'꼬마', p:'jumeokdokki', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['chadol_0']} },
     dongye: { n:'동예 사람', p:'dongye.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['dongye_0']} },
     gusukgi: { n:'뗀석기 사냥꾼', p:'gusukgi.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gusukgi_0']} },
     extra_sangin: { n:'변한 철 상인', p:'extra_sangin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['byeonhan_0']} },
@@ -28,6 +29,7 @@ window.HERO_DATA = (function(){
     ijinasi_f: { n:'대가야 왕', p:'ijinasi_f.png', e:'고대', r:'king', ch:{'gaya.html':['ijinasi_0']} },
     daejoyeong: { n:'대조영', p:'daejoyeong.png', e:'고대', r:'general', ch:{'godae2.html':['daejoyeong_0']} },
     cheolsang: { n:'덩이쇠 상인', p:'cheolsang.png', e:'고대', r:'commoner', ch:{'gaya.html':['cheolsang_0']} },
+    bau: { n:'덩치 큰 청년', p:null, e:'고대', r:'general', ch:{'godae1.html':['bau_0']} },
     muryeong: { n:'무령왕', p:'muryeong.png', e:'고대', r:'king', ch:{'godae1.html':['muryeong_0']} },
     muwang: { n:'무왕', p:'muwang.png', e:'고대', r:'king', ch:{'tongil.html':['muwang_0']} },
     munmu: { n:'문무왕', p:'munmu.png', e:'고대', r:'king', ch:{'tongil.html':['munmu_0']} },

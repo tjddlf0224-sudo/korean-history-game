@@ -5,7 +5,7 @@
 한글 이름표까지 박은 것도 있다) 시트별로 격자와 라벨 높이를 따로 적어 둔다.
 이름표는 칸 아래에 붙어 있어 아래 일정 비율을 버리면 그림이 온전히 남는다.
 
-  python3 crop_items.py                # 다운로드 폴더의 시트 4장을 전부 처리
+  python3 crop_items.py                # _source_art 폴더의 시트 4장을 전부 처리
   python3 crop_items.py --dry          # 자르지 않고 매핑만 확인
 
 배경 제거는 crop_player.py의 key_out과 같은 방식이다(마젠타/초록 크로마키 +
@@ -17,7 +17,8 @@ import unicodedata
 from PIL import Image
 import numpy as np
 
-DL = os.path.expanduser('~/Downloads')
+# 원본 시트는 프로젝트의 _source_art/에 둔다(다운로드 폴더는 정리되면 사라진다).
+DL = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', '_source_art'))
 OUT = os.path.dirname(os.path.abspath(__file__))
 
 BGS = {

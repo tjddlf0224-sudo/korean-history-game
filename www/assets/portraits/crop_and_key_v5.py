@@ -17,11 +17,14 @@ v5 방식 — 슈퍼샘플링 + 프리멀티플라이드 알파:
 배경색은 (255,0,255)로 가정하지 않고 네 모서리에서 실측한다 — 이 시트의
 실제 배경은 (250,6,243)이었다.
 """
+import os
 from PIL import Image
 import numpy as np
 from scipy import ndimage
 
-SRC = '/Users/yunsismac/Downloads/Gemini_Generated_Image_nv18qenv18qenv18.png'
+# 원본 시트는 프로젝트의 _source_art/에 둔다(다운로드 폴더는 정리되면 사라진다).
+SRC = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..',
+                                    '_source_art', 'Gemini_Generated_Image_nv18qenv18qenv18.png'))
 COLS, ROWS = 5, 3
 LABELS = [
     'sejong', 'commoner1', 'suyang', 'jangyeongsil', 'jwasu',

@@ -16,8 +16,8 @@
    - 가장자리 한 겹은 반투명으로 부드럽게 만든다(계단 지지 않게).
 
    쓰는 법
-     python3 key_fake_alpha.py ~/Downloads/칠지도v2.png            # 미리보기만
-     python3 key_fake_alpha.py ~/Downloads/칠지도v2.png -o out.png  # 저장
+     python3 key_fake_alpha.py _source_art/칠지도v2.png            # 미리보기만
+     python3 key_fake_alpha.py _source_art/칠지도v2.png -o out.png  # 저장
      python3 key_fake_alpha.py ... --size 160                       # 게임 규격으로
 """
 import argparse

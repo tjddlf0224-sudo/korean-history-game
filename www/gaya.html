@@ -510,11 +510,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=112"></script>
-<script src="assets/zoomwarn.js?v=112"></script>
-<script src="assets/map/map_component.js?v=112"></script>
-<script src="assets/chart.js?v=112"></script>
-<script src="assets/audio.js?v=112"></script>
+<script src="assets/errlog.js?v=113"></script>
+<script src="assets/zoomwarn.js?v=113"></script>
+<script src="assets/map/map_component.js?v=113"></script>
+<script src="assets/chart.js?v=113"></script>
+<script src="assets/companions.js?v=113"></script>
+<script src="assets/audio.js?v=113"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +527,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=112';   // 존댓말 전환
+const ART_V = '?v=113';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1148,6 +1149,7 @@ const World = {
     for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
     for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
+    if (window.Party) Party.draw(ctx, this, camX, camY, ZOOM);   // 동료가 주인공 뒤에 서게 먼저 그린다
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     if (this.nearNpcShown){
       const n = this.nearNpcShown;
@@ -1365,6 +1367,19 @@ const NPC_DATA = {
         chart:{ type:'relic', title:'가야의 철제 무구', items:[ { img:'pangapot', n:'판갑옷', s:'철판을 이어 만든 갑옷' } ] } },
       { who:'me', t:'(갑옷을 만져 본다) …이거 참 무겁겠습니다.' },
       { who:'npc', t:'무겁지. 허나 철이 있어야 나라도 강해지네.' },
+      Party.say('chadol', 'sly', '(덩이쇠 한 장을 슬쩍 품에 넣는다) 헤헤… 반짝.'),
+      { who:'npc', t:'(장부를 세다 멈춘다) …한 장이 빈다. 방금 그 꼬마! 도둑이야!' },
+      { who:'npc', t:'왜 사신이 오늘 배에 실어 갈 쇠요! 한 장이라도 모자라면 거래가 깨지고, 우리 고을이 겨울을 못 나!' },
+      Party.say('chadol', 'cry', '(쇠를 끌어안고 울먹) 반짝… 예뻐서… 그냥…'),
+      { who:'me', t:'(속으로) 가야는 이 쇠를 낙랑과 왜에 팔았고, 돈처럼 주고받았다. 한 장이 곧 한 사람의 겨울 양식이다.' },
+      Party.say('bau', 'stance', '내가 갚겠소! (덩이쇠 더미를 통째로 들어 올린다) 이 짐, 배까지 한 번에 옮겨 드리리다!'),
+      { who:'npc', t:'(입이 떡 벌어진다) 장정 열이 반나절 걸릴 짐을… 혼자?' },
+      { who:'me', t:'그리고 한 장 값은 제가 치르겠습니다. 덩이쇠가 곧 돈이니, 제 품삯으로 셈해 주십시오.' },
+      { who:'npc', t:'(한숨을 쉬고 웃는다) …됐소. 짐을 옮겨 준 품삯이면 차고 넘치오.' },
+      Party.say('chadol', 'cry', '(두 손으로 쇠를 내민다) 잘못… 했어요.'),
+      { who:'me', t:'(속으로) 처음으로 제대로 된 말로 사과했다.' },
+      Party.say('bau', 'oops', '(차돌이 머리를 쓰다듬는다) 잘했다, 꼬마. 허물이 있는데 고치지 않는 것, 그것이 진짜 허물이라… 어, 또 튀어나왔네.'),
+      Party.say('chadol', 'smile', '(바우 어깨에 올라탄다) 바우, 최고!'),
     ],
     quizSeq: [
       { q:'가야가 낙랑과 왜에 수출하며 화폐처럼 쓰이기도 한, 납작하게 편 철 소재는?',
@@ -1921,38 +1936,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=112"></script>
-<script src="assets/streak.js?v=112"></script>
+<script src="assets/badges.js?v=113"></script>
+<script src="assets/streak.js?v=113"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=112"></script>
-  <script src="assets/fx.js?v=112"></script>
-  <script src="assets/deed.js?v=112"></script>
-  <script src="assets/inkwipe.js?v=112"></script>
-  <script src="assets/dash.js?v=112"></script>
-<script src="assets/juice.js?v=112"></script>
-  <script src="assets/difficulty.js?v=112"></script>
-  <script src="assets/nextauto.js?v=112"></script>
-<script src="assets/heroes_data.js?v=112"></script>
-<script src="assets/heroes.js?v=112"></script>
-<script src="assets/icons.js?v=112"></script>
-<script src="assets/srs.js?v=112"></script>
-<script src="assets/newsflash.js?v=112"></script>
-<script src="assets/timeline.js?v=112"></script>
-<script src="assets/journey.js?v=112"></script>
-<script src="assets/season.js?v=112"></script>
-<script src="assets/items.js?v=112"></script>
-  <script src="assets/gold.js?v=112"></script>
-  <script src="assets/ask.js?v=112"></script>
-  <script src="assets/ads.js?v=112"></script>
-  <script src="assets/energy.js?v=112"></script>
-  <script src="assets/daily.js?v=112"></script>
-  <script src="assets/unlock.js?v=112"></script>
-  <script src="assets/guide.js?v=112"></script>
-  <script src="assets/minigames.js?v=112"></script>
-  <script src="assets/quests.js?v=112"></script>
-  <script src="assets/offline.js?v=112"></script>
-  <script src="assets/telemetry.js?v=112"></script>
-<script src="assets/autowalk.js?v=112"></script>
+<script src="assets/rank.js?v=113"></script>
+  <script src="assets/fx.js?v=113"></script>
+  <script src="assets/deed.js?v=113"></script>
+  <script src="assets/inkwipe.js?v=113"></script>
+  <script src="assets/dash.js?v=113"></script>
+<script src="assets/juice.js?v=113"></script>
+  <script src="assets/difficulty.js?v=113"></script>
+  <script src="assets/nextauto.js?v=113"></script>
+<script src="assets/heroes_data.js?v=113"></script>
+<script src="assets/heroes.js?v=113"></script>
+<script src="assets/icons.js?v=113"></script>
+<script src="assets/srs.js?v=113"></script>
+<script src="assets/newsflash.js?v=113"></script>
+<script src="assets/timeline.js?v=113"></script>
+<script src="assets/journey.js?v=113"></script>
+<script src="assets/season.js?v=113"></script>
+<script src="assets/items.js?v=113"></script>
+  <script src="assets/gold.js?v=113"></script>
+  <script src="assets/ask.js?v=113"></script>
+  <script src="assets/ads.js?v=113"></script>
+  <script src="assets/energy.js?v=113"></script>
+  <script src="assets/daily.js?v=113"></script>
+  <script src="assets/unlock.js?v=113"></script>
+  <script src="assets/guide.js?v=113"></script>
+  <script src="assets/minigames.js?v=113"></script>
+  <script src="assets/quests.js?v=113"></script>
+  <script src="assets/offline.js?v=113"></script>
+  <script src="assets/telemetry.js?v=113"></script>
+<script src="assets/autowalk.js?v=113"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
