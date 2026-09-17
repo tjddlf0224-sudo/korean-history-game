@@ -20,6 +20,9 @@ SKIP = {'_ranktest.html', '_bosstest.html', '_smoke.html',
         'index.html', 'exam_practice.html', 'prologue.html'}
 
 
+COMPANIONS = {'chadol': ('차돌이', None), 'bau': ('바우', None)}
+
+
 def main():
     os.chdir(ROOT)
 
@@ -52,9 +55,15 @@ def main():
                 bm = re.search(r"^  %s_\w+:\s*\{([\s\S]*?)(?=\n  \w+:\s*\{|\n\};)"
                                % re.escape(nid), s, re.M)
                 if bm:
-                    dm = re.search(r"img:\s*'([^']+)'", bm.group(1))
+                    # 초상 경로만 본다 — 도해의 유물 그림(img:'jumeokdokki')을 초상으로
+                    # 집어 차돌이 카드가 뗀석기 얼굴이 된 적이 있다(2026-09-18).
+                    dm = re.search(r"img:\s*'(assets/portraits/[^']+)'", bm.group(1))
                     if dm:
                         img = dm.group(1)
+            # 동료는 합류 전 이름('꼬마')이 아니라 동료 이름으로 싣는다.
+            # 초상은 그림이 들어오면 채운다(companions.js의 HAS_ART와 함께).
+            if nid in COMPANIONS:
+                name, img = COMPANIONS[nid]
             rm = re.search(r"role:\s*'(\w+)'", rest)
             role = rm.group(1) if rm else 'commoner'
             key = os.path.splitext(os.path.basename(img))[0] if img else nid
