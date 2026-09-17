@@ -442,10 +442,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=107"></script>
-<script src="assets/zoomwarn.js?v=107"></script>
-<script src="assets/chart.js?v=107"></script>
-<script src="assets/audio.js?v=107"></script>
+<script src="assets/errlog.js?v=108"></script>
+<script src="assets/zoomwarn.js?v=108"></script>
+<script src="assets/chart.js?v=108"></script>
+<script src="assets/audio.js?v=108"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -457,7 +457,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=107';   // 존댓말 전환
+const ART_V = '?v=108';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -1483,6 +1483,9 @@ const NPC_DATA = {
       { who:'npc', t:'(한참 뒤진다) …없습니다. 어느 고을 사람이시오?',
         chart:{ type:'stat', title:'호적에 적히는 것', items:[ { v:'신분', l:'양인·천민을 구분' }, { v:'이름·나이', l:'식구까지 함께' } ] } },
       { who:'me', t:'(말문이 막힌다) …그게, 좀 멀리서 왔습니다.' },
+      { who:'npc', t:'호적엔 양인과 천민이 갈립니다. 헌데 양인이라도 수군·조례·나장처럼 고된 일을 대대로 지는 이들이 있지요. 신량역천이라 합니다.',
+        chart:{ type:'grid', title:'조선의 신분', head:[ '구분', '누구' ], rows:[ [ '법으로는', '양인과 천인 둘 — 양천제' ], [ '실제로는', '양반 · 중인 · 상민 · 천민' ], [ '신량역천', '신분은 양인, 하는 일은 천역 — 수군·조례·나장 등' ], [ '천민', '노비가 대부분 · 백정·광대 등' ] ], hi:2 } },
+      { who:'me', t:'양인인데도 천한 일을 해야 한다니….' },
       { who:'npc', t:'호적에 없으면 호패도 못 받습지요. 조심하시오.' },
       { who:'npc', t:'세금을 매기려면 논밭 사정도 알아야지요.' },
       { who:'npc', t:'그래서 20년마다 땅을 조사해 양안에 적습니다.',
@@ -1501,6 +1504,9 @@ const NPC_DATA = {
       { q:'조선에서 20년마다 토지를 조사해 작성한, 조세 부과의 근거가 된 토지대장은?',
         opts:['양안','호적'], answer:0, src:[34],
         feedback:['호적은 호구를 조사해 작성한 인구 대장이에요.','정답! 양안입니다. 20년마다 작성해 조세를 매기는 근거로 삼았어요.'] },
+      { q:'조선에서 신분은 양인이지만 수군·조례·나장처럼 천한 역을 지던 계층은?',
+        opts:['신량역천','서얼'], answer:0, src:[7, 11, 16, 19, 67],
+        feedback:['서얼은 양반의 첩에게서 난 자손으로, 벼슬길에 제약을 받았어요.','정답! 신량역천입니다.'] },
     ]
   },
   // 3화(들녘과 국경)에서 늙은 농부 이야기를 끝까지 들어준 적이 있으면,
@@ -2127,38 +2133,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=107"></script>
-<script src="assets/streak.js?v=107"></script>
+<script src="assets/badges.js?v=108"></script>
+<script src="assets/streak.js?v=108"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=107"></script>
-  <script src="assets/fx.js?v=107"></script>
-  <script src="assets/deed.js?v=107"></script>
-  <script src="assets/inkwipe.js?v=107"></script>
-  <script src="assets/dash.js?v=107"></script>
-<script src="assets/juice.js?v=107"></script>
-  <script src="assets/difficulty.js?v=107"></script>
-  <script src="assets/nextauto.js?v=107"></script>
-<script src="assets/heroes_data.js?v=107"></script>
-<script src="assets/heroes.js?v=107"></script>
-<script src="assets/icons.js?v=107"></script>
-<script src="assets/srs.js?v=107"></script>
-<script src="assets/newsflash.js?v=107"></script>
-<script src="assets/timeline.js?v=107"></script>
-<script src="assets/journey.js?v=107"></script>
-<script src="assets/season.js?v=107"></script>
-<script src="assets/items.js?v=107"></script>
-  <script src="assets/gold.js?v=107"></script>
-  <script src="assets/ask.js?v=107"></script>
-  <script src="assets/ads.js?v=107"></script>
-  <script src="assets/energy.js?v=107"></script>
-  <script src="assets/daily.js?v=107"></script>
-  <script src="assets/unlock.js?v=107"></script>
-  <script src="assets/guide.js?v=107"></script>
-  <script src="assets/minigames.js?v=107"></script>
-  <script src="assets/quests.js?v=107"></script>
-  <script src="assets/offline.js?v=107"></script>
-  <script src="assets/telemetry.js?v=107"></script>
-<script src="assets/autowalk.js?v=107"></script>
+<script src="assets/rank.js?v=108"></script>
+  <script src="assets/fx.js?v=108"></script>
+  <script src="assets/deed.js?v=108"></script>
+  <script src="assets/inkwipe.js?v=108"></script>
+  <script src="assets/dash.js?v=108"></script>
+<script src="assets/juice.js?v=108"></script>
+  <script src="assets/difficulty.js?v=108"></script>
+  <script src="assets/nextauto.js?v=108"></script>
+<script src="assets/heroes_data.js?v=108"></script>
+<script src="assets/heroes.js?v=108"></script>
+<script src="assets/icons.js?v=108"></script>
+<script src="assets/srs.js?v=108"></script>
+<script src="assets/newsflash.js?v=108"></script>
+<script src="assets/timeline.js?v=108"></script>
+<script src="assets/journey.js?v=108"></script>
+<script src="assets/season.js?v=108"></script>
+<script src="assets/items.js?v=108"></script>
+  <script src="assets/gold.js?v=108"></script>
+  <script src="assets/ask.js?v=108"></script>
+  <script src="assets/ads.js?v=108"></script>
+  <script src="assets/energy.js?v=108"></script>
+  <script src="assets/daily.js?v=108"></script>
+  <script src="assets/unlock.js?v=108"></script>
+  <script src="assets/guide.js?v=108"></script>
+  <script src="assets/minigames.js?v=108"></script>
+  <script src="assets/quests.js?v=108"></script>
+  <script src="assets/offline.js?v=108"></script>
+  <script src="assets/telemetry.js?v=108"></script>
+<script src="assets/autowalk.js?v=108"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

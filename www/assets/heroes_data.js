@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 208명 */
+   인물 209명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -91,6 +91,7 @@ window.HERO_DATA = (function(){
     seongjong: { n:'성종', p:'seongjong.png', e:'조선 전기', r:'king', ch:{'ch4.html':['seongjong_0','seongjong_1']} },
     sejo: { n:'세조', p:'sejo.png', e:'조선 전기', r:'king', ch:{'ch3.html':['sejo_0','sejo_1','sejo_2']} },
     sejong: { n:'세종', p:'sejong.png', e:'조선 전기', r:'king', ch:{'ch2.html':['sejong_0','sejong_1','sejong_3']} },
+    saimdang: { n:'신사임당', p:'saimdang.png', e:'조선 전기', r:'scholar', ch:{'ch5b.html':['saimdang_0']} },
     sinsukju: { n:'신숙주', p:'sinsukju.png', e:'조선 전기', r:'scholar', ch:{'ch2.html':['sinsukju_0'], 'ch2b.html':['sinsukju_0']} },
     angyeon: { n:'안견', p:'angyeon.png', e:'조선 전기', r:'commoner', ch:{'ch2.html':['angyeon_0']} },
     yeonsangun_f: { n:'연산군', p:'yeonsangun_f.png', e:'조선 전기', r:'king', ch:{'ch5.html':['yeonsangun_0']} },

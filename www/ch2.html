@@ -496,11 +496,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=107"></script>
-<script src="assets/zoomwarn.js?v=107"></script>
-<script src="assets/map/map_component.js?v=107"></script>
-<script src="assets/chart.js?v=107"></script>
-<script src="assets/audio.js?v=107"></script>
+<script src="assets/errlog.js?v=108"></script>
+<script src="assets/zoomwarn.js?v=108"></script>
+<script src="assets/map/map_component.js?v=108"></script>
+<script src="assets/chart.js?v=108"></script>
+<script src="assets/audio.js?v=108"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -512,7 +512,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=107';   // 존댓말 전환
+const ART_V = '?v=108';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -1343,6 +1343,8 @@ const NPC_DATA = {
       { who:'npc', t:'글과 시도 손수 붙이셨습니다. 스물세 명이 글을 얹었지요.',
         chart:{ type:'stat', title:'몽유도원도에 딸린 것', items:[ { v:'23편', l:'그림에 붙인 시와 글' } ] } },
       { who:'npc', t:'제 곁엔 강희안이란 분도 있습니다. 시·그림·글씨 다 능하시지요.' },
+      { who:'npc', t:'그분이 그린 고사관수도는 선비가 바위에 엎드려 물을 바라보는 그림입니다. 붓 몇 번에 마음이 다 담겼지요.',
+        chart:{ type:'compare', title:'조선 전기의 두 그림', cols:[ { h:'몽유도원도', items:[ '안견', '안평대군의 꿈 · 도원' ] }, { h:'고사관수도', hi:true, items:[ '강희안', '선비가 물을 바라봄' ] } ] } },
       { who:'me', t:'…화원의 일도, 참 여러 갈래군요.' },
     ],
     quizSeq: [
@@ -1350,6 +1352,8 @@ const NPC_DATA = {
         feedback:['세한도는 훗날 조선 후기 김정희의 작품이에요.','정답! 안견이 그린 몽유도원도입니다.'] },
       { q:'시·그림·글씨에 모두 능해 조선 전기를 대표하는 문인 화가로 꼽히는 인물은?', opts:['강희안','김홍도'], answer:0, src:[72],
         feedback:['김홍도는 훨씬 후대인 조선 후기 화가예요.','정답! 강희안입니다.'] },
+      { q:'선비가 바위에 엎드려 물을 바라보는 모습을 그린 강희안의 그림은?', opts:['고사관수도','세한도'], answer:0, src:[72],
+        feedback:['세한도는 조선 후기 김정희의 작품이에요.','정답! 고사관수도입니다.'] },
     ]
   },
 
@@ -2441,39 +2445,39 @@ function loop(t){
 }
 requestAnimationFrame(loop);
 </script>
-<script src="assets/badges.js?v=107"></script>
-<script src="assets/streak.js?v=107"></script>
+<script src="assets/badges.js?v=108"></script>
+<script src="assets/streak.js?v=108"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=107"></script>
-  <script src="assets/fx.js?v=107"></script>
-  <script src="assets/deed.js?v=107"></script>
-  <script src="assets/inkwipe.js?v=107"></script>
-  <script src="assets/dash.js?v=107"></script>
-<script src="assets/juice.js?v=107"></script>
-  <script src="assets/difficulty.js?v=107"></script>
-  <script src="assets/nextauto.js?v=107"></script>
-<script src="assets/heroes_data.js?v=107"></script>
-<script src="assets/heroes.js?v=107"></script>
-<script src="assets/icons.js?v=107"></script>
-<script src="assets/srs.js?v=107"></script>
-<script src="assets/newsflash.js?v=107"></script>
-<script src="assets/timeline.js?v=107"></script>
-<script src="assets/journey.js?v=107"></script>
-<script src="assets/season.js?v=107"></script>
-<script src="assets/items.js?v=107"></script>
-  <script src="assets/gold.js?v=107"></script>
-  <script src="assets/ask.js?v=107"></script>
-  <script src="assets/ads.js?v=107"></script>
-  <script src="assets/energy.js?v=107"></script>
-  <script src="assets/daily.js?v=107"></script>
-  <script src="assets/unlock.js?v=107"></script>
-  <script src="assets/guide.js?v=107"></script>
-  <script src="assets/minigames.js?v=107"></script>
-  <script src="assets/quests.js?v=107"></script>
-  <script src="assets/offline.js?v=107"></script>
-  <script src="assets/telemetry.js?v=107"></script>
-<script src="assets/autowalk.js?v=107"></script>
-<script src="assets/boss.js?v=107"></script>
+<script src="assets/rank.js?v=108"></script>
+  <script src="assets/fx.js?v=108"></script>
+  <script src="assets/deed.js?v=108"></script>
+  <script src="assets/inkwipe.js?v=108"></script>
+  <script src="assets/dash.js?v=108"></script>
+<script src="assets/juice.js?v=108"></script>
+  <script src="assets/difficulty.js?v=108"></script>
+  <script src="assets/nextauto.js?v=108"></script>
+<script src="assets/heroes_data.js?v=108"></script>
+<script src="assets/heroes.js?v=108"></script>
+<script src="assets/icons.js?v=108"></script>
+<script src="assets/srs.js?v=108"></script>
+<script src="assets/newsflash.js?v=108"></script>
+<script src="assets/timeline.js?v=108"></script>
+<script src="assets/journey.js?v=108"></script>
+<script src="assets/season.js?v=108"></script>
+<script src="assets/items.js?v=108"></script>
+  <script src="assets/gold.js?v=108"></script>
+  <script src="assets/ask.js?v=108"></script>
+  <script src="assets/ads.js?v=108"></script>
+  <script src="assets/energy.js?v=108"></script>
+  <script src="assets/daily.js?v=108"></script>
+  <script src="assets/unlock.js?v=108"></script>
+  <script src="assets/guide.js?v=108"></script>
+  <script src="assets/minigames.js?v=108"></script>
+  <script src="assets/quests.js?v=108"></script>
+  <script src="assets/offline.js?v=108"></script>
+  <script src="assets/telemetry.js?v=108"></script>
+<script src="assets/autowalk.js?v=108"></script>
+<script src="assets/boss.js?v=108"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
