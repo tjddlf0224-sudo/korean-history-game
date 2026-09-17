@@ -14,27 +14,27 @@
 | `assets/scenes/heritage_beopjusa_palsangjeon.jpg` | 보은 법주사 팔상전 | 이인희 | CC BY(저작권정보 표시) | ★교체(2026-08): 공유마당 gongu.copyright.or.kr wrtSn=11025545 (제목 "속리산_법주사_00074", 저작자 이인희) — 사용자 제공 파일·링크로 교체 및 확인 완료 | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_cheongja_sanggam.jpg` | 청자 상감운학문 매병(보물) | 국립중앙박물관 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_icheondong_seokbul.jpg` | 안동 이천동 마애여래입상 | 국가유산청 | 공공누리(출처표시) | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `goryeo3.html` 의천(uicheon_0) |
-| `assets/scenes/heritage_hasachangdong_buddha.jpg` | 하남 하사창동 철조석가여래좌상 | 국가유산청 | 공공누리(출처표시) | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_hasachangdong_buddha.jpg` | 하남 하사창동 철조석가여래좌상(보물) — 소장품명 「철조 석가불좌상」 | 국립중앙박물관 | 공공누리 제1유형(출처표시) | museum.go.kr 소장품 덕수2748 (relicId=1200) — 2254x3000 원본 · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(사진별 공공누리 배지 확인) | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_cheomseongdae.jpg` | 경주 첨성대 | 국가유산청 | 공공누리 제1유형 | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_gameunsaji_tower.jpg` | 경주 감은사지 삼층석탑(1971년 촬영) | 셀수스협동조합 | 기증저작물(자유이용) | ★교체(2026-08): 공유마당 gongu.copyright.or.kr wrtSn=13297356 (제목 "1971년_감은사지 3층 석탑") — 사용자 제공 파일·링크로 교체 및 확인 완료 | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_seokguram_buddha.jpg` | 석굴암 본존불 | 故한석홍 기증 사진자료 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_bulguksa_tower.jpg` | 불국사 삼층석탑(석가탑) | 국립문화재연구소 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_seongdeokdaewang_bell.jpg` | 성덕대왕신종(국보) | 국가유산청 | 공공누리 제1유형 | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_mugujeonggwang_darani.jpg` | 무구정광대다라니경(귀) — 보존을 위해 책자 형태로 배접된 모습 | 국립중앙박물관 | 공공누리 제1유형(출처표시) | ★교체(2026-08): 기존 이미지는 카탈로그(종이 유물)와 실제 사진(목재 받침 위 유물)이 서로 다른 개체로 보이는 불일치가 있어 사용자가 새 사진으로 교체. e뮤지엄 emuseum.go.kr 상세페이지(relicId=PS0100100102401070300000, 제목 "무구정광대다라니경(귀)")에서 "제 1유형 : 출처표시" 명문 확인, 사진 안에 "無垢淨光大陀羅尼經" 제목도 그대로 찍혀 있어 유물명 일치 재확인. ※ 2026-08 추가 확인: 사진이 두루마리가 아니라 책처럼 펼쳐진 형태라 사용자가 의문 제기 → 원래는 두루마리였으나 지금은 보존을 위해 책자(절첩식)로 배접해 전시하는 형태임을 확인, 게임 내 캡션 문구를 그에 맞게 수정("두루마리를 펼치면" → "원래는 두루마리였지만... 지금은 보존을 위해 책자 형태로 배접되어 있으며") | `godae2.html` 의상(uisang_0) |
-| `assets/scenes/heritage_muyongchong_suryeopdo.jpg` | 무용총 수렵도(모사도) | 정기환(모사) / 국립중앙박물관 소장 | 공공누리 제1유형(출처표시) | 공유마당 — e뮤지엄 emuseum.go.kr에서 모사자 "정기환" 성명 확인, 게임 내 캡션에 반영 완료 | `godae1.html` 고구려 장수(gwanggaeto_0) |
+| `assets/scenes/heritage_muyongchong_suryeopdo.jpg` | 무용총 수렵도(모사도) | 국립문화재연구원 | 공공누리 제1유형(출처표시) | portal.nrich.go.kr 제공본(위키미디어 공용 경유, KOGL Type 1 표시) — 6718x5089 · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(에이전트 자동 수집, 사진 한 장씩 공공누리 배지 확인) | `godae1.html` 고구려 장수(gwanggaeto_0) |
 | `assets/scenes/heritage_mireuksaji_tower.jpg` | 익산 미륵사지 석탑 | 셀수스협동조합 | 기증저작물(자유이용) | 공유마당 gongu.copyright.or.kr wrtSn=13298918로 재확인(사용자가 감은사지로 오인해 전달한 링크였으나 실제 항목은 미륵사지, 기존 기록과 저작자·라이선스 일치 확인) | `godae1.html` 무령왕(muryeong_0) |
 | `assets/scenes/heritage_cheonghwa_baekja.jpg` | 청화백자 | 국립중앙박물관 | 공공누리 제1유형 | 공유마당 — e뮤지엄 emuseum.go.kr에서 "청화백자수지란초문호" 항목(relicId=PS0100100102400296000000)이 제1유형(출처표시)임을 확인, 동일 주제·라이선스 일치로 간접 확인 완료 | `hugi2.html` 김홍도(gimhongdo_0) |
 | `assets/scenes/heritage_daedongyeojido.jpg` | 대동여지도(부분) | 국립중앙박물관 | 공공누리 제1유형 | 공유마당 — e뮤지엄 emuseum.go.kr에서 "대동여지도" 항목(relicId=PS0100100102400394600000)이 제1유형(출처표시)임을 확인, 동일 주제·라이선스 일치로 간접 확인 완료 | `hugi2.html` 김홍도(gimhongdo_0) |
 | `assets/scenes/heritage_geumdong_daehyangno.jpg` | 백제 금동대향로(국보) | 국가유산청(추정) | 공공누리 제1유형(추정) | heritage.go.kr 국보 상세페이지, 사용자 제공 파일명 "국보_백제 금동대향로(089)_문화재대관(국보)"(문화재청·국가유산청 공식 "문화재대관" 아카이브 사진임을 시사) — ⚠️ 이 항목 상세페이지 자체에는 개별 공공누리 배지가 표시되지 않아, 아래 6건과 동일한 방식(파일명·사이트 성격으로 국가유산청 소관 합리적 추정)으로 처리. 100% 확인된 사실은 아님 | `godae1.html` 성왕(seongwang_0) |
 | `assets/scenes/heritage_jeongnimsaji_tower.jpg` | 부여 정림사지 오층석탑(국보) | 국가유산청(추정) | 공공누리 제1유형(추정) | heritage.go.kr 국보 상세페이지, 사용자 제공 파일명 "부여 정림사지 오층석탑_정면 (촬영년도 : 2015년)" — ⚠️ 위 금동대향로와 동일한 사유로 배지 미확인, 합리적 추정으로 처리 | `godae1.html` 성왕(seongwang_0) |
-| `assets/scenes/heritage_ganghwa_bugeunri_dolmen.jpg` | 강화 부근리 지석묘(고인돌, 사적 137호) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1332301370000) — 사용자가 국가유산청 사이트에서 직접 다운로드(2026-08, 파일명 "굄돌기운상태.jpg"). 처음엔 다른 고인돌(학곡리)을 받았으나, Claude가 "고창·화순·강화 고인돌 유적" 중 탁자식 고인돌의 대표격인 부근리 지석묘를 추천해 이걸로 교체 | `seonsa1.html` 청동기시대(cheongdonggi_0) |
+| `assets/scenes/heritage_ganghwa_bugeunri_dolmen.jpg` | 강화 부근리 지석묘(고인돌, 사적) | 국가유산청 | 공공누리 제1유형 | 국가유산포털 ccbaCpno=1332301370000, 사진 id 1625231 — 1600x1067 · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(에이전트 자동 수집, 사진 한 장씩 공공누리 배지 확인) | `seonsa1.html` 청동기시대(cheongdonggi_0) |
 | `assets/scenes/heritage_jungwon_goguryeobi.jpg` | 충주 고구려비(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1113302050000) — 사용자 직접 다운로드(2026-08) | `godae1.html` 고구려 장수(gwanggaeto_0) |
 | `assets/scenes/heritage_ssangbongsa_cheolgamseonsatap.jpg` | 화순 쌍봉사 철감선사탑(국보 57호) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1113600570000) — 사용자 직접 다운로드(2026-08) | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_munmudaewangneung.jpg` | 경주 문무대왕릉(대왕암, 사적) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1333701580000, 2017년 고도보존육성과 촬영) — 사용자 직접 다운로드(2026-08) | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_cheonmachong_gold_crown.jpg` | 천마총 금관(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1113701880000) — 사용자 직접 다운로드(2026-08) | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_hwangnamdaechong_gold_crown.jpg` | 황남대총 북분 금관(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1113701910000, 2014년 국보 동산 앱사진) — 사용자 직접 다운로드(2026-08) | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_bukhansan_jinheungwang_sunsubi.jpg` | 서울 북한산 신라 진흥왕 순수비(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1111100030000) — 사용자 직접 다운로드(2026-08) | `godae1.html` 진흥왕(jinheung_0) |
-| `assets/scenes/heritage_palman_daejanggyeong.jpg` | 합천 해인사 팔만대장경(고려대장경판, 국보 32호) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=2113200540000) — 사용자 직접 다운로드(2026-08) | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_palman_daejanggyeong.jpg` | 합천 해인사 대장경판(팔만대장경, 국보) — 장경판전 판가 | 국가유산청(문화재청 대변인실 2020 촬영) | 공공누리 제1유형 | 국가유산포털 ccbaCpno=1113800320000, 사진 id 6298898 — 5011x3341 원본 · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(에이전트 자동 수집, 사진 한 장씩 공공누리 배지 확인) | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_gyeongbokgung_geunjeongjeon.jpg` | 경복궁 근정전 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1111102230000) — 사용자 직접 다운로드(2026-08) | `ch2.html` 세종(sejong_0) |
 | `assets/scenes/heritage_jongmyo_jeongjeon.jpg` | 종묘 정전(여름) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1111102270000) — 사용자 직접 다운로드(2026-08) | `ch0.html` 정도전(jeongdojeon_1) |
 | `assets/scenes/heritage_changdeokgung_injeongjeon.jpg` | 창덕궁 인정전 | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr, ccbaCpno=1111102250000) — 사용자 직접 다운로드(2026-08). ★위치 정정(2026-08): 처음엔 `ch0.html` 정도전 대사에 넣었는데, 창덕궁은 정도전 사후(태종 5년)에 지어져 "경복궁 이름을 지었다"는 대사 바로 뒤에 나오니 뜬금없다는 지적을 받음 → 실제로 창덕궁을 지은 `ch1.html` 태종(taejong_1)의 해당 대사 뒤로 이동(사진 인프라도 ch1.html에 새로 포팅) | `ch1.html` 태종(taejong_1) |
@@ -64,12 +64,17 @@
 | `assets/scenes/heritage_suncheongja.jpg` | 청자 참외모양 병(국보, 문화재대관) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_buseoksa_sojo.jpg` | 영주 부석사 소조여래좌상(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_danyang_jeokseongbi.jpg` | 단양 신라 적성비(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 진흥왕(jinheung_0) |
-| `assets/scenes/heritage_woljeongsa_tower.jpg` | 평창 월정사 팔각 구층석탑(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_woljeongsa_tower.jpg` | 평창 월정사 팔각 구층석탑(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털 ccbaCpno=1113200480000, 사진 id 1612071 — 900x1141(포털 최대) · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(에이전트 자동 수집, 사진 한 장씩 공공누리 배지 확인) | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_imsinseogiseok.jpg` | 경주 임신서기석(보물, 파일명 "임신서기명석") | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 화랑(hwarang_0) |
-| `assets/scenes/heritage_yeonga7.jpg` | 금동 연가7년명 여래입상(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 고구려 장수(gwanggaeto_0) |
-| `assets/scenes/heritage_bunhwangsa_tower.jpg` | 경주 분황사 모전석탑(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 선덕 여왕(seondeok_0) |
-| `assets/scenes/heritage_gwanchoksa_mireuk.jpg` | 논산 관촉사 석조미륵보살입상(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `goryeo3.html` 의천(uicheon_0) |
-| `assets/scenes/heritage_hwangnyongsaji.jpg` | 경주 황룡사지 남쪽 상공(사적) | 국가유산청 | 공공누리 제1유형 | 국가유산포털(heritage.go.kr) — 사용자 직접 다운로드(2026-09-18, 교안 빈자리 사진 목록의 국가유산포털 링크). 원본은 iCloud `참고자료/문화유산사진_원본/` | `godae1.html` 선덕 여왕(seondeok_0) |
+| `assets/scenes/heritage_yeonga7.jpg` | 금동 연가7년명 여래입상(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털 ccbaCpno=1111101190000, 사진 id 6500565 — 3328x4992 원본 · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(사진별 공공누리 배지 확인) | `godae1.html` 고구려 장수(gwanggaeto_0) |
+| `assets/scenes/heritage_bunhwangsa_tower.jpg` | 경주 분황사 모전석탑(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털 ccbaCpno=1113700300000, 사진 id 1612752 — 1600x1067 · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(사진별 공공누리 배지 확인) | `godae1.html` 선덕 여왕(seondeok_0) |
+| `assets/scenes/heritage_gwanchoksa_mireuk.jpg` | 논산 관촉사 석조미륵보살입상(국보) | 국가유산청 | 공공누리 제1유형 | 국가유산포털 ccbaCpno=1113403230000, 사진 id 10001556 — 4016x6016 원본 · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(에이전트 자동 수집, 사진 한 장씩 공공누리 배지 확인) | `goryeo3.html` 의천(uicheon_0) |
+| `assets/scenes/heritage_hwangnyongsaji.jpg` | 경주 황룡사지 목탑터 유구(심초석, 사적) | 국가유산청 | 공공누리 제1유형 | 국가유산포털 ccbaCpno=1333700060000, 사진 id 6279953 — 3750x2503 원본(2015 촬영) · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(에이전트 자동 수집, 사진 한 장씩 공공누리 배지 확인) | `godae1.html` 선덕 여왕(seondeok_0) |
+| `assets/scenes/heritage_houu.jpg` | 경주 호우총 출토 청동 「광개토대왕」명 호우(보물) | 국립중앙박물관 | 공공누리 제1유형(출처표시) | museum.go.kr 소장품 신수120 (relicId=1917) — 3000x2251 원본, 바닥 명문이 보이는 컷 | `godae1.html` 고구려 장수(gwanggaeto_0) |
+| `assets/scenes/heritage_hanseong_jeoncha.jpg` | 1899년 전차 개통 무렵의 흥인지문 앞 | 서울역사박물관(원저작 Collier's Weekly, 1899.7.15) | 공공누리 제1유형(출처표시) | 위키미디어 공용 File:Opening_of_the_Trams_in_Seoul_(1899).png — KOGL Type 1 표시 확인 | `gaehang5.html` 고종 황제(gojong_0) · 전차 위기 장면 |
+| `assets/scenes/heritage_jeongmi_uibyeong.jpg` | 1907년 정미의병 | F. A. McKenzie(1869~1931) | 저작권 만료(퍼블릭 도메인, 1931년 이전 발행) | 위키미디어 공용 File:Company_of_Korean_rebels_1907_by_F.A._McKenzie.png (원본 『The Tragedy of Korea』 1908) | `gaehang5.html` 정미의병(jeongmi_0) |
+| `assets/scenes/heritage_siilya.jpg` | 황성신문 「시일야방성대곡」 지면(1905.11.20) | 황성신문 | 저작권 만료(퍼블릭 도메인, PD-old) | 위키미디어 공용 File:Si_il_yabangseong_daegok.jpg | `gaehang5.html` 황성신문 기자(hwangseong_0) |
+| `assets/scenes/heritage_jejungwon.jpg` | 제중원(1885, 광혜원을 고쳐 세움) | 촬영자 미상(1885) | 저작권 만료(퍼블릭 도메인) | 위키미디어 공용 File:1885年由广惠院改建后的济众院.jpg — 한국 저작권 만료·1931년 이전 발행 | `gaehang5.html` 고종 황제(gojong_0) |
 
 ## 확인했지만 보류한 이미지
 
@@ -125,7 +130,7 @@
 
 ## 향후 이미지 추가 시 체크리스트
 1. 공유마당(gongu.copyright.or.kr) 또는 국가유산포털(heritage.go.kr)에서 검색
-2. 상세페이지의 "이용조건" 배지 확인 — **제1유형 / 제3유형 / CC BY / 만료(자유이용)만 사용**. 제2·4유형, CC BY-NC류는 금지.
+2. 상세페이지의 "이용조건" 배지 확인 — **제1유형 / CC BY / 저작권 만료(퍼블릭 도메인)만 사용**. 제2·3·4유형과 CC BY-NC·CC BY-SA·CC BY-ND는 쓰지 않는다 — 게임은 사진을 리사이즈해서 넣으므로 변경금지(제3유형·ND)도 걸린다(2026-09-19 정정).
    - ⚠️ 국립중앙박물관(museum.go.kr, e뮤지엄 포함) 소장품 페이지에서 받은 이미지는 **다운로드 화면 자체에 표시되는 "공공누리 유형" 배지를 반드시 확인**할 것. 국보/보물이라고 무조건 자유이용은 아니며, 제4유형(상업용금지+변경금지)인 경우가 있다 — 실제로 경천사지 십층석탑 사진에서 이 문제가 발생해 원본으로 되돌린 적 있음.
 3. 저작(권)자명 확인 후 이 표에 기록(출처표시 의무가 있는 라이선스는 게임 내 대사에도 출처 문구 포함)
 4. `www/assets/scenes/heritage_*.jpg`로 저장(웹용으로 리사이즈: 가로 1000~1800px, JPEG quality 85 권장 — 원본은 수 MB로 과함)

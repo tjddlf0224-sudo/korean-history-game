@@ -519,12 +519,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=126"></script>
-<script src="assets/zoomwarn.js?v=126"></script>
-<script src="assets/map/map_component.js?v=126"></script>
-<script src="assets/chart.js?v=126"></script>
-<script src="assets/companions.js?v=126"></script>
-<script src="assets/audio.js?v=126"></script>
+<script src="assets/errlog.js?v=127"></script>
+<script src="assets/zoomwarn.js?v=127"></script>
+<script src="assets/map/map_component.js?v=127"></script>
+<script src="assets/chart.js?v=127"></script>
+<script src="assets/companions.js?v=127"></script>
+<script src="assets/audio.js?v=127"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -536,7 +536,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=126';   // 존댓말 전환
+const ART_V = '?v=127';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1262,6 +1262,7 @@ const NPC_DATA = {
       { who:'npc', t:'새 문물도 들였지.' },
       { who:'npc', t:'박문국에서 신문을 찍고, 전신을 놓고, 서양식 병원도 열었네.',
         chart:{ type:'grid', title:'근대 문물이 들어온 차례', head:[ '해', '무엇' ], rows:[ [ '1883', '박문국 — 「한성순보」 발행' ], [ '1885', '전신선 가설 — 서울·인천·의주를 잇다' ], [ '1885', '광혜원 — 알렌, 곧 제중원으로' ], [ '1899', '전차 — 한성전기회사, 서대문~청량리' ], [ '1899', '경인선 — 첫 철도' ] ] } },
+      { who:'doc', docImg:'assets/scenes/heritage_jejungwon.jpg', t:'(제중원. 1885년 알렌의 건의로 세운 우리나라 최초의 서양식 국립 병원으로, 광혜원을 고쳐 제중원이라 했다.)\n출처: 1885년 촬영, 촬영자 미상 — 저작권 만료(퍼블릭 도메인), 위키미디어 공용' },
       { who:'me', t:'(속으로) 전차가 처음 달리던 날, 구경꾼이 구름처럼 몰렸다지.' },
       { who:'me', t:'(속으로) 1899년 5월. 전차가 막 달리기 시작한 종로다.' },
       Party.say('chadol', 'shock', '(눈이 동그래진다) 쇠 수레가… 혼자 가요!'),
@@ -1271,6 +1272,7 @@ const NPC_DATA = {
       Party.say('bau', 'stance', '(몸을 날려 차돌이를 안고 굴러 나온다)'),
       { who:'me', t:'(숨이 멎는다) …차돌아!' },
       Party.say('chadol', 'cry', '(바우 품에서 떨기만 한다)'),
+      { who:'doc', docImg:'assets/scenes/heritage_hanseong_jeoncha.jpg', t:'(1899년 서대문~청량리 전차 개통 무렵의 흥인지문 앞. 구경꾼이 구름처럼 몰렸다. 개통 열흘 뒤 종로에서 다섯 살 아이가 치여 목숨을 잃자 성난 사람들이 전차를 불태웠다.)\n출처: 서울역사박물관, 공공누리 제1유형' },
       { who:'me', t:'(속으로) 며칠 뒤 이 거리에서, 다섯 살 아이가 정말로 목숨을 잃는다.' },
       { who:'me', t:'(속으로) 성난 사람들이 전차를 불태우고… 이 아이가 그 아이일 뻔했다.' },
       Party.say('chadol', 'cry', '(형아 소매를 꽉 잡는다) …안 놓고 가지?'),
@@ -1534,6 +1536,7 @@ const NPC_DATA = {
         chart:{ type:'quote', title:'시일야방성대곡', text:'저 개돼지만도 못한 소위 우리 정부의 대신이라는 자들이…<br>아, 원통하고 분하도다. <b>이날을 목 놓아 통곡하노라.</b>', from:'황성신문 1905. 11. 20 · 뜻을 풀어 옮김' } },
       { who:'me', t:'외교권을 빼앗긴 그 조약 말이군요.' },
       Party.say('bau', 'resolve', '(신문을 받아 들고 입술을 깨문다)'),
+      { who:'doc', docImg:'assets/scenes/heritage_siilya.jpg', t:'(1905년 11월 20일자 황성신문에 실린 논설 「시일야방성대곡」 지면. 을사늑약을 고발한 글이다.)\n출처: 황성신문(1905) — 저작권 만료(퍼블릭 도메인), 위키미디어 공용' },
       { who:'npc', t:'검열을 피해 몰래 찍어 돌렸소. 신문은 곧 정간을 당하겠지.' },
       { who:'me', t:'(속으로) 장지연은 뒷날 행적 때문에 평가가 엇갈리게 된다.' },
       { who:'me', t:'(속으로) 그래도 이날의 논설은 을사늑약을 고발한 글로 남는다.' },
@@ -1580,6 +1583,7 @@ const NPC_DATA = {
       { who:'npc', t:'헐버트라는 미국인 선교사가 황제의 밀사 노릇까지 자처했지.' },
       { who:'me', t:'(고개를 끄덕인다) …외국인이, 그렇게까지.' },
       { who:'npc', t:'그 사람도 따로 헤이그로 건너가 특사들을 도왔소.' },
+      { who:'doc', docImg:'assets/scenes/heritage_jeongmi_uibyeong.jpg', t:'(1907년 정미의병. 캐나다 기자 프레더릭 매켄지가 찍었다. 제복도 총도 제각각이지만, 해산 군인이 합류해 전투력이 크게 올랐다.)\n출처: F. A. McKenzie, 「The Tragedy of Korea」(1908) — 저작권 만료(퍼블릭 도메인)' },
       { who:'npc', t:'군대까지 해산되자 해산 군인들이 우리와 합류했소.',
         chart:{ type:'vs', title:'의병의 무게가 달라지다', left:{ n:'을미의병', s:'유생 중심' }, right:{ n:'정미의병', s:'해산 군인 합류', win:true } } },
       Party.say('bau', 'stance', '해산 군인들이! 칼 쓸 줄 아는 이들이 왔구려.'),
@@ -2149,38 +2153,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=126"></script>
-<script src="assets/streak.js?v=126"></script>
+<script src="assets/badges.js?v=127"></script>
+<script src="assets/streak.js?v=127"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=126"></script>
-  <script src="assets/fx.js?v=126"></script>
-  <script src="assets/deed.js?v=126"></script>
-  <script src="assets/inkwipe.js?v=126"></script>
-  <script src="assets/dash.js?v=126"></script>
-<script src="assets/juice.js?v=126"></script>
-  <script src="assets/difficulty.js?v=126"></script>
-  <script src="assets/nextauto.js?v=126"></script>
-<script src="assets/heroes_data.js?v=126"></script>
-<script src="assets/heroes.js?v=126"></script>
-<script src="assets/icons.js?v=126"></script>
-<script src="assets/srs.js?v=126"></script>
-<script src="assets/newsflash.js?v=126"></script>
-<script src="assets/timeline.js?v=126"></script>
-<script src="assets/journey.js?v=126"></script>
-<script src="assets/season.js?v=126"></script>
-<script src="assets/items.js?v=126"></script>
-  <script src="assets/gold.js?v=126"></script>
-  <script src="assets/ask.js?v=126"></script>
-  <script src="assets/ads.js?v=126"></script>
-  <script src="assets/energy.js?v=126"></script>
-  <script src="assets/daily.js?v=126"></script>
-  <script src="assets/unlock.js?v=126"></script>
-  <script src="assets/guide.js?v=126"></script>
-  <script src="assets/minigames.js?v=126"></script>
-  <script src="assets/quests.js?v=126"></script>
-  <script src="assets/offline.js?v=126"></script>
-  <script src="assets/telemetry.js?v=126"></script>
-<script src="assets/autowalk.js?v=126"></script>
+<script src="assets/rank.js?v=127"></script>
+  <script src="assets/fx.js?v=127"></script>
+  <script src="assets/deed.js?v=127"></script>
+  <script src="assets/inkwipe.js?v=127"></script>
+  <script src="assets/dash.js?v=127"></script>
+<script src="assets/juice.js?v=127"></script>
+  <script src="assets/difficulty.js?v=127"></script>
+  <script src="assets/nextauto.js?v=127"></script>
+<script src="assets/heroes_data.js?v=127"></script>
+<script src="assets/heroes.js?v=127"></script>
+<script src="assets/icons.js?v=127"></script>
+<script src="assets/srs.js?v=127"></script>
+<script src="assets/newsflash.js?v=127"></script>
+<script src="assets/timeline.js?v=127"></script>
+<script src="assets/journey.js?v=127"></script>
+<script src="assets/season.js?v=127"></script>
+<script src="assets/items.js?v=127"></script>
+  <script src="assets/gold.js?v=127"></script>
+  <script src="assets/ask.js?v=127"></script>
+  <script src="assets/ads.js?v=127"></script>
+  <script src="assets/energy.js?v=127"></script>
+  <script src="assets/daily.js?v=127"></script>
+  <script src="assets/unlock.js?v=127"></script>
+  <script src="assets/guide.js?v=127"></script>
+  <script src="assets/minigames.js?v=127"></script>
+  <script src="assets/quests.js?v=127"></script>
+  <script src="assets/offline.js?v=127"></script>
+  <script src="assets/telemetry.js?v=127"></script>
+<script src="assets/autowalk.js?v=127"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
