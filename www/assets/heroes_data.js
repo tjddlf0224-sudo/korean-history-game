@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 211명 */
+   인물 215명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -163,9 +163,12 @@ window.HERO_DATA = (function(){
     donghak_jeopju: { n:'동학 접주', p:'donghak_jeopju.png', e:'근대·개항기', r:'commoner', ch:{'gaehang4.html':['jeopju_0']} },
     muwiyeong_soldier: { n:'무위영 병사', p:'muwiyeong_soldier.png', e:'근대·개항기', r:'general', ch:{'gaehang_ch2.html':['soldier_0']} },
     byeolgigun: { n:'별기군 교련병', p:'byeolgigun.png', e:'근대·개항기', r:'general', ch:{'gaehang_ch2.html':['byeolgigun_0']} },
+    sijeon: { n:'시전 상인', p:'sijeon.png', e:'근대·개항기', r:'commoner', ch:{'gaehang5.html':['sijeon_0']} },
+    sindolseok: { n:'신돌석', p:'sindolseok.png', e:'근대·개항기', r:'general', ch:{'gaehang5.html':['sindolseok_0']} },
     sinminhoe: { n:'신민회 회원', p:'sinminhoe.png', e:'근대·개항기', r:'scholar', ch:{'gaehang5.html':['sinminhoe_0']} },
     yangheonsu: { n:'양헌수', p:'yangheonsu.png', e:'근대·개항기', r:'general', ch:{'gaehang1.html':['yangheonsu_0']} },
     eojaeyeon: { n:'어재연', p:'eojaeyeon.png', e:'근대·개항기', r:'general', ch:{'gaehang1.html':['eojaeyeon_0']} },
+    yugiljun: { n:'유길준', p:'yugiljun.png', e:'근대·개항기', r:'scholar', ch:{'gaehang4.html':['yugiljun_0']} },
     eulmi: { n:'을미의병', p:'eulmi.png', e:'근대·개항기', r:'general', ch:{'gaehang4.html':['eulmi_0']} },
     jeonbongjun: { n:'전봉준', p:'jeonbongjun.png', e:'근대·개항기', r:'general', ch:{'gaehang4.html':['jeonbongjun_0']} },
     sinheon: { n:'접견대관', p:'sinheon.png', e:'근대·개항기', r:'scholar', ch:{'gaehang1.html':['sinheon_0']} },
@@ -173,6 +176,7 @@ window.HERO_DATA = (function(){
     jipgang: { n:'집강소 집강', p:'jipgang.png', e:'근대·개항기', r:'commoner', ch:{'gaehang4.html':['jipgang_0']} },
     cheonggun: { n:'청군 초병', p:'cheonggun.png', e:'근대·개항기', r:'general', ch:{'gaehang_ch3.html':['cheonggun_0']} },
     choeikhyeon: { n:'최익현', p:'choeikhyeon.png', e:'근대·개항기', r:'scholar', ch:{'gaehang1.html':['choeikhyeon_0']} },
+    hwangseong_gija: { n:'황성신문 기자', p:'hwangseong_gija.png', e:'근대·개항기', r:'scholar', ch:{'gaehang5.html':['hwangseong_0']} },
     daewongun: { n:'흥선대원군', p:'daewongun.png', e:'근대·개항기', r:'king', ch:{'gaehang1.html':['daewongun_0'], 'gaehang_ch2.html':['daewongun_0','daewongun_1']} },
     gimgu: { n:'김구', p:'gimgu.png', e:'일제강점기', r:'scholar', ch:{'ilje_ch7.html':['gimgu_0','gimgu_1']} },
     gwangbokhoe: { n:'대한광복회 단원', p:'gwangbokhoe.png', e:'일제강점기', r:'general', ch:{'ilje1.html':['gwangbokhoe_0']} },

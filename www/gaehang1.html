@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=109"></script>
-<script src="assets/zoomwarn.js?v=109"></script>
-<script src="assets/map/map_component.js?v=109"></script>
-<script src="assets/chart.js?v=109"></script>
-<script src="assets/audio.js?v=109"></script>
+<script src="assets/errlog.js?v=110"></script>
+<script src="assets/zoomwarn.js?v=110"></script>
+<script src="assets/map/map_component.js?v=110"></script>
+<script src="assets/chart.js?v=110"></script>
+<script src="assets/audio.js?v=110"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=109';   // 존댓말 전환
+const ART_V = '?v=110';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1465,7 +1465,7 @@ const NPC_DATA = {
         chart:{ type:'quote', title:'조선책략이 말한 것', text:'친중국(親中國)·결일본(結日本)·연미국(聯美國)으로 러시아를 막는다', from:'황준헌, 「조선책략」(1880)' } },
       { who:'npc', t:'이 책이 조정에 알려지며 파문이 일었소.' },
       { who:'me', t:'다들 반겼습니까?' },
-      { who:'npc', t:'아니오. 영남 유생들은 만인소를 올려 반발했소.',
+      { who:'npc', t:'아니오. 이만손을 앞세운 영남 유생들이 만인소를 올려 반발했소.',
         chart:{ type:'stat', title:'영남 만인소(1881)', items:[ { v:'만여 명', l:'연명한 유생' } ] } },
       { who:'npc', t:'나는 더 넓은 세상과 마주해야 한다고 믿었소.' },
       { who:'me', t:'훗날에는 어떤 일을 하셨습니까?' },
@@ -1480,6 +1480,9 @@ const NPC_DATA = {
       { q:'1894년 갑오개혁을 추진하며 김홍집이 총리대신으로 이끈 기구는?',
         opts:['군국기무처','통리기무아문'], answer:0, src:[74, 49],
         feedback:['통리기무아문은 그보다 앞선 1880년에 설치된 개화 정책 총괄 기구예요.','정답! 군국기무처입니다. 갑오개혁의 여러 개혁안을 심의·의결했어요.'] },
+      { q:'「조선책략」 유포에 반발해 1881년 영남 유생들이 올린 만인소를 이끈 인물은?',
+        opts:['이만손','최익현'], answer:0, src:[6, 25, 30, 33, 50],
+        feedback:['최익현은 강화도 조약 때 왜양일체론을 내세워 개항에 반대한 인물이에요.','정답! 이만손입니다.'] },
     ]
   },
   choeikhyeon_0: {
@@ -2038,38 +2041,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=109"></script>
-<script src="assets/streak.js?v=109"></script>
+<script src="assets/badges.js?v=110"></script>
+<script src="assets/streak.js?v=110"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=109"></script>
-  <script src="assets/fx.js?v=109"></script>
-  <script src="assets/deed.js?v=109"></script>
-  <script src="assets/inkwipe.js?v=109"></script>
-  <script src="assets/dash.js?v=109"></script>
-<script src="assets/juice.js?v=109"></script>
-  <script src="assets/difficulty.js?v=109"></script>
-  <script src="assets/nextauto.js?v=109"></script>
-<script src="assets/heroes_data.js?v=109"></script>
-<script src="assets/heroes.js?v=109"></script>
-<script src="assets/icons.js?v=109"></script>
-<script src="assets/srs.js?v=109"></script>
-<script src="assets/newsflash.js?v=109"></script>
-<script src="assets/timeline.js?v=109"></script>
-<script src="assets/journey.js?v=109"></script>
-<script src="assets/season.js?v=109"></script>
-<script src="assets/items.js?v=109"></script>
-  <script src="assets/gold.js?v=109"></script>
-  <script src="assets/ask.js?v=109"></script>
-  <script src="assets/ads.js?v=109"></script>
-  <script src="assets/energy.js?v=109"></script>
-  <script src="assets/daily.js?v=109"></script>
-  <script src="assets/unlock.js?v=109"></script>
-  <script src="assets/guide.js?v=109"></script>
-  <script src="assets/minigames.js?v=109"></script>
-  <script src="assets/quests.js?v=109"></script>
-  <script src="assets/offline.js?v=109"></script>
-  <script src="assets/telemetry.js?v=109"></script>
-<script src="assets/autowalk.js?v=109"></script>
+<script src="assets/rank.js?v=110"></script>
+  <script src="assets/fx.js?v=110"></script>
+  <script src="assets/deed.js?v=110"></script>
+  <script src="assets/inkwipe.js?v=110"></script>
+  <script src="assets/dash.js?v=110"></script>
+<script src="assets/juice.js?v=110"></script>
+  <script src="assets/difficulty.js?v=110"></script>
+  <script src="assets/nextauto.js?v=110"></script>
+<script src="assets/heroes_data.js?v=110"></script>
+<script src="assets/heroes.js?v=110"></script>
+<script src="assets/icons.js?v=110"></script>
+<script src="assets/srs.js?v=110"></script>
+<script src="assets/newsflash.js?v=110"></script>
+<script src="assets/timeline.js?v=110"></script>
+<script src="assets/journey.js?v=110"></script>
+<script src="assets/season.js?v=110"></script>
+<script src="assets/items.js?v=110"></script>
+  <script src="assets/gold.js?v=110"></script>
+  <script src="assets/ask.js?v=110"></script>
+  <script src="assets/ads.js?v=110"></script>
+  <script src="assets/energy.js?v=110"></script>
+  <script src="assets/daily.js?v=110"></script>
+  <script src="assets/unlock.js?v=110"></script>
+  <script src="assets/guide.js?v=110"></script>
+  <script src="assets/minigames.js?v=110"></script>
+  <script src="assets/quests.js?v=110"></script>
+  <script src="assets/offline.js?v=110"></script>
+  <script src="assets/telemetry.js?v=110"></script>
+<script src="assets/autowalk.js?v=110"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
