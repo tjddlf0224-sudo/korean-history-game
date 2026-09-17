@@ -520,12 +520,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=113"></script>
-<script src="assets/zoomwarn.js?v=113"></script>
-<script src="assets/map/map_component.js?v=113"></script>
-<script src="assets/chart.js?v=113"></script>
-<script src="assets/companions.js?v=113"></script>
-<script src="assets/audio.js?v=113"></script>
+<script src="assets/errlog.js?v=114"></script>
+<script src="assets/zoomwarn.js?v=114"></script>
+<script src="assets/map/map_component.js?v=114"></script>
+<script src="assets/chart.js?v=114"></script>
+<script src="assets/companions.js?v=114"></script>
+<script src="assets/audio.js?v=114"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -537,7 +537,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=113';   // 존댓말 전환
+const ART_V = '?v=114';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1702,27 +1702,35 @@ const NPC_DATA = {
     name: '덩치 큰 청년', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M12 3a4 4 0 110 8 4 4 0 010-8zM4 22c0-5 3.6-9 8-9s8 4 8 9z"/></svg>',
     partyJoin: 'bau',
     beats: [
-      { who:'npc', t:'(두루마리를 거꾸로 든 채 끙끙) 자왈… 자왈… 그다음이 뭐였더라.' },
-      Party.say('chadol', 'sly', '(두루마리의 금실 끈을 확 잡아당긴다) 반짝 끈!'),
-      { who:'npc', t:'어, 어이 꼬마! 그건 할머님께 받은 책이다! (차돌이를 한 손으로 번쩍 든다)' },
-      { who:'me', t:'(깜짝) 사람을… 한 손으로?' },
-      { who:'npc', t:'(차돌이를 살포시 내려놓는다) 미안하오. 힘 조절이 서툴러서. 다들 나를 바우라 부르오.' },
-      Party.say('chadol', 'shock', '(눈이 동그래진다) …바우. 큰 바위.'),
-      { who:'npc', t:'본래 이름이야 따로 있소만, 집안 어른들은 그 이름에 걸맞게 글이나 읽으라 하시지.' },
-      { who:'me', t:'글 읽는 집안이십니까?' },
-      { who:'npc', t:'(목소리를 낮춘다) 할아버님 대까지 우리 집안은 성골이었소. 진지왕께서 자리에서 물러나시자 우리도 진골로 내려앉았지.',
+      { who:'npc', t:'(두루마리를 든 채 끙끙) 자왈… 자왈… 다음이 뭐더라.' },
+      Party.say('chadol', 'sly', '(금실 끈을 확!) 반짝 끈!'),
+      { who:'npc', t:'어어, 꼬마! 할머님 책이다! (한 손으로 번쩍)' },
+      { who:'me', t:'(깜짝) 애를… 한 손으로?' },
+      { who:'npc', t:'(살포시 내려놓는다) 미안하오. 힘 조절이 영.' },
+      { who:'npc', t:'다들 나를 바우라 부르오.' },
+      Party.say('chadol', 'shock', '바우. 큰 돌.'),
+      { who:'me', t:'글공부 중이셨어요? 책이 거꾸로인데요.' },
+      { who:'npc', t:'(황급히 뒤집는다) …알고 있었소.' },
+      { who:'me', t:'(속으로) 몰랐다.' },
+      { who:'npc', t:'(목소리를 낮춘다) 할아버님 대까지 우리 집은 성골이었소.' },
+      { who:'npc', t:'진지왕께서 물러나신 뒤로 진골이 됐지.',
         chart:{ type:'steps', title:'성골이 끊기기까지', steps:[ { t:'579 · 진지왕 폐위', s:'그 후손은 진골로 내려감' }, { t:'진평왕 · 선덕 여왕 · 진덕 여왕', s:'성골 왕이 이어짐' }, { t:'654 · 진덕 여왕이 죽음', s:'성골 남자가 없어 성골 왕이 끊김' }, { t:'김춘추(무열왕) 즉위', s:'진골 출신 첫 왕' } ] } },
-      { who:'npc', t:'그러니 칼 대신 붓을 쥐라 하시오. 핏줄로 안 되면 학식으로라도 집안을 세우라고.' },
-      Party.say('chadol', 'sly', '(청년의 허리를 가리킨다) 저거… 반짝!'),
-      { who:'npc', t:'(고리 달린 칼을 쓱 뽑아, 떨어지는 나뭇잎을 두 동강 낸다) …아차. 또 이랬군. 이건 비밀이오.' },
-      { who:'me', t:'(속으로) 붓보다 칼이 훨씬 어울리는 사람이다.' },
-      { who:'npc', t:'그대는 먼 데서 왔다지? 앞일을 아는 사람 같다고 궁 안에서 수군대더군.' },
-      { who:'me', t:'…조금은 압니다.' },
-      { who:'npc', t:'그럼 나도 데려가 주시오! 앞일을 알면 어른들 앞에서 똑똑한 척 좀 해 볼 수 있지 않겠소.' },
-      Party.say('bau', 'oops', '배우고 때때로 익히면 또한 기쁘지 아니한가… 어? 방금 내가 뭐라 했소?'),
-      { who:'me', t:'(웃음을 참는다) 「논어」 첫 구절이네요. 글도 꽤 읽으셨는데요.' },
-      Party.say('chadol', 'smile', '바우! 바우! 같이!'),
-      { who:'me', t:'(속으로) 곧 성골이 끊기고 진골 김춘추가 왕이 된다. 이 사람 집안 이야기가 곧 역사다.' },
+      { who:'me', t:'그래서 글로라도 집안을 세우라는 거군요.' },
+      { who:'npc', t:'그렇소. 칼은 넣어 두라 하시오.' },
+      Party.say('chadol', 'sly', '(청년 허리를 가리킨다) 저거. 반짝!'),
+      { who:'npc', t:'(칼을 쓱 — 나뭇잎이 두 동강) …아차.' },
+      { who:'npc', t:'방금 건 비밀이오.' },
+      { who:'me', t:'(속으로) 붓보다 칼이 백 배 어울리는 사람이다.' },
+      { who:'npc', t:'그대, 앞일을 안다지? 궁에서 다 수군대오.' },
+      { who:'me', t:'…조금은요.' },
+      { who:'npc', t:'나도 데려가 주시오!' },
+      { who:'npc', t:'앞일을 알면 어른들 앞에서 똑똑한 척 좀 하지 않겠소.' },
+      Party.say('bau', 'oops', '배우고 때로 익히면 기쁘지 아니한가… 어? 방금 내가 뭐라 했소?'),
+      { who:'me', t:'「논어」 첫 구절이요. 공부 꽤 하셨네요.' },
+      Party.say('chadol', 'smile', '바우! 같이!'),
+      { who:'me', t:'(속으로) 곧 성골이 끊긴다. 그다음 왕은 진골에서 나온다.' },
+      { who:'me', t:'(속으로) 이 집안처럼 성골에서 내려앉은 사람, 김춘추다.' },
+      { who:'me', t:'(속으로) 이 사람 집안 이야기가, 곧 역사다.' },
     ],
     quizSeq: [
       { q:'진덕 여왕이 죽은 뒤 신라에서 진골 출신으로는 처음 왕위에 오른 인물은?',
@@ -2265,38 +2273,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=113"></script>
-<script src="assets/streak.js?v=113"></script>
+<script src="assets/badges.js?v=114"></script>
+<script src="assets/streak.js?v=114"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=113"></script>
-  <script src="assets/fx.js?v=113"></script>
-  <script src="assets/deed.js?v=113"></script>
-  <script src="assets/inkwipe.js?v=113"></script>
-  <script src="assets/dash.js?v=113"></script>
-<script src="assets/juice.js?v=113"></script>
-  <script src="assets/difficulty.js?v=113"></script>
-  <script src="assets/nextauto.js?v=113"></script>
-<script src="assets/heroes_data.js?v=113"></script>
-<script src="assets/heroes.js?v=113"></script>
-<script src="assets/icons.js?v=113"></script>
-<script src="assets/srs.js?v=113"></script>
-<script src="assets/newsflash.js?v=113"></script>
-<script src="assets/timeline.js?v=113"></script>
-<script src="assets/journey.js?v=113"></script>
-<script src="assets/season.js?v=113"></script>
-<script src="assets/items.js?v=113"></script>
-  <script src="assets/gold.js?v=113"></script>
-  <script src="assets/ask.js?v=113"></script>
-  <script src="assets/ads.js?v=113"></script>
-  <script src="assets/energy.js?v=113"></script>
-  <script src="assets/daily.js?v=113"></script>
-  <script src="assets/unlock.js?v=113"></script>
-  <script src="assets/guide.js?v=113"></script>
-  <script src="assets/minigames.js?v=113"></script>
-  <script src="assets/quests.js?v=113"></script>
-  <script src="assets/offline.js?v=113"></script>
-  <script src="assets/telemetry.js?v=113"></script>
-<script src="assets/autowalk.js?v=113"></script>
+<script src="assets/rank.js?v=114"></script>
+  <script src="assets/fx.js?v=114"></script>
+  <script src="assets/deed.js?v=114"></script>
+  <script src="assets/inkwipe.js?v=114"></script>
+  <script src="assets/dash.js?v=114"></script>
+<script src="assets/juice.js?v=114"></script>
+  <script src="assets/difficulty.js?v=114"></script>
+  <script src="assets/nextauto.js?v=114"></script>
+<script src="assets/heroes_data.js?v=114"></script>
+<script src="assets/heroes.js?v=114"></script>
+<script src="assets/icons.js?v=114"></script>
+<script src="assets/srs.js?v=114"></script>
+<script src="assets/newsflash.js?v=114"></script>
+<script src="assets/timeline.js?v=114"></script>
+<script src="assets/journey.js?v=114"></script>
+<script src="assets/season.js?v=114"></script>
+<script src="assets/items.js?v=114"></script>
+  <script src="assets/gold.js?v=114"></script>
+  <script src="assets/ask.js?v=114"></script>
+  <script src="assets/ads.js?v=114"></script>
+  <script src="assets/energy.js?v=114"></script>
+  <script src="assets/daily.js?v=114"></script>
+  <script src="assets/unlock.js?v=114"></script>
+  <script src="assets/guide.js?v=114"></script>
+  <script src="assets/minigames.js?v=114"></script>
+  <script src="assets/quests.js?v=114"></script>
+  <script src="assets/offline.js?v=114"></script>
+  <script src="assets/telemetry.js?v=114"></script>
+<script src="assets/autowalk.js?v=114"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

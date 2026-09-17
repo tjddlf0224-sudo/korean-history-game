@@ -535,12 +535,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=113"></script>
-<script src="assets/zoomwarn.js?v=113"></script>
-<script src="assets/map/map_component.js?v=113"></script>
-<script src="assets/chart.js?v=113"></script>
-<script src="assets/companions.js?v=113"></script>
-<script src="assets/audio.js?v=113"></script>
+<script src="assets/errlog.js?v=114"></script>
+<script src="assets/zoomwarn.js?v=114"></script>
+<script src="assets/map/map_component.js?v=114"></script>
+<script src="assets/chart.js?v=114"></script>
+<script src="assets/companions.js?v=114"></script>
+<script src="assets/audio.js?v=114"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -552,7 +552,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=113';   // 존댓말 전환
+const ART_V = '?v=114';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1357,22 +1357,27 @@ const NPC_DATA = {
     name: '꼬마', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M6 15l3-8 5-2 4 5-1 7-6 2z"/></svg>',
     partyJoin: 'chadol',
     beats: [
-      { who:'me', t:'(손을 펴 본다) …어? 쥐고 있던 돌조각이 없어!' },
-      { who:'npc', t:'(돌조각을 머리 위로 흔든다) 우가! 반짝!' },
-      { who:'me', t:'그거 내 거야. 돌려줄래?' },
-      { who:'npc', t:'(등 뒤로 감추고 도리도리) 아니! 내 거!' },
-      { who:'me', t:'(속으로) 말이 서툴다. 아직 말보다 손짓이 먼저인 때구나.' },
-      { who:'npc', t:'(강 건너를 가리키다 입술이 삐죽) 엄마… 아빠… 저기… 없어.' },
-      { who:'me', t:'무리가 짐승을 따라 떠나 버렸구나. 너만 두고.' },
-      { who:'npc', t:'(돌조각을 꼭 쥔다) 이거… 단단해. 안 깨져.' },
-      { who:'me', t:'차돌처럼 단단하지. 그럼 너는 차돌이다. 차돌이.' },
+      { who:'me', t:'(손을 펴 본다) …어? 돌이 없어!' },
+      { who:'npc', t:'(돌조각을 번쩍 든다) 우가! 반짝!' },
+      { who:'me', t:'야, 그거 내 거야.' },
+      { who:'npc', t:'(등 뒤로 쏙) 아니. 내 거.' },
+      { who:'me', t:'(속으로) 말이 서툴다. 아직 손짓이 말보다 빠른 때구나.' },
+      { who:'me', t:'돌려주면… 이거 줄게. (빈손을 흔든다)' },
+      { who:'npc', t:'(고개를 갸웃) …없잖아.' },
+      { who:'me', t:'(속으로) 꼬마한테 들켰다.' },
+      { who:'npc', t:'(강 건너를 가리키다 입술이 삐죽) 엄마… 아빠… 저기. 없어.' },
+      { who:'me', t:'짐승 따라 무리가 떠났구나. 너만 두고.' },
+      { who:'npc', t:'(돌을 꼭 쥔다) 이거. 단단해. 안 깨져.' },
+      { who:'me', t:'차돌처럼 단단하네. 그럼 넌 차돌이다.' },
       Party.say('chadol', 'smile', '차돌이! 차돌이! (깡충깡충)'),
-      { who:'me', t:'(돌조각을 들여다본다) 돌을 깨뜨리고 떼어 내어 날을 세운 것 — 이게 뗀석기다.',
+      { who:'me', t:'(돌을 들여다본다) 깨서 날을 세운 돌. 뗀석기구나.',
         chart:{ type:'relic', title:'차돌이가 가져간 돌', items:[ { img:'jumeokdokki', n:'뗀석기', s:'깨뜨리고 떼어 내어 날을 세움' } ] } },
-      Party.say('chadol', 'sly', '(주머니를 톡톡) 같이 가. 반짝 더 많이.'),
-      { who:'me', t:'…따라오겠다고? 나는 아주 먼 데로 가는데.' },
-      Party.say('chadol', 'smile', '먼 데! 좋아! (벌써 앞장선다)'),
-      { who:'me', t:'(속으로) 혼자 남겨지는 게 무서운 거겠지. …좋아, 같이 가자.' },
+      Party.say('chadol', 'sly', '(주머니를 톡톡) 같이 가. 반짝, 더.'),
+      { who:'me', t:'나 아주 먼 데 가는데?' },
+      Party.say('chadol', 'smile', '먼 데. 좋아!'),
+      { who:'me', t:'(속으로) …혼자 남는 게 무서운 거겠지.' },
+      { who:'me', t:'좋아, 같이 가자. 대신 아무거나 줍지 마.' },
+      Party.say('chadol', 'sly', '(벌써 뭔가를 주머니에 넣는다) 응!'),
     ],
     quizSeq: [
       { q:'구석기 사람들이 돌을 깨뜨리거나 떼어 내어 만든 도구는?',
@@ -2363,39 +2368,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=113"></script>
-<script src="assets/streak.js?v=113"></script>
+<script src="assets/badges.js?v=114"></script>
+<script src="assets/streak.js?v=114"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=113"></script>
-  <script src="assets/fx.js?v=113"></script>
-  <script src="assets/deed.js?v=113"></script>
-  <script src="assets/inkwipe.js?v=113"></script>
-  <script src="assets/dash.js?v=113"></script>
-<script src="assets/juice.js?v=113"></script>
-  <script src="assets/difficulty.js?v=113"></script>
-  <script src="assets/nextauto.js?v=113"></script>
-<script src="assets/heroes_data.js?v=113"></script>
-<script src="assets/heroes.js?v=113"></script>
-<script src="assets/icons.js?v=113"></script>
-<script src="assets/srs.js?v=113"></script>
-<script src="assets/newsflash.js?v=113"></script>
-<script src="assets/timeline.js?v=113"></script>
-<script src="assets/journey.js?v=113"></script>
-<script src="assets/season.js?v=113"></script>
-<script src="assets/boss.js?v=113"></script>
-<script src="assets/items.js?v=113"></script>
-  <script src="assets/gold.js?v=113"></script>
-  <script src="assets/ask.js?v=113"></script>
-  <script src="assets/ads.js?v=113"></script>
-  <script src="assets/energy.js?v=113"></script>
-  <script src="assets/daily.js?v=113"></script>
-  <script src="assets/unlock.js?v=113"></script>
-  <script src="assets/guide.js?v=113"></script>
-  <script src="assets/minigames.js?v=113"></script>
-  <script src="assets/quests.js?v=113"></script>
-  <script src="assets/offline.js?v=113"></script>
-  <script src="assets/telemetry.js?v=113"></script>
-<script src="assets/autowalk.js?v=113"></script>
+<script src="assets/rank.js?v=114"></script>
+  <script src="assets/fx.js?v=114"></script>
+  <script src="assets/deed.js?v=114"></script>
+  <script src="assets/inkwipe.js?v=114"></script>
+  <script src="assets/dash.js?v=114"></script>
+<script src="assets/juice.js?v=114"></script>
+  <script src="assets/difficulty.js?v=114"></script>
+  <script src="assets/nextauto.js?v=114"></script>
+<script src="assets/heroes_data.js?v=114"></script>
+<script src="assets/heroes.js?v=114"></script>
+<script src="assets/icons.js?v=114"></script>
+<script src="assets/srs.js?v=114"></script>
+<script src="assets/newsflash.js?v=114"></script>
+<script src="assets/timeline.js?v=114"></script>
+<script src="assets/journey.js?v=114"></script>
+<script src="assets/season.js?v=114"></script>
+<script src="assets/boss.js?v=114"></script>
+<script src="assets/items.js?v=114"></script>
+  <script src="assets/gold.js?v=114"></script>
+  <script src="assets/ask.js?v=114"></script>
+  <script src="assets/ads.js?v=114"></script>
+  <script src="assets/energy.js?v=114"></script>
+  <script src="assets/daily.js?v=114"></script>
+  <script src="assets/unlock.js?v=114"></script>
+  <script src="assets/guide.js?v=114"></script>
+  <script src="assets/minigames.js?v=114"></script>
+  <script src="assets/quests.js?v=114"></script>
+  <script src="assets/offline.js?v=114"></script>
+  <script src="assets/telemetry.js?v=114"></script>
+<script src="assets/autowalk.js?v=114"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
