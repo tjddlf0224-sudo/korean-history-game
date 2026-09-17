@@ -535,11 +535,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=111"></script>
-<script src="assets/zoomwarn.js?v=111"></script>
-<script src="assets/map/map_component.js?v=111"></script>
-<script src="assets/chart.js?v=111"></script>
-<script src="assets/audio.js?v=111"></script>
+<script src="assets/errlog.js?v=112"></script>
+<script src="assets/zoomwarn.js?v=112"></script>
+<script src="assets/map/map_component.js?v=112"></script>
+<script src="assets/chart.js?v=112"></script>
+<script src="assets/audio.js?v=112"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -551,7 +551,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=111';   // 존댓말 전환
+const ART_V = '?v=112';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -808,7 +808,9 @@ const PLAYER_SPRITES = {};
    그림이 없거나 Rank가 아직 없으면 예전 그림으로 돌아간다 — 아트가 빠져도
    게임은 돌아가야 한다. */
 const RANK_DIRS = ['nobi','yangin','jungin','yangban','jaesang','wang'];
-let playerSuit = null;
+// 처음엔 undefined로 둔다 — null로 두면 Rank가 아직 없을 때(currentSuit()가 null) 첫 호출이
+// 곧바로 return해 주인공 그림이 하나도 준비되지 않고, 그리기에서 예외가 난다(2026-09-17 자동 점검).
+let playerSuit;
 
 function loadPlayerSprites(suit){
   if (playerSuit === suit) return;
@@ -1358,7 +1360,7 @@ const NPC_DATA = {
       { who:'npc', t:'겉의 무늬가 보이는가. 빗으로 그은 것 같다 하여 빗살무늬라 하네.' },
       { who:'me', t:'그릇에 무엇을 담습니까?' },
       { who:'npc', t:'조와 피를 거두어 담지. 이제 심어서 먹는다네.',
-        chart:{ type:'compare', title:'구석기와 신석기', cols:[ { h:'구석기', items:[ '따라다니며 잡는다', '동굴·막집', '뗀석기' ] }, { h:'신석기', hi:true, items:[ '심어서 거둔다', '움집에 모여 산다', '간석기' ] } ] } },
+        chart:{ type:'compare', title:'구석기와 신석기', cols:[ { h:'구석기', items:[ '이동 생활 — 따라다니며 잡는다', '동굴·막집', '뗀석기' ] }, { h:'신석기', hi:true, items:[ '심어서 거둔다', '움집에 모여 산다', '간석기' ] } ] } },
       { who:'me', t:'심는다면… 떠나지 않는다는 말씀이군요.' },
       { who:'npc', t:'그렇지. 강가에 움집을 파고 여럿이 모여 사네.',
         chart:{ type:'map', title:'신석기 마을이 선 자리', pins:[ { x:44.7, y:90.8, n:'암사동', on:true } ], legend:[ { k:'왜 강가인가', v:'물과 물고기가 있다', on:true }, { k:'움집', v:'땅을 파고 지붕을 덮는다' } ] } },
@@ -1659,6 +1661,9 @@ const NPC_DATA = {
       { q:'영고·동맹·무천 같은 제천 행사를 열고, 사출도·민며느리제·책화 같은 풍습을 남긴 나라들은?',
         opts:['부여·고구려·옥저·동예','신라·백제·가야'], answer:0, src:[13, 22, 30, 40, 47, 53],
         feedback:['신라·백제·가야는 그보다 뒤인 삼국 시대의 나라들이에요.','정답! 초기 국가들입니다. 남쪽 삼한 사람들은 솟대 곁과 가마 곁에서 만날 수 있어요.'] },
+      { q:'동예에서 같은 씨족끼리는 혼인하지 않던 풍습은?',
+        opts:['족외혼','민며느리제'], answer:0, src:[8, 18, 22, 24, 28, 30, 31, 33, 34, 36],
+        feedback:['민며느리제는 옥저의 혼인 풍습이에요.','정답! 족외혼입니다. 책화와 함께 씨족 사회의 전통을 보여 줘요.'] },
     ],
   },
   samhan_0: {
@@ -2323,39 +2328,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=111"></script>
-<script src="assets/streak.js?v=111"></script>
+<script src="assets/badges.js?v=112"></script>
+<script src="assets/streak.js?v=112"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=111"></script>
-  <script src="assets/fx.js?v=111"></script>
-  <script src="assets/deed.js?v=111"></script>
-  <script src="assets/inkwipe.js?v=111"></script>
-  <script src="assets/dash.js?v=111"></script>
-<script src="assets/juice.js?v=111"></script>
-  <script src="assets/difficulty.js?v=111"></script>
-  <script src="assets/nextauto.js?v=111"></script>
-<script src="assets/heroes_data.js?v=111"></script>
-<script src="assets/heroes.js?v=111"></script>
-<script src="assets/icons.js?v=111"></script>
-<script src="assets/srs.js?v=111"></script>
-<script src="assets/newsflash.js?v=111"></script>
-<script src="assets/timeline.js?v=111"></script>
-<script src="assets/journey.js?v=111"></script>
-<script src="assets/season.js?v=111"></script>
-<script src="assets/boss.js?v=111"></script>
-<script src="assets/items.js?v=111"></script>
-  <script src="assets/gold.js?v=111"></script>
-  <script src="assets/ask.js?v=111"></script>
-  <script src="assets/ads.js?v=111"></script>
-  <script src="assets/energy.js?v=111"></script>
-  <script src="assets/daily.js?v=111"></script>
-  <script src="assets/unlock.js?v=111"></script>
-  <script src="assets/guide.js?v=111"></script>
-  <script src="assets/minigames.js?v=111"></script>
-  <script src="assets/quests.js?v=111"></script>
-  <script src="assets/offline.js?v=111"></script>
-  <script src="assets/telemetry.js?v=111"></script>
-<script src="assets/autowalk.js?v=111"></script>
+<script src="assets/rank.js?v=112"></script>
+  <script src="assets/fx.js?v=112"></script>
+  <script src="assets/deed.js?v=112"></script>
+  <script src="assets/inkwipe.js?v=112"></script>
+  <script src="assets/dash.js?v=112"></script>
+<script src="assets/juice.js?v=112"></script>
+  <script src="assets/difficulty.js?v=112"></script>
+  <script src="assets/nextauto.js?v=112"></script>
+<script src="assets/heroes_data.js?v=112"></script>
+<script src="assets/heroes.js?v=112"></script>
+<script src="assets/icons.js?v=112"></script>
+<script src="assets/srs.js?v=112"></script>
+<script src="assets/newsflash.js?v=112"></script>
+<script src="assets/timeline.js?v=112"></script>
+<script src="assets/journey.js?v=112"></script>
+<script src="assets/season.js?v=112"></script>
+<script src="assets/boss.js?v=112"></script>
+<script src="assets/items.js?v=112"></script>
+  <script src="assets/gold.js?v=112"></script>
+  <script src="assets/ask.js?v=112"></script>
+  <script src="assets/ads.js?v=112"></script>
+  <script src="assets/energy.js?v=112"></script>
+  <script src="assets/daily.js?v=112"></script>
+  <script src="assets/unlock.js?v=112"></script>
+  <script src="assets/guide.js?v=112"></script>
+  <script src="assets/minigames.js?v=112"></script>
+  <script src="assets/quests.js?v=112"></script>
+  <script src="assets/offline.js?v=112"></script>
+  <script src="assets/telemetry.js?v=112"></script>
+<script src="assets/autowalk.js?v=112"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

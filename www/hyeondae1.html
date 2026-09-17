@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=111"></script>
-<script src="assets/zoomwarn.js?v=111"></script>
-<script src="assets/map/map_component.js?v=111"></script>
-<script src="assets/chart.js?v=111"></script>
-<script src="assets/audio.js?v=111"></script>
+<script src="assets/errlog.js?v=112"></script>
+<script src="assets/zoomwarn.js?v=112"></script>
+<script src="assets/map/map_component.js?v=112"></script>
+<script src="assets/chart.js?v=112"></script>
+<script src="assets/audio.js?v=112"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=111';   // 존댓말 전환
+const ART_V = '?v=112';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -710,7 +710,9 @@ const PLAYER_SPRITES = {};
    그림이 없거나 Rank가 아직 없으면 예전 그림으로 돌아간다 — 아트가 빠져도
    게임은 돌아가야 한다. */
 const RANK_DIRS = ['nobi','yangin','jungin','yangban','jaesang','wang'];
-let playerSuit = null;
+// 처음엔 undefined로 둔다 — null로 두면 Rank가 아직 없을 때(currentSuit()가 null) 첫 호출이
+// 곧바로 return해 주인공 그림이 하나도 준비되지 않고, 그리기에서 예외가 난다(2026-09-17 자동 점검).
+let playerSuit;
 
 function loadPlayerSprites(suit){
   if (playerSuit === suit) return;
@@ -1225,6 +1227,7 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'(벽보를 내밀며) 이것 좀 붙여 주게. 치안대원을 모은다는 거요.' },
       { who:'me', t:'(벽보를 든다) …건국준비위원회, 이게 뭡니까?' },
+      { who:'npc', t:'광복 한 해 전, 몰래 조선 건국 동맹을 꾸려 두었소. 그 조직이 이 건준의 뿌리요.' },
       { who:'npc', t:'총독부와 담판해 정치범을 풀어주고 치안을 넘겨받았소.',
         chart:{ type:'stat', title:'건국준비위원회, 1945', items:[ { v:'정치범 석방', l:'총독부와 담판' }, { v:'치안 이양', l:'그 대가' } ] } },
       { who:'me', t:'(놀라며) 총독부와, 직접 담판을요?' },
@@ -1262,6 +1265,9 @@ const NPC_DATA = {
       { q:'1차 미소공동위원회 결렬 뒤 1946년 이승만이 정읍에서, 남한만이라도 임시 정부·위원회를 조직하자고 주장한 발언은?',
         opts:['정읍 발언','6·29 선언'], answer:0, src:[19],
         feedback:['6·29 선언은 1987년 6월 민주항쟁의 결과로 나온 직선제 수용 선언이에요.','정답! 정읍 발언입니다. 이후 좌우합작운동이 통일 정부 수립을 다시 시도했어요.'] },
+      { q:'여운형이 광복 직전인 1944년 국내에서 비밀리에 조직해 건국 준비 위원회의 바탕이 된 단체는?',
+        opts:['조선 건국 동맹','조선 독립 동맹'], answer:0, src:[17, 38, 67, 68, 77],
+        feedback:['조선 독립 동맹은 김두봉 등이 화북에서 만든 단체예요.','정답! 조선 건국 동맹입니다.'] },
     ]
   },
   sintak_0: {
@@ -1349,7 +1355,7 @@ const NPC_DATA = {
       { who:'npc', t:'지주제가 무너지고 자작농이 늘었소.',
         chart:{ type:'vs', title:'농지개혁이 바꾼 것', left:{ n:'지주제' }, right:{ n:'자작농 중심', win:true }, mid:'→' } },
       { who:'npc', t:'다만 미리 팔아치운 땅도 많았지.' },
-      { who:'npc', t:'전쟁이 끝난 뒤엔 미국 원조로 버텼소.',
+      { who:'npc', t:'전쟁이 끝난 뒤엔 미국 원조로 버텼소. 원조 경제라 하지.',
         chart:{ type:'stat', title:'전후 경제', items:[ { v:'미국 원조', l:'재건의 큰 축' } ] } },
       { who:'me', t:'(끄덕이며) 원조가 컸군요.' },
       { who:'npc', t:'밀가루·설탕·면직물 — 삼백산업이라 불렀지.',
@@ -1381,12 +1387,14 @@ const NPC_DATA = {
       { who:'npc', t:'1·4 후퇴일세.' },
       { who:'npc', t:'흥남에서도 배로 대규모 철수를 했지, 그해 12월.' },
       { who:'npc', t:'삼팔선 부근에서 이 년을 더 싸웠네.' },
+      { who:'npc', t:'휴전 회담이 이어지던 1953년 6월, 이승만 대통령이 반공 포로를 한꺼번에 풀어 버렸네. 휴전에 반대한다는 뜻이었지.' },
       { who:'npc', t:'1953년에 정전 협정을 맺었지.',
         chart:{ type:'timeline', title:'6·25 전쟁, 3년의 흐름', marks:[ { y:'1950.6', t:'남침' }, { y:'1950.9', t:'인천 상륙' }, { y:'1950.10~', t:'중국군 개입' }, { y:'1951.1', t:'1·4 후퇴' }, { y:'1953.7', t:'정전 협정', on:true } ] } },
       { who:'npc', t:'이긴 쪽도 진 쪽도 없이, 그저 멈춘 것이오.',
         chart:{ type:'stat', title:'정전 협정이 남긴 선', items:[ { v:'155마일', l:'군사분계선 길이' }, { v:'판문점', l:'1953.7.27 체결 장소' } ] } },
       { who:'me', t:'(봇짐을 내려놓으며) …끝난 겁니까?' },
       { who:'npc', t:'전쟁 중에 헌법도 바뀌었네. 대통령을 국민이 뽑도록.' },
+      { who:'npc', t:'국회에서 다시 뽑히기 어렵게 되자, 정부는 부산에서 국회의원들을 잡아들였네. 부산 정치 파동이지.' },
       { who:'npc', t:'부산에서, 계엄 아래 — 발췌 개헌일세.',
         chart:{ type:'stat', title:'발췌 개헌, 1952', items:[ { v:'부산', l:'계엄 아래 통과' }, { v:'대통령 직선제', l:'핵심 내용' } ] } },
       { who:'me', t:'(봇짐을 다시 지며) …그래서 어찌 됐습니까?' },
@@ -1412,6 +1420,12 @@ const NPC_DATA = {
       { q:'1960년 이승만 대통령 하야 직후, 허정을 수반으로 하여 내각책임제 개헌과 총선거를 관리한 임시 정부는?',
         opts:['허정 과도정부','장면 내각'], answer:0, src:[64],
         feedback:['장면 내각은 그 뒤 총선거로 구성되어 실제로 정권을 잡은 제2공화국의 정식 정부예요.','정답! 허정 과도정부입니다. 이승만 하야 직후 내각책임제 개헌과 총선거를 관리했어요.'] },
+      { q:'정전 협상이 진행되던 1953년 6월 이승만 정부가 휴전에 반대하며 단행한 일은?',
+        opts:['반공 포로 석방','발췌 개헌'], answer:0, src:[51],
+        feedback:['발췌 개헌은 1952년 대통령 직선제를 도입한 개헌이에요.','정답! 반공 포로 석방입니다.'] },
+      { q:'1952년 이승만 정부가 계엄령을 선포하고 국회의원들을 연행하는 등 발췌 개헌을 강행한 사건은?',
+        opts:['부산 정치 파동','사사오입 개헌'], answer:0, src:[13, 44],
+        feedback:['사사오입 개헌은 1954년 초대 대통령의 중임 제한을 없앤 개헌이에요.','정답! 부산 정치 파동입니다.'] },
     ],
     endsChapter: true
   },
@@ -1905,39 +1919,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=111"></script>
-<script src="assets/streak.js?v=111"></script>
+<script src="assets/badges.js?v=112"></script>
+<script src="assets/streak.js?v=112"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=111"></script>
-  <script src="assets/fx.js?v=111"></script>
-  <script src="assets/deed.js?v=111"></script>
-  <script src="assets/inkwipe.js?v=111"></script>
-  <script src="assets/moment.js?v=111"></script>
-  <script src="assets/dash.js?v=111"></script>
-<script src="assets/juice.js?v=111"></script>
-  <script src="assets/difficulty.js?v=111"></script>
-  <script src="assets/nextauto.js?v=111"></script>
-<script src="assets/heroes_data.js?v=111"></script>
-<script src="assets/heroes.js?v=111"></script>
-<script src="assets/icons.js?v=111"></script>
-<script src="assets/srs.js?v=111"></script>
-<script src="assets/newsflash.js?v=111"></script>
-<script src="assets/timeline.js?v=111"></script>
-<script src="assets/journey.js?v=111"></script>
-<script src="assets/season.js?v=111"></script>
-<script src="assets/items.js?v=111"></script>
-  <script src="assets/gold.js?v=111"></script>
-  <script src="assets/ask.js?v=111"></script>
-  <script src="assets/ads.js?v=111"></script>
-  <script src="assets/energy.js?v=111"></script>
-  <script src="assets/daily.js?v=111"></script>
-  <script src="assets/unlock.js?v=111"></script>
-  <script src="assets/guide.js?v=111"></script>
-  <script src="assets/minigames.js?v=111"></script>
-  <script src="assets/quests.js?v=111"></script>
-  <script src="assets/offline.js?v=111"></script>
-  <script src="assets/telemetry.js?v=111"></script>
-<script src="assets/autowalk.js?v=111"></script>
+<script src="assets/rank.js?v=112"></script>
+  <script src="assets/fx.js?v=112"></script>
+  <script src="assets/deed.js?v=112"></script>
+  <script src="assets/inkwipe.js?v=112"></script>
+  <script src="assets/moment.js?v=112"></script>
+  <script src="assets/dash.js?v=112"></script>
+<script src="assets/juice.js?v=112"></script>
+  <script src="assets/difficulty.js?v=112"></script>
+  <script src="assets/nextauto.js?v=112"></script>
+<script src="assets/heroes_data.js?v=112"></script>
+<script src="assets/heroes.js?v=112"></script>
+<script src="assets/icons.js?v=112"></script>
+<script src="assets/srs.js?v=112"></script>
+<script src="assets/newsflash.js?v=112"></script>
+<script src="assets/timeline.js?v=112"></script>
+<script src="assets/journey.js?v=112"></script>
+<script src="assets/season.js?v=112"></script>
+<script src="assets/items.js?v=112"></script>
+  <script src="assets/gold.js?v=112"></script>
+  <script src="assets/ask.js?v=112"></script>
+  <script src="assets/ads.js?v=112"></script>
+  <script src="assets/energy.js?v=112"></script>
+  <script src="assets/daily.js?v=112"></script>
+  <script src="assets/unlock.js?v=112"></script>
+  <script src="assets/guide.js?v=112"></script>
+  <script src="assets/minigames.js?v=112"></script>
+  <script src="assets/quests.js?v=112"></script>
+  <script src="assets/offline.js?v=112"></script>
+  <script src="assets/telemetry.js?v=112"></script>
+<script src="assets/autowalk.js?v=112"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

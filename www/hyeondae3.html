@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=111"></script>
-<script src="assets/zoomwarn.js?v=111"></script>
-<script src="assets/map/map_component.js?v=111"></script>
-<script src="assets/chart.js?v=111"></script>
-<script src="assets/audio.js?v=111"></script>
+<script src="assets/errlog.js?v=112"></script>
+<script src="assets/zoomwarn.js?v=112"></script>
+<script src="assets/map/map_component.js?v=112"></script>
+<script src="assets/chart.js?v=112"></script>
+<script src="assets/audio.js?v=112"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=111';   // 존댓말 전환
+const ART_V = '?v=112';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -706,7 +706,9 @@ const PLAYER_SPRITES = {};
    그림이 없거나 Rank가 아직 없으면 예전 그림으로 돌아간다 — 아트가 빠져도
    게임은 돌아가야 한다. */
 const RANK_DIRS = ['nobi','yangin','jungin','yangban','jaesang','wang'];
-let playerSuit = null;
+// 처음엔 undefined로 둔다 — null로 두면 Rank가 아직 없을 때(currentSuit()가 null) 첫 호출이
+// 곧바로 return해 주인공 그림이 하나도 준비되지 않고, 그리기에서 예외가 난다(2026-09-17 자동 점검).
+let playerSuit;
 
 function loadPlayerSprites(suit){
   if (playerSuit === suit) return;
@@ -1280,6 +1282,7 @@ const NPC_DATA = {
       { who:'npc', t:'1·2차는 경공업, 3·4차는 중화학 공업으로 갔네.',
         chart:{ type:'bar', bars:[ { label:'1·2차', v:3, text:'경공업 — 가발·신발·섬유' }, { label:'3·4차', v:10, text:'중화학 — 철강·조선·화학' } ], note:'<b>1·2차는 가벼운 것, 3·4차는 무거운 것</b>. 포항제철과 울산 조선소가 3·4차 때네.' } },
       { who:'me', t:'(붓을 내려놓으며) …그게 그렇게 다릅니까?' },
+      { who:'npc', t:'1977년엔 수출 100억 달러를 넘겼네. 목표보다 몇 해나 앞당겼지.' },
       { who:'npc', t:'그 무렵 서독에도 사람을 보냈네.' },
       { who:'me', t:'(붓을 씻으며) 거긴 또 왜요?' },
       { who:'npc', t:'광부와 간호사였지 — 한·독 근로자 채용 협정일세.',
@@ -1289,6 +1292,7 @@ const NPC_DATA = {
       { who:'npc', t:'1972년엔 남북이 처음 한목소리를 냈네.' },
       { who:'npc', t:'자주·평화·민족 대단결, 7·4 남북 공동 성명이지.',
         chart:{ type:'stat', title:'7·4 남북 공동 성명, 1972', items:[ { v:'자주·평화', l:'두 원칙' }, { v:'민족 대단결', l:'세 번째 원칙' } ] } },
+      { who:'npc', t:'성명을 실천하려고 남북 조절 위원회도 두었지. 오래가진 못했지만.' },
       { who:'npc', t:'그런데 그해 10월, 유신 헌법이 나왔네.' },
       { who:'npc', t:'대통령을 통일주체국민회의에서 뽑고, 임기 제한도 없앴지.',
         chart:{ type:'pyramid', title:'유신 헌법, 1972', tiers:[ { t:'대통령', s:'통일주체국민회의 선출·임기 제한 없음', hi:true }, { t:'국회·국민' } ] } },
@@ -1308,6 +1312,12 @@ const NPC_DATA = {
       { q:'1960년대 박정희 정부가 외화를 벌기 위해 광부와 간호사를 파견한 협정을 맺은 나라는?',
         opts:['서독','일본'], answer:0, src:[79, 34],
         feedback:['일본과는 1965년 한일 협정으로 청구권 자금을 받았어요.','정답! 서독입니다. 한·독 근로자 채용 협정에 따라 광부와 간호사가 파견되었어요.'] },
+      { q:'7·4 남북 공동 성명을 실천하려고 남북이 함께 만든 기구는?',
+        opts:['남북 조절 위원회','남북 공동 연락 사무소'], answer:0, src:[22, 34, 43],
+        feedback:['남북 공동 연락 사무소는 2018년 판문점 선언 뒤 개성에 세워졌어요.','정답! 남북 조절 위원회입니다(1972).'] },
+      { q:'1977년 박정희 정부 때 달성한 경제 지표로 옳은 것은?',
+        opts:['수출 100억 달러 달성','1인당 국민 소득 2만 달러 달성'], answer:0, src:[47],
+        feedback:['1인당 국민 소득 2만 달러는 2000년대의 일이에요.','정답! 수출 100억 달러를 달성했어요.'] },
     ]
   },
   olympic_0: {
@@ -1321,6 +1331,7 @@ const NPC_DATA = {
       { who:'me', t:'(깃발을 정리하며) 왜 그게 큰일입니까?' },
       { who:'npc', t:'이 기회에 정부가 소련, 중국과 국교를 텄거든.',
         chart:{ type:'stat', title:'북방 외교', items:[ { v:'1990', l:'소련 수교' }, { v:'1992', l:'중국 수교' } ] } },
+      { who:'npc', t:'경제도 날개를 달았지. 기름값·달러 가치·금리가 모두 낮았던 3저 호황이었네(1986~88).' },
       { who:'npc', t:'그전에도 통일로 가는 길은 조금씩 열리고 있었네.' },
       { who:'npc', t:'이렇게 하나씩 쌓인 거지.',
         chart:{ type:'grid', title:'통일로 가는 길, 하나씩', head:[ '사건', '연도', '정부' ], rows:[ [ '이산가족 최초 상봉', '1985', '전두환' ], [ '7·7 선언', '1988', '노태우' ], [ '개성공단 조성 합의', '2000', '김대중' ] ] } },
@@ -1328,6 +1339,7 @@ const NPC_DATA = {
       { who:'npc', t:'1991년엔 남북이 유엔에 함께 들어갔네.',
         chart:{ type:'stat', title:'남북 유엔 동시 가입', items:[ { v:'1991', l:'노태우 정부' } ] } },
       { who:'npc', t:'그해 말엔 남북 기본 합의서도 채택했지.' },
+      { who:'npc', t:'같은 해 말 한반도 비핵화 공동 선언도 발표했네.' },
       { who:'me', t:'(끄덕이며) 유엔도 같이 들어갔고요?' },
       { who:'npc', t:'서로를 특수 관계로 규정했네.',
         chart:{ type:'vs', title:'남북 기본 합의서의 규정', left:{ n:'국가 대 국가' }, right:{ n:'특수 관계', win:true }, mid:'≠' } },
@@ -1361,6 +1373,12 @@ const NPC_DATA = {
       { q:'전두환 정부가 대학 본고사를 폐지하고 졸업정원제를 도입한 1980년의 교육 정책은?',
         opts:['7·30 교육개혁','문민 교육 개혁'], answer:0, src:[44],
         feedback:['문민 교육 개혁이라는 명칭은 쓰이지 않아요.','정답! 7·30 교육개혁입니다. 과외도 금지되었어요.'] },
+      { q:'1980년대 중반 저유가·저달러·저금리로 수출이 크게 늘어난 경제 호황은?',
+        opts:['3저 호황','베트남 특수'], answer:0, src:[29],
+        feedback:['베트남 특수는 1960년대 후반 베트남 파병과 함께 얻은 경제적 이익이에요.','정답! 3저 호황입니다.'] },
+      { q:'노태우 정부 때 남북 기본 합의서와 같은 해에 채택된 선언은?',
+        opts:['한반도 비핵화 공동 선언','6·15 남북 공동 선언'], answer:0, src:[56],
+        feedback:['6·15 남북 공동 선언은 2000년 김대중 정부 때 발표됐어요.','정답! 한반도 비핵화 공동 선언입니다(1991).'] },
     ]
   },
   gimdaejung_0: {
@@ -1382,6 +1400,8 @@ const NPC_DATA = {
       { who:'npc', t:'2000년 6월, 평양에서 처음으로 남북 정상이 마주 앉았네.' },
       { who:'npc', t:'6·15 남북 공동 선언이지.',
         chart:{ type:'stat', title:'6·15 남북 공동 선언, 2000', items:[ { v:'2000.6', l:'첫 남북 정상 회담' } ] } },
+      { who:'npc', t:'선언엔 남측의 연합제안과 북측의 낮은 단계 연방제안이 서로 닮은 점이 있다고 적었지.' },
+      { who:'npc', t:'그보다 앞선 1998년엔 정주영 회장이 소 떼를 몰고 판문점을 넘어갔네.' },
       { who:'npc', t:'금강산 관광길은 이미 1998년부터 열려 있었네.' },
       { who:'me', t:'(끄덕이며) …벌써 그렇게 됐군요.' },
       { who:'npc', t:'그 뒤로 이산가족이 다시 만났고, 개성에 공단이 들어섰지.',
@@ -1392,6 +1412,7 @@ const NPC_DATA = {
         chart:{ type:'stat', title:'전임 정부의 유산', items:[ { v:'금융실명제·지방자치', l:'김영삼 정부에서 이어받음' } ] } },
       { who:'npc', t:'김영삼 정부는 그 밖에도 많은 일을 했네.',
         chart:{ type:'grid', title:'김영삼 정부, 1993~1996', head:[ '연도', '내용' ], rows:[ [ '1993', '금융실명제' ], [ '1993~', '하나회 해체' ], [ '1995', 'WTO 가입' ], [ '1995~96', '조선총독부 건물 철거' ] ] } },
+      { who:'npc', t:'우루과이 라운드 협상이 타결되어 쌀 시장까지 조금씩 열어야 했고.' },
       { who:'npc', t:'하나회를 해체하고 총독부 건물도 헐어냈지.' },
       { who:'npc', t:'역사 바로 세우기라 불렀네.' },
       { who:'me', t:'(반지를 정리하며) …전임자 것도 잘 이어받으셨네요.' },
@@ -1440,6 +1461,15 @@ const NPC_DATA = {
       { q:'2007년 평양에서 열린 2차 남북 정상 회담에서 발표된 선언은?',
         opts:['10·4 남북 공동 선언','6·15 남북 공동 선언'], answer:0, src:[24],
         feedback:['6·15 남북 공동 선언은 2000년 1차 정상 회담의 결과예요.','정답! 10·4 남북 공동 선언입니다.'] },
+      { q:'6·15 남북 공동 선언에서 통일 방안의 공통성을 인정한 것은?',
+        opts:['남측 연합제안과 북측 낮은 단계 연방제안','남측 1국가 2체제안과 북측 고려 연방제안'], answer:0, src:[41, 65, 68],
+        feedback:['그런 짝은 선언에 담기지 않았어요.','정답! 연합제안과 낮은 단계 연방제안의 공통성을 인정했어요.'] },
+      { q:'1998년 김대중 정부 때 소 떼를 몰고 판문점을 넘어 방북한 인물은?',
+        opts:['정주영','이봉창'], answer:0, src:[43, 53, 78],
+        feedback:['이봉창은 1932년 도쿄에서 의거를 일으킨 한인애국단원이에요.','정답! 정주영 현대그룹 명예회장입니다.'] },
+      { q:'김영삼 정부 때 타결되어 쌀 시장 개방 문제를 불러온 다자간 무역 협상은?',
+        opts:['우루과이 라운드','브라운 각서'], answer:0, src:[22, 27, 38, 61],
+        feedback:['브라운 각서는 1966년 베트남 파병과 관련한 한미 간 약속이에요.','정답! 우루과이 라운드입니다.'] },
     ],
     endsChapter: true
   },
@@ -1933,38 +1963,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=111"></script>
-<script src="assets/streak.js?v=111"></script>
+<script src="assets/badges.js?v=112"></script>
+<script src="assets/streak.js?v=112"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=111"></script>
-  <script src="assets/fx.js?v=111"></script>
-  <script src="assets/deed.js?v=111"></script>
-  <script src="assets/inkwipe.js?v=111"></script>
-  <script src="assets/dash.js?v=111"></script>
-<script src="assets/juice.js?v=111"></script>
-  <script src="assets/difficulty.js?v=111"></script>
-  <script src="assets/nextauto.js?v=111"></script>
-<script src="assets/heroes_data.js?v=111"></script>
-<script src="assets/heroes.js?v=111"></script>
-<script src="assets/icons.js?v=111"></script>
-<script src="assets/srs.js?v=111"></script>
-<script src="assets/newsflash.js?v=111"></script>
-<script src="assets/timeline.js?v=111"></script>
-<script src="assets/journey.js?v=111"></script>
-<script src="assets/season.js?v=111"></script>
-<script src="assets/items.js?v=111"></script>
-  <script src="assets/gold.js?v=111"></script>
-  <script src="assets/ask.js?v=111"></script>
-  <script src="assets/ads.js?v=111"></script>
-  <script src="assets/energy.js?v=111"></script>
-  <script src="assets/daily.js?v=111"></script>
-  <script src="assets/unlock.js?v=111"></script>
-  <script src="assets/guide.js?v=111"></script>
-  <script src="assets/minigames.js?v=111"></script>
-  <script src="assets/quests.js?v=111"></script>
-  <script src="assets/offline.js?v=111"></script>
-  <script src="assets/telemetry.js?v=111"></script>
-<script src="assets/autowalk.js?v=111"></script>
+<script src="assets/rank.js?v=112"></script>
+  <script src="assets/fx.js?v=112"></script>
+  <script src="assets/deed.js?v=112"></script>
+  <script src="assets/inkwipe.js?v=112"></script>
+  <script src="assets/dash.js?v=112"></script>
+<script src="assets/juice.js?v=112"></script>
+  <script src="assets/difficulty.js?v=112"></script>
+  <script src="assets/nextauto.js?v=112"></script>
+<script src="assets/heroes_data.js?v=112"></script>
+<script src="assets/heroes.js?v=112"></script>
+<script src="assets/icons.js?v=112"></script>
+<script src="assets/srs.js?v=112"></script>
+<script src="assets/newsflash.js?v=112"></script>
+<script src="assets/timeline.js?v=112"></script>
+<script src="assets/journey.js?v=112"></script>
+<script src="assets/season.js?v=112"></script>
+<script src="assets/items.js?v=112"></script>
+  <script src="assets/gold.js?v=112"></script>
+  <script src="assets/ask.js?v=112"></script>
+  <script src="assets/ads.js?v=112"></script>
+  <script src="assets/energy.js?v=112"></script>
+  <script src="assets/daily.js?v=112"></script>
+  <script src="assets/unlock.js?v=112"></script>
+  <script src="assets/guide.js?v=112"></script>
+  <script src="assets/minigames.js?v=112"></script>
+  <script src="assets/quests.js?v=112"></script>
+  <script src="assets/offline.js?v=112"></script>
+  <script src="assets/telemetry.js?v=112"></script>
+<script src="assets/autowalk.js?v=112"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

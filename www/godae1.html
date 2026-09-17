@@ -520,11 +520,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=111"></script>
-<script src="assets/zoomwarn.js?v=111"></script>
-<script src="assets/map/map_component.js?v=111"></script>
-<script src="assets/chart.js?v=111"></script>
-<script src="assets/audio.js?v=111"></script>
+<script src="assets/errlog.js?v=112"></script>
+<script src="assets/zoomwarn.js?v=112"></script>
+<script src="assets/map/map_component.js?v=112"></script>
+<script src="assets/chart.js?v=112"></script>
+<script src="assets/audio.js?v=112"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -536,7 +536,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=111';   // 존댓말 전환
+const ART_V = '?v=112';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -807,7 +807,9 @@ const PLAYER_SPRITES = {};
    그림이 없거나 Rank가 아직 없으면 예전 그림으로 돌아간다 — 아트가 빠져도
    게임은 돌아가야 한다. */
 const RANK_DIRS = ['nobi','yangin','jungin','yangban','jaesang','wang'];
-let playerSuit = null;
+// 처음엔 undefined로 둔다 — null로 두면 Rank가 아직 없을 때(currentSuit()가 null) 첫 호출이
+// 곧바로 return해 주인공 그림이 하나도 준비되지 않고, 그리기에서 예외가 난다(2026-09-17 자동 점검).
+let playerSuit;
 
 function loadPlayerSprites(suit){
   if (playerSuit === suit) return;
@@ -1407,6 +1409,9 @@ const NPC_DATA = {
       { q:'공주 공산성, 부여 부소산성, 익산 왕궁리 유적 등 백제의 여러 도읍 유적을 묶어 2015년 유네스코 세계유산으로 등재한 것은?',
         opts:['백제역사유적지구','고인돌 유적지구'], answer:0, src:[29],
         feedback:['고인돌 유적지구는 고창·화순·강화의 청동기 시대 고인돌을 묶어 등재한 유산이에요.','정답! 백제역사유적지구입니다. 웅진·사비·익산 세 시기의 백제 유적을 함께 아우르고 있어요.'] },
+      { q:'무령왕릉처럼 중국 남조의 영향을 받아 벽돌로 방을 쌓은 무덤 양식은?',
+        opts:['벽돌무덤','돌무지무덤'], answer:0, src:[10, 19, 29],
+        feedback:['돌무지무덤은 한성 시기 석촌동 고분처럼 돌을 쌓은 무덤이에요.','정답! 벽돌무덤입니다.'] },
     ]
   },
   gwanggaeto_0: {
@@ -1489,6 +1494,9 @@ const NPC_DATA = {
       { q:'돌로 널방을 만들고 흙으로 봉분을 덮은 무덤으로, 방 안 벽과 천장에 사신도 같은 벽화를 그릴 수 있었던 무덤 양식은?',
         opts:['굴식 돌방무덤','돌무지덧널무덤'], answer:0, src:[27, 30, 37, 39, 45, 52, 57, 65, 68, 73],
         feedback:['돌무지덧널무덤은 신라의 무덤으로, 구조상 벽화를 그릴 수 없어요.','정답! 굴식 돌방무덤입니다. 강서대묘의 사신도가 대표적이에요.'] },
+      { q:'475년 장수왕의 공격으로 한성이 함락될 때 전사한 백제의 왕은?',
+        opts:['개로왕','성왕'], answer:0, src:[22, 61, 70],
+        feedback:['성왕은 554년 관산성 전투에서 전사한 왕이에요.','정답! 개로왕입니다. 이 뒤 문주왕이 웅진으로 도읍을 옮겼어요.'] },
     ]
   },
   seongwang_0: {
@@ -1617,6 +1625,12 @@ const NPC_DATA = {
       { q:'건원이라는 독자 연호를 쓰고 율령을 반포했으며, 이차돈의 순교를 계기로 불교를 공인한 신라 왕은?',
         opts:['법흥왕','지증왕'], answer:0, src:[49],
         feedback:['지증왕은 국호를 신라로 정하고 우산국을 복속시킨 왕이에요.','정답! 법흥왕입니다. 건원 연호·율령 반포·불교 공인으로 신라 국가 체제를 완성했어요.'] },
+      { q:'진흥왕 때 거칠부가 편찬한 역사서는?',
+        opts:['국사','서기'], answer:0, src:[32],
+        feedback:['「서기」는 백제 근초고왕 때 고흥이 지은 역사서예요.','정답! 거칠부의 「국사」입니다.'] },
+      { q:'신라에서 "마립간" 대신 왕 칭호를 처음 쓴 임금은?',
+        opts:['지증왕','내물 마립간'], answer:0, src:[15, 27, 42, 46, 51, 71],
+        feedback:['내물 마립간은 김씨 왕위 세습을 시작한 임금이에요.','정답! 지증왕입니다. 국호도 신라로 정했어요.'] },
     ]
   },
   hwarang_0: {
@@ -2209,38 +2223,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=111"></script>
-<script src="assets/streak.js?v=111"></script>
+<script src="assets/badges.js?v=112"></script>
+<script src="assets/streak.js?v=112"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=111"></script>
-  <script src="assets/fx.js?v=111"></script>
-  <script src="assets/deed.js?v=111"></script>
-  <script src="assets/inkwipe.js?v=111"></script>
-  <script src="assets/dash.js?v=111"></script>
-<script src="assets/juice.js?v=111"></script>
-  <script src="assets/difficulty.js?v=111"></script>
-  <script src="assets/nextauto.js?v=111"></script>
-<script src="assets/heroes_data.js?v=111"></script>
-<script src="assets/heroes.js?v=111"></script>
-<script src="assets/icons.js?v=111"></script>
-<script src="assets/srs.js?v=111"></script>
-<script src="assets/newsflash.js?v=111"></script>
-<script src="assets/timeline.js?v=111"></script>
-<script src="assets/journey.js?v=111"></script>
-<script src="assets/season.js?v=111"></script>
-<script src="assets/items.js?v=111"></script>
-  <script src="assets/gold.js?v=111"></script>
-  <script src="assets/ask.js?v=111"></script>
-  <script src="assets/ads.js?v=111"></script>
-  <script src="assets/energy.js?v=111"></script>
-  <script src="assets/daily.js?v=111"></script>
-  <script src="assets/unlock.js?v=111"></script>
-  <script src="assets/guide.js?v=111"></script>
-  <script src="assets/minigames.js?v=111"></script>
-  <script src="assets/quests.js?v=111"></script>
-  <script src="assets/offline.js?v=111"></script>
-  <script src="assets/telemetry.js?v=111"></script>
-<script src="assets/autowalk.js?v=111"></script>
+<script src="assets/rank.js?v=112"></script>
+  <script src="assets/fx.js?v=112"></script>
+  <script src="assets/deed.js?v=112"></script>
+  <script src="assets/inkwipe.js?v=112"></script>
+  <script src="assets/dash.js?v=112"></script>
+<script src="assets/juice.js?v=112"></script>
+  <script src="assets/difficulty.js?v=112"></script>
+  <script src="assets/nextauto.js?v=112"></script>
+<script src="assets/heroes_data.js?v=112"></script>
+<script src="assets/heroes.js?v=112"></script>
+<script src="assets/icons.js?v=112"></script>
+<script src="assets/srs.js?v=112"></script>
+<script src="assets/newsflash.js?v=112"></script>
+<script src="assets/timeline.js?v=112"></script>
+<script src="assets/journey.js?v=112"></script>
+<script src="assets/season.js?v=112"></script>
+<script src="assets/items.js?v=112"></script>
+  <script src="assets/gold.js?v=112"></script>
+  <script src="assets/ask.js?v=112"></script>
+  <script src="assets/ads.js?v=112"></script>
+  <script src="assets/energy.js?v=112"></script>
+  <script src="assets/daily.js?v=112"></script>
+  <script src="assets/unlock.js?v=112"></script>
+  <script src="assets/guide.js?v=112"></script>
+  <script src="assets/minigames.js?v=112"></script>
+  <script src="assets/quests.js?v=112"></script>
+  <script src="assets/offline.js?v=112"></script>
+  <script src="assets/telemetry.js?v=112"></script>
+<script src="assets/autowalk.js?v=112"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
