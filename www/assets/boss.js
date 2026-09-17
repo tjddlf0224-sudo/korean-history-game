@@ -72,6 +72,11 @@ window.Boss = (function(){
     .bs-enemy img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.2s ease-in-out infinite; }
     .bs-self { bottom:3%; left:11%; height:48%; }
+    /* 동료(차돌이·바우) — 주인공 뒤, 한 발 물러선 자리 */
+    .bs-mate { position:absolute; z-index:4; width:auto; pointer-events:none;
+      filter:drop-shadow(0 6px 6px rgba(0,0,0,.5)) brightness(.9); }
+    .bs-mate-bau { bottom:8%; left:3%; height:52%; }
+    .bs-mate-chadol { bottom:2%; left:25%; height:30%; z-index:6; }
     .bs-self img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.8s ease-in-out infinite; }
     @keyframes bs-bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
@@ -256,6 +261,22 @@ window.Boss = (function(){
     });
   }
 
+  /* 동료 한마디 — 차돌이·바우가 합류해 있으면 전투 중에 한 줄씩 끼어든다(2026-09-19).
+     같은 줄만 반복되면 금방 질리니 몇 개 중에서 고른다. */
+  const CHEER = {
+    combo:  [['chadol', '형아 최고! 한 번 더!'], ['chadol', '(깡충깡충) 맞았다, 맞았어!'], ['bau', '그 기세요! 밀어붙이시오!']],
+    hurt:   [['bau', '(앞을 막아선다) 괜찮소, 다음이 있소!'], ['chadol', '형아, 힘내요!']],
+    last:   [['bau', '한 번만 더 버티시오. 내가 뒤에 있소.'], ['chadol', '(형아 손을 꼭 잡는다) …할 수 있어요.']],
+  };
+  function cheer(kind){
+    if (!window.Party || !Party.members) return '';
+    const who = Party.members();
+    const pool = CHEER[kind].filter(([id]) => who.indexOf(id) >= 0);
+    if (!pool.length) return '';
+    const [id, t] = pool[Math.floor(Math.random() * pool.length)];
+    return `<br><span style="color:#b9d4a8">${Party.WHO[id].name}</span> <span style="color:#d8ccb5">${t}</span>`;
+  }
+
   async function answer(i){
     if (S.busy) return;
     S.busy = true;
@@ -279,7 +300,7 @@ window.Boss = (function(){
 
       if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_hit');
       if (navigator.vibrate) navigator.vibrate(crit ? 45 : 25);
-      msg(S.cur.feedback[1] + (S.combo >= 3 ? `<br><b>${S.combo}연속! 일격이 무거워진다.</b>` : ''));
+      msg(S.cur.feedback[1] + (S.combo >= 3 ? `<br><b>${S.combo}연속! 일격이 무거워진다.</b>` : '') + (S.combo === 3 ? cheer('combo') : ''));
       // 잘 맞힐수록 전투가 빨라진다. 콤보가 3이든 0이든 똑같이 기다리면
       // 잘하고 있는데 화면이 안 따라와 리듬이 끊긴다 — **속도 자체가 보상**이다.
       // 오답 쪽(900ms)은 줄이지 않는다. 해설을 읽어야 하는 순간이라서다.
@@ -310,7 +331,7 @@ window.Boss = (function(){
       // 목숨이 하나 남으면 화면 가장자리가 붉게 뛴다 — 숫자를 안 봐도 알게 한다
       if (window.Fx) Fx.danger(S.pHp <= 1);
       if (navigator.vibrate) navigator.vibrate([50, 40, 50]);
-      msg(S.cur.feedback[0]);
+      msg(S.cur.feedback[0] + (S.pHp === 1 ? cheer('last') : S.pHp > 0 ? cheer('hurt') : ''));
       bars(); await wait(900);
       ep.classList.remove('lunge'); pp.classList.remove('hit');
       if (S.pHp <= 0) return finish(false);
@@ -420,8 +441,17 @@ window.Boss = (function(){
     document.getElementById('bs-p').innerHTML =
       `<img src="${opt.playerImg || 'assets/player/right_1.png?v=6'}" alt="">`;
 
-    // 담력(膽)을 가진 동료가 있으면 한 번은 대신 맞아 준다.
-    // 동료를 화면에 세우지는 않는다 — 전투용 아트를 따로 뽑아야 하는데
+    // 이야기 동료(차돌이·바우)는 걷기 그림의 오른쪽 모습을 그대로 세운다(2026-09-19).
+    arena.querySelectorAll('.bs-mate').forEach(n => n.remove());
+    (window.Party ? Party.members() : []).forEach(id => {
+      const im = document.createElement('img');
+      im.className = 'bs-mate bs-mate-' + id; im.alt = '';
+      im.src = `assets/companions/${id}/right_1.png` + (typeof ART_V === 'string' ? ART_V : '');
+      arena.appendChild(im);
+    });
+
+    // 담력(膽)을 가진 동료(도감 인물)가 있으면 한 번은 대신 맞아 준다.
+    // 도감 인물은 화면에 세우지 않는다 — 전투용 아트를 따로 뽑아야 하는데
     // 그 비용에 비해 얻는 것이 적다.
     S.guard = (window.Heroes ? Heroes.power('dam') : 0) > 0;
     S.guardUsed = false;
