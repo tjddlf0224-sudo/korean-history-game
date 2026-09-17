@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=106"></script>
-<script src="assets/zoomwarn.js?v=106"></script>
-<script src="assets/map/map_component.js?v=106"></script>
-<script src="assets/chart.js?v=106"></script>
-<script src="assets/audio.js?v=106"></script>
+<script src="assets/errlog.js?v=107"></script>
+<script src="assets/zoomwarn.js?v=107"></script>
+<script src="assets/map/map_component.js?v=107"></script>
+<script src="assets/chart.js?v=107"></script>
+<script src="assets/audio.js?v=107"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=106';   // 존댓말 전환
+const ART_V = '?v=107';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -679,6 +679,7 @@ const ZONES = {
       { id:'jeonsigwa', name:'전시과 담당 관리', x:300, y:250, img:'assets/portraits/jeonsigwa.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
       { id:'songsang', name:'송 상인', x:700, y:240, img:'assets/portraits/songsang.png', look:{ role:'commoner', body:'#5c4a6b', accent:'#d8c48a' } },
       { id:'arabsang', name:'대식국 상인', x:688, y:555, img:'assets/portraits/arabsang.png', look:{ role:'commoner', body:'#6b5a44', accent:'#e0b94a' } },
+      { id:'yeoin', name:'고려 여인', x:1100, y:480, img:'assets/portraits/goryeo_yeoin.png', look:{ role:'commoner', body:'#e8e2d0', accent:'#8a2f3a' } },
       { id:'jujeon', name:'주전도감 장인', x:1040, y:300, img:'assets/portraits/jujeon.png', look:{ role:'commoner', body:'#5a5a4a', accent:'#b8a888' } },
       { id:'sukjong', name:'고려 숙종', x:504, y:344, img: 'assets/portraits/sukjong_f.png', look:{ role:'king', body:'#3d5a6b', accent:'#e0b94a' } },
       { id:'gyeongsiseo', name:'경시서 관리', x:856, y:352, img:'assets/portraits/goryeo_gyeongsiseo.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
@@ -990,7 +991,8 @@ function updateHudGoal(){
       ['arabsang', '대식국 상인과 대화하기'],
       ['sukjong', '고려 숙종과 대화하기'],
       ['gyeongsiseo', '경시서 관리와 대화하기'],
-      ['jujeon', '주전도감 장인과 대화하기']
+      ['jujeon', '주전도감 장인과 대화하기'],
+      ['yeoin', '고려 여인과 대화하기']
     ];
     /* 자동 걷기도 같은 차례를 따라야 한다. autowalk는 원래 ZONES의
        npcs 배열 순서로 갔는데, 그 순서와 이 목록이 달라 목표는
@@ -1397,6 +1399,40 @@ const NPC_DATA = {
         opts:['해동통보','상평통보'], answer:0, src:[13, 31, 37, 49, 51, 59, 62, 71, 75],
         feedback:['상평통보는 조선 숙종 때 전국적으로 유통된 화폐예요.','정답! 해동통보입니다. 고려 숙종 대에 의천의 건의로 주조되었어요.'] },
     ],
+  },
+  yeoin_0: {
+    name: '고려 여인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-4 0-6 3-6 7v11h12V10c0-4-2-7-6-7z"/><circle cx="12" cy="9" r="2.4"/></svg>', img: 'assets/portraits/goryeo_yeoin.png',
+    beats: [
+      { who:'npc', t:'(검은 너울을 걷는다) 송 상인과 흥정하던 참이오. 이 병 좀 들어 주시겠소?' },
+      { who:'me', t:'(받아 든다) 무늬 하나 없는데… 빛깔이 참 곱습니다.' },
+      { who:'npc', t:'무늬를 새기지 않고 비색만으로 멋을 낸 청자요. 송 사람들도 이 빛을 부러워하지.',
+        chart:{ type:'relic', title:'순청자', items:[ { img:'suncheongja', n:'청자 참외모양 병', s:'12세기 · 무늬 없이 비색만으로' } ] } },
+      { who:'me', t:'뒤에 나오는 상감청자와는 다르군요.' },
+      { who:'npc', t:'그렇소. 이건 친정에서 물려받은 것이오. 아버님 재산은 우리 남매가 똑같이 나눠 받았지.' },
+      { who:'me', t:'딸도 아들과 똑같이요?' },
+      { who:'npc', t:'그렇소. 부모 제사도 형제자매가 돌아가며 모시오. 윤행이라 하지.',
+        chart:{ type:'compare', title:'고려 여성의 자리', cols:[ { h:'고려', hi:true, items:[ '재산을 아들딸 고루 — 균분 상속', '제사를 돌아가며 — 윤행봉사', '호적에 태어난 차례대로', '여자도 호주가 됨', '다시 혼인해도 흠이 안 됨' ] }, { h:'조선 후기', items:[ '맏아들 중심 상속', '맏아들이 제사', '아들 먼저 적음' ] } ] } },
+      { who:'npc', t:'호적에도 아들딸 가리지 않고 태어난 차례대로 적고, 사위나 외손자도 음서를 받는다오.' },
+      { who:'me', t:'(속으로) 조선 후기에 가면 맏아들 중심으로 바뀌지…' },
+      { who:'npc', t:'(들판을 가리킨다) 우리 집 농사는 저 백정들이 함께 짓소.' },
+      { who:'me', t:'백정이라면… 짐승을 잡는 사람 말입니까?' },
+      { who:'npc', t:'(웃는다) 아니오. 고려에서 백정은 나라 일을 따로 맡지 않은 보통 농민이오. 백성 대부분이 백정이지.',
+        chart:{ type:'vs', title:'백정이라는 말', left:{ n:'고려의 백정', s:'직역이 없는 일반 농민', win:true }, right:{ n:'조선의 백정', s:'도살업 등을 하던 천민' }, mid:'≠' } },
+    ],
+    quizSeq: [
+      { q:'고려 시대에 재산을 아들과 딸에게 고르게 나누어 주던 관행은?',
+        opts:['균분 상속','장자 상속'], answer:0, src:[9, 17, 21],
+        feedback:['장자 상속은 조선 후기에 맏아들 중심으로 굳어진 관행이에요.','정답! 균분 상속입니다. 제사도 자녀가 돌아가며 지냈어요(윤행봉사).'] },
+      { q:'고려 시대에 부모의 제사를 아들딸이 돌아가며 지낸 관행은?',
+        opts:['윤행봉사','친영 제도'], answer:0, src:[9, 17, 21],
+        feedback:['친영 제도는 신부를 신랑 집으로 맞아 혼례를 치르는, 조선 후기에 자리 잡은 방식이에요.','정답! 윤행봉사입니다.'] },
+      { q:'고려 시대의 "백정"에 대한 설명으로 옳은 것은?',
+        opts:['특정한 직역이 없는 일반 농민이었다','도살업에 종사하는 천민이었다'], answer:0, src:[12, 34, 46],
+        feedback:['도살업에 종사한 천민을 백정이라 부른 것은 조선 시대의 일이에요.','정답! 고려의 백정은 직역이 없는 일반 농민으로, 백성의 대다수였어요.'] },
+      { q:'무늬를 새기거나 상감하지 않고 비색만으로 아름다움을 낸, 상감청자 이전의 고려청자는?',
+        opts:['순청자','분청사기'], answer:0, src:[58],
+        feedback:['분청사기는 고려 말~조선 초에 유행한, 회색 흙에 백토를 입힌 그릇이에요.','정답! 순청자입니다. 청자 참외모양 병이 대표적이에요.'] },
+    ],
     endsChapter: true
   },
 };
@@ -1407,6 +1443,7 @@ const Stage = {
     if (id === 'songsang') return 'songsang_0';
     if (id === 'arabsang') return 'arabsang_0';
     if (id === 'jujeon') return 'jujeon_0';
+    if (id === 'yeoin') return 'yeoin_0';
     if (id === 'sukjong') return 'sukjong_0';
     if (id === 'gyeongsiseo') return 'gyeongsiseo_0';
     return null;
@@ -1892,38 +1929,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=106"></script>
-<script src="assets/streak.js?v=106"></script>
+<script src="assets/badges.js?v=107"></script>
+<script src="assets/streak.js?v=107"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=106"></script>
-  <script src="assets/fx.js?v=106"></script>
-  <script src="assets/deed.js?v=106"></script>
-  <script src="assets/inkwipe.js?v=106"></script>
-  <script src="assets/dash.js?v=106"></script>
-<script src="assets/juice.js?v=106"></script>
-  <script src="assets/difficulty.js?v=106"></script>
-  <script src="assets/nextauto.js?v=106"></script>
-<script src="assets/heroes_data.js?v=106"></script>
-<script src="assets/heroes.js?v=106"></script>
-<script src="assets/icons.js?v=106"></script>
-<script src="assets/srs.js?v=106"></script>
-<script src="assets/newsflash.js?v=106"></script>
-<script src="assets/timeline.js?v=106"></script>
-<script src="assets/journey.js?v=106"></script>
-<script src="assets/season.js?v=106"></script>
-<script src="assets/items.js?v=106"></script>
-  <script src="assets/gold.js?v=106"></script>
-  <script src="assets/ask.js?v=106"></script>
-  <script src="assets/ads.js?v=106"></script>
-  <script src="assets/energy.js?v=106"></script>
-  <script src="assets/daily.js?v=106"></script>
-  <script src="assets/unlock.js?v=106"></script>
-  <script src="assets/guide.js?v=106"></script>
-  <script src="assets/minigames.js?v=106"></script>
-  <script src="assets/quests.js?v=106"></script>
-  <script src="assets/offline.js?v=106"></script>
-  <script src="assets/telemetry.js?v=106"></script>
-<script src="assets/autowalk.js?v=106"></script>
+<script src="assets/rank.js?v=107"></script>
+  <script src="assets/fx.js?v=107"></script>
+  <script src="assets/deed.js?v=107"></script>
+  <script src="assets/inkwipe.js?v=107"></script>
+  <script src="assets/dash.js?v=107"></script>
+<script src="assets/juice.js?v=107"></script>
+  <script src="assets/difficulty.js?v=107"></script>
+  <script src="assets/nextauto.js?v=107"></script>
+<script src="assets/heroes_data.js?v=107"></script>
+<script src="assets/heroes.js?v=107"></script>
+<script src="assets/icons.js?v=107"></script>
+<script src="assets/srs.js?v=107"></script>
+<script src="assets/newsflash.js?v=107"></script>
+<script src="assets/timeline.js?v=107"></script>
+<script src="assets/journey.js?v=107"></script>
+<script src="assets/season.js?v=107"></script>
+<script src="assets/items.js?v=107"></script>
+  <script src="assets/gold.js?v=107"></script>
+  <script src="assets/ask.js?v=107"></script>
+  <script src="assets/ads.js?v=107"></script>
+  <script src="assets/energy.js?v=107"></script>
+  <script src="assets/daily.js?v=107"></script>
+  <script src="assets/unlock.js?v=107"></script>
+  <script src="assets/guide.js?v=107"></script>
+  <script src="assets/minigames.js?v=107"></script>
+  <script src="assets/quests.js?v=107"></script>
+  <script src="assets/offline.js?v=107"></script>
+  <script src="assets/telemetry.js?v=107"></script>
+<script src="assets/autowalk.js?v=107"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

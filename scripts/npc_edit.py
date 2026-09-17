@@ -25,5 +25,11 @@ def edit(path, pairs=(), quiz_add=()):
         k = m[-1].start() + 1
         blk = blk[:k] + txt + blk[k:]
         s = s[:i] + blk + s[j:]
+    # 도해를 기다리는 대사(끝이 `',`) 바로 다음 줄에 새 대사가 오면 문법이 깨진다.
+    # 2026-09-17 고려 1·4화에서 실제로 났다 — 쓰기 전에 막는다.
+    lines = s.split('\n')
+    for n in range(len(lines) - 1):
+        if re.search(r"\bt:'(?:[^'\\]|\\.)*',\s*$", lines[n]) and lines[n + 1].lstrip().startswith('{ who:'):
+            raise SystemExit(f'{path}:{n + 1}: 도해를 기다리는 대사 뒤에 새 대사가 끼었음')
     open(path, 'w', encoding='utf-8').write(s)
     print('ok', path)

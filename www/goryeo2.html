@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=106"></script>
-<script src="assets/zoomwarn.js?v=106"></script>
-<script src="assets/map/map_component.js?v=106"></script>
-<script src="assets/chart.js?v=106"></script>
-<script src="assets/audio.js?v=106"></script>
+<script src="assets/errlog.js?v=107"></script>
+<script src="assets/zoomwarn.js?v=107"></script>
+<script src="assets/map/map_component.js?v=107"></script>
+<script src="assets/chart.js?v=107"></script>
+<script src="assets/audio.js?v=107"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=106';   // 존댓말 전환
+const ART_V = '?v=107';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1287,6 +1287,9 @@ const NPC_DATA = {
         chart:{ type:'quote', title:'십팔자위왕(十八字爲王)', text:'十八子가 왕이 된다 — 합치면 <b>오얏 리(李)</b>', from:'당대의 참설' } },
       { who:'me', t:'…합치면 오얏 리(李) 아닙니까?' },
       { who:'npc', t:'그렇다. 내가 왕이 된다는 뜻이지.' },
+      { who:'npc', t:'금이 일어나 우리더러 신하의 예를 갖추라 했을 때, 나는 그 요구를 받아들였다. 싸워 봐야 득이 없으니.',
+        chart:{ type:'vs', title:'금의 사대 요구 (1126)', left:{ n:'이자겸 정권', s:'받아들임 — 권력 유지' }, right:{ n:'반대하는 이들', s:'뒷날 묘청 · 금국 정벌론' }, mid:'?' } },
+      { who:'me', t:'…나라의 체면보다 집안을 먼저 챙기신 거군요.' },
       { who:'npc', t:'(목소리가 낮아진다) 인종께서 나를 없애려 하셨다.',
         chart:{ type:'vs', title:'왕과 외척', left:{ n:'인종', s:'외척을 치우려 한다' }, right:{ n:'이자겸', s:'권력을 지키려 한다' }, mid:'VS' } },
       { who:'me', t:'그래서 어찌 대응하셨습니까?' },
@@ -1307,6 +1310,9 @@ const NPC_DATA = {
       { q:'이자겸의 난으로 왕실 권위가 흔들린 틈을 타, 서경 천도와 칭제건원을 주장하며 등장한 인물은?',
         opts:['묘청','신돈'], answer:0, src:[27, 29, 35, 36, 45, 47, 60, 67, 78],
         feedback:['신돈은 훗날 공민왕 때 개혁을 이끌다 실각한 승려예요.','정답! 묘청입니다. 바로 저기 있는 저 사람이오 — 가서 이야기를 들어 보시게.'] },
+      { q:'이자겸 집권기에 고려가 받아들여 반대 여론을 불러일으킨 금의 요구는?',
+        opts:['사대(군신 관계) 요구','강동 6주 반환 요구'], answer:0, src:[13],
+        feedback:['강동 6주는 거란 1차 침입 때 서희의 담판으로 고려가 얻은 땅이에요.','정답! 금의 사대 요구입니다. 이를 받아들인 데 대한 반발이 묘청의 금국 정벌론으로 이어져요.'] },
     ]
   },
   myocheong_0: {
@@ -1343,6 +1349,7 @@ const NPC_DATA = {
         chart:{ type:'stat', title:'묘청의 최후', items:[ { v:'조광', l:'묘청을 배신하고 목을 벰' }, { v:'1년', l:'그래도 서경성은 버팀' } ] } },
       { who:'me', t:'…믿었던 이들에게 배신당하신 겁니까?' },
       { who:'npc', t:'그런데도 성은 일 년을 더 버텼지.' },
+      { who:'me', t:'(속으로) 뒷날 신채호는 『조선사연구초』에서 이 일을 "조선 역사상 일천년래 제일대사건"이라 부른다.' },
       { who:'npc', t:'1136년, 결국 성은 무너졌네.',
         chart:{ type:'timeline', title:'묘청의 난', marks:[ { y:'1135', t:'서경에서 반란', on:true }, { y:'1135', t:'조광, 묘청을 죽임' }, { y:'1136.2', t:'서경성 함락' } ] } },
     ],
@@ -1353,6 +1360,9 @@ const NPC_DATA = {
       { q:'묘청의 서경 천도 운동을 진압하는 데 앞장선, 「삼국사기」를 편찬한 문신은?',
         opts:['김부식','최승로'], answer:0, src:[20, 25, 27, 28, 29, 35, 36, 45, 47, 72, 77, 78],
         feedback:['최승로는 고려 초 성종에게 시무 28조를 올린 문신이에요.','정답! 김부식입니다. 관군을 이끌어 서경성을 함락시켰어요.'] },
+      { q:'신채호가 「조선사연구초」에서 "조선 역사상 일천년래 제일대사건"이라 평가한 사건은?',
+        opts:['묘청의 서경 천도 운동','이자겸의 난'], answer:0, src:[27, 29, 35, 36, 45, 47, 78],
+        feedback:['이자겸의 난은 외척이 권력을 독점하다 일으킨 반란이에요.','정답! 묘청의 서경 천도 운동입니다. 신채호는 자주적 전통이 꺾인 사건으로 보았어요.'] },
     ]
   },
   gimbusik_0: {
@@ -1498,10 +1508,14 @@ const NPC_DATA = {
       { who:'npc', t:'봉사 10조라 했네. 실은 내 자리를 굳히는 일이었지.',
         chart:{ type:'stat', title:'봉사 10조', items:[ { v:'10조', l:'왕에게 올린 개혁안' }, { v:'1196', l:'최충헌 집권한 해' } ] } },
       { who:'me', t:'…그래도 그리 해도 되는 겁니까?' },
-      { who:'npc', t:'(대답 없이) 나는 이듬해 김보당의 난도 겪었네.' },
+      { who:'npc', t:'(대답 없이) 정변 세 해 뒤엔 김보당의 난이 있었지.' },
       { who:'npc', t:'1173년, 쫓겨난 의종을 다시 세우겠다며 군사를 일으켰지.' },
       { who:'npc', t:'무신 정권에 맞선 첫 반란이었네. 이내 진압되었지.',
         chart:{ type:'vs', title:'김보당의 난', left:{ n:'김보당', s:'의종 복위 주장' }, right:{ n:'무신 정권', s:'이내 진압', win:true }, mid:'VS' } },
+      { who:'npc', t:'무신들끼리도 서로 베었지. 정중부를 친 경대승은 처음으로 도방을 두어 제 몸을 지켰네.',
+        chart:{ type:'flow', title:'무신 집권자의 차례', steps:[ { t:'정중부', s:'정변' }, { t:'경대승', s:'도방 처음 설치' }, { t:'이의민', s:'천민 출신' }, { t:'최충헌', s:'교정도감' }, { t:'최우', s:'정방·강화 천도' } ] } },
+      { who:'npc', t:'이의민 때엔 운문의 김사미, 초전의 효심이 들고일어났고.',
+        chart:{ type:'grid', title:'무신 집권기의 봉기', head:[ '봉기', '때 · 곳', '누가' ], rows:[ [ '망이·망소이의 난', '1176 · 공주 명학소', '소의 주민' ], [ '김사미·효심의 난', '1193 · 운문·초전', '농민' ], [ '만적의 난', '1198 · 개경', '노비' ] ], hi:1 } },
       { who:'me', t:'그런데 어르신은 어찌 권력을 지키십니까?' },
       { who:'npc', t:'교정도감을 두었네. 나랏일을 여기서 결정하지.' },
       { who:'npc', t:'왕은 있으나, 정사는 내 손에서 나가네.',
@@ -1531,7 +1545,7 @@ const NPC_DATA = {
       { q:'무신들이 문신에 대한 차별에 반발해 정권을 잡은 1170년의 사건은?',
         opts:['무신정변','묘청의 난'], answer:0, src:[24, 26, 32, 37, 62, 65, 66, 69, 70, 72, 74, 76],
         feedback:['묘청의 난은 그보다 앞선 1135년 서경 천도를 주장하며 일어난 사건이에요.','정답! 무신정변입니다. 이후 100년간 무신 정권이 이어져요.'] },
-      { q:'무신정변 이듬해인 1173년, 문신 김보당이 폐위된 의종의 복위를 내걸고 일으킨, 무신 정권에 맞선 첫 반란은?',
+      { q:'무신정변 3년 뒤인 1173년, 문신 김보당이 폐위된 의종의 복위를 내걸고 일으킨, 무신 정권에 맞선 첫 반란은?',
         opts:['김보당의 난','망이·망소이의 난'], answer:0, src:[74],
         feedback:['망이·망소이의 난은 공주 명학소에서 소(所) 주민들이 일으킨 신분 차별 봉기예요.','정답! 김보당의 난입니다. 이내 진압되었지만 무신 정권에 맞선 첫 저항이었어요.'] },
       { q:'최충헌이 국정을 총괄하기 위해 설치한 최고 권력 기구는?',
@@ -1546,6 +1560,12 @@ const NPC_DATA = {
       { q:'최충헌의 사노비였던 만적이 개경에서 노비들을 모아 신분 해방을 외치며 반란을 모의한 사건은?',
         opts:['만적의 난','망이·망소이의 난'], answer:0, src:[78],
         feedback:['망이·망소이의 난은 공주 명학소에서 소(所) 주민들이 일으킨 봉기예요.','정답! 만적의 난(1198)입니다. 개경에서 노비 신분 해방을 외쳤지만 사전에 발각되었어요.'] },
+      { q:'정중부를 제거하고 권력을 잡은 뒤 처음으로 도방을 설치한 무신 집권자는?',
+        opts:['경대승','이의민'], answer:0, src:[66],
+        feedback:['이의민은 경대승 뒤에 집권한 천민 출신 무신이에요.','정답! 경대승입니다. 도방은 뒤에 최충헌이 크게 키웠어요.'] },
+      { q:'무신 집권기 이의민 때 운문과 초전에서 일어난 농민 봉기는?',
+        opts:['김사미·효심의 난','원종·애노의 난'], answer:0, src:[35, 53, 73],
+        feedback:['원종·애노의 난은 신라 진성 여왕 때의 농민 봉기예요.','정답! 김사미·효심의 난입니다(1193).'] },
     ]
   },
   sambyeolcho_0: {
@@ -2149,40 +2169,40 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=106"></script>
-<script src="assets/streak.js?v=106"></script>
+<script src="assets/badges.js?v=107"></script>
+<script src="assets/streak.js?v=107"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=106"></script>
-  <script src="assets/fx.js?v=106"></script>
-  <script src="assets/deed.js?v=106"></script>
-  <script src="assets/inkwipe.js?v=106"></script>
-  <script src="assets/moment.js?v=106"></script>
-  <script src="assets/dash.js?v=106"></script>
-<script src="assets/juice.js?v=106"></script>
-  <script src="assets/difficulty.js?v=106"></script>
-  <script src="assets/nextauto.js?v=106"></script>
-<script src="assets/heroes_data.js?v=106"></script>
-<script src="assets/heroes.js?v=106"></script>
-<script src="assets/icons.js?v=106"></script>
-<script src="assets/srs.js?v=106"></script>
-<script src="assets/newsflash.js?v=106"></script>
-<script src="assets/timeline.js?v=106"></script>
-<script src="assets/journey.js?v=106"></script>
-<script src="assets/season.js?v=106"></script>
-<script src="assets/boss.js?v=106"></script>
-<script src="assets/items.js?v=106"></script>
-  <script src="assets/gold.js?v=106"></script>
-  <script src="assets/ask.js?v=106"></script>
-  <script src="assets/ads.js?v=106"></script>
-  <script src="assets/energy.js?v=106"></script>
-  <script src="assets/daily.js?v=106"></script>
-  <script src="assets/unlock.js?v=106"></script>
-  <script src="assets/guide.js?v=106"></script>
-  <script src="assets/minigames.js?v=106"></script>
-  <script src="assets/quests.js?v=106"></script>
-  <script src="assets/offline.js?v=106"></script>
-  <script src="assets/telemetry.js?v=106"></script>
-<script src="assets/autowalk.js?v=106"></script>
+<script src="assets/rank.js?v=107"></script>
+  <script src="assets/fx.js?v=107"></script>
+  <script src="assets/deed.js?v=107"></script>
+  <script src="assets/inkwipe.js?v=107"></script>
+  <script src="assets/moment.js?v=107"></script>
+  <script src="assets/dash.js?v=107"></script>
+<script src="assets/juice.js?v=107"></script>
+  <script src="assets/difficulty.js?v=107"></script>
+  <script src="assets/nextauto.js?v=107"></script>
+<script src="assets/heroes_data.js?v=107"></script>
+<script src="assets/heroes.js?v=107"></script>
+<script src="assets/icons.js?v=107"></script>
+<script src="assets/srs.js?v=107"></script>
+<script src="assets/newsflash.js?v=107"></script>
+<script src="assets/timeline.js?v=107"></script>
+<script src="assets/journey.js?v=107"></script>
+<script src="assets/season.js?v=107"></script>
+<script src="assets/boss.js?v=107"></script>
+<script src="assets/items.js?v=107"></script>
+  <script src="assets/gold.js?v=107"></script>
+  <script src="assets/ask.js?v=107"></script>
+  <script src="assets/ads.js?v=107"></script>
+  <script src="assets/energy.js?v=107"></script>
+  <script src="assets/daily.js?v=107"></script>
+  <script src="assets/unlock.js?v=107"></script>
+  <script src="assets/guide.js?v=107"></script>
+  <script src="assets/minigames.js?v=107"></script>
+  <script src="assets/quests.js?v=107"></script>
+  <script src="assets/offline.js?v=107"></script>
+  <script src="assets/telemetry.js?v=107"></script>
+<script src="assets/autowalk.js?v=107"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 207명 */
+   인물 208명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -49,6 +49,7 @@ window.HERO_DATA = (function(){
     hwarang: { n:'화랑', p:'hwarang.png', e:'고대', r:'general', ch:{'godae1.html':['hwarang_0']} },
     goryeo_gyeongsiseo: { n:'경시서 관리', p:'goryeo_gyeongsiseo.png', e:'고려', r:'scholar', ch:{'byeokrando.html':['gyeongsiseo_0']} },
     sukjong_f: { n:'고려 숙종', p:'sukjong_f.png', e:'고려', r:'king', ch:{'byeokrando.html':['sukjong_0']} },
+    goryeo_yeoin: { n:'고려 여인', p:'goryeo_yeoin.png', e:'고려', r:'commoner', ch:{'byeokrando.html':['yeoin_0']} },
     gongmin: { n:'공민왕', p:'gongmin.png', e:'고려', r:'king', ch:{'goryeo3.html':['gongmin_0','gongmin_1']} },
     goryeo_gwanggun: { n:'광군 군사', p:'goryeo_gwanggun.png', e:'고려', r:'general', ch:{'goryeo1.html':['gwanggun_0']} },
     gwangjong: { n:'광종', p:'gwangjong.png', e:'고려', r:'king', ch:{'goryeo1.html':['gwangjong_0']} },

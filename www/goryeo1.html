@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=106"></script>
-<script src="assets/zoomwarn.js?v=106"></script>
-<script src="assets/map/map_component.js?v=106"></script>
-<script src="assets/chart.js?v=106"></script>
-<script src="assets/audio.js?v=106"></script>
+<script src="assets/errlog.js?v=107"></script>
+<script src="assets/zoomwarn.js?v=107"></script>
+<script src="assets/map/map_component.js?v=107"></script>
+<script src="assets/chart.js?v=107"></script>
+<script src="assets/audio.js?v=107"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=106';   // 존댓말 전환
+const ART_V = '?v=107';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1369,6 +1369,9 @@ const NPC_DATA = {
         chart:{ type:'grid', title:'광종이 쓴 연호', head:[ '연호', '비고' ], rows:[ [ '광덕', '즉위 후 처음 쓴 연호' ], [ '준풍', '뒤이어 쓴 연호' ] ] } },
       { who:'me', t:'…나라 안에서만 쓰는 이름 아닙니까?' },
       { who:'npc', t:'이 나라의 주인이 누구인지 밝히는 것도 왕의 일일세.' },
+      { who:'npc', t:'벼슬아치의 옷 빛깔도 정했네. 자주·붉은·비색·초록, 네 빛으로 위아래를 가렸지.',
+        chart:{ type:'grid', title:'광종의 공복 제정', head:[ '옷', '누가 입나' ], rows:[ [ '자삼(자주)', '가장 높은 벼슬' ], [ '단삼(붉은)', '그다음' ], [ '비삼(비색)', '그다음' ], [ '녹삼(초록)', '가장 낮은 벼슬' ] ], hi:0 } },
+      { who:'me', t:'옷만 보아도 누가 높은지 알겠군요.' },
       { who:'npc', t:'가난한 이도 잊지 않았네. 제위보를 두었지.',
         chart:{ type:'steps', title:'제위보가 하는 일', steps:[ { t:'기금을 마련한다' }, { t:'그 이자로 꾸어준다' }, { t:'가난한 백성을 돕는다', s:'제위보' } ] } },
       { who:'me', t:'(작게) …소인 같은 이도 도움을 받습니까?' },
@@ -1387,6 +1390,9 @@ const NPC_DATA = {
       { q:'고려 시대 빈민에게 곡식을 빌려주고 그 이자로 구제하던 기관은?',
         opts:['제위보','상평창'], answer:0, src:[78],
         feedback:['상평창은 곡식값을 조절해 물가를 안정시키던 기관이에요.','정답! 제위보입니다. 광종 때 기금을 마련해 그 이자로 빈민을 구제했어요.'] },
+      { q:'광종이 관리의 등급에 따라 자삼·단삼·비삼·녹삼으로 옷 색을 구분한 제도는?',
+        opts:['공복 제정','기인 제도'], answer:0, src:[26, 27, 31, 36, 39, 43, 50, 53, 57, 63],
+        feedback:['기인 제도는 지방 호족의 자제를 개경에 머물게 한 태조의 정책이에요.','정답! 공복 제정입니다. 관리의 위계를 옷 빛깔로 드러냈어요.'] },
     ]
   },
   choeseungno_0: {
@@ -1405,6 +1411,10 @@ const NPC_DATA = {
       { who:'me', t:'그전엔 지방을 어찌 다스렸습니까?' },
       { who:'npc', t:'중앙이 손을 대지 못했네. 향리들이 대신했지.',
         chart:{ type:'vs', title:'12목 이전과 이후', left:{ n:'그전', s:'향리가 대신 다스린다' }, right:{ n:'12목 이후', s:'지방관이 직접 다스린다' }, mid:'982년' } },
+      { who:'npc', t:'나라의 틀은 당을 본떠 2성 6부로 짰네. 허나 고려만의 기구도 따로 있지.',
+        chart:{ type:'grid', title:'고려의 중앙 기구', head:[ '기구', '하는 일' ], rows:[ [ '중서문하성', '나랏일을 의논·결정 (재신)' ], [ '중추원', '왕명 출납·군사 기밀 (추밀)' ], [ '삼사', '화폐와 곡식의 출납·회계' ], [ '도병마사', '재신·추밀이 모여 국방을 의논 — 고려 독자' ], [ '식목도감', '재신·추밀이 모여 법과 제도를 의논 — 고려 독자' ] ], hi:3 } },
+      { who:'me', t:'도병마사와 식목도감에는 누가 모입니까?' },
+      { who:'npc', t:'중서문하성의 재신과 중추원의 추밀이 함께 앉지. 당에도 송에도 없는, 고려만의 회의 자리일세.' },
       { who:'npc', t:'국자감도 세워 인재를 길렀네.',
         chart:{ type:'grid', title:'시무 28조가 이른 것', head:[ '요지', '내용' ], rows:[ [ '불교 행사', '팔관회·연등회를 줄여라' ], [ '지방관', '12목에 보내라' ] ] } },
       { who:'npc', t:'(두루마리를 접으며) …나 혼자 다 말할 순 없네.' },
@@ -1417,6 +1427,12 @@ const NPC_DATA = {
       { q:'성종이 지방 통제를 위해 처음으로 지방관을 파견한 열두 곳의 행정 구역은?',
         opts:['12목','9주 5소경'], answer:0, src:[75],
         feedback:['9주 5소경은 통일 신라의 지방 제도예요.','정답! 12목입니다. 이때부터 중앙이 지방을 직접 다스리기 시작했어요.'] },
+      { q:'고려에서 재신과 추밀이 모여 법률과 제도를 의논한, 고려의 독자적 회의 기구는?',
+        opts:['식목도감','삼사'], answer:0, src:[22, 24, 25, 26, 31, 43, 44, 47, 50, 54],
+        feedback:['삼사는 화폐와 곡식의 출납·회계를 맡은 기구예요.','정답! 식목도감입니다. 국방을 의논한 도병마사와 함께 고려만의 기구예요.'] },
+      { q:'고려에서 화폐와 곡식의 출납과 회계를 맡은 기구는?',
+        opts:['삼사','어사대'], answer:0, src:[33, 44],
+        feedback:['어사대는 관리의 비리를 감찰하던 기구예요.','정답! 삼사입니다. 조선의 삼사(사헌부·사간원·홍문관)와 이름만 같으니 주의하세요.'] },
     ]
   },
 
@@ -1462,7 +1478,9 @@ const NPC_DATA = {
       { who:'npc', t:'1019년, 귀주에서 크게 무찔렀지.',
         chart:{ type:'timeline', title:'현종 대의 거란 전쟁', marks:[ { y:'1010', t:'2차 침입 · 나주 피란' }, { y:'1011', t:'대장경 새기기 시작' }, { y:'1019', t:'귀주대첩', on:true } ] } },
       { who:'me', t:'…그 뒤로는 편안하셨습니까?' },
-      { who:'npc', t:'겨우 한숨 돌렸지. 나라의 뼈대를 다시 세웠네.' },
+      { who:'npc', t:'겨우 한숨 돌렸지. 강감찬의 말을 따라 개경 둘레에 나성을 쌓았네.',
+        chart:{ type:'steps', title:'거란 침입 뒤의 대비', steps:[ { t:'1019 귀주 대첩', s:'강감찬' }, { t:'개경 나성을 쌓는다', s:'강감찬의 건의 · 1029년 완성' }, { t:'나라의 뼈대를 다시 세운다', s:'5도 양계' } ] } },
+      { who:'npc', t:'그리고 나라의 뼈대를 다시 세웠네.' },
       { who:'npc', t:'전국을 5도와 양계로 나누었지.',
         chart:{ type:'compare', title:'5도와 양계', cols:[ { h:'5도 (남쪽)', items:[ '일반 행정', '안찰사가 돈다' ] }, { h:'양계 (북쪽)', hi:true, items:[ '국경 요충', '병마사가 지킨다' ] } ] } },
       { who:'me', t:'…남쪽과 북쪽을 다르게 다스리십니까?' },
@@ -1474,6 +1492,9 @@ const NPC_DATA = {
       { q:'고려가 일반 행정 구역인 5도와 국경 지역의 군사 행정 구역을 함께 둔 지방 제도는?',
         opts:['5도 양계','8도 체제'], answer:0, src:[78],
         feedback:['8도는 조선 시대에 전국을 나눈 지방 행정 구역이에요.','정답! 5도 양계입니다. 5도에는 안찰사를, 양계에는 병마사를 파견했어요.'] },
+      { q:'거란의 침입을 겪은 뒤 강감찬의 건의로 개경 둘레에 쌓은 성은?',
+        opts:['나성','천리장성'], answer:0, src:[55],
+        feedback:['천리장성은 거란·여진에 대비해 압록강 어귀에서 도련포까지 쌓은 장성이에요.','정답! 개경 나성입니다(1029 완성).'] },
     ]
   },
 
@@ -1525,6 +1546,8 @@ const NPC_DATA = {
       { who:'me', t:'7재는 무엇입니까?' },
       { who:'npc', t:'국자감 안에 둔 전문 강좌일세. 경전마다 따로 배우게 했지.' },
       { who:'npc', t:'배움만으론 부족하네. 병든 백성껜 혜민국서 약을 나눠 주었지.',
+        chart:{ type:'grid', title:'고려의 구휼·의료 기구', head:[ '기구', '하는 일' ], rows:[ [ '의창', '흉년에 곡식을 빌려줌' ], [ '상평창', '곡식값을 고르게' ], [ '제위보', '기금 이자로 빈민 구제' ], [ '동·서 대비원', '개경에서 환자·빈민을 돌봄' ], [ '혜민국', '약을 지어 나눔' ], [ '구제도감·구급도감', '재해·역병 때 세우는 임시 기구' ] ], hi:3 } },
+      { who:'npc', t:'개경 동쪽과 서쪽엔 대비원을 두어 앓는 이와 갈 곳 없는 이를 돌보네. 역병이 돌면 구제도감·구급도감을 따로 세우지.',
         chart:{ type:'steps', title:'예종이 편 백성 구제', steps:[ { t:'구제도감을 둔다', s:'전염병 때 병자를 돌본다' }, { t:'혜민국을 둔다', s:'약을 나눠준다' } ] } },
       { who:'me', t:'(작게) …소인 같은 이도 약을 받을 수 있습니까?' },
       { who:'npc', t:'(끄덕이며) 그리 되라고 만든 것일세.',
@@ -1540,6 +1563,9 @@ const NPC_DATA = {
       { q:'고려 예종~인종 무렵, 병자에게 약을 지급해 구제하던 기관은?',
         opts:['혜민국','제위보'], answer:0, src:[59],
         feedback:['제위보는 앞서 광종 때 이자로 빈민을 구제하던 기금이에요.','정답! 혜민국입니다. 병든 백성에게 약을 나누어 주는 사회 시책이었어요.'] },
+      { q:'고려에서 개경에 설치되어 환자를 치료하고 빈민을 돌본 기구는?',
+        opts:['동·서 대비원','상평창'], answer:0, src:[12],
+        feedback:['상평창은 곡식값을 조절해 물가를 안정시키던 기구예요.','정답! 동·서 대비원입니다. 재해나 역병 때에는 구제도감·구급도감을 임시로 두었어요.'] },
     ],
     endsChapter: true
   },
@@ -2035,38 +2061,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=106"></script>
-<script src="assets/streak.js?v=106"></script>
+<script src="assets/badges.js?v=107"></script>
+<script src="assets/streak.js?v=107"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=106"></script>
-  <script src="assets/fx.js?v=106"></script>
-  <script src="assets/deed.js?v=106"></script>
-  <script src="assets/inkwipe.js?v=106"></script>
-  <script src="assets/dash.js?v=106"></script>
-<script src="assets/juice.js?v=106"></script>
-  <script src="assets/difficulty.js?v=106"></script>
-  <script src="assets/nextauto.js?v=106"></script>
-<script src="assets/heroes_data.js?v=106"></script>
-<script src="assets/heroes.js?v=106"></script>
-<script src="assets/icons.js?v=106"></script>
-<script src="assets/srs.js?v=106"></script>
-<script src="assets/newsflash.js?v=106"></script>
-<script src="assets/timeline.js?v=106"></script>
-<script src="assets/journey.js?v=106"></script>
-<script src="assets/season.js?v=106"></script>
-<script src="assets/items.js?v=106"></script>
-  <script src="assets/gold.js?v=106"></script>
-  <script src="assets/ask.js?v=106"></script>
-  <script src="assets/ads.js?v=106"></script>
-  <script src="assets/energy.js?v=106"></script>
-  <script src="assets/daily.js?v=106"></script>
-  <script src="assets/unlock.js?v=106"></script>
-  <script src="assets/guide.js?v=106"></script>
-  <script src="assets/minigames.js?v=106"></script>
-  <script src="assets/quests.js?v=106"></script>
-  <script src="assets/offline.js?v=106"></script>
-  <script src="assets/telemetry.js?v=106"></script>
-<script src="assets/autowalk.js?v=106"></script>
+<script src="assets/rank.js?v=107"></script>
+  <script src="assets/fx.js?v=107"></script>
+  <script src="assets/deed.js?v=107"></script>
+  <script src="assets/inkwipe.js?v=107"></script>
+  <script src="assets/dash.js?v=107"></script>
+<script src="assets/juice.js?v=107"></script>
+  <script src="assets/difficulty.js?v=107"></script>
+  <script src="assets/nextauto.js?v=107"></script>
+<script src="assets/heroes_data.js?v=107"></script>
+<script src="assets/heroes.js?v=107"></script>
+<script src="assets/icons.js?v=107"></script>
+<script src="assets/srs.js?v=107"></script>
+<script src="assets/newsflash.js?v=107"></script>
+<script src="assets/timeline.js?v=107"></script>
+<script src="assets/journey.js?v=107"></script>
+<script src="assets/season.js?v=107"></script>
+<script src="assets/items.js?v=107"></script>
+  <script src="assets/gold.js?v=107"></script>
+  <script src="assets/ask.js?v=107"></script>
+  <script src="assets/ads.js?v=107"></script>
+  <script src="assets/energy.js?v=107"></script>
+  <script src="assets/daily.js?v=107"></script>
+  <script src="assets/unlock.js?v=107"></script>
+  <script src="assets/guide.js?v=107"></script>
+  <script src="assets/minigames.js?v=107"></script>
+  <script src="assets/quests.js?v=107"></script>
+  <script src="assets/offline.js?v=107"></script>
+  <script src="assets/telemetry.js?v=107"></script>
+<script src="assets/autowalk.js?v=107"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
