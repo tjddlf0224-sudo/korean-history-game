@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>타임슬립 한국사 · 깨어나다</title>
-<meta name="description" content="아홉 시대를 모두 지나 독서실에서 깨어난다. 그리고 시험지를 받아 든다.">
+<meta name="description" content="아홉 시대를 지나 독서실에서 깨어난다. 문 앞에는 컵라면을 든 두 동료가 서 있다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
@@ -33,6 +33,10 @@
     text-shadow:0 2px 14px rgba(0,0,0,.9); }
   #line.on { opacity:1; transform:none; }
   #line b { color:#f0c96b; }
+  #line .pics { display:flex; gap:14px; justify-content:center; align-items:flex-end; margin-top:14px; }
+  #line .pics img { height:clamp(96px,22vh,170px); width:auto; filter:drop-shadow(0 6px 14px rgba(0,0,0,.7)); }
+  #line .pics img[src*="chadol"] { height:clamp(74px,16vh,124px); }   /* 예닐곱 살 꼬마 */
+  #line .pics img[src*="bau"] { height:clamp(118px,28vh,210px); }     /* 머리 하나 큰 청년 */
   #go { margin-top:32px; font-size:13px; color:#9d8d70; letter-spacing:.12em; opacity:0;
     transition:opacity .5s ease; }
   #go.on { opacity:1; animation:blink 2.1s ease-in-out infinite; }
@@ -97,7 +101,8 @@
     <div class="keys" id="keys"></div>
     <div class="word">
       꿈이었는지 아닌지는 알 수 없다.<br>
-      다만 이제 <b>이름과 사건이 뒤섞이지 않는다</b>.
+      다만 이제 <b>이름과 사건이 뒤섞이지 않는다</b>.<br>
+      시험지 맨 위 이름 칸에, 또박또박 <b>제 이름</b>을 적는다.
     </div>
     <div class="btns">
       <button class="btn" id="toExam">시험지를 받아 든다 →</button>
@@ -108,17 +113,17 @@
   <button id="skip">건너뛰기</button>
 </div>
 
-<script src="assets/items.js?v=116"></script>
-<script src="assets/heroes_data.js?v=116"></script>
-<script src="assets/icons.js?v=116"></script>
-<script src="assets/heroes.js?v=116"></script>
-<script src="assets/badges.js?v=116"></script>
-<script src="assets/rank.js?v=116"></script>
-<script src="assets/journey.js?v=116"></script>
-  <script src="assets/fx.js?v=116"></script>
-  <script src="assets/nextauto.js?v=116"></script>
-  <script src="assets/dash.js?v=116"></script>
-<script src="assets/season.js?v=116"></script>
+<script src="assets/items.js?v=117"></script>
+<script src="assets/heroes_data.js?v=117"></script>
+<script src="assets/icons.js?v=117"></script>
+<script src="assets/heroes.js?v=117"></script>
+<script src="assets/badges.js?v=117"></script>
+<script src="assets/rank.js?v=117"></script>
+<script src="assets/journey.js?v=117"></script>
+  <script src="assets/fx.js?v=117"></script>
+  <script src="assets/nextauto.js?v=117"></script>
+  <script src="assets/dash.js?v=117"></script>
+<script src="assets/season.js?v=117"></script>
 <script>
 /* ============ 엔딩 — 독서실에서 깨어난다 ============
 
@@ -131,7 +136,7 @@
 */
 const SC = [
   { bg:'', t:'—' },
-  { t:'어디선가 종이 넘기는 소리가 들린다.' },
+  { t:'어디선가 종이 넘기는 소리.' },
   { t:'흙냄새도, 물소리도, 말발굽 소리도 없다.' },
   // 독서실 장면인데 배경이 ch0_bg(조선 궁궐터)로 걸려 있었다. 그래서
   // "조선 전기 오프닝이 남아 있는 것 아니냐"는 제보를 받았다.
@@ -139,9 +144,24 @@ const SC = [
   { bg:'assets/scenes/intro_dokseosil.webp',
     t:'눈을 뜨니 형광등 불빛.<br>책상 위에 <b>한능검 문제집</b>이 그대로 펼쳐져 있다.' },
   { t:'시계는 새벽 1시 5분.<br>엎드린 지 <b>5분</b>이 지났을 뿐이다.' },
-  { t:'그런데 손끝에 아직 무언가 남아 있다.<br>차가운 청동, 젖은 나무판, 접힌 종이의 감촉.' },
+  /* 떡밥 회수(스토리 바이블 · 대사_작법 6장)
+     - 차돌이가 늘 쥐고 다닌 뗀석기 → 도판 속 주먹도끼 옆에
+     - 차돌이의 두려움("안 놓고 가지?") → 문 앞의 두 사람
+     - 이름 없이 관노가 된 프롤로그 → 시험지 이름 칸(보고서 화면) */
+  { t:'…꿈이었나.<br>그런데 손안에 뭔가 쥐여 있다.' },
+  { t:'거칠게 떼어 낸 <b>돌조각</b> 하나.<br>펼친 도판 속 주먹도끼와 꼭 닮았다.' },
+  { t:'— 차돌이가 늘 쥐고 다니던, 그 돌.' },
+  { t:'"…차돌아? 바우?"<br>텅 빈 열람실. 대답이 없다.' },
+  { t:'그때, 독서실 문이 드르륵 열린다.' },
+  { t:'털가죽을 두른 꼬마와, 새 깃 꽂은 모자를 쓴 덩치.<br>두 손에 편의점 <b>컵라면</b>이 들려 있다.',
+    pics:['assets/portraits/chadol_smile.png', 'assets/portraits/bau_smile.png'] },
+  { t:'"<b>이번엔… 안 두고 갔지?</b>"<br>꼬마가 울 것 같은 얼굴로 웃는다.',
+    pics:['assets/portraits/chadol_cry.png'] },
+  { t:'"뜨거운 물은 저쪽이라 하오. 셋이 같이 먹읍시다."<br>덩치가 머쓱하게 컵라면을 내민다.',
+    pics:['assets/portraits/bau_oops.png'] },
+  { t:'— 그래. 이번엔 아무도 두고 오지 않았다.' },
   { t:'책장을 넘긴다.<br>구석기, 신석기, 청동기 — 이제 순서가 뒤섞이지 않는다.' },
-  { t:'이름들이 얼굴로 떠오른다.<br>세종의 목소리, 이순신의 등, 유관순의 손에 들린 깃발.' },
+  { t:'세종의 목소리, 이순신의 등, 유관순의 손에 들린 깃발.<br>이름들이 얼굴로 떠오른다.' },
   { t:'— 그 사람들을 만나고 왔기 때문이다.', last:true },
 ];
 
@@ -167,7 +187,7 @@ function next(){
   el.go.classList.remove('on');
   setTimeout(() => {
     setBg(s.bg);
-    el.line.innerHTML = s.t;
+    el.line.innerHTML = s.t + (s.pics ? '<div class="pics">' + s.pics.map(p => `<img src="${p}" alt="">`).join('') + '</div>' : '');
     el.line.classList.add('on');
     if (s.last) setTimeout(showReport, 2600);
     else setTimeout(() => el.go.classList.add('on'), 800);

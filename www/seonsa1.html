@@ -535,12 +535,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=116"></script>
-<script src="assets/zoomwarn.js?v=116"></script>
-<script src="assets/map/map_component.js?v=116"></script>
-<script src="assets/chart.js?v=116"></script>
-<script src="assets/companions.js?v=116"></script>
-<script src="assets/audio.js?v=116"></script>
+<script src="assets/errlog.js?v=117"></script>
+<script src="assets/zoomwarn.js?v=117"></script>
+<script src="assets/map/map_component.js?v=117"></script>
+<script src="assets/chart.js?v=117"></script>
+<script src="assets/companions.js?v=117"></script>
+<script src="assets/audio.js?v=117"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -552,7 +552,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=116';   // 존댓말 전환
+const ART_V = '?v=117';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -2236,12 +2236,21 @@ const Dialog = {
    지루해"라는 제보. 게임을 다시 켤 때마다 처음부터 다 봐야 했다.
    마디(졸음 → 넘어감 → 도착)는 그대로 두고 문장을 뭉쳤다.
    아래에 건너뛰기도 달았다 — 두 번째부터는 굳이 다시 볼 이유가 없다. */
-const INTRO_LINES = [
+/* 프롤로그(독서실 → 조선 관아 → 관노 판정)를 본 사람에게는 그 뒤로 이어 준다.
+   프롤로그는 "발밑이 꺼졌다"로 끝난다 — 여기서 "쿵"으로 받는다(스토리 바이블). */
+const PROLOGUE_SEEN = (() => { try { return localStorage.getItem('khg_prologue_seen') === '1'; } catch(e){ return false; } })();
+const INTRO_LINES = PROLOGUE_SEEN ? [
+  '쿵. — 관아 마당이 아니다.',
+  '축축한 돌벽. 어디선가 쨍, 쨍, 돌 깨는 소리.',
+  '손에는 거칠게 떼어 낸 돌조각 하나. "…여긴 또 어디야."',
+  '관노라더니, 이번엔 아예 시간의 첫머리다.',
+] : [
   '독서실. 새벽 1시. 한능검 문제집 위로 눈꺼풀이 무거워진다.',
   '"구석기, 신석기, 청동기…" 순서가 자꾸 뒤섞인다. "딱 5분만…"',
   '— 눈을 뜨니 축축한 돌벽. 어디선가 쨍, 쨍 돌 깨는 소리.',
   '손에는 거칠게 떼어낸 돌조각 하나. 아주 오래된 시간의 첫머리다.',
 ];
+if (PROLOGUE_SEEN) document.getElementById('intro-overlay').style.background = 'radial-gradient(ellipse at 50% 40%, #2a2016, #0b0906 75%)';
 let introIdx = 0;
 function renderIntro(){
   document.getElementById('intro-text').textContent = INTRO_LINES[introIdx];
@@ -2390,39 +2399,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=116"></script>
-<script src="assets/streak.js?v=116"></script>
+<script src="assets/badges.js?v=117"></script>
+<script src="assets/streak.js?v=117"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=116"></script>
-  <script src="assets/fx.js?v=116"></script>
-  <script src="assets/deed.js?v=116"></script>
-  <script src="assets/inkwipe.js?v=116"></script>
-  <script src="assets/dash.js?v=116"></script>
-<script src="assets/juice.js?v=116"></script>
-  <script src="assets/difficulty.js?v=116"></script>
-  <script src="assets/nextauto.js?v=116"></script>
-<script src="assets/heroes_data.js?v=116"></script>
-<script src="assets/heroes.js?v=116"></script>
-<script src="assets/icons.js?v=116"></script>
-<script src="assets/srs.js?v=116"></script>
-<script src="assets/newsflash.js?v=116"></script>
-<script src="assets/timeline.js?v=116"></script>
-<script src="assets/journey.js?v=116"></script>
-<script src="assets/season.js?v=116"></script>
-<script src="assets/boss.js?v=116"></script>
-<script src="assets/items.js?v=116"></script>
-  <script src="assets/gold.js?v=116"></script>
-  <script src="assets/ask.js?v=116"></script>
-  <script src="assets/ads.js?v=116"></script>
-  <script src="assets/energy.js?v=116"></script>
-  <script src="assets/daily.js?v=116"></script>
-  <script src="assets/unlock.js?v=116"></script>
-  <script src="assets/guide.js?v=116"></script>
-  <script src="assets/minigames.js?v=116"></script>
-  <script src="assets/quests.js?v=116"></script>
-  <script src="assets/offline.js?v=116"></script>
-  <script src="assets/telemetry.js?v=116"></script>
-<script src="assets/autowalk.js?v=116"></script>
+<script src="assets/rank.js?v=117"></script>
+  <script src="assets/fx.js?v=117"></script>
+  <script src="assets/deed.js?v=117"></script>
+  <script src="assets/inkwipe.js?v=117"></script>
+  <script src="assets/dash.js?v=117"></script>
+<script src="assets/juice.js?v=117"></script>
+  <script src="assets/difficulty.js?v=117"></script>
+  <script src="assets/nextauto.js?v=117"></script>
+<script src="assets/heroes_data.js?v=117"></script>
+<script src="assets/heroes.js?v=117"></script>
+<script src="assets/icons.js?v=117"></script>
+<script src="assets/srs.js?v=117"></script>
+<script src="assets/newsflash.js?v=117"></script>
+<script src="assets/timeline.js?v=117"></script>
+<script src="assets/journey.js?v=117"></script>
+<script src="assets/season.js?v=117"></script>
+<script src="assets/boss.js?v=117"></script>
+<script src="assets/items.js?v=117"></script>
+  <script src="assets/gold.js?v=117"></script>
+  <script src="assets/ask.js?v=117"></script>
+  <script src="assets/ads.js?v=117"></script>
+  <script src="assets/energy.js?v=117"></script>
+  <script src="assets/daily.js?v=117"></script>
+  <script src="assets/unlock.js?v=117"></script>
+  <script src="assets/guide.js?v=117"></script>
+  <script src="assets/minigames.js?v=117"></script>
+  <script src="assets/quests.js?v=117"></script>
+  <script src="assets/offline.js?v=117"></script>
+  <script src="assets/telemetry.js?v=117"></script>
+<script src="assets/autowalk.js?v=117"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
