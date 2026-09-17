@@ -141,7 +141,10 @@ def check_dup_questions(f, s):
 def check_assets(f, s):
     """그림 파일 존재 — 없으면 실패가 아니라 '생성 대기'."""
     need = set(re.findall(r"assets/(?:scenes|portraits)/[\w.\-]+\.png", s))
-    miss = [p for p in need if not os.path.exists(os.path.join(WWW, p))]
+    # 챕터는 같은 이름의 .webp를 먼저 불러온다(없으면 .png). 둘 다 없을 때만 '없음'.
+    # 2026-09-19: .png만 봐서 멀쩡한 배경 63개를 '없음'으로 신고하고 있었다.
+    miss = [p for p in need if not os.path.exists(os.path.join(WWW, p))
+            and not os.path.exists(os.path.join(WWW, p[:-4] + '.webp'))]
     return miss
 
 

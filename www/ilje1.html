@@ -510,12 +510,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=117"></script>
-<script src="assets/zoomwarn.js?v=117"></script>
-<script src="assets/map/map_component.js?v=117"></script>
-<script src="assets/chart.js?v=117"></script>
-<script src="assets/companions.js?v=117"></script>
-<script src="assets/audio.js?v=117"></script>
+<script src="assets/errlog.js?v=118"></script>
+<script src="assets/zoomwarn.js?v=118"></script>
+<script src="assets/map/map_component.js?v=118"></script>
+<script src="assets/chart.js?v=118"></script>
+<script src="assets/companions.js?v=118"></script>
+<script src="assets/audio.js?v=118"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -527,7 +527,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=117';   // 존댓말 전환
+const ART_V = '?v=118';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1438,6 +1438,7 @@ const NPC_DATA = {
   suin3_0: {
     name: '끝방 노인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18M9 3v18M14 3v18M19 3v18"/></svg>', img: 'assets/portraits/suin_nam.png',
     beats: [
+      { who:'me', t:'(끝방에서 끙끙 앓는 소리가 들린다)' },
       { who:'npc', t:'나는 만세를 부른 것이 아니오. 땅 때문에 왔소.' },
       { who:'me', t:'땅 때문이라 하시면, 대체 무슨 일이…' },
       { who:'npc', t:'몇 해 전, 관에서 땅을 신고하라 했소.',
@@ -1478,6 +1479,7 @@ const NPC_DATA = {
   siwon1_0: {
     name: '만세 시위 시민', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4a2 2 0 0 0 2 2h1l10 5V5L6 8H5a2 2 0 0 0-2 2z"/><path d="M17 9a4 4 0 0 1 0 6"/><path d="M8 16v3a2 2 0 0 0 4 0v-1"/></svg>', img: 'assets/portraits/siwon1.png',
     beats: [
+      { who:'me', t:'(가게 덧문이 쾅 닫힌다. 주인이 태극기를 품에 넣는다)' },
       { who:'npc', t:'나는 그저 저잣거리의 장사치일 뿐입니다.' },
       { who:'npc', t:'허나 이 나라가 없어지는데 가만있을 수 있겠습니까.' },
       { who:'npc', t:'가게 문을 걸어 잠그고 나왔습니다.',
@@ -1509,6 +1511,7 @@ const NPC_DATA = {
   siwon2_0: {
     name: '만세 시위 시민', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 10V6.8a1.5 1.5 0 013 0V10"/><path d="M11.5 10V6a1.5 1.5 0 013 0v4"/><path d="M14.5 10V6.8a1.5 1.5 0 013 0V12"/><path d="M17.5 10.5a1.5 1.5 0 013 0V15c0 3.5-2.5 6.5-6.5 6.5h-1c-3 0-4.5-1.2-6-3l-2.3-3a1.4 1.4 0 012-2l1.8 1.5"/></svg>', img: 'assets/portraits/siwon2.png',
     beats: [
+      { who:'me', t:'(흙투성이 짚신을 신은 사내가 숨을 헐떡인다)' },
       { who:'npc', t:'저는 먼 시골에서 여기까지 왔습니다.' },
       { who:'npc', t:'헌병이 무서워도 이 소식을 듣고는 가만있을 수 없었지요.',
         chart:{ type:'map', title:'제암리, 3·1 운동의 비극', pins:[ { x:40.4, y:97.4, n:'제암리', on:true } ] } },
@@ -2183,39 +2186,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=117"></script>
-<script src="assets/streak.js?v=117"></script>
+<script src="assets/badges.js?v=118"></script>
+<script src="assets/streak.js?v=118"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=117"></script>
-  <script src="assets/fx.js?v=117"></script>
-  <script src="assets/inkwipe.js?v=117"></script>
-  <script src="assets/moment.js?v=117"></script>
-  <script src="assets/manse.js?v=117"></script>
-  <script src="assets/dash.js?v=117"></script>
-<script src="assets/juice.js?v=117"></script>
-  <script src="assets/difficulty.js?v=117"></script>
-  <script src="assets/nextauto.js?v=117"></script>
-<script src="assets/heroes_data.js?v=117"></script>
-<script src="assets/heroes.js?v=117"></script>
-<script src="assets/icons.js?v=117"></script>
-<script src="assets/srs.js?v=117"></script>
-<script src="assets/newsflash.js?v=117"></script>
-<script src="assets/timeline.js?v=117"></script>
-<script src="assets/journey.js?v=117"></script>
-<script src="assets/season.js?v=117"></script>
-<script src="assets/items.js?v=117"></script>
-  <script src="assets/gold.js?v=117"></script>
-  <script src="assets/ask.js?v=117"></script>
-  <script src="assets/ads.js?v=117"></script>
-  <script src="assets/energy.js?v=117"></script>
-  <script src="assets/daily.js?v=117"></script>
-  <script src="assets/unlock.js?v=117"></script>
-  <script src="assets/guide.js?v=117"></script>
-  <script src="assets/minigames.js?v=117"></script>
-  <script src="assets/quests.js?v=117"></script>
-  <script src="assets/offline.js?v=117"></script>
-  <script src="assets/telemetry.js?v=117"></script>
-<script src="assets/autowalk.js?v=117"></script>
+<script src="assets/rank.js?v=118"></script>
+  <script src="assets/fx.js?v=118"></script>
+  <script src="assets/inkwipe.js?v=118"></script>
+  <script src="assets/moment.js?v=118"></script>
+  <script src="assets/manse.js?v=118"></script>
+  <script src="assets/dash.js?v=118"></script>
+<script src="assets/juice.js?v=118"></script>
+  <script src="assets/difficulty.js?v=118"></script>
+  <script src="assets/nextauto.js?v=118"></script>
+<script src="assets/heroes_data.js?v=118"></script>
+<script src="assets/heroes.js?v=118"></script>
+<script src="assets/icons.js?v=118"></script>
+<script src="assets/srs.js?v=118"></script>
+<script src="assets/newsflash.js?v=118"></script>
+<script src="assets/timeline.js?v=118"></script>
+<script src="assets/journey.js?v=118"></script>
+<script src="assets/season.js?v=118"></script>
+<script src="assets/items.js?v=118"></script>
+  <script src="assets/gold.js?v=118"></script>
+  <script src="assets/ask.js?v=118"></script>
+  <script src="assets/ads.js?v=118"></script>
+  <script src="assets/energy.js?v=118"></script>
+  <script src="assets/daily.js?v=118"></script>
+  <script src="assets/unlock.js?v=118"></script>
+  <script src="assets/guide.js?v=118"></script>
+  <script src="assets/minigames.js?v=118"></script>
+  <script src="assets/quests.js?v=118"></script>
+  <script src="assets/offline.js?v=118"></script>
+  <script src="assets/telemetry.js?v=118"></script>
+<script src="assets/autowalk.js?v=118"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

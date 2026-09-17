@@ -520,12 +520,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=117"></script>
-<script src="assets/zoomwarn.js?v=117"></script>
-<script src="assets/map/map_component.js?v=117"></script>
-<script src="assets/chart.js?v=117"></script>
-<script src="assets/companions.js?v=117"></script>
-<script src="assets/audio.js?v=117"></script>
+<script src="assets/errlog.js?v=118"></script>
+<script src="assets/zoomwarn.js?v=118"></script>
+<script src="assets/map/map_component.js?v=118"></script>
+<script src="assets/chart.js?v=118"></script>
+<script src="assets/companions.js?v=118"></script>
+<script src="assets/audio.js?v=118"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -537,7 +537,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=117';   // 존댓말 전환
+const ART_V = '?v=118';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1435,6 +1435,7 @@ const NPC_DATA = {
       { who:'npc', t:'정복한 자취와, 무덤 지킬 이들의 이름일세.' },
       { who:'npc', t:'태왕께선 영락이라는 연호를 쓰셨네. 중국과 대등하다는 뜻이지.',
         chart:{ type:'stat', title:'광개토대왕', items:[ { v:'영락', l:'고구려의 연호' }, { v:'400년', l:'신라에 쳐들어온 왜를 물리침' }, { v:'만주', l:'요동까지 넓힘' } ] } },
+      Party.say('chadol', 'shock', '영락? 뭐야?'),
       { who:'npc', t:'왜에 시달리던 신라에 군사 오만을 보내 구해 주기도 하셨지.' },
       { who:'npc', t:'신라 왕실에도 태왕을 기리는 그릇이 건너갔다네.' },
       { who:'me', t:'(속으로) 훗날 경주 호우총에서 태왕의 이름을 새긴 그 그릇이 나온다.' },
@@ -1467,6 +1468,7 @@ const NPC_DATA = {
       { who:'doc', docImg:'assets/scenes/heritage_muyongchong_suryeopdo.jpg',
         t:'(정기환 필 무용총 수렵도 모사도. 말을 타고 활을 쏘며 호랑이와 사슴을 사냥하는 고구려인의 힘찬 모습을 담았다.)\n출처: 국립중앙박물관(모사: 정기환), 공유마당, 공공누리 제1유형' },
       { who:'npc', t:'뒤로 가면 돌로 방을 짜고 흙을 덮었지. 굴식 돌방무덤일세.' },
+      Party.say('chadol', 'smile', '돌방! 동굴 같아!'),
       { who:'npc', t:'벽화도 그 방 안에 그린다네.',
         chart:{ type:'compare', title:'고구려 무덤의 두 모양', cols:[ { h:'돌무지무덤', items:[ '초기', '돌을 계단처럼 쌓음', '장군총' ] }, { h:'굴식 돌방무덤', hi:true, items:[ '후기', '돌방 + 흙 봉분', '벽화 — 사신도(강서대묘)' ] } ] } },
       { who:'npc', t:'수나라 백만 대군이 왔을 때, 을지문덕이 시를 보냈지.',
@@ -2295,38 +2297,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=117"></script>
-<script src="assets/streak.js?v=117"></script>
+<script src="assets/badges.js?v=118"></script>
+<script src="assets/streak.js?v=118"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=117"></script>
-  <script src="assets/fx.js?v=117"></script>
-  <script src="assets/deed.js?v=117"></script>
-  <script src="assets/inkwipe.js?v=117"></script>
-  <script src="assets/dash.js?v=117"></script>
-<script src="assets/juice.js?v=117"></script>
-  <script src="assets/difficulty.js?v=117"></script>
-  <script src="assets/nextauto.js?v=117"></script>
-<script src="assets/heroes_data.js?v=117"></script>
-<script src="assets/heroes.js?v=117"></script>
-<script src="assets/icons.js?v=117"></script>
-<script src="assets/srs.js?v=117"></script>
-<script src="assets/newsflash.js?v=117"></script>
-<script src="assets/timeline.js?v=117"></script>
-<script src="assets/journey.js?v=117"></script>
-<script src="assets/season.js?v=117"></script>
-<script src="assets/items.js?v=117"></script>
-  <script src="assets/gold.js?v=117"></script>
-  <script src="assets/ask.js?v=117"></script>
-  <script src="assets/ads.js?v=117"></script>
-  <script src="assets/energy.js?v=117"></script>
-  <script src="assets/daily.js?v=117"></script>
-  <script src="assets/unlock.js?v=117"></script>
-  <script src="assets/guide.js?v=117"></script>
-  <script src="assets/minigames.js?v=117"></script>
-  <script src="assets/quests.js?v=117"></script>
-  <script src="assets/offline.js?v=117"></script>
-  <script src="assets/telemetry.js?v=117"></script>
-<script src="assets/autowalk.js?v=117"></script>
+<script src="assets/rank.js?v=118"></script>
+  <script src="assets/fx.js?v=118"></script>
+  <script src="assets/deed.js?v=118"></script>
+  <script src="assets/inkwipe.js?v=118"></script>
+  <script src="assets/dash.js?v=118"></script>
+<script src="assets/juice.js?v=118"></script>
+  <script src="assets/difficulty.js?v=118"></script>
+  <script src="assets/nextauto.js?v=118"></script>
+<script src="assets/heroes_data.js?v=118"></script>
+<script src="assets/heroes.js?v=118"></script>
+<script src="assets/icons.js?v=118"></script>
+<script src="assets/srs.js?v=118"></script>
+<script src="assets/newsflash.js?v=118"></script>
+<script src="assets/timeline.js?v=118"></script>
+<script src="assets/journey.js?v=118"></script>
+<script src="assets/season.js?v=118"></script>
+<script src="assets/items.js?v=118"></script>
+  <script src="assets/gold.js?v=118"></script>
+  <script src="assets/ask.js?v=118"></script>
+  <script src="assets/ads.js?v=118"></script>
+  <script src="assets/energy.js?v=118"></script>
+  <script src="assets/daily.js?v=118"></script>
+  <script src="assets/unlock.js?v=118"></script>
+  <script src="assets/guide.js?v=118"></script>
+  <script src="assets/minigames.js?v=118"></script>
+  <script src="assets/quests.js?v=118"></script>
+  <script src="assets/offline.js?v=118"></script>
+  <script src="assets/telemetry.js?v=118"></script>
+<script src="assets/autowalk.js?v=118"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

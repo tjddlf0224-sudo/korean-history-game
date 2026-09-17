@@ -510,12 +510,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=117"></script>
-<script src="assets/zoomwarn.js?v=117"></script>
-<script src="assets/map/map_component.js?v=117"></script>
-<script src="assets/chart.js?v=117"></script>
-<script src="assets/companions.js?v=117"></script>
-<script src="assets/audio.js?v=117"></script>
+<script src="assets/errlog.js?v=118"></script>
+<script src="assets/zoomwarn.js?v=118"></script>
+<script src="assets/map/map_component.js?v=118"></script>
+<script src="assets/chart.js?v=118"></script>
+<script src="assets/companions.js?v=118"></script>
+<script src="assets/audio.js?v=118"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -527,7 +527,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=117';   // 존댓말 전환
+const ART_V = '?v=118';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1403,6 +1403,7 @@ const NPC_DATA = {
       Party.say('bau', 'oops', '(바늘에 손가락을 찔린다) 아얏! 칼보다 무섭소, 이 바늘.'),
       { who:'npc', t:'(웃으며) 직녀님 솜씨도 하루아침은 아니었을 거예요.' },
       { who:'npc', t:'오늘 비가 오면 만난 기쁨의 눈물이라 하고,' },
+      Party.say('chadol', 'smile', '(하늘을 본다) 비 오면 좋겠다! 만나게!'),
       { who:'npc', t:'내일 아침 비는 헤어지는 눈물이라 한답니다.',
         chart:{ type:'stat', title:'칠석우', items:[ { v:'오늘 비', l:'만난 기쁨의 눈물' }, { v:'이튿날 비', l:'이별의 눈물' } ] } },
       { who:'npc', t:'봄엔 삼짇날이라고, 진달래 화전을 부치는 날도 있었죠.',
@@ -1442,6 +1443,7 @@ const NPC_DATA = {
       { who:'npc', t:'(웃음) 그리 부릅니다. 대추가 많이 열리라고요.',
         chart:{ type:'stat', title:'대추나무 시집보내기', items:[ { v:'가지 사이 돌', l:'대추 풍년을 기원' } ] } },
       { who:'npc', t:'봄엔 삼짇날도 있었죠. 진달래로 화전을 부칩니다.' },
+      Party.say('chadol', 'smile', '화전? 꽃을 먹어요?'),
       { who:'npc', t:'한식은… 저 산소 다녀오시는 어르신께 여쭤보세요.' },
       { who:'npc', t:'단오와 칠석은 흔히들 헷갈리시더군요.',
         chart:{ type:'vs', title:'단오와 칠석', left:{ n:'단오', s:'음력 5월 5일 · 창포물·그네' }, right:{ n:'칠석', s:'음력 7월 7일 · 견우직녀' } } },
@@ -2024,38 +2026,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=117"></script>
-<script src="assets/streak.js?v=117"></script>
+<script src="assets/badges.js?v=118"></script>
+<script src="assets/streak.js?v=118"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=117"></script>
-  <script src="assets/fx.js?v=117"></script>
-  <script src="assets/deed.js?v=117"></script>
-  <script src="assets/inkwipe.js?v=117"></script>
-  <script src="assets/dash.js?v=117"></script>
-<script src="assets/juice.js?v=117"></script>
-  <script src="assets/difficulty.js?v=117"></script>
-  <script src="assets/nextauto.js?v=117"></script>
-<script src="assets/heroes_data.js?v=117"></script>
-<script src="assets/heroes.js?v=117"></script>
-<script src="assets/icons.js?v=117"></script>
-<script src="assets/srs.js?v=117"></script>
-<script src="assets/newsflash.js?v=117"></script>
-<script src="assets/timeline.js?v=117"></script>
-<script src="assets/journey.js?v=117"></script>
-<script src="assets/season.js?v=117"></script>
-<script src="assets/items.js?v=117"></script>
-  <script src="assets/gold.js?v=117"></script>
-  <script src="assets/ask.js?v=117"></script>
-  <script src="assets/ads.js?v=117"></script>
-  <script src="assets/energy.js?v=117"></script>
-  <script src="assets/daily.js?v=117"></script>
-  <script src="assets/unlock.js?v=117"></script>
-  <script src="assets/guide.js?v=117"></script>
-  <script src="assets/minigames.js?v=117"></script>
-  <script src="assets/quests.js?v=117"></script>
-  <script src="assets/offline.js?v=117"></script>
-  <script src="assets/telemetry.js?v=117"></script>
-<script src="assets/autowalk.js?v=117"></script>
+<script src="assets/rank.js?v=118"></script>
+  <script src="assets/fx.js?v=118"></script>
+  <script src="assets/deed.js?v=118"></script>
+  <script src="assets/inkwipe.js?v=118"></script>
+  <script src="assets/dash.js?v=118"></script>
+<script src="assets/juice.js?v=118"></script>
+  <script src="assets/difficulty.js?v=118"></script>
+  <script src="assets/nextauto.js?v=118"></script>
+<script src="assets/heroes_data.js?v=118"></script>
+<script src="assets/heroes.js?v=118"></script>
+<script src="assets/icons.js?v=118"></script>
+<script src="assets/srs.js?v=118"></script>
+<script src="assets/newsflash.js?v=118"></script>
+<script src="assets/timeline.js?v=118"></script>
+<script src="assets/journey.js?v=118"></script>
+<script src="assets/season.js?v=118"></script>
+<script src="assets/items.js?v=118"></script>
+  <script src="assets/gold.js?v=118"></script>
+  <script src="assets/ask.js?v=118"></script>
+  <script src="assets/ads.js?v=118"></script>
+  <script src="assets/energy.js?v=118"></script>
+  <script src="assets/daily.js?v=118"></script>
+  <script src="assets/unlock.js?v=118"></script>
+  <script src="assets/guide.js?v=118"></script>
+  <script src="assets/minigames.js?v=118"></script>
+  <script src="assets/quests.js?v=118"></script>
+  <script src="assets/offline.js?v=118"></script>
+  <script src="assets/telemetry.js?v=118"></script>
+<script src="assets/autowalk.js?v=118"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

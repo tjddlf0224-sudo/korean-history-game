@@ -510,12 +510,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=117"></script>
-<script src="assets/zoomwarn.js?v=117"></script>
-<script src="assets/map/map_component.js?v=117"></script>
-<script src="assets/chart.js?v=117"></script>
-<script src="assets/companions.js?v=117"></script>
-<script src="assets/audio.js?v=117"></script>
+<script src="assets/errlog.js?v=118"></script>
+<script src="assets/zoomwarn.js?v=118"></script>
+<script src="assets/map/map_component.js?v=118"></script>
+<script src="assets/chart.js?v=118"></script>
+<script src="assets/companions.js?v=118"></script>
+<script src="assets/audio.js?v=118"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -527,7 +527,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=117';   // 존댓말 전환
+const ART_V = '?v=118';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1343,6 +1343,7 @@ const NPC_DATA = {
       { who:'me', t:'(속으로) 1990년엔 소련, 1992년엔 중국과 수교한다.' },
       { who:'npc', t:'경제도 날개를 달았지.' },
       { who:'npc', t:'기름값·달러 가치·금리가 모두 낮았던 3저 호황이었네(1986~88).' },
+      Party.say('chadol', 'smile', '(깃발을 흔든다) 세계가 다 왔대요!'),
       { who:'npc', t:'그전에도 통일로 가는 길은 조금씩 열리고 있었네.' },
       { who:'npc', t:'이렇게 하나씩 쌓인 거지.',
         chart:{ type:'grid', title:'통일로 가는 길, 하나씩', head:[ '사건', '연도', '정부' ], rows:[ [ '이산가족 최초 상봉', '1985', '전두환' ], [ '7·7 선언', '1988', '노태우' ], [ '개성공단 조성 합의', '2000', '김대중' ] ] } },
@@ -1357,6 +1358,7 @@ const NPC_DATA = {
       { who:'npc', t:'이 올림픽 자체가 1981년에 정해졌는데,',
         chart:{ type:'stat', title:'서울 올림픽 유치', items:[ { v:'1981', l:'개최 확정' }, { v:'1988', l:'실제 개최' } ] } },
       { who:'npc', t:'그 무렵 광주에서 있었던 일을 세계는 잘 몰랐네.' },
+      Party.say('bau', 'resolve', '세계가 몰랐다니…'),
       { who:'npc', t:'전두환 정부는 국민의 관심을 다른 데로 돌리려 애썼지.' },
       { who:'npc', t:'1982년 프로야구가 6개 구단으로 출범한 것도 그 무렵이야.',
         chart:{ type:'stat', title:'3S 정책', items:[ { v:'1982', l:'프로야구 6개 구단 출범' } ] } },
@@ -1424,6 +1426,7 @@ const NPC_DATA = {
       { who:'npc', t:'2000년 6월, 평양에서 처음으로 남북 정상이 마주 앉았네.' },
       { who:'npc', t:'6·15 남북 공동 선언이지.',
         chart:{ type:'stat', title:'6·15 남북 공동 선언, 2000', items:[ { v:'2000.6', l:'첫 남북 정상 회담' } ] } },
+      Party.say('bau', 'smile', '남과 북의 우두머리가 마주 앉다니!'),
       { who:'npc', t:'선언엔 남측의 연합제안과 북측의 낮은 단계 연방제안이' },
       { who:'npc', t:'서로 닮은 점이 있다고 적었지.' },
       Party.say('chadol', 'shock', '소 떼가 판문점을 넘어요? 대박!'),
@@ -2002,38 +2005,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=117"></script>
-<script src="assets/streak.js?v=117"></script>
+<script src="assets/badges.js?v=118"></script>
+<script src="assets/streak.js?v=118"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=117"></script>
-  <script src="assets/fx.js?v=117"></script>
-  <script src="assets/deed.js?v=117"></script>
-  <script src="assets/inkwipe.js?v=117"></script>
-  <script src="assets/dash.js?v=117"></script>
-<script src="assets/juice.js?v=117"></script>
-  <script src="assets/difficulty.js?v=117"></script>
-  <script src="assets/nextauto.js?v=117"></script>
-<script src="assets/heroes_data.js?v=117"></script>
-<script src="assets/heroes.js?v=117"></script>
-<script src="assets/icons.js?v=117"></script>
-<script src="assets/srs.js?v=117"></script>
-<script src="assets/newsflash.js?v=117"></script>
-<script src="assets/timeline.js?v=117"></script>
-<script src="assets/journey.js?v=117"></script>
-<script src="assets/season.js?v=117"></script>
-<script src="assets/items.js?v=117"></script>
-  <script src="assets/gold.js?v=117"></script>
-  <script src="assets/ask.js?v=117"></script>
-  <script src="assets/ads.js?v=117"></script>
-  <script src="assets/energy.js?v=117"></script>
-  <script src="assets/daily.js?v=117"></script>
-  <script src="assets/unlock.js?v=117"></script>
-  <script src="assets/guide.js?v=117"></script>
-  <script src="assets/minigames.js?v=117"></script>
-  <script src="assets/quests.js?v=117"></script>
-  <script src="assets/offline.js?v=117"></script>
-  <script src="assets/telemetry.js?v=117"></script>
-<script src="assets/autowalk.js?v=117"></script>
+<script src="assets/rank.js?v=118"></script>
+  <script src="assets/fx.js?v=118"></script>
+  <script src="assets/deed.js?v=118"></script>
+  <script src="assets/inkwipe.js?v=118"></script>
+  <script src="assets/dash.js?v=118"></script>
+<script src="assets/juice.js?v=118"></script>
+  <script src="assets/difficulty.js?v=118"></script>
+  <script src="assets/nextauto.js?v=118"></script>
+<script src="assets/heroes_data.js?v=118"></script>
+<script src="assets/heroes.js?v=118"></script>
+<script src="assets/icons.js?v=118"></script>
+<script src="assets/srs.js?v=118"></script>
+<script src="assets/newsflash.js?v=118"></script>
+<script src="assets/timeline.js?v=118"></script>
+<script src="assets/journey.js?v=118"></script>
+<script src="assets/season.js?v=118"></script>
+<script src="assets/items.js?v=118"></script>
+  <script src="assets/gold.js?v=118"></script>
+  <script src="assets/ask.js?v=118"></script>
+  <script src="assets/ads.js?v=118"></script>
+  <script src="assets/energy.js?v=118"></script>
+  <script src="assets/daily.js?v=118"></script>
+  <script src="assets/unlock.js?v=118"></script>
+  <script src="assets/guide.js?v=118"></script>
+  <script src="assets/minigames.js?v=118"></script>
+  <script src="assets/quests.js?v=118"></script>
+  <script src="assets/offline.js?v=118"></script>
+  <script src="assets/telemetry.js?v=118"></script>
+<script src="assets/autowalk.js?v=118"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
