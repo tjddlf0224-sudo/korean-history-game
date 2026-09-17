@@ -519,11 +519,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=108"></script>
-<script src="assets/zoomwarn.js?v=108"></script>
-<script src="assets/map/map_component.js?v=108"></script>
-<script src="assets/chart.js?v=108"></script>
-<script src="assets/audio.js?v=108"></script>
+<script src="assets/errlog.js?v=109"></script>
+<script src="assets/zoomwarn.js?v=109"></script>
+<script src="assets/map/map_component.js?v=109"></script>
+<script src="assets/chart.js?v=109"></script>
+<script src="assets/audio.js?v=109"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -535,7 +535,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=108';   // 존댓말 전환
+const ART_V = '?v=109';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -706,6 +706,8 @@ const ZONES = {
       { id:'jeongyagyong', name:'정약용', x:330, y:390, img:'assets/portraits/jeongyagyong.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
       { id:'bakjega', name:'박제가', x:700, y:330, img:'assets/portraits/bakjega.png', look:{ role:'scholar', body:'#4a5a68', accent:'#e0b94a' } },
       { id:'hongdaeyong', name:'홍대용', x:1060, y:345, img:'assets/portraits/hongdaeyong.png', look:{ role:'scholar', body:'#4a4a58', accent:'#c9a24a' } },
+      { id:'gwangjak', name:'광작 농민', x:1150, y:480, img:'assets/portraits/gwangjak.png', look:{ role:'commoner', body:'#e8e2d0', accent:'#c9a24a' } },
+      { id:'bobusang', name:'보부상', x:1200, y:300, img:'assets/portraits/bobusang.png', look:{ role:'commoner', body:'#e8e2d0', accent:'#8a7a5a' } },
       { id:'gimhongdo', name:'김홍도', x:560, y:480, img:'assets/portraits/gimhongdo.png', look:{ role:'scholar', body:'#6b5636', accent:'#c9a24a' } },
       { id:'jeongjo', name:'정조', x:900, y:500, img:'assets/portraits/jeongjo.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
     ],
@@ -1016,6 +1018,8 @@ function updateHudGoal(){
       ['bakjega', '박제가와 대화하기'],
       ['hongdaeyong', '홍대용과 대화하기'],
       ['gimhongdo', '김홍도와 대화하기'],
+      ['gwangjak', '광작 농민과 대화하기'],
+      ['bobusang', '보부상과 대화하기'],
       ['jeongjo', '정조와 대화하기']
     ];
     /* 자동 걷기도 같은 차례를 따라야 한다. autowalk는 원래 ZONES의
@@ -1375,6 +1379,9 @@ const NPC_DATA = {
       { q:'최제우가 동학을 창시하며 내세운, 한울님을 마음에 모신다는 뜻의 핵심 교리는?',
         opts:['시천주','인내천'], answer:0, src:[44],
         feedback:['인내천은 훗날 2대 교주 최시형이 정리한 개념이에요.','정답! 시천주입니다.'] },
+      { q:'정약용이 중앙 정치 제도의 개혁 방안을 담아 지은 책은?',
+        opts:['경세유표','흠흠신서'], answer:0, src:[28, 30],
+        feedback:['흠흠신서는 형벌(재판)에 관한 책이에요.','정답! 경세유표입니다. 지방관의 도리는 목민심서에 담았어요.'] },
     ]
   },
   bakjega_0: {
@@ -1429,6 +1436,8 @@ const NPC_DATA = {
     name: '홍대용', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3.5 8.5h17M3.5 15.5h17"/></svg>', img: 'assets/portraits/hongdaeyong.png',
     beats: [
       { who:'npc', t:'(둥근 구슬을 굴리며) 나도 연행길에 올랐던 사람이오.' },
+      { who:'npc', t:'일찍이 이광정이 들여온 곤여만국전도를 보고 세상이 얼마나 넓은지 알았지.',
+        chart:{ type:'relic', title:'서양식 세계지도', items:[ { img:'gonyeo', n:'곤여만국전도', s:'마테오 리치 · 1603년 조선에 들어옴' } ] } },
       { who:'npc', t:'「의산문답」에 내 생각을 담았소.' },
       { who:'me', t:'무슨 내용입니까?' },
       { who:'npc', t:'땅은 둥글고 하루에 한 번 스스로 돈다 하였소.',
@@ -1452,6 +1461,9 @@ const NPC_DATA = {
       { q:'청에 다녀온 기록인 「열하일기」를 쓰고 「양반전」으로 양반의 위선을 풍자한 실학자는?',
         opts:['박지원','김정희'], answer:0, src:[18, 25, 30, 38, 43, 62, 70],
         feedback:['김정희는 금석문을 연구하고 「세한도」를 그린 학자예요.','정답! 박지원입니다.'] },
+      { q:'마테오 리치가 만들어 17세기 초 조선에 전해져 세계관을 넓힌 지도는?',
+        opts:['곤여만국전도','대동여지도'], answer:0, src:[28],
+        feedback:['대동여지도는 김정호가 만든 우리나라 지도예요.','정답! 곤여만국전도입니다.'] },
     ]
   },
   gimhongdo_0: {
@@ -1520,7 +1532,63 @@ const NPC_DATA = {
       { q:'흰 백자 표면에 코발트 안료로 그림을 그려 넣어, 조선 후기 상류층 사이에서 널리 쓰인 자기는?',
         opts:['청화백자','분청사기'], answer:0, src:[6,14,27,53],
         feedback:['분청사기는 조선 전기에 유행하다 백자에 밀려 사라진 자기예요.','정답! 청화백자입니다. 조선 후기로 갈수록 널리 퍼졌어요.'] },
+      { q:'정선이 금강산 전체를 한 화폭에 담아 그린 진경산수화는?',
+        opts:['금강전도','몽유도원도'], answer:0, src:[16, 47, 54, 73],
+        feedback:['몽유도원도는 조선 전기 안견의 작품이에요.','정답! 금강전도입니다.'] },
     ]
+  },
+  gwangjak_0: {
+    name: '광작 농민', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V9"/><path d="M12 9c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M12 13c3 0 5-2 5-5-3 0-5 2-5 5z"/><path d="M12 17c-3 0-5-2-5-5 3 0 5 2 5 5z"/></svg>', img: 'assets/portraits/gwangjak.png',
+    beats: [
+      { who:'npc', t:'(볏단을 내려놓는다) 올해도 풍년이오! 모를 따로 길러 옮겨 심으니 김매는 품이 확 줄었지.',
+        chart:{ type:'steps', title:'모내기법이 바꾼 것', steps:[ { t:'모내기법(이앙법)이 퍼진다' }, { t:'김매기 일손이 준다' }, { t:'한 집이 넓은 땅을 짓는다', s:'광작' }, { t:'땅을 잃은 이는 품을 판다', s:'임노동자' } ] } },
+      { who:'me', t:'혼자서 이 넓은 논을 다 짓습니까?' },
+      { who:'npc', t:'한 집이 넓은 땅을 짓는 걸 광작이라 하오. 일손은 품삯을 주고 사지.' },
+      { who:'npc', t:'땅을 잃은 이들은 남의 논에서 품을 팔아 먹고사오. 임노동자라 하지.' },
+      { who:'me', t:'땅 주인에게는 얼마를 냅니까?' },
+      { who:'npc', t:'예전엔 해마다 거둔 것의 절반을 나눴소. 요즘은 미리 정한 만큼만 내는 곳이 늘었지.',
+        chart:{ type:'compare', title:'소작료를 내는 방식', cols:[ { h:'타조법', items:[ '해마다 수확의 절반쯤', '많이 거둬도 절반을 냄' ] }, { h:'도조법', hi:true, items:[ '미리 정한 액수만', '더 거두면 내 몫이 늘어남' ] } ] } },
+      { who:'me', t:'정해진 만큼만 내면, 애쓴 만큼 남겠군요.' },
+      { who:'npc', t:'돈 모은 이들은 곡식을 바치고 벼슬 이름을 사기도 하오. 족보를 사거나 고치는 이도 있고.',
+        chart:{ type:'grid', title:'흔들리는 신분', head:[ '방법', '내용' ], rows:[ [ '납속책', '곡식을 바치고 신분을 높이거나 벼슬 이름을 받음' ], [ '공명첩', '이름을 비워 둔 벼슬 임명장' ], [ '족보 위조·매입', '양반 행세를 하려고' ] ], hi:0 } },
+      { who:'me', t:'(속으로) 양반이 부쩍 늘어나는 까닭이 여기 있구나.' },
+    ],
+    quizSeq: [
+      { q:'조선 후기 모내기법이 퍼지면서, 땅을 잃은 농민이 품삯을 받고 남의 농사를 짓게 된 것을 무엇이라 하나?',
+        opts:['임노동자의 등장','작인의 등장'], answer:0, src:[6],
+        feedback:['작인은 남의 땅을 빌려 짓는 소작인을 두루 이르는 말이에요.','정답! 임노동자입니다. 광작이 늘며 품을 파는 사람이 많아졌어요.'] },
+      { q:'조선 후기에 확산된, 미리 정한 액수만 지대로 내는 방식은?',
+        opts:['도조법','타조법'], answer:0, src:[21],
+        feedback:['타조법은 해마다 수확량의 일정 비율(보통 절반)을 내는 방식이에요.','정답! 도조법입니다. 농민에게 더 유리했어요.'] },
+      { q:'조선 후기 국가가 재정을 채우려고 곡식을 바치는 사람에게 신분을 높여 주거나 벼슬을 준 정책은?',
+        opts:['납속책','호패법'], answer:0, src:[7, 16, 19],
+        feedback:['호패법은 16세 이상 남자에게 호패를 차게 한 인구 파악 제도예요.','정답! 납속책입니다. 공명첩·족보 위조와 함께 신분제를 흔들었어요.'] },
+    ],
+  },
+  bobusang_0: {
+    name: '보부상', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9c3-3 15-3 18 0"/><path d="M8 9v12"/><path d="M16 9v12"/><path d="M8 14h8"/><circle cx="6" cy="8" r="1.2"/><circle cx="18" cy="8" r="1.2"/></svg>', img: 'assets/portraits/bobusang.png',
+    beats: [
+      { who:'npc', t:'(지게를 내린다) 장이 서는 날이면 어디든 가오. 보부상이오.' },
+      { who:'me', t:'(패랭이의 목화송이를 본다) 그 목화송이가 표시입니까?' },
+      { who:'npc', t:'그렇소. 한 동아리로 뭉쳐 서로 돕지. 장은 닷새마다 이 고을 저 고을 돌아가며 서오.' },
+      { who:'npc', t:'큰 장사꾼도 많소. 한강에선 경강상인이 배로 곡식과 소금을 나르고 배까지 손수 짓지.',
+        chart:{ type:'grid', title:'조선 후기의 사상(私商)', head:[ '상인', '어디', '무엇' ], rows:[ [ '경강상인', '한강', '배로 운송(선상) · 배를 지음' ], [ '송상', '개성', '송방 · 인삼' ], [ '만상', '의주', '청과 무역' ], [ '내상', '동래', '일본과 무역' ], [ '객주·여각', '포구', '보관·중개·숙박' ] ], hi:0 } },
+      { who:'me', t:'배로 물건을 나르는 장사를 선상이라 하던데요.' },
+      { who:'npc', t:'맞소. 요즘은 상인이 장인에게 돈과 재료를 먼저 대고 물건을 받아 가기도 하오.',
+        chart:{ type:'steps', title:'선대제 수공업', steps:[ { t:'상인이 돈·재료를 먼저 댄다' }, { t:'장인이 물건을 만든다' }, { t:'상인이 물건을 가져가 판다' } ] } },
+      { who:'npc', t:'선대제라 하오. 제 돈으로 만들어 제가 파는 독립 수공업자도 늘었고.' },
+    ],
+    quizSeq: [
+      { q:'조선 후기 상인이 수공업자에게 자금과 원료를 먼저 대 주고 제품을 넘겨받던 방식은?',
+        opts:['선대제','도고'], answer:0, src:[32, 77],
+        feedback:['도고는 물건을 독점적으로 사들여 값을 올려 파는 도매 상업이에요.','정답! 선대제입니다.'] },
+      { q:'한강을 무대로 곡물·소금 등을 배로 운송하고 선박을 건조하기도 한 조선 후기 상인은?',
+        opts:['경강상인','만상'], answer:0, src:[21, 32],
+        feedback:['만상은 의주를 근거로 청과 무역한 상인이에요.','정답! 경강상인입니다. 선상이라고도 해요.'] },
+      { q:'패랭이에 목화송이를 달고 전국의 장시를 돌며 물건을 팔던 상인은?',
+        opts:['보부상','공인'], answer:0, src:[11, 27],
+        feedback:['공인은 대동법 시행 뒤 관청에 물품을 조달한 어용 상인이에요.','정답! 보부상입니다.'] },
+    ],
   },
   jeongjo_0: {
     name: '정조', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/jeongjo.png',
@@ -1541,7 +1609,9 @@ const NPC_DATA = {
       { who:'me', t:'왜 독점을 풀었습니까?' },
       { who:'npc', t:'누구나 장사할 수 있어야 시장이 크지.' },
       { who:'me', t:'(고개를 끄덕인다) …그렇겠네요.' },
-      { who:'me', t:'어떤 법입니까?' },
+      { who:'npc', t:'법전도 다시 엮었네. 경국대전과 속대전을 하나로 모은 「대전통편」일세.',
+        chart:{ type:'relic', title:'정조가 펴낸 법전', items:[ { img:'daejeontongpyeon', n:'대전통편', s:'경국대전 + 속대전을 합침' } ] } },
+      { who:'me', t:'법 말고도 새로 마련하신 게 있습니까?' },
       { who:'npc', t:'인재를 키우는 법도 새로 마련했다.',
         chart:{ type:'stat', title:'초계문신제', items:[ { v:'규장각', l:'문신 재교육·국왕 감독' } ] } },
       { who:'npc', t:'젊은 문신을 규장각에서 다시 공부시키고, 내가 직접 감독했지.' },
@@ -1574,6 +1644,9 @@ const NPC_DATA = {
       { q:'이언적과 이황의 학통을 이은 붕당은?',
         opts:['남인','서인'], answer:0, src:[44],
         feedback:['서인은 이이와 성혼의 학통을 이었어요.','정답! 남인입니다.'] },
+      { q:'정조 때 경국대전과 속대전 등을 통합해 편찬한 법전은?',
+        opts:['대전통편','대전회통'], answer:0, src:[33, 64],
+        feedback:['대전회통은 흥선대원군 때 편찬한 법전이에요.','정답! 대전통편입니다.'] },
     ],
     endsChapter: true
   },
@@ -1587,6 +1660,8 @@ const Stage = {
     if (id === 'bakjega') return 'bakjega_0';
     if (id === 'hongdaeyong') return 'hongdaeyong_0';
     if (id === 'gimhongdo') return 'gimhongdo_0';
+    if (id === 'gwangjak') return 'gwangjak_0';
+    if (id === 'bobusang') return 'bobusang_0';
     if (id === 'jeongjo') return 'jeongjo_0';
     return null;
   },
@@ -2098,38 +2173,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=108"></script>
-<script src="assets/streak.js?v=108"></script>
+<script src="assets/badges.js?v=109"></script>
+<script src="assets/streak.js?v=109"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=108"></script>
-  <script src="assets/fx.js?v=108"></script>
-  <script src="assets/deed.js?v=108"></script>
-  <script src="assets/inkwipe.js?v=108"></script>
-  <script src="assets/dash.js?v=108"></script>
-<script src="assets/juice.js?v=108"></script>
-  <script src="assets/difficulty.js?v=108"></script>
-  <script src="assets/nextauto.js?v=108"></script>
-<script src="assets/heroes_data.js?v=108"></script>
-<script src="assets/heroes.js?v=108"></script>
-<script src="assets/icons.js?v=108"></script>
-<script src="assets/srs.js?v=108"></script>
-<script src="assets/newsflash.js?v=108"></script>
-<script src="assets/timeline.js?v=108"></script>
-<script src="assets/journey.js?v=108"></script>
-<script src="assets/season.js?v=108"></script>
-<script src="assets/items.js?v=108"></script>
-  <script src="assets/gold.js?v=108"></script>
-  <script src="assets/ask.js?v=108"></script>
-  <script src="assets/ads.js?v=108"></script>
-  <script src="assets/energy.js?v=108"></script>
-  <script src="assets/daily.js?v=108"></script>
-  <script src="assets/unlock.js?v=108"></script>
-  <script src="assets/guide.js?v=108"></script>
-  <script src="assets/minigames.js?v=108"></script>
-  <script src="assets/quests.js?v=108"></script>
-  <script src="assets/offline.js?v=108"></script>
-  <script src="assets/telemetry.js?v=108"></script>
-<script src="assets/autowalk.js?v=108"></script>
+<script src="assets/rank.js?v=109"></script>
+  <script src="assets/fx.js?v=109"></script>
+  <script src="assets/deed.js?v=109"></script>
+  <script src="assets/inkwipe.js?v=109"></script>
+  <script src="assets/dash.js?v=109"></script>
+<script src="assets/juice.js?v=109"></script>
+  <script src="assets/difficulty.js?v=109"></script>
+  <script src="assets/nextauto.js?v=109"></script>
+<script src="assets/heroes_data.js?v=109"></script>
+<script src="assets/heroes.js?v=109"></script>
+<script src="assets/icons.js?v=109"></script>
+<script src="assets/srs.js?v=109"></script>
+<script src="assets/newsflash.js?v=109"></script>
+<script src="assets/timeline.js?v=109"></script>
+<script src="assets/journey.js?v=109"></script>
+<script src="assets/season.js?v=109"></script>
+<script src="assets/items.js?v=109"></script>
+  <script src="assets/gold.js?v=109"></script>
+  <script src="assets/ask.js?v=109"></script>
+  <script src="assets/ads.js?v=109"></script>
+  <script src="assets/energy.js?v=109"></script>
+  <script src="assets/daily.js?v=109"></script>
+  <script src="assets/unlock.js?v=109"></script>
+  <script src="assets/guide.js?v=109"></script>
+  <script src="assets/minigames.js?v=109"></script>
+  <script src="assets/quests.js?v=109"></script>
+  <script src="assets/offline.js?v=109"></script>
+  <script src="assets/telemetry.js?v=109"></script>
+<script src="assets/autowalk.js?v=109"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

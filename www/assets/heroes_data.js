@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 209명 */
+   인물 211명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -118,6 +118,7 @@ window.HERO_DATA = (function(){
     hundo: { n:'훈도', p:'hundo.png', e:'조선 전기', r:'scholar', ch:{'ch4.html':['hundo_0']} },
     gyeokgun: { n:'격군', p:'gyeokgun.png', e:'조선 후기', r:'commoner', ch:{'imjin.html':['gyeokgun_0']} },
     gwakjaeu: { n:'곽재우', p:'gwakjaeu.png', e:'조선 후기', r:'general', ch:{'imjin2.html':['gwakjaeu_0']} },
+    gwangjak: { n:'광작 농민', p:'gwangjak.png', e:'조선 후기', r:'commoner', ch:{'hugi2.html':['gwangjak_0']} },
     gwanghae: { n:'광해군', p:'gwanghae.png', e:'조선 후기', r:'king', ch:{'hugi1.html':['gwanghae_0']} },
     gwonyul: { n:'권율', p:'gwonyul.png', e:'조선 후기', r:'general', ch:{'imjin2.html':['gwonyul_0']} },
     gimsimin: { n:'김시민', p:'gimsimin.png', e:'조선 후기', r:'general', ch:{'imjin.html':['gimsimin_0']} },
@@ -125,6 +126,7 @@ window.HERO_DATA = (function(){
     nongae: { n:'논개', p:'nongae.png', e:'조선 후기', r:'commoner', ch:{'imjin.html':['nongae_0']} },
     extra_gunsa: { n:'동래성 군졸', p:'extra_gunsa.png', e:'조선 후기', r:'general', ch:{'imjin.html':['dongnae_0']} },
     bakjega: { n:'박제가', p:'bakjega.png', e:'조선 후기', r:'scholar', ch:{'hugi2.html':['bakjega_0']} },
+    bobusang: { n:'보부상', p:'bobusang.png', e:'조선 후기', r:'commoner', ch:{'hugi2.html':['bobusang_0']} },
     bibyeonsa: { n:'비변사 당상', p:'bibyeonsa.png', e:'조선 후기', r:'scholar', ch:{'imjin2.html':['bibyeonsa_0']} },
     subyeong_sabu: { n:'사부', p:'subyeong_sabu.png', e:'조선 후기', r:'general', ch:{'imjin.html':['sabu_0']} },
     seokgong: { n:'삼전도비 석공', p:'seokgong.png', e:'조선 후기', r:'commoner', ch:{'hugi1.html':['seokgong_0']} },

@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=108"></script>
-<script src="assets/zoomwarn.js?v=108"></script>
-<script src="assets/map/map_component.js?v=108"></script>
-<script src="assets/chart.js?v=108"></script>
-<script src="assets/audio.js?v=108"></script>
+<script src="assets/errlog.js?v=109"></script>
+<script src="assets/zoomwarn.js?v=109"></script>
+<script src="assets/map/map_component.js?v=109"></script>
+<script src="assets/chart.js?v=109"></script>
+<script src="assets/audio.js?v=109"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=108';   // 존댓말 전환
+const ART_V = '?v=109';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1422,6 +1422,7 @@ const NPC_DATA = {
       { who:'npc', t:'세도 정치기엔 안동 김씨 같은 외척이 조정을 쥐었습니다.',
         chart:{ type:'stat', title:'세도정치', items:[ { v:'비변사', l:'외척 권력의 통로' } ] } },
       { who:'npc', t:'본래 국방을 논하던 비변사가 최고 권력 기구가 되었지요.' },
+      { who:'npc', t:'벼슬도 돈으로 사고팝니다. 산 자는 본전을 뽑으려 백성을 더 쥐어짜지요 — 매관매직입니다.' },
       { who:'npc', t:'요즘 팔도를 떠도는 시인이 하나 있습니다.' },
       { who:'me', t:'누구입니까?' },
       { who:'npc', t:'김병연, 삿갓을 쓰고 다녀 김삿갓이라 하지요.' },
@@ -1444,6 +1445,9 @@ const NPC_DATA = {
       { q:'조선 후기 부를 축적한 새로운 세력이 향안에 이름을 올리고 향임 자리를 요구하며 기존 양반과 향촌 주도권을 다툰 현상은?',
         opts:['향전','서원·향약을 통한 사림의 향촌 자치'], answer:0, src:[78],
         feedback:['서원·향약을 통한 향촌 자치는 조선 전기 사림 세력이 주도한 것으로, 시대와 주체가 달라요.','정답! 향전입니다. 신향(새로 부를 쌓은 세력)과 구향(기존 양반)이 향안 등재와 향임 자리를 두고 다툰, 조선 후기 신분제 동요를 보여주는 사례예요.'] },
+      { q:'세도 정치기에 돈을 받고 벼슬을 사고팔아 수령의 수탈이 심해진 폐단은?',
+        opts:['매관매직','음서'], answer:0, src:[8, 20, 28, 31, 43, 47, 71],
+        feedback:['음서는 공신·고관의 자손을 시험 없이 관리로 뽑던 제도예요.','정답! 매관매직입니다.'] },
     ],
     endsChapter: true
   },
@@ -1959,39 +1963,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=108"></script>
-<script src="assets/streak.js?v=108"></script>
+<script src="assets/badges.js?v=109"></script>
+<script src="assets/streak.js?v=109"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=108"></script>
-  <script src="assets/fx.js?v=108"></script>
-  <script src="assets/deed.js?v=108"></script>
-  <script src="assets/inkwipe.js?v=108"></script>
-  <script src="assets/dash.js?v=108"></script>
-<script src="assets/juice.js?v=108"></script>
-  <script src="assets/difficulty.js?v=108"></script>
-  <script src="assets/nextauto.js?v=108"></script>
-<script src="assets/heroes_data.js?v=108"></script>
-<script src="assets/heroes.js?v=108"></script>
-<script src="assets/icons.js?v=108"></script>
-<script src="assets/srs.js?v=108"></script>
-<script src="assets/newsflash.js?v=108"></script>
-<script src="assets/timeline.js?v=108"></script>
-<script src="assets/journey.js?v=108"></script>
-<script src="assets/season.js?v=108"></script>
-<script src="assets/boss.js?v=108"></script>
-<script src="assets/items.js?v=108"></script>
-  <script src="assets/gold.js?v=108"></script>
-  <script src="assets/ask.js?v=108"></script>
-  <script src="assets/ads.js?v=108"></script>
-  <script src="assets/energy.js?v=108"></script>
-  <script src="assets/daily.js?v=108"></script>
-  <script src="assets/unlock.js?v=108"></script>
-  <script src="assets/guide.js?v=108"></script>
-  <script src="assets/minigames.js?v=108"></script>
-  <script src="assets/quests.js?v=108"></script>
-  <script src="assets/offline.js?v=108"></script>
-  <script src="assets/telemetry.js?v=108"></script>
-<script src="assets/autowalk.js?v=108"></script>
+<script src="assets/rank.js?v=109"></script>
+  <script src="assets/fx.js?v=109"></script>
+  <script src="assets/deed.js?v=109"></script>
+  <script src="assets/inkwipe.js?v=109"></script>
+  <script src="assets/dash.js?v=109"></script>
+<script src="assets/juice.js?v=109"></script>
+  <script src="assets/difficulty.js?v=109"></script>
+  <script src="assets/nextauto.js?v=109"></script>
+<script src="assets/heroes_data.js?v=109"></script>
+<script src="assets/heroes.js?v=109"></script>
+<script src="assets/icons.js?v=109"></script>
+<script src="assets/srs.js?v=109"></script>
+<script src="assets/newsflash.js?v=109"></script>
+<script src="assets/timeline.js?v=109"></script>
+<script src="assets/journey.js?v=109"></script>
+<script src="assets/season.js?v=109"></script>
+<script src="assets/boss.js?v=109"></script>
+<script src="assets/items.js?v=109"></script>
+  <script src="assets/gold.js?v=109"></script>
+  <script src="assets/ask.js?v=109"></script>
+  <script src="assets/ads.js?v=109"></script>
+  <script src="assets/energy.js?v=109"></script>
+  <script src="assets/daily.js?v=109"></script>
+  <script src="assets/unlock.js?v=109"></script>
+  <script src="assets/guide.js?v=109"></script>
+  <script src="assets/minigames.js?v=109"></script>
+  <script src="assets/quests.js?v=109"></script>
+  <script src="assets/offline.js?v=109"></script>
+  <script src="assets/telemetry.js?v=109"></script>
+<script src="assets/autowalk.js?v=109"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

@@ -519,11 +519,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=108"></script>
-<script src="assets/zoomwarn.js?v=108"></script>
-<script src="assets/map/map_component.js?v=108"></script>
-<script src="assets/chart.js?v=108"></script>
-<script src="assets/audio.js?v=108"></script>
+<script src="assets/errlog.js?v=109"></script>
+<script src="assets/zoomwarn.js?v=109"></script>
+<script src="assets/map/map_component.js?v=109"></script>
+<script src="assets/chart.js?v=109"></script>
+<script src="assets/audio.js?v=109"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -535,7 +535,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=108';   // 존댓말 전환
+const ART_V = '?v=109';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1295,6 +1295,8 @@ const NPC_DATA = {
       { who:'me', t:'나리는 그중 무엇입니까?' },
       { who:'npc', t:'나는 포수요. 이 셋을 삼수병이라 하오.' },
       { who:'me', t:'이 군영은 언제 세워졌습니까?' },
+      { who:'npc', t:'지방에도 군대를 새로 짰소. 양반부터 노비까지 한데 묶은 속오군이오. 평소엔 농사짓다 일이 나면 모이지.',
+        chart:{ type:'compare', title:'왜란 뒤 새로 짠 군대', cols:[ { h:'훈련도감', items:[ '서울 · 중앙군', '급료 받는 직업 군인', '포수·살수·사수' ] }, { h:'속오군', hi:true, items:[ '지방군', '양반~노비까지(양천 혼성)', '평소 농사 · 유사시 동원' ] } ] } },
       { who:'npc', t:'1594년일세. 이 셋을 갖춘 뒤에야 왜군과 다시 겨룰 만해졌소.',
         chart:{ type:'stat', title:'훈련도감', items:[ { v:'1594', l:'설립 연도' } ] } },
       { who:'me', t:'(고개를 끄덕인다)' },
@@ -1303,6 +1305,9 @@ const NPC_DATA = {
       { q:'임진왜란 중 조총에 맞서기 위해 설치되어 포수·살수·사수의 삼수병으로 편성된 군영은?',
         opts:['훈련도감','장용영'], answer:0, src:[16, 17, 23, 24, 29, 32, 34, 35, 37, 38, 39, 41],
         feedback:['장용영은 정조가 설치한 국왕 친위 부대예요.','정답! 훈련도감입니다. 뒤에 5군영 체제의 중심이 돼요.'] },
+      { q:'임진왜란 중 편성된 조선의 지방군으로, 양반부터 노비까지 포함하고 평소에는 농사를 짓다 유사시 동원된 부대는?',
+        opts:['속오군','별기군'], answer:0, src:[16, 24, 29, 32, 35, 38, 43, 55, 58, 77],
+        feedback:['별기군은 개항 뒤 1881년에 만든 신식 군대예요.','정답! 속오군입니다.'] },
     ]
   },
 
@@ -1970,39 +1975,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=108"></script>
-<script src="assets/streak.js?v=108"></script>
+<script src="assets/badges.js?v=109"></script>
+<script src="assets/streak.js?v=109"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=108"></script>
-  <script src="assets/fx.js?v=108"></script>
-  <script src="assets/deed.js?v=108"></script>
-  <script src="assets/inkwipe.js?v=108"></script>
-  <script src="assets/dash.js?v=108"></script>
-<script src="assets/juice.js?v=108"></script>
-  <script src="assets/difficulty.js?v=108"></script>
-  <script src="assets/nextauto.js?v=108"></script>
-<script src="assets/heroes_data.js?v=108"></script>
-<script src="assets/heroes.js?v=108"></script>
-<script src="assets/icons.js?v=108"></script>
-<script src="assets/srs.js?v=108"></script>
-<script src="assets/newsflash.js?v=108"></script>
-<script src="assets/timeline.js?v=108"></script>
-<script src="assets/journey.js?v=108"></script>
-<script src="assets/season.js?v=108"></script>
-<script src="assets/boss.js?v=108"></script>
-<script src="assets/items.js?v=108"></script>
-  <script src="assets/gold.js?v=108"></script>
-  <script src="assets/ask.js?v=108"></script>
-  <script src="assets/ads.js?v=108"></script>
-  <script src="assets/energy.js?v=108"></script>
-  <script src="assets/daily.js?v=108"></script>
-  <script src="assets/unlock.js?v=108"></script>
-  <script src="assets/guide.js?v=108"></script>
-  <script src="assets/minigames.js?v=108"></script>
-  <script src="assets/quests.js?v=108"></script>
-  <script src="assets/offline.js?v=108"></script>
-  <script src="assets/telemetry.js?v=108"></script>
-<script src="assets/autowalk.js?v=108"></script>
+<script src="assets/rank.js?v=109"></script>
+  <script src="assets/fx.js?v=109"></script>
+  <script src="assets/deed.js?v=109"></script>
+  <script src="assets/inkwipe.js?v=109"></script>
+  <script src="assets/dash.js?v=109"></script>
+<script src="assets/juice.js?v=109"></script>
+  <script src="assets/difficulty.js?v=109"></script>
+  <script src="assets/nextauto.js?v=109"></script>
+<script src="assets/heroes_data.js?v=109"></script>
+<script src="assets/heroes.js?v=109"></script>
+<script src="assets/icons.js?v=109"></script>
+<script src="assets/srs.js?v=109"></script>
+<script src="assets/newsflash.js?v=109"></script>
+<script src="assets/timeline.js?v=109"></script>
+<script src="assets/journey.js?v=109"></script>
+<script src="assets/season.js?v=109"></script>
+<script src="assets/boss.js?v=109"></script>
+<script src="assets/items.js?v=109"></script>
+  <script src="assets/gold.js?v=109"></script>
+  <script src="assets/ask.js?v=109"></script>
+  <script src="assets/ads.js?v=109"></script>
+  <script src="assets/energy.js?v=109"></script>
+  <script src="assets/daily.js?v=109"></script>
+  <script src="assets/unlock.js?v=109"></script>
+  <script src="assets/guide.js?v=109"></script>
+  <script src="assets/minigames.js?v=109"></script>
+  <script src="assets/quests.js?v=109"></script>
+  <script src="assets/offline.js?v=109"></script>
+  <script src="assets/telemetry.js?v=109"></script>
+<script src="assets/autowalk.js?v=109"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

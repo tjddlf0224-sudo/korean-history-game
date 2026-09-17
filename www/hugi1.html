@@ -520,11 +520,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=108"></script>
-<script src="assets/zoomwarn.js?v=108"></script>
-<script src="assets/map/map_component.js?v=108"></script>
-<script src="assets/chart.js?v=108"></script>
-<script src="assets/audio.js?v=108"></script>
+<script src="assets/errlog.js?v=109"></script>
+<script src="assets/zoomwarn.js?v=109"></script>
+<script src="assets/map/map_component.js?v=109"></script>
+<script src="assets/chart.js?v=109"></script>
+<script src="assets/audio.js?v=109"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -536,7 +536,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=108';   // 존댓말 전환
+const ART_V = '?v=109';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1359,6 +1359,8 @@ const NPC_DATA = {
         chart:{ type:'stat', title:'강홍립', items:[ { v:'도원수', l:'파병 사령관' } ] } },
       { who:'npc', t:'그 일로 명을 저버렸다는 말을 들었네.',
         chart:{ type:'timeline', title:'광해군, 왕좌에서 쫓겨나다', marks:[ { y:'1608', t:'즉위' }, { y:'1618', t:'중립 외교' }, { y:'1623', t:'인조반정', on:true } ] } },
+      { who:'npc', t:'어린 아우 영창대군을 죽게 하고 인목대비를 서궁에 가둔 일도 두고두고 허물이 되었네.',
+        chart:{ type:'steps', title:'인조반정의 명분', steps:[ { t:'영창대군 죽음 · 인목대비 유폐', s:'폐모살제' }, { t:'명을 저버렸다는 비판', s:'중립 외교' }, { t:'서인이 반정을 일으킨다', s:'1623 인조반정' } ] } },
       { who:'npc', t:'끝내 인조반정으로 쫓겨났지.' },
     ],
     quizSeq: [
@@ -1368,6 +1370,9 @@ const NPC_DATA = {
       { q:'광해군 때 허준이 완성한, 우리 의학을 집대성한 의서는?',
         opts:['동의보감','향약집성방'], answer:0, src:[14],
         feedback:['향약집성방은 세종 대에 편찬된 의서예요.','정답! 「동의보감」입니다.'] },
+      { q:'광해군 때 영창대군을 죽이고 인목대비를 유폐한 일로, 인조반정의 명분이 된 것은?',
+        opts:['폐모살제','기해예송'], answer:0, src:[40, 51],
+        feedback:['기해예송은 현종 때 자의대비의 상복 기간을 둘러싼 논쟁이에요.','정답! 폐모살제입니다. 중립 외교에 대한 비판과 함께 반정의 명분이 되었어요.'] },
     ]
   },
   hullyeon_0: {
@@ -1410,6 +1415,7 @@ const NPC_DATA = {
       { who:'me', t:'정묘호란 때는 이러지 않았지요?' },
       { who:'npc', t:'호란은 두 번이오. 헷갈리지 마시오.',
         chart:{ type:'compare', title:'두 번의 호란', cols:[ { h:'정묘호란·1627', items:[ '상대: 후금', '형제 관계' ] }, { h:'병자호란·1636', hi:true, items:[ '상대: 청', '군신 관계·삼전도' ] } ] } },
+      { who:'npc', t:'정묘년(1627)엔 후금이 먼저 쳐들어왔소. 정봉수가 용골산성에서, 이립이 의주에서 의병을 이끌고 버텼지.' },
       { who:'npc', t:'그 치욕 때문에,' },
       { who:'npc', t:'뒷날 효종께서 북벌을 준비하셨소.',
         chart:{ type:'stat', title:'북벌 준비', items:[ { v:'효종', l:'어영청·훈련도감 정비' } ] } },
@@ -1435,6 +1441,9 @@ const NPC_DATA = {
       { q:'임진왜란 때 원군을 보내준 명 신종을 기리며 충주 화양동에 세운, 대명의리론을 상징하는 사당은?',
         opts:['만동묘','종묘'], answer:0, src:[69],
         feedback:['종묘는 조선 역대 왕과 왕비의 신주를 모신 사당이에요.','정답! 만동묘입니다. 명에 대한 의리를 지킨다는 뜻을 담았어요.'] },
+      { q:'정묘호란 때 용골산성에서 의병을 이끌고 후금군에 맞선 인물은?',
+        opts:['정봉수','임경업'], answer:0, src:[53],
+        feedback:['임경업은 병자호란 전후 백마산성을 지키며 청에 맞선 장수예요.','정답! 정봉수입니다. 의주에서는 이립이 싸웠어요.'] },
     ]
   },
   daedong_0: {
@@ -1450,6 +1459,9 @@ const NPC_DATA = {
       { who:'me', t:'(쌀 됫박을 들어 본다) …이게 대동법입니까?' },
       { who:'npc', t:'그렇습니다. 땅 많은 양반이 더 내게 되니 반대가 컸지요.',
         chart:{ type:'stat', title:'대동법 반대', items:[ { v:'양반', l:'토지 많은 이 반대' } ] } },
+      { who:'npc', t:'효종 임금 때 김육 대감이 충청도와 전라도로 넓히자고 끝까지 밀어붙이셨지요.',
+        chart:{ type:'grid', title:'김육이 한 일', head:[ '무엇', '내용' ], rows:[ [ '대동법 확대', '충청도 · 전라도로' ], [ '시헌력', '청에서 들여온 새 역법을 쓰자' ], [ '동전', '상평통보를 널리 쓰자' ] ], hi:0 } },
+      { who:'me', t:'쌀로 내는 법이 그렇게 조금씩 퍼져 나갔군요.' },
       { who:'npc', t:'전국에 퍼지는 데 백 년이 걸렸지요.',
         chart:{ type:'bar', title:'대동법, 백 년의 확산', bars:[ { label:'1608 경기', v:1, text:'광해군' }, { label:'1623 강원', v:2, text:'인조' }, { label:'1651 충청', v:4, text:'효종' }, { label:'1658 전라', v:5, text:'효종' }, { label:'1708 전국', v:10, text:'숙종' } ], note:'<b>경기에서 시작해 전국까지 백 년</b>' } },
       { who:'me', t:'그럼 물건은 누가 댑니까?' },
@@ -1480,6 +1492,12 @@ const NPC_DATA = {
       { q:'조선후기에 청에서 들여와 사용하기 시작한 서양식 역법으로, 세종 때의 칠정산을 대신한 것은?',
         opts:['시헌력','수시력'], answer:0, src:[64],
         feedback:['수시력은 칠정산의 바탕이 된 원의 역법으로, 세종 때 이미 쓰이고 있었어요.','정답! 시헌력입니다. 청을 통해 들어온 서양식 역법이에요.'] },
+      { q:'효종 때 대동법을 충청도·전라도로 확대하자고 주장하고, 시헌력 도입과 상평통보 유통을 건의한 인물은?',
+        opts:['김육','이원익'], answer:0, src:[36, 46],
+        feedback:['이원익은 광해군 때 경기도에 대동법을 처음 시행하자고 건의한 인물이에요.','정답! 김육입니다.'] },
+      { q:'공납을 대신 바치고 백성에게 몇 배를 받아 내던 폐단은?',
+        opts:['방납','환곡'], answer:0, src:[10],
+        feedback:['환곡은 곡식을 빌려주고 이자를 받던 제도로, 조선 후기에 삼정의 하나로 문란해졌어요.','정답! 방납입니다. 대동법은 이 폐단을 없애려는 것이었어요.'] },
     ]
   },
   hyojong_0: {
@@ -1563,6 +1581,9 @@ const NPC_DATA = {
       { who:'me', t:'장희빈 이야기도 그때입니까?' },
       { who:'npc', t:'그렇네. 갑술년엔 다시 뒤집혀 인현왕후가 복위했지.',
         chart:{ type:'stat', title:'갑술환국', items:[ { v:'1694년', l:'인현왕후 복위' } ] } },
+      { who:'npc', t:'환국 때마다 한 당이 조정을 통째로 차지하고 다른 당을 몰아냈지. 일당 전제일세.',
+        chart:{ type:'faces', title:'환국에 휩쓸린 사람들', people:[ { img:'heojeok', n:'허적', s:'남인 · 경신환국에 몰락' }, { img:'yunhyu', n:'윤휴', s:'남인 · 경신환국에 사사' }, { img:'songsiyeol', n:'송시열', s:'서인(노론) · 기사환국에 사사' }, { img:'janghuibin', n:'희빈 장씨', s:'기사환국에 왕비 · 갑술환국에 강등' }, { img:'gimmanjung', n:'김만중', s:'서인 · 「사씨남정기」' } ] } },
+      { who:'me', t:'한쪽이 이기면 다른 쪽은 목숨까지 잃었군요.' },
       { who:'npc', t:'그 뒤로는 소론과 노론이 정국을 이끌었네.' },
       { who:'me', t:'붕당 다툼이 더 심해졌겠군요.' },
       { who:'npc', t:'그렇네. 대신 북쪽 국경은 다잡았지.' },
@@ -1597,6 +1618,9 @@ const NPC_DATA = {
       { q:'지행합일과 실천을 강조하며, 정제두를 중심으로 소론 계열 학자들이 연구한 학문은?',
         opts:['양명학(강화학파)','고증학'], answer:0, src:[19],
         feedback:['고증학은 청에서 유행한 실증적 학풍으로, 이와는 다른 갈래예요.','정답! 양명학입니다. 정제두를 중심으로 강화학파를 이루었어요.'] },
+      { q:'숙종 때 환국이 거듭되며 한 붕당이 정권을 독차지하고 상대 붕당을 몰아낸 경향을 무엇이라 하나?',
+        opts:['일당 전제화','탕평 정치'], answer:0, src:[18, 19, 23, 24, 25, 27, 28, 30, 32, 34],
+        feedback:['탕평 정치는 영조·정조가 붕당을 고루 등용하려 한 정치예요.','정답! 일당 전제화입니다.'] },
     ]
   },
   yeongjo_0: {
@@ -1617,6 +1641,8 @@ const NPC_DATA = {
       { who:'npc', t:'성균관 입구에 비석까지 세워 새겼네.',
         chart:{ type:'quote', title:'탕평비', text:'두루 사귀고 편을 가르지 않는 것이 <b>군자의 공정한 마음</b>이다.', from:'탕평비, 1742년 건립' } },
       { who:'me', t:'(비석의 글귀를 읽어 본다) …좋은 말이군요.' },
+      { who:'npc', t:'붕당의 근거지가 된 서원도 크게 줄였네. 법도 새로 모아 「속대전」을 펴냈지.',
+        chart:{ type:'relic', title:'영조가 펴낸 법전', items:[ { img:'sokdaejeon', n:'속대전', s:'경국대전 뒤의 법령을 모음' } ] } },
       { who:'npc', t:'군포도 손보았네.',
         chart:{ type:'stat', title:'균역법', items:[ { v:'2필→1필', l:'군포 감소' } ] } },
       { who:'me', t:'모자란 곳간은요?' },
@@ -1652,6 +1678,9 @@ const NPC_DATA = {
       { q:'태종 때 처음 설치되었다가 흐지부지된 뒤, 영조 때 다시 설치되어 백성이 억울한 일을 호소할 수 있게 한 것은?',
         opts:['신문고','격쟁'], answer:0, src:[31],
         feedback:['격쟁은 임금의 행차 때 꽹과리를 쳐서 억울함을 호소하던 방법이에요.','정답! 신문고입니다. 태종 때 처음 달았다가 흐지부지된 걸 영조가 다시 달았어요.'] },
+      { q:'영조가 붕당의 근거지를 없애려고 한 일과, 편찬한 법전을 옳게 짝지은 것은?',
+        opts:['서원 정리 – 속대전','서원 철폐 – 대전회통'], answer:0, src:[63],
+        feedback:['서원을 47곳만 남기고 철폐하고 대전회통을 편찬한 것은 흥선대원군 때예요.','정답! 영조는 서원을 크게 정리하고 「속대전」을 편찬했어요.'] },
     ],
     endsChapter: true
   },
@@ -2177,38 +2206,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=108"></script>
-<script src="assets/streak.js?v=108"></script>
+<script src="assets/badges.js?v=109"></script>
+<script src="assets/streak.js?v=109"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=108"></script>
-  <script src="assets/fx.js?v=108"></script>
-  <script src="assets/deed.js?v=108"></script>
-  <script src="assets/inkwipe.js?v=108"></script>
-  <script src="assets/dash.js?v=108"></script>
-<script src="assets/juice.js?v=108"></script>
-  <script src="assets/difficulty.js?v=108"></script>
-  <script src="assets/nextauto.js?v=108"></script>
-<script src="assets/heroes_data.js?v=108"></script>
-<script src="assets/heroes.js?v=108"></script>
-<script src="assets/icons.js?v=108"></script>
-<script src="assets/srs.js?v=108"></script>
-<script src="assets/newsflash.js?v=108"></script>
-<script src="assets/timeline.js?v=108"></script>
-<script src="assets/journey.js?v=108"></script>
-<script src="assets/season.js?v=108"></script>
-<script src="assets/items.js?v=108"></script>
-  <script src="assets/gold.js?v=108"></script>
-  <script src="assets/ask.js?v=108"></script>
-  <script src="assets/ads.js?v=108"></script>
-  <script src="assets/energy.js?v=108"></script>
-  <script src="assets/daily.js?v=108"></script>
-  <script src="assets/unlock.js?v=108"></script>
-  <script src="assets/guide.js?v=108"></script>
-  <script src="assets/minigames.js?v=108"></script>
-  <script src="assets/quests.js?v=108"></script>
-  <script src="assets/offline.js?v=108"></script>
-  <script src="assets/telemetry.js?v=108"></script>
-<script src="assets/autowalk.js?v=108"></script>
+<script src="assets/rank.js?v=109"></script>
+  <script src="assets/fx.js?v=109"></script>
+  <script src="assets/deed.js?v=109"></script>
+  <script src="assets/inkwipe.js?v=109"></script>
+  <script src="assets/dash.js?v=109"></script>
+<script src="assets/juice.js?v=109"></script>
+  <script src="assets/difficulty.js?v=109"></script>
+  <script src="assets/nextauto.js?v=109"></script>
+<script src="assets/heroes_data.js?v=109"></script>
+<script src="assets/heroes.js?v=109"></script>
+<script src="assets/icons.js?v=109"></script>
+<script src="assets/srs.js?v=109"></script>
+<script src="assets/newsflash.js?v=109"></script>
+<script src="assets/timeline.js?v=109"></script>
+<script src="assets/journey.js?v=109"></script>
+<script src="assets/season.js?v=109"></script>
+<script src="assets/items.js?v=109"></script>
+  <script src="assets/gold.js?v=109"></script>
+  <script src="assets/ask.js?v=109"></script>
+  <script src="assets/ads.js?v=109"></script>
+  <script src="assets/energy.js?v=109"></script>
+  <script src="assets/daily.js?v=109"></script>
+  <script src="assets/unlock.js?v=109"></script>
+  <script src="assets/guide.js?v=109"></script>
+  <script src="assets/minigames.js?v=109"></script>
+  <script src="assets/quests.js?v=109"></script>
+  <script src="assets/offline.js?v=109"></script>
+  <script src="assets/telemetry.js?v=109"></script>
+<script src="assets/autowalk.js?v=109"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
