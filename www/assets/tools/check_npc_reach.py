@@ -29,12 +29,14 @@ def zones_of(html):
     for zm in re.finditer(r"\n  (\w+):\s*\{([\s\S]*?)(?=\n  \w+:\s*\{|\Z)", m.group(1)):
         zid, b = zm.group(1), zm.group(2)
         bars = []
-        bm = re.search(r'barriers:\s*\[([\s\S]*?)\n    \]', b)
+        # 닫는 괄호 들여쓰기가 챕터마다 다르다(2칸·4칸). 4칸만 찾던 때는
+        # 60개 구역의 벽을 못 읽고 '모두 닿음'으로 통과시켰다(2026-09-17).
+        bm = re.search(r'barriers:\s*\[([\s\S]*?)\n\s*\]', b)
         if bm:
             bars = [tuple(map(int, r)) for r in re.findall(
                 r'x0:\s*(-?\d+),\s*y0:\s*(-?\d+),\s*x1:\s*(-?\d+),\s*y1:\s*(-?\d+)', bm.group(1))]
         npcs = []
-        nm = re.search(r'npcs:\s*\[([\s\S]*?)\n    \]', b)
+        nm = re.search(r'npcs:\s*\[([\s\S]*?)\n\s*\],', b)
         if nm:
             for e in re.finditer(r"\{\s*id:\s*'(\w+)'[^}]*?x:\s*(\d+),\s*y:\s*(\d+)", nm.group(1)):
                 npcs.append((e.group(1), int(e.group(2)), int(e.group(3))))

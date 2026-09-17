@@ -1177,3 +1177,35 @@ Auto도 고쳤다 — 길이 없거나 끝까지 갔는데 말이 안 닿으면 
     편전 5장(허적·윤휴·송시열·장희빈·김만중)→hugi1 환국, anyongbok·extra_nam→hugi2,
     samil→ilje1, suyang→ch3 즉위 전 장면. commoner2·josik2는 저해상도라 안 씀.
   - `_research/교안대조/`는 교안 파생 자료라 공개 저장소에 올리지 않음(untracked 유지).
+
+
+### ⚠️ (2026-09-17, 전산회계 오락실 세션에서 전달) SceneDelegate 브리지 중복 — 수정 필요
+전산회계 오락실을 **iOS 27 시뮬레이터**(이 맥에 27.0 설치됨, 26.5 삭제됨)에서 검증하다 발견. **Capacitor 8.5 공식 템플릿 그대로면 웹 앱이 두 번 로드된다.**
+- 원인: Info.plist `UISceneStoryboardFile = Main` 때문에 UIKit 이 `scene(_:willConnectTo:)` **전에** 이미 스토리보드로 창 + `CAPBridgeViewController` 를 만들어 `self.window` 에 넣는다. 템플릿 SceneDelegate 가 거기서 창을 **또** 만든다 → 브리지 2개.
+- 증거: `xcrun simctl spawn <id> log show --last 1m --predicate 'process == "App" AND eventMessage CONTAINS "loadRequestWithNavigationShared"'` 가 실행 1번에 **2줄**, WebContent 프로세스 2개.
+- 영향: 크래시는 없음. 대신 실행할 때마다 앱 시작 로직(DB 방문 기록, 통계, 광고 초기화 등)이 **두 번** 돈다.
+- 이 프로젝트 확인 결과: storyboard=Main 이고 SceneDelegate 가 창을 무조건 만듦(nil 가드 없음) → **해당됨.**
+- 수정(전산회계 `ios/App/App/SceneDelegate.swift` 에 적용·검증 완료):
+```swift
+guard let windowScene = scene as? UIWindowScene else { return }
+if window == nil {   // 스토리보드 설정이 없을 때만 직접 만든다
+    window = UIWindow(windowScene: windowScene)
+    window?.rootViewController = CAPBridgeViewController()
+    window?.makeKeyAndVisible()
+}
+SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
+```
+- 검증: 위 로그가 실행 1번에 **1줄**이면 정상. simctl 은 멈출 수 있으니 `perl -e 'alarm 30; exec @ARGV' xcrun simctl ...` 로 감쌀 것. 막 부팅한 iOS 27 시뮬레이터는 첫 실행이 **15초가량 흰 화면**(WebContent 기동 지연 — 앱 문제 아님). 테스트 설치본은 .app 복사본의 public/ 운영 백엔드 주소를 없는 주소로 바꾸고 Info.plist 에 `FIREBASE_ANALYTICS_COLLECTION_ENABLED=false` 넣은 뒤 `codesign --force --deep --sign -` 해서 운영 오염을 막을 것.
+- 참고: 가장자리 스와이프 뒤로가기는 시뮬레이터 합성 터치로는 인식이 안 됐다(설정값은 정상) — 실기기에서 확인.
+
+- 9-17 **교안 빈자리 채우기 1: 선사 1화** (v104)
+  - 신석기 아낙: 원시 신앙(애니미즘·토테미즘·샤머니즘·영혼 숭배) + 퀴즈.
+  - 고조선 제사장: 한 군현(낙랑·진번·임둔·현도, 낙랑 313 미천왕), 8조→60여 조 + 퀴즈.
+  - 부여 사람: 1책 12법(부여·고구려) + 퀴즈.
+  - 초기 국가 마을에 새 인물 둘 — 놀던 그림 사용. 삼한 천군(`samhan_cheongun`, 솟대 곁
+    860,640): 소도·계절제(5·10월)·저수지. 변한 철 상인(`extra_sangin`, 가마 곁 1150,560):
+    덩이쇠 수출(낙랑·왜)·세형 동검·다호리 붓. 챕터 끝(endsChapter)은 변한 상인으로 옮김.
+  - 유물 자리 2(sp_sehyeong·sp_dahori), items.js에 새 유물 16점 도감 항목.
+  - `scripts/rounds_for.py`: 낱말로 기출 회차 찾기(새 퀴즈 src용).
+  - **검사기 버그 수정**: check_npc_reach.py가 닫는 괄호가 2칸 들여쓰기인 배리어 블록
+    60곳을 못 읽어 '모두 닿음'으로 통과시키고 있었음 → 고친 뒤에도 218명 전원 도달 ✅.

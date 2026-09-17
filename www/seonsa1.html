@@ -535,11 +535,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=103"></script>
-<script src="assets/zoomwarn.js?v=103"></script>
-<script src="assets/map/map_component.js?v=103"></script>
-<script src="assets/chart.js?v=103"></script>
-<script src="assets/audio.js?v=103"></script>
+<script src="assets/errlog.js?v=104"></script>
+<script src="assets/zoomwarn.js?v=104"></script>
+<script src="assets/map/map_component.js?v=104"></script>
+<script src="assets/chart.js?v=104"></script>
+<script src="assets/audio.js?v=104"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -551,7 +551,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=103';   // 존댓말 전환
+const ART_V = '?v=104';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -757,12 +757,19 @@ const ZONES = {
     spots: [
       { id:'sp_misong', x:1290, y:330, item:'misongni',
         label:'바구니와 항아리' },
+      { id:'sp_sehyeong', x:1205, y:470, item:'sehyeongdonggeom',
+        label:'가마 옆 소쿠리' },
+      { id:'sp_dahori', x:240, y:585, item:'dahori_but',
+        label:'활 걸이 밑' },
     ],
     npcs: [
       { id:'buyeo', name:'부여 사람', x:400, y:350, img:'assets/portraits/buyeo.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
       { id:'gogurin', name:'고구려 사람', x:688, y:300, img:'assets/portraits/gogurin.png', look:{ role:'commoner', body:'#4f5d75', accent:'#8a6d3b' } },
       { id:'okjeo', name:'옥저 사람', x:970, y:350, img:'assets/portraits/okjeo.png', look:{ role:'commoner', body:'#5c6b4a', accent:'#8a7a5a' } },
       { id:'dongye', name:'동예 사람', x:688, y:560, img:'assets/portraits/dongye.png', look:{ role:'commoner', body:'#6b5a44', accent:'#c9a24a' } },
+      // 배경 아래쪽 솟대·큰 북이 소도, 오른쪽 가마가 쇠 녹이는 곳이다 — 그 곁에 세운다
+      { id:'samhan', name:'삼한 천군', x:860, y:640, img:'assets/portraits/samhan_cheongun.png', look:{ role:'scholar', body:'#e8e2d0', accent:'#5c8a4a' } },
+      { id:'byeonhan', name:'변한 철 상인', x:1150, y:560, img:'assets/portraits/extra_sangin.png', look:{ role:'commoner', body:'#7a6a50', accent:'#8a7a5a' } },
     ],
     exits: [
       { rect:{x0:385,y0:0,x1:450,y1:60}, to:'seonsa', spawn:{x:688,y:690}, label:'선사의 강가로' },
@@ -1066,7 +1073,9 @@ function updateHudGoal(){
       ['buyeo', '부여 사람과 대화하기'],
       ['gogurin', '고구려 사람과 대화하기'],
       ['okjeo', '옥저 사람과 대화하기'],
-      ['dongye', '동예 사람과 대화하기']
+      ['dongye', '동예 사람과 대화하기'],
+      ['samhan', '삼한 천군과 대화하기'],
+      ['byeonhan', '변한 철 상인과 대화하기']
     ];
     /* 자동 걷기도 같은 차례를 따라야 한다. autowalk는 원래 ZONES의
        npcs 배열 순서로 갔는데, 그 순서와 이 목록이 달라 목표는
@@ -1358,6 +1367,12 @@ const NPC_DATA = {
       { who:'npc', t:'갈아서 만든 돌이니까. 깨서 쓰던 시절은 지났네.' },
       { who:'npc', t:'(실을 자아 보이며) 옷도 이제 지어 입지.',
         chart:{ type:'steps', title:'옷을 짓는 차례', steps:[ { t:'가락바퀴로 실을 뽑는다' }, { t:'뼈바늘로 꿰맨다' }, { t:'옷이 된다', s:'길쌈의 시작' } ] } },
+      { who:'me', t:'(움집 기둥에 걸린 곰 발톱을 본다) 저건 무엇입니까?' },
+      { who:'npc', t:'우리 무리의 조상일세. 곰에게서 났다고 믿지.' },
+      { who:'me', t:'짐승을 조상으로 모십니까?' },
+      { who:'npc', t:'그뿐인가. 해에도 강에도 바위에도 넋이 깃들어 있다네.',
+        chart:{ type:'grid', title:'신석기 사람들의 믿음', head:[ '이름', '무엇을 믿나' ], rows:[ [ '애니미즘', '해·물·바위 같은 자연에도 영혼이 있다' ], [ '토테미즘', '곰·호랑이 같은 동식물을 조상으로 섬긴다' ], [ '샤머니즘', '무당이 사람과 신령을 잇는다' ], [ '영혼 숭배', '죽은 뒤에도 넋은 남는다' ] ], hi:0 } },
+      { who:'npc', t:'그래서 죽은 이도 해 뜨는 쪽으로 머리를 두어 묻지.' },
     ],
     quizSeq: [
       { q:'농경과 정착 생활이 시작되고, 움집에 살며 간석기와 빗살무늬 토기를 쓴 시대는?',
@@ -1369,6 +1384,9 @@ const NPC_DATA = {
       { q:'신석기 시대에 실을 뽑아 옷을 짓는 데 쓰인 도구로 옳은 것은?',
         opts:['가락바퀴와 뼈바늘','반달 돌칼'], answer:0, src:[78],
         feedback:['반달 돌칼은 청동기 시대에 벼 이삭을 자르던 도구예요. 신석기 시대의 옷 짓는 도구가 아니에요.','정답! 가락바퀴로 실을 뽑고 뼈바늘로 옷을 지어 입었어요. 신석기 시대에 시작된 원시적인 길쌈(방직)이지요.'] },
+      { q:'신석기 시대 사람들이 해·물·바위 같은 자연물에도 영혼이 깃들어 있다고 믿은 신앙은?',
+        opts:['애니미즘','풍수지리설'], answer:0, src:[12, 17, 20, 21, 48, 64, 69, 74, 78],
+        feedback:['풍수지리설은 땅의 기운이 사람의 길흉을 좌우한다는 생각으로, 신라 말에 퍼졌어요.','정답! 애니미즘입니다. 곰·호랑이를 조상으로 섬긴 토테미즘, 무당을 믿은 샤머니즘도 이때 나타났어요.'] },
     ]
   },
   cheongdonggi_0: {
@@ -1451,6 +1469,12 @@ const NPC_DATA = {
         chart:{ type:'vs', title:'고조선의 마지막 싸움', left:{ n:'한 무제', s:'대군을 보냈다' }, right:{ n:'우거왕', s:'1년을 버텼다' }, mid:'VS' } },
       { who:'npc', t:'왕검성이 무너지고… 나라도 함께 무너졌지.',
         chart:{ type:'timeline', title:'고조선 2000년', marks:[ { y:'BC 2333', t:'고조선' }, { y:'BC 4세기', t:'왕 칭함' }, { y:'BC 3세기', t:'진개에 밀림' }, { y:'BC 194', t:'위만' }, { y:'BC 108', t:'멸망', on:true } ] } },
+      { who:'me', t:'…그 땅은 어찌 되었습니까?' },
+      { who:'npc', t:'한나라가 고을을 넷 두었네. 낙랑·진번·임둔·현도 — 한 군현이라 하지.',
+        chart:{ type:'grid', title:'고조선이 무너진 뒤 — 한 군현', head:[ '군현', '그 뒤' ], rows:[ [ '낙랑군', '가장 오래 남았다 — 313년 고구려 미천왕이 몰아냄' ], [ '진번군', '곧 없어짐' ], [ '임둔군', '곧 없어짐' ], [ '현도군', '고구려에 밀려 옮겨 감' ] ], hi:0 } },
+      { who:'npc', t:'법도 달라졌지. 여덟 조목이 예순 남짓으로 불었네.',
+        chart:{ type:'stat', title:'한 군현이 선 뒤의 법', items:[ { v:'8조', l:'고조선의 법' }, { v:'60여 조', l:'군현이 선 뒤' }, { v:'각박', l:'풍속이 거칠어졌다' } ] } },
+      { who:'me', t:'법이 늘었다는 건… 다툼이 늘었다는 말씀이군요.' },
       { who:'me', t:'남쪽에는 아무도 없었습니까?' },
       { who:'npc', t:'있었지. 마한·진한·변한 — 삼한이라 하네.',
         chart:{ type:'map', title:'삼한의 자리', pins:[ { x:38.6, y:121.6, n:'마한', on:true }, { x:65.7, y:115.3, n:'진한', on:true }, { x:61.4, y:127.9, n:'변한', on:true } ], legend:[ { k:'마한', v:'가장 크다 — 뒷날 백제' }, { k:'진한', v:'뒷날 신라' }, { k:'변한', v:'뒷날 가야' } ] } },
@@ -1482,6 +1506,9 @@ const NPC_DATA = {
       { q:'신지·읍차 등 군장이 정치를 맡고, 천군이 소도라는 신성 지역에서 따로 제사를 주관하던 마한·진한·변한의 사회는?',
         opts:['삼한','옥저'], answer:0, src:[69, 49, 39],
         feedback:['옥저는 왕이 없이 읍군·삼로가 다스리던 동해안의 나라예요.','정답! 삼한(마한·진한·변한)입니다. 군장과 제사장(천군)의 권한이 나뉜 제정분리 사회였어요.'] },
+      { q:'고조선이 멸망한 뒤 한이 설치하였고, 이후 법 조항이 60여 조로 늘어나며 풍속이 각박해진 계기가 된 것은?',
+        opts:['한 군현의 설치','진개의 침입'], answer:0, src:[65, 77],
+        feedback:['진개의 침입은 고조선이 강성하던 기원전 3세기의 일로, 이때 서쪽 땅을 잃었어요.','정답! 한 군현(낙랑·진번·임둔·현도)입니다. 가장 오래 남은 낙랑군은 313년 고구려 미천왕이 몰아냈어요.'] },
     ]
   },
   dangun_1: {
@@ -1528,6 +1555,11 @@ const NPC_DATA = {
       { who:'npc', t:'(목소리를 낮춘다) 왕에게 책임을 묻기도 하오.',
         chart:{ type:'pyramid', title:'부여의 정치 구조', tiers:[ { t:'왕', s:'흉년이면 책임을 진다' }, { t:'마가 · 우가 · 저가 · 구가', s:'저마다 사출도를 다스린다', hi:true }, { t:'백성' } ] } },
       { who:'npc', t:'귀한 이가 죽으면 따르던 사람도 함께 묻소. 순장이라 하지.' },
+      { who:'me', t:'(끌려가는 사내를 본다) 저 사람은 무슨 일입니까?' },
+      { who:'npc', t:'소를 훔쳤소. 이제 소 열두 마리를 물어내야 하지.' },
+      { who:'me', t:'한 마리를 훔쳤는데 열두 마리를요?' },
+      { who:'npc', t:'훔친 것의 열두 배. 1책 12법이오. 고구려도 같은 법을 쓰오.',
+        chart:{ type:'compare', title:'도둑을 벌하는 법', cols:[ { h:'고조선 8조법', items:[ '도둑은 그 집의 종이 된다', '50만 전을 내면 풀려난다' ] }, { h:'부여·고구려 1책 12법', hi:true, items:[ '훔친 것의 12배를 물어낸다' ] } ] } },
     ],
     quizSeq: [
       { q:'부여에서 왕이 다스리는 중앙 이외의 땅을 마가·우가·저가·구가 네 갈래가 나누어 다스리던 제도는?',
@@ -1536,6 +1568,9 @@ const NPC_DATA = {
       { q:'부여에서 매년 12월에 열려 온 나라가 함께 하늘에 감사를 올린 제천 행사는?',
         opts:['영고','무천'], answer:0, src:[12, 14, 21, 23, 24, 29, 32, 33, 34, 38, 40, 41],
         feedback:['무천은 동예에서 매년 10월에 연 제천 행사예요.','정답! 영고입니다. 시기가 다른 동예의 무천과 자주 헷갈려요.'] },
+      { q:'부여와 고구려에서 도둑질한 자에게 훔친 물건의 12배를 갚게 한 법은?',
+        opts:['1책 12법','8조법(범금 8조)'], answer:0, src:[32, 43, 51],
+        feedback:['8조법은 고조선의 법으로, 도둑질한 자는 그 집의 노비가 되게 했어요.','정답! 1책 12법입니다. 부여와 고구려가 함께 썼어요.'] },
     ]
   },
   gogurin_0: {
@@ -1623,7 +1658,66 @@ const NPC_DATA = {
         feedback:['비파형동검·명도전·거친무늬거울은 고조선의 문화 범위를 보여주는 유물이에요.','정답! 단궁·과하마·반어피입니다.'] },
       { q:'영고·동맹·무천 같은 제천 행사를 열고, 사출도·민며느리제·책화 같은 풍습을 남긴 나라들은?',
         opts:['부여·고구려·옥저·동예','신라·백제·가야'], answer:0, src:[13, 22, 30, 40, 47, 53],
-        feedback:['신라·백제·가야는 그보다 뒤인 삼국 시대의 나라들이에요.','정답! 초기 국가들입니다. 저 남쪽 길로 가면 그 나라 사람들을 직접 만나 볼 수 있네.'] },
+        feedback:['신라·백제·가야는 그보다 뒤인 삼국 시대의 나라들이에요.','정답! 초기 국가들입니다. 남쪽 삼한 사람들은 솟대 곁과 가마 곁에서 만날 수 있어요.'] },
+    ],
+  },
+  samhan_0: {
+    name: '삼한 천군', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V6"/><path d="M12 6l-2-2m2 2l2-2"/><path d="M7 10l5-2 5 2"/><path d="M8 14l4-1.5 4 1.5"/></svg>', img: 'assets/portraits/samhan_cheongun.png',
+    beats: [
+      { who:'npc', t:'(방울을 흔들다 멈춘다) 쉿. 발소리를 낮추게. 여기는 소도일세.' },
+      { who:'me', t:'(솟대와 큰 북을 올려다본다) 나무 장대 위에 새가 앉았군요.' },
+      { who:'npc', t:'하늘과 이 땅을 잇는 새지. 방울과 북을 걸어 신을 모신다네.' },
+      { who:'me', t:'어르신이 이곳을 맡으십니까?' },
+      { who:'npc', t:'그렇네. 나는 천군일세. 다스림은 신지·읍차가 하고, 제사는 내가 하지.',
+        chart:{ type:'vs', title:'삼한 — 제사와 정치가 나뉘다', left:{ n:'천군', s:'제사 · 소도를 맡는다' }, right:{ n:'신지 · 읍차', s:'고을을 다스린다' }, mid:'따로' } },
+      { who:'me', t:'(한 사내가 뛰어든다) …저 사람은 쫓기는 것 같은데요.' },
+      { who:'npc', t:'죄를 짓고 도망쳐 왔군. 허나 소도 안에선 군장도 못 잡아가네.',
+        chart:{ type:'steps', title:'소도라는 곳', steps:[ { t:'천군이 제사를 지낸다' }, { t:'솟대에 방울과 북을 단다' }, { t:'죄인이 들어와도 잡아가지 못한다', s:'군장의 힘이 미치지 않는다' } ] } },
+      { who:'me', t:'제사는 언제 지냅니까?' },
+      { who:'npc', t:'씨 뿌리고 난 오월, 거두고 난 시월. 해마다 두 번일세. 계절제라 하지.',
+        chart:{ type:'grid', title:'나라마다 다른 제천 행사', head:[ '나라', '제천', '달' ], rows:[ [ '부여', '영고', '12월' ], [ '고구려', '동맹', '10월' ], [ '동예', '무천', '10월' ], [ '삼한', '계절제', '5월 · 10월' ] ], hi:3 } },
+      { who:'me', t:'씨 뿌릴 때와 거둘 때라면… 벼농사를 짓는군요.' },
+      { who:'npc', t:'그렇지. 물을 가두려고 저수지도 팠다네. 벽골제·의림지·수산제가 그렇게 시작됐지.' },
+    ],
+    quizSeq: [
+      { q:'삼한에서 씨뿌리기를 마친 5월과 추수를 마친 10월에 하늘에 제사 지낸 행사는?',
+        opts:['계절제','영고'], answer:0, src:[49, 61],
+        feedback:['영고는 부여에서 12월에 연 제천 행사예요.','정답! 계절제입니다. 벼농사와 맞물린 5월·10월의 제사였어요.'] },
+      { q:'삼한에서 천군이 다스리던 신성한 곳으로, 죄인이 도망쳐 들어와도 잡아갈 수 없었던 곳은?',
+        opts:['소도','사출도'], answer:0, src:[13, 39, 53, 61],
+        feedback:['사출도는 부여에서 마가·우가·저가·구가가 다스리던 지역이에요.','정답! 소도입니다. 제사장(천군)과 군장의 권한이 나뉜 제정분리 사회였어요.'] },
+    ],
+  },
+  byeonhan_0: {
+    name: '변한 철 상인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="13" width="16" height="3" rx=".6"/><rect x="5" y="9.5" width="14" height="3" rx=".6"/><rect x="6" y="6" width="12" height="3" rx=".6"/><path d="M8 19h8"/></svg>', img: 'assets/portraits/extra_sangin.png',
+    beats: [
+      { who:'npc', t:'(지게를 내려놓는다) 아이고 허리야. 거기, 이 쇠 좀 받쳐 주시오.' },
+      { who:'me', t:'(받아 든다) 납작한 쇳덩이가 여러 장이군요.',
+        chart:{ type:'relic', title:'변한에서 나는 쇠', items:[ { img:'deongiswe', n:'덩이쇠', s:'쇠를 판처럼 떠낸 것' } ] } },
+      { who:'npc', t:'저 가마에서 녹여 떠낸 것이오. 변한엔 쇠가 넘쳐나지.' },
+      { who:'me', t:'이 많은 쇠를 어디에 씁니까?' },
+      { who:'npc', t:'바다 건너 왜로, 북쪽 낙랑으로 실어 가오. 값을 이 쇠로 치르기도 하지. 돈처럼.',
+        chart:{ type:'map', title:'변한의 쇠가 간 길', pins:[ { x:69.7, y:127.4, n:'변한', on:true }, { x:25, y:67.4, n:'낙랑' }, { x:91, y:151, n:'왜' } ], legend:[ { k:'나는 곳', v:'변한 — 뒷날 가야', on:true }, { k:'가는 곳', v:'낙랑 · 왜' }, { k:'쓰임', v:'화폐처럼도 쓴다' } ] } },
+      { who:'me', t:'(허리춤의 짧은 칼을 본다) 그런데 그 칼은 쇠가 아니군요.' },
+      { who:'npc', t:'청동이오. 쇠를 쓰는 지금도 청동검은 차지. 다만 모양이 달라졌소.',
+        chart:{ type:'relic', title:'청동검이 바뀌다', items:[ { img:'bipahyeong', n:'비파형 동검', s:'청동기 · 아래가 불룩하다' }, { img:'sehyeongdonggeom', n:'세형 동검', s:'철기 시대 · 좁고 곧다' } ] } },
+      { who:'npc', t:'좁고 곧게 뽑은 세형 동검이오. 거푸집도 이 땅에서 빚었으니, 이 땅만의 청동 솜씨지.' },
+      { who:'me', t:'(상인이 품에서 꺼내는 것을 본다) 그건… 붓입니까?' },
+      { who:'npc', t:'셈을 적는 붓이오. 바다 건너 사람과 거래하려면 한자를 써야 하지.',
+        chart:{ type:'relic', title:'창원 다호리에서 나온 것', items:[ { img:'dahori_but', n:'붓과 손칼', s:'붓 5점 · 틀린 글자를 깎는 손칼' } ] } },
+      { who:'npc', t:'창원 다호리 무덤에서도 이런 붓이 나오오. 틀리면 손칼로 나무를 깎아 지우지.' },
+      { who:'me', t:'이 무렵에 벌써 글자를 쓰는 사람이 있었군요.' },
+    ],
+    quizSeq: [
+      { q:'철기 시대에 한반도에서 독자적으로 만들어진, 비파형 동검보다 폭이 좁고 곧은 청동검은?',
+        opts:['세형 동검','비파형 동검'], answer:0, src:[10],
+        feedback:['비파형 동검은 청동기 시대의 검으로, 고조선 문화권을 보여 줘요.','정답! 세형 동검(한국식 동검)입니다. 거푸집과 함께 나와 한반도에서 직접 만들었음을 알려 줘요.'] },
+      { q:'창원 다호리 유적에서 붓이 출토된 것으로 알 수 있는 사실은?',
+        opts:['철기 시대에 한자를 사용하였다','이 시기에 금속 활자로 책을 찍었다'], answer:0, src:[6, 14],
+        feedback:['금속 활자는 한참 뒤인 고려 때의 일이에요.','정답! 기원전 1세기 무렵 이미 한자를 썼다는 증거예요.'] },
+      { q:'철이 많이 나서 낙랑과 왜에 수출하고, 철을 화폐처럼 쓰기도 한 삼한의 나라는?',
+        opts:['변한','동예'], answer:0, src:[17, 23],
+        feedback:['동예는 단궁·과하마·반어피가 특산물인 동해안의 나라예요.','정답! 변한입니다. 이 철기 문화는 뒷날 가야로 이어져요.'] },
     ],
     endsChapter: true
   },
@@ -1660,6 +1754,8 @@ const Stage = {
     if (id === 'gogurin') return 'gogurin_0';
     if (id === 'okjeo') return 'okjeo_0';
     if (id === 'dongye') return 'dongye_0';
+    if (id === 'samhan') return 'samhan_0';
+    if (id === 'byeonhan') return 'byeonhan_0';
     return null;
   },
   interact(){
@@ -1705,6 +1801,22 @@ const GLOSSARY = {
     '실을 뽑을 때 쓰던 팽이 모양의 흙 도구. 가운데 구멍에 막대를 꽂아 돌려 실을 꼬았다. 뼈바늘과 함께 신석기 시대에 옷을 지어 입었다는 증거다.',
   '뼈바늘':
     '동물 뼈를 갈아 만든 바늘. 가락바퀴로 뽑은 실을 꿰어 옷을 지었다.',
+  '애니미즘':
+    '해·달·물·바위 같은 자연에도 영혼이 있다고 믿는 신앙. 신석기 시대에 농사가 시작되면서 날씨와 자연을 두려워하고 섬기는 마음이 커졌다. 동식물을 조상으로 섬기는 토테미즘, 무당을 믿는 샤머니즘과 함께 나온다.',
+  '한 군현':
+    '기원전 108년 고조선이 무너진 뒤 한나라가 그 땅에 둔 낙랑·진번·임둔·현도 네 군. 진번·임둔은 곧 없어지고 현도는 밀려났으며, 낙랑군은 313년 고구려 미천왕에게 쫓겨날 때까지 남았다. 이때 법 조항이 60여 조로 늘었다.',
+  '1책 12법':
+    '부여와 고구려의 법. 남의 물건을 훔친 자는 그 12배를 물어내게 했다. 고조선 8조법에서 도둑이 노비가 되던 것과 짝지어 나온다.',
+  '천군':
+    '삼한에서 제사를 맡은 사람. 정치는 신지·읍차 같은 군장이 맡고, 천군은 소도에서 따로 제사를 지냈다. 제사와 정치가 나뉜 제정분리 사회를 보여 준다.',
+  '소도':
+    '삼한에서 천군이 제사를 지내던 신성한 곳. 큰 나무(솟대)에 방울과 북을 달았고, 죄인이 도망쳐 들어와도 잡아가지 못했다.',
+  '계절제':
+    '삼한의 제천 행사. 씨를 뿌린 5월과 거둬들인 10월에 하늘에 제사를 지냈다. 벼농사가 발달했다는 뜻이다.',
+  '세형 동검':
+    '철기 시대에 한반도에서 만든 청동검. 비파형 동검보다 좁고 곧다. 이 검을 떠내던 거푸집이 한반도에서 나와, 청동기 문화가 이 땅에서 독자적으로 발전했음을 보여 준다. 한국식 동검이라고도 한다.',
+  '다호리':
+    '경남 창원의 철기 시대 널무덤 유적. 1호 무덤에서 붓 5점과, 나무에 쓴 글자를 깎아 지우던 손칼이 나와 기원전 1세기 무렵 한자를 썼음을 보여 준다.',
   '지석묘':
     '고인돌의 다른 이름. 받침돌 위에 큰 덮개돌을 얹은 청동기 시대의 무덤이다.',
 };
@@ -2211,39 +2323,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=103"></script>
-<script src="assets/streak.js?v=103"></script>
+<script src="assets/badges.js?v=104"></script>
+<script src="assets/streak.js?v=104"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=103"></script>
-  <script src="assets/fx.js?v=103"></script>
-  <script src="assets/deed.js?v=103"></script>
-  <script src="assets/inkwipe.js?v=103"></script>
-  <script src="assets/dash.js?v=103"></script>
-<script src="assets/juice.js?v=103"></script>
-  <script src="assets/difficulty.js?v=103"></script>
-  <script src="assets/nextauto.js?v=103"></script>
-<script src="assets/heroes_data.js?v=103"></script>
-<script src="assets/heroes.js?v=103"></script>
-<script src="assets/icons.js?v=103"></script>
-<script src="assets/srs.js?v=103"></script>
-<script src="assets/newsflash.js?v=103"></script>
-<script src="assets/timeline.js?v=103"></script>
-<script src="assets/journey.js?v=103"></script>
-<script src="assets/season.js?v=103"></script>
-<script src="assets/boss.js?v=103"></script>
-<script src="assets/items.js?v=103"></script>
-  <script src="assets/gold.js?v=103"></script>
-  <script src="assets/ask.js?v=103"></script>
-  <script src="assets/ads.js?v=103"></script>
-  <script src="assets/energy.js?v=103"></script>
-  <script src="assets/daily.js?v=103"></script>
-  <script src="assets/unlock.js?v=103"></script>
-  <script src="assets/guide.js?v=103"></script>
-  <script src="assets/minigames.js?v=103"></script>
-  <script src="assets/quests.js?v=103"></script>
-  <script src="assets/offline.js?v=103"></script>
-  <script src="assets/telemetry.js?v=103"></script>
-<script src="assets/autowalk.js?v=103"></script>
+<script src="assets/rank.js?v=104"></script>
+  <script src="assets/fx.js?v=104"></script>
+  <script src="assets/deed.js?v=104"></script>
+  <script src="assets/inkwipe.js?v=104"></script>
+  <script src="assets/dash.js?v=104"></script>
+<script src="assets/juice.js?v=104"></script>
+  <script src="assets/difficulty.js?v=104"></script>
+  <script src="assets/nextauto.js?v=104"></script>
+<script src="assets/heroes_data.js?v=104"></script>
+<script src="assets/heroes.js?v=104"></script>
+<script src="assets/icons.js?v=104"></script>
+<script src="assets/srs.js?v=104"></script>
+<script src="assets/newsflash.js?v=104"></script>
+<script src="assets/timeline.js?v=104"></script>
+<script src="assets/journey.js?v=104"></script>
+<script src="assets/season.js?v=104"></script>
+<script src="assets/boss.js?v=104"></script>
+<script src="assets/items.js?v=104"></script>
+  <script src="assets/gold.js?v=104"></script>
+  <script src="assets/ask.js?v=104"></script>
+  <script src="assets/ads.js?v=104"></script>
+  <script src="assets/energy.js?v=104"></script>
+  <script src="assets/daily.js?v=104"></script>
+  <script src="assets/unlock.js?v=104"></script>
+  <script src="assets/guide.js?v=104"></script>
+  <script src="assets/minigames.js?v=104"></script>
+  <script src="assets/quests.js?v=104"></script>
+  <script src="assets/offline.js?v=104"></script>
+  <script src="assets/telemetry.js?v=104"></script>
+<script src="assets/autowalk.js?v=104"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
