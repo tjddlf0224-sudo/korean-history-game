@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=105"></script>
-<script src="assets/zoomwarn.js?v=105"></script>
-<script src="assets/map/map_component.js?v=105"></script>
-<script src="assets/chart.js?v=105"></script>
-<script src="assets/audio.js?v=105"></script>
+<script src="assets/errlog.js?v=106"></script>
+<script src="assets/zoomwarn.js?v=106"></script>
+<script src="assets/map/map_component.js?v=106"></script>
+<script src="assets/chart.js?v=106"></script>
+<script src="assets/audio.js?v=106"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=105';   // 존댓말 전환
+const ART_V = '?v=106';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1411,6 +1411,8 @@ const NPC_DATA = {
       { who:'npc', t:'당이 물러가지 않았네. 이 땅을 통째로 삼킬 셈이었지.' },
       { who:'npc', t:'고구려 유민도 도왔네. 674년, 안승을 보덕국왕으로 세웠지.',
         chart:{ type:'map', title:'안승의 보덕국', pins:[ { x:42.3, y:116.2, n:'금마저', on:true } ] } },
+      { who:'npc', t:'고구려가 망하자 검모잠이 안승을 받들어 나라를 되살리려 했고, 고연무는 오골성에서 당군과 맞섰네.',
+        chart:{ type:'compare', title:'무너진 두 나라의 부흥 운동', cols:[ { h:'백제', items:[ '복신 · 도침 — 주류성', '흑치상지 — 임존성' ] }, { h:'고구려', hi:true, items:[ '검모잠 — 안승을 왕으로', '고연무 — 오골성' ] } ] } },
       { who:'me', t:'(고개를 갸웃한다) …왜 도우셨습니까?' },
       { who:'npc', t:'옛 고구려 땅에서 당을 함께 밀어낼 힘이 되었으니까.' },
       { who:'npc', t:'675년, 매소성에서 당의 대군을 깨뜨렸네.',
@@ -1434,6 +1436,9 @@ const NPC_DATA = {
       { q:'삼국 통일을 완성했고, 죽어서 동해의 용이 되겠다며 수중릉에 묻힌 신라의 왕은?',
         opts:['문무왕','진흥왕'], answer:0, src:[31, 40, 59, 65, 74, 77],
         feedback:['진흥왕은 6세기에 한강 유역을 차지하고 순수비를 세운 왕이에요.','정답! 문무왕입니다. 경주 앞바다의 대왕암이 그 무덤으로 전해져요.'] },
+      { q:'고구려 멸망 뒤 안승을 왕으로 받들어 고구려 부흥 운동을 이끈 인물은?',
+        opts:['검모잠','복신'], answer:0, src:[15, 16, 23, 32, 51, 55, 62],
+        feedback:['복신은 도침과 함께 주류성에서 백제 부흥 운동을 이끈 인물이에요.','정답! 검모잠입니다. 고연무도 오골성에서 당군과 싸웠어요.'] },
     ]
   },
   sinmun_0: {
@@ -1455,6 +1460,17 @@ const NPC_DATA = {
         chart:{ type:'stat', title:'국학', items:[ { v:'682년', l:'설치' }, { v:'유학', l:'가르친 내용' } ] } },
       { who:'me', t:'(고개를 끄덕인다) …빠르게 움직이셨군요.' },
       { who:'npc', t:'다급했으니까. 진골 귀족의 힘을 서둘러 꺾어야 했네.' },
+      { who:'npc', t:'왕명을 받드는 집사부의 시중에게 힘을 실었지. 귀족 대표인 상대등의 목소리는 줄었고.',
+        chart:{ type:'vs', title:'신라 중대 — 누구 힘이 커졌나', left:{ n:'집사부 시중', s:'왕의 뜻을 받든다', win:true }, right:{ n:'상대등', s:'귀족의 대표 · 화백회의' }, mid:'▲ ▼' } },
+      { who:'npc', t:'군대도 새로 짰네. 서울엔 9서당, 지방엔 10정을 두었지.',
+        chart:{ type:'grid', title:'9서당 10정', head:[ '군대', '어디', '특징' ], rows:[ [ '9서당', '서울 · 중앙군', '고구려·백제·말갈 사람까지 넣음' ], [ '10정', '지방군', '9주에 하나씩, 넓은 한주엔 둘' ] ], hi:0 } },
+      { who:'me', t:'옛 적국 사람까지 군대에 넣으셨군요.' },
+      { who:'npc', t:'한 나라가 되었으니까. 지방 세력은 그 자제를 서울에 올라와 머물게 하여 살폈네. 상수리 제도일세.',
+        chart:{ type:'steps', title:'상수리 제도', steps:[ { t:'지방 세력의 자제를 뽑는다' }, { t:'서울에 올라와 머물게 한다' }, { t:'지방 세력을 견제한다', s:'고려의 기인 제도로 이어짐' } ] } },
+      { who:'npc', t:'(책을 덮으며) 설총이 들려준 꽃 이야기도 잊지 못하네.',
+        chart:{ type:'quote', title:'설총의 화왕계', text:'꽃의 왕 모란 앞에 아리따운 <b>장미</b>와<br>허리 굽은 <b>할미꽃</b>이 찾아왔다.<br>왕은 누구의 말을 들어야 하는가.', from:'설총 · 삼국사기 열전' } },
+      { who:'me', t:'달콤한 아첨보다 쓴소리를 들으라는 뜻이군요.' },
+      { who:'me', t:'(속으로) 훗날 원성왕은 국학 학생의 글 읽는 실력을 셋으로 나눠 관리를 뽑는다. 독서삼품과다.' },
       { who:'me', t:'관료전과 녹읍은… 어떻게 다릅니까?' },
       { who:'npc', t:'관료전은 세금만 걷는 땅. 녹읍은 사람까지 부리는 땅이었지.',
         chart:{ type:'vs', title:'관료전과 녹읍', left:{ n:'관료전', s:'조세만 걷는다 · 687년 지급' }, right:{ n:'녹읍', s:'사람까지 부린다 · 689년 폐지' }, mid:'VS' } },
@@ -1474,6 +1490,21 @@ const NPC_DATA = {
       { q:'신문왕이 즉위 직후 진압하고, 이를 계기로 진골 귀족 세력을 대대적으로 숙청한 반란은?',
         opts:['김흠돌의 난','원종·애노의 난'], answer:0, src:[17, 22, 24, 29, 39, 42, 46, 48, 50, 57, 60, 62],
         feedback:['원종·애노의 난은 진성여왕 때 일어난 농민 봉기예요.','정답! 김흠돌의 난입니다. 왕의 장인이 일으킨 반란이었어요.'] },
+      { q:'통일 신라가 서울에 둔 중앙군으로, 고구려·백제·말갈 사람까지 포함해 편성한 부대는?',
+        opts:['9서당','별무반'], answer:0, src:[15, 24, 25, 28, 30, 34, 65, 66, 67, 73],
+        feedback:['별무반은 고려 숙종 때 여진을 치려고 만든 부대예요.','정답! 9서당입니다. 지방에는 10정을 두었어요.'] },
+      { q:'신라 중대에 왕권이 강해지면서 힘이 커진, 왕명을 받드는 집사부의 장관은?',
+        opts:['시중','상대등'], answer:0, src:[35, 52, 69],
+        feedback:['상대등은 화백회의를 이끄는 귀족의 대표로, 이 시기에는 힘이 줄었어요.','정답! 시중(중시)입니다.'] },
+      { q:'통일 신라가 지방 세력의 자제를 서울에 머물게 하여 지방을 통제한 제도는?',
+        opts:['상수리 제도','사심관 제도'], answer:0, src:[37, 43, 55, 66, 67, 76],
+        feedback:['사심관 제도는 고려 태조가 지방 출신 관리에게 그 고향을 맡긴 제도예요.','정답! 상수리 제도입니다. 고려의 기인 제도로 이어져요.'] },
+      { q:'설총이 신문왕에게 꽃 이야기에 빗대어 바른 정치를 권한 글은?',
+        opts:['화왕계','계원필경'], answer:0, src:[34],
+        feedback:['계원필경은 최치원의 문집이에요.','정답! 화왕계입니다. 아첨하는 장미보다 충언하는 할미꽃을 가까이하라는 뜻이에요.'] },
+      { q:'국학 학생의 유교 경전 이해 수준에 따라 관리를 뽑으려 한 독서삼품과를 실시한 왕은?',
+        opts:['원성왕','신문왕'], answer:0, src:[44, 70],
+        feedback:['신문왕은 682년 국학을 세운 왕이에요.','정답! 원성왕입니다(788).'] },
     ],
     endsChapter: true
   },
@@ -1990,39 +2021,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=105"></script>
-<script src="assets/streak.js?v=105"></script>
+<script src="assets/badges.js?v=106"></script>
+<script src="assets/streak.js?v=106"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=105"></script>
-  <script src="assets/fx.js?v=105"></script>
-  <script src="assets/deed.js?v=105"></script>
-  <script src="assets/inkwipe.js?v=105"></script>
-  <script src="assets/dash.js?v=105"></script>
-<script src="assets/juice.js?v=105"></script>
-  <script src="assets/difficulty.js?v=105"></script>
-  <script src="assets/nextauto.js?v=105"></script>
-<script src="assets/heroes_data.js?v=105"></script>
-<script src="assets/heroes.js?v=105"></script>
-<script src="assets/icons.js?v=105"></script>
-<script src="assets/srs.js?v=105"></script>
-<script src="assets/newsflash.js?v=105"></script>
-<script src="assets/timeline.js?v=105"></script>
-<script src="assets/journey.js?v=105"></script>
-<script src="assets/season.js?v=105"></script>
-<script src="assets/boss.js?v=105"></script>
-<script src="assets/items.js?v=105"></script>
-  <script src="assets/gold.js?v=105"></script>
-  <script src="assets/ask.js?v=105"></script>
-  <script src="assets/ads.js?v=105"></script>
-  <script src="assets/energy.js?v=105"></script>
-  <script src="assets/daily.js?v=105"></script>
-  <script src="assets/unlock.js?v=105"></script>
-  <script src="assets/guide.js?v=105"></script>
-  <script src="assets/minigames.js?v=105"></script>
-  <script src="assets/quests.js?v=105"></script>
-  <script src="assets/offline.js?v=105"></script>
-  <script src="assets/telemetry.js?v=105"></script>
-<script src="assets/autowalk.js?v=105"></script>
+<script src="assets/rank.js?v=106"></script>
+  <script src="assets/fx.js?v=106"></script>
+  <script src="assets/deed.js?v=106"></script>
+  <script src="assets/inkwipe.js?v=106"></script>
+  <script src="assets/dash.js?v=106"></script>
+<script src="assets/juice.js?v=106"></script>
+  <script src="assets/difficulty.js?v=106"></script>
+  <script src="assets/nextauto.js?v=106"></script>
+<script src="assets/heroes_data.js?v=106"></script>
+<script src="assets/heroes.js?v=106"></script>
+<script src="assets/icons.js?v=106"></script>
+<script src="assets/srs.js?v=106"></script>
+<script src="assets/newsflash.js?v=106"></script>
+<script src="assets/timeline.js?v=106"></script>
+<script src="assets/journey.js?v=106"></script>
+<script src="assets/season.js?v=106"></script>
+<script src="assets/boss.js?v=106"></script>
+<script src="assets/items.js?v=106"></script>
+  <script src="assets/gold.js?v=106"></script>
+  <script src="assets/ask.js?v=106"></script>
+  <script src="assets/ads.js?v=106"></script>
+  <script src="assets/energy.js?v=106"></script>
+  <script src="assets/daily.js?v=106"></script>
+  <script src="assets/unlock.js?v=106"></script>
+  <script src="assets/guide.js?v=106"></script>
+  <script src="assets/minigames.js?v=106"></script>
+  <script src="assets/quests.js?v=106"></script>
+  <script src="assets/offline.js?v=106"></script>
+  <script src="assets/telemetry.js?v=106"></script>
+<script src="assets/autowalk.js?v=106"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

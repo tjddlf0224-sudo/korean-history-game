@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 206명 */
+   인물 207명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -33,6 +33,7 @@ window.HERO_DATA = (function(){
     munmu: { n:'문무왕', p:'munmu.png', e:'고대', r:'king', ch:{'tongil.html':['munmu_0']} },
     munwang: { n:'발해 문왕', p:'munwang.png', e:'고대', r:'king', ch:{'godae2.html':['munwang_0']} },
     seongwang: { n:'백제 성왕', p:'seongwang.png', e:'고대', r:'king', ch:{'godae1.html':['seongwang_0']} },
+    jongjangin: { n:'범종 장인', p:'jongjangin.png', e:'고대', r:'commoner', ch:{'godae2.html':['jongjangin_0']} },
     seondeok_f: { n:'선덕 여왕', p:'seondeok_f.png', e:'고대', r:'king', ch:{'godae1.html':['seondeok_0']} },
     beopheung_f: { n:'신라 법흥왕', p:'beopheung_f.png', e:'고대', r:'king', ch:{'gaya.html':['beopheung_0']} },
     sinmun: { n:'신문왕', p:'sinmun.png', e:'고대', r:'king', ch:{'tongil.html':['sinmun_0']} },

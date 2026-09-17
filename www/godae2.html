@@ -519,11 +519,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=105"></script>
-<script src="assets/zoomwarn.js?v=105"></script>
-<script src="assets/map/map_component.js?v=105"></script>
-<script src="assets/chart.js?v=105"></script>
-<script src="assets/audio.js?v=105"></script>
+<script src="assets/errlog.js?v=106"></script>
+<script src="assets/zoomwarn.js?v=106"></script>
+<script src="assets/map/map_component.js?v=106"></script>
+<script src="assets/chart.js?v=106"></script>
+<script src="assets/audio.js?v=106"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -535,7 +535,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=105';   // 존댓말 전환
+const ART_V = '?v=106';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -792,6 +792,7 @@ const ZONES = {
   ],
     npcs: [
       { id:'jangbogo', name:'장보고', x:320, y:260, img:'assets/portraits/jangbogo.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
+      { id:'jongjangin', name:'범종 장인', x:820, y:380, img:'assets/portraits/jongjangin.png', look:{ role:'commoner', body:'#7a6a50', accent:'#5c8a6a' } },
       { id:'uisang', name:'의상', x:700, y:230, img:'assets/portraits/uisang.png', look:{ role:'scholar', body:'#8a6d3b', accent:'#e0b94a' } },
       { id:'cheoyong', name:'처용', x:950, y:300, img:'assets/portraits/cheoyong.png', look:{ role:'commoner', body:'#6b7a5a', accent:'#c9a24a' } },
       { id:'minjeong', name:'촌주', x:560, y:300, img:'assets/portraits/minjeong.png', look:{ role:'commoner', body:'#6b5636', accent:'#8a7a5a' } },
@@ -1103,6 +1104,7 @@ function updateHudGoal(){
       ['munwang', '발해 문왕과 대화하기'],
       ['jangbogo', '청해진으로 가서 장보고와 대화하기'],
       ['uisang', '의상과 대화하기'],
+      ['jongjangin', '범종 장인과 대화하기'],
       ['cheoyong', '처용과 대화하기'],
       ['minjeong', '촌주와 대화하기']
     ];
@@ -1413,7 +1415,9 @@ const NPC_DATA = {
       { who:'npc', t:'여러 번 옮긴 끝에 예 자리 잡았지.',
         chart:{ type:'map', title:'상경 용천부의 자리', north:true, pins:[ { x:79, y:-12, n:'상경', on:true } ], legend:[ { k:'본뜬 것', v:'당의 장안' } ] } },
       { who:'me', t:'(둘러본다) …당의 도성과 닮았습니다.' },
-      { who:'npc', t:'그대로 본떴네. 나라의 틀도 당의 것을 가져왔지.' },
+      { who:'npc', t:'그대로 본떴네. 궁성 남문에서 성 남쪽 끝까지 넓은 길을 곧게 냈지. 주작대로일세.',
+        chart:{ type:'stat', title:'상경 용천부의 짜임', items:[ { v:'주작대로', l:'궁성에서 남문까지 곧은 큰길' }, { v:'바둑판', l:'구획을 반듯하게 나눔' }, { v:'장안성', l:'본뜬 당의 도성' } ] } },
+      { who:'npc', t:'나라의 틀도 당의 것을 가져왔지.' },
       { who:'npc', t:'3성 6부를 두었네. 이름은 우리 식으로 고쳤지만.',
         chart:{ type:'grid', title:'발해의 중앙 관제', head:[ '기구', '하는 일' ], hi:0, rows:[ [ '정당성', '국정을 총괄' ], [ '대내상', '정당성의 우두머리' ], [ '상서성', '6부의 실무를 나눠 맡음' ] ] } },
       { who:'npc', t:'주자감을 두어 귀족 자제에게 유학을 가르쳤네.',
@@ -1433,6 +1437,11 @@ const NPC_DATA = {
       { who:'me', t:'(받아 본다) …고구려에서 보던 것과 닮았습니다.' },
       { who:'npc', t:'온돌도, 이 부처 둘이 나란한 상도 다르지 않네.',
         chart:{ type:'relic', title:'발해에 남은 고구려의 흔적', items:[ { img:'ibulbyeongjwasang', n:'이불병좌상', s:'두 부처가 나란히 앉은 상' } ] } },
+      { who:'npc', t:'내 딸 정혜공주의 무덤 앞엔 돌사자를 두었네. 굳센 모습이 고구려 솜씨를 닮았지.',
+        chart:{ type:'relic', title:'발해의 돌 조각', items:[ { img:'balhae_saja', n:'돌사자상', s:'정혜공주 무덤' }, { img:'balhae_seokdeung', n:'석등', s:'상경 절터 · 현무암' } ] } },
+      { who:'npc', t:'절에는 현무암으로 커다란 석등을 세웠네. 받침의 연꽃잎이 힘차지.' },
+      { who:'me', t:'(속으로) 벽돌을 쌓아 올린 다섯 층 영광탑도 발해의 자취로 남는다.',
+        chart:{ type:'grid', title:'발해 문화의 자취', head:[ '유물', '어디 · 무엇' ], rows:[ [ '석등', '상경 절터 · 현무암, 연꽃무늬' ], [ '돌사자상', '정혜공주 무덤' ], [ '영광탑', '지린성 장백 · 벽돌 5층탑' ], [ '이불병좌상', '두 부처가 나란히' ] ] } },
       { who:'npc', t:'그러니 발해는 고구려를 이은 나라일세.' },
       { who:'npc', t:'지방은 다섯 갈래 길로 이웃과 오갔네.',
         chart:{ type:'grid', title:'발해의 다섯 갈래 길', head:[ '길', '통하는 곳' ], rows:[ [ '거란도', '거란' ], [ '영주도', '영주' ], [ '신라도', '신라' ], [ '일본도', '일본' ], [ '조공도', '당' ] ] } },
@@ -1451,6 +1460,10 @@ const NPC_DATA = {
       { who:'npc', t:'다투었지. 그 일을 쟁장사건이라 하네.',
         chart:{ type:'vs', title:'쟁장사건', left:{ n:'발해', s:'신라와 대등한 자리를 요구', win:true }, right:{ n:'신라', s:'윗자리를 지키려 함' }, mid:'당의 외교 자리' } },
       { who:'npc', t:'우리도 신라 못지않다는 뜻이었네.' },
+      { who:'npc', t:'당은 산둥 등주에 발해관을 두어 우리 사신과 상인을 맞았네. 신라에서 온 이들은 신라관에 묵었지.',
+        chart:{ type:'compare', title:'당 등주의 두 객관', cols:[ { h:'발해관', hi:true, items:[ '발해 사신·상인이 묵음' ] }, { h:'신라관', items:[ '신라 사신·상인이 묵음' ] } ] } },
+      { who:'me', t:'신라와도 오가는 길이 따로 있었지요?' },
+      { who:'npc', t:'있지. 다섯 갈래 길 가운데 신라도일세. 남쪽 이웃과도 문은 열어 두었네.' },
     ],
     quizSeq: [
       { q:'상경 용천부로 도읍을 옮기고 3성 6부의 중앙 관제와 주자감을 갖춰 발해의 체제를 정비한 왕은?',
@@ -1474,6 +1487,21 @@ const NPC_DATA = {
       { q:'당의 외교 의전에서 발해가 신라와 대등한 대우를 요구하며 자리를 다툰 사건은?',
         opts:['쟁장사건','도병마사'], answer:0, src:[29],
         feedback:['도병마사는 고려의 국방·군사 문제를 논의하던 회의 기구예요.','정답! 쟁장사건입니다. 발해가 신라 못지않은 위상을 요구하며 다툰 일이에요.'] },
+      { q:'발해 상경 용천부에서 당의 장안성을 본떠 궁성 남문으로부터 곧게 낸 큰길은?',
+        opts:['주작대로','운종가'], answer:0, src:[26, 44],
+        feedback:['운종가는 조선 한양의 시전 거리예요.','정답! 주작대로입니다. 발해가 당의 도성 제도를 받아들였음을 보여 줘요.'] },
+      { q:'발해의 문화유산으로 옳은 것은?',
+        opts:['벽돌로 쌓은 영광탑','돌을 벽돌 모양으로 깎아 쌓은 분황사 모전 석탑'], answer:0, src:[68],
+        feedback:['분황사 모전 석탑은 신라 선덕 여왕 때의 탑이에요.','정답! 영광탑입니다. 정혜공주 무덤의 돌사자상, 상경의 석등도 발해의 유물이에요.'] },
+      { q:'정혜공주 무덤에서 출토되어 발해가 고구려 문화를 이었음을 보여 주는 유물은?',
+        opts:['돌사자상','금동 미륵보살 반가 사유상'], answer:0, src:[31, 34, 42, 55],
+        feedback:['금동 미륵보살 반가 사유상은 삼국 시대의 불상이에요.','정답! 돌사자상입니다. 굳센 모습이 고구려 조각을 닮았어요.'] },
+      { q:'당이 산둥반도 등주에 두어 발해의 사신과 상인이 머물게 한 곳은?',
+        opts:['발해관','신라방'], answer:0, src:[61],
+        feedback:['신라방은 당에 건너간 신라 사람들이 모여 살던 마을이에요.','정답! 발해관입니다. 신라 사람은 신라관에 묵었어요.'] },
+      { q:'발해가 남쪽의 신라와 오가기 위해 둔 교통로는?',
+        opts:['신라도','영주도'], answer:0, src:[56, 74],
+        feedback:['영주도는 당(영주)으로 통하는 길이에요.','정답! 신라도입니다. 발해와 신라가 교류했음을 보여 줘요.'] },
     ]
   },
   jangbogo_0: {
@@ -1496,6 +1524,8 @@ const NPC_DATA = {
       { who:'npc', t:'당의 적산에도 절을 하나 두었네. 법화원이라 하지.',
         chart:{ type:'map', title:'당 땅의 신라인 마을, 적산 법화원', north:true, pins:[ { x:-18, y:100, n:'적산 법화원', on:true } ] } },
       { who:'me', t:'절이 무슨 소용입니까?' },
+      { who:'npc', t:'산둥 바닷가엔 신라 사람들이 모여 사는 마을이 있네. 신라방이라 하지.',
+        chart:{ type:'grid', title:'당 땅의 신라 사람들', head:[ '이름', '무엇' ], rows:[ [ '신라방', '신라인이 모여 사는 마을' ], [ '신라소', '그 마을을 다스리는 관청' ], [ '신라원', '신라인의 절 — 법화원' ], [ '신라관', '신라 사신이 묵는 곳' ] ], hi:0 } },
       { who:'npc', t:'그 땅에 사는 신라 사람들이 예로 모이네.',
         chart:{ type:'stat', title:'법화원, 재당 신라인의 중심', items:[ { v:'30여 명', l:'법화원에 머문 승려' }, { v:'250여 명', l:'법회 때 모인 신라인' } ] } },
       { who:'npc', t:'타향에서 마음 둘 곳이지.' },
@@ -1517,7 +1547,36 @@ const NPC_DATA = {
       { q:'통일 신라 효소왕 때 수도에 두어 시장을 감독하게 한 관청과, 국제 무역항으로 번성한 곳을 옳게 짝지은 것은?',
         opts:['서시전·남시전 – 울산항','동시전 – 벽란도'], answer:0, src:[8, 34],
         feedback:['동시전은 그보다 앞서 지증왕 때 처음 설치되었고, 벽란도는 고려의 무역항이에요.','정답! 서시전·남시전이 효소왕 때 설치되어 시장을 감독했고, 울산항·당항성이 국제 무역항으로 번성했어요.'] },
+      { q:'통일 신라 때 당의 산둥반도 일대에 신라 사람들이 모여 살던 마을은?',
+        opts:['신라방','왜관'], answer:0, src:[15, 20, 46, 53, 59, 62, 66, 74, 77],
+        feedback:['왜관은 조선이 일본인에게 허락한 거주·무역 공간이에요.','정답! 신라방입니다. 신라소·신라원(법화원)도 함께 있었어요.'] },
     ]
+  },
+  jongjangin_0: {
+    name: '범종 장인', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2"/><path d="M7 17c0-7 2-11 5-11s5 4 5 11"/><path d="M5 17h14"/><circle cx="12" cy="19.5" r="1.5"/></svg>', img: 'assets/portraits/jongjangin.png',
+    beats: [
+      { who:'npc', t:'(망치를 내려놓는다) 조심하시오. 아직 쇠가 뜨겁소.' },
+      { who:'me', t:'(푸르스름한 종을 본다) 절에 걸 종입니까?' },
+      { who:'npc', t:'그렇소. 오대산 상원사에 걸 종이오. 725년, 성덕왕 때 부어 낸 것이지.',
+        chart:{ type:'relic', title:'상원사 동종', items:[ { img:'sangwonsajong', n:'상원사 동종', s:'725년 · 지금 남은 한국 종 가운데 가장 오래됨' } ] } },
+      { who:'me', t:'꼭대기에 용이 붙어 있군요.' },
+      { who:'npc', t:'용뉴라 하오. 그 옆 대롱은 음통 — 소리를 맑게 하지. 몸통엔 하늘을 나는 비천이 악기를 켜오.',
+        chart:{ type:'grid', title:'신라 종의 생김새', head:[ '부분', '하는 일' ], rows:[ [ '용뉴', '종을 거는 용 모양 고리' ], [ '음통', '소리를 고르는 대롱 — 신라 종만의 것' ], [ '비천상', '악기를 연주하는 하늘 사람' ] ], hi:1 } },
+      { who:'me', t:'(속으로) 뒷날 혜공왕 때 완성되는 성덕대왕신종은 이보다 훨씬 크다.' },
+      { who:'npc', t:'(땀을 닦는다) 서라벌엔 종소리보다 더 흥겨운 곳도 있소.' },
+      { who:'me', t:'어디 말입니까?' },
+      { who:'npc', t:'문무왕께서 궁 곁에 못을 파고 섬을 쌓으셨지. 동궁과 월지요. 손님을 맞고 잔치를 여는 곳이오.',
+        chart:{ type:'stat', title:'동궁과 월지', items:[ { v:'674년', l:'문무왕 때 못을 팜' }, { v:'잔치', l:'나라의 경사·손님맞이' }, { v:'주령구', l:'못에서 나온 14면 주사위' } ] } },
+      { who:'me', t:'(속으로) 뒷날 폐허가 된 뒤 안압지라고 불리다가, 지금은 본디 이름을 되찾았지.' },
+    ],
+    quizSeq: [
+      { q:'725년 성덕왕 때 만들어졌으며, 현재 남아 있는 한국 범종 가운데 가장 오래된 종은?',
+        opts:['상원사 동종','성덕대왕신종'], answer:0, src:[15, 22, 71],
+        feedback:['성덕대왕신종은 771년 혜공왕 때 완성된, 가장 크고 정교한 신라 종이에요.','정답! 상원사 동종입니다. 용뉴·음통·비천상을 갖춘 신라 종의 전형이에요.'] },
+      { q:'문무왕 때 조성된 궁궐 연못으로, 14면체 주사위(주령구) 등이 출토되어 신라 귀족의 생활을 보여 주는 곳은?',
+        opts:['경주 동궁과 월지','익산 미륵사지'], answer:0, src:[6, 11, 12, 20, 56],
+        feedback:['익산 미륵사지는 백제 무왕이 세운 절터예요.','정답! 동궁과 월지입니다. 한때 안압지라고 불렸어요.'] },
+    ],
   },
   cheoyong_0: {
     name: '처용', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="7.5" cy="12" rx="5" ry="6.5"/><ellipse cx="16.5" cy="12" rx="5" ry="6.5"/><path d="M5.5 10.5c.8-.7 1.7-.7 2.5 0"/><path d="M14.5 10.5c.8-.7 1.7-.7 2.5 0"/><path d="M5.5 14c1 1.2 3 1.2 4 0"/><path d="M14.5 15c1-1.2 3-1.2 4 0"/></svg>', img: 'assets/portraits/cheoyong.png',
@@ -1572,6 +1631,8 @@ const NPC_DATA = {
         chart:{ type:'steps', title:'원효, 발길을 돌리다', steps:[ { t:'해골물을 마신다', s:'어둠 속' }, { t:'날이 밝아 안다' }, { t:'「모든 것은 마음」', s:'신라로 돌아간다' } ] } },
       { who:'npc', t:'「모든 것은 마음이 짓는다」고. 그러고는 신라로 돌아가셨소.' },
       { who:'npc', t:'저 혼자 신라를 떠났지요.' },
+      { who:'npc', t:'원효 스님은 돌아와 표주박을 두드리며 무애가를 부르고 다니셨소. 마을마다 춤추며 부처를 알리셨지.' },
+      { who:'me', t:'(속으로) 뒷날 혜초는 인도와 중앙아시아를 걸어서 돌고 「왕오천축국전」을 남긴다.' },
       { who:'npc', t:'그보다 앞서 선덕여왕 때는 첨성대를 쌓아 하늘을 살폈지요.' },
       { who:'me', t:'(고개를 든다) 별을 보는 것입니까?' },
       { who:'npc', t:'별자리와 날씨를 함께 살폈소.' },
@@ -1592,6 +1653,8 @@ const NPC_DATA = {
       { who:'doc', t:'(성덕대왕신종. 봉덕사에 있던 종이라 봉덕사종이라고도 하며, 현존하는 한국 종 가운데 가장 크고 정교한 문양을 지녔다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_seongdeokdaewang_bell.jpg' },
       { who:'doc', t:'(화순 쌍봉사 철감선사탑. 신라 하대 선종 승려 철감선사 도윤의 사리를 모신 승탑으로, 통일 신라 승탑 예술의 최고 걸작으로 꼽힌다.)\n출처: 국가유산청, 국가유산포털, 공공누리 제1유형', docImg:'assets/scenes/heritage_ssangbongsa_cheolgamseonsatap.jpg' },
       { who:'npc', t:'이 불국사 삼층석탑, 흔히 석가탑이라 하오.' },
+      { who:'npc', t:'마주 선 다보탑은 모양이 화려해 층을 헤아리기도 어렵지요.',
+        chart:{ type:'compare', title:'불국사의 두 탑', cols:[ { h:'석가탑', items:[ '3층 · 단정한 비례', '무구정광대다라니경 발견' ] }, { h:'다보탑', hi:true, items:[ '화려하고 독특한 모양', '층을 가늠하기 어려움' ] } ] } },
       { who:'npc', t:'해체하다 무구정광대다라니경이 나왔지요.' },
       { who:'me', t:'…얼마나 오래된 것입니까?' },
       { who:'npc', t:'지금 남은 것 가운데 가장 오래된 목판 인쇄물이오.' },
@@ -1610,6 +1673,15 @@ const NPC_DATA = {
       { q:'불국사 삼층석탑(석가탑)을 해체하다가 발견된, 세계에서 가장 오래된 목판 인쇄물은?',
         opts:['무구정광대다라니경','직지심체요절'], answer:0, src:[10],
         feedback:['직지심체요절은 고려 시대의 현존 최고(最古) 금속 활자 인쇄물이에요.','정답! 무구정광대다라니경입니다. 통일 신라의 목판 인쇄 기술을 보여줘요.'] },
+      { q:'표주박을 두드리며 무애가를 부르고 다니며 불교 대중화에 힘쓴 승려는?',
+        opts:['원효','의상'], answer:0, src:[47],
+        feedback:['의상은 당에서 화엄을 배우고 부석사를 세운 승려예요.','정답! 원효입니다.'] },
+      { q:'인도와 중앙아시아를 다녀와 「왕오천축국전」을 남긴 신라 승려는?',
+        opts:['혜초','자장'], answer:0, src:[14, 55],
+        feedback:['자장은 선덕 여왕에게 황룡사 9층 목탑을 세우자고 건의한 승려예요.','정답! 혜초입니다.'] },
+      { q:'불국사에서 석가탑과 마주 서 있으며, 화려하고 독특한 모양을 한 통일 신라의 탑은?',
+        opts:['다보탑','감은사지 3층 석탑'], answer:0, src:[27],
+        feedback:['감은사지 3층 석탑은 신문왕 때 완성된 쌍탑으로, 단정하고 웅장한 모양이에요.','정답! 다보탑입니다.'] },
     ]
   },
   minjeong_0: {
@@ -1720,6 +1792,7 @@ const Stage = {
     if (id === 'munwang') return 'munwang_0';
     if (id === 'jangbogo') return 'jangbogo_0';
     if (id === 'uisang') return 'uisang_0';
+    if (id === 'jongjangin') return 'jongjangin_0';
     if (id === 'cheoyong') return 'cheoyong_0';
     if (id === 'minjeong') return 'minjeong_0';
     return null;
@@ -1740,7 +1813,14 @@ const seenDialogKeys = new Set();
 /* ============ 용어 설명(글로서리): 대사 속 낯선 용어나 지명을 눌러 설명을
    보거나(문자열) 지도를 띄운다(map 필드). GLOSSARY에 추가하기만 하면 별도
    코드 수정 없이 대사 어디서든 자동으로 링크된다. ============ */
-const GLOSSARY = {};
+const GLOSSARY = {
+  '주작대로': '발해 상경 용천부의 궁성 남문에서 도성 남문까지 곧게 뻗은 큰길. 당의 장안성을 본떠 도성을 반듯한 구획으로 나누었다.',
+  '신라방': '당의 산둥반도·장쑤 바닷가에 신라 사람들이 모여 살던 마을. 신라소(관청), 신라원(절), 신라관(객관)과 함께 나온다.',
+  '발해관': '당이 산둥반도 등주에 둔, 발해 사신과 상인이 머무는 객관. 신라 사람은 신라관에 묵었다.',
+  '무애가': '원효가 표주박을 두드리며 부르고 다녔다는 노래. 어려운 교리 대신 노래와 춤으로 백성에게 불교를 알렸다.',
+  '동궁과 월지': '경주에 있는 신라 왕궁의 별궁과 연못. 문무왕 때 못을 파고 섬을 쌓았다. 조선 때 폐허가 되어 안압지라 불렸다.',
+  '음통': '신라 종 꼭대기 용뉴 옆에 붙은 대롱. 소리를 고르게 해 준다고 보며, 중국·일본 종에는 없는 신라 종만의 특징이다.',
+};
 function escapeHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -2233,39 +2313,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=105"></script>
-<script src="assets/streak.js?v=105"></script>
+<script src="assets/badges.js?v=106"></script>
+<script src="assets/streak.js?v=106"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=105"></script>
-  <script src="assets/fx.js?v=105"></script>
-  <script src="assets/deed.js?v=105"></script>
-  <script src="assets/inkwipe.js?v=105"></script>
-  <script src="assets/dash.js?v=105"></script>
-<script src="assets/juice.js?v=105"></script>
-  <script src="assets/difficulty.js?v=105"></script>
-  <script src="assets/nextauto.js?v=105"></script>
-<script src="assets/heroes_data.js?v=105"></script>
-<script src="assets/heroes.js?v=105"></script>
-<script src="assets/icons.js?v=105"></script>
-<script src="assets/srs.js?v=105"></script>
-<script src="assets/newsflash.js?v=105"></script>
-<script src="assets/timeline.js?v=105"></script>
-<script src="assets/journey.js?v=105"></script>
-<script src="assets/season.js?v=105"></script>
-<script src="assets/boss.js?v=105"></script>
-<script src="assets/items.js?v=105"></script>
-  <script src="assets/gold.js?v=105"></script>
-  <script src="assets/ask.js?v=105"></script>
-  <script src="assets/ads.js?v=105"></script>
-  <script src="assets/energy.js?v=105"></script>
-  <script src="assets/daily.js?v=105"></script>
-  <script src="assets/unlock.js?v=105"></script>
-  <script src="assets/guide.js?v=105"></script>
-  <script src="assets/minigames.js?v=105"></script>
-  <script src="assets/quests.js?v=105"></script>
-  <script src="assets/offline.js?v=105"></script>
-  <script src="assets/telemetry.js?v=105"></script>
-<script src="assets/autowalk.js?v=105"></script>
+<script src="assets/rank.js?v=106"></script>
+  <script src="assets/fx.js?v=106"></script>
+  <script src="assets/deed.js?v=106"></script>
+  <script src="assets/inkwipe.js?v=106"></script>
+  <script src="assets/dash.js?v=106"></script>
+<script src="assets/juice.js?v=106"></script>
+  <script src="assets/difficulty.js?v=106"></script>
+  <script src="assets/nextauto.js?v=106"></script>
+<script src="assets/heroes_data.js?v=106"></script>
+<script src="assets/heroes.js?v=106"></script>
+<script src="assets/icons.js?v=106"></script>
+<script src="assets/srs.js?v=106"></script>
+<script src="assets/newsflash.js?v=106"></script>
+<script src="assets/timeline.js?v=106"></script>
+<script src="assets/journey.js?v=106"></script>
+<script src="assets/season.js?v=106"></script>
+<script src="assets/boss.js?v=106"></script>
+<script src="assets/items.js?v=106"></script>
+  <script src="assets/gold.js?v=106"></script>
+  <script src="assets/ask.js?v=106"></script>
+  <script src="assets/ads.js?v=106"></script>
+  <script src="assets/energy.js?v=106"></script>
+  <script src="assets/daily.js?v=106"></script>
+  <script src="assets/unlock.js?v=106"></script>
+  <script src="assets/guide.js?v=106"></script>
+  <script src="assets/minigames.js?v=106"></script>
+  <script src="assets/quests.js?v=106"></script>
+  <script src="assets/offline.js?v=106"></script>
+  <script src="assets/telemetry.js?v=106"></script>
+<script src="assets/autowalk.js?v=106"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
