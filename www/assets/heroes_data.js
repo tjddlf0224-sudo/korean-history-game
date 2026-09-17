@@ -3,7 +3,7 @@
 
    n=이름  p=초상 파일  e=시대(챕터 목록과 같은 구분)  r=역할(능력치의 근거)
    ch={챕터: [퀴즈가 있는 대화 키]}  — 이 대화를 전부 끝내야 카드를 얻는다
-   인물 215명 */
+   인물 216명 */
 window.HERO_DATA = (function(){
   return {
     gogurin: { n:'고구려 사람', p:'gogurin.png', e:'선사·초기국가', r:'commoner', ch:{'seonsa1.html':['gogurin_0']} },
@@ -195,6 +195,7 @@ window.HERO_DATA = (function(){
     yugwansun: { n:'유관순', p:'yugwansun.png', e:'일제강점기', r:'commoner', ch:{'ilje1.html':['yugwansun_0']} },
     yunbonggil: { n:'윤봉길', p:'yunbonggil.png', e:'일제강점기', r:'commoner', ch:{'ilje_ch7.html':['yunbonggil_0']} },
     uiyeoldan: { n:'의열단원', p:'uiyeoldan.png', e:'일제강점기', r:'general', ch:{'ilje2.html':['uiyeoldan_0']} },
+    ihoeyeong: { n:'이회영', p:'ihoeyeong.png', e:'일제강점기', r:'scholar', ch:{'ilje1.html':['ihoeyeong_0']} },
     eohakhoe: { n:'조선어학회 회원', p:'eohakhoe.png', e:'일제강점기', r:'scholar', ch:{'ilje2.html':['eohakhoe_0']} },
     josoang: { n:'조소앙', p:'josoang.png', e:'일제강점기', r:'scholar', ch:{'ilje_ch7.html':['josoang_0']} },
     jicheongcheon: { n:'지청천', p:'jicheongcheon.png', e:'일제강점기', r:'general', ch:{'ilje_ch7.html':['jicheongcheon_0']} },

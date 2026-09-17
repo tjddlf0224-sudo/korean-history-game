@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=110"></script>
-<script src="assets/zoomwarn.js?v=110"></script>
-<script src="assets/map/map_component.js?v=110"></script>
-<script src="assets/chart.js?v=110"></script>
-<script src="assets/audio.js?v=110"></script>
+<script src="assets/errlog.js?v=111"></script>
+<script src="assets/zoomwarn.js?v=111"></script>
+<script src="assets/map/map_component.js?v=111"></script>
+<script src="assets/chart.js?v=111"></script>
+<script src="assets/audio.js?v=111"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=110';   // 존댓말 전환
+const ART_V = '?v=111';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1255,7 +1255,7 @@ const NPC_DATA = {
     beats: [
       { who:'npc', t:'이 무명옷, 한번 만져 보시겠소.' },
       { who:'me', t:'(만져 본다) …그냥 무명인데요?' },
-      { who:'npc', t:'조선 사람이 짠 것이오. 관세가 풀리면 일본 물건이 밀려드오.' },
+      { who:'npc', t:'조선 사람이 짠 것이오. 1920년에 회사령이 없어지고, 곧 일본과의 관세마저 철폐된다 하오. 그럼 일본 물건이 밀려드오.' },
       { who:'npc', t:'그럼 우리 산업이 견디지 못하지요.',
         chart:{ type:'quote', title:'물산장려운동의 표어', text:'조선 사람 <b>조선 것</b>으로,<br>내 살림 <b>내 것</b>으로.', from:'물산장려운동, 1920년 평양' } },
       { who:'me', t:'누가 앞장서 시작한 겁니까?' },
@@ -1288,6 +1288,7 @@ const NPC_DATA = {
       { who:'npc', t:'동아일보가 1931년부터 벌인 일이오.' },
       { who:'npc', t:'학생을 농촌으로 보내 한글을 가르쳤소.',
         chart:{ type:'steps', title:'브나로드 운동, 1931~', steps:[ { t:'학생이 농촌으로 간다' }, { t:'한글을 가르친다' }, { t:'"배우자 가르치자"' } ] } },
+      { who:'npc', t:'심훈은 이 운동을 바탕으로 소설 「상록수」를 썼소. 농촌 계몽에 몸 바친 젊은이들 이야기지.' },
       { who:'me', t:'저 극장엔 사람이 가득합니다.' },
       { who:'npc', t:'1926년, 나운규의 「아리랑」이 걸렸소.',
         chart:{ type:'stat', title:'영화 「아리랑」, 1926', items:[ { v:'단성사', l:'개봉관' }, { v:'나운규', l:'감독 겸 주연' } ] } },
@@ -1347,6 +1348,12 @@ const NPC_DATA = {
       { q:'「하늘과 바람과 별과 시」로 알려졌으며, 일제 말 후쿠오카 형무소에서 순국한 시인은?',
         opts:['윤동주','이육사'], answer:0, src:[39],
         feedback:['이육사도 저항 시인이지만 「하늘과 바람과 별과 시」의 저자는 아니에요. 이육사는 「광야」·「청포도」를 썼어요.','정답! 윤동주입니다.'] },
+      { q:'1920년대 일본과의 관세 철폐 움직임에 맞서 "조선 사람 조선 것으로"를 내건 운동의 배경으로 옳은 것은?',
+        opts:['회사령 철폐와 관세 철폐','토지 조사 사업 시작'], answer:0, src:[53],
+        feedback:['토지 조사 사업은 1910년대에 시작된 정책이에요.','정답! 회사령 철폐(1920)와 관세 철폐로 일본 자본이 밀려들 것을 걱정해 물산 장려 운동이 일어났어요.'] },
+      { q:'브나로드 운동을 배경으로 농촌 계몽을 그린 심훈의 소설은?',
+        opts:['상록수','무정'], answer:0, src:[50, 72],
+        feedback:['「무정」은 이광수의 소설이에요.','정답! 「상록수」입니다.'] },
     ]
   },
   singanhoe_0: {
@@ -1370,6 +1377,8 @@ const NPC_DATA = {
       { who:'npc', t:'조선엔 근대적 발전이 없었다는 총독부 어용학자들의 정체성론을,',
         chart:{ type:'vs', title:'정체성론에 맞선 유물사관', left:{ n:'정체성론', s:'조선은 발전이 없었다' }, right:{ n:'백남운', s:'유물사관으로 반박' }, mid:'≠' } },
       { who:'npc', t:'유물사관으로 반박하셨소.' },
+      { who:'npc', t:'이병도·손진태 같은 이들은 진단 학회를 세워 문헌을 꼼꼼히 따지는 실증주의로 역사를 연구했소.',
+        chart:{ type:'grid', title:'일제강점기 역사학의 세 갈래', head:[ '갈래', '누구', '특징' ], rows:[ [ '민족주의 사학', '박은식 · 신채호', '민족의 정신·혼' ], [ '사회 경제 사학', '백남운', '유물 사관 · 정체성론 반박' ], [ '실증주의 사학', '진단 학회(이병도·손진태)', '문헌 고증' ] ], hi:2 } },
       { who:'me', t:'저 학생들은 어디서 왔습니까?',
         chart:{ type:'stat', title:'학생들의 소식', items:[ { v:'광주', l:'온 곳' }, { v:'1929', l:'일이 벌어진 해' } ] } },
       { who:'npc', t:'광주에서 왔다 하오. 1926년 순종의 인산일엔' },
@@ -1400,6 +1409,12 @@ const NPC_DATA = {
       { q:'「조선사회경제사」를 저술해 조선에는 근대적 발전이 없었다는 식민사학의 정체성론을 유물사관으로 반박한 인물은?',
         opts:['백남운','신채호'], answer:0, src:[74, 69, 44, 10],
         feedback:['신채호는 「조선상고사」를 쓰고 민족주의 사학을 이끌었어요.','정답! 백남운입니다. 사회경제사학의 관점에서 정체성론을 반박했어요.'] },
+      { q:'이병도·손진태 등이 조직해 실증주의 사학을 이끈 단체는?',
+        opts:['진단 학회','조선사 편수회'], answer:0, src:[16, 17, 19, 24, 25, 27, 29, 37, 41, 48],
+        feedback:['조선사 편수회는 총독부가 식민 사관을 퍼뜨리려 만든 기구예요.','정답! 진단 학회입니다(1934).'] },
+      { q:'백남운이 유물 사관을 바탕으로 식민 사학의 정체성론을 반박한 역사학의 갈래는?',
+        opts:['사회 경제 사학','실증주의 사학'], answer:0, src:[42, 74],
+        feedback:['실증주의 사학은 진단 학회가 이끈 문헌 고증 중심의 역사학이에요.','정답! 사회 경제 사학입니다.'] },
     ]
   },
   uiyeoldan_0: {
@@ -1414,16 +1429,21 @@ const NPC_DATA = {
       { who:'npc', t:'박재혁은 부산경찰서에 폭탄을 던졌소.' },
       { who:'npc', t:'김익상은 조선총독부에, 나석주는 동양척식주식회사에 던졌지.',
         chart:{ type:'stat', title:'의열단의 의거', items:[ { v:'부산경찰서', l:'박재혁' }, { v:'조선총독부', l:'김익상' }, { v:'동양척식주식회사', l:'나석주' } ] } },
+      { who:'npc', t:'김상옥은 종로경찰서에 폭탄을 던지고 수백 명의 경찰과 맞서 싸웠소(1923).' },
       { who:'me', t:'그 뒤엔 어찌 되셨습니까?' },
+      { who:'npc', t:'혼자 던지는 폭탄으론 한계가 있었소. 단원들이 황푸 군관 학교에 들어가 군사를 배웠지. 조직된 무장 투쟁으로 방향을 튼 것이오.' },
       { who:'npc', t:'김원봉은 중국 국민당의 도움을 얻었소.',
         chart:{ type:'stat', title:'조선혁명간부학교', items:[ { v:'중국 국민당', l:'지원' }, { v:'투사 양성', l:'훗날 민족혁명당으로' } ] } },
       { who:'me', t:'그 학교에서 무엇을 가르쳤습니까?' },
       { who:'npc', t:'조선혁명간부학교를 세워 투사를 길러냈지.' },
       { who:'npc', t:'1935년엔 여러 세력을 모아 민족혁명당을 만들었소.',
         chart:{ type:'timeline', title:'의열단에서 조선의용대로', marks:[ { y:'1919', t:'의열단 결성' }, { y:'1935', t:'민족혁명당' }, { y:'1938', t:'조선의용대', on:true } ] } },
+      { who:'npc', t:'1937년엔 좌파 세력을 모아 조선 민족 전선 연맹을 꾸렸고,' },
       { who:'npc', t:'뒤에 김원봉은 조선의용대를 만들었소.' },
       { who:'npc', t:'중국 관내에서 만들어진 최초의 한인 무장 부대요.',
         chart:{ type:'stat', title:'조선의용대, 1938', items:[ { v:'중국 우한', l:'조직된 곳' }, { v:'최초', l:'중국 관내 한인 무장 부대' } ] } },
+      { who:'npc', t:'조선의용대 일부는 화북으로 가서 조선 독립 동맹의 조선 의용군이 되었소(1942).',
+        chart:{ type:'grid', title:'1930~40년대 중국 관내의 무장 세력', head:[ '단체', '해', '누가 · 어디' ], rows:[ [ '조선 민족 전선 연맹', '1937', '김원봉 등 좌파 연합' ], [ '조선의용대', '1938', '김원봉 · 우한' ], [ '조선 의용군', '1942', '조선 독립 동맹(김두봉) · 화북' ], [ '한국광복군', '1940', '임시정부 · 충칭' ] ], hi:2 } },
       { who:'me', t:'그 뜻이 광복 때까지 이어졌습니까?' },
       { who:'npc', t:'1945년, 대한애국청년당의 조문기 등이' },
       { who:'npc', t:'친일파가 모인 경성 부민관에 폭탄을 터뜨렸소.' },
@@ -1508,6 +1528,15 @@ const NPC_DATA = {
       { q:'신채호가 김원봉의 부탁으로 써서 의열단의 활동 지침이 된 선언문은?',
         opts:['조선혁명선언','대한독립선언'], answer:0, src:[9, 16, 22, 29, 31, 36, 37, 43, 45, 47, 55, 58],
         feedback:['대한독립선언은 1919년 만주에서 발표된 무장 투쟁 촉구 선언이에요.','정답! 「조선혁명선언」입니다. 민중의 직접 혁명을 통한 독립을 주장했어요.'] },
+      { q:'1923년 종로 경찰서에 폭탄을 던진 의열단원은?',
+        opts:['김상옥','나석주'], answer:0, src:[31, 55],
+        feedback:['나석주는 동양 척식 주식회사에 폭탄을 던진 의열단원이에요.','정답! 김상옥입니다.'] },
+      { q:'의열단원들이 입교해 개인 폭력 투쟁에서 조직적 무장 투쟁으로 방향을 바꾸는 계기가 된 중국의 학교는?',
+        opts:['황푸 군관 학교','신흥 무관 학교'], answer:0, src:[31, 55],
+        feedback:['신흥 무관 학교는 서간도 삼원보에 세운 독립군 양성 학교예요.','정답! 황푸 군관 학교입니다.'] },
+      { q:'1942년 화북에서 조선 독립 동맹이 거느린 무장 부대는?',
+        opts:['조선 의용군','한국광복군'], answer:0, src:[60],
+        feedback:['한국광복군은 1940년 충칭에서 임시정부가 만든 군대예요.','정답! 조선 의용군입니다. 조선의용대 화북지대가 바탕이 되었어요.'] },
     ]
   },
   cheongsanri_0: {
@@ -1536,6 +1565,7 @@ const NPC_DATA = {
       { who:'npc', t:'이들은 훗날 국민부와 혁신의회로 다시 통합되었소.' },
       { who:'npc', t:'1930년대엔 양세봉의 조선혁명군과 지청천의 한국독립군이 나섰소.',
         chart:{ type:'vs', title:'1930년대, 만주의 두 부대', left:{ n:'조선혁명군', s:'양세봉' }, right:{ n:'한국독립군', s:'지청천' }, mid:'&' } },
+      { who:'npc', t:'양세봉의 조선혁명군은 중국 의용군과 함께 영릉가와 흥경성에서 일본군을 쳤소.' },
       { who:'npc', t:'지청천의 부대는 쌍성보와 대전자령에서 일본군을 크게 격파했지.',
         chart:{ type:'stat', title:'1930년대, 만주의 승전', items:[ { v:'쌍성보', l:'지청천, 한국독립군' }, { v:'대전자령', l:'지청천, 한국독립군' } ] } },
       { who:'me', t:'임시정부의 군대는 언제 섰습니까?' },
@@ -1566,6 +1596,12 @@ const NPC_DATA = {
       { q:'1940년 충칭에서 창설되어 인도·미얀마 전선에서 영국군과 연합하고, 미국 OSS와 함께 국내 진공 작전을 준비한 부대는?',
         opts:['한국광복군','조선의용대'], answer:0, src:[79, 69, 64, 44, 59],
         feedback:['조선의용대는 1938년 우한에서 조직된 중국 관내 최초의 한인 무장 부대예요.','정답! 한국광복군입니다. 국내 진공 작전은 광복으로 실행되지 못했어요.'] },
+      { q:'봉오동·청산리 전투에서 진 일본군이 보복으로 간도의 한인을 학살한 사건은?',
+        opts:['간도 참변','자유시 참변'], answer:0, src:[38, 59],
+        feedback:['자유시 참변은 러시아 자유시에서 독립군이 적군에게 피해를 입은 사건이에요.','정답! 간도 참변입니다(1920).'] },
+      { q:'양세봉이 이끈 조선혁명군이 중국 의용군과 연합해 일본군을 물리친 전투는?',
+        opts:['영릉가 전투','대전자령 전투'], answer:0, src:[52],
+        feedback:['대전자령 전투는 지청천의 한국독립군이 거둔 승리예요.','정답! 영릉가 전투입니다. 흥경성에서도 싸웠어요.'] },
     ]
   },
   eohakhoe_0: {
@@ -2122,38 +2158,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=110"></script>
-<script src="assets/streak.js?v=110"></script>
+<script src="assets/badges.js?v=111"></script>
+<script src="assets/streak.js?v=111"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=110"></script>
-  <script src="assets/fx.js?v=110"></script>
-  <script src="assets/deed.js?v=110"></script>
-  <script src="assets/inkwipe.js?v=110"></script>
-  <script src="assets/dash.js?v=110"></script>
-<script src="assets/juice.js?v=110"></script>
-  <script src="assets/difficulty.js?v=110"></script>
-  <script src="assets/nextauto.js?v=110"></script>
-<script src="assets/heroes_data.js?v=110"></script>
-<script src="assets/heroes.js?v=110"></script>
-<script src="assets/icons.js?v=110"></script>
-<script src="assets/srs.js?v=110"></script>
-<script src="assets/newsflash.js?v=110"></script>
-<script src="assets/timeline.js?v=110"></script>
-<script src="assets/journey.js?v=110"></script>
-<script src="assets/season.js?v=110"></script>
-<script src="assets/items.js?v=110"></script>
-  <script src="assets/gold.js?v=110"></script>
-  <script src="assets/ask.js?v=110"></script>
-  <script src="assets/ads.js?v=110"></script>
-  <script src="assets/energy.js?v=110"></script>
-  <script src="assets/daily.js?v=110"></script>
-  <script src="assets/unlock.js?v=110"></script>
-  <script src="assets/guide.js?v=110"></script>
-  <script src="assets/minigames.js?v=110"></script>
-  <script src="assets/quests.js?v=110"></script>
-  <script src="assets/offline.js?v=110"></script>
-  <script src="assets/telemetry.js?v=110"></script>
-<script src="assets/autowalk.js?v=110"></script>
+<script src="assets/rank.js?v=111"></script>
+  <script src="assets/fx.js?v=111"></script>
+  <script src="assets/deed.js?v=111"></script>
+  <script src="assets/inkwipe.js?v=111"></script>
+  <script src="assets/dash.js?v=111"></script>
+<script src="assets/juice.js?v=111"></script>
+  <script src="assets/difficulty.js?v=111"></script>
+  <script src="assets/nextauto.js?v=111"></script>
+<script src="assets/heroes_data.js?v=111"></script>
+<script src="assets/heroes.js?v=111"></script>
+<script src="assets/icons.js?v=111"></script>
+<script src="assets/srs.js?v=111"></script>
+<script src="assets/newsflash.js?v=111"></script>
+<script src="assets/timeline.js?v=111"></script>
+<script src="assets/journey.js?v=111"></script>
+<script src="assets/season.js?v=111"></script>
+<script src="assets/items.js?v=111"></script>
+  <script src="assets/gold.js?v=111"></script>
+  <script src="assets/ask.js?v=111"></script>
+  <script src="assets/ads.js?v=111"></script>
+  <script src="assets/energy.js?v=111"></script>
+  <script src="assets/daily.js?v=111"></script>
+  <script src="assets/unlock.js?v=111"></script>
+  <script src="assets/guide.js?v=111"></script>
+  <script src="assets/minigames.js?v=111"></script>
+  <script src="assets/quests.js?v=111"></script>
+  <script src="assets/offline.js?v=111"></script>
+  <script src="assets/telemetry.js?v=111"></script>
+<script src="assets/autowalk.js?v=111"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

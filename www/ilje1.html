@@ -510,11 +510,11 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=110"></script>
-<script src="assets/zoomwarn.js?v=110"></script>
-<script src="assets/map/map_component.js?v=110"></script>
-<script src="assets/chart.js?v=110"></script>
-<script src="assets/audio.js?v=110"></script>
+<script src="assets/errlog.js?v=111"></script>
+<script src="assets/zoomwarn.js?v=111"></script>
+<script src="assets/map/map_component.js?v=111"></script>
+<script src="assets/chart.js?v=111"></script>
+<script src="assets/audio.js?v=111"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -526,7 +526,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=110';   // 존댓말 전환
+const ART_V = '?v=111';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -668,6 +668,7 @@ const ZONES = {
       { id:'yugwansun', name:'유관순', x:700, y:240, img:'assets/portraits/yugwansun.png', look:{ role:'commoner', body:'#e8e2d2', accent:'#6b5636' } },
       { id:'siwon1', name:'만세 시위 시민', x:630, y:330, img:'assets/portraits/siwon1.png', look:{ role:'commoner', body:'#8a7a5a', accent:'#e8e2d2' } },
       { id:'siwon2', name:'만세 시위 시민', x:790, y:330, img:'assets/portraits/siwon2.png', look:{ role:'commoner', body:'#6b5636', accent:'#e8e2d2' } },
+      { id:'ihoeyeong', name:'이회영', x:380, y:520, img:'assets/portraits/ihoeyeong.png', look:{ role:'scholar', body:'#2a2a2a', accent:'#8a7a5a' } },
       { id:'bakeunsik', name:'박은식', x:1060, y:280, img:'assets/portraits/bakeunsik.png', look:{ role:'scholar', body:'#4a5a68', accent:'#c9a24a' } },
       { id:'gwangbokhoe', name:'대한광복회 단원', x:688, y:600, img:'assets/portraits/gwangbokhoe.png', look:{ role:'general', body:'#4a4a58', accent:'#8a6d3b' } },
       { id:'uibyeongbu', name:'독립의군부 단원', x:1000, y:550, img:'assets/portraits/uibyeongbu.png', look:{ role:'commoner', body:'#5a4a3a', accent:'#8a7a5a' } },
@@ -1028,6 +1029,7 @@ function updateHudGoal(){
       ['yugwansun', '유관순과 대화하기'],
       ['siwon1', '만세 시위 시민과 대화하기'],
       ['siwon2', '만세 시위 시민과 대화하기'],
+      ['ihoeyeong', '이회영과 대화하기'],
       ['bakeunsik', '박은식과 대화하기'],
       ['gwangbokhoe', '대한광복회 단원과 대화하기'],
       ['uibyeongbu', '독립의군부 단원과 대화하기']
@@ -1285,6 +1287,8 @@ const NPC_DATA = {
       { who:'me', t:'재판도 없이 그리 되었단 말입니까?' },
       { who:'npc', t:'조선인에게만 매를 치는 것이 무단 통치라오.',
         chart:{ type:'vs', title:'무단 통치, 매 앞의 차이', left:{ n:'조선인', s:'재판 없이 태형' }, right:{ n:'일본인', s:'적용되지 않음' }, mid:'≠' } },
+      { who:'npc', t:'헌병은 재판 없이 벌을 내릴 수 있었소. 즉결 처분이오. 학교 선생님들까지 제복에 칼을 찼지.',
+        chart:{ type:'grid', title:'1910년대 무단 통치의 모습', head:[ '무엇', '내용' ], rows:[ [ '헌병 경찰', '헌병이 경찰 일까지 맡음' ], [ '즉결 처분', '재판 없이 벌금·구류·태형' ], [ '조선 태형령', '조선인에게만 매질' ], [ '칼 찬 교사', '관리와 교원도 제복에 칼' ] ], hi:1 } },
       { who:'me', t:'…이 낡고 빛바랜 종이는 무엇입니까?' },
       { who:'npc', t:'기한 안에 신고해야 내 땅으로 인정해 주는 통지문이오.' },
       { who:'npc', t:'나는 그 기한을 넘겨 땅을 잃고 말았소.' },
@@ -1315,6 +1319,9 @@ const NPC_DATA = {
       { q:'함경남도 원산의 라이징선 석유회사에서 시작되어 일본은 물론 프랑스 등 해외 노동단체의 격려까지 받은 1920년대 최대 규모의 노동자 파업은?',
         opts:['원산 총파업','암태도 소작 쟁의'], answer:0, src:[79, 29, 19],
         feedback:['암태도 소작 쟁의는 전남 신안 암태도에서 소작농들이 벌인 쟁의예요.','정답! 원산 총파업입니다. 1929년 원산에서 일어나 국내외의 주목을 받았어요.'] },
+      { q:'1910년대 헌병 경찰이 재판 없이 조선인에게 벌금·구류·태형을 내릴 수 있게 한 권한은?',
+        opts:['즉결 처분권','치외 법권'], answer:0, src:[51],
+        feedback:['치외 법권은 외국인이 자기 나라 법의 적용을 받는 권리예요.','정답! 즉결 처분권입니다. 이 시기엔 교원도 제복을 입고 칼을 찼어요.'] },
     ]
   },
   yugwansun_0: {
@@ -1493,6 +1500,22 @@ const NPC_DATA = {
         feedback:['아우내 장터는 유관순이 만세 시위를 이끈 천안의 장터예요.','정답! 제암리입니다. 수원(화성) 제암리에서 일어난 학살 사건이에요.'] },
     ]
   },
+  ihoeyeong_0: {
+    name: '이회영', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7"/></svg>', img: 'assets/portraits/ihoeyeong.png',
+    beats: [
+      { who:'npc', t:'(누비옷 깃을 여민다) 나라가 넘어간 그해 겨울, 우리 여섯 형제는 가진 땅과 집을 모두 팔았소.' },
+      { who:'me', t:'그 많은 재산을 다 말입니까?' },
+      { who:'npc', t:'식구 쉰여 명이 압록강을 건너 서간도 삼원보로 갔소. 거기서 독립군을 길러야 했으니.',
+        chart:{ type:'steps', title:'이회영 일가의 망명', steps:[ { t:'1910 · 여섯 형제가 전 재산을 처분' }, { t:'서간도 삼원보로 이주' }, { t:'1911 · 경학사와 신흥 강습소를 세움' }, { t:'신흥 무관 학교로 자라 독립군을 길러 냄' } ] } },
+      { who:'npc', t:'동포를 모아 경학사를 꾸리고, 신흥 강습소를 열었소. 뒷날 신흥 무관 학교가 되지.' },
+      { who:'me', t:'(속으로) 이 학교에서 자란 이들이 청산리에서도 싸운다. 선생은 1932년 일제에 붙잡혀 순국하신다.' },
+    ],
+    quizSeq: [
+      { q:'전 재산을 처분하고 서간도 삼원보로 망명해 경학사와 신흥 강습소를 세운 인물은?',
+        opts:['이회영','이상설'], answer:0, src:[26],
+        feedback:['이상설은 북간도에 서전서숙을 세우고 헤이그 특사로 간 인물이에요.','정답! 이회영입니다. 신흥 강습소는 신흥 무관 학교로 이어졌어요.'] },
+    ],
+  },
   bakeunsik_0: {
     name: '박은식', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.8-1.3-4-2-8-2v13c4 0 6.2.7 8 2 1.8-1.3 4-2 8-2V4c-4 0-6.2.7-8 2z"/><line x1="12" y1="6" x2="12" y2="19"/></svg>', img: 'assets/portraits/bakeunsik.png',
     beats: [
@@ -1589,6 +1612,8 @@ const NPC_DATA = {
         chart:{ type:'grid', title:'독립의군부와 대한광복회', head:[ '', '독립의군부', '대한광복회' ], rows:[ [ '시기', '1912', '1915' ], [ '이념', '복벽주의(옛 황제)', '공화주의(새 정부)' ], [ '중심', '임병찬', '박상진' ], [ '방식', '국권 반환 요구서', '군자금 모집·친일파 처단' ] ], note:'하나는 <b>임금을 다시</b>, 하나는 <b>새 나라를</b> 꿈꿨습니다.' } },
       { who:'me', t:'임시정부는 자금을 어찌 모았습니까?' },
       { who:'npc', t:'연통제와 교통국으로 국내와 소식을 이었소.' },
+      { who:'npc', t:'상하이 임시정부는 임시의정원·국무원·법원을 나눠 두었소. 삼권 분립이지.',
+        chart:{ type:'grid', title:'대한민국 임시정부의 짜임(1919)', head:[ '기관', '맡은 일' ], rows:[ [ '임시의정원', '입법' ], [ '국무원', '행정' ], [ '법원', '사법' ] ] } },
       { who:'npc', t:'나라 안팎 동포에게 독립공채도 발행했다 들었소.',
         chart:{ type:'stat', title:'임시정부의 자금줄', items:[ { v:'연통제·교통국', l:'국내 연락' }, { v:'독립공채', l:'동포에게 발행' } ] } },
     ],
@@ -1602,6 +1627,9 @@ const NPC_DATA = {
       { q:'독립운동 자금을 마련하기 위해 대한민국 임시정부가 발행한 것은?',
         opts:['독립공채','상평통보'], answer:0, src:[74],
         feedback:['상평통보는 조선 후기에 발행된 화폐예요.','정답! 독립공채입니다. 임시정부는 연통제·교통국과 함께 독립공채로도 자금을 모았어요.'] },
+      { q:'1919년 통합된 대한민국 임시정부가 입법·행정·사법을 나눈 기관을 옳게 짝지은 것은?',
+        opts:['임시의정원 – 국무원 – 법원','중추원 – 의정부 – 재판소'], answer:0, src:[16, 65, 74],
+        feedback:['중추원·의정부는 대한제국 시기의 기구예요.','정답! 임시정부는 삼권 분립의 틀을 갖췄어요.'] },
     ],
     endsChapter: true
   },
@@ -1614,6 +1642,7 @@ const Stage = {
     if (id === 'siwon1') return 'siwon1_0';
     if (id === 'siwon2') return 'siwon2_0';
     if (id === 'bakeunsik') return 'bakeunsik_0';
+    if (id === 'ihoeyeong') return 'ihoeyeong_0';
     if (id === 'gwangbokhoe') return 'gwangbokhoe_0';
     if (id === 'uibyeongbu') return 'uibyeongbu_0';
     if (id === 'suin1') return 'suin1_0';
@@ -2119,39 +2148,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=110"></script>
-<script src="assets/streak.js?v=110"></script>
+<script src="assets/badges.js?v=111"></script>
+<script src="assets/streak.js?v=111"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=110"></script>
-  <script src="assets/fx.js?v=110"></script>
-  <script src="assets/inkwipe.js?v=110"></script>
-  <script src="assets/moment.js?v=110"></script>
-  <script src="assets/manse.js?v=110"></script>
-  <script src="assets/dash.js?v=110"></script>
-<script src="assets/juice.js?v=110"></script>
-  <script src="assets/difficulty.js?v=110"></script>
-  <script src="assets/nextauto.js?v=110"></script>
-<script src="assets/heroes_data.js?v=110"></script>
-<script src="assets/heroes.js?v=110"></script>
-<script src="assets/icons.js?v=110"></script>
-<script src="assets/srs.js?v=110"></script>
-<script src="assets/newsflash.js?v=110"></script>
-<script src="assets/timeline.js?v=110"></script>
-<script src="assets/journey.js?v=110"></script>
-<script src="assets/season.js?v=110"></script>
-<script src="assets/items.js?v=110"></script>
-  <script src="assets/gold.js?v=110"></script>
-  <script src="assets/ask.js?v=110"></script>
-  <script src="assets/ads.js?v=110"></script>
-  <script src="assets/energy.js?v=110"></script>
-  <script src="assets/daily.js?v=110"></script>
-  <script src="assets/unlock.js?v=110"></script>
-  <script src="assets/guide.js?v=110"></script>
-  <script src="assets/minigames.js?v=110"></script>
-  <script src="assets/quests.js?v=110"></script>
-  <script src="assets/offline.js?v=110"></script>
-  <script src="assets/telemetry.js?v=110"></script>
-<script src="assets/autowalk.js?v=110"></script>
+<script src="assets/rank.js?v=111"></script>
+  <script src="assets/fx.js?v=111"></script>
+  <script src="assets/inkwipe.js?v=111"></script>
+  <script src="assets/moment.js?v=111"></script>
+  <script src="assets/manse.js?v=111"></script>
+  <script src="assets/dash.js?v=111"></script>
+<script src="assets/juice.js?v=111"></script>
+  <script src="assets/difficulty.js?v=111"></script>
+  <script src="assets/nextauto.js?v=111"></script>
+<script src="assets/heroes_data.js?v=111"></script>
+<script src="assets/heroes.js?v=111"></script>
+<script src="assets/icons.js?v=111"></script>
+<script src="assets/srs.js?v=111"></script>
+<script src="assets/newsflash.js?v=111"></script>
+<script src="assets/timeline.js?v=111"></script>
+<script src="assets/journey.js?v=111"></script>
+<script src="assets/season.js?v=111"></script>
+<script src="assets/items.js?v=111"></script>
+  <script src="assets/gold.js?v=111"></script>
+  <script src="assets/ask.js?v=111"></script>
+  <script src="assets/ads.js?v=111"></script>
+  <script src="assets/energy.js?v=111"></script>
+  <script src="assets/daily.js?v=111"></script>
+  <script src="assets/unlock.js?v=111"></script>
+  <script src="assets/guide.js?v=111"></script>
+  <script src="assets/minigames.js?v=111"></script>
+  <script src="assets/quests.js?v=111"></script>
+  <script src="assets/offline.js?v=111"></script>
+  <script src="assets/telemetry.js?v=111"></script>
+<script src="assets/autowalk.js?v=111"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

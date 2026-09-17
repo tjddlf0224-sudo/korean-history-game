@@ -422,10 +422,10 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=110"></script>
-<script src="assets/zoomwarn.js?v=110"></script>
-<script src="assets/chart.js?v=110"></script>
-<script src="assets/audio.js?v=110"></script>
+<script src="assets/errlog.js?v=111"></script>
+<script src="assets/zoomwarn.js?v=111"></script>
+<script src="assets/chart.js?v=111"></script>
+<script src="assets/audio.js?v=111"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -436,7 +436,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=110';   // 존댓말 전환
+const ART_V = '?v=111';   // 존댓말 전환
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
@@ -1027,6 +1027,10 @@ const NPC_DATA = {
       { who:'npc', t:'물통 들고 줄 서서 불 끄는 연습도 합니다.',
         chart:{ type:'stat', title:'방공 훈련', items:[ { v:'물통 릴레이', l:'불 끄는 연습' }, { v:'애국반 단위', l:'정기 훈련' } ] } },
       { who:'npc', t:'정작 우리 집에 불이 나면, 누가 꺼 주겠습니까.' },
+      { who:'npc', t:'아침마다 도쿄 궁성 쪽으로 절을 시키고, 신문도 1940년에 동아·조선일보를 다 없앴지요.',
+        chart:{ type:'grid', title:'민족 말살과 전시 수탈', head:[ '무엇', '내용' ], rows:[ [ '궁성 요배', '일왕이 사는 궁성을 향해 절하기' ], [ '신문 폐간', '1940 · 동아일보·조선일보' ], [ '남면북양', '남쪽엔 목화, 북쪽엔 양 — 공업 원료' ], [ '병참 기지화', '대륙 침략을 위한 공업·군수 기지' ], [ '미곡 공출 · 배급', '쌀을 거둬 가고 조금씩 나눠 줌' ], [ '국민 징용령', '1939 · 사람을 끌고 감' ] ] } },
+      { who:'me', t:'쌀도 사람도 다 빼앗아 갔군요.' },
+      { who:'npc', t:'놋그릇 숟가락까지 거둬 갔습니다. 남편은 징용으로 끌려가 소식이 없고요.' },
     ],
     quizSeq: [
       { q:'1940년대 전시 동원기에 일제가 조선 여성에게 입도록 강요한 일본식 노동복은?',
@@ -1035,6 +1039,18 @@ const NPC_DATA = {
       { q:'일제가 전시에 주민을 통제하려고 열 집 안팎을 하나로 묶어 만든 최말단 조직으로, 배급과 방공 훈련을 맡은 것은?',
         opts:['애국반','향약'], answer:0, src:[58],
         feedback:['향약은 조선 시대 향촌의 자치 규약으로, 일제의 전시 조직과는 전혀 다릅니다.','맞습니다. 애국반입니다. 배급·방공 훈련은 물론 주민 감시까지 맡은 말단 통제 조직이었습니다.'] },
+      { q:'1930년대 일제가 한반도 남쪽엔 면화를, 북쪽엔 양을 기르게 한 정책은?',
+        opts:['남면북양 정책','산미 증식 계획'], answer:0, src:[73, 77],
+        feedback:['산미 증식 계획은 1920년대 쌀 생산을 늘려 일본으로 가져간 정책이에요.','정답! 남면북양 정책입니다.'] },
+      { q:'1930년대 일제가 한반도를 대륙 침략의 발판으로 삼아 군수 공업을 키운 정책은?',
+        opts:['병참 기지화 정책','문화 통치'], answer:0, src:[28],
+        feedback:['문화 통치는 3·1 운동 뒤 1920년대의 통치 방식이에요.','정답! 병참 기지화 정책입니다.'] },
+      { q:'일제가 전쟁 물자를 마련하려 1940년대에 쌀을 강제로 거둬 간 것은?',
+        opts:['미곡 공출','방곡령'], answer:0, src:[35, 62, 75],
+        feedback:['방곡령은 1889년 조선 정부가 곡식 수출을 막으려 내린 명령이에요.','정답! 미곡 공출입니다. 식량 배급제도 함께 실시했어요.'] },
+      { q:'민족 말살 통치기에 일왕이 사는 궁성을 향해 절하게 한 것은?',
+        opts:['궁성 요배','신사 참배'], answer:0, src:[10, 13, 17, 22, 27, 77, 78],
+        feedback:['신사 참배는 일본 신을 모신 신사에 가서 절하게 한 것이에요.','정답! 궁성 요배입니다. 1940년에는 동아·조선일보도 폐간되었어요.'] },
     ]
   },
 
@@ -1050,6 +1066,7 @@ const NPC_DATA = {
       { who:'npc', t:'우리 정부가 우리 이름으로 세운 군대요.' },
       { who:'npc', t:'그 차이는 총 한 자루보다 무겁소.',
         chart:{ type:'stat', title:'한국광복군, 남의 군대가 아니다', items:[ { v:'임시정부', l:'세운 주체' }, { v:'우리 이름', l:'우리가 지휘' } ] } },
+      { who:'npc', t:'일본이 미국과 전쟁을 벌이자, 임시정부는 곧바로 일본에 선전 포고를 했소(1941. 12).' },
       { who:'npc', t:'인도와 미얀마 전선에도 나가 싸웠소.' },
       { who:'npc', t:'영국군과 함께 선전 방송을 하고, 포로를 심문했지.',
         chart:{ type:'grid', title:'한국광복군, 두 전선', head:[ '전선', '한 일' ], rows:[ [ '인도·미얀마', '영국군과 선전·포로 심문' ], [ '국내 진공', 'OSS와 훈련, 실행은 못 함' ] ] } },
@@ -1069,6 +1086,9 @@ const NPC_DATA = {
       { q:'한국광복군이 미국 전략정보국(OSS)과 함께 훈련하며 준비했으나 광복으로 실행하지 못한 작전은?',
         opts:['국내 진공 작전','봉오동 전투'], answer:0, src:[10, 25, 37, 41, 44, 51, 52, 58, 59, 64, 69, 71, 75, 76, 79],
         feedback:['봉오동 전투는 1920년 홍범도가 이끈 독립군이 거둔 승리로, 광복군보다 20년 앞선 일이에요.','맞습니다. 국내 진공 작전입니다. OSS와 합작 훈련까지 마쳤으나 실행 전에 광복을 맞았습니다.'] },
+      { q:'태평양 전쟁이 일어나자 1941년 대한민국 임시정부가 일본에 한 것은?',
+        opts:['대일 선전 포고','국민대표회의 소집'], answer:0, src:[26, 53, 55],
+        feedback:['국민대표회의는 1923년 임시정부의 방향을 두고 열린 회의예요.','정답! 대일 선전 포고입니다.'] },
     ]
   },
 
@@ -1638,39 +1658,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=110"></script>
-<script src="assets/streak.js?v=110"></script>
+<script src="assets/badges.js?v=111"></script>
+<script src="assets/streak.js?v=111"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=110"></script>
-  <script src="assets/fx.js?v=110"></script>
-  <script src="assets/deed.js?v=110"></script>
-  <script src="assets/inkwipe.js?v=110"></script>
-  <script src="assets/dash.js?v=110"></script>
-<script src="assets/juice.js?v=110"></script>
-  <script src="assets/difficulty.js?v=110"></script>
-  <script src="assets/nextauto.js?v=110"></script>
-<script src="assets/heroes_data.js?v=110"></script>
-<script src="assets/heroes.js?v=110"></script>
-<script src="assets/icons.js?v=110"></script>
-<script src="assets/srs.js?v=110"></script>
-<script src="assets/newsflash.js?v=110"></script>
-<script src="assets/timeline.js?v=110"></script>
-<script src="assets/journey.js?v=110"></script>
-<script src="assets/season.js?v=110"></script>
-<script src="assets/boss.js?v=110"></script>
-<script src="assets/items.js?v=110"></script>
-  <script src="assets/gold.js?v=110"></script>
-  <script src="assets/ask.js?v=110"></script>
-  <script src="assets/ads.js?v=110"></script>
-  <script src="assets/energy.js?v=110"></script>
-  <script src="assets/daily.js?v=110"></script>
-  <script src="assets/unlock.js?v=110"></script>
-  <script src="assets/guide.js?v=110"></script>
-  <script src="assets/minigames.js?v=110"></script>
-  <script src="assets/quests.js?v=110"></script>
-  <script src="assets/offline.js?v=110"></script>
-  <script src="assets/telemetry.js?v=110"></script>
-<script src="assets/autowalk.js?v=110"></script>
+<script src="assets/rank.js?v=111"></script>
+  <script src="assets/fx.js?v=111"></script>
+  <script src="assets/deed.js?v=111"></script>
+  <script src="assets/inkwipe.js?v=111"></script>
+  <script src="assets/dash.js?v=111"></script>
+<script src="assets/juice.js?v=111"></script>
+  <script src="assets/difficulty.js?v=111"></script>
+  <script src="assets/nextauto.js?v=111"></script>
+<script src="assets/heroes_data.js?v=111"></script>
+<script src="assets/heroes.js?v=111"></script>
+<script src="assets/icons.js?v=111"></script>
+<script src="assets/srs.js?v=111"></script>
+<script src="assets/newsflash.js?v=111"></script>
+<script src="assets/timeline.js?v=111"></script>
+<script src="assets/journey.js?v=111"></script>
+<script src="assets/season.js?v=111"></script>
+<script src="assets/boss.js?v=111"></script>
+<script src="assets/items.js?v=111"></script>
+  <script src="assets/gold.js?v=111"></script>
+  <script src="assets/ask.js?v=111"></script>
+  <script src="assets/ads.js?v=111"></script>
+  <script src="assets/energy.js?v=111"></script>
+  <script src="assets/daily.js?v=111"></script>
+  <script src="assets/unlock.js?v=111"></script>
+  <script src="assets/guide.js?v=111"></script>
+  <script src="assets/minigames.js?v=111"></script>
+  <script src="assets/quests.js?v=111"></script>
+  <script src="assets/offline.js?v=111"></script>
+  <script src="assets/telemetry.js?v=111"></script>
+<script src="assets/autowalk.js?v=111"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

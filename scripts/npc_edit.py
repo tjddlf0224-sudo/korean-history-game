@@ -8,6 +8,21 @@ edit(path, pairs, quiz_add)
 import re
 
 
+def line_of(path, prefix):
+    """prefix로 시작하는 줄 하나를 통째로 돌려준다(정확히 한 줄이어야 한다)."""
+    import os as _os
+    hits = [ln for ln in open(path, encoding='utf-8').read().split('\n') if ln.lstrip().startswith(prefix)]
+    if len(hits) != 1:
+        raise SystemExit(f'{path}: {prefix!r}로 시작하는 줄이 {len(hits)}개')
+    return hits[0]
+
+
+def before(path, prefix, new):
+    """prefix로 시작하는 줄 **앞에** new를 끼운다 — (원문, 바꿀 글) 한 쌍을 만든다."""
+    ln = line_of(path, prefix)
+    return (ln, new.rstrip('\n') + '\n' + ln)
+
+
 def edit(path, pairs=(), quiz_add=()):
     s = open(path, encoding='utf-8').read()
     for a, b in pairs:
