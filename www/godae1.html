@@ -520,12 +520,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=115"></script>
-<script src="assets/zoomwarn.js?v=115"></script>
-<script src="assets/map/map_component.js?v=115"></script>
-<script src="assets/chart.js?v=115"></script>
-<script src="assets/companions.js?v=115"></script>
-<script src="assets/audio.js?v=115"></script>
+<script src="assets/errlog.js?v=116"></script>
+<script src="assets/zoomwarn.js?v=116"></script>
+<script src="assets/map/map_component.js?v=116"></script>
+<script src="assets/chart.js?v=116"></script>
+<script src="assets/companions.js?v=116"></script>
+<script src="assets/audio.js?v=116"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -537,7 +537,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=115';   // 존댓말 전환
+const ART_V = '?v=116';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -763,7 +763,7 @@ const ZONES = {
       { id:'seongwang', name:'백제 성왕', x:540, y:470, img:'assets/portraits/seongwang.png', look:{ role:'king', body:'#5a3a5a', accent:'#c9a24a' } },
       { id:'jinheung', name:'진흥왕', x:1030, y:330, img:'assets/portraits/jinheung.png', look:{ role:'king', body:'#7a2f3d', accent:'#e0b94a' } },
       { id:'hwarang', name:'화랑', x:1090, y:430, img:'assets/portraits/hwarang.png', look:{ role:'general', body:'#3d5a6b', accent:'#c9a24a' } },
-      { id:'bau', name:'덩치 큰 청년', x:1100, y:600, look:{ role:'general', body:'#2f3d6b', accent:'#8a3a6a' } },
+      { id:'bau', name:'덩치 큰 청년', x:1100, y:600, img:'assets/portraits/bau_smile.png', h:112, look:{ role:'general', body:'#2f3d6b', accent:'#8a3a6a' } },
       { id:'seondeok', name:'선덕 여왕', x:950, y:600, img:'assets/portraits/seondeok_f.png', look:{ role:'king', body:'#8a2f3a', accent:'#e0b94a' } },
     ],
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
@@ -862,7 +862,7 @@ function getNpcImg(path){
   if (!NPC_SPRITE_CACHE[path]){ const im = new Image(); im.src = path + ART_V; NPC_SPRITE_CACHE[path] = im; }
   return NPC_SPRITE_CACHE[path];
 }
-function drawNpcSprite(px, py, imgPath, look){
+function drawNpcSprite(px, py, imgPath, look, h){
   ctx.fillStyle = 'rgba(0,0,0,.28)';
   ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
   const img = getNpcImg(imgPath);
@@ -873,8 +873,8 @@ function drawNpcSprite(px, py, imgPath, look){
     drawCharacter(px, py, 'd', look);
     return;
   }
-  const H = 88, W = H * (img.naturalWidth / img.naturalHeight);
-  ctx.drawImage(img, px - W/2, py - H*0.68, W, H);
+  const H = h || 88, W = H * (img.naturalWidth / img.naturalHeight);
+  ctx.drawImage(img, px - W/2, py + 28 - H, W, H);   // 발끝 기준(88이면 예전과 같음)
 }
 
 function drawCharacter(px, py, facing, look){
@@ -1226,7 +1226,7 @@ const World = {
     ctx.scale(ZOOM, ZOOM);
     for (const n of zone.npcs){ if (!n.img) drawCharacter(n.x - camX, n.y - camY, 'd', n.look); }
     ctx.restore();
-    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img); }
+    for (const n of zone.npcs){ if (n.img) drawNpcSprite((n.x - camX) * ZOOM, (n.y - camY) * ZOOM, n.img, n.look, n.h); }
     if (window.Party) Party.draw(ctx, this, camX, camY, ZOOM);   // 동료가 주인공 뒤에 서게 먼저 그린다
     drawPlayerSprite((this.px - camX) * ZOOM, (this.py - camY) * ZOOM, this.facing, this.moving);
     if (this.nearNpcShown){
@@ -2278,38 +2278,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=115"></script>
-<script src="assets/streak.js?v=115"></script>
+<script src="assets/badges.js?v=116"></script>
+<script src="assets/streak.js?v=116"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=115"></script>
-  <script src="assets/fx.js?v=115"></script>
-  <script src="assets/deed.js?v=115"></script>
-  <script src="assets/inkwipe.js?v=115"></script>
-  <script src="assets/dash.js?v=115"></script>
-<script src="assets/juice.js?v=115"></script>
-  <script src="assets/difficulty.js?v=115"></script>
-  <script src="assets/nextauto.js?v=115"></script>
-<script src="assets/heroes_data.js?v=115"></script>
-<script src="assets/heroes.js?v=115"></script>
-<script src="assets/icons.js?v=115"></script>
-<script src="assets/srs.js?v=115"></script>
-<script src="assets/newsflash.js?v=115"></script>
-<script src="assets/timeline.js?v=115"></script>
-<script src="assets/journey.js?v=115"></script>
-<script src="assets/season.js?v=115"></script>
-<script src="assets/items.js?v=115"></script>
-  <script src="assets/gold.js?v=115"></script>
-  <script src="assets/ask.js?v=115"></script>
-  <script src="assets/ads.js?v=115"></script>
-  <script src="assets/energy.js?v=115"></script>
-  <script src="assets/daily.js?v=115"></script>
-  <script src="assets/unlock.js?v=115"></script>
-  <script src="assets/guide.js?v=115"></script>
-  <script src="assets/minigames.js?v=115"></script>
-  <script src="assets/quests.js?v=115"></script>
-  <script src="assets/offline.js?v=115"></script>
-  <script src="assets/telemetry.js?v=115"></script>
-<script src="assets/autowalk.js?v=115"></script>
+<script src="assets/rank.js?v=116"></script>
+  <script src="assets/fx.js?v=116"></script>
+  <script src="assets/deed.js?v=116"></script>
+  <script src="assets/inkwipe.js?v=116"></script>
+  <script src="assets/dash.js?v=116"></script>
+<script src="assets/juice.js?v=116"></script>
+  <script src="assets/difficulty.js?v=116"></script>
+  <script src="assets/nextauto.js?v=116"></script>
+<script src="assets/heroes_data.js?v=116"></script>
+<script src="assets/heroes.js?v=116"></script>
+<script src="assets/icons.js?v=116"></script>
+<script src="assets/srs.js?v=116"></script>
+<script src="assets/newsflash.js?v=116"></script>
+<script src="assets/timeline.js?v=116"></script>
+<script src="assets/journey.js?v=116"></script>
+<script src="assets/season.js?v=116"></script>
+<script src="assets/items.js?v=116"></script>
+  <script src="assets/gold.js?v=116"></script>
+  <script src="assets/ask.js?v=116"></script>
+  <script src="assets/ads.js?v=116"></script>
+  <script src="assets/energy.js?v=116"></script>
+  <script src="assets/daily.js?v=116"></script>
+  <script src="assets/unlock.js?v=116"></script>
+  <script src="assets/guide.js?v=116"></script>
+  <script src="assets/minigames.js?v=116"></script>
+  <script src="assets/quests.js?v=116"></script>
+  <script src="assets/offline.js?v=116"></script>
+  <script src="assets/telemetry.js?v=116"></script>
+<script src="assets/autowalk.js?v=116"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();

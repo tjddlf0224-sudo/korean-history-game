@@ -20,7 +20,7 @@ SKIP = {'_ranktest.html', '_bosstest.html', '_smoke.html',
         'index.html', 'exam_practice.html', 'prologue.html'}
 
 
-COMPANIONS = {'chadol': ('차돌이', None), 'bau': ('바우', None)}
+COMPANIONS = {'chadol': ('차돌이', 'assets/portraits/chadol_smile.png'), 'bau': ('바우', 'assets/portraits/bau_smile.png')}
 
 
 def main():

@@ -25,17 +25,17 @@
 */
 window.Party = (function(){
   const KEY = 'khg_party';
-  const HAS_ART = { chadol: false, bau: false };
+  const HAS_ART = { chadol: true, bau: true };
 
   const WHO = {
     chadol: {
-      name: '차돌이', h: 70,
+      name: '차돌이', h: 74,
       look: { role: 'commoner', body: '#8a5a32', accent: '#d9c3a0' },
       icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M6 15l3-8 5-2 4 5-1 7-6 2z"/></svg>',
       faces: ['smile', 'sly', 'cry', 'shock'],
     },
     bau: {
-      name: '바우', h: 100,
+      name: '바우', h: 112,
       look: { role: 'general', body: '#2f3d6b', accent: '#8a3a6a' },
       icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.2"/><path d="M5 21c0-5 3-8 7-8s7 3 7 8"/><path d="M9 4l-2-3M15 4l2-3"/></svg>',
       faces: ['smile', 'stance', 'oops', 'resolve'],
@@ -196,7 +196,7 @@ window.Party = (function(){
           ctx.fillStyle = 'rgba(0,0,0,.22)';
           ctx.beginPath(); ctx.ellipse(sx, sy + 23, 16, 6, 0, 0, Math.PI * 2); ctx.fill();
           const H = w.h, W = H * (img.naturalWidth / img.naturalHeight);
-          ctx.drawImage(img, sx - W / 2, sy + 23 - H * 0.93, W, H);
+          ctx.drawImage(img, sx - W / 2, sy + 27 - H, W, H);   // 발끝을 주인공과 같은 높이에
           return;
         }
       }
