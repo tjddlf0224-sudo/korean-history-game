@@ -1166,3 +1166,14 @@ Auto도 고쳤다 — 길이 없거나 끝까지 갔는데 말이 안 닿으면 
   `uiyeoldan.png`로 대신. `seondeok_queen.png`(계보 얼굴)의 관이 서양식 → 나중에 재생성 권장.
 - 사용자 결정(9-17): 선덕여왕 전신은 출자형 신라 금관으로 간다. 시트는 사용자가 뽑아 Downloads에 둔다.
 - 다음: 그림 받으면 자르고 넣기 → 시대별로 138+14개 대사·퀴즈 추가.
+- 9-17 시트 4장 받음 → `scripts/cut_sheet_1709.py`로 자름(로고는 네 갈래 별 모양 틀로
+  언블렌드: 중심 우하단 (120,120), R=28.5, p=0.7, 비율 0.27 · 막힌 틈은 마젠타가 아닐 때만 채움).
+  - 인물 11: seondeok_f jongjangin goryeo_yeoin saimdang gwangjak bobusang sijeon
+    yugiljun hwangseong_gija ihoeyeong sindolseok(총 한 자루 지움). **아직 챕터에 연결 안 함.**
+  - 유물 14(items/): 그중 balhae_seokdeung·suncheongja는 임시, imsinseogi·yeonggwangtap은 미수령.
+    유물 1×4 재생성 프롬프트를 주문서 맨 위에 둠.
+  - 변한 사람 새 그림은 일본도 모양 칼이라 버림 → 놀던 `extra_sangin`을 변한 철 상인으로.
+  - 놀던 그림 18장 활용 계획(주문서 ‘놀던 인물 쓰기’): 초기 국가 마을 6장→seonsa1,
+    편전 5장(허적·윤휴·송시열·장희빈·김만중)→hugi1 환국, anyongbok·extra_nam→hugi2,
+    samil→ilje1, suyang→ch3 즉위 전 장면. commoner2·josik2는 저해상도라 안 씀.
+  - `_research/교안대조/`는 교안 파생 자료라 공개 저장소에 올리지 않음(untracked 유지).
