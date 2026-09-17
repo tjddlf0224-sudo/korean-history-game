@@ -66,7 +66,16 @@ window.Party = (function(){
     const cur = CHAPTER_SEQ.indexOf(here()), at = CHAPTER_SEQ.indexOf(JOIN_AT[id]);
     return cur >= 0 && at >= 0 && cur > at;
   }
-  function members(){ return ORDER.filter(joined); }
+  /* 합류 챕터를 다시 할 때(이미 합류한 기록이 있어도) 그 챕터에서는
+     합류 장면을 다시 거쳐야 한다. 인물을 지도에서 지워 버리면 고대 1화처럼
+     합류 대화가 곧 챕터의 마지막 대화인 곳에서 챕터를 끝낼 수 없다(2026-09-19).
+     그래서 합류 챕터에서는 '이번 판에서 합류했는가'로 본다. */
+  const sessionJoined = {};
+  function active(id){
+    if (here() === JOIN_AT[id]) return !!sessionJoined[id];
+    return joined(id);
+  }
+  function members(){ return ORDER.filter(active); }
 
   /* ---------------- 대사 ---------------- */
   function portrait(id, face){
@@ -90,14 +99,16 @@ window.Party = (function(){
       const npcs = ZONES[z].npcs;
       if (!npcs) continue;
       for (let i = npcs.length - 1; i >= 0; i--){
-        if (WHO[npcs[i].id] && joined(npcs[i].id)) npcs.splice(i, 1);
+        if (WHO[npcs[i].id] && active(npcs[i].id)) npcs.splice(i, 1);
       }
     }
   }
   function join(id){
     if (!WHO[id]) return;
+    const again = !!sessionJoined[id];
+    sessionJoined[id] = true;
     const v = load();
-    if (v[id]) return;
+    if (v[id]){ if (!again){ hideJoinedNpcs(); trail.length = 0; } return; }
     v[id] = Date.now(); save(v);
     hideJoinedNpcs();
     trail.length = 0;
@@ -117,7 +128,7 @@ window.Party = (function(){
       const r = origOpen.apply(this, arguments);
       const beats = this.data && this.data.beats;
       // 합류 장면 자신의 대사는 남긴다(아직 합류 전이니까)
-      const keep = b => !b.party || joined(b.party) || b.party === this.data.partyJoin;
+      const keep = b => !b.party || active(b.party) || b.party === this.data.partyJoin;
       if (beats && !beats.every(keep)){
         this.data = Object.assign({}, this.data, { beats: beats.filter(keep) });
         this.idx = 0;
