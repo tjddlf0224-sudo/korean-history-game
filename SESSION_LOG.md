@@ -1422,4 +1422,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 점검(Playwright, 1180×820·1376×1032): 모든 화면이 휴대폰 픽셀 크기 그대로라 인물·HUD·조이스틱·대화창·보스전·도감·기출이 반쯤으로 쪼그라들어 보였다.
 - 해결 `assets/tablet.js`(45개 페이지, viewport meta 바로 뒤): 터치 기기이고 짧은 변 ≥700이면 뷰포트 width를 (긴/짧은 변)/S로 정해 **짧은 변 약 500px 휴대폰처럼 배치하고 통째로 확대**(S=짧은변/500, 11"=1.64, 13"=2.06). 터치 좌표는 브라우저가 맞춰 준다. 캔버스는 devicePixelRatio를 max(실제, 2×S)로 알려 선명하게(WebKit은 이미 배율을 곱해 주기도 해서 곱하지 않음). `?tablet=1`로 데스크톱에서 시험.
 - 좁은 배치 폭(약 700)에서 드러난 것 2개: 대화 지도 차트가 범례를 밀어내 잘림 → `chart.js` 지도 높이 상한 52vw / 기출 화면 진행 표시가 오른쪽 위 금·기력과 겹침 → 860px 이하에서 topbar 오른쪽 여백. 휴대폰(844)은 변화 없음.
-- 확인: Chromium·WebKit 모바일 에뮬레이션(isMobile)에서 720×500 배치·1.64배, 캔버스 2160px. iPad 시뮬레이터는 첫 시도 때 맥 메모리 부족(여유 100MB, load 700)으로 WebKit GPU 프로세스가 멎어 흰 화면 → 시뮬레이터 모두 끄고 재시도.
+- 확인: Chromium·WebKit 모바일 에뮬레이션(isMobile)에서 720×500 배치·1.64배, 캔버스 2160px. iPad 시뮬레이터는 첫 시도 때 맥 메모리 부족(여유 100MB, load 700)으로 WebKit GPU 프로세스가 멎어 흰 화면 → 시뮬레이터 모두 끄고 재시도하니 iPad Air 11" 시뮬레이터 앱에서 정상 표시(세로로 들면 휴대폰처럼 회전, 글자·요소가 커짐).
