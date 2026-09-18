@@ -1444,3 +1444,9 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - `Info.plist`의 `UISupportedInterfaceOrientations~ipad`를 네 방향으로(아이폰은 가로 그대로). 세로로 들면 게임이 이미 스스로 회전(body.rot)하므로 그대로 동작.
 - 멀티태스킹이 켜지면 창이 화면보다 좁을 수 있어 `tablet.js`를 **창 실제 폭(visualViewport.width×scale)** 기준으로, 460px 밑으로는 확대를 줄이게 고침. WebKit·Chromium 에뮬레이션: 1180×820→720, 세로 820×1180→500(회전), 1376×1032→667.
 - 빌드 4 아카이브(번들 81.2MB 포함) → Organizer로 열어 둠.
+
+## 2026-09-18 · 앱 아이콘(빌드 5)
+- 그동안 아이콘이 Capacitor 기본(파란 X 무늬)이었다 → 인앱 브라우저 제미나이로 제작: 황금 시간 포털(단청 구름무늬) 안에서 후드티 주인공이 튀어나오고 차돌이가 어깨 너머로 주먹도끼를 든 구도, 뒤에 궁궐 지붕·고인돌. 참고그림=주인공 전투그림+차돌이 초상+타이틀 로고.
+- 차돌이가 또 자루 달린 돌도끼를 들고 나와 → 자루 없는 주먹도끼로 수정 요청(고증).
+- 제미나이 로고(1024px 결과의 오른쪽 아래 약 903,904)가 구름무늬 위에 겹쳐 역알파·거울 복사·확산 모두 흔적이 남음 → **오른쪽 아래 모서리를 빈 배경으로 다시 그려 달라고 해서** 확산으로 깨끗이 지움. (교훈: 아이콘은 처음부터 오른쪽 아래를 비워 달라고 할 것)
+- `ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png`(1024 RGB), 원본은 `store/icon/app_icon_1024.png`. 빌드 5 아카이브 → Organizer.
