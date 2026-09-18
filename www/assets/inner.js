@@ -18,15 +18,17 @@
 window.Inner = (function(){
   const CSS = `
   /* 속마음 — 색을 빼고 기울여서 '들리지 않는 말'로 보이게 한다 */
-  #dlg-frame.inner-voice #dlg-panel { background:#23252be8; border-color:#7e838d; }
-  #dlg-frame.inner-voice .dlg-name { color:#cfd3da; font-weight:500; }
-  #dlg-frame.inner-voice .dlg-portrait { filter:grayscale(.85) brightness(.92);
-    border-color:#7e838d; box-shadow:0 10px 22px rgba(0,0,0,.5), 0 0 0 2px #7e838d; }
-  #dlg-frame.inner-voice #dlg-text { font-style:italic; color:#dfe3ea;
-    border-left:2px dashed #767b85; padding-left:12px; }
+  /* 2026-09-19: 처음 색이 너무 어두워 "아예 죽은 것 같다"는 지적을 받아 한 단계 밝혔다.
+     속말은 조용한 것이지 가라앉은 것이 아니다 — 밝은 회청색 + 또렷한 흰 글씨. */
+  #dlg-frame.inner-voice #dlg-panel { background:#4a505cee; border-color:#b9c0cb; }
+  #dlg-frame.inner-voice .dlg-name { color:#f0f3f8; font-weight:500; }
+  #dlg-frame.inner-voice .dlg-portrait { filter:grayscale(.45) brightness(1.04);
+    border-color:#b9c0cb; box-shadow:0 10px 22px rgba(0,0,0,.45), 0 0 0 2px #b9c0cb; }
+  #dlg-frame.inner-voice #dlg-text { font-style:italic; color:#fbfcfe;
+    border-left:2px dashed #c3cad5; padding-left:12px; }
   .inner-badge { display:inline-block; margin-left:7px; padding:1px 7px; border-radius:999px;
     font-style:normal; font-size:11px; font-weight:500; letter-spacing:.04em;
-    color:#c3c8d1; background:#3a3e46; border:1px solid #767b85; vertical-align:2px; }
+    color:#2b2f36; background:#d5dae2; border:1px solid #eef1f5; vertical-align:2px; }
   `;
   let styled = false, hooked = false;
 
