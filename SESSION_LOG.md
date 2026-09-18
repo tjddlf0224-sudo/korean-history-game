@@ -1438,3 +1438,9 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
   - 줄이기: PNG를 256색 팔레트로(알파 유지, 초상 24.1→4.9MB, 나란히 비교해 구분 안 됨), 배지는 900px·1MB → 384px(화면엔 44px). 41.1MB 절약.
   - 오디오(96kbps)·배경 webp/jpg는 그대로.
 - 확인: 번들 폴더를 그대로 띄워 42개 페이지 + 도감·가방 열기 — 404·스크립트 오류 0. check_all 0건.
+
+## 2026-09-18 · 빌드 2 업로드 거절 → 아이패드 4방향 지원(빌드 4, v140)
+- Organizer 업로드 오류: "Invalid bundle… UISupportedInterfaceOrientations에 가로 둘만 있음 — 아이패드 멀티태스킹을 지원하려면 네 방향 모두 필요". (GoogleMobileAds dSYM 경고는 구글 SDK 문제로 무시해도 됨.)
+- `Info.plist`의 `UISupportedInterfaceOrientations~ipad`를 네 방향으로(아이폰은 가로 그대로). 세로로 들면 게임이 이미 스스로 회전(body.rot)하므로 그대로 동작.
+- 멀티태스킹이 켜지면 창이 화면보다 좁을 수 있어 `tablet.js`를 **창 실제 폭(visualViewport.width×scale)** 기준으로, 460px 밑으로는 확대를 줄이게 고침. WebKit·Chromium 에뮬레이션: 1180×820→720, 세로 820×1180→500(회전), 1376×1032→667.
+- 빌드 4 아카이브(번들 81.2MB 포함) → Organizer로 열어 둠.

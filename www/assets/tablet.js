@@ -23,14 +23,32 @@
     var S = Math.max(1, Math.min(2.4, sw / BASE));
     var meta = document.querySelector('meta[name=viewport]');
     if (!meta){ meta = document.createElement('meta'); meta.name = 'viewport'; document.head.appendChild(meta); }
+    /* 창의 실제 폭으로 계산한다(2026-09-18). 아이패드는 네 방향을 다 지원해야 해서
+       (App Store 업로드 규정 — 멀티태스킹) 화면 분할·Stage Manager로 창이 화면보다
+       좁아질 수 있다. 확대 배율 × 배치 폭 = 창 폭이므로, 현재 배율이 반영된
+       visualViewport로 창 폭을 구하면 몇 번 다시 계산해도 같은 값이 나온다. */
+    var last = '';
+    function winWidth(){
+      var vv = window.visualViewport;
+      var w = vv ? vv.width * vv.scale : 0;
+      if (!(w > 0)){
+        var land = window.matchMedia ? matchMedia('(orientation: landscape)').matches : (innerWidth > innerHeight);
+        w = land ? lw : sw;
+      }
+      return w;
+    }
     function apply(){
-      var land = window.matchMedia ? matchMedia('(orientation: landscape)').matches : (innerWidth > innerHeight);
-      var W = Math.round((land ? lw : sw) / S);
-      meta.setAttribute('content', 'width=' + W + ', user-scalable=no, viewport-fit=cover');
+      var ww = winWidth();
+      var W = Math.round(ww / S);
+      // 좁은 창(화면 분할 1/3 등)에선 너무 작게 배치하지 않는다 — 460px 밑으로는 확대를 줄인다
+      if (W < 460) W = Math.round(Math.min(ww, 460));
+      var c = 'width=' + W + ', user-scalable=no, viewport-fit=cover';
+      if (c !== last){ last = c; meta.setAttribute('content', c); }
     }
     apply();
     window.addEventListener('orientationchange', function(){ setTimeout(apply, 50); });
     if (window.matchMedia) matchMedia('(orientation: landscape)').addEventListener('change', apply);
+    if (window.visualViewport) visualViewport.addEventListener('resize', function(){ setTimeout(apply, 30); });
     // 확대한 만큼 캔버스 해상도도 올린다. 엔진에 따라 devicePixelRatio에 확대 배율이
     // 이미 들어가 있기도 해서(WebKit 모바일 에뮬레이션은 3.28, 곱하면 5.4가 됐다)
     // 곱하지 않고 "아이패드 기본 2배 × 확대 배율" 이상만 보장한다.
