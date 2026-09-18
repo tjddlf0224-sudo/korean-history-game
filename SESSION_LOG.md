@@ -1481,3 +1481,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 빌드 6: CURRENT_PROJECT_VERSION=6, 아카이브 ~/Library/Developer/Xcode/Archives/2026-09-18/KoreanHistory-1.0-6.xcarchive(v143·save.js·applesignin 확인), Organizer 열어 둠 → 업로드는 성일님.
 - 성일님 기존 애플 계정은 이름을 다시 안 주므로 로그인 창에서 닉네임 직접 설정 필요.
 - Firebase 콘솔 점검(인앱 브라우저): iOS 앱·웹 앱 이미 등록돼 있음. iOS 앱에 App Store ID 6813351584·팀 ID 39RN7AZUVT 입력·저장. 로그인 제공업체 Google·Apple 켜짐(이메일/비밀번호는 성일님이 사용 중지함). 승인 도메인에 tjddlf0224-sudo.github.io 있음. 성일님이 규칙 게시 → REST로 비로그인 khg_save 읽기·쓰기 403, 랭킹 읽기 200 확인.
+- 빌드 6 업로드 완료(성일님, Organizer). 버전 1.0에는 아직 빌드 5가 붙어 있음 → 심사 제출 전 빌드 6으로 교체 필요.
