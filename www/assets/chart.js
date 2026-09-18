@@ -169,8 +169,11 @@ window.Chart = (function(){
        범례는 378px 폭을 차지하면서 내용은 39px 높이뿐이라 옆이 텅 비었다.
        --dlg-max-h 는 게임 높이의 80%다. 그 60%면 대략 화면의 절반이다. */
     .ch-map .mfit { flex:none; }
-    .ch-map svg { flex:none; height:calc(var(--dlg-max-h, 320px) * 1.28); width:auto;
+    .ch-map svg { flex:none; height:min(calc(var(--dlg-max-h, 320px) * 1.28), 52vw); width:auto;
       display:block; }
+    /* 52vw 상한(2026-09-18): 4:3 화면(아이패드, 배치 폭 약 700px)에선 높이 기준 지도가
+       너무 넓어져 범례가 한 단어씩 줄바꿈되고 오른쪽이 잘렸다. 가로 휴대폰(844px)에선
+       52vw(439px)가 원래 높이보다 커서 아무 변화가 없다. */
     /* 범례가 없으면 지도만 있는 것이니 가운데로 크게 — 옆이 비면 허전하다 */
     .ch-map.solo { justify-content:center; }
     /* 지도만 있을 때는 높이로 잡는다 — 폭으로 잡으면 세로로 든 휴대폰
