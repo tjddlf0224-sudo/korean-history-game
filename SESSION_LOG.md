@@ -1463,3 +1463,20 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 전산회계 로그 대조: 그쪽 원인(.ambient 무음 스위치·fetch mp3 실패)은 이미 둘 다 반영돼 있었다. 증상 가르는 질문을 먼저 했고, 성일님 확인 결과 **게임 메뉴의 배경음악이 꺼져 있었던 것**(버그 아님).
 - 곁가지로 넣은 개선은 유지: 소리 잠금 풀기를 첫 터치 한 번이 아니라 **소리가 켜질 때까지 터치·클릭마다 재시도**(+무음 버퍼). 진단 로그는 제거.
 - 교훈 재확인: 앱 전용 증상은 시뮬레이터로 먼저 재현, 재현 안 되면 추측 빌드 말고 증상을 가르는 질문부터.
+
+## 2026-09-18 v142 — 대화 완료 기준 목표·자동모드, 보스전 노치 여백
+- 제보: 선사1화 "다음 화로 넘어가기"가 떴는데 버튼 없음, auto가 출구만 왕복. 원인: Dialog.open에서 seenDialogKeys.add → 마지막(endsChapter) 대화를 열었다 닫으면 '본 것'으로 처리. 성일님은 끝까지 대화해서 버튼 확인함.
+- 수정: 30개 챕터에 doneDialogKeys(완료 시점 add, prevKey 직후) + updateHudGoal 판정 교체, autowalk.pickGoal은 doneDialogKeys 우선(없는 ch2·ch2b·ch3·ch4·ch5·ch5b는 seen 폴백).
+- 보스전(boss.js): .bs-bottom 좌우 padding과 체력칸 left/right에 safe-area-inset 반영(가로 아이폰 노치에 왼쪽 글자 가림).
+- 남은 것: 애플 로그인 이름(766ptjh82m=릴레이 이메일 앞부분) 수정, 클라우드 저장·랭킹 max 제안 승인 대기, 빌드 6.
+
+## 2026-09-18 v143 — 클라우드 저장·랭킹 최고점·애플 이름, 빌드 6
+- save.js(새): localStorage의 khg_* 키(기기 전용 khg_err·loop_err·guide·tm·tm_id·qstats·offline·diff 제외)를 JSON 한 덩어리로 Firestore `khg_save/<uid>`{data,xp,at,v}에 저장. index.html에만 붙음(auth.js가 index에만 있음) → 챕터 진행은 목록으로 돌아올 때/앱 숨을 때/1분마다 올라감.
+  - 로그인 시 서버 xp > 기기 xp면 "저장된 기록 불러오기 / 이 기기 기록 쓰기"를 물음. 묻기 전·서버가 앞선 동안엔 업로드 안 함. 불러오기는 동기화 키만 교체 후 reload.
+  - 가짜 DB로 시험: 첫 업로드, 낮은 기기에서 물음+덮어쓰기 안 함, 불러오기 후 gold/rank 복원·khg_err 유지 확인.
+- board.js push: 서버 score와 기기 score 중 큰 값(계급도 큰 쪽 것).
+- auth.js: 애플 첫 로그인 r.user.displayName("성일 윤"→한글이면 "윤성일")을 updateProfile, privaterelay 이메일 앞부분 표시 안 함(→"나그네"), 로그인 창 닉네임 바꾸기(20자, 바꾸면 Board.push), 계정 삭제 시 khg_save도 삭제.
+- **firestore.rules(저장소 루트, 새로 커밋)**: khg_save 규칙 추가 — 성일님이 콘솔에 게시해야 클라우드 저장이 동작. 게시 전엔 조용히 실패(게임엔 영향 없음).
+- privacy.html: 게임 진행 기록 사본 저장·닉네임·삭제 범위 추가. ASC 개인정보 라벨은 이미 '게임플레이 콘텐츠(연결됨)' 있음 → 변경 불필요.
+- 빌드 6: CURRENT_PROJECT_VERSION=6, 아카이브 ~/Library/Developer/Xcode/Archives/2026-09-18/KoreanHistory-1.0-6.xcarchive(v143·save.js·applesignin 확인), Organizer 열어 둠 → 업로드는 성일님.
+- 성일님 기존 애플 계정은 이름을 다시 안 주므로 로그인 창에서 닉네임 직접 설정 필요.
