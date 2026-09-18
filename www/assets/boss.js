@@ -68,9 +68,15 @@ window.Boss = (function(){
        bottom:6%/height:54% 면 머리가 무대의 40% 자리에서 시작해
        가로모드(무대 약 200px)에서 20px 넘게 여유가 생긴다.
        하반신이 아래 문제창 쪽으로 내려오는 것은 괜찮다고 하셨다. */
-    .bs-enemy { bottom:6%; right:13%; height:54%; }
+    .bs-enemy { bottom:6%; right:11%; height:60%; }  /* 새 그림(2026-09-18)은 무기 자리 여백이 있어 조금 키웠다 */
     .bs-enemy img { height:100%; width:auto; object-fit:contain; display:block;
-      animation:bs-bob 3.2s ease-in-out infinite; }
+      animation:bs-breathe 2.8s ease-in-out infinite; transform-origin:50% 100%; }
+    /* 보스는 자세가 두 장이다(2026-09-18): 평소(숨쉬기)와 공격(오답일 때).
+       두 장은 같은 캔버스에 발을 맞춰 그려 두어서 바꿔 끼워도 자리가 튀지 않는다. */
+    .bs-enemy .bs-atk { display:none; }
+    .bs-enemy.attacking .bs-idle { display:none; }
+    .bs-enemy.attacking .bs-atk { display:block; animation:none; }
+    @keyframes bs-breathe { 0%,100%{transform:scale(1,1);} 50%{transform:scale(1.012,.982) translateY(1px);} }
     .bs-self { bottom:3%; left:11%; height:55%; }  /* 전투 그림은 위에 갓 자리 여백이 있어 조금 키웠다 */
     /* 동료(차돌이·바우) — 주인공 뒤, 한 발 물러선 자리 */
     .bs-mate { position:absolute; z-index:4; width:auto; pointer-events:none;
@@ -314,14 +320,14 @@ window.Boss = (function(){
       if (ci >= 0) S.btns[ci].classList.add('correct');
       S.combo = 0;
       ep.style.setProperty('--lx', '-26px');
-      ep.classList.add('lunge'); await wait(180);
+      ep.classList.add('attacking', 'lunge'); await wait(180);
       // 담력을 가진 동료가 한 번은 대신 맞는다
       if (S.guard && !S.guardUsed){
         S.guardUsed = true;
         pop('p', '버팀', 'crit');
         msg(S.cur.feedback[0] + '<br><b>동료의 담력이 한 번 버티게 했다.</b>');
         bars(); await wait(900);
-        ep.classList.remove('lunge');
+        ep.classList.remove('lunge', 'attacking');
         S.qIdx++; S.busy = false; ask();
         return;
       }
@@ -333,7 +339,7 @@ window.Boss = (function(){
       if (navigator.vibrate) navigator.vibrate([50, 40, 50]);
       msg(S.cur.feedback[0] + (S.pHp === 1 ? cheer('last') : S.pHp > 0 ? cheer('hurt') : ''));
       bars(); await wait(900);
-      ep.classList.remove('lunge'); pp.classList.remove('hit');
+      ep.classList.remove('lunge', 'attacking'); pp.classList.remove('hit');
       if (S.pHp <= 0) return finish(false);
     }
     S.qIdx++;
@@ -429,9 +435,19 @@ window.Boss = (function(){
       (window.Rank ? Rank.get().tier.name : '나');
     // 초상이 아직 없는 인물도 있다(최만리처럼 새로 세운 보스). 그럴 때
     // 자리를 비워 두면 허공에 대고 싸우는 꼴이라, 이름을 새긴 실루엣을 세운다.
-    document.getElementById('bs-e').innerHTML =
-      opt.img ? `<img src="${opt.img}" alt="">`
+    // 공격 자세는 같은 이름 + _atk.png. 없으면(아직 안 뽑은 보스) 평소 그림으로 덤빈다.
+    const v = (typeof ART_V === 'string') ? ART_V : '';
+    const eEl = document.getElementById('bs-e');
+    eEl.classList.remove('attacking');
+    eEl.innerHTML =
+      opt.img ? `<img class="bs-idle" src="${opt.img}${v}" alt="">`
               : `<div class="bs-silhouette"><span>${S.name}</span></div>`;
+    if (opt.img && /\/boss\/[^/]+\.png$/.test(opt.img)){
+      const atk = new Image();
+      atk.className = 'bs-atk'; atk.alt = '';
+      atk.onload = () => { if (S && eEl.isConnected) eEl.appendChild(atk); };
+      atk.src = opt.img.replace(/\.png$/, '_atk.png') + v;
+    }
     // 전투용 그림(battle.png)을 쓴다 — 오른쪽으로 3/4쯤 돌아 주먹을 쥔 자세라
     // 왼쪽을 보는 보스와 마주 선다(2026-09-18). 예전엔 걷기 그림의 옆모습
     // (right_1)을 세웠는데 "걸을 때 옆모습을 갖다 쓰니 어색하다"는 지적을 받았다.
