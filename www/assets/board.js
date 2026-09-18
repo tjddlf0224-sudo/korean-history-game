@@ -44,13 +44,20 @@ window.Board = (function(){
     const d = db(), u = me();
     if (!d || !u) return false;
     const g = myTier();
-    const name = (u.displayName || '이름 없는 나그네').slice(0, 20);
+    const name = ((window.Auth && Auth.nameOf) ? Auth.nameOf(u) : (u.displayName || '나그네')).slice(0, 20);
     try {
+      /* 점수는 **내려가지 않는다**(2026-09-18). 새 기기나 기록을 지운 기기로
+         로그인하면 그 기기 경험치가 더 낮아, 덮어쓰면 랭킹이 깎였다.
+         서버에 있던 점수와 이 기기 점수 중 큰 쪽을 올린다. */
+      let prev = 0, pv = null;
+      try { const old = await d.collection(COL).doc(u.uid).get(); if (old.exists){ pv = old.data(); prev = +(pv.score) || 0; } } catch(e){}
+      const mine = Math.max(0, Math.min(2000000, Math.round(myScore())));
       await d.collection(COL).doc(u.uid).set({
         name: name,
-        score: Math.max(0, Math.min(2000000, Math.round(myScore()))),
-        level: g.level,
-        tier: g.tier || '',
+        score: Math.max(prev, mine),
+        // 서버 쪽이 더 높으면 계급도 그쪽 것을 둔다(점수와 계급이 어긋나지 않게)
+        level: (pv && prev > mine) ? (+pv.level || g.level) : g.level,
+        tier: (pv && prev > mine) ? String(pv.tier || g.tier || '') : (g.tier || ''),
         at: Date.now(),
       });
       return true;

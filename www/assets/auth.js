@@ -102,9 +102,39 @@ window.Auth = (function(){
       const p = new firebase.auth.OAuthProvider('apple.com');
       // rawNonce를 같이 넘겨야 한다 — 안 넘기면 애플이 토큰을 거부한다.
       await auth.signInWithCredential(p.credential({ idToken: c.idToken, rawNonce: c.nonce }));
+      // 애플은 이름을 **처음 로그인할 때 한 번만** 넘겨준다. 그때 계정에 적어 두지
+      // 않으면 이름이 비고, 화면에는 가림용 이메일 앞부분(766ptjh82m 같은)이 떴다
+      // (2026-09-18 제보). 이미 이름이 있으면(닉네임을 바꿨으면) 덮어쓰지 않는다.
+      const nm = appleName(r && r.user && r.user.displayName);
+      const cu = auth.currentUser;
+      if (nm && cu && !cu.displayName){
+        try { await cu.updateProfile({ displayName: nm }); user = auth.currentUser; render(); } catch(e){}
+      }
     } else {
       await webSignIn(new firebase.auth.OAuthProvider('apple.com'));
     }
+  }
+
+  /* 애플은 "이름 성" 순서로 붙여 준다("성일 윤"). 둘 다 한글이면 우리식으로 붙인다. */
+  function appleName(s){
+    s = (s || '').trim();
+    if (!s) return '';
+    const m = s.match(/^([가-힣]+)\s+([가-힣]+)$/);
+    return (m ? m[2] + m[1] : s).slice(0, 20);
+  }
+
+  /* 닉네임 — 랭킹에 보이는 이름. 20자(Firestore 규칙과 같은 상한) */
+  async function setNickname(name){
+    const cu = auth && auth.currentUser;
+    if (!cu) throw new Error('로그인 상태가 아닙니다');
+    name = String(name || '').replace(/\s+/g, ' ').trim().slice(0, 20);
+    if (!name) throw new Error('닉네임을 적어 주세요');
+    await cu.updateProfile({ displayName: name });
+    user = auth.currentUser;
+    render();
+    // 랭킹에 이미 올라가 있으면 이름도 바로 바꿔 준다
+    try { if (window.Board && Board.push) await Board.push(); } catch(e){}
+    return name;
   }
 
   async function signOut(){
@@ -131,6 +161,8 @@ window.Auth = (function(){
     // 랭킹 문서부터 지운다 — 계정을 먼저 지우면 권한이 사라져 못 지운다
     try { if (db) await db.collection('khg_rank').doc(uid).delete(); }
     catch(e){ /* 규칙이 삭제를 막고 있으면 계정만 지운다. 문서는 콘솔에서 지울 수 있다. */ }
+    // 클라우드에 둔 진행 기록(save.js)도 같이 지운다
+    try { if (db) await db.collection('khg_save').doc(uid).delete(); } catch(e){}
     await user.delete();
   }
 
@@ -175,7 +207,15 @@ window.Auth = (function(){
     #auth-ov .close { background:none; border:0; color:#8d7f66; font-family:inherit;
       font-size:13.5px; cursor:pointer; padding:6px; }
     #auth-ov .err { min-height:17px; text-align:center; font-size:12.5px; color:#e8836e; }
-    #auth-ov .me { text-align:center; font-size:13.5px; color:#e6dbc2; }`;
+    #auth-ov .me { text-align:center; font-size:13.5px; color:#e6dbc2; }
+    #auth-ov .nick { display:none; gap:8px; }
+    #auth-ov.in .nick { display:flex; }
+    #auth-ov .nick input { flex:1; min-width:0; padding:11px 12px; border-radius:10px;
+      border:1px solid #4a3c26; background:#241b10; color:#f5ecd8; font-family:inherit; font-size:15px; }
+    #auth-ov .nick button { padding:0 14px; border-radius:10px; border:1px solid #6b5530;
+      background:#3a2c17; color:#f0c96b; font-family:inherit; font-size:14px; cursor:pointer; white-space:nowrap; }
+    #auth-ov .sync { display:none; text-align:center; font-size:12px; color:#9d8f74; line-height:1.6; }
+    #auth-ov.in .sync { display:block; }`;
     document.head.appendChild(s);
   }
 
@@ -193,6 +233,9 @@ window.Auth = (function(){
       '<div class="sub" id="auth-sub">로그인하면 다른 기기에서도 이어서 하고,<br>' +
       '랭킹에 이름을 올릴 수 있습니다.</div>' +
       '<div class="me" id="auth-me"></div>' +
+      '<div class="nick"><input id="auth-nick" maxlength="20" placeholder="랭킹에 보일 닉네임">' +
+      '<button id="auth-nick-ok" type="button">바꾸기</button></div>' +
+      '<div class="sync" id="auth-sync"></div>' +
       '<button class="p g" id="auth-g">' + G_ICON + ' 구글로 계속하기</button>' +
       '<button class="p a" id="auth-a">' + A_ICON + ' Apple로 계속하기</button>' +
       '<button class="p out" id="auth-out">로그아웃</button>' +
@@ -238,6 +281,11 @@ window.Auth = (function(){
         } else err(msgOf(e));
       }
     };
+    document.getElementById('auth-nick-ok').onclick = async () => {
+      err('');
+      try { const n = await setNickname(document.getElementById('auth-nick').value); err('닉네임을 "' + n + '"(으)로 바꿨습니다.'); }
+      catch(e){ err(e && e.message ? e.message : String(e)); }
+    };
     document.getElementById('auth-x').onclick = close;
     d.onclick = e => { if (e.target === d) close(); };
   }
@@ -281,12 +329,22 @@ window.Auth = (function(){
     // 계정 삭제는 로그인 상태에서만 보인다(.in 이 붙어야 CSS가 내보인다)
     const ov = document.getElementById('auth-ov');
     if (ov) ov.classList.toggle('in', !!user);
+    const nick = document.getElementById('auth-nick');
+    if (nick && user && document.activeElement !== nick) nick.value = user.displayName || '';
+    const sy = document.getElementById('auth-sync');
+    if (sy) sy.textContent = (window.CloudSave && CloudSave.status) ? CloudSave.status() : '';
     const sub = document.getElementById('auth-sub');
     if (sub) sub.style.display = user ? 'none' : 'block';
   }
 
+  /* 애플 '이메일 가리기'를 고르면 이메일이 xxx@privaterelay.appleid.com 이 된다.
+     그 앞부분은 이름이 아니다 — 보여 주지 않는다. */
   function nameOf(u){
-    return (u && (u.displayName || (u.email || '').split('@')[0])) || '이름 없음';
+    if (!u) return '나그네';
+    if (u.displayName) return u.displayName;
+    const e = u.email || '';
+    if (e && !/privaterelay\.appleid\.com$/i.test(e)) return e.split('@')[0];
+    return '나그네';
   }
 
   /* 챕터 목록 같은 데 단추를 하나 붙여 준다 */
@@ -311,5 +369,6 @@ window.Auth = (function(){
     get user(){ return user; },
     get db(){ return db; },
     signInGoogle, signInApple, signOut, open, close, attach, onChange, mount,
+    setNickname, nameOf, render,
   };
 })();
