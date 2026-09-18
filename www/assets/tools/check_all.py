@@ -233,6 +233,14 @@ def main():
     for f, _ in chs:
         if f not in listed:
             warns.append(f'{f}  챕터 목록(index)에 없음')
+    # 챕터 잠금 순서(chapterlock.js ORDER)는 목록(index ERAS) 순서와 같아야 한다
+    cl = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'chapterlock.js'), encoding='utf-8').read()
+    order = re.findall(r"'([\w\-]+\.html)'", cl.split('const ORDER = [')[1].split('];')[0])
+    if order != re.findall(r"href: '([\w\-]+\.html)'", idx):
+        fails.append('chapterlock.js ORDER가 index.html 챕터 목록 순서와 다름')
+    for f, s2 in chs:
+        if f in order and 'ChapterLock.guard()' not in s2:
+            fails.append(f'{f}  챕터 잠금 가드(ChapterLock.guard) 없음')
 
     print(f'퀴즈 총 {nq}문항 (출처 표기 완료)\n')
     if fails:

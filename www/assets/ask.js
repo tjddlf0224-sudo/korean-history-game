@@ -63,7 +63,7 @@ window.Ask = (function(){
       '<div id="ask-box"><div class="bar"></div>' +
       `<div class="msg">${message}${opt.sub ? `<span class="sub">${opt.sub}</span>` : ''}</div>` +
       '<div class="row">' +
-      `<button type="button" id="ask-no">${opt.cancel || '취소'}</button>` +
+      (opt.cancel === false ? '' : `<button type="button" id="ask-no">${opt.cancel || '취소'}</button>`) +   // false면 알림(단추 하나)
       `<button type="button" id="ask-yes" class="go${opt.danger ? ' danger' : ''}">${opt.ok || '확인'}</button>` +
       '</div></div>';
     d.classList.add('show');
@@ -76,7 +76,7 @@ window.Ask = (function(){
       }
       function onKey(ev){ if (ev.key === 'Escape') done(false); }
       d.querySelector('#ask-yes').onclick = () => done(true);
-      d.querySelector('#ask-no').onclick = () => done(false);
+      const no = d.querySelector('#ask-no'); if (no) no.onclick = () => done(false);
       // 바깥을 눌러도 닫힌다 — 다만 '취소'로 닫는다(되돌릴 수 없는 쪽으로 새지 않게)
       d.onclick = ev => { if (ev.target === d) done(false); };
       document.addEventListener('keydown', onKey);

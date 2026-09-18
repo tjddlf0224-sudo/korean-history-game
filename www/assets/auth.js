@@ -137,10 +137,14 @@ window.Auth = (function(){
     return name;
   }
 
+  /* 로그아웃 — 기록은 계정을 따라간다(save.js). 마지막 기록을 올리고 나가서,
+     이 기기는 처음 상태로 돌아간다(다른 사람이 써도 섞이지 않게). */
   async function signOut(){
+    try { if (window.CloudSave) await CloudSave.beforeSignOut(); } catch(e){}
     const np = nativePlugin();
     try { if (np) await np.signOut(); } catch(e){}
     await auth.signOut();
+    try { if (window.CloudSave) CloudSave.afterSignOut(); } catch(e){}
   }
 
   /* ============ 계정 삭제 ============
@@ -148,8 +152,8 @@ window.Auth = (function(){
      앱 안에서 지울 수도 있어야 한다. 없으면 심사에서 떨어진다.
 
      지우는 것: 파이어베이스 계정, 랭킹에 올린 내 문서(khg_rank/<uid>).
-     안 지우는 것: 이 기기의 게임 기록(localStorage) — 계정과 무관하게
-     기기에 있는 것이고, 지우고 싶으면 메뉴의 '진행 기록 초기화'가 따로 있다.
+     계정에 저장한 게임 기록(khg_save/<uid>)도 지우고, 기록은 계정을 따라가므로
+     (save.js, 2026-09-19) 이 기기의 게임 기록도 비워 처음 상태로 돌린다.
      학습 통계(khg_qstats)는 익명 집계라 사람과 연결되지 않는다.
 
      '최근 로그인' 문제: 파이어베이스는 보안상 로그인한 지 오래된 계정의
@@ -164,6 +168,8 @@ window.Auth = (function(){
     // 클라우드에 둔 진행 기록(save.js)도 같이 지운다
     try { if (db) await db.collection('khg_save').doc(uid).delete(); } catch(e){}
     await user.delete();
+    // 기록은 계정 것이었다 — 이 기기도 처음 상태로
+    try { if (window.CloudSave) CloudSave.afterSignOut(); } catch(e){}
   }
 
   /* ---------------- 화면 ---------------- */
@@ -272,7 +278,7 @@ window.Auth = (function(){
       try {
         await deleteAccount();
         delBtn.textContent = '계정 삭제';
-        err('계정을 지웠습니다. 이 기기의 게임 기록은 남아 있습니다.');
+        err('계정과 기록을 지웠습니다. 처음 상태로 돌아갑니다.');
         render();
       } catch(e){
         delBtn.textContent = '계정 삭제';
