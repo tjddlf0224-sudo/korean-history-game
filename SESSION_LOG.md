@@ -1388,3 +1388,7 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 제보: 인물도감 위쪽(탭·동료 띠)이 고정되고 목록만 움직여 가로 화면에선 스크롤 구역이 너무 좁다.
 - `heroes.js`: 패널 전체가 스크롤(`.panel{overflow-y:auto}`, 목록 `.scroll`은 flex:none). 닫기 ✕는 위에 sticky, 인물 설명(detail)은 아래에 sticky라 어디까지 내려도 보인다. 유물도감은 원래 전체 스크롤이라 그대로 맞췄다.
 - 844×390 가로 화면에서 스크롤·✕·설명 확인.
+
+## 2026-09-18 · 대화(행동) 버튼이 AUTO에 가려짐(v134)
+- 제보(아이폰 사진): 오른쪽 아래 노란 대화 버튼을 오른쪽 정렬대 맨 아래 AUTO 버튼이 덮는다.
+- 36챕터 `#act-btn`의 right를 22px → 84px로(정렬대 폭 44+여백 10에 여유). 390×760 세로 화면(회전 모드)에서 두 버튼 간격 15px 확인.
