@@ -1392,3 +1392,13 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 ## 2026-09-18 · 대화(행동) 버튼이 AUTO에 가려짐(v134)
 - 제보(아이폰 사진): 오른쪽 아래 노란 대화 버튼을 오른쪽 정렬대 맨 아래 AUTO 버튼이 덮는다.
 - 36챕터 `#act-btn`의 right를 22px → 84px로(정렬대 폭 44+여백 10에 여유). 390×760 세로 화면(회전 모드)에서 두 버튼 간격 15px 확인.
+
+## 2026-09-18 · iOS 첫 TestFlight 준비(v135)
+- 다른 세 앱(전산회계·상담일지·보카) 배포 기록을 대조해 반영(ios 폴더는 git 제외라 로컬에만 있음):
+  - SceneDelegate: 스토리보드 창이 있으면 새로 안 만듦(브리지 중복 방지) + 백그라운드/복귀 때 BGM 재우기·깨우기 호출
+  - AppDelegate: AVAudioSession .playback+.mixWithOthers, Now Playing 비우기, 구글 로그인 복귀 URL(ApplicationDelegateProxy) 전달
+  - App.entitlements(Sign in with Apple — 구글·애플 로그인 둘 다 씀), PrivacyInfo.xcprivacy(이름·이메일·uid·게임점수·진행통계, UserDefaults CA92.1), SKAdNetwork 1→50개, ITSAppUsesNonExemptEncryption=false, DEVELOPMENT_TEAM=39RN7AZUVT
+  - www/assets/audio.js: <audio> → Web Audio(AudioContext). XHR(status 0 허용), 모노 합치기, BGM 최근 2곡 캐시, __khgReleaseAudio/__khgResumeAudio
+- 서명 없이 Release 빌드 성공, iPhone 18 Pro 시뮬레이터에서 실행·프롤로그 표시 확인.
+- **막힌 곳:** xcodebuild가 "No Accounts" — 새 번들(com.yunsis.koreanhistorygame)은 설치된 프로비저닝 프로파일이 없어(다른 앱은 이미 있음) Sign in with Apple 포함 프로파일을 못 만든다. Apple Developer 로그인(또는 Xcode 계정 로그인)이 필요 → 사람 몫. 그 뒤: App ID 등록(Sign in with Apple), App Store Connect 앱 레코드, 아카이브, Organizer 업로드.
+- 아카이브 경로: ~/Library/Developer/Xcode/Archives/2026-09-18/KoreanHistory-1.0-1.xcarchive (서명 문제 해결 후 다시 만들 것)
