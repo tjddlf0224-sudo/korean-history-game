@@ -1457,3 +1457,9 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 확인 끝나면: ASC 버전 1.0(빌드 5 연결됨) **심사 제출**. 그 전에 AdMob `USE_TEST` 실제 광고 전환 여부 결정(규칙상 사람 결정).
 - ios 폴더는 git 제외 — 이번 세션의 네이티브 변경(SceneDelegate·AppDelegate 오디오·entitlements·PrivacyInfo·SKAdNetwork·iPad 4방향·수동 서명·빌드번호 5·아이콘)은 로컬에만 있다.
 - 스토어 자료: store/listing.md, store/screenshots, store/tools(shots.js·frame.js), store/icon.
+
+## 2026-09-18 · "배경음악이 안 들려" → 게임 안 음악 끄기가 켜져 있던 것(v141)
+- TestFlight 제보. 시뮬레이터(콘솔 로그 `simctl launch --console-pty`)에서 확인: 음악 파일 21개 번들에 있음, XHR 로딩·재생 정상(title_theme 154.8초 로드, state=running). 옛 코드도 시뮬레이터에선 정상.
+- 전산회계 로그 대조: 그쪽 원인(.ambient 무음 스위치·fetch mp3 실패)은 이미 둘 다 반영돼 있었다. 증상 가르는 질문을 먼저 했고, 성일님 확인 결과 **게임 메뉴의 배경음악이 꺼져 있었던 것**(버그 아님).
+- 곁가지로 넣은 개선은 유지: 소리 잠금 풀기를 첫 터치 한 번이 아니라 **소리가 켜질 때까지 터치·클릭마다 재시도**(+무음 버퍼). 진단 로그는 제거.
+- 교훈 재확인: 앱 전용 증상은 시뮬레이터로 먼저 재현, 재현 안 되면 추측 빌드 말고 증상을 가르는 질문부터.

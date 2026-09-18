@@ -21,8 +21,8 @@
    받자마자 모노로 합쳐 절반으로 줄이고, 배경음악은 **최근 두 곡만** 들고 있는다
    (크로스페이드에 두 곡이 필요해서). 효과음은 짧아서 따로 계속 둔다.
 
-   브라우저 자동재생 정책 때문에 사용자 제스처 전에는 소리가 막힌다 — 첫
-   pointerdown/keydown/touchstart에서 unlock()하고, 그 전에 들어온 play()
+   브라우저 자동재생 정책 때문에 사용자 제스처 전에는 소리가 막힌다 — 아래
+   onGesture()가 소리가 켜질 때까지 터치·클릭마다 풀고, 그 전에 들어온 play()
    요청은 pending에 두었다가 그때 재생한다. 아직 없는 파일을 요청해도 조용히
    실패할 뿐 게임이 멎지 않는다. */
 window.BGM = (function(){
@@ -201,19 +201,47 @@ window.BGM = (function(){
   }
   function getVolume(){ return volume; }
 
-  function unlock(){
+  /* ■ 소리 잠금 풀기 (2026-09-18 TestFlight 제보: "배경음악이 안 들려")
+     iOS WebKit은 손가락이 **닿는 순간**(touchstart·pointerdown)을 소리 허락으로 치지
+     않고 **떼는 순간**(touchend·click)만 친다. 예전엔 첫 pointerdown 한 번에만
+     resume()을 시도하고 리스너를 떼어 버려서, 그 시도가 거절되면 끝까지 무음이었다
+     (데스크톱 크롬은 pointerdown도 허락이라 모르고 지나갔다).
+     그래서 **소리가 실제로 켜질 때까지(state==='running')** 모든 터치·클릭마다
+     다시 시도하고, 켜지면 그때 리스너를 뗀다. 켜지는 순간 아주 짧은 무음 버퍼를
+     한 번 틀어 iOS 오디오를 확실히 깨운다(전산회계 오락실 bgm.js와 같은 방식). */
+  const GESTURES = ['touchend', 'click', 'pointerup', 'keydown', 'touchstart', 'pointerdown'];
+  let armed = false;
+  function onGesture(){
     const c = ac();
-    if (c && c.state !== 'running'){ const p = c.resume(); if (p && p.catch) p.catch(() => {}); }
-    if (unlocked) return;
-    unlocked = true;
-    if (pending){
-      const p = pending; pending = null; current = null;
-      play(p.id, p.opts);
+    if (!c) return;
+    if (!unlocked){
+      unlocked = true;
+      if (pending){
+        const p = pending; pending = null; current = null;
+        play(p.id, p.opts);
+      }
+    }
+    if (c.state !== 'running'){
+      try {
+        const b = c.createBuffer(1, 1, 22050), s = c.createBufferSource();
+        s.buffer = b; s.connect(c.destination); s.start(0);
+      } catch (e) {}
+      const r = c.resume();
+      if (r && r.then) r.then(checkRunning, () => {}); else checkRunning();
+    } else checkRunning();
+  }
+  function checkRunning(){
+    if (ctx && ctx.state === 'running' && armed){
+      armed = false;
+      GESTURES.forEach(ev => document.removeEventListener(ev, onGesture, true));
     }
   }
-  ['pointerdown', 'keydown', 'touchstart'].forEach(ev => {
-    window.addEventListener(ev, unlock, { once: true, passive: true });
-  });
+  function arm(){
+    if (armed) return; armed = true;
+    GESTURES.forEach(ev => document.addEventListener(ev, onGesture, true));
+  }
+  function unlock(){ onGesture(); }
+  arm();
 
   /* ---------- 앱/탭 이탈·복귀 ----------
      AudioContext라 잠금화면에 남을 일은 없지만, 백그라운드에서 소리가 계속
@@ -231,15 +259,7 @@ window.BGM = (function(){
     const p = ctx.resume();
     // 자동재생이 막히면 다음 터치 한 번에 다시 깨운다
     if (p && p.catch) p.catch(() => {});
-    setTimeout(() => {
-      if (ctx && ctx.state !== 'running'){
-        const h = () => {
-          ['touchstart', 'pointerdown', 'click'].forEach(e => document.removeEventListener(e, h, true));
-          const q = ctx.resume(); if (q && q.catch) q.catch(() => {});
-        };
-        ['touchstart', 'pointerdown', 'click'].forEach(e => document.addEventListener(e, h, true));
-      }
-    }, 300);
+    setTimeout(() => { if (ctx && ctx.state !== 'running') arm(); }, 300);
   }
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') release(); else resume();
