@@ -96,8 +96,8 @@ window.Boss = (function(){
       background:rgba(16,11,5,.74); border:1px solid rgba(240,201,107,.42);
       border-radius:10px; padding:5px 10px; }
     /* 내 정보가 왼쪽 위, 상대가 오른쪽 위 — 각자 자기 캐릭터 쪽 위에 붙는다 */
-    .bs-info-p { top:5%; left:5%; }
-    .bs-info-e { top:5%; right:5%; }
+    .bs-info-p { top:5%; left:max(5%, calc(env(safe-area-inset-left) + 8px)); }
+    .bs-info-e { top:5%; right:max(5%, calc(env(safe-area-inset-right) + 8px)); }
     .bs-info .nm { font-size:13px; font-weight:700; color:#f0c96b; margin-bottom:3px; }
     .bs-hp { height:9px; border-radius:999px; background:rgba(0,0,0,.6);
       border:1px solid rgba(240,201,107,.3); overflow:hidden; }
@@ -136,7 +136,8 @@ window.Boss = (function(){
 
     /* 아래 — 대사 + 문제 */
     .bs-bottom { flex:none; background:#1a140c; border-top:1px solid #4a3c26;
-      padding:12px 16px calc(14px + env(safe-area-inset-bottom));
+      /* 가로로 든 아이폰은 노치·둥근 모서리가 양옆에 온다 — 양쪽 모두 안전 여백을 둔다(2026-09-18 제보: 왼쪽 글자가 노치에 가림) */
+      padding:12px max(16px, calc(env(safe-area-inset-left) + 8px), calc(env(safe-area-inset-right) + 8px)) calc(14px + env(safe-area-inset-bottom));
       max-height:52%; overflow-y:auto; }
     .bs-msg { font-size:14px; line-height:1.6; color:#e8dcc2; min-height:22px; margin-bottom:10px; }
     .bs-msg b { color:#f0c96b; }

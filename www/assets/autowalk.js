@@ -165,7 +165,10 @@ window.Auto = (function(){
       let key = null;
       try { key = Stage.keyFor(n.id); } catch(e){}
       if (!key) continue;
-      const seen = (typeof seenDialogKeys !== 'undefined') && seenDialogKeys.has(key);
+      // 끝까지 마친 대화만 '끝'으로 본다(열었다 닫은 마지막 대화로 돌아가게) — 없는 옛 챕터는 seen
+      const doneSet = (typeof doneDialogKeys !== 'undefined') ? doneDialogKeys
+                    : (typeof seenDialogKeys !== 'undefined') ? seenDialogKeys : null;
+      const seen = !!(doneSet && doneSet.has(key));
       if (!seen) return { x:n.x, y:n.y, kind:'npc', id:n.id };
     }
     for (let i = 0; i < (z.exits || []).length; i++){
