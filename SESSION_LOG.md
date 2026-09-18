@@ -1450,3 +1450,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 차돌이가 또 자루 달린 돌도끼를 들고 나와 → 자루 없는 주먹도끼로 수정 요청(고증).
 - 제미나이 로고(1024px 결과의 오른쪽 아래 약 903,904)가 구름무늬 위에 겹쳐 역알파·거울 복사·확산 모두 흔적이 남음 → **오른쪽 아래 모서리를 빈 배경으로 다시 그려 달라고 해서** 확산으로 깨끗이 지움. (교훈: 아이콘은 처음부터 오른쪽 아래를 비워 달라고 할 것)
 - `ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png`(1024 RGB), 원본은 `store/icon/app_icon_1024.png`. 빌드 5 아카이브 → Organizer.
+- (이어서) 빌드 4·5 처리 완료(제출 준비 완료, 90일). 내부 그룹 "내부 테스트"에 두 빌드 자동 배포, 테스터 tjddlf0224@naver.com은 "초대됨"(메일 수락 필요). 버전 1.0 심사 페이지 빌드 칸에 **빌드 5** 연결·저장. 심사 제출은 TestFlight 확인 후.
