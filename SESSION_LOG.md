@@ -1402,3 +1402,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 서명 없이 Release 빌드 성공, iPhone 18 Pro 시뮬레이터에서 실행·프롤로그 표시 확인.
 - **막힌 곳:** xcodebuild가 "No Accounts" — 새 번들(com.yunsis.koreanhistorygame)은 설치된 프로비저닝 프로파일이 없어(다른 앱은 이미 있음) Sign in with Apple 포함 프로파일을 못 만든다. Apple Developer 로그인(또는 Xcode 계정 로그인)이 필요 → 사람 몫. 그 뒤: App ID 등록(Sign in with Apple), App Store Connect 앱 레코드, 아카이브, Organizer 업로드.
 - 아카이브 경로: ~/Library/Developer/Xcode/Archives/2026-09-18/KoreanHistory-1.0-1.xcarchive (서명 문제 해결 후 다시 만들 것)
+- (이어서) 성일님 로그인 후: developer.apple.com에 App ID `com.yunsis.koreanhistorygame`(Sign In with Apple) 등록, 개발 프로파일 "KoreanHistory Development" 생성·설치, pbxproj App 타깃 Release만 수동 서명 → **ARCHIVE SUCCEEDED**(applesignin entitlement·PrivacyInfo 포함 확인). App Store Connect에 신규 앱 "타임슬립 한국사"(한국어, SKU koreanhistorygame, iOS 1.0) 생성. Organizer로 아카이브 열어 둠 → 업로드는 성일님.
