@@ -1482,3 +1482,16 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 성일님 기존 애플 계정은 이름을 다시 안 주므로 로그인 창에서 닉네임 직접 설정 필요.
 - Firebase 콘솔 점검(인앱 브라우저): iOS 앱·웹 앱 이미 등록돼 있음. iOS 앱에 App Store ID 6813351584·팀 ID 39RN7AZUVT 입력·저장. 로그인 제공업체 Google·Apple 켜짐(이메일/비밀번호는 성일님이 사용 중지함). 승인 도메인에 tjddlf0224-sudo.github.io 있음. 성일님이 규칙 게시 → REST로 비로그인 khg_save 읽기·쓰기 403, 랭킹 읽기 200 확인.
 - 빌드 6 업로드 완료(성일님, Organizer). 버전 1.0에는 아직 빌드 5가 붙어 있음 → 심사 제출 전 빌드 6으로 교체 필요.
+
+---
+### ⚠️ 2026-09-18 20:31 — 한국사 게임 규칙이 **장원급제반(TopClass) Firebase 프로젝트에** 게시됨 (장원급제반 세션이 발견·복구)
+- 콘솔 규칙 이력: `topclass-be740`에 오늘 20:31 게시본 = 이 게임의 `khg_rank`/`khg_save`/`khg_qstats`/`khg_progress` 규칙.
+  맨 끝 `allow read, write: if false` 때문에 **장원급제반 학생 앱의 읽기가 약 20분간 전부 막혔다.** 20:50 장원급제반 규칙으로 복구함.
+- 이 게임의 실제 프로젝트 `korean-history-game-beec0`에는 규칙이 정상으로 들어가 있다(REST: khg_rank 200, khg_save 403) — **여기서 할 일은 없음.**
+- 앞으로 규칙을 게시할 땐 **콘솔 URL의 프로젝트 ID(`korean-history-game-beec0`)와 탭 제목**을 먼저 확인할 것. 인앱 브라우저는 여러 세션이 같이 쓴다.
+
+## 2026-09-19 v144 — 챕터 잠금(광고로 열기) · 계정 기준 기록, 빌드 7
+- 성일님 요청: 선사만 열고 나머지 잠금, 앞 화 완료 시 다음 화, 광고 보면 어디든 열기 / 기기 기준 말고 계정 기준 연동.
+- assets/chapterlock.js(새): ORDER(=index ERAS 카드 순서, check_all이 대조) · 완료 판정은 기존 배지 ch_complete_<파일> · 광고 열기는 khg_unlock.open(계정 동기화됨). 첫 실행 때 완료 챕터·그다음 화·khg_lastChapter를 열어 둠(기존 사용자 보호). 36챕터 head에 `ChapterLock.guard()` → 잠긴 챕터 직접 진입 시 index.html#locked=파일 → 광고 열기 창. 웹은 광고 없이 확인 창만. ask.js에 cancel:false(단추 하나) 추가.
+- save.js 재작성(v2): khg_owner(기기 전용, guest|uid)·khg_sync_at·khg_sync_sig. 같은 계정=서버가 더 새롭고 기기 무변경이면 받기(둘 다 변경이면 xp 큰 쪽), 다른 계정 기록=그 계정 것으로 교체(없으면 처음부터), 비로그인 진행=한 번 물음(계정과 같으면 묻지 않음). 로그아웃·계정 삭제 = 마지막 업로드 후 기기 초기화(guest). 로그인이 저절로 풀리면 비우지 않음. 가짜 DB로 4가지 시나리오 시험 통과.
+- 빌드 7 아카이브: ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-7.xcarchive(CFBundleVersion 7, v144 확인), Organizer 열어 둠 → 업로드는 성일님. 심사 제출 전 버전 1.0 빌드를 최신으로 교체할 것(현재 5).
