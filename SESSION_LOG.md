@@ -1347,3 +1347,16 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
     회색 대화창 + 기울인 글씨 + 왼쪽 점선 + 초상 흑백 + 이름 옆 '속마음' 표. 화면에서만 `(속으로)`를 떼고, **대사 데이터는 그대로 둔다**(작법 점검 도구가 이 표시로 속말을 찾는다).
     `(탑 몸돌을 쓸어 본다 · 속으로)`처럼 동작이 섞인 것은 동작만 남긴다.
   - 36챕터에 스크립트 한 줄씩 추가. 자동 점검 36/36, check_all 0건.
+  - 같은 날 **밝기 올림**(v129): "회색이 어두워 죽어 보인다" → 배경 #23252b→#4a505c, 흰 글씨, 초상 흑백 0.85→0.45, '속마음' 표는 밝은 바탕.
+- 9-19 **문화유산 사진 병렬 수집** (v127) — 사용자 요청으로 병렬 에이전트 4개(model:sonnet)
+  - 국가유산포털 받는 법(확인됨): 상세 `culSelectDetail.do?ccbaCpno=…&pageNo=1_1_2_0`(pageNo 없으면 가끔 빈 페이지) → `ccbaKdcd·ccbaAsno·ccbaCtcd` 추출
+    → `selectCulImageList.do`(XHR 헤더) JSON `list[].imageUrl`·`id` → 사진별 이용조건은 `imgHeritage.do?ccimId={id}&…`의 `mark0N.svg`/`licenseTypeN.do`.
+    **사진마다 유형이 따로 붙는다** — `scripts/check_kogl.py <ccbaCpno> [파일조각]`로 확인. JSON의 `open`(A/D)은 라이선스가 아니다(첨성대 1유형도 D).
+    에이전트가 동시에 두드리면 포털이 잠깐 막는다 → 검증은 40초 간격.
+  - 새로 넣은 5장: 호우총 호우(국중박 신수120, 3000px — 포털 원본은 255px뿐), 1899 전차(서울역사박물관 1유형), 정미의병(매켄지 PD-1923), 시일야방성대곡 지면(PD), 제중원(PD) → 고대 1화·개항 5화 사진 장면.
+  - 더 큰 원본으로 교체 9장: 관촉사·황룡사지·무용총 수렵도·강화 고인돌·해인사 대장경판·월정사탑·하사창동 철불·연가7년명·분황사탑.
+  - **크다고 다 좋진 않아 유지**한 4장: 천마총 금관(새것은 눕혀 찍고 "경주 2274" 글자 박힘), 임신서기석(3D 스캔 컷이라 글자 안 보임), 이천동 마애여래(얼굴 덜 보임), 쌍봉사 승탑(울타리).
+  - 못 구함(규칙상): 다호리 붓(국중박 비공개·김해박물관 4유형), 곤여만국전도 전체 컷(포털은 조각뿐, 실학박물관은 All rights reserved).
+  - 도구: `scripts/add_heritage_photo.py`(긴 쪽 1600·JPEG 84), `check_kogl.py`. 원본은 `_source_photos/`(커밋 안 함).
+  - 출처 기록 `_research/heritage_image_credits.md` 갱신, 체크리스트에서 **제3유형 제외**(리사이즈해서 넣으므로 변경금지 불가).
+  - 사용자 질문 정리: 고친 "원본"은 한능검 기출이 아니라 **우리 대본 파일**(author_specs.py·specs/*.json)과 **우리가 만든 변형문제**(exam_variants.json)였다. 기출 원문은 저장·수정한 적 없음.
