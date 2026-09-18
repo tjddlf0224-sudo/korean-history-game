@@ -203,10 +203,15 @@ window.Heroes = (function(){
     #hero-ov { position:absolute; inset:0; z-index:92; display:none; align-items:center;
       justify-content:center; background:rgba(8,6,3,.86); font-family:"Gowun Batang",serif; }
     #hero-ov.show { display:flex; }
+    /* 창 전체가 스크롤된다(2026-09-18). 예전엔 탭·동료 띠가 고정되고 목록만
+       움직여서, 가로 화면에선 손가락 한 마디 높이만 스크롤돼 너무 좁았다.
+       닫기(✕)는 위에, 인물 설명은 아래에 붙여 둬서 어디까지 내려도 보인다. */
     #hero-ov .panel { width:min(92%,560px); max-height:88%; display:flex; flex-direction:column;
-      background:#1a140c; border:1px solid #4a3c26; border-radius:16px; padding:16px; }
+      background:#1a140c; border:1px solid #4a3c26; border-radius:16px; padding:16px;
+      overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
     /* 오른쪽 위 닫기 — 아래쪽 '닫기'는 목록이 길면 한참 내려야 나온다. */
-    #hero-ov .pnl-x { display:flex; justify-content:flex-end; margin:-6px -6px 2px 0; flex:none; }
+    #hero-ov .pnl-x { display:flex; justify-content:flex-end; margin:-6px -6px 2px 0; flex:none;
+      position:sticky; top:-10px; z-index:3; height:0; overflow:visible; }
     #hero-ov h3 { margin:0 0 3px; font-size:17px; color:#f0c96b; text-align:center; }
     /* 인물 도감·유물 도감을 오가는 탭. 예전엔 단추가 둘이라 서로 다른
        도감으로 착각하기 쉬웠다 — 사실 하나의 '모은 것' 도감이 둘로 나뉜
@@ -217,7 +222,7 @@ window.Heroes = (function(){
       background:#241c12; color:#8d7f66; font-family:inherit; font-size:12.5px; cursor:pointer; }
     #hero-ov .dg-tab.on { border-color:#c9a24a; background:#3a2c1a; color:#f0c96b; font-weight:700; }
     #hero-ov .cntline { text-align:center; font-size:12px; color:#b8a888; margin-bottom:12px; }
-    #hero-ov .scroll { overflow-y:auto; -webkit-overflow-scrolling:touch; flex:1; }
+    #hero-ov .scroll { flex:none; }
     #hero-ov .era { font-size:12px; color:#c9a24a; letter-spacing:.12em; margin:14px 0 7px;
       padding-bottom:4px; border-bottom:1px solid #3a2c1a; }
     #hero-ov .era:first-child { margin-top:0; }
@@ -238,7 +243,8 @@ window.Heroes = (function(){
     #hero-ov .cell .st { position:absolute; right:3px; top:3px; font-size:11px; color:#ffd970;
       text-shadow:0 1px 4px rgba(0,0,0,.9); }
     #hero-ov .detail { margin-top:12px; padding:13px; background:#241c12; border-radius:11px;
-      border:1px solid #3a2c1a; display:none; flex:none; }
+      border:1px solid #3a2c1a; display:none; flex:none;
+      position:sticky; bottom:-16px; z-index:2; box-shadow:0 -10px 18px rgba(0,0,0,.55); }
     #hero-ov .detail.show { display:block; }
     #hero-ov .detail .dn { font-size:16px; font-weight:700; color:#f0c96b; }
     #hero-ov .detail .de { font-size:11px; color:#b8a888; margin-bottom:7px; }
