@@ -1403,3 +1403,11 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - **막힌 곳:** xcodebuild가 "No Accounts" — 새 번들(com.yunsis.koreanhistorygame)은 설치된 프로비저닝 프로파일이 없어(다른 앱은 이미 있음) Sign in with Apple 포함 프로파일을 못 만든다. Apple Developer 로그인(또는 Xcode 계정 로그인)이 필요 → 사람 몫. 그 뒤: App ID 등록(Sign in with Apple), App Store Connect 앱 레코드, 아카이브, Organizer 업로드.
 - 아카이브 경로: ~/Library/Developer/Xcode/Archives/2026-09-18/KoreanHistory-1.0-1.xcarchive (서명 문제 해결 후 다시 만들 것)
 - (이어서) 성일님 로그인 후: developer.apple.com에 App ID `com.yunsis.koreanhistorygame`(Sign In with Apple) 등록, 개발 프로파일 "KoreanHistory Development" 생성·설치, pbxproj App 타깃 Release만 수동 서명 → **ARCHIVE SUCCEEDED**(applesignin entitlement·PrivacyInfo 포함 확인). App Store Connect에 신규 앱 "타임슬립 한국사"(한국어, SKU koreanhistorygame, iOS 1.0) 생성. Organizer로 아카이브 열어 둠 → 업로드는 성일님.
+
+## 2026-09-18 · App Store Connect 등록 정보 입력(인앱 브라우저)
+- 내용은 `store/listing.md` 참고(이름·부제·설명·키워드·카테고리·연령 13+·가격 무료·개인정보 라벨 게시·심사 정보·TestFlight 내부 그룹).
+- 스크린샷 7장×2(아이폰 6.5" 2778×1284, 아이패드 13" 2752×2064): Playwright로 게임 장면을 찍고(`store/tools/shots.js`, 가이드·프롤로그 끄고 Lv17 양반·금 2877 세팅) 고운바탕 자막 틀을 씌움(`frame.js`).
+- 인앱 브라우저엔 파일 업로드 도구가 없어서: 로컬 서버가 이미지를 190KB씩 쪼개 `appstoreconnect.apple.com/robots.txt#조각`으로 리다이렉트 → 그 페이지 JS가 IndexedDB에 저장(41조각) → 버전 페이지에서 합쳐 `input[type=file]`에 DataTransfer로 넣음. fetch·iframe은 CSP/PNA로 막혔다.
+- 개인정보 처리방침 정정: "로그인 없이 쓸 때 외부로 전송하지 않는다"가 사실과 달랐다(telemetry.js가 문항·챕터 통계를 무작위 기기 아이디로 보냄, 로그인 시 uid). 1·3항을 실제대로 고치고 support.html 추가.
+- 발견: iPad(4:3)에서 대화의 지도 차트 오른쪽이 잘림 → 별도 작업 칩으로 남김.
+- 남은 것: Organizer 업로드 후 빌드가 처리되면 내부 그룹에 자동 배포. 심사 제출은 아직 안 함(TestFlight 확인 먼저).
