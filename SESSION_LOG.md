@@ -1360,3 +1360,9 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
   - 도구: `scripts/add_heritage_photo.py`(긴 쪽 1600·JPEG 84), `check_kogl.py`. 원본은 `_source_photos/`(커밋 안 함).
   - 출처 기록 `_research/heritage_image_credits.md` 갱신, 체크리스트에서 **제3유형 제외**(리사이즈해서 넣으므로 변경금지 불가).
   - 사용자 질문 정리: 고친 "원본"은 한능검 기출이 아니라 **우리 대본 파일**(author_specs.py·specs/*.json)과 **우리가 만든 변형문제**(exam_variants.json)였다. 기출 원문은 저장·수정한 적 없음.
+
+## 2026-09-18 · 대화 첫머리 초상화 빠짐 보강(v130)
+- 제보: 선사 꼬마 대화창에 초상화가 없다가 중간부터 나온다.
+- 원인: 대화 데이터에 `img`가 없어 합류 전 `who:'npc'` 줄은 아이콘만 떴다(Party.say 줄만 얼굴이 있음).
+- 전 챕터를 훑어 같은 누락 4곳을 보강했다: seonsa1 chadol_0(부모 얘기 줄은 chadol_cry), godae1 bau_0, ch2 sejong_crisis·choemanri_after.
+- check_all 0건, 커밋·푸시·sync 완료.
