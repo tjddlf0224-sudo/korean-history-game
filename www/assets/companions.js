@@ -121,6 +121,7 @@ window.Party = (function(){
   function hook(){
     if (hooked || typeof Dialog === 'undefined' || !Dialog.afterQuiz) return;
     hooked = true;
+    members().forEach(preload);
     // 아직 합류하지 않은 동료의 대사는 뺀다(합류 장면을 건너뛰고 말을 건 경우).
     // 챕터의 open()이 data를 정한 뒤에 걸러서 첫 줄부터 다시 그린다.
     const origOpen = Dialog.open;
@@ -162,6 +163,24 @@ window.Party = (function(){
     return imgs[k];
   }
   const DIR = { u:'up', d:'down', l:'left', r:'right' };
+  /* 걷기 그림 12장(4방향×3걸음)을 처음부터 다 불러 둔다(2026-09-18 제보).
+     예전엔 그 방향·걸음이 처음 필요해질 때 받기 시작해서, 받는 동안은 아래의
+     옛날 코드 그림(drawCharacter)이 대신 나왔다 — "어느 각도에서는 갑자기 옛날
+     캐릭터가 나온다". 그래서 ① 미리 다 받고 ② 아직 안 온 장은 이미 받아 둔 같은
+     동료의 다른 장으로 대신하며 ③ 한 장도 없을 때만 옛 그림을 쓴다. */
+  const preloaded = {};
+  function preload(id){
+    if (preloaded[id] || !HAS_ART[id]) return;
+    preloaded[id] = true;
+    for (const d of ['down','up','left','right']) for (let i = 0; i < 3; i++) frameImg(id, d, i);
+  }
+  function ready(im){ return im && im.complete && im.naturalWidth > 0; }
+  function anyFrame(id, dir){
+    // 같은 방향의 서 있는 장 → 정면 → 아무 장이나
+    const cands = [frameImg(id, dir, 0), frameImg(id, 'down', 0)];
+    for (const d of ['down','left','right','up']) for (let i = 0; i < 3; i++) cands.push(frameImg(id, d, i));
+    return cands.find(ready) || null;
+  }
 
   function record(world){
     const p = { x: world.px, y: world.py, f: world.facing };
@@ -202,14 +221,17 @@ window.Party = (function(){
         const dir = DIR[p.f] || 'down';
         const seq = [0, 1, 0, 2];
         const idx = world.moving ? seq[Math.floor(performance.now() / 140 + n) % seq.length] : 0;
-        const img = frameImg(id, dir, idx);
-        if (img.complete && img.naturalWidth){
+        preload(id);
+        let img = frameImg(id, dir, idx);
+        if (!ready(img)) img = anyFrame(id, dir);
+        if (img){
           ctx.fillStyle = 'rgba(0,0,0,.22)';
           ctx.beginPath(); ctx.ellipse(sx, sy + 23, 16, 6, 0, 0, Math.PI * 2); ctx.fill();
           const H = w.h, W = H * (img.naturalWidth / img.naturalHeight);
           ctx.drawImage(img, sx - W / 2, sy + 27 - H, W, H);   // 발끝을 주인공과 같은 높이에
           return;
         }
+        return;   // 그림이 있는 동료는 한 장도 안 왔으면 잠깐 안 그린다(옛 그림을 보이지 않게)
       }
       if (typeof drawCharacter === 'function'){
         ctx.save(); ctx.scale(zoom, zoom);

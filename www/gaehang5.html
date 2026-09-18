@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=138"></script>
+<script src="assets/tablet.js?v=139"></script>
 <title>한국사 게임 - 개항 5화 대한제국과 국권피탈</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -522,13 +522,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=138"></script>
-<script src="assets/zoomwarn.js?v=138"></script>
-<script src="assets/map/map_component.js?v=138"></script>
-<script src="assets/chart.js?v=138"></script>
-<script src="assets/companions.js?v=138"></script>
-<script src="assets/inner.js?v=138"></script>
-<script src="assets/audio.js?v=138"></script>
+<script src="assets/errlog.js?v=139"></script>
+<script src="assets/zoomwarn.js?v=139"></script>
+<script src="assets/map/map_component.js?v=139"></script>
+<script src="assets/chart.js?v=139"></script>
+<script src="assets/companions.js?v=139"></script>
+<script src="assets/inner.js?v=139"></script>
+<script src="assets/audio.js?v=139"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -540,7 +540,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=138';   // 존댓말 전환
+const ART_V = '?v=139';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -789,7 +789,11 @@ function drawNpcSprite(px, py, imgPath, look){
   ctx.fillStyle = 'rgba(0,0,0,.28)';
   ctx.beginPath(); ctx.ellipse(px, py + 23, 20, 8, 0, 0, Math.PI*2); ctx.fill();
   const img = getNpcImg(imgPath);
-  if (!img.complete || !img.naturalWidth){
+  // 받는 중이면 잠깐 비워 둔다 — 여기서 옛 실루엣을 그리면 구역에 들어설 때마다
+  // 옛날 코드 그림이 번쩍 보였다(2026-09-18 차돌이와 같은 제보). 받기에 실패했을
+  // 때(파일 없음)만 아래 실루엣으로 대신한다.
+  if (!img.complete) return;
+  if (!img.naturalWidth){
     // 초상이 아직 없거나(신규 챕터) 로딩 중이면 프로시저럴 실루엣으로 대신 그린다.
     // 예전엔 그냥 return이라 NPC가 통째로 안 보였고, 그림이 준비되기 전에는
     // 대사·퀴즈가 멀쩡한데도 챕터를 검증할 수가 없었다.
@@ -2157,38 +2161,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=138"></script>
-<script src="assets/streak.js?v=138"></script>
+<script src="assets/badges.js?v=139"></script>
+<script src="assets/streak.js?v=139"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=138"></script>
-  <script src="assets/fx.js?v=138"></script>
-  <script src="assets/deed.js?v=138"></script>
-  <script src="assets/inkwipe.js?v=138"></script>
-  <script src="assets/dash.js?v=138"></script>
-<script src="assets/juice.js?v=138"></script>
-  <script src="assets/difficulty.js?v=138"></script>
-  <script src="assets/nextauto.js?v=138"></script>
-<script src="assets/heroes_data.js?v=138"></script>
-<script src="assets/heroes.js?v=138"></script>
-<script src="assets/icons.js?v=138"></script>
-<script src="assets/srs.js?v=138"></script>
-<script src="assets/newsflash.js?v=138"></script>
-<script src="assets/timeline.js?v=138"></script>
-<script src="assets/journey.js?v=138"></script>
-<script src="assets/season.js?v=138"></script>
-<script src="assets/items.js?v=138"></script>
-  <script src="assets/gold.js?v=138"></script>
-  <script src="assets/ask.js?v=138"></script>
-  <script src="assets/ads.js?v=138"></script>
-  <script src="assets/energy.js?v=138"></script>
-  <script src="assets/daily.js?v=138"></script>
-  <script src="assets/unlock.js?v=138"></script>
-  <script src="assets/guide.js?v=138"></script>
-  <script src="assets/minigames.js?v=138"></script>
-  <script src="assets/quests.js?v=138"></script>
-  <script src="assets/offline.js?v=138"></script>
-  <script src="assets/telemetry.js?v=138"></script>
-<script src="assets/autowalk.js?v=138"></script>
+<script src="assets/rank.js?v=139"></script>
+  <script src="assets/fx.js?v=139"></script>
+  <script src="assets/deed.js?v=139"></script>
+  <script src="assets/inkwipe.js?v=139"></script>
+  <script src="assets/dash.js?v=139"></script>
+<script src="assets/juice.js?v=139"></script>
+  <script src="assets/difficulty.js?v=139"></script>
+  <script src="assets/nextauto.js?v=139"></script>
+<script src="assets/heroes_data.js?v=139"></script>
+<script src="assets/heroes.js?v=139"></script>
+<script src="assets/icons.js?v=139"></script>
+<script src="assets/srs.js?v=139"></script>
+<script src="assets/newsflash.js?v=139"></script>
+<script src="assets/timeline.js?v=139"></script>
+<script src="assets/journey.js?v=139"></script>
+<script src="assets/season.js?v=139"></script>
+<script src="assets/items.js?v=139"></script>
+  <script src="assets/gold.js?v=139"></script>
+  <script src="assets/ask.js?v=139"></script>
+  <script src="assets/ads.js?v=139"></script>
+  <script src="assets/energy.js?v=139"></script>
+  <script src="assets/daily.js?v=139"></script>
+  <script src="assets/unlock.js?v=139"></script>
+  <script src="assets/guide.js?v=139"></script>
+  <script src="assets/minigames.js?v=139"></script>
+  <script src="assets/quests.js?v=139"></script>
+  <script src="assets/offline.js?v=139"></script>
+  <script src="assets/telemetry.js?v=139"></script>
+<script src="assets/autowalk.js?v=139"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
