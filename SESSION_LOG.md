@@ -1366,3 +1366,12 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 원인: 대화 데이터에 `img`가 없어 합류 전 `who:'npc'` 줄은 아이콘만 떴다(Party.say 줄만 얼굴이 있음).
 - 전 챕터를 훑어 같은 누락 4곳을 보강했다: seonsa1 chadol_0(부모 얘기 줄은 chadol_cry), godae1 bau_0, ch2 sejong_crisis·choemanri_after.
 - check_all 0건, 커밋·푸시·sync 완료.
+
+## 2026-09-18 · 보스전 전투 그림 새로 뽑기(v131)
+- 요청: 보스전에서 주인공·동료가 걷기 그림 옆모습(right_1)이라 어색하다 → 제미나이로 전투용 에셋.
+- 인앱 브라우저 제미나이로 3번 생성(+차돌이 1번 재생성): 주인공 7벌(후드티·노비·양인·중인·양반·재상·왕) + 차돌이·바우.
+  자세는 보스와 마주 보도록 오른쪽 3/4 정면, 주먹 쥔 전투 자세. 첫 결과(주인공 4벌)를 다음 묶음의 화풍 참고로 붙여 통일.
+- 고증: 차돌이가 처음엔 자루 달린 돌도끼를 들고 나와(구석기와 안 맞음) 자루 없는 주먹도끼로 다시 뽑았다.
+- 파일: `assets/player/battle.png`, `assets/player/<신분>/battle.png`(7장 모두 267×447 같은 캔버스에 발끝 맞춤 — 갓 유무로 몸 크기가 달라지지 않게), `assets/companions/{chadol,bau}/battle.png`.
+- `boss.js`: `battleImg()`가 챕터의 `currentSuit()`로 신분 옷을 고른다(예전엔 늘 후드티 옆모습). 동료도 battle.png. 주인공 높이 48→55%, 차돌이 30→33%.
+- 제미나이 다리 서버(scratchpad/gem/recv_server.py)는 스크래치패드가 비워져 다시 썼다. 참고 그림이 200KB 넘으면 리다이렉트가 실패 → JPEG로 줄여 50KB 안팎으로.

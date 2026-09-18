@@ -71,12 +71,12 @@ window.Boss = (function(){
     .bs-enemy { bottom:6%; right:13%; height:54%; }
     .bs-enemy img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.2s ease-in-out infinite; }
-    .bs-self { bottom:3%; left:11%; height:48%; }
+    .bs-self { bottom:3%; left:11%; height:55%; }  /* 전투 그림은 위에 갓 자리 여백이 있어 조금 키웠다 */
     /* 동료(차돌이·바우) — 주인공 뒤, 한 발 물러선 자리 */
     .bs-mate { position:absolute; z-index:4; width:auto; pointer-events:none;
       filter:drop-shadow(0 6px 6px rgba(0,0,0,.5)) brightness(.9); }
     .bs-mate-bau { bottom:8%; left:3%; height:52%; }
-    .bs-mate-chadol { bottom:2%; left:25%; height:30%; z-index:6; }
+    .bs-mate-chadol { bottom:2%; left:27%; height:33%; z-index:6; }
     .bs-self img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.8s ease-in-out infinite; }
     @keyframes bs-bob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
@@ -432,21 +432,24 @@ window.Boss = (function(){
     document.getElementById('bs-e').innerHTML =
       opt.img ? `<img src="${opt.img}" alt="">`
               : `<div class="bs-silhouette"><span>${S.name}</span></div>`;
-    // 오른쪽을 보는 측면(right_1)을 쓴다. 보스는 왼쪽을 보고 있으므로
-    // 둘이 마주 선다. 뒷모습을 쓰면 얼굴이 안 보여 누가 싸우는지 모른다.
+    // 전투용 그림(battle.png)을 쓴다 — 오른쪽으로 3/4쯤 돌아 주먹을 쥔 자세라
+    // 왼쪽을 보는 보스와 마주 선다(2026-09-18). 예전엔 걷기 그림의 옆모습
+    // (right_1)을 세웠는데 "걸을 때 옆모습을 갖다 쓰니 어색하다"는 지적을 받았다.
+    // 신분(옷)마다 한 장씩 있다. 7장 모두 같은 캔버스(267×447)에 발끝을 맞춰
+    // 그려 두어서, 갓을 쓰든 안 쓰든 몸 크기가 같게 나온다.
     //
     // ?v= 를 반드시 붙인다. 챕터는 ART_V로 스프라이트 캐시를 갱신하는데
     // 여기만 그게 없어서, 파일을 고쳐도 브라우저가 옛 그림을 계속 썼다
     // (좌우 파일 이름을 바로잡은 뒤에도 주인공이 보스 반대쪽을 보고 있었다).
     document.getElementById('bs-p').innerHTML =
-      `<img src="${opt.playerImg || 'assets/player/right_1.png?v=6'}" alt="">`;
+      `<img src="${opt.playerImg || battleImg()}" alt="">`;
 
-    // 이야기 동료(차돌이·바우)는 걷기 그림의 오른쪽 모습을 그대로 세운다(2026-09-19).
+    // 이야기 동료(차돌이·바우)도 전투용 그림을 세운다(2026-09-18, 예전엔 걷기 옆모습).
     arena.querySelectorAll('.bs-mate').forEach(n => n.remove());
     (window.Party ? Party.members() : []).forEach(id => {
       const im = document.createElement('img');
       im.className = 'bs-mate bs-mate-' + id; im.alt = '';
-      im.src = `assets/companions/${id}/right_1.png` + (typeof ART_V === 'string' ? ART_V : '');
+      im.src = `assets/companions/${id}/battle.png` + (typeof ART_V === 'string' ? ART_V : '');
       arena.appendChild(im);
     });
 
@@ -460,6 +463,14 @@ window.Boss = (function(){
     msg(`<b>${S.name}</b>이(가) 앞을 막아섰다. 아는 것으로 답하라.`);
     ask();
     ov.classList.add('show');
+  }
+
+  // 지금 신분에 맞는 전투 그림. 챕터마다 currentSuit()가 있다(없으면 후드티).
+  function battleImg(){
+    let suit = null;
+    try { if (typeof currentSuit === 'function') suit = currentSuit(); } catch(e){}
+    const v = (typeof ART_V === 'string') ? ART_V : '';
+    return (suit ? `assets/player/${suit}/battle.png` : 'assets/player/battle.png') + v;
   }
 
   return { start, fromChapter, _state: () => S };
