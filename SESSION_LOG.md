@@ -1451,3 +1451,9 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 제미나이 로고(1024px 결과의 오른쪽 아래 약 903,904)가 구름무늬 위에 겹쳐 역알파·거울 복사·확산 모두 흔적이 남음 → **오른쪽 아래 모서리를 빈 배경으로 다시 그려 달라고 해서** 확산으로 깨끗이 지움. (교훈: 아이콘은 처음부터 오른쪽 아래를 비워 달라고 할 것)
 - `ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png`(1024 RGB), 원본은 `store/icon/app_icon_1024.png`. 빌드 5 아카이브 → Organizer.
 - (이어서) 빌드 4·5 처리 완료(제출 준비 완료, 90일). 내부 그룹 "내부 테스트"에 두 빌드 자동 배포, 테스터 tjddlf0224@naver.com은 "초대됨"(메일 수락 필요). 버전 1.0 심사 페이지 빌드 칸에 **빌드 5** 연결·저장. 심사 제출은 TestFlight 확인 후.
+
+## 2026-09-18 · 세션 마감 — 다음에 할 일
+- 성일님이 TestFlight 빌드 5 설치·확인 중. 확인 항목: 구글·애플 로그인/랭킹, BGM(앱 나가면 멈춤·잠금화면 위젯 없음·무음모드), 아이패드 가로·세로, 차돌이 옛 그림 번쩍임, 보스 공격 자세, 가림·잘림.
+- 확인 끝나면: ASC 버전 1.0(빌드 5 연결됨) **심사 제출**. 그 전에 AdMob `USE_TEST` 실제 광고 전환 여부 결정(규칙상 사람 결정).
+- ios 폴더는 git 제외 — 이번 세션의 네이티브 변경(SceneDelegate·AppDelegate 오디오·entitlements·PrivacyInfo·SKAdNetwork·iPad 4방향·수동 서명·빌드번호 5·아이콘)은 로컬에만 있다.
+- 스토어 자료: store/listing.md, store/screenshots, store/tools(shots.js·frame.js), store/icon.
