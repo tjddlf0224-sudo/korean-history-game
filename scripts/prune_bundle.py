@@ -31,8 +31,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WWW = os.path.join(ROOT, 'www')
 PUB = os.path.join(ROOT, 'ios', 'App', 'App', 'public')
 
-DIRS = ['assets/tools', 'assets/tiles', 'assets/tiles_gemini', 'assets/props', 'assets/map']
-FILES = ['ch0_phaser.html']
+DIRS = ['assets/tools', 'assets/tiles', 'assets/tiles_gemini', 'assets/props', 'assets/map', 'data/chapters', 'css']
+FILES = ['ch0_phaser.html', 'js/main.js', 'data/chapters_index.json']  # js·css·data/chapters = 첫 프로토타입, 어느 페이지도 안 부른다
 
 
 def referenced(name):
@@ -97,7 +97,7 @@ def main():
         if not os.path.exists(p):
             continue
         who = referenced(f)
-        if who and who != f:
+        if who and who != f and not who.startswith('js' + os.sep):   # js/main.js는 같이 지우는 프로토타입
             print('  남김 %-22s ← %s 가 링크한다' % (f, who))
             continue
         s = size(p)
@@ -112,10 +112,106 @@ def main():
                 s = size(p)
                 os.remove(p)
                 freed += s
+    freed += prune_unused_and_junk()
+    freed += shrink_images()
+    for base, dirs, files in os.walk(PUB, topdown=False):   # 덜어내고 빈 폴더
+        if base != PUB and not os.listdir(base):
+            os.rmdir(base)
     print('  덜어낸 합계 %.1fMB' % (freed / 1048576))
     tot = size(PUB) / 1048576
     print('  번들 %.1fMB' % tot)
     return 0
+
+
+# ---------------------------------------------------------------------------
+# 2026-09-18 추가 — "앱에 불필요한 파일이 섞이지 않았는지, 용량 줄일 수 있으면 줄여"
+# 번들의 모든 파일을 게임 코드가 부르는지 이름으로 대조해서 찾은 것들.
+# 동적으로 이름을 만들어 부르는 것(초상 _smile·_atk, 신분별 걷기 그림 등)은
+# 이름 대조에 안 걸리므로 손으로 확인한 뒤 여기 적었다. 지우기 전에 한 번 더
+# referenced()로 확인한다 — 나중에 쓰이기 시작하면 알아서 남는다.
+UNUSED = [
+    'assets/portraits/npc_sheet_v2.png', 'assets/portraits/npc_sheet_v3.png',
+    'assets/portraits/npc_sheet_magenta.png',          # NPC 초상을 오려 낸 원본 시트
+    'assets/scenes/ch0_scene_raw.webp', 'assets/scenes/ch0_scene_v2_raw.webp',  # 0화 배경 원본
+    'assets/portraits/samil.png', 'assets/portraits/anyongbok.png', 'assets/portraits/suyang.png',
+    'assets/portraits/extra_eobu.png', 'assets/portraits/extra_sanyang.png',
+    'assets/portraits/extra_musa0.png', 'assets/portraits/extra_yeo.png',
+    'assets/portraits/extra_yeoin0.png', 'assets/portraits/josik2.png',
+    'assets/portraits/commoner2.png', 'assets/icons/exam_btn.png',
+]
+JUNK_NAMES = ('.DS_Store',)
+
+
+def prune_unused_and_junk():
+    freed = 0
+    for rel in UNUSED:
+        p = os.path.join(PUB, rel)
+        if not os.path.exists(p):
+            continue
+        stem = os.path.splitext(os.path.basename(rel))[0]
+        who = referenced(stem)
+        if who:
+            print('  남김 %-40s ← %s 가 쓴다' % (rel, who))
+            continue
+        freed += size(p)
+        os.remove(p)
+    for base, dirs, files in os.walk(PUB, topdown=False):
+        for f in files:
+            if f in JUNK_NAMES or f.endswith('.pyc'):
+                p = os.path.join(base, f)
+                freed += size(p)
+                os.remove(p)
+        for d in dirs:
+            if d == '__pycache__':
+                p = os.path.join(base, d)
+                freed += size(p)
+                shutil.rmtree(p, ignore_errors=True)
+    print('  덜어냄 안 쓰는 그림·찌꺼기   %6.1fMB' % (freed / 1048576))
+    return freed
+
+
+# PNG를 256색 팔레트로 줄인다(알파 유지). 초상 324장이 24.1MB → 4.9MB였고,
+# 나란히 놓고 봐도 구분이 거의 안 됐다(2026-09-18 확인). 배지는 화면에 44px로만
+# 나오는데 원본이 900px·1MB라 먼저 384px로 줄인다.
+# **번들에서만** 한다 — www(웹·원본)는 그대로 둔다.
+SHRINK_DIRS = ['assets/portraits', 'assets/boss', 'assets/player', 'assets/companions',
+               'assets/items', 'assets/mascots', 'assets/icons']
+BADGE_MAX = 384
+
+
+def shrink_images():
+    try:
+        from PIL import Image
+    except ImportError:
+        print('  (Pillow 없음 — 그림 줄이기 건너뜀)')
+        return 0
+    import io
+    freed = 0
+    for d in SHRINK_DIRS:
+        for base, _dirs, files in os.walk(os.path.join(PUB, d)):
+            for f in files:
+                if not f.lower().endswith('.png'):
+                    continue
+                p = os.path.join(base, f)
+                before = os.path.getsize(p)
+                try:
+                    im = Image.open(p)
+                    im.load()
+                    im = im.convert('RGBA')
+                    if f.startswith('badge_') and max(im.size) > BADGE_MAX:
+                        r = BADGE_MAX / max(im.size)
+                        im = im.resize((round(im.width * r), round(im.height * r)), Image.LANCZOS)
+                    q = im.quantize(colors=256, method=Image.Quantize.FASTOCTREE,
+                                    dither=Image.Dither.FLOYDSTEINBERG)
+                    buf = io.BytesIO()
+                    q.save(buf, 'PNG', optimize=True)
+                    if buf.tell() < before:
+                        open(p, 'wb').write(buf.getvalue())
+                        freed += before - buf.tell()
+                except Exception as e:
+                    print('  (줄이기 실패 %s: %s)' % (f, e))
+    print('  그림 줄이기(256색·배지 384px) %6.1fMB' % (freed / 1048576))
+    return freed
 
 
 if __name__ == '__main__':

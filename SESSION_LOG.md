@@ -1430,3 +1430,11 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 원인: `companions.js`가 걷기 그림(4방향×3걸음=12장)을 그 방향이 처음 필요할 때 받기 시작했고, 받는 동안 `drawCharacter`(옛 절차 그림)로 대신 그렸다. NPC(`drawNpcSprite`, 36챕터)도 로딩 중엔 같은 실루엣을 그렸다.
 - 고침: 동료 12장을 합류 시점에 미리 받고, 아직 안 온 장은 이미 받은 다른 장으로 대신, 한 장도 없으면 잠깐 안 그림. NPC는 **받는 중(!complete)엔 비워 두고 받기 실패(파일 없음)일 때만** 실루엣.
 - 확인: Playwright에서 그림 요청을 700ms씩 늦추고 4방향으로 걸어 `drawCharacter` 호출 수를 셌다 — 옛 코드 150회(동료 132) → 새 코드 0회.
+
+## 2026-09-18 · 앱 번들 점검·용량 줄이기(128.5MB → 81.2MB)
+- 번들(ios/App/App/public)의 모든 파일을 게임 코드(html·js·json·css)가 부르는지 이름으로 대조. 동적 이름(초상 _smile·_atk, 신분별 걷기 그림)은 손으로 확인.
+- `scripts/prune_bundle.py`(npm run sync가 자동 실행, **www 원본은 그대로**)에 추가:
+  - 안 쓰는 것: NPC 원본 시트 3장(5.4MB), 0화 배경 원본 2장, 안 쓰는 초상 11장·아이콘 1장, `.DS_Store`·`__pycache__`·`.pyc`, 첫 프로토타입(js/main.js·css/main.css·data/chapters*). 지우기 전 referenced()로 다시 확인.
+  - 줄이기: PNG를 256색 팔레트로(알파 유지, 초상 24.1→4.9MB, 나란히 비교해 구분 안 됨), 배지는 900px·1MB → 384px(화면엔 44px). 41.1MB 절약.
+  - 오디오(96kbps)·배경 webp/jpg는 그대로.
+- 확인: 번들 폴더를 그대로 띄워 42개 페이지 + 도감·가방 열기 — 404·스크립트 오류 0. check_all 0건.
