@@ -1520,3 +1520,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - v154: 도해+대화 묶음 위 잘림 → #dlg-stack max-height에서 아래 여백·안전 영역 뺌. 874x402로 36챕터 도해 1215개 전부 측정해 잘림 0. 빌드 12 아카이브.
 - v155: 선사 1화 위치 지도(부여·고구려·옥저/동예·삼한)에 영역 추가(build_era_maps 좌표). 다른 챕터의 '○○의 자리' 점만 있는 지도도 같은 방식으로 점검할 것. 빌드 13 아카이브.
 - v156: 영역 필요한 지도 8개(발해·후기가야·후삼국×2·원 설치 기구·쌍성 수복·4군·6진)에 areas. 나머지 70개는 전투지·유적 등 점이 맞는 지도로 판단해 둠. 성일님: 이후 작업은 추천 모델 먼저 알리기(Sonnet 5 가능한 건 Sonnet 5).
+- v156 빌드 14 아카이브(~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-14.xcarchive, CFBundleVersion 14 확인), Organizer 열어 둠 → 업로드는 성일님.
