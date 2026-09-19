@@ -1529,3 +1529,11 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 빌드 16 아카이브(v161: 돋보기/대화 버그·조이스틱 드래그 막기·보스전 도전 문구), Organizer 열어 둠 → 업로드는 성일님.
 - v162: 챕터 메뉴 버튼이 대화창 열려 있으면 안 눌리던 것(#menu-btn z-index 25 < .ov 26) → 32로. 빌드 미반영(현재 앱은 빌드 16=v161).
 - v165: 광고 세 가지(성일님 요청) — ATT 추적 권한 요청 전환(Info.plist NSUserTrackingUsageDescription), 부팅 시 미리 init+ATT 요청, 전면 광고 재도입(noteLearned 카운트/maybeShowInterstitial은 index.html에서만 — 2026-07 사고 재현 방지 위해 '세기'와 '보여주기' 화면 분리). privacy.html·store/listing.md 갱신. **ASC 앱 개인정보 질문지는 성일님이 직접 '추적함'으로 바꿔야 함**(코드만으론 안 됨).
+- v163: X 눌러도 대화창이 안 닫히는 제보(빌드14) → v152 수정이 `window.Dialog`를 썼는데 `Dialog`는 챕터별 `const`라 `window.`로는 항상 undefined(rank.js·autowalk.js와 같은 함정). 버튼의 `onclick="Dialog.close()"`가 제 스코프에서 풀리도록 버튼 자체를 `.click()`하는 방식으로 수정.
+- v164: 동료(돌쇠 등) 합류 안 한 챕터에서도 바로 따라다니는 제보 → `Party.joined()`가 CHAPTER_SEQ 순번만 보고 "지났으면 이미 만남"으로 판정하던 게, 광고로 건너뛰기 기능(chapterlock) 도입 후 깨짐. `khg_progress`에 실제 합류 대사 키가 있는지로 판정하도록 교체.
+- ASC 앱 개인정보 질문지 "추적함" 갱신(성일님 "인앱브라우저로 가서 대신 바꿔") — App Store Connect distribution/privacy에서 광고 데이터 항목 편집: "신원에 연결됩니까" 예, "추적 목적으로 사용합니까" 예로 게시 완료. store/listing.md 메모 갱신.
+- v166: 동료(바우·차돌이) 걷기 그림 화질 제보("테두리 계단식·화질 안 좋음") → 원인 둘: 원본 해상도가 그리는 크기보다 작음(특히 바우), 크로마키가 알파를 0/255 이진값으로만 잘라 계단 현상. Lanczos 업스케일(바우 ×2.0, 차돌 ×1.6)로 해상도와 알파 안티앨리어싱 동시 해결(알파 고유값 2→175).
+- v167: 메뉴 오른쪽 유물 도감·인물 도감·AUTO 아이콘 재요청("금·기력은 제미나이로 뽑아서 좋은데 이 셋은 별로, 통일성 있게 다시 뽑자") — 제미나이로 초록 배경 시트 1장(참고 그림 없이 글로만, 첫 시도에 3개 다 깔끔하게 나옴) → cut_ui_sheet.py로 잘라 dex_hero/dex_item/ic_auto.webp. uiskin.js에서 기존 SVG 숨기고 금·기력과 같은 background-image 방식으로 교체, AUTO는 켜졌을 때 도는 기존 애니메이션이 나침반 자체에 걸리도록 `.ring`에 배경을 얹음(자동이동=나침반 회전, 자연스럽게 맞아떨어짐).
+- 이로써 "남은 일도 다 해"(ASC 추적 선언·동료 해상도·메뉴 아이콘 셋) 전부 완료. 다음 빌드에 v157~v167 전부 한꺼번에 반영 필요(성일님 지시로 빌드는 모아서, 현재 앱은 빌드 16=v161).
+- 빌드 17 아카이브(v157~v167 전부 반영 — 챕터 이어하기·조이스틱 드래그 막기·보스전 도전 문구·메뉴 항상 눌림·광고 ATT/전면·X닫기 버그·동료 합류 버그·동료 해상도·도감/AUTO 아이콘 등): ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-17.xcarchive(CFBundleVersion 17), Organizer 열어 둠 → 업로드는 성일님.
+- v168: 인물 도감 제보(스크린샷, 차돌이 카드) — "데리고 가기/동행 그만두기 누르면 카드가 안 닫힌다" → 버튼 핸들러가 toggleParty 뒤 showDetail(k)로 **같은 카드를 다시 그려서** 안 닫혔던 것, el.classList.remove('show')로 항상 닫게 수정. 추가 요청: 데려간 순간 목록 맨 위로 스크롤 + 동행 칸이 잠깐 빛나는 강조(highlightParty, .slot.joined 1.3s 금빛 글로우, prefers-reduced-motion 대응).

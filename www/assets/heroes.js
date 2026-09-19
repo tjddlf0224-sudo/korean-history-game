@@ -260,6 +260,16 @@ window.Heroes = (function(){
       background:#1a140c; display:grid; place-content:center; overflow:hidden; position:relative; }
     #hero-ov .party .slot img { width:100%; height:100%; object-fit:cover; object-position:top center; }
     #hero-ov .party .slot .e { font-size:17px; color:#4a3c26; }
+    /* 방금 데려온 동료 자리를 잠깐 빛내서 알려 준다 */
+    #hero-ov .party .slot.joined { animation:hr-slot-glow 1.3s ease; }
+    @keyframes hr-slot-glow {
+      0% { box-shadow:0 0 0 0 rgba(255,217,112,0), 0 0 0 2px #ffd970; }
+      35% { box-shadow:0 0 22px 6px rgba(255,217,112,.85), 0 0 0 2px #ffd970; }
+      100% { box-shadow:0 0 0 0 rgba(255,217,112,0), 0 0 0 2px transparent; }
+    }
+    @media (prefers-reduced-motion:reduce){
+      #hero-ov .party .slot.joined { animation:none; box-shadow:0 0 0 2px #ffd970; }
+    }
     #hero-ov .party .info { flex:1; font-size:11.5px; color:#b8a888; line-height:1.55; }
     #hero-ov .party .info b { color:#f0c96b; }
     #hero-ov .cell.picked { border-color:#c9a24a; box-shadow:0 0 0 1px #c9a24a inset; }
@@ -437,7 +447,7 @@ window.Heroes = (function(){
     let slots = '';
     for (let i = 0; i < MAX_PARTY; i++){
       const k = p[i];
-      slots += `<div class="slot">${k ? faceHtml(k) : '<span class="e">＋</span>'}</div>`;
+      slots += `<div class="slot"${k ? ` data-k="${k}"` : ''}>${k ? faceHtml(k) : '<span class="e">＋</span>'}</div>`;
     }
     // 지금 붙어 있는 효과를 그대로 읽어 준다
     const lines = [];
@@ -465,7 +475,23 @@ window.Heroes = (function(){
       `<button class="join" data-k="${k}">${inParty(k) ? '동행 그만두기' : '데리고 가기'}</button>`;
     el.classList.add('show');
     const btn = el.querySelector('.join');
-    if (btn) btn.onclick = () => { toggleParty(k); renderParty(); showDetail(k); markPicked(); };
+    if (btn) btn.onclick = () => {
+      toggleParty(k); renderParty(); markPicked();
+      el.classList.remove('show');   // 데리고 가기/그만두기를 누르면 카드는 닫힌다
+      if (inParty(k)) highlightParty(k);   // 새로 데려온 동료는 위로 스크롤해 보여 준다
+    };
+  }
+
+  /* 방금 데려온 동료의 자리를 보여 주고 잠깐 빛낸다 */
+  function highlightParty(k){
+    const panel = document.querySelector('#hero-ov .panel');
+    if (panel) panel.scrollTo({ top: 0, behavior: 'smooth' });
+    requestAnimationFrame(() => {
+      const slot = document.querySelector(`#hero-party .slot[data-k="${k}"]`);
+      if (!slot) return;
+      slot.classList.remove('joined'); void slot.offsetWidth; slot.classList.add('joined');
+      setTimeout(() => slot.classList.remove('joined'), 1300);
+    });
   }
 
   return { recordTalk, mount, openBook, has, owned, starred, total,
