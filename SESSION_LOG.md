@@ -1548,3 +1548,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
   - uiskin.js(목록+36챕터): `*,::before,::after { -webkit-user-select:none; user-select:none; -webkit-touch-callout:none }`(입력칸·contenteditable만 text) + JS 안전망(selectstart 막기, pointerdown 때 남은 선택 지우기).
   - 검증은 **Playwright webkit**으로: 수정 전 계산값 `text`·HUD→조이스틱 끌기에 글자 선택됨 / 수정 후 `none`·선택 없음 / 닉네임 입력칸은 text 유지 / 조이스틱 이동 옛판과 동일(115px), 떼면 풀림. 스크립트 scratchpad/t_select.js·t_stick_wk2.js.
   - Capacitor 한계 아님, 플러터 불필요(성일님 질문에 답함).
+- 빌드는 성일님 지시로 보류(외출 중, Organizer 배포 불가). 미빌드분: v170(글자 선택 막기) — 다음 빌드 20에 반영.
