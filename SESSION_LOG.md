@@ -1510,3 +1510,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - HUD 목표 글자는 예전 "알약 배경 구려 보인다" 피드백대로 박스 없이 둠.
 - 남은 것: exam_practice.html(기출변형)·스트릭 전체화면·보스전 화면은 아직 옛 모양. 빌드 8(현재 앱은 빌드 7).
 - v149: 시대/묶음 리본을 그림→CSS(단색 띠+단청 세 줄+제비꼬리)로. 리본 그림 늘리면 글자가 꼬리에 걸쳐 "구려" 지적.
+- 빌드 8 아카이브(v149, UI 현판 옷+CSS 리본): ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-8.xcarchive, Organizer 열어 둠 → 업로드는 성일님.
