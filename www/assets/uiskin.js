@@ -721,10 +721,15 @@
     }).observe(document.head, { childList: true });
   } catch(e){}
   /* 닫기는 손을 떼는 즉시 — 대사를 넘기다 곧바로 ✕를 누르면 '더블탭 확대 막기'(300ms)가
-     click을 삼켜 안 닫혔다. pointerup에서 바로 닫는다. */
+     click을 삼켜 안 닫혔다. pointerup에서 바로 닫는다.
+     ⚠️ Dialog는 각 챕터 안에서 const로 선언돼 window.Dialog로는 안 잡힌다(이 코드베이스가
+     rank.js·autowalk.js에서 이미 겪고 적어 둔 바로 그 함정 — 여기서도 같은 실수를 했다가
+     2026-09-19 "X 눌러도 대화창이 안 닫히네"로 다시 들통났다). Dialog.close()를 직접 부르는
+     대신 버튼 자신을 눌러(.click()) onclick="Dialog.close()"가 그 챕터의 스코프에서
+     실행되게 한다 — 이러면 브라우저가 그 제스처의 click을 삼켰어도 상관없다. */
   document.addEventListener('pointerup', e => {
     const x = e.target && e.target.closest && e.target.closest('.dlg-close');
-    if (x && window.Dialog && Dialog.close){ e.preventDefault(); Dialog.close(); }
+    if (x){ e.preventDefault(); x.click(); }
   }, true);
   const runHoist = () => { try { hoist(); } catch(e){} };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runHoist); else runHoist();
