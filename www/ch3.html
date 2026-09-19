@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=171"></script>
-<script src="assets/chapterlock.js?v=171"></script>
+<script src="assets/tablet.js?v=172"></script>
+<script src="assets/chapterlock.js?v=172"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=171"></script>
+<script src="assets/resume.js?v=172"></script>
 <title>타임슬립 한국사 - 4화 피의 계승</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -446,12 +446,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=171"></script>
-<script src="assets/zoomwarn.js?v=171"></script>
-<script src="assets/chart.js?v=171"></script>
-<script src="assets/companions.js?v=171"></script>
-<script src="assets/inner.js?v=171"></script>
-<script src="assets/audio.js?v=171"></script>
+<script src="assets/errlog.js?v=172"></script>
+<script src="assets/zoomwarn.js?v=172"></script>
+<script src="assets/chart.js?v=172"></script>
+<script src="assets/companions.js?v=172"></script>
+<script src="assets/inner.js?v=172"></script>
+<script src="assets/audio.js?v=172"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -463,7 +463,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=171';   // 존댓말 전환
+const ART_V = '?v=172';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -1437,6 +1437,7 @@ const NPC_DATA = {
       { who:'me', t:'(속으로) 양주 백정 출신. 살기 어려운 백성들이 그를 따르고.' },
       { who:'me', t:'(속으로) 신분 질서가 흔들린다는 징조다.',
         chart:{ type:'grid', title:'또 다른 소용돌이', head:[ '시기', '일' ], rows:[ [ '1457년', '엄흥도, 시신을 거두다' ], [ '1562년', '임꺽정, 명종 대에 죽다' ] ] } },
+      { who:'me', t:'(속으로) 이런 해석, 어느 모의고사에서 읽은 것 같다.' },
     ],
     quiz: {
       q: '명종 대에 황해도 일대에서 도적 무리를 이끌며 당시 신분제 동요를 보여준 인물은?',
@@ -1712,6 +1713,7 @@ const Quiz = {
     document.getElementById('quiz-tag').textContent = this.seq ? `${this.seqIdx+1}/${this.seq.length}` : '확인 퀴즈';
     document.getElementById('quiz-q').textContent = data.q;
     document.getElementById('quiz-fb').textContent = '';
+      document.getElementById('quiz-fb').className = 'quiz-fb';
     document.getElementById('quiz-next').classList.remove('show');
     document.getElementById('quiz-src').textContent = formatQuizSrc(data.src);
     // 모든 퀴즈 데이터가 answer:0(첫 번째 보기)으로 통일 작성돼 있어서
@@ -1752,6 +1754,7 @@ const Quiz = {
       this.optButtons[i].classList.add('correct');
       this.optButtons.forEach(b => b.disabled = true);
       document.getElementById('quiz-fb').textContent = this.data.feedback[1];
+      document.getElementById('quiz-fb').classList.add('right');
       const next = document.getElementById('quiz-next');
       next.classList.add('show');
       next.onclick = () => this.confirmIfReady();
@@ -1771,6 +1774,7 @@ const Quiz = {
       this.optButtons[i].classList.add('wrong');
       this.optButtons[i].disabled = true;
       document.getElementById('quiz-fb').textContent = this.data.feedback[0];
+      document.getElementById('quiz-fb').classList.add('miss');
     }
   },
   confirmIfReady(){
@@ -1942,39 +1946,39 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=171"></script>
-<script src="assets/streak.js?v=171"></script>
+<script src="assets/badges.js?v=172"></script>
+<script src="assets/streak.js?v=172"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=171"></script>
-  <script src="assets/fx.js?v=171"></script>
-  <script src="assets/inkwipe.js?v=171"></script>
-  <script src="assets/dash.js?v=171"></script>
-<script src="assets/juice.js?v=171"></script>
-  <script src="assets/difficulty.js?v=171"></script>
-  <script src="assets/nextauto.js?v=171"></script>
-<script src="assets/heroes_data.js?v=171"></script>
-<script src="assets/heroes.js?v=171"></script>
-<script src="assets/icons.js?v=171"></script>
-<script src="assets/srs.js?v=171"></script>
-<script src="assets/newsflash.js?v=171"></script>
-<script src="assets/timeline.js?v=171"></script>
-<script src="assets/journey.js?v=171"></script>
-<script src="assets/season.js?v=171"></script>
-<script src="assets/boss.js?v=171"></script>
-  <script src="assets/encounter.js?v=171"></script>
-<script src="assets/items.js?v=171"></script>
-  <script src="assets/gold.js?v=171"></script>
-  <script src="assets/ask.js?v=171"></script>
-  <script src="assets/ads.js?v=171"></script>
-  <script src="assets/energy.js?v=171"></script>
-  <script src="assets/daily.js?v=171"></script>
-  <script src="assets/unlock.js?v=171"></script>
-  <script src="assets/guide.js?v=171"></script>
-  <script src="assets/minigames.js?v=171"></script>
-  <script src="assets/quests.js?v=171"></script>
-  <script src="assets/offline.js?v=171"></script>
-  <script src="assets/telemetry.js?v=171"></script>
-<script src="assets/autowalk.js?v=171"></script>
+<script src="assets/rank.js?v=172"></script>
+  <script src="assets/fx.js?v=172"></script>
+  <script src="assets/inkwipe.js?v=172"></script>
+  <script src="assets/dash.js?v=172"></script>
+<script src="assets/juice.js?v=172"></script>
+  <script src="assets/difficulty.js?v=172"></script>
+  <script src="assets/nextauto.js?v=172"></script>
+<script src="assets/heroes_data.js?v=172"></script>
+<script src="assets/heroes.js?v=172"></script>
+<script src="assets/icons.js?v=172"></script>
+<script src="assets/srs.js?v=172"></script>
+<script src="assets/newsflash.js?v=172"></script>
+<script src="assets/timeline.js?v=172"></script>
+<script src="assets/journey.js?v=172"></script>
+<script src="assets/season.js?v=172"></script>
+<script src="assets/boss.js?v=172"></script>
+  <script src="assets/encounter.js?v=172"></script>
+<script src="assets/items.js?v=172"></script>
+  <script src="assets/gold.js?v=172"></script>
+  <script src="assets/ask.js?v=172"></script>
+  <script src="assets/ads.js?v=172"></script>
+  <script src="assets/energy.js?v=172"></script>
+  <script src="assets/daily.js?v=172"></script>
+  <script src="assets/unlock.js?v=172"></script>
+  <script src="assets/guide.js?v=172"></script>
+  <script src="assets/minigames.js?v=172"></script>
+  <script src="assets/quests.js?v=172"></script>
+  <script src="assets/offline.js?v=172"></script>
+  <script src="assets/telemetry.js?v=172"></script>
+<script src="assets/autowalk.js?v=172"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2037,6 +2041,6 @@ if (window.Encounter) Encounter.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=171"></script>
+<script src="assets/uiskin.js?v=172"></script>
 </body>
 </html>

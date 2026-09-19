@@ -545,6 +545,11 @@
     box-shadow:0 3px 0 #8d2a1a !important; }
   #quiz-panel * { --qtxt:#3b2a17; }
   #quiz-panel .quiz-src, #quiz-panel .quiz-tag, #quiz-panel small { color:#7d6243 !important; }
+  /* 정답 뒤 풀이("정답! ○○입니다...")가 옛 어두운 배경용 옅은 글자색(#d8ccb5)
+     그대로라 한지 바탕에서 거의 안 보였다(제보: "이 문구가 너무 안 보여") */
+  #quiz-panel .quiz-fb { color:#3b2a17 !important; font-weight:600 !important; }
+  #quiz-panel .quiz-fb.right { color:#2d6b3a !important; }
+  #quiz-panel .quiz-fb.miss { color:#8a3b12 !important; }
   .gloss-title { color:#8a3b12 !important; } .gloss-body { color:#3b2a17 !important; }
   .gloss-term { color:#9a4a12 !important; }
   #game-menu-panel h3 { color:#8a3b12 !important; font-family:"Gugi","Gowun Batang",serif !important; }
