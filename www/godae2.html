@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=177"></script>
-<script src="assets/chapterlock.js?v=177"></script>
+<script src="assets/tablet.js?v=178"></script>
+<script src="assets/chapterlock.js?v=178"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=177"></script>
+<script src="assets/resume.js?v=178"></script>
 <title>한국사 게임 - 고대 4화 통일과 발해</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -525,13 +525,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=177"></script>
-<script src="assets/zoomwarn.js?v=177"></script>
-<script src="assets/map/map_component.js?v=177"></script>
-<script src="assets/chart.js?v=177"></script>
-<script src="assets/companions.js?v=177"></script>
-<script src="assets/inner.js?v=177"></script>
-<script src="assets/audio.js?v=177"></script>
+<script src="assets/errlog.js?v=178"></script>
+<script src="assets/zoomwarn.js?v=178"></script>
+<script src="assets/map/map_component.js?v=178"></script>
+<script src="assets/chart.js?v=178"></script>
+<script src="assets/companions.js?v=178"></script>
+<script src="assets/inner.js?v=178"></script>
+<script src="assets/audio.js?v=178"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -543,7 +543,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=177';   // 존댓말 전환
+const ART_V = '?v=178';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1537,7 +1537,7 @@ const NPC_DATA = {
       { who:'npc', t:'나는 장보고일세. 당에서 군인으로 지냈지.' },
       { who:'me', t:'…지금은 무얼 하십니까?' },
       { who:'npc', t:'(배를 가리키며) 이 진을 지키네. 청해진이라 하지.',
-        chart:{ type:'relic', title:'장보고의 바다', items:[ { img:'cheonghaejin', n:'청해진', s:'완도에 세운 해상 기지' } ] } },
+        chart:{ type:'relic', title:'장보고의 바다', items:[ { img:'cheonghaejin', n:'청해진 교역 도자기', s:'청해진을 거쳐 오간 청록빛 도자기' } ] } },
       { who:'npc', t:'흥덕왕께 청하여 여기 완도에 세웠네.' },
       { who:'me', t:'(배에 오른다) …왜 하필 완도입니까?' },
       { who:'npc', t:'뱃길의 목을 쥔 곳이지.',
@@ -1550,7 +1550,12 @@ const NPC_DATA = {
       Party.say('bau', 'stance', '(주먹을 쥔다) 장하오! 해적 몇은 나도 맡겠소.'),
       { who:'npc', t:'신라·당·일본을 잇는 길이 죄다 예로 통하지.' },
       { who:'npc', t:'당의 적산에도 절을 하나 두었네. 법화원이라 하지.',
-        chart:{ type:'map', title:'당 땅의 신라인 마을, 적산 법화원', north:true, pins:[ { x:-18, y:100, n:'적산 법화원', on:true } ] } },
+        // 적산은 한반도가 아니라 바다 건너 당(산둥반도)에 있다. 이 지도엔
+        // 중국 쪽 땅이 그려져 있지 않아, 점만 찍으면 그냥 빈 바다에 찍힌
+        // 것처럼 보인다(제보: "적산 법화원이 바다에 찍혀있는 느낌"). 범례로
+        // 바다 건너 당 땅이라는 걸 짚어 준다.
+        chart:{ type:'map', title:'당 땅의 신라인 마을, 적산 법화원', north:true, pins:[ { x:-18, y:100, n:'적산 법화원', on:true } ],
+          legend:[ { k:'적산', v:'한반도가 아니라 바다 건너 당(唐) 산둥반도', on:true } ] } },
       { who:'me', t:'절이 무슨 소용입니까?' },
       { who:'npc', t:'산둥 바닷가엔 신라 사람들이 모여 사는 마을이 있네. 신라방이라 하지.',
         chart:{ type:'grid', title:'당 땅의 신라 사람들', head:[ '이름', '무엇' ], rows:[ [ '신라방', '신라인이 모여 사는 마을' ], [ '신라소', '그 마을을 다스리는 관청' ], [ '신라원', '신라인의 절 — 법화원' ], [ '신라관', '신라 사신이 묵는 곳' ] ], hi:0 } },
@@ -2374,39 +2379,39 @@ if (window.Resume){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=177"></script>
-<script src="assets/streak.js?v=177"></script>
+<script src="assets/badges.js?v=178"></script>
+<script src="assets/streak.js?v=178"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=177"></script>
-  <script src="assets/fx.js?v=177"></script>
-  <script src="assets/deed.js?v=177"></script>
-  <script src="assets/inkwipe.js?v=177"></script>
-  <script src="assets/dash.js?v=177"></script>
-<script src="assets/juice.js?v=177"></script>
-  <script src="assets/difficulty.js?v=177"></script>
-  <script src="assets/nextauto.js?v=177"></script>
-<script src="assets/heroes_data.js?v=177"></script>
-<script src="assets/heroes.js?v=177"></script>
-<script src="assets/icons.js?v=177"></script>
-<script src="assets/srs.js?v=177"></script>
-<script src="assets/newsflash.js?v=177"></script>
-<script src="assets/timeline.js?v=177"></script>
-<script src="assets/journey.js?v=177"></script>
-<script src="assets/season.js?v=177"></script>
-<script src="assets/boss.js?v=177"></script>
-<script src="assets/items.js?v=177"></script>
-  <script src="assets/gold.js?v=177"></script>
-  <script src="assets/ask.js?v=177"></script>
-  <script src="assets/ads.js?v=177"></script>
-  <script src="assets/energy.js?v=177"></script>
-  <script src="assets/daily.js?v=177"></script>
-  <script src="assets/unlock.js?v=177"></script>
-  <script src="assets/guide.js?v=177"></script>
-  <script src="assets/minigames.js?v=177"></script>
-  <script src="assets/quests.js?v=177"></script>
-  <script src="assets/offline.js?v=177"></script>
-  <script src="assets/telemetry.js?v=177"></script>
-<script src="assets/autowalk.js?v=177"></script>
+<script src="assets/rank.js?v=178"></script>
+  <script src="assets/fx.js?v=178"></script>
+  <script src="assets/deed.js?v=178"></script>
+  <script src="assets/inkwipe.js?v=178"></script>
+  <script src="assets/dash.js?v=178"></script>
+<script src="assets/juice.js?v=178"></script>
+  <script src="assets/difficulty.js?v=178"></script>
+  <script src="assets/nextauto.js?v=178"></script>
+<script src="assets/heroes_data.js?v=178"></script>
+<script src="assets/heroes.js?v=178"></script>
+<script src="assets/icons.js?v=178"></script>
+<script src="assets/srs.js?v=178"></script>
+<script src="assets/newsflash.js?v=178"></script>
+<script src="assets/timeline.js?v=178"></script>
+<script src="assets/journey.js?v=178"></script>
+<script src="assets/season.js?v=178"></script>
+<script src="assets/boss.js?v=178"></script>
+<script src="assets/items.js?v=178"></script>
+  <script src="assets/gold.js?v=178"></script>
+  <script src="assets/ask.js?v=178"></script>
+  <script src="assets/ads.js?v=178"></script>
+  <script src="assets/energy.js?v=178"></script>
+  <script src="assets/daily.js?v=178"></script>
+  <script src="assets/unlock.js?v=178"></script>
+  <script src="assets/guide.js?v=178"></script>
+  <script src="assets/minigames.js?v=178"></script>
+  <script src="assets/quests.js?v=178"></script>
+  <script src="assets/offline.js?v=178"></script>
+  <script src="assets/telemetry.js?v=178"></script>
+<script src="assets/autowalk.js?v=178"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2457,6 +2462,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=177"></script>
+<script src="assets/uiskin.js?v=178"></script>
 </body>
 </html>
