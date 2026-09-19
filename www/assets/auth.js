@@ -37,6 +37,12 @@ window.Auth = (function(){
       firebase.initializeApp(cfg);
       auth = firebase.auth();
       db = firebase.firestore();
+      // 앱(iOS WKWebView, capacitor://)에서는 Firestore 기본 연결(WebChannel)이 붙지 못하고
+      // 멈춰 '계정 기록과 맞추는 중…'에서 안 움직였다(2026-09-19). 앱에서는 롱 폴링을 강제한다.
+      try {
+        if (window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform())
+          db.settings({ experimentalForceLongPolling: true, merge: true });
+      } catch(e){}
       auth.onAuthStateChanged(u => {
         user = u;
         render();
@@ -310,6 +316,7 @@ window.Auth = (function(){
   let redirectErr = '';
   function open(){
     mount(); render();
+    try { if (window.CloudSave && CloudSave.retry) CloudSave.retry(); } catch(e){}
     const box = document.getElementById('auth-err');
     if (box && redirectErr){ box.textContent = redirectErr; redirectErr = ''; }
     const d = document.getElementById('auth-ov'); if (d) d.classList.add('show');

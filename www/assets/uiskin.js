@@ -379,6 +379,7 @@
   #badges-panel .badge-item *, #badges-body h3, #badges-body h4, #badges-body .era-h { color:#3b2a17 !important; }
 
   /* 고침(2차 확인 후) */
+  #kings-modal { z-index:42 !important; } #badges-modal { z-index:42 !important; }
   #badges-panel #badges-close, #kings-panel #kings-close {
     background:url(${U}xbtn.webp) center/contain no-repeat !important; border:0 !important;
     box-shadow:none !important; font-size:0 !important; }

@@ -173,7 +173,7 @@ window.Unlock = (function(){
                                    : (g.desc || '');
       d.innerHTML = '<div class="panel"><h3>계급과 해금</h3>' +
         `<div class="ul-now"><span class="chip">지금 <b>${GATES[here].name}</b> · Lv.${lv}</span>` +
-        (nx ? `<span class="chip">${nx.name}까지 <b>${Math.max(0, nx.lv - lv)}</b></span>` : '') +
+        (nx ? `<span class="chip">${nx.name}까지 <b>${Math.max(0, nx.lv - lv)}</b>레벨 남음</span>` : '') +   // 숫자만 있으면 뭘 뜻하는지 몰랐다(제보)
         '</div>' +
         `<div class="ul-road"><div class="road" id="ul-rd"><i style="width:${fill}%"></i></div>${road}</div>` +
         `<div class="ul-det${on ? '' : ' locked'}"><div class="dh"><span class="dn">${g.name}</span>` +

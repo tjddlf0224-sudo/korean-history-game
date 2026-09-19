@@ -117,12 +117,21 @@ window.CloudSave = (function(){
     return true;
   }
 
+  let failed = false, trying = false;
   async function onLogin(u){
-    uid = u.uid; ready = false;
+    uid = u.uid; ready = false; failed = false;
     const d = db(); if (!d) return;
     let snap = null;
-    try { snap = await d.collection(COL).doc(uid).get(); }
-    catch(e){ console.warn('[CloudSave] 읽기 실패 — 이번엔 맞추지 않음', e); return; }
+    trying = true; refresh();
+    try {
+      // 연결이 붙지 않으면 get()이 끝나지 않는다 — 15초에 끊고 알린다(로그인 창을 다시 열면 재시도)
+      snap = await Promise.race([
+        d.collection(COL).doc(uid).get(),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000)),
+      ]);
+    }
+    catch(e){ console.warn('[CloudSave] 읽기 실패 — 이번엔 맞추지 않음', e); failed = true; trying = false; refresh(); return; }
+    trying = false;
     if (!window.Auth || !Auth.user || Auth.user.uid !== uid) return;     // 그새 로그아웃
     const c = (snap && snap.exists) ? snap.data() : null;
     const cData = (c && typeof c.data === 'string') ? c.data : null;
@@ -243,6 +252,7 @@ window.CloudSave = (function(){
 
   function status(){
     if (!uid) return '';
+    if (failed) return '계정 기록을 불러오지 못했습니다. 인터넷을 확인하고 이 창을 다시 열어 주세요.';
     if (!ready) return '계정 기록과 맞추는 중…';
     const t = lastAt || +(lsGet(SYNC_AT) || 0);
     return '기록이 이 계정에 저장됩니다' + (t ? ' · 마지막 저장 ' + when(t) : '');
@@ -265,5 +275,10 @@ window.CloudSave = (function(){
   }
   start();
 
-  return { upload: () => upload(false), status, beforeSignOut, afterSignOut, COL };
+  // 로그인 창을 열 때 — 맞추기가 실패했거나 멈춰 있으면 다시 한 번
+  function retry(){
+    if (uid && !ready && !trying && window.Auth && Auth.user && Auth.user.uid === uid) onLogin(Auth.user);
+  }
+
+  return { upload: () => upload(false), status, retry, beforeSignOut, afterSignOut, COL };
 })();
