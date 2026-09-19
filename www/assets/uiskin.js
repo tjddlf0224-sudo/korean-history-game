@@ -267,7 +267,7 @@
   /* ---------- 2차: 목록이 안쪽에서 스크롤되는 창들 ----------
      판 자체는 넘치지 않고(최대 높이 유지) 안쪽 목록이 스크롤되므로, 틀은 ::before로 씌운다. */
   const P2 = ['#bd-ov .panel', '#srs-ov .panel', '#auth-ov .panel', '#cs-ov .panel',
-              '#ask-box', '#badges-panel', '#kings-panel'];
+              '#ask-box', '#badges-panel', '#kings-panel', '#eng-ov .panel', '#gold-ov .panel'];
   const e2 = suf => P2.map(p => p + suf).join(', ');
   /* 창 전체가 스크롤되는 창(인물·유물 도감) — 틀을 판의 테두리로 직접 그려야 스크롤해도 제자리다 */
   const P3 = ['#hero-ov .panel', '#bag-ov .panel'];
@@ -315,7 +315,7 @@
   #hero-ov .pnl-x button, #bag-ov .pnl-x button { top:-30px !important; right:-34px !important; }
 
   /* 단추 */
-  ${e2(' button:not(.g):not(.a):not(.del)')}, #srs-ov .go, #hero-ov .close, #bag-ov .close {
+  ${e2(' button:not(.g):not(.a):not(.del):not(.hi):not(.go):not(.load)')}, #srs-ov .go, #hero-ov .close, #bag-ov .close {
     background:linear-gradient(180deg,#fffaf0,#f3e4c6) !important; border:2px solid #a8814f !important;
     border-radius:14px !important; color:#4a3319 !important; font-weight:700;
     box-shadow:0 3px 0 #8a6538, inset 0 1px 0 #fff !important; }
@@ -588,9 +588,87 @@
   .era-title.clk { cursor:pointer; }
   `;
 
+  /* ---------- 고침 2026-09-19 (실기기 제보) ----------
+     1) 주인공 초상 — 보스전용 고해상도 그림(battle.png)의 상반신을 잡는다
+     2) 닫기 ✕는 틀 바깥 모서리에 — 안쪽이 스크롤되는 창은 판을 한 겹 감싸(.sk-hold)
+        ✕를 그 감싼 쪽으로 옮긴다(아래 hoist). 판 안에 두면 스크롤 영역에 잘려 안쪽으로 밀렸다.
+     3) 기력·금 창 — 현판 옷 + 인삼 그림 칸 + 모서리 ✕ */
+  const css7 = `
+  .dlg-portrait.me-pic { background-size:190% auto !important; background-position:52% 3% !important;
+    background-repeat:no-repeat !important; image-rendering:auto !important; }
+  .sk-hold { position:relative; display:flex; flex-direction:column; min-height:0; box-sizing:border-box; }
+  #hero-ov > .sk-hold > .panel, #bag-ov > .sk-hold > .panel, .sk-hold > #quiz-panel, .sk-hold > #gloss-panel, .sk-hold > #map-panel {
+    width:100% !important; max-width:none !important; margin:0 !important; flex:1 1 auto; min-height:0; }
+  #hero-ov > .sk-hold { width:min(92%,560px); max-height:88%; max-width:calc(100% - 2 * ${SAFE} - 28px); }
+  #bag-ov > .sk-hold { width:min(90%,520px); max-height:84%; max-width:calc(100% - 2 * ${SAFE} - 28px); }
+  #quiz-overlay > .sk-hold, #gloss-overlay > .sk-hold, #map-overlay > .sk-hold {
+    width:100%; max-width:min(640px, calc(100% - 2 * ${SAFE} - 28px)); max-height:80%;
+    margin:0 auto calc(16px + env(safe-area-inset-bottom)); }
+  #gloss-overlay > .sk-hold { max-width:min(320px, calc(100% - 2 * ${SAFE} - 28px)); }
+  #map-overlay > .sk-hold { max-height:92%; }
+  .sk-hold > .sk-x, .sk-hold > .sk-x.quiz-close, .sk-hold > .sk-x.gloss-close, .sk-hold > #map-close {
+    position:absolute !important; top:-14px !important; right:-14px !important; left:auto !important;
+    width:42px !important; height:42px !important; margin:0 !important; padding:0 !important;
+    border:0 !important; border-radius:50% !important; font-size:0 !important; color:transparent !important;
+    background:url(${U}xbtn.webp) center/contain no-repeat !important; box-shadow:none !important;
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.4)); z-index:6; cursor:pointer; }
+  .sk-hold > .sk-x * { display:none !important; }
+  .sk-hold > .sk-x:active { transform:scale(.92); }
+  #hero-ov .pnl-x, #bag-ov .pnl-x { display:none !important; }
+
+  /* 기력 · 금 */
+  #eng-ov h3, #gold-ov h3 { display:block; width:max-content; max-width:90%; margin:-52px auto 4px !important;
+    padding:8px 40px 10px !important; background:url(${U}plaque.webp) center/100% 100% no-repeat;
+    color:#fff1cf !important; font-family:"Gugi","Gowun Batang",serif !important; font-size:18px !important;
+    letter-spacing:.06em; text-shadow:0 2px 0 #3d220c; }
+  #eng-ov .dots { gap:10px !important; margin:4px 0 2px !important; }
+  #eng-ov .dot { width:46px !important; height:46px !important; border-radius:12px !important;
+    background:url(${U}stamina.webp) center/78% no-repeat, linear-gradient(180deg,#fffbf2,#f1e2c3) !important;
+    border:2px solid #b58d5c !important; box-shadow:0 3px 0 #9b7447 !important;
+    filter:grayscale(1) opacity(.45); }
+  #eng-ov .dot.on { filter:none; border-color:#3f8a4f !important; box-shadow:0 3px 0 #2d6b3a, 0 0 10px rgba(80,170,100,.35) !important; }
+  #eng-ov .sub, #gold-ov .bal { color:#6d5536 !important; }
+  #eng-ov .msg, #gold-ov .msg { color:#9a5b1e !important; font-weight:700; }
+  #eng-ov #eng-x, #gold-ov #gold-close {
+    position:absolute !important; top:-10px !important; right:-10px !important; width:42px !important; height:42px !important;
+    padding:0 !important; border:0 !important; border-radius:50% !important; font-size:0 !important; color:transparent !important;
+    background:url(${U}xbtn.webp) center/contain no-repeat !important; box-shadow:none !important;
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.4)); z-index:4; margin:0 !important; }
+  #eng-ov #eng-gold::before { content:''; display:inline-block; width:20px; height:20px; margin-right:6px; vertical-align:-4px;
+    background:url(${U}coin.webp) center/contain no-repeat; }
+  #gold-ov .row { background:linear-gradient(180deg,#fffbf2,#f4e6c9) !important; border:2px solid #c9a878 !important;
+    border-radius:12px !important; box-shadow:0 2px 0 #b08a5a !important; }
+  #gold-ov .row .nm { color:#3b2a17 !important; font-weight:700; }
+  #gold-ov .row .ds { color:#7d6243 !important; }
+  #gold-ov .row .ic { color:#9a5b1e !important; }
+  #gold-ov .row button { background:linear-gradient(180deg,#ffe38a,#f2b83e) !important; border:2px solid #b27c1f !important;
+    color:#4a2e08 !important; box-shadow:0 2px 0 #9a6614 !important; }
+  `;
+
+  /* 안쪽이 스크롤되는 창의 ✕를 틀 바깥으로 — 판을 한 겹 감싸고 ✕를 그리로 옮긴다.
+     창을 열 때마다 새로 그리는 모듈(도감)이 있어 DOM이 바뀔 때마다 다시 본다.
+     ✕ 요소를 옮기기만 하므로 붙어 있던 클릭 처리는 그대로 산다. */
+  const HOIST = [
+    ['#hero-ov > .panel', '#hero-x'], ['#bag-ov > .panel', '#bag-x'],
+    ['#quiz-panel', '.quiz-close'], ['#gloss-panel', '.gloss-close'], ['#map-panel', '#map-close'],
+  ];
+  function hoist(){
+    for (const [ps, xs] of HOIST){
+      document.querySelectorAll(ps).forEach(p => {
+        let hold = p.parentElement;
+        if (!hold || !hold.classList.contains('sk-hold')){
+          hold = document.createElement('div'); hold.className = 'sk-hold';
+          p.parentNode.insertBefore(hold, p); hold.appendChild(p);
+        }
+        const x = p.querySelector(xs);
+        if (x){ x.classList.add('sk-x'); hold.appendChild(x); }
+      });
+    }
+  }
+
   const st = document.createElement('style');
   st.id = 'uiskin';
-  st.textContent = css + css2 + css3 + css4 + css5 + css6;
+  st.textContent = css + css2 + css3 + css4 + css5 + css6 + css7;
   function last(){
     const h = document.head;
     if (h && h.lastElementChild !== st) h.appendChild(st);
@@ -603,6 +681,13 @@
         if (n !== st && (n.nodeName === 'STYLE' || n.nodeName === 'LINK')){ last(); return; }
       }
     }).observe(document.head, { childList: true });
+  } catch(e){}
+  const runHoist = () => { try { hoist(); } catch(e){} };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runHoist); else runHoist();
+  try {
+    let t = 0;
+    new MutationObserver(() => { if (!t) t = setTimeout(() => { t = 0; runHoist(); }, 120); })
+      .observe(document.documentElement, { childList: true, subtree: true });
   } catch(e){}
   // 그림은 미리 받아 둔다(처음 열 때 빈 칸이 번쩍이지 않게)
   ['frame', 'plaque', 'xbtn', 'rib_red', 'rib_blue', 'rib_gold', 'coin', 'stamina'].forEach(n => {
