@@ -1495,3 +1495,9 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - assets/chapterlock.js(새): ORDER(=index ERAS 카드 순서, check_all이 대조) · 완료 판정은 기존 배지 ch_complete_<파일> · 광고 열기는 khg_unlock.open(계정 동기화됨). 첫 실행 때 완료 챕터·그다음 화·khg_lastChapter를 열어 둠(기존 사용자 보호). 36챕터 head에 `ChapterLock.guard()` → 잠긴 챕터 직접 진입 시 index.html#locked=파일 → 광고 열기 창. 웹은 광고 없이 확인 창만. ask.js에 cancel:false(단추 하나) 추가.
 - save.js 재작성(v2): khg_owner(기기 전용, guest|uid)·khg_sync_at·khg_sync_sig. 같은 계정=서버가 더 새롭고 기기 무변경이면 받기(둘 다 변경이면 xp 큰 쪽), 다른 계정 기록=그 계정 것으로 교체(없으면 처음부터), 비로그인 진행=한 번 물음(계정과 같으면 묻지 않음). 로그아웃·계정 삭제 = 마지막 업로드 후 기기 초기화(guest). 로그인이 저절로 풀리면 비우지 않음. 가짜 DB로 4가지 시나리오 시험 통과.
 - 빌드 7 아카이브: ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-7.xcarchive(CFBundleVersion 7, v144 확인), Organizer 열어 둠 → 업로드는 성일님. 심사 제출 전 버전 1.0 빌드를 최신으로 교체할 것(현재 5).
+
+## 2026-09-19 UI 업그레이드 — 시안 A(나무 현판·단청·한지) 통일 시안
+- 성일님: 메뉴·출석 등 UI가 밋밋 → 제미나이로 업그레이드. 시안 A(나무 현판+단청+한지)·B(나전칠기+보자기) 중 **A 선택**, "다른 UI도 A로 통일해 싹 다시 뽑기".
+- 시안 15장 저장: `_source_art/ui_concepts_2026-09-19/`(git 제외) — 메뉴·메인·출석·상자·할 일·미니게임·계급·배지함·인물도감·오답복습·왕조계보·급제자명단·로그인·게임 안 대화창·퀴즈.
+- 방법: 참고 그림 = 위 시안A + 아래 현재 화면 캡처(Playwright) 합성 1장(JPEG q70 ≈120KB, /go 해시로 첨부). **인앱 브라우저 창이 가려져 있으면(visibilityState hidden) 제미나이가 첨부·전송을 안 함** → 창이 보일 때만 동작. 세로로 나오는 일이 있어 "WIDE LANDSCAPE 16:9, NOT portrait" 명시.
+- 개인 계정으로 17장 생성, 아직 한도 안 걸림. 다음: 자산(아이콘·보상·상자·틀) 그리드 생성 → CSS 적용.
