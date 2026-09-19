@@ -68,7 +68,7 @@ window.Boss = (function(){
        bottom:6%/height:54% 면 머리가 무대의 40% 자리에서 시작해
        가로모드(무대 약 200px)에서 20px 넘게 여유가 생긴다.
        하반신이 아래 문제창 쪽으로 내려오는 것은 괜찮다고 하셨다. */
-    .bs-enemy { bottom:6%; right:11%; height:60%; }  /* 새 그림(2026-09-18)은 무기 자리 여백이 있어 조금 키웠다 */
+    .bs-enemy { bottom:6%; right:max(11%, calc(env(safe-area-inset-right) + 14px)); height:60%; }  /* 새 그림(2026-09-18)은 무기 자리 여백이 있어 조금 키웠다 */
     .bs-enemy img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-breathe 2.8s ease-in-out infinite; transform-origin:50% 100%; }
     /* 보스는 자세가 두 장이다(2026-09-18): 평소(숨쉬기)와 공격(오답일 때).
@@ -77,11 +77,13 @@ window.Boss = (function(){
     .bs-enemy.attacking .bs-idle { display:none; }
     .bs-enemy.attacking .bs-atk { display:block; animation:none; }
     @keyframes bs-breathe { 0%,100%{transform:scale(1,1);} 50%{transform:scale(1.012,.982) translateY(1px);} }
-    .bs-self { bottom:3%; left:11%; height:55%; }  /* 전투 그림은 위에 갓 자리 여백이 있어 조금 키웠다 */
-    /* 동료(차돌이·바우) — 주인공 뒤, 한 발 물러선 자리 */
+    .bs-self { bottom:3%; left:max(11%, calc(env(safe-area-inset-left) + 14px)); height:55%; }  /* 전투 그림은 위에 갓 자리 여백이 있어 조금 키웠다 */
+    /* 동료(차돌이·바우) — 주인공 뒤, 한 발 물러선 자리. 노치가 왼쪽에 오는
+       가로모드에서 bau가 안전 영역 계산 없이 left:3%라 카메라 홈에
+       가려졌다(제보: "동료 바우가 노치에 가려져"). */
     .bs-mate { position:absolute; z-index:4; width:auto; pointer-events:none;
       filter:drop-shadow(0 6px 6px rgba(0,0,0,.5)) brightness(.9); }
-    .bs-mate-bau { bottom:8%; left:3%; height:52%; }
+    .bs-mate-bau { bottom:8%; left:max(3%, calc(env(safe-area-inset-left) + 6px)); height:52%; }
     .bs-mate-chadol { bottom:2%; left:27%; height:33%; z-index:6; }
     .bs-self img { height:100%; width:auto; object-fit:contain; display:block;
       animation:bs-bob 3.8s ease-in-out infinite; }
