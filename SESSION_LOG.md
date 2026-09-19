@@ -1514,3 +1514,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - v150: 실기기 제보 3건 — 주인공 초상 임시로 battle.png, 스크롤 창(도감·퀴즈·풀이·지도)의 ✕를 .sk-hold로 감싸 틀 바깥 모서리로(uiskin hoist, DOM 바뀌면 120ms 뒤 다시), 기력·금 창 현판 옷(인삼 그림 칸).
 - v151: 주인공 대화 초상 제미나이로 7벌(보스전 그림 7장+NPC 초상 하나를 참고로 붙여 4명·3명 두 장, "BOTH ARMS RELAXED DOWN, NO fists" 강조) → assets/player/<suit>/portrait.png. 초록 배경 빼다가 초록 옷이 회색으로 바래서 cut_ui_sheet.py에 --keepgreen(테두리와 이어진 초록+갇힌 조각만 배경). 로고 마스크는 인물 발에 겹쳐 구멍이 나서 뺌.
 - v151: 메뉴 칸 '완료' 구분(성일님 "할 거 있을 때랑 다 했을 때 구분") — 출석/상자/할 일/미니게임 다 하면 흐리게+초록 완료 표.
+- 빌드 9 아카이브(v151): ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-9.xcarchive, Organizer 열어 둠.
