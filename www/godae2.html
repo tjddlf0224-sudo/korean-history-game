@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=159"></script>
-<script src="assets/chapterlock.js?v=159"></script>
+<script src="assets/tablet.js?v=160"></script>
+<script src="assets/chapterlock.js?v=160"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=159"></script>
+<script src="assets/resume.js?v=160"></script>
 <title>한국사 게임 - 고대 4화 통일과 발해</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -479,7 +479,7 @@
     </div>
   </div>
 
-  <button id="next-chapter-btn" onclick="Stage.endChapter()">다음 화로 가기 ▶</button>
+  <button id="next-chapter-btn" onclick="Stage.endChapter()">보스전 하기 ▶</button>
 
   <div id="fade"></div>
   <div id="fanfare">
@@ -525,13 +525,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=159"></script>
-<script src="assets/zoomwarn.js?v=159"></script>
-<script src="assets/map/map_component.js?v=159"></script>
-<script src="assets/chart.js?v=159"></script>
-<script src="assets/companions.js?v=159"></script>
-<script src="assets/inner.js?v=159"></script>
-<script src="assets/audio.js?v=159"></script>
+<script src="assets/errlog.js?v=160"></script>
+<script src="assets/zoomwarn.js?v=160"></script>
+<script src="assets/map/map_component.js?v=160"></script>
+<script src="assets/chart.js?v=160"></script>
+<script src="assets/companions.js?v=160"></script>
+<script src="assets/inner.js?v=160"></script>
+<script src="assets/audio.js?v=160"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -543,7 +543,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=159';   // 존댓말 전환
+const ART_V = '?v=160';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1112,7 +1112,7 @@ function updateHudGoal(){
   // 아직 말 안 걸어 본 사람을 차례로 가리킨다. talkStage만 보고 정하면 첫 사람과
   // 대화한 뒤로 영영 안 바뀐다(한산도에서 곽재우와 말을 끝내도 계속 곽재우를
   // 가리키던 버그). 여러 단계짜리 인물은 단계마다 키가 달라지므로 keyFor로 묻는다.
-  const t = done ? '다음 목표: 다음 화로 넘어가기' : (function(){
+  const t = done ? '다음 목표: 보스전 하기' : (function(){
     const order = [
       ['daejoyeong', '상경성에서 대조영과 대화하기'],
       ['munwang', '발해 문왕과 대화하기'],
@@ -1138,7 +1138,7 @@ function updateHudGoal(){
         return '다음 목표: ' + goal;
       }
     }
-    return '다음 목표: 다음 화로 넘어가기';
+    return '다음 목표: 보스전 하기';
   })();
   if (el.textContent !== t) el.textContent = t;
 }
@@ -2369,39 +2369,39 @@ if (window.Resume){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=159"></script>
-<script src="assets/streak.js?v=159"></script>
+<script src="assets/badges.js?v=160"></script>
+<script src="assets/streak.js?v=160"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=159"></script>
-  <script src="assets/fx.js?v=159"></script>
-  <script src="assets/deed.js?v=159"></script>
-  <script src="assets/inkwipe.js?v=159"></script>
-  <script src="assets/dash.js?v=159"></script>
-<script src="assets/juice.js?v=159"></script>
-  <script src="assets/difficulty.js?v=159"></script>
-  <script src="assets/nextauto.js?v=159"></script>
-<script src="assets/heroes_data.js?v=159"></script>
-<script src="assets/heroes.js?v=159"></script>
-<script src="assets/icons.js?v=159"></script>
-<script src="assets/srs.js?v=159"></script>
-<script src="assets/newsflash.js?v=159"></script>
-<script src="assets/timeline.js?v=159"></script>
-<script src="assets/journey.js?v=159"></script>
-<script src="assets/season.js?v=159"></script>
-<script src="assets/boss.js?v=159"></script>
-<script src="assets/items.js?v=159"></script>
-  <script src="assets/gold.js?v=159"></script>
-  <script src="assets/ask.js?v=159"></script>
-  <script src="assets/ads.js?v=159"></script>
-  <script src="assets/energy.js?v=159"></script>
-  <script src="assets/daily.js?v=159"></script>
-  <script src="assets/unlock.js?v=159"></script>
-  <script src="assets/guide.js?v=159"></script>
-  <script src="assets/minigames.js?v=159"></script>
-  <script src="assets/quests.js?v=159"></script>
-  <script src="assets/offline.js?v=159"></script>
-  <script src="assets/telemetry.js?v=159"></script>
-<script src="assets/autowalk.js?v=159"></script>
+<script src="assets/rank.js?v=160"></script>
+  <script src="assets/fx.js?v=160"></script>
+  <script src="assets/deed.js?v=160"></script>
+  <script src="assets/inkwipe.js?v=160"></script>
+  <script src="assets/dash.js?v=160"></script>
+<script src="assets/juice.js?v=160"></script>
+  <script src="assets/difficulty.js?v=160"></script>
+  <script src="assets/nextauto.js?v=160"></script>
+<script src="assets/heroes_data.js?v=160"></script>
+<script src="assets/heroes.js?v=160"></script>
+<script src="assets/icons.js?v=160"></script>
+<script src="assets/srs.js?v=160"></script>
+<script src="assets/newsflash.js?v=160"></script>
+<script src="assets/timeline.js?v=160"></script>
+<script src="assets/journey.js?v=160"></script>
+<script src="assets/season.js?v=160"></script>
+<script src="assets/boss.js?v=160"></script>
+<script src="assets/items.js?v=160"></script>
+  <script src="assets/gold.js?v=160"></script>
+  <script src="assets/ask.js?v=160"></script>
+  <script src="assets/ads.js?v=160"></script>
+  <script src="assets/energy.js?v=160"></script>
+  <script src="assets/daily.js?v=160"></script>
+  <script src="assets/unlock.js?v=160"></script>
+  <script src="assets/guide.js?v=160"></script>
+  <script src="assets/minigames.js?v=160"></script>
+  <script src="assets/quests.js?v=160"></script>
+  <script src="assets/offline.js?v=160"></script>
+  <script src="assets/telemetry.js?v=160"></script>
+<script src="assets/autowalk.js?v=160"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2452,6 +2452,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=159"></script>
+<script src="assets/uiskin.js?v=160"></script>
 </body>
 </html>
