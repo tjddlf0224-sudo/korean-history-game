@@ -1509,3 +1509,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 노치(성일님 강조): 모든 창·대화 묶음 max-width = 100% − 2×max(safe-left, safe-right, 8px) − 28px. 874×402·노치 62pt 가정 측정으로 전부 좌우 ≥94px 확인. 시뮬레이터(iPhone 17 Pro)로 목록 화면 확인, 시뮬레이터 탭은 좌표가 안 먹어 창 열기는 못 함.
 - HUD 목표 글자는 예전 "알약 배경 구려 보인다" 피드백대로 박스 없이 둠.
 - 남은 것: exam_practice.html(기출변형)·스트릭 전체화면·보스전 화면은 아직 옛 모양. 빌드 8(현재 앱은 빌드 7).
+- v149: 시대/묶음 리본을 그림→CSS(단색 띠+단청 세 줄+제비꼬리)로. 리본 그림 늘리면 글자가 꼬리에 걸쳐 "구려" 지적.
