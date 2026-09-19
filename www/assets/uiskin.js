@@ -555,9 +555,42 @@
   #gloss-panel { max-width:min(320px, calc(100% - 2 * ${SAFE} - 28px)) !important; }
   `;
 
+  /* ---------- 리본 다시(2026-09-19 성일님 "챕터 이름 나타내는 게 별로야. 구려") ----------
+     리본 그림을 글자 길이에 맞춰 늘리니 꼬리까지 글자가 걸치고 모양이 찌그러졌다.
+     그림을 버리고 CSS로 그린다: 단색 띠 + 왼쪽 단청 세 줄 + 오른쪽 제비꼬리. 글자 길이에 딱 맞는다. */
+  const RIB = ['.era-title', '.mn-sec h4', '#mg-ov .sec', '#qs-ov .sec', '#ul-ov .sec',
+               '#hero-ov .era', '#bag-ov .era', '#badges-panel .badge-era'];
+  const css6 = `
+  ${RIB.join(', ')} {
+    --rb:#c2412b; --rb2:#9c2c1a;
+    display:inline-flex !important; align-items:center; width:max-content; max-width:100%;
+    box-sizing:border-box; position:relative;
+    background:linear-gradient(180deg,var(--rb) 0%,var(--rb2) 100%) !important; background-size:auto !important;
+    padding:4px 26px 5px 17px !important; min-height:0 !important; line-height:1.25 !important;
+    color:#fff !important; font-weight:700 !important; letter-spacing:.06em !important;
+    text-shadow:0 1px 0 rgba(0,0,0,.3) !important; border:0 !important; border-radius:3px 0 0 3px;
+    clip-path:polygon(0 0,100% 0,calc(100% - 11px) 50%,100% 100%,0 100%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.25), inset 0 -2px 0 rgba(0,0,0,.15) !important; filter:none !important; }
+  /* 왼쪽 단청 세 줄 */
+  ${RIB.map(r => r + '::before').join(', ')} {
+    content:'' !important; position:absolute; left:0; top:0; bottom:0; width:10px;
+    background:linear-gradient(90deg,#2f7a5a 0 3px,#f4d35e 3px 6px,#2d5f9a 6px 10px) !important; }
+  .mn-sec h4::after, #mg-ov .sec::after, #qs-ov .sec::after, #ul-ov .sec::after { display:none !important; }
+  .era-title { font-family:"Gugi","Gowun Batang",serif !important; font-weight:400 !important;
+    font-size:16px !important; padding:5px 30px 6px 19px !important; }
+  /* 색 — 묶음마다 다르게(오방색) */
+  .mn-sec[data-sec="익히기"] h4, .era-section:nth-of-type(8n+2) .era-title,
+  .era-section:nth-of-type(8n+6) .era-title { --rb:#3a6fb0; --rb2:#274f85; }
+  .mn-sec[data-sec="기록"] h4, .era-section:nth-of-type(8n+3) .era-title,
+  .era-section:nth-of-type(8n+7) .era-title { --rb:#d99a1e; --rb2:#a8720c; }
+  .mn-sec[data-sec="설정"] h4, .era-section:nth-of-type(8n+4) .era-title,
+  .era-section:nth-of-type(8n+8) .era-title { --rb:#3d8a5f; --rb2:#28674a; }
+  .era-title.clk { cursor:pointer; }
+  `;
+
   const st = document.createElement('style');
   st.id = 'uiskin';
-  st.textContent = css + css2 + css3 + css4 + css5;
+  st.textContent = css + css2 + css3 + css4 + css5 + css6;
   function last(){
     const h = document.head;
     if (h && h.lastElementChild !== st) h.appendChild(st);
