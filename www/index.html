@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=150"></script>
+<script src="assets/tablet.js?v=151"></script>
 <title>타임슬립 한국사 · 한능검 심화 기출 — 챕터 목록</title>
 <meta name="description" content="한국사능력검정시험(한능검) 심화 대비 게임. 선사부터 현대까지 36화를 걸어다니며, 기출 415문항을 이야기로 푼다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -493,35 +493,35 @@
 <script src="vendor/firebase/firebase-app-compat.js"></script>
 <script src="vendor/firebase/firebase-auth-compat.js"></script>
 <script src="vendor/firebase/firebase-firestore-compat.js"></script>
-<script src="assets/zoomwarn.js?v=150"></script>
-<script src="assets/firebase_config.js?v=150"></script>
-<script src="assets/auth.js?v=150"></script>
-<script src="assets/board.js?v=150"></script>
-<script src="assets/save.js?v=150"></script>
-<script src="assets/audio.js?v=150"></script>
-<script src="assets/srs.js?v=150"></script>
-  <script src="assets/rank.js?v=150"></script>
-  <script src="assets/heroes_data.js?v=150"></script>
-  <script src="assets/heroes.js?v=150"></script>
-  <script src="assets/items.js?v=150"></script>
+<script src="assets/zoomwarn.js?v=151"></script>
+<script src="assets/firebase_config.js?v=151"></script>
+<script src="assets/auth.js?v=151"></script>
+<script src="assets/board.js?v=151"></script>
+<script src="assets/save.js?v=151"></script>
+<script src="assets/audio.js?v=151"></script>
+<script src="assets/srs.js?v=151"></script>
+  <script src="assets/rank.js?v=151"></script>
+  <script src="assets/heroes_data.js?v=151"></script>
+  <script src="assets/heroes.js?v=151"></script>
+  <script src="assets/items.js?v=151"></script>
   <!-- 판 껍데기는 다른 모듈보다 먼저 — 각 화면이 필요한 것만 위에 덮어쓴다 -->
-  <script src="assets/panelskin.js?v=150"></script>
-  <script src="assets/gold.js?v=150"></script>
-  <script src="assets/ads.js?v=150"></script>
-  <script src="assets/chapterlock.js?v=150"></script>
-  <script src="assets/energy.js?v=150"></script>
-  <script src="assets/daily.js?v=150"></script>
-  <script src="assets/unlock.js?v=150"></script>
-  <script src="assets/guide.js?v=150"></script>
-  <script src="assets/minigames.js?v=150"></script>
-  <script src="assets/quests.js?v=150"></script>
-  <script src="assets/journey.js?v=150"></script>
-  <script src="assets/fx.js?v=150"></script>
-  <script src="assets/season.js?v=150"></script>
-  <script src="assets/offline.js?v=150"></script>
-  <script src="assets/telemetry.js?v=150"></script>
-<script src="assets/badges.js?v=150"></script>
-<script src="assets/streak.js?v=150"></script>
+  <script src="assets/panelskin.js?v=151"></script>
+  <script src="assets/gold.js?v=151"></script>
+  <script src="assets/ads.js?v=151"></script>
+  <script src="assets/chapterlock.js?v=151"></script>
+  <script src="assets/energy.js?v=151"></script>
+  <script src="assets/daily.js?v=151"></script>
+  <script src="assets/unlock.js?v=151"></script>
+  <script src="assets/guide.js?v=151"></script>
+  <script src="assets/minigames.js?v=151"></script>
+  <script src="assets/quests.js?v=151"></script>
+  <script src="assets/journey.js?v=151"></script>
+  <script src="assets/fx.js?v=151"></script>
+  <script src="assets/season.js?v=151"></script>
+  <script src="assets/offline.js?v=151"></script>
+  <script src="assets/telemetry.js?v=151"></script>
+<script src="assets/badges.js?v=151"></script>
+<script src="assets/streak.js?v=151"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>
@@ -1290,14 +1290,30 @@ document.addEventListener('keydown', (ev) => {
     if (window.Mini) mk('daily-mini', '미니게임', function(){ Mini.open(); });
     if (window.Unlock) mk('daily-unlock', '계급', function(){ Unlock.open(); });
     var b = mk('daily-box', '상자', function(){ Daily.openBox(); });
+    /* 할 것이 있으면 점(hot), 오늘 몫을 다 했으면 흐리게(done) — 성일님 2026-09-19
+       "할 거 있을 때랑 다 했을 때를 구분하고 싶어". 흐려도 눌러서 볼 수는 있다. */
     function paint(){
-      a.classList.toggle('hot', !Daily.claimedToday());
+      var attDone = Daily.claimedToday();
+      a.classList.toggle('hot', !attDone);
+      a.classList.toggle('done', attDone);
+      var boxDone = Daily.boxLeft() <= 0 && (!Daily.adBoxLeft || Daily.adBoxLeft() <= 0);
       b.classList.toggle('hot', Daily.boxLeft() > 0);
+      b.classList.toggle('done', boxDone);
       var q = document.getElementById('daily-quest');
-      if (q && window.Quests) q.classList.toggle('hot', Quests.pending());
+      if (q && window.Quests){
+        q.classList.toggle('hot', Quests.pending());
+        q.classList.toggle('done', !!(Quests.allDone && Quests.allDone()));
+      }
+      var m = document.getElementById('daily-mini');
+      if (m && window.Mini && Mini.freeLeft){
+        var mDone = Mini.freeLeft() <= 0 && (!Mini.adLeft || Mini.adLeft() <= 0);
+        m.classList.toggle('done', mDone);
+      }
     }
     paint();
     setInterval(paint, 3000);
+    var mbtn = document.getElementById('menu-btn');
+    if (mbtn) mbtn.addEventListener('click', paint);   // 열 때 바로 최신으로
   })();
 
   /* 로그인 단추는 상단 액션 줄에 붙인다. 설정이 없으면 Auth.attach가
@@ -1318,8 +1334,8 @@ document.addEventListener('keydown', (ev) => {
     }
   })();
 </script>
-<script src="assets/ask.js?v=150"></script>
-<script src="assets/tidy.js?v=150"></script>
-<script src="assets/uiskin.js?v=150"></script>
+<script src="assets/ask.js?v=151"></script>
+<script src="assets/tidy.js?v=151"></script>
+<script src="assets/uiskin.js?v=151"></script>
 </body>
 </html>

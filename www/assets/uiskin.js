@@ -134,6 +134,14 @@
     height:13px !important; background:radial-gradient(circle at 35% 30%,#ff8d7a,#d8412c) !important;
     border:2px solid #fff6e4; box-shadow:0 1px 3px rgba(0,0,0,.35) !important; }
   #menu-panel #menu-reset { color:#8a3a2a !important; }
+  /* 오늘 몫을 다 한 칸 — 흐리게 + 초록 '완료' 표. 할 것이 있는 칸(붉은 점)과 한눈에 갈린다 */
+  #menu-panel .mtile.done { background:linear-gradient(180deg,#efe6d4,#ddd0b5) !important;
+    border-color:#bfae90 !important; box-shadow:0 2px 0 #a8977a !important; color:#9a8a70 !important; }
+  #menu-panel .mtile.done::before { filter:grayscale(1) opacity(.45) !important; }
+  #menu-panel .mtile.done::after { content:'완료' !important; position:absolute; top:-6px !important; right:-6px !important;
+    width:auto !important; height:auto !important; padding:2px 7px !important; border-radius:999px !important;
+    background:#3f8a4f !important; color:#fff !important; font-size:10.5px; font-weight:700; letter-spacing:.04em;
+    border:2px solid #fff6e4; box-shadow:0 1px 3px rgba(0,0,0,.3) !important; }
   #menu-panel #bgm-mute-toggle.muted::before { filter:grayscale(1) opacity(.55) !important; }
   #menu-panel > button:not(.mtile), #menu-panel > a:not(.mtile) {
     display:block; margin:8px auto 0 !important; width:auto !important; min-width:220px;
@@ -594,7 +602,8 @@
         ✕를 그 감싼 쪽으로 옮긴다(아래 hoist). 판 안에 두면 스크롤 영역에 잘려 안쪽으로 밀렸다.
      3) 기력·금 창 — 현판 옷 + 인삼 그림 칸 + 모서리 ✕ */
   const css7 = `
-  .dlg-portrait.me-pic { background-size:190% auto !important; background-position:52% 3% !important;
+  /* 주인공 초상 — NPC 초상과 같은 전신 그림(assets/player/<신분>/portrait.png)이라 같은 방식(cover·위쪽)으로 */
+  .dlg-portrait.me-pic { background-size:cover !important; background-position:center top !important;
     background-repeat:no-repeat !important; image-rendering:auto !important; }
   .sk-hold { position:relative; display:flex; flex-direction:column; min-height:0; box-sizing:border-box; }
   #hero-ov > .sk-hold > .panel, #bag-ov > .sk-hold > .panel, .sk-hold > #quiz-panel, .sk-hold > #gloss-panel, .sk-hold > #map-panel {

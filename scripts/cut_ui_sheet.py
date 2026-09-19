@@ -11,7 +11,7 @@ from scipy import ndimage
 ap = argparse.ArgumentParser()
 ap.add_argument('src'); ap.add_argument('--out'); ap.add_argument('--names', nargs='*', default=[])
 ap.add_argument('--size', type=int, default=256, help='긴 변 최대 크기')
-ap.add_argument('--list', action='store_true'); ap.add_argument('--merge', type=int, default=18)
+ap.add_argument('--list', action='store_true'); ap.add_argument('--keepgreen', action='store_true'); ap.add_argument('--merge', type=int, default=18)
 ap.add_argument('--mask', nargs='*', default=[], help='x0,y0,x1,y1 영역 지우기(로고)')
 a = ap.parse_args()
 
@@ -25,6 +25,21 @@ for m in a.mask:
 gfix = np.where(spill > 0, np.maximum(r, b) + np.minimum(spill, 0), g)
 rgb = np.stack([r, np.minimum(g, np.maximum(gfix, np.maximum(r, b))), b], -1)
 rgb[..., 1] = np.where(spill > 5, np.maximum(r, b), g)
+if a.keepgreen:
+    # 초록 옷을 살린다(2026-09-19, 중인·양반 두루마기가 회색으로 바랬다): 테두리와 이어진
+    # 진한 초록만 배경으로 보고, 그 가장자리 2~3px 띠에서만 번짐을 뺀다. 안쪽 초록은 그대로.
+    strong = (g > 140) & (spill > 60)
+    lab0, _ = ndimage.label(strong)
+    edge_ids = set(np.unique(np.concatenate([lab0[0], lab0[-1], lab0[:, 0], lab0[:, -1]]))) - {0}
+    sizes = ndimage.sum(strong, lab0, range(1, lab0.max() + 1))
+    pockets = {i + 1 for i, sz in enumerate(sizes) if sz >= 25}   # 머리띠 뒤처럼 갇힌 배경 조각
+    bg = np.isin(lab0, list(edge_ids | pockets))
+    for m in a.mask:
+        x0, y0, x1, y1 = map(int, m.split(',')); bg[y0:y1, x0:x1] = True
+    band = ndimage.binary_dilation(bg, iterations=3) & ~bg
+    alpha = np.where(bg, 0.0, np.where(band, np.clip(1 - (spill - 25) / 70, 0, 1), 1.0))
+    rgb = np.stack([r, g, b], -1)
+    rgb[..., 1] = np.where(band & (spill > 5), np.maximum(r, b), g)
 mask = alpha > 0.5
 lab, n = ndimage.label(ndimage.binary_dilation(mask, iterations=a.merge))
 objs = ndimage.find_objects(lab)

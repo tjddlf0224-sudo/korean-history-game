@@ -280,6 +280,12 @@ window.Quests = (function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  return { open, pending, todayList, ACH, claimDaily, claimAch, wire,
+  /* 오늘 할 일을 다 받았나 — 메뉴 칸을 '다 함'으로 흐리게 두는 데 쓴다 */
+  function allDone(){
+    try { rollDay(); const t = todayList(); return t.length > 0 && t.every(q => st.taken[q.id]); }
+    catch(e){ return false; }
+  }
+
+  return { open, pending, allDone, todayList, ACH, claimDaily, claimAch, wire,
            _st: () => st };
 })();
