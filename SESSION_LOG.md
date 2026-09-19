@@ -1516,3 +1516,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - v151: 메뉴 칸 '완료' 구분(성일님 "할 거 있을 때랑 다 했을 때 구분") — 출석/상자/할 일/미니게임 다 하면 흐리게+초록 완료 표.
 - 빌드 9 아카이브(v151): ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-9.xcarchive, Organizer 열어 둠.
 - v152: 대화창 ✕(단추 줄과 겹침+더블탭 막기에 click 삼켜짐 → 틀 안쪽·z30·pointerup 닫기), 가방 단추 svg box-shadow 네모 제거. 빌드 10 아카이브 Organizer 열어 둠.
+- v153: 앱에서 Firestore 멈춤(WKWebView WebChannel) → 네이티브 experimentalForceLongPolling + 읽기 15초 제한·실패 안내·로그인 창 열 때 재시도. 배지함/왕조계보 메뉴 위에 띄움. 계급 알약 'N레벨 남음'. 빌드 11 아카이브.
