@@ -118,9 +118,9 @@ window.Offline = (function(){
     let d = document.getElementById('of-ov');
     if (!d){ d = document.createElement('div'); d.id = 'of-ov'; layer().appendChild(d); }
     d.innerHTML = '<div class="panel">' +
-      '<div class="tag">자 리 를  비 우 신  사 이</div>' +
+      '<h3>자리를 비운 사이</h3>' +
       `<div class="ln">${p.ms ? fmt(p.ms) + ' 동안 ' : ''}배운 것이 익었습니다.</div>` +
-      `<div class="big">금 ${p.gold}</div>` +
+      `<div class="big"><img class="coin" alt="" src="assets/ui/coin.webp">${p.gold}</div>` +
       (p.capped ? '<div class="sm">여덟 시간치까지만 쌓입니다.</div>' : '') +
       '<button class="hi" id="of-take">받기</button>' +
       '<button id="of-ad">광고 보고 두 배로</button>' +

@@ -275,7 +275,7 @@
   /* ---------- 2차: 목록이 안쪽에서 스크롤되는 창들 ----------
      판 자체는 넘치지 않고(최대 높이 유지) 안쪽 목록이 스크롤되므로, 틀은 ::before로 씌운다. */
   const P2 = ['#bd-ov .panel', '#srs-ov .panel', '#auth-ov .panel', '#cs-ov .panel',
-              '#ask-box', '#badges-panel', '#kings-panel', '#eng-ov .panel', '#gold-ov .panel'];
+              '#ask-box', '#badges-panel', '#kings-panel', '#eng-ov .panel', '#gold-ov .panel', '#of-ov .panel'];
   const e2 = suf => P2.map(p => p + suf).join(', ');
   /* 창 전체가 스크롤되는 창(인물·유물 도감) — 틀을 판의 테두리로 직접 그려야 스크롤해도 제자리다 */
   const P3 = ['#hero-ov .panel', '#bag-ov .panel'];
@@ -300,13 +300,19 @@
     padding:4px 4px 8px !important; color:#3b2a17 !important; }
 
   /* 제목 — 현판 */
-  #bd-ov h3, #srs-ov h3, #auth-ov h3, #cs-ov h3, #hero-ov h3, #bag-ov h3,
+  #bd-ov h3, #srs-ov h3, #auth-ov h3, #cs-ov h3, #hero-ov h3, #bag-ov h3, #of-ov h3,
   #badges-panel .kp-head h2, #kings-panel .kp-head h2 {
     display:block; width:max-content; max-width:90%; margin:-52px auto 6px !important;
     padding:8px 40px 10px !important; background:url(${U}plaque.webp) center/100% 100% no-repeat;
     color:#fff1cf !important; font-family:"Gugi","Gowun Batang",serif !important;
     font-size:18px !important; letter-spacing:.06em; text-shadow:0 2px 0 #3d220c; white-space:nowrap; }
   #hero-ov h3, #bag-ov h3 { margin-top:0 !important; }
+  /* 자리를 비운 사이(오프라인 보상) */
+  #of-ov .big { color:#9a5b1e !important; display:flex; align-items:center; justify-content:center; gap:8px;
+    text-shadow:none !important; font-family:"Gugi","Gowun Batang",serif; }
+  #of-ov .big img.coin { width:30px; height:30px; object-fit:contain; }
+  #of-ov .ln { color:#3b2a17 !important; }
+  #of-ov .sm { color:#7d6243 !important; }
   #badges-panel .kp-head, #kings-panel .kp-head { flex-direction:column; align-items:center !important;
     border-bottom:0 !important; padding:0 !important; margin-bottom:6px; }
   .kp-sub, #bd-ov .sub, #srs-ov .sub, #auth-ov .sub, #auth-ov .me, #cs-ov .note, #cs-ov .when,
