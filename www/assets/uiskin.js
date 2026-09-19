@@ -396,9 +396,167 @@
   #kings-panel .kp-king .kp-year, #kings-panel .kp-king .kp-a { color:#6d5536 !important; }
   `;
 
+  /* ---------- 3차: 목록 화면(index) — 한지 바탕 ---------- */
+  const css3 = !document.getElementById('era-list') ? '' : `
+  html, body { background:#2a1d10 !important; }
+  #wrap { background:
+      radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(90,55,20,.28) 100%),
+      url(${U}hanji.webp) center/cover no-repeat, #f3e7cc !important; }
+  #app { color:#3b2a17; }
+  h1 img { filter:brightness(.78) saturate(1.35) drop-shadow(0 1px 0 #5a3519) drop-shadow(0 0 1px #5a3519); }
+  .subtitle { color:#7d6243 !important; }
+  #menu-btn { width:40px !important; height:40px !important; border-radius:50% !important;
+    background:radial-gradient(circle at 35% 30%,#a8733f,#6b4424) !important; border:2px solid #3a220e !important;
+    color:#fff1cf !important; box-shadow:0 3px 0 #2f1a09, inset 0 1px 0 rgba(255,220,170,.35) !important; }
+  #streak-pill { background:linear-gradient(180deg,#7a4e2a,#5a3519) !important; border:1.5px solid #3a220e !important; }
+  #streak-pill span { color:#ffe08a !important; }
+  #auth-btn { background:linear-gradient(180deg,#7a4e2a,#5a3519) !important; border:1.5px solid #3a220e !important;
+    color:#ffe08a !important; }
+  /* 시대 */
+  .era-title { color:#fff !important; font-family:"Gugi","Gowun Batang",serif; font-weight:400 !important;
+    font-size:15px !important; letter-spacing:.04em; display:inline-block;
+    background:url(${U}rib_red.webp) left center/100% 100% no-repeat; padding:4px 46px 6px 12px;
+    text-shadow:0 1px 0 rgba(0,0,0,.4); border-bottom:0 !important; }
+  .era-section:nth-of-type(8n+2) .era-title { background-image:url(${U}rib_blue.webp); }
+  .era-section:nth-of-type(8n+3) .era-title { background-image:url(${U}rib_gold.webp); }
+  .era-section:nth-of-type(8n+5) .era-title { background-image:url(${U}rib_blue.webp); filter:hue-rotate(-75deg); }
+  .era-section:nth-of-type(8n+6) .era-title { background-image:url(${U}rib_gold.webp); }
+  .era-section:nth-of-type(8n+7) .era-title { background-image:url(${U}rib_blue.webp); }
+  .era-year { color:#6d5536 !important; font-weight:700; }
+  .era-pct { color:#9a5b1e !important; font-weight:700; }
+  .era-dot { background:#d9533b !important; border-color:#f3e7cc !important; box-shadow:0 0 0 2px #8a5a2b !important; }
+  .era-track-line { height:5px !important; background:repeating-linear-gradient(90deg,#b08a5a 0 6px,#8d6a3f 6px 9px) !important;
+    border-radius:3px; }
+  .era-track-dot.start { background:#8a5a2b !important; }
+  .era-track-dot.end { background:#f3e7cc !important; border-color:#8a5a2b !important; }
+  .era-track-dot.current { background:#ffe08a !important; border-color:#d98a12 !important;
+    box-shadow:0 0 0 3px rgba(255,214,102,.45), 0 0 14px rgba(255,170,40,.7) !important; }
+  .era-exam-btn { text-shadow:none !important; background:linear-gradient(180deg,#7a4e2a,#5a3519);
+    border:2px solid #3a220e; border-radius:12px; padding:5px 4px 6px; box-shadow:0 3px 0 #2f1a09; }
+  .era-exam-btn .eb-title { color:#ffe08a !important; font-size:13.5px !important; }
+  .era-exam-btn .eb-sub { color:#f6e3bf !important; }
+  .era-exam-btn .eb-icon { color:#ffe08a !important; }
+  .era-mascot { filter:drop-shadow(0 4px 4px rgba(80,50,20,.35)); }
+  /* 챕터 카드 — 나무 테두리 이야기책 */
+  .chapter-card { border:3px solid #8a5a2b !important; border-radius:14px !important;
+    box-shadow:0 4px 0 #5a3519, 0 6px 14px rgba(60,35,10,.3) !important; }
+  .chapter-card.recent { border-color:#e0a526 !important;
+    box-shadow:0 4px 0 #9a6614, 0 0 0 3px rgba(255,214,102,.6), 0 0 22px 6px rgba(255,190,60,.55) !important; }
+  .chapter-card.recent::before { border-bottom-color:#e0a526 !important; }
+  .chapter-card.locked { filter:grayscale(.8) brightness(.8) !important; }
+  .chapter-card.locked .ccard-lock { width:34px !important; height:38px !important; background:url(${U}lock.webp) center/contain no-repeat !important;
+    border:0 !important; top:6px !important; right:6px !important; filter:none; }
+  .chapter-card.locked .ccard-lock svg { display:none; }
+  /* 이달의 시대 띠 */
+  #sn-band { background:linear-gradient(180deg,#fffbf2,#f4e6c9) !important; border:2px solid #b58d5c !important;
+    box-shadow:0 3px 0 #9b7447 !important; }
+  #sn-band .k { color:#9a5b1e !important; }
+  #sn-band .v { color:#3b2a17 !important; font-weight:700; }
+  #sn-band .mark { background:linear-gradient(180deg,#7a4e2a,#5a3519) !important; border-color:#3a220e !important; color:#ffe08a !important; }
+  #sn-band .bar { background:#e3d1ad !important; }
+  #sn-band .bar i { background:linear-gradient(90deg,#e9a93c,#ffd86b) !important; }
+  #sn-band .rt { color:#7d6243 !important; }
+  #sn-band .rt b { color:#9a5b1e !important; }
+  .plan-note { color:#7d6243 !important; }
+  `;
+
+  /* ---------- 4차: 챕터 화면(게임 안) ----------
+     속말(.inner-voice)은 inner.js의 밝은 회청색 창을 그대로 둔다 — 성일님이 맞춘 것이다. */
+  const css4 = !document.getElementById('dlg-overlay') ? '' : `
+  /* 대화창 — 한지 판에 나무 틀. 창이 스크롤될 수 있어 틀은 판 테두리에 직접 */
+  #dlg-frame:not(.inner-voice) #dlg-panel, #quiz-panel, #gloss-panel, #intro-panel, #map-panel, #game-menu-panel {
+    background:none !important; border-radius:0 !important; box-shadow:0 12px 30px rgba(0,0,0,.45) !important;
+    border-style:solid !important; border-width:26px 30px 26px 30px !important;
+    border-image:url(${U}frame.webp) 195 205 195 205 fill / 26px 30px 26px 30px stretch !important;
+    color:#3b2a17 !important; isolation:isolate; }
+  #dlg-frame:not(.inner-voice) #dlg-panel { padding:4px 4px 2px 104px !important; min-height:80px !important; }
+  #quiz-panel, #gloss-panel, #intro-panel, #game-menu-panel { padding:4px 6px 4px !important; }
+  #map-panel { padding:6px 8px !important; }
+  /* 말하는 사람에 따라 한지에 옅은 물을 들인다(나=옥빛, 끼어드는 사람=쪽빛) */
+  #dlg-frame.me-speaker #dlg-panel::after, #dlg-frame.alt-speaker #dlg-panel::after {
+    content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; border-radius:6px; }
+  #dlg-frame.me-speaker #dlg-panel::after { background:rgba(77,138,115,.16); }
+  #dlg-frame.alt-speaker #dlg-panel::after { background:rgba(53,112,140,.16); }
+  #dlg-frame:not(.inner-voice) .dlg-name { color:#8a3b12 !important; font-family:"Gugi","Gowun Batang",serif; font-weight:400 !important; }
+  #dlg-frame.me-speaker .dlg-name { color:#2f6b52 !important; }
+  #dlg-frame.alt-speaker .dlg-name { color:#255a78 !important; }
+  #dlg-frame:not(.inner-voice) .dlg-tag { color:#7d6243 !important; }
+  #dlg-frame:not(.inner-voice) .dlg-box, #dlg-frame:not(.inner-voice) #dlg-text { color:#3b2a17 !important; }
+  #dlg-frame:not(.inner-voice) .dlg-next, #dlg-frame:not(.inner-voice) .dlg-prev { color:#8a5a2b !important; font-weight:700; }
+  #dlg-frame:not(.inner-voice) .photo-credit { color:#8d7552 !important; }
+  .dlg-portrait { border:3px solid #8a5a2b !important; background-color:#f3e4c4 !important;
+    box-shadow:0 3px 0 #5a3519, 0 10px 18px rgba(0,0,0,.35) !important; }
+  #dlg-frame.me-speaker .dlg-portrait { border-color:#3f7a62 !important; box-shadow:0 3px 0 #2a5543, 0 10px 18px rgba(0,0,0,.35) !important; }
+  #dlg-frame.alt-speaker .dlg-portrait { border-color:#35708c !important; box-shadow:0 3px 0 #244e63, 0 10px 18px rgba(0,0,0,.35) !important; }
+  .dlg-close, .quiz-close, .gloss-close, #map-close {
+    width:34px !important; height:34px !important; border:0 !important; font-size:0 !important; color:transparent !important;
+    background:url(${U}xbtn.webp) center/contain no-repeat !important; top:-20px !important; right:-22px !important;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.4)); }
+  .dlg-close *, .quiz-close *, .gloss-close *, #map-close * { display:none !important; }
+  /* 퀴즈·풀이·지도 창은 안쪽이 스크롤돼 밖으로 내민 단추가 잘린다 — 안쪽 모서리에 둔다 */
+  .quiz-close, .gloss-close, #map-close { top:0 !important; right:0 !important; width:32px !important; height:32px !important; }
+
+  /* 퀴즈 */
+  .quiz-q { color:#3b2a17 !important; font-weight:700; }
+  .quiz-opt { background:linear-gradient(180deg,#fffaf0,#f3e4c6) !important; border:2px solid #b58d5c !important;
+    color:#3b2a17 !important; font-weight:700; box-shadow:0 3px 0 #8a6538 !important; }
+  .quiz-opt:active { transform:translateY(2px); box-shadow:0 1px 0 #8a6538 !important; }
+  .quiz-opt.correct { background:linear-gradient(180deg,#e4f5e2,#b9e0b4) !important; border-color:#3f8a4f !important;
+    box-shadow:0 3px 0 #2d6b3a !important; }
+  .quiz-opt.wrong { background:linear-gradient(180deg,#fbe1da,#f0b2a4) !important; border-color:#c4442e !important;
+    box-shadow:0 3px 0 #8d2a1a !important; }
+  #quiz-panel * { --qtxt:#3b2a17; }
+  #quiz-panel .quiz-src, #quiz-panel .quiz-tag, #quiz-panel small { color:#7d6243 !important; }
+  .gloss-title { color:#8a3b12 !important; } .gloss-body { color:#3b2a17 !important; }
+  .gloss-term { color:#9a4a12 !important; }
+  #game-menu-panel h3 { color:#8a3b12 !important; font-family:"Gugi","Gowun Batang",serif !important; }
+  #game-menu-panel a, #game-menu-panel button { background:linear-gradient(180deg,#fffaf0,#f3e4c6) !important;
+    border:2px solid #b58d5c !important; color:#3b2a17 !important; box-shadow:0 2px 0 #8a6538 !important; }
+  #intro-panel, #intro-text { color:#3b2a17 !important; }
+  #map-panel * { color:inherit; }
+
+  /* 오른쪽 세로 단추들 — 둥근 나무 */
+  #gold-btn, #eng-btn { background:linear-gradient(180deg,#7a4e2a,#5a3519) !important; border:2px solid #3a220e !important;
+    color:#ffe08a !important; box-shadow:0 2px 0 #2f1a09, inset 0 1px 0 rgba(255,220,170,.3) !important; }
+  #gold-btn svg, #eng-btn svg { display:none !important; }
+  #gold-btn::before, #eng-btn::before { content:''; width:20px; height:20px; flex:none;
+    background:url(${U}coin.webp) center/contain no-repeat; }
+  #eng-btn::before { background-image:url(${U}stamina.webp); }
+  #bag-btn, #hero-btn, #auto-btn { background:radial-gradient(circle at 35% 30%,#a8733f,#6b4424) !important;
+    border:2px solid #3a220e !important; color:#fff1cf !important;
+    box-shadow:0 2px 0 #2f1a09, inset 0 1px 0 rgba(255,220,170,.35) !important; }
+  #auto-btn.on, #auto-btn.active { background:radial-gradient(circle at 35% 30%,#ffe38a,#e0a526) !important; color:#4a2e08 !important; }
+  /* 조이스틱 — 나무 원판에 놋쇠 손잡이 */
+  #stick-base { background:radial-gradient(circle at 50% 45%,rgba(168,115,63,.55),rgba(90,53,25,.55) 70%) !important;
+    border:3px solid rgba(58,34,14,.75) !important; box-shadow:inset 0 0 0 5px rgba(255,220,170,.12), 0 3px 8px rgba(0,0,0,.35); }
+  #stick-knob { background:radial-gradient(circle at 35% 30%,#fff1b0,#d9a441 55%,#8a5a1a) !important;
+    box-shadow:0 3px 6px rgba(0,0,0,.45), inset 0 -2px 3px rgba(0,0,0,.25); }
+  #minimap-canvas { border:3px solid #8a5a2b !important; border-radius:10px !important;
+    box-shadow:0 3px 0 #5a3519, 0 4px 10px rgba(0,0,0,.4) !important; }
+  #zone-label { color:#fff1cf !important; }
+  #next-chapter-btn { background:linear-gradient(180deg,#ffe38a,#f2b83e) !important; border:2px solid #b27c1f !important;
+    color:#4a2e08 !important; font-weight:700; box-shadow:0 3px 0 #9a6614, 0 0 16px rgba(255,190,60,.6) !important; }
+  #act-btn { background:radial-gradient(circle at 35% 30%,#ffe38a,#e0a526 60%,#a8701a) !important;
+    border:3px solid #7a4e12 !important; box-shadow:0 4px 0 #6b4410, 0 6px 12px rgba(0,0,0,.4) !important; }
+  `;
+
+  /* ---------- 노치 — 모든 창이 양옆 안전 영역 안에 들어오게 (2026-09-19 성일님) ----------
+     가로로 든 아이폰은 노치·둥근 모서리가 왼쪽 또는 오른쪽에 온다. 어느 쪽인지 모르니
+     두 값 중 큰 쪽을 양옆에 똑같이 비운다. 닫기 단추가 틀 밖으로 12px 튀어나오므로 그만큼 더. */
+  const SAFE = 'max(env(safe-area-inset-left), env(safe-area-inset-right), 8px)';
+  const css5 = `
+  ${P}, ${P2.join(', ')}, ${P3.join(', ')} {
+    max-width:calc(100% - 2 * ${SAFE} - 28px) !important; box-sizing:border-box; }
+  #dlg-stack { max-width:min(640px, calc(100% - 2 * ${SAFE} - 28px)) !important; }
+  #quiz-panel, #gloss-panel, #intro-panel, #map-panel, #game-menu-panel {
+    max-width:min(640px, calc(100% - 2 * ${SAFE} - 28px)) !important;
+    margin-left:auto !important; margin-right:auto !important; }
+  #gloss-panel { max-width:min(320px, calc(100% - 2 * ${SAFE} - 28px)) !important; }
+  `;
+
   const st = document.createElement('style');
   st.id = 'uiskin';
-  st.textContent = css + css2;
+  st.textContent = css + css2 + css3 + css4 + css5;
   function last(){
     const h = document.head;
     if (h && h.lastElementChild !== st) h.appendChild(st);
