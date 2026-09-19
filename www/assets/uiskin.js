@@ -403,7 +403,8 @@
       radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(90,55,20,.28) 100%),
       url(${U}hanji.webp) center/cover no-repeat, #f3e7cc !important; }
   #app { color:#3b2a17; }
-  h1 img { filter:brightness(.78) saturate(1.35) drop-shadow(0 1px 0 #5a3519) drop-shadow(0 0 1px #5a3519); }
+  /* 로고 PNG 가장자리에 반투명 흰 기가 있어 한지 위에서 흐린 네모로 보였다 — 곱하기로 섞어 지운다 */
+  h1 img { mix-blend-mode:multiply; filter:brightness(.8) saturate(1.4) contrast(1.1); }
   .subtitle { color:#7d6243 !important; }
   #menu-btn { width:40px !important; height:40px !important; border-radius:50% !important;
     background:radial-gradient(circle at 35% 30%,#a8733f,#6b4424) !important; border:2px solid #3a220e !important;
