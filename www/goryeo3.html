@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=155"></script>
-<script src="assets/chapterlock.js?v=155"></script>
+<script src="assets/tablet.js?v=156"></script>
+<script src="assets/chapterlock.js?v=156"></script>
 <script>ChapterLock.guard();</script>
 <title>한국사 게임 - 고려 4화 원 간섭기와 공민왕</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -524,13 +524,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=155"></script>
-<script src="assets/zoomwarn.js?v=155"></script>
-<script src="assets/map/map_component.js?v=155"></script>
-<script src="assets/chart.js?v=155"></script>
-<script src="assets/companions.js?v=155"></script>
-<script src="assets/inner.js?v=155"></script>
-<script src="assets/audio.js?v=155"></script>
+<script src="assets/errlog.js?v=156"></script>
+<script src="assets/zoomwarn.js?v=156"></script>
+<script src="assets/map/map_component.js?v=156"></script>
+<script src="assets/chart.js?v=156"></script>
+<script src="assets/companions.js?v=156"></script>
+<script src="assets/inner.js?v=156"></script>
+<script src="assets/audio.js?v=156"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -542,7 +542,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=155';   // 존댓말 전환
+const ART_V = '?v=156';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1254,7 +1254,7 @@ const NPC_DATA = {
       { who:'npc', t:'백 년이었네. 원의 사위 나라로 지낸 세월이.',
         chart:{ type:'kings', title:'\'충(忠)\' 자를 벗기까지', main:[ { name:'충렬왕', note:'원 공주와 혼인·정동행성 — 원 간섭 시작' }, { name:'충선왕' }, { name:'충숙왕' }, { name:'충혜왕' }, { name:'충목왕' }, { name:'충정왕' }, { name:'공민왕', note:'\'충\' 자를 벗고 반원 개혁', active:true } ], cross:[  ] } },
       { who:'npc', t:'원은 이 땅 곳곳에 통치 기구도 두었네.',
-        chart:{ type:'map', title:'원이 두었던 세 곳', pins:[ { x:50, y:60, n:'쌍성총관부', on:true }, { x:25, y:68, n:'동녕부' }, { x:36, y:155, n:'탐라총관부' } ], legend:[ { k:'쌍성총관부', v:'철령 이북, 공민왕이 되찾음', on:true }, { k:'동녕부', v:'자비령 이북, 1290년 돌려받음' }, { k:'탐라총관부', v:'제주, 훗날 만호부로' } ] } },
+        chart:{ type:'map', title:'원이 두었던 세 곳', areas:[ { pts:'41,69 66,69 66,52 41,52', c:'#d98a7a' }, { pts:'6,47 40,47 40,74 9,74', c:'#c9a9d1' } ], pins:[ { x:50, y:60, n:'쌍성총관부', on:true }, { x:25, y:68, n:'동녕부' }, { x:36, y:155, n:'탐라총관부' } ], legend:[ { k:'쌍성총관부', v:'철령 이북, 공민왕이 되찾음', on:true }, { k:'동녕부', v:'자비령 이북, 1290년 돌려받음' }, { k:'탐라총관부', v:'제주, 훗날 만호부로' } ] } },
       { who:'me', t:'…한 곳도 아니고 셋씩이나 말입니까?' },
       { who:'npc', t:'왕 이름 앞엔 \'충\' 자가 붙었지. 충렬왕부터 충정왕까지.' },
       { who:'npc', t:'스스로를 짐이라 못 하고, \'고\'라 낮춰 불렀네.',
@@ -1280,7 +1280,7 @@ const NPC_DATA = {
       Party.say('bau', 'stance', '(주먹을 불끈) 장하시오!'),
       { who:'me', t:'…큰 결단이셨겠습니다.' },
       { who:'npc', t:'원이 두었던 쌍성총관부도 무력으로 되찾았지.',
-        chart:{ type:'map', title:'쌍성총관부를 되찾다', pins:[ { x:50, y:60, n:'쌍성총관부', on:true } ], legend:[ { k:'자리', v:'철령 이북' }, { k:'되찾은 해', v:'1356년', on:true } ] } },
+        chart:{ type:'map', title:'쌍성총관부를 되찾다', areas:[ { pts:'41,69 66,69 66,52 41,52', c:'#d98a7a' } ], pins:[ { x:50, y:60, n:'쌍성총관부', on:true } ], legend:[ { k:'자리', v:'철령 이북' }, { k:'되찾은 해', v:'1356년', on:true } ] } },
       { who:'me', t:'철령 이북이… 백 년 만에 돌아온 겁니까?' },
       { who:'npc', t:'그렇네. 백 년 만이었지.' },
       { who:'npc', t:'그사이 홍건적이 두 번이나 쳐들어왔네.' },
@@ -2129,38 +2129,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=155"></script>
-<script src="assets/streak.js?v=155"></script>
+<script src="assets/badges.js?v=156"></script>
+<script src="assets/streak.js?v=156"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=155"></script>
-  <script src="assets/fx.js?v=155"></script>
-  <script src="assets/deed.js?v=155"></script>
-  <script src="assets/inkwipe.js?v=155"></script>
-  <script src="assets/dash.js?v=155"></script>
-<script src="assets/juice.js?v=155"></script>
-  <script src="assets/difficulty.js?v=155"></script>
-  <script src="assets/nextauto.js?v=155"></script>
-<script src="assets/heroes_data.js?v=155"></script>
-<script src="assets/heroes.js?v=155"></script>
-<script src="assets/icons.js?v=155"></script>
-<script src="assets/srs.js?v=155"></script>
-<script src="assets/newsflash.js?v=155"></script>
-<script src="assets/timeline.js?v=155"></script>
-<script src="assets/journey.js?v=155"></script>
-<script src="assets/season.js?v=155"></script>
-<script src="assets/items.js?v=155"></script>
-  <script src="assets/gold.js?v=155"></script>
-  <script src="assets/ask.js?v=155"></script>
-  <script src="assets/ads.js?v=155"></script>
-  <script src="assets/energy.js?v=155"></script>
-  <script src="assets/daily.js?v=155"></script>
-  <script src="assets/unlock.js?v=155"></script>
-  <script src="assets/guide.js?v=155"></script>
-  <script src="assets/minigames.js?v=155"></script>
-  <script src="assets/quests.js?v=155"></script>
-  <script src="assets/offline.js?v=155"></script>
-  <script src="assets/telemetry.js?v=155"></script>
-<script src="assets/autowalk.js?v=155"></script>
+<script src="assets/rank.js?v=156"></script>
+  <script src="assets/fx.js?v=156"></script>
+  <script src="assets/deed.js?v=156"></script>
+  <script src="assets/inkwipe.js?v=156"></script>
+  <script src="assets/dash.js?v=156"></script>
+<script src="assets/juice.js?v=156"></script>
+  <script src="assets/difficulty.js?v=156"></script>
+  <script src="assets/nextauto.js?v=156"></script>
+<script src="assets/heroes_data.js?v=156"></script>
+<script src="assets/heroes.js?v=156"></script>
+<script src="assets/icons.js?v=156"></script>
+<script src="assets/srs.js?v=156"></script>
+<script src="assets/newsflash.js?v=156"></script>
+<script src="assets/timeline.js?v=156"></script>
+<script src="assets/journey.js?v=156"></script>
+<script src="assets/season.js?v=156"></script>
+<script src="assets/items.js?v=156"></script>
+  <script src="assets/gold.js?v=156"></script>
+  <script src="assets/ask.js?v=156"></script>
+  <script src="assets/ads.js?v=156"></script>
+  <script src="assets/energy.js?v=156"></script>
+  <script src="assets/daily.js?v=156"></script>
+  <script src="assets/unlock.js?v=156"></script>
+  <script src="assets/guide.js?v=156"></script>
+  <script src="assets/minigames.js?v=156"></script>
+  <script src="assets/quests.js?v=156"></script>
+  <script src="assets/offline.js?v=156"></script>
+  <script src="assets/telemetry.js?v=156"></script>
+<script src="assets/autowalk.js?v=156"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2211,6 +2211,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=155"></script>
+<script src="assets/uiskin.js?v=156"></script>
 </body>
 </html>

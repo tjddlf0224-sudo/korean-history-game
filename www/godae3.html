@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=155"></script>
-<script src="assets/chapterlock.js?v=155"></script>
+<script src="assets/tablet.js?v=156"></script>
+<script src="assets/chapterlock.js?v=156"></script>
 <script>ChapterLock.guard();</script>
 <title>한국사 게임 - 고대 5화 후삼국</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -515,13 +515,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=155"></script>
-<script src="assets/zoomwarn.js?v=155"></script>
-<script src="assets/map/map_component.js?v=155"></script>
-<script src="assets/chart.js?v=155"></script>
-<script src="assets/companions.js?v=155"></script>
-<script src="assets/inner.js?v=155"></script>
-<script src="assets/audio.js?v=155"></script>
+<script src="assets/errlog.js?v=156"></script>
+<script src="assets/zoomwarn.js?v=156"></script>
+<script src="assets/map/map_component.js?v=156"></script>
+<script src="assets/chart.js?v=156"></script>
+<script src="assets/companions.js?v=156"></script>
+<script src="assets/inner.js?v=156"></script>
+<script src="assets/audio.js?v=156"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -533,7 +533,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=155';   // 존댓말 전환
+const ART_V = '?v=156';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1330,7 +1330,7 @@ const NPC_DATA = {
       { who:'npc', t:'그중 하나가 나다. 굶주린 백성을 보다 못해 창을 들었지.' },
       { who:'me', t:'…그래서 창을 들고, 나라까지 세우셨습니까?' },
       { who:'npc', t:'900년, 완산주에 도읍을 세웠다. 나라 이름은 후백제.',
-        chart:{ type:'map', title:'후백제의 도읍', pins:[ { x:45, y:118, n:'완산주', on:true } ], legend:[ { k:'완산주', v:'지금의 전주', on:true }, { k:'900년', v:'후백제를 세운 해' } ] } },
+        chart:{ type:'map', title:'후백제의 도읍', areas:[ { pts:'33,106 56,106 56,122 53,136 29,144 26,123', c:'#d8b25e', n:'후백제', tx:40, ty:126 }, { pts:'11,69 51,65 77,84 66,101 56,106 33,106 26,90', c:'#c9a9d1', n:'후고구려', tx:49, ty:85 }, { pts:'56,106 66,101 80,96 83,131 64,134 53,136 56,122', c:'#7fa8c4', n:'신라', tx:69, ty:117 } ], pins:[ { x:45, y:118, n:'완산주', on:true } ], legend:[ { k:'완산주', v:'지금의 전주', on:true }, { k:'900년', v:'후백제를 세운 해' } ] } },
       { who:'npc', t:'완산에 도읍하여, 의자왕의 원한을 씻겠다 했다.',
         chart:{ type:'quote', title:'견훤의 선언', text:'완산에 도읍하여 <b>의자왕</b>의 묵은 분함을<br>씻지 않겠는가.', from:'삼국사기 견훤열전' } },
       { who:'me', t:'완산주라면… 지금의 전주를 말씀하시는 겁니까?' },
@@ -1358,7 +1358,7 @@ const NPC_DATA = {
         chart:{ type:'faces', title:'궁예를 넘어선 사람', people:[ { img:'gungye', n:'궁예', s:'태봉의 왕' }, { img:'wanggeon', n:'왕건', s:'그를 몰아낸 신하' } ] } },
       { who:'me', t:'…그런 분이, 어찌 나라까지 세우게 되셨습니까?' },
       { who:'npc', t:'901년, 송악을 근거지 삼아 세웠다. 후고구려.',
-        chart:{ type:'map', title:'궁예가 세운 나라', pins:[ { x:36, y:84, n:'송악', on:true } ], legend:[ { k:'송악', v:'지금의 개성', on:true }, { k:'901년', v:'후고구려를 세운 해' } ] } },
+        chart:{ type:'map', title:'궁예가 세운 나라', areas:[ { pts:'33,106 56,106 56,122 53,136 29,144 26,123', c:'#d8b25e', n:'후백제', tx:40, ty:126 }, { pts:'11,69 51,65 77,84 66,101 56,106 33,106 26,90', c:'#c9a9d1', n:'후고구려', tx:49, ty:85 }, { pts:'56,106 66,101 80,96 83,131 64,134 53,136 56,122', c:'#7fa8c4', n:'신라', tx:69, ty:117 } ], pins:[ { x:36, y:84, n:'송악', on:true } ], legend:[ { k:'송악', v:'지금의 개성', on:true }, { k:'901년', v:'후고구려를 세운 해' } ] } },
       { who:'me', t:'…국호가 이러저리 여러 번 바뀌었다 들었습니다.' },
       { who:'npc', t:'처음엔 마진이라 했다가, 뒤에 태봉으로 고쳤다.' },
       { who:'npc', t:'송악에 있던 도읍도, 뒤에 철원으로 옮겼지.',
@@ -1998,38 +1998,38 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=155"></script>
-<script src="assets/streak.js?v=155"></script>
+<script src="assets/badges.js?v=156"></script>
+<script src="assets/streak.js?v=156"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=155"></script>
-  <script src="assets/fx.js?v=155"></script>
-  <script src="assets/deed.js?v=155"></script>
-  <script src="assets/inkwipe.js?v=155"></script>
-  <script src="assets/dash.js?v=155"></script>
-<script src="assets/juice.js?v=155"></script>
-  <script src="assets/difficulty.js?v=155"></script>
-  <script src="assets/nextauto.js?v=155"></script>
-<script src="assets/heroes_data.js?v=155"></script>
-<script src="assets/heroes.js?v=155"></script>
-<script src="assets/icons.js?v=155"></script>
-<script src="assets/srs.js?v=155"></script>
-<script src="assets/newsflash.js?v=155"></script>
-<script src="assets/timeline.js?v=155"></script>
-<script src="assets/journey.js?v=155"></script>
-<script src="assets/season.js?v=155"></script>
-<script src="assets/items.js?v=155"></script>
-  <script src="assets/gold.js?v=155"></script>
-  <script src="assets/ask.js?v=155"></script>
-  <script src="assets/ads.js?v=155"></script>
-  <script src="assets/energy.js?v=155"></script>
-  <script src="assets/daily.js?v=155"></script>
-  <script src="assets/unlock.js?v=155"></script>
-  <script src="assets/guide.js?v=155"></script>
-  <script src="assets/minigames.js?v=155"></script>
-  <script src="assets/quests.js?v=155"></script>
-  <script src="assets/offline.js?v=155"></script>
-  <script src="assets/telemetry.js?v=155"></script>
-<script src="assets/autowalk.js?v=155"></script>
+<script src="assets/rank.js?v=156"></script>
+  <script src="assets/fx.js?v=156"></script>
+  <script src="assets/deed.js?v=156"></script>
+  <script src="assets/inkwipe.js?v=156"></script>
+  <script src="assets/dash.js?v=156"></script>
+<script src="assets/juice.js?v=156"></script>
+  <script src="assets/difficulty.js?v=156"></script>
+  <script src="assets/nextauto.js?v=156"></script>
+<script src="assets/heroes_data.js?v=156"></script>
+<script src="assets/heroes.js?v=156"></script>
+<script src="assets/icons.js?v=156"></script>
+<script src="assets/srs.js?v=156"></script>
+<script src="assets/newsflash.js?v=156"></script>
+<script src="assets/timeline.js?v=156"></script>
+<script src="assets/journey.js?v=156"></script>
+<script src="assets/season.js?v=156"></script>
+<script src="assets/items.js?v=156"></script>
+  <script src="assets/gold.js?v=156"></script>
+  <script src="assets/ask.js?v=156"></script>
+  <script src="assets/ads.js?v=156"></script>
+  <script src="assets/energy.js?v=156"></script>
+  <script src="assets/daily.js?v=156"></script>
+  <script src="assets/unlock.js?v=156"></script>
+  <script src="assets/guide.js?v=156"></script>
+  <script src="assets/minigames.js?v=156"></script>
+  <script src="assets/quests.js?v=156"></script>
+  <script src="assets/offline.js?v=156"></script>
+  <script src="assets/telemetry.js?v=156"></script>
+<script src="assets/autowalk.js?v=156"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2083,6 +2083,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=155"></script>
+<script src="assets/uiskin.js?v=156"></script>
 </body>
 </html>
