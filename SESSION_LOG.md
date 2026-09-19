@@ -1549,3 +1549,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
   - 검증은 **Playwright webkit**으로: 수정 전 계산값 `text`·HUD→조이스틱 끌기에 글자 선택됨 / 수정 후 `none`·선택 없음 / 닉네임 입력칸은 text 유지 / 조이스틱 이동 옛판과 동일(115px), 떼면 풀림. 스크립트 scratchpad/t_select.js·t_stick_wk2.js.
   - Capacitor 한계 아님, 플러터 불필요(성일님 질문에 답함).
 - 빌드는 성일님 지시로 보류(외출 중, Organizer 배포 불가). 미빌드분: v170(글자 선택 막기) — 다음 빌드 20에 반영.
+- v171: 자리 비운 사이 금 받기 연출(성일님: "받기 눌렀는데 별 효과 없이 끝나서 받은 건지 모르겠다") — offline.js celebrate(): 단추를 치우고 숫자가 +N으로 튀며 올라감, 엽전 28개가 금 그림에서 솟았다 화면 전체로 쏟아짐(Web Animations, .of-fx 층), "금 N 받았습니다! / 지금 가진 금 M"(목록 화면엔 금 표시가 없어 창 안에서 보여 줌), 딩 소리·진동, 2.4초 뒤 닫힘(누르면 바로). 광고 두 배도 같은 연출. 줄임 모션 설정이면 엽전 생략. 미빌드(v170~171, 다음 빌드 20).

@@ -101,7 +101,17 @@ window.Offline = (function(){
     #of-ov .sm { font-size:12px; color:#8d7f66; line-height:1.7; }
     #of-ov button { padding:13px; border-radius:11px; font-family:inherit; font-size:15px;
       cursor:pointer; border:1px solid #4a3c26; background:#2a2013; color:#f5ecd8; }
-    #of-ov button.hi { background:#3a2c1a; border-color:#c9a24a; color:#f0c96b; font-weight:700; }`;
+    #of-ov button.hi { background:#3a2c1a; border-color:#c9a24a; color:#f0c96b; font-weight:700; }
+    /* 받는 순간 — 엽전이 터져 나와 쏟아진다. 목록 화면엔 금 표시가 없어서
+       '받았다'를 창 안에서 끝까지 보여 준다(2026-09-19 "받은 건지 알 수가 없네"). */
+    #of-ov .of-fx { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:5; }
+    #of-ov .of-c { position:absolute; left:0; top:0; will-change:transform,opacity; }
+    #of-ov .big.pop { animation:of-pop .65s cubic-bezier(.2,.9,.25,1); }
+    @keyframes of-pop { 0%{ transform:scale(1); } 30%{ transform:scale(1.4); } 100%{ transform:scale(1); } }
+    #of-ov .got { font-size:15px; line-height:1.7; animation:of-in .4s ease both; }
+    #of-ov .got b { font-size:19px; color:#9a5b1e; }
+    @keyframes of-in { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    @media (prefers-reduced-motion:reduce){ #of-ov .big.pop, #of-ov .got { animation:none; } }`;
     document.head.appendChild(s);
   }
   function layer(){ return document.getElementById('wrap') || document.body; }
@@ -120,7 +130,7 @@ window.Offline = (function(){
     d.innerHTML = '<div class="panel">' +
       '<h3>자리를 비운 사이</h3>' +
       `<div class="ln">${p.ms ? fmt(p.ms) + ' 동안 ' : ''}배운 것이 익었습니다.</div>` +
-      `<div class="big"><img class="coin" alt="" src="assets/ui/coin.webp">${p.gold}</div>` +
+      `<div class="big"><img class="coin" alt="" src="assets/ui/coin.webp"><span class="n">${p.gold}</span></div>` +
       (p.capped ? '<div class="sm">여덟 시간치까지만 쌓입니다.</div>' : '') +
       '<button class="hi" id="of-take">받기</button>' +
       '<button id="of-ad">광고 보고 두 배로</button>' +
@@ -128,8 +138,8 @@ window.Offline = (function(){
     d.classList.add('show');
     const close = () => { clear(); d.classList.remove('show'); };
     d.querySelector('#of-take').onclick = () => {
-      if (window.Gold) Gold.earn(p.gold, '없는 사이');
-      close();
+      const amt = window.Gold ? Gold.earn(p.gold, '없는 사이') : p.gold;
+      celebrate(d, amt, close);
     };
     d.querySelector('#of-ad').onclick = async () => {
       const b = d.querySelector('#of-ad');
@@ -140,9 +150,67 @@ window.Offline = (function(){
         d.querySelector('#of-msg').textContent = '광고를 끝까지 보지 않으셨습니다.';
         return;
       }
-      if (window.Gold) Gold.earn(p.gold * 2, '없는 사이 · 두 배');
-      close();
+      const amt = window.Gold ? Gold.earn(p.gold * 2, '없는 사이 · 두 배') : p.gold * 2;
+      celebrate(d, amt, close);
     };
+  }
+
+  /* 받은 것을 눈으로 — 숫자가 튀며 올라가고, 엽전이 솟았다 쏟아지고,
+     '금 N을 받았습니다 · 지금 가진 금'을 보여 준 뒤 닫힌다(누르면 바로 닫힘). */
+  function celebrate(d, amt, close){
+    d.querySelectorAll('button').forEach(b => b.remove());
+    const big = d.querySelector('.big'), n = big && big.querySelector('.n');
+    const msg = d.querySelector('#of-msg');
+    const total = (window.Gold && Gold.get) ? Gold.get() : null;
+    if (msg){
+      msg.className = 'sm got';
+      msg.innerHTML = `금 <b>${amt.toLocaleString()}</b> 받았습니다!` +
+        (total != null ? `<br>지금 가진 금 ${total.toLocaleString()}` : '');
+    }
+    if (big){ big.classList.remove('pop'); void big.offsetWidth; big.classList.add('pop'); }
+    if (n){
+      const t0 = performance.now(), D = 700;
+      const tick = now => {
+        const k = Math.min(1, (now - t0) / D);
+        n.textContent = '+' + Math.round(amt * (1 - Math.pow(1 - k, 3))).toLocaleString();
+        if (k < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+    shower(d, big && big.querySelector('img'));
+    try { if (window.BGM && BGM.playOnce) BGM.playOnce('sfx_ding'); } catch(e){}
+    try { if (navigator.vibrate) navigator.vibrate([25, 40, 25]); } catch(e){}
+    let done = false;
+    const fin = () => { if (done) return; done = true; d.onclick = null; close(); };
+    d.onclick = fin;
+    setTimeout(fin, 2400);
+  }
+
+  function shower(d, from){
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !from || !from.animate) return;
+    let fx = d.querySelector('.of-fx');
+    if (!fx){ fx = document.createElement('div'); fx.className = 'of-fx'; d.appendChild(fx); }
+    const db = d.getBoundingClientRect(), fb = from.getBoundingClientRect();
+    const ox = fb.left - db.left + fb.width / 2, oy = fb.top - db.top + fb.height / 2;
+    const H = db.height;
+    for (let i = 0; i < 28; i++){
+      const c = document.createElement('img');
+      c.className = 'of-c'; c.alt = ''; c.src = 'assets/ui/coin.webp';
+      const sz = 18 + Math.random() * 16;
+      c.style.width = c.style.height = sz + 'px';
+      fx.appendChild(c);
+      const dx = (Math.random() - 0.5) * db.width * 0.9;
+      const up = 90 + Math.random() * 170;
+      const spin = (Math.random() < .5 ? -1 : 1) * (360 + Math.random() * 540);
+      const x0 = ox - sz / 2, y0 = oy - sz / 2;
+      c.animate([
+        { transform:`translate(${x0}px,${y0}px) scale(.3) rotate(0deg)`, opacity:0 },
+        { transform:`translate(${x0 + dx * .45}px,${y0 - up}px) scale(1) rotate(${spin * .4}deg)`, opacity:1, offset:.32, easing:'cubic-bezier(.3,0,.7,1)' },
+        { transform:`translate(${x0 + dx}px,${H + 40}px) scale(.9) rotate(${spin}deg)`, opacity:.9 },
+      ], { duration:1200 + Math.random() * 600, delay:i * 22, easing:'cubic-bezier(.2,.6,.4,1)', fill:'both' })
+       .onfinish = () => c.remove();
+    }
   }
 
   /* 켤 때 한 번 본다. 목록 화면에서만 띄운다 —
