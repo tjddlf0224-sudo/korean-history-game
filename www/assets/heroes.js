@@ -236,8 +236,14 @@ window.Heroes = (function(){
     #hero-ov .cell.locked .f img { filter:brightness(0) saturate(0); }
     #hero-ov .cell.locked .nm { color:#6d6250; }
     #hero-ov .cell .f { width:100%; aspect-ratio:1; border-radius:7px; overflow:hidden;
-      background:#1a140c; margin-bottom:4px; display:grid; place-content:center; }
-    #hero-ov .cell .f img { width:100%; height:100%; object-fit:cover; object-position:top center; }
+      background:#1a140c; margin-bottom:4px; display:grid; place-content:center; position:relative; }
+    /* grid+place-content:center인 채로 img에 width/height:100%만 주면, 트랙이
+       이미지의 본디 세로비로 정해져(가로만 꽉 채우고 세로는 넘침) 그 넘친
+       만큼을 place-content가 위아래로 똑같이 잘라낸다 — object-position:top을
+       줘도 무시된 것처럼 얼굴 위가 잘렸다(제보: "얼굴 윗부분이 다 잘리네").
+       absolute로 .f 박스에 직접 꽉 채우면 그 트랙 계산을 건너뛴다. */
+    #hero-ov .cell .f img { position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; object-position:top center; }
     #hero-ov .cell .q { font-size:20px; color:#5d5040; }
     #hero-ov .cell .nm { font-size:11px; color:#e8dcc2; line-height:1.3; }
     #hero-ov .cell .st { position:absolute; right:3px; top:3px; font-size:11px; color:#ffd970;
@@ -258,7 +264,8 @@ window.Heroes = (function(){
       border-radius:11px; flex:none; }
     #hero-ov .party .slot { width:52px; height:52px; border-radius:9px; border:1px dashed #4a3c26;
       background:#1a140c; display:grid; place-content:center; overflow:hidden; position:relative; }
-    #hero-ov .party .slot img { width:100%; height:100%; object-fit:cover; object-position:top center; }
+    #hero-ov .party .slot img { position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; object-position:top center; }
     #hero-ov .party .slot .e { font-size:17px; color:#4a3c26; }
     /* 방금 데려온 동료 자리를 잠깐 빛내서 알려 준다 */
     #hero-ov .party .slot.joined { animation:hr-slot-glow 1.3s ease; }

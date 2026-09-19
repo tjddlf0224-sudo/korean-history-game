@@ -124,7 +124,9 @@ window.Chart = (function(){
     .ch-cards .c { flex:1 1 0; min-width:64px; max-width:110px; text-align:center; }
     .ch-cards .c img { width:100%; aspect-ratio:1/1; object-fit:contain; display:block;
       border-radius:7px; background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.14); }
-    .ch-cards.face .c img { object-fit:cover; }
+    /* object-position 없이 cover만 쓰면 기본이 가운데 자르기라, 세로로 긴
+       전신 초상은 얼굴 위쪽이 잘려 나갔다(제보: "여기도 얼굴이 잘리네"). */
+    .ch-cards.face .c img { object-fit:cover; object-position:top center; }
     .ch-cards .n { font-size:15px; color:#f0c96b; margin-top:4px; line-height:1.3; }
     .ch-cards .s { font-size:13px; color:#a89676; line-height:1.4; }
     .ch-cards .c.dim img { filter:grayscale(1) brightness(.5); }
