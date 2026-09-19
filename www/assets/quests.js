@@ -260,11 +260,11 @@ window.Quests = (function(){
     d.innerHTML = '<div class="panel"><h3>할 일</h3>' +
       `<div class="qs-tally"><span class="chip">오늘 <b>${got}</b> / ${today.length} 받음</span>` +
       (ready ? `<span class="chip">받을 것 <b>${ready}</b></span>` : '') + '</div>' +
-      '<div class="sec">오늘</div>' +
+      '<div class="qs-body"><div class="sec">오늘</div>' +
       today.map(q => row(q, !!st.taken[q.id], 'd')).join('') +
       '<div class="sec">긴 것</div>' +
       ACH.filter(q => !st.doneAch[q.id] || q.get() >= q.need)
-         .slice(0, 6).map(q => row(q, !!st.doneAch[q.id], 'a')).join('') +
+         .slice(0, 6).map(q => row(q, !!st.doneAch[q.id], 'a')).join('') + '</div>' +
       '<button class="x" id="qs-x" aria-label="닫기">✕</button></div>';
     d.querySelectorAll('[data-id]').forEach(b => {
       b.onclick = () => {

@@ -266,7 +266,8 @@ window.Daily = (function(){
       const cls = (i < got ? ' done' : '') + (!done && i === cur ? ' today' : '') +
                   (r.box ? ' sp' : '') + (popAt === i ? ' pop' : '');
       return `<div class="dy-day${cls}">` +
-        `<div class="coin"><span class="v">${r.gold}</span>${SVG_CHECK}` +
+        `<div class="coin"><img class="rw" alt="" src="assets/ui/${r.box ? 'chest_gold' : 'r_' + Math.min(i + 1, 6)}.webp">` +
+        `<span class="v">${r.gold}</span>${SVG_CHECK}` +
         (r.box ? `<i class="chest">${SVG_CHEST}</i>` : '') + '</div>' +
         `<div class="nm">${i + 1}일</div></div>`;
     }).join('');
@@ -283,9 +284,9 @@ window.Daily = (function(){
       `<div class="dy-track"><div class="road"><i style="width:${fill}%"></i></div>${track}</div>` +
       (done ? '' :
         '<div class="dy-prize">' +
-        `<span class="p">${SVG_COIN} 금 <b>${now.gold}</b></span>` +
-        `<span class="p">${SVG_ENG} 기력 <b>${now.eng}</b></span>` +
-        (now.box ? '<span class="p">' + SVG_CHEST + ' 상자 <b>+1</b></span>' : '') +
+        `<span class="p">${SVG_COIN}<img alt="" src="assets/ui/coin.webp"> 금 <b>${now.gold}</b></span>` +
+        `<span class="p">${SVG_ENG}<img alt="" src="assets/ui/stamina.webp"> 기력 <b>${now.eng}</b></span>` +
+        (now.box ? '<span class="p">' + SVG_CHEST + '<img alt="" src="assets/ui/chest_closed.webp"> 상자 <b>+1</b></span>' : '') +
         '</div>' +
         '<div class="row2"><button class="hi" id="dy-c">받기</button>' +
         '<button id="dy-c2">광고 보고 두 배</button></div>') +
@@ -333,14 +334,15 @@ window.Daily = (function(){
     const d = ov('dy-box',
       '<h3>시대 상자</h3>' +
       '<div class="sub">금·기력·콤보 지키기가 들어 있습니다.</div>' +
-      `<div class="dy-chest" id="dy-ch"><div class="art">${SVG_BIGCHEST}</div></div>` +
+      `<div class="dy-chest" id="dy-ch"><div class="art">${SVG_BIGCHEST}` +
+        `<img alt="" src="assets/ui/${lootName ? 'chest_open' : 'chest_closed'}.webp"></div></div>` +
       `<div class="dy-loot${lootName ? ' pop' : ''}" id="dy-l">${lootName || ''}</div>` +
       '<div class="dy-ways">' +
-      `<button class="hi" id="dy-f"${free ? '' : ' disabled'}>${SVG_BIGCHEST}` +
+      `<button class="hi" id="dy-f"${free ? '' : ' disabled'}><img alt="" src="assets/ui/chest_closed.webp">` +
       `<span>무료</span><span class="cap">${free ? '오늘 ' + free + '번' : '다 쓰셨어요'}</span></button>` +
       `<button id="dy-a"${ad ? '' : ' disabled'}>${SVG_AD}` +
       `<span>광고</span><span class="cap">${ad ? '한 번 더' : '다 쓰셨어요'}</span></button>` +
-      `<button id="dy-g">${SVG_COIN}<span>금</span><span class="cap">${GOLD_BOX}으로</span></button>` +
+      `<button id="dy-g"><img alt="" src="assets/ui/coin.webp"><span>금</span><span class="cap">${GOLD_BOX}으로</span></button>` +
       '</div>' +
       '<div class="msg" id="dy-bm"></div>' +
       '<button class="x" id="dy-bx" aria-label="닫기">✕</button>');

@@ -167,6 +167,7 @@ window.Mini = (function(){
       return `<button class="mg-card${ok ? ' on' : ''}" data-g="${id}"${ok ? '' : ' disabled'}>` +
         (ok ? '' : mgSvg(MG_LOCK, 'lk')) +
         mgSvg(MG_ICON[id] || MG_ICON.mg_match, 'ic') +
+        `<img class="art" alt="" src="assets/ui/${id === 'mg_face' ? 'm_profile' : 'm_mini'}.webp">` +
         `<span>${g.name}</span><span class="ht">${hint}</span></button>`;
     }).join('') + '</div>';
     const d = panel('<h3>미니게임</h3>' +

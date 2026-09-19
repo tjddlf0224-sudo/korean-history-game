@@ -143,6 +143,10 @@ window.Tidy = (function(){
       ['menu-reset',      '기록 초기화','reset'],
     ]],
   ];
+  /* 제미나이로 뽑은 색 그림(assets/ui) — uiskin.js의 현판 옷과 짝 */
+  const PIC = { att:'m_attend', box:'m_box', quest:'m_quest', mini:'m_mini', srs:'m_review',
+    kings:'m_kings', rank:'m_rank', badge:'m_badges', board:'m_board', auth:'m_profile',
+    bgm:'m_music', reset:'m_reset' };
   const ALL = SECTIONS.reduce((a, [, items]) => a.concat(items), []);
   const READOUT = ['gold-btn', 'eng-btn'];
 
@@ -293,7 +297,8 @@ window.Tidy = (function(){
         const b = document.getElementById(id);
         if (!b || b.dataset.moved === '1') continue;
         if (label) b.textContent = label;
-        b.style.setProperty('--i', ico(I[icon]));
+        // 그림 아이콘(2026-09-19, 현판 옷) — 있으면 그림, 없으면 예전 선 그림
+        b.style.setProperty('--i', PIC[icon] ? `url(assets/ui/${PIC[icon]}.webp)` : ico(I[icon]));
         b.style.setProperty('--n', String(order++));
         b.classList.add('mtile');
         b.dataset.moved = '1';
@@ -308,7 +313,7 @@ window.Tidy = (function(){
   function paintBgm(){
     const b = document.getElementById('bgm-mute-toggle');
     if (!b || !window.BGM || !BGM.isMuted) return;
-    b.style.setProperty('--i', ico(BGM.isMuted() ? I.mute : I.bgm));
+    b.classList.toggle('muted', BGM.isMuted());
   }
 
   /* 안에 받을 것이 있으면 메뉴 단추에 점 하나. 신호는 살리고 자리만 줄인다. */

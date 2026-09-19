@@ -165,7 +165,7 @@ window.Unlock = (function(){
         const on = lv >= g.lv;
         return `<button class="st${on ? ' on' : ''}${i === here ? ' here' : ''}` +
           `${i === sel ? ' sel' : ''}" data-i="${i}">` +
-          `<span class="bd">${on ? UL_CHECK : UL_LOCK}</span>` +
+          `<span class="bd"><img class="hat" alt="" src="assets/ui/hat_${g.tier}.webp">${on ? UL_CHECK : UL_LOCK}</span>` +
           `<span class="nm">${g.name}</span></button>`;
       }).join('');
       const g = GATES[sel], on = lv >= g.lv;
