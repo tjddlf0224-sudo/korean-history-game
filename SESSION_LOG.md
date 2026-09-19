@@ -1526,3 +1526,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - v159: 용어풀이(gloss-overlay)·챕터메뉴 z-index를 대화창(30)보다 위(31)로 — v152에서 대화창 z 올릴 때 같이 안 올려 대화 중 용어 눌러도 안 보였음.
 - v160: 보스전 있는 9챕터(선사1화·후기3화·통일전쟁·상경/청해진·무신정권/삼별초·계유정난·행주산성/의병·병자호란·임정의부활) 버튼·목표문구 '다음 화로 가기'→'보스전 하기'. 보스 문제는 대화 진행과 무관하게 NPC_DATA 전체에서 무작위 추출 확인, 재도전 제한 없음 확인.
 - v161: 유물 돋보기 눌렀는데 대화 열림 제보 → items.js trySearch가 spotWins(유물이 더 가까움) 안 보고 world.nearNpc만 보던 버그, spotWins let로 선언해 씀. 조이스틱 드래그(브라우저 기본 드래그/선택 끼어듦, 제보 스크린샷) → 36챕터 pointerdown/pointermove에 e.preventDefault(). 보스전 9챕터 버튼문구 '보스전 하기'→'보스전 도전'(성일님 재요청). 빌드는 성일님 지시로 다음에 한 번에(현재 미빌드분: v159~161).
+- 빌드 16 아카이브(v161: 돋보기/대화 버그·조이스틱 드래그 막기·보스전 도전 문구), Organizer 열어 둠 → 업로드는 성일님.
