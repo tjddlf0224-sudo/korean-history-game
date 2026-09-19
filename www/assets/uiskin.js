@@ -513,6 +513,11 @@
      틀 윗변 안쪽 모서리에 두고, 대화 묶음을 단추 줄보다 위에 올린다. */
   #dlg-frame .dlg-close { top:-19px !important; right:10px !important; width:40px !important; height:40px !important; z-index:5 !important; }
   #dlg-overlay { z-index:30 !important; }
+  /* 용어 풀이(gloss-overlay)·챕터 메뉴(game-menu-overlay)는 대화창이 열린 채로 그
+     위에 뜬다 — 둘 다 원래 .ov와 같은 z-index(26)라, 대화창을 30으로 올리며
+     뒤로 가려 안 보이게 됐다(제보: "다호리 눌렀을 때 나오는 게 대화창 뒤로 가서
+     안 보여"). 대화창보다 위로 올린다. */
+  #gloss-overlay, #game-menu-overlay { z-index:31 !important; }
   /* 도해+대화 묶음이 화면 위로 잘렸다(제보, 도해 있는 대사 54개 중 10개) — max-height:100%가
      아래 여백(16px+안전 영역)을 빼지 않아 묶음 꼭대기가 화면 밖으로 나갔다. 위에도 8px 둔다.
      넘치는 만큼은 도해가 줄고 도해 안에서 스크롤된다(flex-shrink). */
