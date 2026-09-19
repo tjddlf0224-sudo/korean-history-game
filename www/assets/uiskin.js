@@ -502,6 +502,12 @@
     background:url(${U}xbtn.webp) center/contain no-repeat !important; top:-20px !important; right:-22px !important;
     filter:drop-shadow(0 2px 2px rgba(0,0,0,.4)); }
   .dlg-close *, .quiz-close *, .gloss-close *, #map-close * { display:none !important; }
+  /* 대화창 ✕ — 폰에서는 노치 여백만큼 오른쪽 단추 줄이 안으로 들어와 ✕와 겹쳤다(눌러도 안 꺼짐 제보).
+     틀 윗변 안쪽 모서리에 두고, 대화 묶음을 단추 줄보다 위에 올린다. */
+  #dlg-frame .dlg-close { top:-19px !important; right:10px !important; width:40px !important; height:40px !important; z-index:5 !important; }
+  #dlg-overlay { z-index:30 !important; }
+  /* 오른쪽 단추 속 그림에 붙은 그림자가 네모로 보였다 */
+  #bag-btn svg, #hero-btn svg, #auto-btn svg { box-shadow:none !important; filter:none !important; }
   /* 퀴즈·풀이·지도 창은 안쪽이 스크롤돼 밖으로 내민 단추가 잘린다 — 안쪽 모서리에 둔다 */
   .quiz-close, .gloss-close, #map-close { top:0 !important; right:0 !important; width:32px !important; height:32px !important; }
 
@@ -691,6 +697,12 @@
       }
     }).observe(document.head, { childList: true });
   } catch(e){}
+  /* 닫기는 손을 떼는 즉시 — 대사를 넘기다 곧바로 ✕를 누르면 '더블탭 확대 막기'(300ms)가
+     click을 삼켜 안 닫혔다. pointerup에서 바로 닫는다. */
+  document.addEventListener('pointerup', e => {
+    const x = e.target && e.target.closest && e.target.closest('.dlg-close');
+    if (x && window.Dialog && Dialog.close){ e.preventDefault(); Dialog.close(); }
+  }, true);
   const runHoist = () => { try { hoist(); } catch(e){} };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runHoist); else runHoist();
   try {
