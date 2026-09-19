@@ -95,7 +95,7 @@ window.Gold = (function(){
     #gold-ov .bal { text-align:center; font-size:13px; color:#b8a888; margin-top:-6px; }
     #gold-ov .row { display:flex; gap:11px; align-items:center; background:#241c12;
       border:1px solid #3a2c1a; border-radius:11px; padding:11px 13px; text-align:left; }
-    #gold-ov .row .ic { flex:none; width:26px; height:26px; color:#c9a24a; }
+    #gold-ov .row .ic { flex:none; width:30px; height:30px; object-fit:contain; }
     #gold-ov .row .tx { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
     /* span은 인라인이라 그냥 두면 이름과 설명이 한 줄로 붙는다 */
     #gold-ov .row .nm { display:block; font-size:14px; color:#f5ecd8; }
@@ -112,9 +112,10 @@ window.Gold = (function(){
   }
   function layer(){ return document.getElementById('wrap') || document.body; }
 
-  const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"' +
-    ' stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/>' +
-    '<rect x="9.2" y="9.2" width="5.6" height="5.6" rx="0.8"/></svg>';
+  // 예전엔 상점 줄마다 똑같은 원+네모 아이콘을 재탕해서, "콤보 지키기"에도
+  // "유물 탐지"용 돋보기 비슷한 아이콘이 붙어 있었다(제보: "여기도 제미나이로
+  // 다시 만들자"). 항목마다 제 그림으로.
+  const ICONS = { scan: 'assets/ui/ic_scan.webp', shield: 'assets/ui/ic_shield.webp' };
 
   function float(text, why){
     const L = layer(), btn = document.getElementById('gold-btn');
@@ -182,7 +183,7 @@ window.Gold = (function(){
     document.getElementById('gold-bal').textContent = `지닌 금 ${st.gold}`;
     const box = document.getElementById('gold-rows');
     box.innerHTML = rows().map(r =>
-      `<div class="row"><span class="ic">${ICON}</span>` +
+      `<div class="row"><img class="ic" src="${ICONS[r.id] || ICONS.scan}" alt="">` +
       `<span class="tx"><span class="nm">${r.nm}</span>` +
       `<span class="ds">${r.ds}</span></span>` +
       `<button data-id="${r.id}" data-p="${r.price}"` +

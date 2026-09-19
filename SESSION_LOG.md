@@ -1571,3 +1571,6 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
   2) 인물 도감 썸네일 얼굴 위가 잘림("인물도감 얼굴이 윗부분이 다 잘리네") — `#hero-ov .cell .f`가 `display:grid;place-content:center`인 채로 이미지에 width/height:100%만 줘서, 그리드 트랙이 이미지 원래 세로비로 정해지고(가로만 꽉 차고 세로는 넘침) 그 넘친 만큼을 place-content가 위아래로 똑같이 반씩 잘라냄 — object-position:top을 줘도 무시된 것처럼 보였던 진짜 원인. img를 position:absolute+inset:0으로 `.f` 박스에 직접 꽉 채워 트랙 계산을 건너뛰게 고침(동행 슬롯도 동일 적용). 실측으로 확인(수정 전 이미지 높이 171.9px/컨테이너 위 -48.8px 튀어나옴 → 수정 후 정확히 74.4px로 꽉 참).
   2-1) 같은 증상이 도해(chart.js)의 'faces' 인물 비교 카드(견훤·궁예·왕건 등)에도 있었음("여기도 얼굴이 잘리네") — 이쪽은 원인이 달라서, object-fit:cover만 있고 object-position이 아예 없어 기본값(가운데 자르기)으로 위쪽이 잘렸음. object-position:top center 추가.
   Playwright로 셋 다 수정 전/후 비교 확인.
+- v181: 성일님 제보 2건.
+  1) 후삼국(godae3.html) 공산 전투 무한반복(Auto 모드에서 재현, "Auto모드로 하니 여기서 무한반복이네" — 화면도 까맣게) — 원인은 신숭겸이 말하는 "그 자리에 서 보기"(Deed) 표식이 아니라, husamguk→gongsan 출구의 도착 지점(688,200)이 gongsan 쪽에서 되돌아가는 출구 사각형(y:160~210) **안**이었던 것. checkExit()는 자리만 겹치면 자동으로 넘어가므로, 들어가자마자 바로 되잡혀 husamguk↔gongsan을 영원히 오갔다(자동이동이 매번 gongsan을 다시 목표로 잡아서 더 두드러짐). 두 출구 사이 빈 칸(688,228)으로 도착 지점을 옮김. check_reachability로 확인.
+  2) "금으로 할 수 있는 것" 상점의 유물 탐지·콤보 지키기가 똑같은 밋밋한 원+네모 아이콘을 같이 썼음("여기도 제미나이로 다시 만들자") → 제미나이로 항목별 아이콘(돋보기/방패) 새로 뽑아 항목마다 제 그림 붙임.
