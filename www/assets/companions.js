@@ -43,16 +43,9 @@ window.Party = (function(){
   };
   const ORDER = ['chadol', 'bau'];   // 따라오는 차례(주인공 바로 뒤가 차돌이)
 
-  /* 챕터마다 "이 챕터를 연다면 이미 합류해 있어야 하는 동료".
-     목록에서 아무 챕터나 골라 시작할 수 있으므로, 합류 장면을 건너뛰고
-     들어온 사람에게도 대사가 어색하지 않게 한다. 합류 챕터 자신은 빼 둔다
-     (그 챕터에서는 합류 장면을 거쳐야 한다). */
+  /* 어느 챕터에서 이 동료를 만나는가. joined()가 "그 챕터의 합류 대화를
+     실제로 끝냈는가"를 확인하는 데 쓴다(khg_progress). */
   const JOIN_AT = { chadol: 'seonsa1.html', bau: 'godae1.html' };
-  const CHAPTER_SEQ = ['prologue.html','seonsa1.html','godae1.html','gaya.html','tongil.html','godae2.html','godae3.html',
-    'goryeo1.html','goryeo2.html','byeokrando.html','goryeo3.html','ch0.html','ch1.html','ch2.html','ch2b.html','ch3.html',
-    'ch4.html','ch5.html','ch5b.html','ch6.html','imjin.html','imjin2.html','hugi1.html','hugi2.html','hugi3.html',
-    'gaehang1.html','gaehang_ch2.html','gaehang_ch3.html','gaehang4.html','gaehang5.html','ilje1.html','ilje2.html',
-    'ilje_ch7.html','hyeondae1.html','hyeondae2.html','hyeondae3.html','sesi.html','ending.html'];
   function here(){ return (location.pathname.split('/').pop() || '').toLowerCase(); }
 
   function load(){
@@ -61,10 +54,23 @@ window.Party = (function(){
   }
   function save(v){ try { localStorage.setItem(KEY, JSON.stringify(v)); } catch(e){} }
 
+  /* 2026-09-19 성일님 제보: 잠긴 챕터를 광고로 건너뛰어 바로 들어가면, 그
+     챕터에서 합류하는 동료가 "만나는 이벤트"도 없이 처음부터 따라오고
+     있었다. 예전에는 "지금 챕터가 합류 챕터보다 뒤라면 이미 만났겠지"로
+     보았는데, chapterlock.js가 생긴 뒤로는 그 가정이 깨진다 — 앞 화를
+     끝내지 않고도(광고로) 뒤 화에 들어올 수 있어서다.
+     실제로 그 합류 대화(키는 항상 `<id>_0`)를 끝냈는지, resume.js가 챕터별로
+     남겨 둔 기록(khg_progress)에서 직접 확인한다. */
+  function metJoinDialogue(id){
+    try {
+      const all = JSON.parse(localStorage.getItem('khg_progress'));
+      const arr = all && all[JOIN_AT[id]];
+      return Array.isArray(arr) && arr.indexOf(id + '_0') >= 0;
+    } catch(e){ return false; }
+  }
   function joined(id){
     if (load()[id]) return true;
-    const cur = CHAPTER_SEQ.indexOf(here()), at = CHAPTER_SEQ.indexOf(JOIN_AT[id]);
-    return cur >= 0 && at >= 0 && cur > at;
+    return metJoinDialogue(id);
   }
   /* 합류 챕터를 다시 할 때(이미 합류한 기록이 있어도) 그 챕터에서는
      합류 장면을 다시 거쳐야 한다. 인물을 지도에서 지워 버리면 고대 1화처럼
