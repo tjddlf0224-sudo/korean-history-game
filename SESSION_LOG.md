@@ -1522,3 +1522,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - v156: 영역 필요한 지도 8개(발해·후기가야·후삼국×2·원 설치 기구·쌍성 수복·4군·6진)에 areas. 나머지 70개는 전투지·유적 등 점이 맞는 지도로 판단해 둠. 성일님: 이후 작업은 추천 모델 먼저 알리기(Sonnet 5 가능한 건 Sonnet 5).
 - v156 빌드 14 아카이브(~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-14.xcarchive, CFBundleVersion 14 확인), Organizer 열어 둠 → 업로드는 성일님.
 - 빌드 14 업로드 완료(성일님, Organizer). 처리 후 TestFlight에서 확인 필요. 버전 1.0에 최신 빌드로 교체·심사 제출은 아직.
+- v158: 챕터 이어하기(resume.js) — 대화 끝낼 때마다 khg_progress[챕터]에 키 저장, 재입장 시 GOAL_ORDER 앞에서부터 훑어 아직 안 끝낸 첫 사람 구역의 spawn으로 World 세움. 30개(GOAL_ORDER 있는) 챕터 완전 적용, 6개 옛 챕터(ch2·ch2b·ch3·ch4·ch5·ch5b)는 seenDialogKeys만 이어서 저장·구역 이동은 미적용(목표 판정이 챕터마다 손짜기라 일반화 어려움 — 필요하면 개별 작업).
