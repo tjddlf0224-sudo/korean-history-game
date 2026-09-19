@@ -1542,3 +1542,9 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
   1) TestFlight(빌드16) 스크린샷 — "계정 기록을 불러오지 못했습니다" → 롱폴링 핸드셰이크가 15초 안에 못 끝나는 경우가 있어 곧장 실패로 보여줬다. 타임아웃 15→20초로 늘리고, 1차 실패해도(로그인 상태 그대로면) 자동으로 한 번 더 시도한 뒤에만 실패 표시(save.js getWithTimeout).
   2) 조이스틱 드래그(재발) + "드래그되면 다시 안 움직임" — v161의 preventDefault만으론 부족했다. 실제 원인은 iOS 텍스트選択 콜아웃(파란 선택 손잡이, `-webkit-touch-callout`)이 `user-select:none`만으론 안 꺼져서 터치가 선택 제스처로 새 버렸던 것 + 그 제스처가 pointer 이벤트 스트림을 통째로 가져가 pointerup/cancel이 안 와 activeId가 영원히 안 풀렸던 것. 36챕터 전부 `-webkit-touch-callout:none` 추가 + `lostpointercapture`에서도 end() 걸어 무엇으로 캡처가 풀리든 반드시 조이스틱이 풀리게(안전망).
   3) 시대 상자 — "한 번 열고 나면 잠시 후 다시 문 닫히게, 그래야 금으로 열든 광고보고 열든 매번 여는 느낌" → 상자를 연 채로 계속 두지 않고, 로컬 시험(가짜 타임라인)으로 확인: 닫힘→(클릭)→흔들림→1.3초 뒤 열림+보상 표시→2.2초 더 지나면 도로 닫힘. 재진입(boxGen)·이미 닫은 창 보호 가드 포함(daily.js openBox).
+- 빌드 19 아카이브(v169 — 계정 동기화 재시도·조이스틱 드래그 고정·시대 상자 자동 닫힘): ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-19.xcarchive(CFBundleVersion 19), Organizer 열어 둠 → 업로드는 성일님.
+- 빌드 19 업로드 완료(성일님, Organizer). 처리 후 TestFlight에서 확인 필요. 버전 1.0에 최신 빌드로 교체·심사 제출은 아직.
+- v170: 조이스틱 드래그 **진짜 원인** — 빌드 19에서도 재현(성일님 스크린샷). 파란 점·막대는 네이티브 드래그가 아니라 **글자 선택 손잡이**였다("양인"에서 시작, Lv.8·조이스틱 뒤 회색이 선택 영역). 챕터마다 `* { user-select:none }`을 걸어 뒀지만 **iOS WebKit은 접두어 없는 user-select를 모르고 `-webkit-user-select`만 안다** → 앱에선 선택이 살아 있었고, iOS가 그 터치를 선택에 넘겨 조이스틱이 먹통. 크롬(Playwright chromium)은 접두어 없는 것도 알아들어 로컬에선 한 번도 재현 안 됐다. v161·v169 수정은 헛짚음.
+  - uiskin.js(목록+36챕터): `*,::before,::after { -webkit-user-select:none; user-select:none; -webkit-touch-callout:none }`(입력칸·contenteditable만 text) + JS 안전망(selectstart 막기, pointerdown 때 남은 선택 지우기).
+  - 검증은 **Playwright webkit**으로: 수정 전 계산값 `text`·HUD→조이스틱 끌기에 글자 선택됨 / 수정 후 `none`·선택 없음 / 닉네임 입력칸은 text 유지 / 조이스틱 이동 옛판과 동일(115px), 떼면 풀림. 스크립트 scratchpad/t_select.js·t_stick_wk2.js.
+  - Capacitor 한계 아님, 플러터 불필요(성일님 질문에 답함).

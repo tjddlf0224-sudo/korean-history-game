@@ -712,9 +712,20 @@
     }
   }
 
+  /* 글자 선택 막기 — 앱(iOS WebKit)은 접두어 없는 user-select를 모른다.
+     챕터마다 * { user-select:none }을 걸어 뒀지만 앱에선 안 먹어서, 조이스틱을
+     끌면 HUD 글자부터 조이스틱까지 '글자 선택'이 잡히고(파란 손잡이·회색 칸),
+     iOS가 그 터치를 가져가 조이스틱이 먹통이 됐다(2026-09-19 빌드 19 제보).
+     크롬은 접두어 없는 것도 알아들어 로컬 시험에선 재현되지 않았다. */
+  const css8 = `
+  *, *::before, *::after { -webkit-user-select:none !important; user-select:none !important;
+    -webkit-touch-callout:none !important; }
+  input, textarea, [contenteditable="true"] { -webkit-user-select:text !important; user-select:text !important; }
+  `;
+
   const st = document.createElement('style');
   st.id = 'uiskin';
-  st.textContent = css + css2 + css3 + css4 + css5 + css6 + css7;
+  st.textContent = css + css2 + css3 + css4 + css5 + css6 + css7 + css8;
   function last(){
     const h = document.head;
     if (h && h.lastElementChild !== st) h.appendChild(st);
@@ -738,6 +749,16 @@
   document.addEventListener('pointerup', e => {
     const x = e.target && e.target.closest && e.target.closest('.dlg-close');
     if (x){ e.preventDefault(); x.click(); }
+  }, true);
+  // CSS가 어느 판에서 안 먹더라도 선택 자체가 시작되지 않게(입력칸은 예외)
+  const editable = t => {
+    const el = t && (t.nodeType === 3 ? t.parentElement : t);
+    return !!(el && el.closest && el.closest('input, textarea, [contenteditable="true"]'));
+  };
+  document.addEventListener('selectstart', e => { if (!editable(e.target)) e.preventDefault(); }, true);
+  document.addEventListener('pointerdown', e => {
+    if (editable(e.target)) return;
+    try { const s = window.getSelection(); if (s && s.rangeCount) s.removeAllRanges(); } catch(err){}
   }, true);
   const runHoist = () => { try { hoist(); } catch(e){} };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runHoist); else runHoist();
