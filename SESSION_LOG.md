@@ -1523,3 +1523,5 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - v156 빌드 14 아카이브(~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-14.xcarchive, CFBundleVersion 14 확인), Organizer 열어 둠 → 업로드는 성일님.
 - 빌드 14 업로드 완료(성일님, Organizer). 처리 후 TestFlight에서 확인 필요. 버전 1.0에 최신 빌드로 교체·심사 제출은 아직.
 - v158: 챕터 이어하기(resume.js) — 대화 끝낼 때마다 khg_progress[챕터]에 키 저장, 재입장 시 GOAL_ORDER 앞에서부터 훑어 아직 안 끝낸 첫 사람 구역의 spawn으로 World 세움. 30개(GOAL_ORDER 있는) 챕터 완전 적용, 6개 옛 챕터(ch2·ch2b·ch3·ch4·ch5·ch5b)는 seenDialogKeys만 이어서 저장·구역 이동은 미적용(목표 판정이 챕터마다 손짜기라 일반화 어려움 — 필요하면 개별 작업).
+- v159: 용어풀이(gloss-overlay)·챕터메뉴 z-index를 대화창(30)보다 위(31)로 — v152에서 대화창 z 올릴 때 같이 안 올려 대화 중 용어 눌러도 안 보였음.
+- v160: 보스전 있는 9챕터(선사1화·후기3화·통일전쟁·상경/청해진·무신정권/삼별초·계유정난·행주산성/의병·병자호란·임정의부활) 버튼·목표문구 '다음 화로 가기'→'보스전 하기'. 보스 문제는 대화 진행과 무관하게 NPC_DATA 전체에서 무작위 추출 확인, 재도전 제한 없음 확인.
