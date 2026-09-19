@@ -15,7 +15,7 @@
 | `assets/scenes/heritage_cheongja_sanggam.jpg` | 청자 상감운학문 매병(보물) | 국립중앙박물관 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_icheondong_seokbul.jpg` | 안동 이천동 마애여래입상 | 국가유산청 | 공공누리(출처표시) | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `goryeo3.html` 의천(uicheon_0) |
 | `assets/scenes/heritage_hasachangdong_buddha.jpg` | 하남 하사창동 철조석가여래좌상(보물) — 소장품명 「철조 석가불좌상」 | 국립중앙박물관 | 공공누리 제1유형(출처표시) | museum.go.kr 소장품 덕수2748 (relicId=1200) — 2254x3000 원본 · **2026-09-19 교체**: 더 큰 원본으로 다시 받음(사진별 공공누리 배지 확인) | `goryeo3.html` 의천(uicheon_0) |
-| `assets/scenes/heritage_cheomseongdae.jpg` | 경주 첨성대 | 국가유산청 | 공공누리 제1유형 | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `godae2.html` 의상(uisang_0) |
+| `assets/scenes/heritage_cheomseongdae.jpg` | 경주 첨성대 | 국가유산청 | 공공누리 제1유형 | **국가유산포털**(heritage.go.kr) — 사용자가 직접 국가유산청 사이트에서 다운로드했음을 확인(2026-08) | `godae2.html` 의상(uisang_0) · `godae1.html` 선덕여왕(seondeok_0)(2026-09-19 추가 — 선덕여왕 본인이 첨성대를 말하는데 사진이 없다는 제보) |
 | `assets/scenes/heritage_gameunsaji_tower.jpg` | 경주 감은사지 삼층석탑(1971년 촬영) | 셀수스협동조합 | 기증저작물(자유이용) | ★교체(2026-08): 공유마당 gongu.copyright.or.kr wrtSn=13297356 (제목 "1971년_감은사지 3층 석탑") — 사용자 제공 파일·링크로 교체 및 확인 완료 | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_seokguram_buddha.jpg` | 석굴암 본존불 | 故한석홍 기증 사진자료 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `godae2.html` 의상(uisang_0) |
 | `assets/scenes/heritage_bulguksa_tower.jpg` | 불국사 삼층석탑(석가탑) | 국립문화재연구소 | 공공누리 제1유형 | 공유마당 — 국가유산포털 상세페이지 제목으로 존재 재확인 완료 | `godae2.html` 의상(uisang_0) |
