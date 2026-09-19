@@ -151,19 +151,35 @@ window.Boss = (function(){
     .bs-opt.wrong { background:#3d2622; border-color:#d96b5f; }
     .bs-opt:disabled { opacity:.55; cursor:default; }
 
-    /* 결과 */
+    /* 결과 — 나무 현판 옷(시안 A). 예전엔 이 화면만 옛 어두운 판이라 밋밋했다
+       (제보: "이것도 너무 밋밋해"). 월계관 배지는 제미나이로 새로 뽑았다. */
     .bs-end { position:absolute; inset:0; z-index:20; display:flex; align-items:center;
-      justify-content:center; background:rgba(8,6,3,.86); }
-    .bs-end .card { width:min(84vw,400px); text-align:center; padding:28px 24px;
-      background:linear-gradient(180deg,#241c12,#1a140c); border:1px solid rgba(240,201,107,.55);
-      border-radius:14px; box-shadow:0 18px 60px rgba(0,0,0,.7);
+      justify-content:center; background:rgba(8,6,3,.86); overflow:visible; }
+    .bs-end .card { position:relative; width:min(84vw,380px); text-align:center;
+      padding:38px 22px 24px; box-sizing:border-box;
+      background:linear-gradient(180deg,#fffaf0,#f1e2c3); border-radius:4px;
+      border-style:solid; border-width:40px 44px 40px 44px;
+      border-image:url(assets/ui/frame.webp) 195 205 195 205 fill / 40px 44px 40px 44px stretch;
+      box-shadow:0 18px 60px rgba(0,0,0,.7);
       animation:bs-card .5s cubic-bezier(.2,.9,.25,1) forwards; }
     @keyframes bs-card { 0%{opacity:0; transform:scale(.9) translateY(10px);} 100%{opacity:1; transform:none;} }
-    .bs-end .ttl { font-size:30px; font-weight:700; color:#f0c96b; margin-bottom:8px;
-      text-shadow:0 0 24px rgba(240,201,107,.5); }
-    .bs-end .sub { font-size:13.5px; color:#c9bda6; line-height:1.7; }
-    .bs-end button { margin-top:20px; background:#2a2013; border:1px solid #4a3c26; color:#f5ecd8;
-      border-radius:11px; padding:12px 26px; font-family:inherit; font-size:14px; cursor:pointer; }
+    .bs-badge { position:relative; width:128px; height:136px; margin:-20px auto 4px;
+      background:url(assets/ui/badge_wreath.webp) center/contain no-repeat;
+      display:flex; align-items:center; justify-content:center; }
+    .bs-end.win .bs-badge { filter:drop-shadow(0 0 16px rgba(240,201,107,.7)); }
+    .bs-end.lose .bs-badge { filter:grayscale(1) brightness(.6) drop-shadow(0 0 8px rgba(0,0,0,.5)); }
+    .bs-end .ttl { font-size:23px; font-weight:700; color:#6b3a12; letter-spacing:.04em; }
+    .bs-end .sub { font-size:13.5px; color:#7d6243; line-height:1.7; }
+    .bs-end button { margin-top:18px; background:linear-gradient(180deg,#ffe38a,#f2b83e);
+      border:2px solid #b27c1f; color:#4a2e08; font-weight:700;
+      border-radius:11px; padding:12px 26px; font-family:inherit; font-size:14px; cursor:pointer;
+      box-shadow:0 3px 0 #9a6614; }
+    .bs-end.lose button { background:linear-gradient(180deg,#e8dcc2,#c9bda6);
+      border-color:#8a7a5c; color:#3b2a17; box-shadow:0 3px 0 #6d6250; }
+    /* 승리 순간 배지에서 금빛 조각이 터져 나온다 */
+    .bs-burst { position:absolute; left:50%; top:50%; width:8px; height:8px; margin:-4px;
+      border-radius:50%; background:#f7dd93; box-shadow:0 0 6px 1px rgba(240,201,107,.8);
+      pointer-events:none; }
 
     @media (prefers-reduced-motion:reduce){
       .bs-arena.shake,.bs-sprite.lunge,.bs-sprite.hit,.bs-part,.bs-pop,.bs-end .card
@@ -379,22 +395,46 @@ window.Boss = (function(){
     return (code - 0xAC00) % 28 ? '을' : '를';
   }
 
+  /* 승리 배지에서 금빛 조각이 사방으로 터진다 */
+  function burst(el){
+    for (let i = 0; i < 14; i++){
+      const a = (Math.PI * 2 * i) / 14 + Math.random() * 0.3;
+      const r = 60 + Math.random() * 50;
+      const p = document.createElement('i');
+      p.className = 'bs-burst';
+      el.appendChild(p);
+      p.animate([
+        { transform:'translate(0,0) scale(.4)', opacity:0 },
+        { transform:`translate(${(Math.cos(a) * r * .4).toFixed(1)}px,${(Math.sin(a) * r * .4).toFixed(1)}px) scale(1.15)`, opacity:1, offset:.3 },
+        { transform:`translate(${(Math.cos(a) * r).toFixed(1)}px,${(Math.sin(a) * r).toFixed(1)}px) scale(.4)`, opacity:0 },
+      ], { duration:650 + Math.random() * 250, easing:'cubic-bezier(.2,.7,.3,1)' })
+       .onfinish = () => p.remove();
+    }
+  }
+
   function finish(won){
     // 위험 표시를 반드시 끈다. 안 끄면 전투가 끝난 뒤 지도 위에까지 붉게 남는다.
     if (window.Fx) Fx.danger(false);
-    const arena = document.getElementById('bs-arena');
     const end = document.createElement('div');
-    end.className = 'bs-end';
+    end.className = 'bs-end ' + (won ? 'win' : 'lose');
     end.innerHTML =
       '<div class="card">' +
-        '<div class="ttl">' + (won ? '승리' : '패배') + '</div>' +
+        '<div class="bs-badge"><div class="ttl">' + (won ? '승리' : '패배') + '</div></div>' +
         '<div class="sub">' + (won
           ? `${S.name}${objJosa(S.name)} 논파했습니다.<br>맞힌 문제 ${S.hit}개 · 최고 연속 ${S.best}`
           : '아직 이릅니다. 대사를 다시 듣고 오면 이길 수 있습니다.') + '</div>' +
         '<button id="bs-close">' + (won ? '계속' : '돌아가기') + '</button>' +
       '</div>';
-    arena.appendChild(end);
-    if (won && window.Rank) Rank.addXp(60 + S.best * 5, '보스전 승리');
+    // 예전엔 무대(.bs-arena)에만 붙여서, 아래 문제창(.bs-bottom)이 안 가려지고
+    // 뒤에 비쳐 보였다(제보: "승리 창이 뒤로 가 있네") — 무대 밑까지 다 덮도록
+    // 전투창 전체(#boss-ov)에 붙인다.
+    document.getElementById('boss-ov').appendChild(end);
+    if (won){
+      if (window.Rank) Rank.addXp(60 + S.best * 5, '보스전 승리');
+      const badge = end.querySelector('.bs-badge');
+      const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (badge && !reduce) setTimeout(() => burst(badge), 350);
+    }
     document.getElementById('bs-close').onclick = () => {
       document.getElementById('boss-ov').classList.remove('show');
       end.remove();
