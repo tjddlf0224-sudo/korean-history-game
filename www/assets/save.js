@@ -117,6 +117,14 @@ window.CloudSave = (function(){
     return true;
   }
 
+  // 연결이 붙지 않으면 get()이 끝나지 않는다 — 정해진 시간에 끊는다
+  function getWithTimeout(d, uid, ms){
+    return Promise.race([
+      d.collection(COL).doc(uid).get(),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms)),
+    ]);
+  }
+
   let failed = false, trying = false;
   async function onLogin(u){
     uid = u.uid; ready = false; failed = false;
@@ -124,13 +132,16 @@ window.CloudSave = (function(){
     let snap = null;
     trying = true; refresh();
     try {
-      // 연결이 붙지 않으면 get()이 끝나지 않는다 — 15초에 끊고 알린다(로그인 창을 다시 열면 재시도)
-      snap = await Promise.race([
-        d.collection(COL).doc(uid).get(),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 15000)),
-      ]);
+      snap = await getWithTimeout(d, uid, 20000);
     }
-    catch(e){ console.warn('[CloudSave] 읽기 실패 — 이번엔 맞추지 않음', e); failed = true; trying = false; refresh(); return; }
+    catch(e1){
+      // 앱(WKWebView)에서는 첫 연결이 유독 느릴 때가 있다(롱폴링 핸드셰이크).
+      // 곧바로 실패로 보여 주지 않고, 로그인 상태가 그대로면 한 번 더 시도한다.
+      console.warn('[CloudSave] 읽기 1차 실패 — 한 번 더 시도', e1);
+      if (!window.Auth || !Auth.user || Auth.user.uid !== uid){ trying = false; return; }
+      try { snap = await getWithTimeout(d, uid, 20000); }
+      catch(e2){ console.warn('[CloudSave] 읽기 실패 — 이번엔 맞추지 않음', e2); failed = true; trying = false; refresh(); return; }
+    }
     trying = false;
     if (!window.Auth || !Auth.user || Auth.user.uid !== uid) return;     // 그새 로그아웃
     const c = (snap && snap.exists) ? snap.data() : null;

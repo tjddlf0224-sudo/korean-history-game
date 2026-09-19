@@ -329,7 +329,9 @@ window.Daily = (function(){
     '<path d="M5.6 9.5V7A2.5 2.5 0 0 1 8.1 4.5h7.8A2.5 2.5 0 0 1 18.4 7v2.5"/>' +
     '<path d="M12 4.5v5"/></svg>';
 
+  let boxGen = 0;   // 재렌더·중복 타이머 구분용(닫기 예약이 다음 판을 덮치지 않게)
   function openBox(lootName){
+    const myGen = ++boxGen;
     const free = boxLeft(), ad = adBoxLeft();
     const d = ov('dy-box',
       '<h3>시대 상자</h3>' +
@@ -348,6 +350,19 @@ window.Daily = (function(){
       '<button class="x" id="dy-bx" aria-label="닫기">✕</button>');
     d.querySelector('#dy-bx').onclick = () => d.classList.remove('show');
     const msg = t => { const m = d.querySelector('#dy-bm'); if (m) m.textContent = t || ''; };
+    // 연 채로 계속 두면 다음 번에도 '이미 열려 있던 것'처럼 보인다(성일님:
+    // "금으로 열든지 광고보고 열든지 여는 느낌이 나야지") — 잠깐 보여 준 뒤
+    // 상자 문을 도로 닫아 다음 번도 매번 새로 여는 느낌을 준다.
+    if (lootName){
+      setTimeout(() => {
+        if (myGen !== boxGen) return;                     // 그새 새로 열렸다
+        if (!d.classList.contains('show')) return;         // 이미 닫아 버렸다
+        const img = d.querySelector('#dy-ch img');
+        if (img) img.src = 'assets/ui/chest_closed.webp';
+        const l = d.querySelector('#dy-l');
+        if (l){ l.classList.remove('pop'); l.textContent = ''; }
+      }, 2200);
+    }
     // 열면 상자가 흔들리고, 빛이 터진 다음에 나온 것을 보여 준다
     const show = x => {
       if (!x){ msg('열지 못했습니다.'); return; }

@@ -1537,3 +1537,8 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - 이로써 "남은 일도 다 해"(ASC 추적 선언·동료 해상도·메뉴 아이콘 셋) 전부 완료. 다음 빌드에 v157~v167 전부 한꺼번에 반영 필요(성일님 지시로 빌드는 모아서, 현재 앱은 빌드 16=v161).
 - 빌드 17 아카이브(v157~v167 전부 반영 — 챕터 이어하기·조이스틱 드래그 막기·보스전 도전 문구·메뉴 항상 눌림·광고 ATT/전면·X닫기 버그·동료 합류 버그·동료 해상도·도감/AUTO 아이콘 등): ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-17.xcarchive(CFBundleVersion 17), Organizer 열어 둠 → 업로드는 성일님.
 - v168: 인물 도감 제보(스크린샷, 차돌이 카드) — "데리고 가기/동행 그만두기 누르면 카드가 안 닫힌다" → 버튼 핸들러가 toggleParty 뒤 showDetail(k)로 **같은 카드를 다시 그려서** 안 닫혔던 것, el.classList.remove('show')로 항상 닫게 수정. 추가 요청: 데려간 순간 목록 맨 위로 스크롤 + 동행 칸이 잠깐 빛나는 강조(highlightParty, .slot.joined 1.3s 금빛 글로우, prefers-reduced-motion 대응).
+- 빌드 18 아카이브(v168 — 인물 도감 동행 카드 안 닫히는 버그·동행 강조 연출): ~/Library/Developer/Xcode/Archives/2026-09-19/KoreanHistory-1.0-18.xcarchive(CFBundleVersion 18), Organizer 열어 둠 → 업로드는 성일님.
+- v169: 제보 3건.
+  1) TestFlight(빌드16) 스크린샷 — "계정 기록을 불러오지 못했습니다" → 롱폴링 핸드셰이크가 15초 안에 못 끝나는 경우가 있어 곧장 실패로 보여줬다. 타임아웃 15→20초로 늘리고, 1차 실패해도(로그인 상태 그대로면) 자동으로 한 번 더 시도한 뒤에만 실패 표시(save.js getWithTimeout).
+  2) 조이스틱 드래그(재발) + "드래그되면 다시 안 움직임" — v161의 preventDefault만으론 부족했다. 실제 원인은 iOS 텍스트選択 콜아웃(파란 선택 손잡이, `-webkit-touch-callout`)이 `user-select:none`만으론 안 꺼져서 터치가 선택 제스처로 새 버렸던 것 + 그 제스처가 pointer 이벤트 스트림을 통째로 가져가 pointerup/cancel이 안 와 activeId가 영원히 안 풀렸던 것. 36챕터 전부 `-webkit-touch-callout:none` 추가 + `lostpointercapture`에서도 end() 걸어 무엇으로 캡처가 풀리든 반드시 조이스틱이 풀리게(안전망).
+  3) 시대 상자 — "한 번 열고 나면 잠시 후 다시 문 닫히게, 그래야 금으로 열든 광고보고 열든 매번 여는 느낌" → 상자를 연 채로 계속 두지 않고, 로컬 시험(가짜 타임라인)으로 확인: 닫힘→(클릭)→흔들림→1.3초 뒤 열림+보상 표시→2.2초 더 지나면 도로 닫힘. 재진입(boxGen)·이미 닫은 창 보호 가드 포함(daily.js openBox).
