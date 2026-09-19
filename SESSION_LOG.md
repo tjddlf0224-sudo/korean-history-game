@@ -1528,3 +1528,4 @@ SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connecti
 - v161: 유물 돋보기 눌렀는데 대화 열림 제보 → items.js trySearch가 spotWins(유물이 더 가까움) 안 보고 world.nearNpc만 보던 버그, spotWins let로 선언해 씀. 조이스틱 드래그(브라우저 기본 드래그/선택 끼어듦, 제보 스크린샷) → 36챕터 pointerdown/pointermove에 e.preventDefault(). 보스전 9챕터 버튼문구 '보스전 하기'→'보스전 도전'(성일님 재요청). 빌드는 성일님 지시로 다음에 한 번에(현재 미빌드분: v159~161).
 - 빌드 16 아카이브(v161: 돋보기/대화 버그·조이스틱 드래그 막기·보스전 도전 문구), Organizer 열어 둠 → 업로드는 성일님.
 - v162: 챕터 메뉴 버튼이 대화창 열려 있으면 안 눌리던 것(#menu-btn z-index 25 < .ov 26) → 32로. 빌드 미반영(현재 앱은 빌드 16=v161).
+- v165: 광고 세 가지(성일님 요청) — ATT 추적 권한 요청 전환(Info.plist NSUserTrackingUsageDescription), 부팅 시 미리 init+ATT 요청, 전면 광고 재도입(noteLearned 카운트/maybeShowInterstitial은 index.html에서만 — 2026-07 사고 재현 방지 위해 '세기'와 '보여주기' 화면 분리). privacy.html·store/listing.md 갱신. **ASC 앱 개인정보 질문지는 성일님이 직접 '추적함'으로 바꿔야 함**(코드만으론 안 됨).
