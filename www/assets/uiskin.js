@@ -564,6 +564,14 @@
     border:2px solid #3a220e !important; color:#fff1cf !important;
     box-shadow:0 2px 0 #2f1a09, inset 0 1px 0 rgba(255,220,170,.35) !important; }
   #auto-btn.on, #auto-btn.active { background:radial-gradient(circle at 35% 30%,#ffe38a,#e0a526) !important; color:#4a2e08 !important; }
+  /* 유물 도감·인물 도감·AUTO 아이콘도 금·기력처럼 제미나이 그림으로(성일님:
+     "통일성 있게 이것도 다시 뽑자"). AUTO는 안쪽 .ring에 나침반을 얹어서
+     켜졌을 때 도는 애니메이션(#auto-btn.on .ring)이 그대로 나침반 회전이 된다. */
+  #bag-btn svg, #hero-btn svg, #auto-btn .ring svg { display:none !important; }
+  #bag-btn::before, #hero-btn::before { content:''; width:25px; height:26px; flex:none;
+    background:url(${U}dex_item.webp) center/contain no-repeat; }
+  #hero-btn::before { background-image:url(${U}dex_hero.webp); }
+  #auto-btn .ring { background:url(${U}ic_auto.webp) center/contain no-repeat; }
   /* 조이스틱 — 나무 원판에 놋쇠 손잡이 */
   #stick-base { background:radial-gradient(circle at 50% 45%,rgba(168,115,63,.55),rgba(90,53,25,.55) 70%) !important;
     border:3px solid rgba(58,34,14,.75) !important; box-shadow:inset 0 0 0 5px rgba(255,220,170,.12), 0 3px 8px rgba(0,0,0,.35); }
