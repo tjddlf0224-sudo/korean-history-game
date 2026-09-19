@@ -461,6 +461,7 @@ window.Items = (function(){
 
   /* ---------------- 탐색 ---------------- */
   let nearSpot = null;
+  let spotWins = false;   // 유물이 NPC보다 가까워 돋보기로 바뀐 상태인가
 
   function spotKey(zone, id){ return zone + ':' + id; }
 
@@ -518,9 +519,13 @@ window.Items = (function(){
     if (btn.innerHTML !== want) btn.innerHTML = want;
   }
 
-  /* Stage.interact()가 NPC보다 먼저 이걸 물어본다. 처리했으면 true. */
+  /* Stage.interact()가 NPC보다 먼저 이걸 물어본다. 처리했으면 true.
+     NPC가 근처에 있어도 유물이 더 가까워 행동 버튼이 돋보기로 바뀐
+     상태(spotWins)라면 유물을 먼저 줍는다 — checkSpot이 정한 것과 실제
+     버튼 동작이 어긋나면 "돋보기가 떴는데 눌렀더니 대화가 열린다"가 된다
+     (제보, 2026-09-19). */
   function trySearch(world){
-    if (!nearSpot || world.nearNpc) return false;
+    if (!nearSpot || (world.nearNpc && !spotWins)) return false;
     const s = nearSpot;
     const k = spotKey(world.zone, s.id);
     if (taken(k)) return false;
