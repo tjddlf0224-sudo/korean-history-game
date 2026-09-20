@@ -6,17 +6,25 @@
    - 동시에 **광고를 볼 이유**를 만든다. 아쉬운 순간이 있어야 사람이 자발적으로
      광고를 본다. 아쉬움이 없으면 광고는 그냥 방해다.
 
-   ⚠️ 넘지 않는 선 — 배우는 것 자체는 절대 막지 않는다
-   - 이 게임은 시험 공부용이고, 사장님 학생들이 쓴다. 듀오링고처럼 하트가 없다고
-     **새 챕터를 못 들어가게 하면 안 된다.** 공부를 볼모로 잡는 꼴이다.
-   - 그래서 기력은 **접근이 아니라 "다시·빨리"를 판다**:
-       · 보스에게 지고 **즉시** 다시 붙기       (없으면 기다리거나 그냥 진행)
-       · 끊긴 **콤보 되살리기**                 (없으면 콤보만 0)
-       · 기출문제 **추가 도전**                 (하루 무료 3회는 그대로)
-     셋 다 안 써도 게임은 끝까지 된다. 조급한 사람만 값을 치른다.
+   화 입장료 (2026-09-20, 성일님 지시로 방침을 바꿨다)
+   - 전에는 여기에 "듀오링고 하트처럼 챕터 입장을 막지 말 것"이라고 적혀 있었다.
+     그런데 금도 기력도 쓸 곳이 없어 쌓이기만 했고(한 화에서 금 140쯤 벌리는데
+     쓸 곳은 12~40짜리뿐), 무엇보다 **하루에 외울 수 있는 양에는 한계가 있어서**
+     몰아치기로 열 화 스무 화를 내리 도는 것은 학습 효율이 이미 떨어진 뒤다.
+   - 그래서 새 화에 들어갈 때 기력 1을 받는다. 대신 벽이 일찍 오지 않게 한다:
+       · 최대 8 — 처음 여덟 화는 연달아 그냥 들어간다(두세 시간 분량)
+       · **하루 첫 두 화는 공짜** — 가볍게 하는 사람은 벽을 아예 못 만난다
+       · 같은 화 12시간 안 재입장은 공짜(새로고침·이어하기·복습은 값을 안 받는다)
+       · 20분에 1씩 차므로, 그 뒤로도 시간당 세 화는 계속 된다
+   - 막혔을 때: 광고로 +2, 또는 금 150으로 1. 금값을 150으로 잡은 것은 한 화에서
+     140쯤 벌리기 때문이다 — 40이면 사실상 무제한이라 벽이 서지 않는다.
+   - 기출변형·복습·미니게임은 입장료를 받지 않는다. 챕터(이야기)만 받는다.
+
+   기력은 그 밖에 "다시·빨리"에도 쓴다
+       · 보스에게 지고 **즉시** 다시 붙기 · 끊긴 **콤보 되살리기** · 기출 추가 도전
 
    차오르는 규칙
-   - 최대 5. 25분에 1씩 찬다(가득이면 시계가 멈춘다).
+   - 최대 8. 20분에 1씩 찬다(가득이면 시계가 멈춘다).
    - 시간은 저장된 "마지막 계산 시각"과의 차이로 구한다 — 앱이 꺼져 있어도 찬다.
 
    붙이는 법
@@ -25,9 +33,19 @@
 */
 window.Energy = (function(){
   const KEY = 'khg_energy';
-  const MAX = 5;
-  const REFILL_MS = 25 * 60 * 1000;      // 25분에 1
-  const GOLD_PER = 40;                   // 금으로 살 때 1개 값
+  const MAX = 8;
+  const REFILL_MS = 20 * 60 * 1000;      // 20분에 1
+  const GOLD_PER = 150;                  // 금으로 살 때 1개 값(한 화 수입이 140쯤)
+
+  /* 화 입장료 — 기록은 따로 둔다(기력 자체와 섞지 않는다) */
+  const FEE_KEY  = 'khg_entry';
+  const FEE      = 1;
+  const FREE_DAY = 2;                    // 하루 첫 두 화는 공짜
+  /* 같은 화는 12시간 동안 다시 안 받는다. 넉넉히 잡은 이유 — 한 화를 오래
+     붙잡고 있다가 새로고침되면(휴대폰이 절전으로 웹뷰를 버리는 일이 잦다)
+     하던 화에서 쫓겨나는 일이 생긴다. 새 이야기를 계속 여는 것만 막으면
+     되지, 같은 화를 다시 보는 것(복습)은 오히려 권할 일이다. */
+  const PASS_MS  = 12 * 60 * 60 * 1000;
 
   function load(){
     try {
@@ -77,6 +95,48 @@ window.Energy = (function(){
     st.n = Math.min(MAX, st.n + (n || 1));
     save(st); render();
     return st.n;
+  }
+
+  /* ---------------- 화 입장료 ----------------
+     chapterlock.js의 guard()도 같은 기록(khg_entry)의 '입장권'을 본다 —
+     거기서는 기력 계산 없이 입장권이 살아 있는지만 확인한다. */
+  function today(){ const d = new Date(); return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
+  function feeLoad(){
+    let v = null;
+    try { v = JSON.parse(localStorage.getItem(FEE_KEY)); } catch(e){}
+    if (!v || typeof v !== 'object') v = { d: today(), free: 0, pass: {} };
+    // 하루 단위로 되돌리는 것은 '공짜 두 화'뿐이다. 입장권까지 자정에 지우면
+    // 밤 11시에 시작한 화가 12시에 다시 값을 받게 된다.
+    if (v.d !== today()){ v.d = today(); v.free = 0; }
+    if (!v.pass) v.pass = {};
+    return v;
+  }
+  function feeSave(v){ try { localStorage.setItem(FEE_KEY, JSON.stringify(v)); } catch(e){} }
+
+  function hasPass(file){
+    const v = feeLoad(), t = v.pass && v.pass[file];
+    return !!t && (Date.now() - t) < PASS_MS;
+  }
+  function freeLeft(){ return Math.max(0, FREE_DAY - feeLoad().free); }
+
+  /* 들어갈 수 있으면 값을 치르고 입장권을 끊는다.
+     'pass'(이미 낸 화) · 'free'(하루 공짜) · 'paid'(기력 1) · false(모자람) */
+  function payEntry(file){
+    file = String(file || '').split('/').pop().split('?')[0].split('#')[0];
+    if (!file) return 'pass';
+    const v = feeLoad();
+    const t = v.pass && v.pass[file];
+    if (t && (Date.now() - t) < PASS_MS) return 'pass';
+    let how;
+    if (v.free < FREE_DAY){ v.free++; how = 'free'; }
+    else if (spend(FEE)) how = 'paid';
+    else return false;
+    v.pass = v.pass || {};
+    v.pass[file] = Date.now();
+    // 오래된 입장권은 지운다 — 기록이 한없이 늘지 않게
+    for (const k of Object.keys(v.pass)) if (Date.now() - v.pass[k] > PASS_MS) delete v.pass[k];
+    feeSave(v);
+    return how;
   }
 
   /* ---------------- 채우는 방법 ---------------- */
@@ -182,10 +242,13 @@ window.Energy = (function(){
       btn.disabled = false; btn.textContent = '광고 보고 기력 2 받기';
       say(ok ? '기력 2를 받았습니다.' : '광고를 끝까지 보지 않아 받지 못했습니다.');
       paint();
+      if (ok) resumeEntry();
     };
     d.querySelector('#eng-gold').onclick = () => {
-      say(refillByGold() ? '기력 1을 채웠습니다.' : '금이 모자랍니다.');
+      const ok = refillByGold();
+      say(ok ? '기력 1을 채웠습니다.' : '금이 모자랍니다.');
       paint();
+      if (ok) resumeEntry();
     };
   }
 
@@ -198,11 +261,13 @@ window.Energy = (function(){
       (_, i) => `<span class="dot${i < n ? ' on' : ''}"></span>`).join('');
     const sub = document.getElementById('eng-sub');
     if (sub){
-      sub.innerHTML = n >= MAX
-        ? '가득 찼습니다.'
-        : `다음 한 개까지 ${fmt(nextIn())}<br>` +
-          '<span style="font-size:11.5px;color:#8d7f66">기력이 없어도 챕터는 그대로 진행됩니다.<br>' +
-          '다시 붙거나 서두를 때만 씁니다.</span>';
+      const tail = pending
+        ? '<span style="font-size:11.5px;color:#8d7f66">새 화에 들어갈 때 기력 1을 씁니다.<br>' +
+          '채우면 바로 이어서 들어갑니다.</span>'
+        : '<span style="font-size:11.5px;color:#8d7f66">새 화에 들어갈 때 1을 씁니다' +
+          (freeLeft() ? ` (오늘 공짜 ${freeLeft()}화 남음)` : '') + '.<br>' +
+          '보스 재도전·콤보 되살리기에도 씁니다.</span>';
+      sub.innerHTML = (n >= MAX ? '가득 찼습니다.<br>' : `다음 한 개까지 ${fmt(nextIn())}<br>`) + tail;
     }
     const g = document.getElementById('eng-gold');
     if (g) g.disabled = !(window.Gold && Gold.get() >= GOLD_PER) || n >= MAX;
@@ -212,7 +277,21 @@ window.Energy = (function(){
   }
 
   function open(){ css(); mountOv(); paint(); document.getElementById('eng-ov').classList.add('show'); }
-  function close(){ const d = document.getElementById('eng-ov'); if (d) d.classList.remove('show'); }
+  function close(){ pending = null; const d = document.getElementById('eng-ov'); if (d) d.classList.remove('show'); }
+
+  /* 기력이 없어 새 화를 못 열 때. 채우면 그 화로 바로 넘어간다. */
+  let pending = null;
+  function openForEntry(href){
+    pending = href || null;
+    open();
+    say('기력이 모자라 새 화를 열 수 없습니다.');
+  }
+  /* 광고·금으로 채운 직후에 부른다 */
+  function resumeEntry(){
+    if (!pending || get() <= 0) return;
+    const href = pending; pending = null;
+    if (payEntry(href)) location.href = href;
+  }
 
   /* 기력이 필요한 자리에서 부른다. 모자라면 충전 창을 띄우고 false. */
   function tryUse(n){
@@ -226,5 +305,6 @@ window.Energy = (function(){
   else init();
 
   return { get, full, spend, add, tryUse, open, mount, nextIn,
-           refillByAd, refillByGold, MAX };
+           refillByAd, refillByGold, MAX,
+           payEntry, hasPass, freeLeft, openForEntry, FEE };
 })();

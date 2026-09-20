@@ -96,11 +96,17 @@ window.ChapterLock = (function(){
     return true;
   }
 
-  /* 챕터 파일에서: 잠겨 있으면 목록으로 돌려보낸다(목록이 여는 방법을 묻는다) */
+  /* 챕터 파일에서: 잠겨 있으면 목록으로 돌려보낸다(목록이 여는 방법을 묻는다).
+     기력 입장료도 여기서 받는다 — 목록에서 들어오든 '다음 화' 단추로 들어오든
+     주소를 직접 치든 한 곳을 지나게 하려는 것이다. energy.js가 이 파일보다
+     먼저 실려 있어야 한다(챕터 <head> 차례: chapterlock → energy → guard()). */
   function guard(){
     try {
       const me = location.pathname.split('/').pop();
-      if (!isOpen(me)) location.replace('index.html#locked=' + encodeURIComponent(me));
+      if (!isOpen(me)){ location.replace('index.html#locked=' + encodeURIComponent(me)); return; }
+      if (window.Energy && Energy.payEntry && !Energy.payEntry(me)){
+        location.replace('index.html#needeng=' + encodeURIComponent(me));
+      }
     } catch(e){}
   }
 
