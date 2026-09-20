@@ -117,6 +117,14 @@ window.Gold = (function(){
   // 다시 만들자"). 항목마다 제 그림으로.
   const ICONS = { scan: 'assets/ui/ic_scan.webp', shield: 'assets/ui/ic_shield.webp' };
 
+  // 금 버튼(엽전)에 쓰는 그림. v181에서 상점 줄 아이콘을 ICONS로 바꾸면서
+  // 이 상수를 같이 지워 버려, mount()가 없는 이름을 부르며 터졌다 —
+  // 버튼이 안 붙는 데서 그치지 않고 init()이 거기서 멈춰 wire()까지 못 돌아
+  // **정답·유물·보스로 금이 전혀 안 붙었다**(v181~v186, 빌드 20~22).
+  const COIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"' +
+    ' stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/>' +
+    '<rect x="9.2" y="9.2" width="5.6" height="5.6" rx="0.8"/></svg>';
+
   function float(text, why){
     const L = layer(), btn = document.getElementById('gold-btn');
     if (!btn) return;
@@ -148,7 +156,7 @@ window.Gold = (function(){
     const b = document.createElement('button');
     b.id = 'gold-btn'; b.type = 'button';
     b.setAttribute('aria-label', '금');
-    b.innerHTML = ICON + '<span>' + st.gold + '</span>';
+    b.innerHTML = COIN_ICON + '<span>' + st.gold + '</span>';
     b.onclick = open;
     if (dock){ b.style.position = 'static'; dock.appendChild(b); }
     else { b.style.right = '10px'; b.style.top = '10px'; layer().appendChild(b); }
@@ -156,10 +164,19 @@ window.Gold = (function(){
   }
 
   /* ---------------- 상점 ---------------- */
-  function rows(){
+  function rows(locked){
     const hasMap = !!(window.Items && Items.has('daedongyeojido'));
     const scan = hasMap ? PRICE.scanWithMap : PRICE.scan;
     const out = [];
+    // 유물 지도는 광고로 — 금이 없어도 되고, 대신 이 화 전체에 계속 남는다.
+    // (금으로 사는 유물 탐지는 이 구역만, 4초 반짝. 값의 층이 갈린다.)
+    out.push({ id:'adscan', nm:'유물 지도', ad:true,
+      ds: mapRevealed()
+        ? '이 화의 유물 자리가 이미 지도와 미니맵에 표시되고 있습니다.'
+        : '광고를 보면 이 화의 못 찾은 유물 자리가 지도와 미니맵에 계속 표시됩니다.' });
+    // 상점이 아직 안 열린 사람에게는 광고 줄만 보여 준다 — 금을 쓰는 것은
+    // 중인부터지만, 광고는 금과 무관하므로 처음부터 쓸 수 있어야 한다.
+    if (locked) return out;
     // 유물 탐지는 재상부터 — 지도를 다 걸어 본 사람에게 주는 편의다
     if (!window.Unlock || Unlock.has('scan')) out.push(
       { id:'scan', nm:'유물 탐지', price:scan,
@@ -176,19 +193,28 @@ window.Gold = (function(){
   }
 
   function open(){
-    // 상점은 중인부터. 금은 그전에도 쌓이지만 쓸 곳이 그때 열린다.
-    if (window.Unlock && !Unlock.has('shop')){ Unlock.deny('shop'); return; }
+    // 금을 쓰는 것은 중인부터. 그전에는 광고로 여는 유물 지도만 보여 준다
+    // (광고는 금과 무관한데, 상점 문을 아예 막으면 그것까지 못 쓴다).
+    const locked = !!(window.Unlock && !Unlock.has('shop'));
     css(); mountOv();
     const ov = document.getElementById('gold-ov');
-    document.getElementById('gold-bal').textContent = `지닌 금 ${st.gold}`;
+    document.getElementById('gold-bal').textContent = locked
+      ? `지닌 금 ${st.gold} · 금을 쓰는 것은 중인부터`
+      : `지닌 금 ${st.gold}`;
     const box = document.getElementById('gold-rows');
-    box.innerHTML = rows().map(r =>
-      `<div class="row"><img class="ic" src="${ICONS[r.id] || ICONS.scan}" alt="">` +
-      `<span class="tx"><span class="nm">${r.nm}</span>` +
-      `<span class="ds">${r.ds}</span></span>` +
-      `<button data-id="${r.id}" data-p="${r.price}"` +
-      `${st.gold < r.price ? ' disabled' : ''}>${r.price} 금</button></div>`).join('');
-    box.querySelectorAll('button').forEach(b => { b.onclick = () => buy(b.dataset.id, +b.dataset.p); });
+    box.innerHTML = rows(locked).map(r => {
+      // 광고 줄은 값 대신 '광고 보기'가 붙는다. 이미 표시 중이거나 이 화에
+      // 남은 유물이 없으면 누를 것이 없으므로 잠근다.
+      const off = r.ad && (mapRevealed() || !leftSpots().length);
+      const label = r.ad ? (mapRevealed() ? '표시 중' : '광고 보기') : (r.price + ' 금');
+      const lock = r.ad ? off : st.gold < r.price;
+      return `<div class="row"><img class="ic" src="${ICONS[r.id] || ICONS.scan}" alt="">` +
+        `<span class="tx"><span class="nm">${r.nm}</span>` +
+        `<span class="ds">${r.ds}</span></span>` +
+        `<button data-id="${r.id}" data-p="${r.price || 0}"` +
+        `${lock ? ' disabled' : ''}>${label}</button></div>`;
+    }).join('');
+    box.querySelectorAll('button').forEach(b => { b.onclick = () => buy(b.dataset.id, +b.dataset.p, b); });
     document.getElementById('gold-msg').textContent = '';
     ov.classList.add('show');
   }
@@ -209,7 +235,8 @@ window.Gold = (function(){
 
   function say(t){ const m = document.getElementById('gold-msg'); if (m) m.textContent = t; }
 
-  function buy(id, price){
+  async function buy(id, price, btn){
+    if (id === 'adscan'){ await buyMapByAd(btn); return; }
     if (!spend(price)){ say('금이 모자랍니다.'); return; }
     if (id === 'scan'){
       const n = scanSpots();
@@ -257,6 +284,151 @@ window.Gold = (function(){
     return left.length;
   }
 
+
+  /* ---------------- 유물 지도(광고) ----------------
+     금으로 사는 '유물 탐지'는 이 구역만 4초 반짝이고 끝이다. 광고로 여는
+     '유물 지도'는 이 화(챕터) 전체에서, 못 찾은 유물 자리를 지도와 미니맵에
+     계속 띄워 준다 — 한 번 보면 그 화를 끝낼 때까지 남는다.
+
+     챕터마다 World.render·drawMinimap이 복붙돼 있어서(챕터 파일 29곳),
+     거기를 고치는 대신 이미 만들어진 함수를 감싼다. gold.js는 챕터의
+     인라인 스크립트보다 뒤에 실리므로 감쌀 대상이 이미 있다. */
+  const MAP_KEY = 'khg_relicmap';
+
+  function chapterId(){
+    return (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
+  }
+  function loadMaps(){
+    try {
+      const v = JSON.parse(localStorage.getItem(MAP_KEY));
+      return Array.isArray(v) ? v : [];
+    } catch(e){ return []; }
+  }
+  let maps = loadMaps();
+  function mapRevealed(){ return maps.indexOf(chapterId()) >= 0; }
+  function revealMap(){
+    if (mapRevealed()) return;
+    maps.push(chapterId());
+    try { localStorage.setItem(MAP_KEY, JSON.stringify(maps)); } catch(e){}
+  }
+
+  /* 이 화에서 아직 못 찾은 유물 자리 — 구역을 가리지 않고 전부 */
+  function leftSpots(){
+    if (typeof ZONES === 'undefined') return [];
+    const out = [];
+    for (const z of Object.keys(ZONES)){
+      for (const sp of (ZONES[z].spots || [])){
+        if (!(window.Items && Items.has(sp.item))) out.push({ zone:z, sp });
+      }
+    }
+    return out;
+  }
+  function leftHere(){
+    if (typeof World === 'undefined') return [];
+    return leftSpots().filter(o => o.zone === World.zone).map(o => o.sp);
+  }
+
+  async function buyMapByAd(btn){
+    if (mapRevealed()) return;
+    if (!leftSpots().length){ say('이 화에는 남은 유물이 없습니다.'); return; }
+    const old = btn ? btn.textContent : '';
+    if (btn){ btn.disabled = true; btn.textContent = '광고 준비 중…'; }
+    const ok = window.Ads ? await Ads.rewarded() : false;
+    if (!ok){
+      if (btn){ btn.disabled = false; btn.textContent = old; }
+      say('광고를 끝까지 보지 않으셨습니다.');
+      return;
+    }
+    revealMap();
+    const n = leftSpots().length;
+    say(`이 화에 남은 유물 ${n}곳이 지도에 표시됩니다.`);
+    const ov = document.getElementById('gold-ov');
+    if (ov) ov.classList.remove('show');   // 지도를 바로 볼 수 있게 창을 닫는다
+  }
+
+  /* 지도 위 표식 — 자리 위에 금빛 마름모가 떠서 위아래로 흔들린다 */
+  function drawOnMap(){
+    if (!mapRevealed()) return;
+    if (typeof ctx === 'undefined' || typeof World === 'undefined') return;
+    if (typeof VIEW_W === 'undefined' || typeof BG_W === 'undefined') return;
+    const left = leftHere();
+    if (!left.length) return;
+    const viewW = VIEW_W / ZOOM, viewH = VIEW_H / ZOOM;
+    const camX = Math.max(0, Math.min(Math.max(0, BG_W - viewW), World.px - viewW/2));
+    const camY = Math.max(0, Math.min(Math.max(0, BG_H - viewH), World.py - viewH/2));
+    const bob = Math.sin(performance.now() / 360) * 3;
+    ctx.save();
+    for (const sp of left){
+      const x = (sp.x - camX) * ZOOM;
+      const y = (sp.y - camY) * ZOOM;
+      if (x < -60 || x > VIEW_W + 60 || y < -80 || y > VIEW_H + 60) continue;
+      // 발밑 빛무리
+      const g = ctx.createRadialGradient(x, y, 0, x, y, 22);
+      g.addColorStop(0, 'rgba(240,201,107,.42)');
+      g.addColorStop(1, 'rgba(240,201,107,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.ellipse(x, y, 22, 9, 0, 0, Math.PI*2); ctx.fill();
+      // 마름모
+      const cy = y - 40 + bob, r = 9;
+      ctx.beginPath();
+      ctx.moveTo(x, cy - r); ctx.lineTo(x + r*0.72, cy);
+      ctx.lineTo(x, cy + r); ctx.lineTo(x - r*0.72, cy);
+      ctx.closePath();
+      ctx.fillStyle = '#f0c96b';
+      ctx.strokeStyle = '#3a2c1a';
+      ctx.lineWidth = 2;
+      ctx.fill(); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  /* 미니맵 표식 — NPC 점과 같은 방식으로, 색만 금빛 마름모 */
+  function drawOnMini(){
+    if (!mapRevealed()) return;
+    if (typeof BG_W === 'undefined') return;
+    const cv = document.getElementById('minimap-canvas');
+    if (!cv) return;
+    const left = leftHere();
+    if (!left.length) return;
+    const c = cv.getContext('2d');
+    const sx = cv.width / BG_W, sy = cv.height / BG_H;
+    c.save();
+    c.fillStyle = '#f0c96b';
+    c.strokeStyle = '#3a2c1a';
+    c.lineWidth = 1;
+    for (const sp of left){
+      const x = sp.x * sx, y = sp.y * sy, r = 4.5;
+      c.beginPath();
+      c.moveTo(x, y - r); c.lineTo(x + r*0.8, y);
+      c.lineTo(x, y + r); c.lineTo(x - r*0.8, y);
+      c.closePath();
+      c.fill(); c.stroke();
+    }
+    c.restore();
+  }
+
+  /* 챕터가 이미 만들어 둔 그리기 함수를 감싼다 */
+  function hookDraw(){
+    if (typeof World !== 'undefined' && World.render && !World._relicMapHooked){
+      World._relicMapHooked = true;
+      const orender = World.render;
+      World.render = function(){
+        const r = orender.apply(this, arguments);
+        try { drawOnMap(); } catch(e){}
+        return r;
+      };
+    }
+    if (typeof window.drawMinimap === 'function' && !window.drawMinimap._relicMapHooked){
+      const omini = window.drawMinimap;
+      const wrap = function(){
+        const r = omini.apply(this, arguments);
+        try { drawOnMini(); } catch(e){}
+        return r;
+      };
+      wrap._relicMapHooked = true;
+      window.drawMinimap = wrap;
+    }
+  }
 
   /* ---------------- 콤보 지키기 ---------------- */
   function useShield(){
@@ -309,10 +481,17 @@ window.Gold = (function(){
     }
   }
 
-  function init(){ mount(); wire(); }
+  // 하나가 터져도 나머지는 살아 있어야 한다 — v181~v186에는 mount()가 터지는
+  // 바람에 wire()가 아예 안 돌아 금이 한 푼도 안 붙었다.
+  function init(){
+    try { mount(); } catch(e){ console.error('[gold] mount', e); }
+    try { wire(); } catch(e){ console.error('[gold] wire', e); }
+    try { hookDraw(); } catch(e){ console.error('[gold] hookDraw', e); }
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
   return { get, earn, spend, open, mount, useShield, addShield, scanSpots,
+           mapRevealed, revealMap,
            get shields(){ return st.shield; } };
 })();
