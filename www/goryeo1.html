@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=194"></script>
-<script src="assets/chapterlock.js?v=194"></script>
-<script src="assets/energy.js?v=194"></script>
+<script src="assets/tablet.js?v=195"></script>
+<script src="assets/chapterlock.js?v=195"></script>
+<script src="assets/energy.js?v=195"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=194"></script>
+<script src="assets/resume.js?v=195"></script>
 <title>한국사 게임 - 고려 1화 왕건의 나라</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -517,13 +517,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=194"></script>
-<script src="assets/zoomwarn.js?v=194"></script>
-<script src="assets/map/map_component.js?v=194"></script>
-<script src="assets/chart.js?v=194"></script>
-<script src="assets/companions.js?v=194"></script>
-<script src="assets/inner.js?v=194"></script>
-<script src="assets/audio.js?v=194"></script>
+<script src="assets/errlog.js?v=195"></script>
+<script src="assets/zoomwarn.js?v=195"></script>
+<script src="assets/map/map_component.js?v=195"></script>
+<script src="assets/chart.js?v=195"></script>
+<script src="assets/companions.js?v=195"></script>
+<script src="assets/inner.js?v=195"></script>
+<script src="assets/audio.js?v=195"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -535,7 +535,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=194';   // 존댓말 전환
+const ART_V = '?v=195';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1282,8 +1282,8 @@ const NPC_DATA = {
     name: '태조 왕건', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l3.5 3H8.5z"/><path d="M6 6.5h12l1.5 3H4.5z"/><path d="M7 9.5v4h10v-4"/><path d="M4.5 13.5h15l1.5 3H3z"/><path d="M6.5 16.5v4.5h11v-4.5"/><path d="M10.5 21v-3h3v3"/></svg>', img: 'assets/portraits/wanggeon.png',
     beats: [
       { who:'npc', t:'게 섰거라. …낯선 얼굴이군.' },
-      { who:'me', t:'(고개를 숙인다) 소인은 이 댁의 종입니다.' },
-      { who:'npc', t:'종이라… (한숨) 내 나라엔 아직 그런 이가 많네.' },
+      { who:'me', t:'(고개를 숙인다) 소인은… 주인 없이 떠도는 종입니다.' },
+      { who:'npc', t:'주인이 없다… (한숨) 내 나라엔 아직 그런 이가 많네.' },
       Party.say('bau', 'oops', '(속삭인다) 우리도 종이오? …나, 진골인데.'),
       { who:'npc', t:'궁예를 몰아내고 나라를 세웠네. 918년, 고려라 하였지.' },
       { who:'me', t:'(고개를 든다) 도읍은 예서 멉니까?' },
@@ -2112,38 +2112,38 @@ if (window.Resume){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=194"></script>
-<script src="assets/streak.js?v=194"></script>
+<script src="assets/badges.js?v=195"></script>
+<script src="assets/streak.js?v=195"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=194"></script>
-  <script src="assets/fx.js?v=194"></script>
-  <script src="assets/deed.js?v=194"></script>
-  <script src="assets/inkwipe.js?v=194"></script>
-  <script src="assets/dash.js?v=194"></script>
-<script src="assets/juice.js?v=194"></script>
-<script src="assets/growth.js?v=194"></script>
-  <script src="assets/difficulty.js?v=194"></script>
-  <script src="assets/nextauto.js?v=194"></script>
-<script src="assets/heroes_data.js?v=194"></script>
-<script src="assets/heroes.js?v=194"></script>
-<script src="assets/icons.js?v=194"></script>
-<script src="assets/srs.js?v=194"></script>
-<script src="assets/newsflash.js?v=194"></script>
-<script src="assets/timeline.js?v=194"></script>
-<script src="assets/journey.js?v=194"></script>
-<script src="assets/season.js?v=194"></script>
-<script src="assets/items.js?v=194"></script>
-  <script src="assets/gold.js?v=194"></script>
-  <script src="assets/ask.js?v=194"></script>
-  <script src="assets/ads.js?v=194"></script>
-  <script src="assets/daily.js?v=194"></script>
-  <script src="assets/unlock.js?v=194"></script>
-  <script src="assets/guide.js?v=194"></script>
-  <script src="assets/minigames.js?v=194"></script>
-  <script src="assets/quests.js?v=194"></script>
-  <script src="assets/offline.js?v=194"></script>
-  <script src="assets/telemetry.js?v=194"></script>
-<script src="assets/autowalk.js?v=194"></script>
+<script src="assets/rank.js?v=195"></script>
+  <script src="assets/fx.js?v=195"></script>
+  <script src="assets/deed.js?v=195"></script>
+  <script src="assets/inkwipe.js?v=195"></script>
+  <script src="assets/dash.js?v=195"></script>
+<script src="assets/juice.js?v=195"></script>
+<script src="assets/growth.js?v=195"></script>
+  <script src="assets/difficulty.js?v=195"></script>
+  <script src="assets/nextauto.js?v=195"></script>
+<script src="assets/heroes_data.js?v=195"></script>
+<script src="assets/heroes.js?v=195"></script>
+<script src="assets/icons.js?v=195"></script>
+<script src="assets/srs.js?v=195"></script>
+<script src="assets/newsflash.js?v=195"></script>
+<script src="assets/timeline.js?v=195"></script>
+<script src="assets/journey.js?v=195"></script>
+<script src="assets/season.js?v=195"></script>
+<script src="assets/items.js?v=195"></script>
+  <script src="assets/gold.js?v=195"></script>
+  <script src="assets/ask.js?v=195"></script>
+  <script src="assets/ads.js?v=195"></script>
+  <script src="assets/daily.js?v=195"></script>
+  <script src="assets/unlock.js?v=195"></script>
+  <script src="assets/guide.js?v=195"></script>
+  <script src="assets/minigames.js?v=195"></script>
+  <script src="assets/quests.js?v=195"></script>
+  <script src="assets/offline.js?v=195"></script>
+  <script src="assets/telemetry.js?v=195"></script>
+<script src="assets/autowalk.js?v=195"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2197,6 +2197,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=194"></script>
+<script src="assets/uiskin.js?v=195"></script>
 </body>
 </html>
