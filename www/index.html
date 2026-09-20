@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=189"></script>
+<script src="assets/tablet.js?v=190"></script>
 <title>타임슬립 한국사 · 한능검 심화 기출 — 챕터 목록</title>
 <meta name="description" content="한국사능력검정시험(한능검) 심화 대비 게임. 선사부터 현대까지 36화를 걸어다니며, 기출 415문항을 이야기로 푼다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -223,6 +223,10 @@
     filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
   .era-exam-btn .eb-title { display: block; font-size: 15px; font-weight: 700; color: #f0c96b; }
   .era-exam-btn .eb-sub { display: block; font-size: 11px; color: #f5ecd8; margin-top: 2px; }
+  /* 풀어 본 시대는 이 자리에 정답률이 뜬다(examstat.js). 80%를 넘겨 보상을
+     받은 시대는 금빛으로 — 목록을 훑을 때 어느 시대가 여물었는지 보이게. */
+  .era-exam-btn .eb-sub.rate { color: #cfc4a8; font-variant-numeric: tabular-nums; }
+  .era-exam-btn .eb-sub.rate.hit { color: #f0c96b; font-weight: 700; }
   .era-exam-btn:active { transform: translateY(1px); }
 
   /* 시대 진행선 — 시작(금색 점) → 현재(최근 학습한 챕터, 빛나는 고리) →
@@ -493,35 +497,36 @@
 <script src="vendor/firebase/firebase-app-compat.js"></script>
 <script src="vendor/firebase/firebase-auth-compat.js"></script>
 <script src="vendor/firebase/firebase-firestore-compat.js"></script>
-<script src="assets/zoomwarn.js?v=189"></script>
-<script src="assets/firebase_config.js?v=189"></script>
-<script src="assets/auth.js?v=189"></script>
-<script src="assets/board.js?v=189"></script>
-<script src="assets/save.js?v=189"></script>
-<script src="assets/audio.js?v=189"></script>
-<script src="assets/srs.js?v=189"></script>
-  <script src="assets/rank.js?v=189"></script>
-  <script src="assets/heroes_data.js?v=189"></script>
-  <script src="assets/heroes.js?v=189"></script>
-  <script src="assets/items.js?v=189"></script>
+<script src="assets/zoomwarn.js?v=190"></script>
+<script src="assets/firebase_config.js?v=190"></script>
+<script src="assets/auth.js?v=190"></script>
+<script src="assets/board.js?v=190"></script>
+<script src="assets/save.js?v=190"></script>
+<script src="assets/audio.js?v=190"></script>
+<script src="assets/srs.js?v=190"></script>
+  <script src="assets/rank.js?v=190"></script>
+  <script src="assets/heroes_data.js?v=190"></script>
+  <script src="assets/heroes.js?v=190"></script>
+  <script src="assets/items.js?v=190"></script>
   <!-- 판 껍데기는 다른 모듈보다 먼저 — 각 화면이 필요한 것만 위에 덮어쓴다 -->
-  <script src="assets/panelskin.js?v=189"></script>
-  <script src="assets/gold.js?v=189"></script>
-  <script src="assets/ads.js?v=189"></script>
-  <script src="assets/chapterlock.js?v=189"></script>
-  <script src="assets/energy.js?v=189"></script>
-  <script src="assets/daily.js?v=189"></script>
-  <script src="assets/unlock.js?v=189"></script>
-  <script src="assets/guide.js?v=189"></script>
-  <script src="assets/minigames.js?v=189"></script>
-  <script src="assets/quests.js?v=189"></script>
-  <script src="assets/journey.js?v=189"></script>
-  <script src="assets/fx.js?v=189"></script>
-  <script src="assets/season.js?v=189"></script>
-  <script src="assets/offline.js?v=189"></script>
-  <script src="assets/telemetry.js?v=189"></script>
-<script src="assets/badges.js?v=189"></script>
-<script src="assets/streak.js?v=189"></script>
+  <script src="assets/panelskin.js?v=190"></script>
+  <script src="assets/gold.js?v=190"></script>
+  <script src="assets/ads.js?v=190"></script>
+  <script src="assets/chapterlock.js?v=190"></script>
+  <script src="assets/energy.js?v=190"></script>
+  <script src="assets/examstat.js?v=190"></script>
+  <script src="assets/daily.js?v=190"></script>
+  <script src="assets/unlock.js?v=190"></script>
+  <script src="assets/guide.js?v=190"></script>
+  <script src="assets/minigames.js?v=190"></script>
+  <script src="assets/quests.js?v=190"></script>
+  <script src="assets/journey.js?v=190"></script>
+  <script src="assets/fx.js?v=190"></script>
+  <script src="assets/season.js?v=190"></script>
+  <script src="assets/offline.js?v=190"></script>
+  <script src="assets/telemetry.js?v=190"></script>
+<script src="assets/badges.js?v=190"></script>
+<script src="assets/streak.js?v=190"></script>
 <script>const ICON_SOUND = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><path d="M16 9c1.2 1 1.2 5 0 6"/><path d="M18.5 6.5c2.5 2.5 2.5 8.5 0 11"/></svg>';
 const ICON_MUTE = '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="4,10 8,10 12,6 12,18 8,14 4,14" stroke-linejoin="round"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/></svg>';
 </script>
@@ -963,10 +968,17 @@ function renderEraList(){
         width:${mascotW}px; height:${e.mascotH || 112}px; right:${mascotRight}px"
         title="${e.title}"></div>` : '';
     const examBtnRight = mascotRight + mascotW + 14;
+    // 기출변형을 풀어 본 시대는 '풀어보기' 대신 지금까지의 정답률을 보여 준다
+    // (첫 시도 기준 누적 — examstat.js). 80%를 넘긴 시대는 금빛으로.
+    const exPct = window.ExamStat ? ExamStat.pct(eraIdx) : null;
+    const exGot = window.ExamStat && (ExamStat.get(eraIdx) || {}).got;
+    const exSub = exPct === null
+      ? '<span class="eb-sub">풀어보기</span>'
+      : `<span class="eb-sub rate${exGot ? ' hit' : ''}">정답률 ${exPct}%</span>`;
     const examBtnHtml = `<a class="era-exam-btn" href="exam_practice.html?era=${eraIdx}"
-        style="right:${examBtnRight}px" title="${e.title} 기출변형 풀어보기">
+        style="right:${examBtnRight}px" title="${e.title} 기출변형 풀어보기${exPct === null ? '' : ` · 지금까지 정답률 ${exPct}%`}">
         <svg class="eb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5a2 2 0 100 4h12a2 2 0 100-4z"/><path d="M6 19a2 2 0 100-4h12a2 2 0 100 4z"/><path d="M6 7v10M18 9v6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
-        <span class="eb-title">기출변형</span><span class="eb-sub">풀어보기</span>
+        <span class="eb-title">기출변형</span>${exSub}
       </a>`;
     section.innerHTML = `
       <div class="era-dot"></div>
@@ -1357,8 +1369,8 @@ document.addEventListener('keydown', (ev) => {
      화면이 곧 바뀌므로 예약된 광고는 그대로 무산된다 — 따로 막을 것 없다. */
   if (window.Ads) Ads.maybeShowInterstitial();
 </script>
-<script src="assets/ask.js?v=189"></script>
-<script src="assets/tidy.js?v=189"></script>
-<script src="assets/uiskin.js?v=189"></script>
+<script src="assets/ask.js?v=190"></script>
+<script src="assets/tidy.js?v=190"></script>
+<script src="assets/uiskin.js?v=190"></script>
 </body>
 </html>

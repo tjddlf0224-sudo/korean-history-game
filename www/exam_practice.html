@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=189"></script>
+<script src="assets/tablet.js?v=190"></script>
 <title>기출변형 풀이 — 타임슬립 한국사</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -181,32 +181,33 @@
 </div>
 </div>
 
-<script src="assets/badges.js?v=189"></script>
-<script src="assets/streak.js?v=189"></script>
-<script src="assets/rank.js?v=189"></script>
-  <script src="assets/fx.js?v=189"></script>
-  <script src="assets/dash.js?v=189"></script>
-<script src="assets/juice.js?v=189"></script>
-  <script src="assets/difficulty.js?v=189"></script>
-  <script src="assets/nextauto.js?v=189"></script>
-  <script src="assets/gold.js?v=189"></script>
-  <script src="assets/ask.js?v=189"></script>
-  <script src="assets/ads.js?v=189"></script>
-  <script src="assets/energy.js?v=189"></script>
-  <script src="assets/daily.js?v=189"></script>
-  <script src="assets/unlock.js?v=189"></script>
-  <script src="assets/guide.js?v=189"></script>
-  <script src="assets/minigames.js?v=189"></script>
-  <script src="assets/quests.js?v=189"></script>
-<script src="assets/season.js?v=189"></script>
-  <script src="assets/offline.js?v=189"></script>
-  <script src="assets/telemetry.js?v=189"></script>
+<script src="assets/badges.js?v=190"></script>
+<script src="assets/streak.js?v=190"></script>
+<script src="assets/rank.js?v=190"></script>
+<script src="assets/examstat.js?v=190"></script>
+  <script src="assets/fx.js?v=190"></script>
+  <script src="assets/dash.js?v=190"></script>
+<script src="assets/juice.js?v=190"></script>
+  <script src="assets/difficulty.js?v=190"></script>
+  <script src="assets/nextauto.js?v=190"></script>
+  <script src="assets/gold.js?v=190"></script>
+  <script src="assets/ask.js?v=190"></script>
+  <script src="assets/ads.js?v=190"></script>
+  <script src="assets/energy.js?v=190"></script>
+  <script src="assets/daily.js?v=190"></script>
+  <script src="assets/unlock.js?v=190"></script>
+  <script src="assets/guide.js?v=190"></script>
+  <script src="assets/minigames.js?v=190"></script>
+  <script src="assets/quests.js?v=190"></script>
+<script src="assets/season.js?v=190"></script>
+  <script src="assets/offline.js?v=190"></script>
+  <script src="assets/telemetry.js?v=190"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
 if (window.Juice) Juice.mount();
 </script>
-<script src="assets/audio.js?v=189"></script>
+<script src="assets/audio.js?v=190"></script>
 <script>
 /* 가로모드 고정: index.html·게임 챕터들과 동일. */
 function applyOrientation(){
@@ -403,10 +404,37 @@ function celebrateCorrect(btn){
   setTimeout(() => burst.remove(), 750);
 }
 
+/* 정답률 보상 알림 — 이 화면에만 쓰는 짧은 띠 */
+function toast(html){
+  let t = document.getElementById('ex-toast');
+  if (!t){
+    t = document.createElement('div');
+    t.id = 'ex-toast';
+    t.style.cssText = 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);' +
+      'z-index:99;max-width:86%;padding:12px 18px;border-radius:14px;' +
+      'background:rgba(26,20,12,.95);border:1px solid #c9a24a;color:#f0c96b;' +
+      'font-family:"Gowun Batang",serif;font-size:13.5px;line-height:1.6;text-align:center;' +
+      'box-shadow:0 8px 24px rgba(0,0,0,.5);opacity:0;transition:opacity .28s';
+    document.body.appendChild(t);
+  }
+  t.innerHTML = html;
+  requestAnimationFrame(() => { t.style.opacity = '1'; });
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.style.opacity = '0'; }, 3600);
+}
+
 function pick(i){
   if (answered) return;
   const data = queue[qIdx];
   const correct = order[i] === data.answer;
+  // 정답률은 첫 시도만 센다(틀리면 다시 고를 수 있어서, 다시 맞힌 것까지
+  // 세면 늘 100%가 된다). missedThis가 아직 false인 지금이 첫 시도다.
+  if (!missedThis && window.ExamStat){
+    ExamStat.note(eraIdx, correct);
+    const got = ExamStat.claim(eraIdx, pool.length);
+    if (got) setTimeout(() => toast(
+      `${eraTitle} 기출 정답률 ${ExamStat.GOAL}% 돌파!<br>기력 +${got.energy} · 금 +${got.gold}`), 900);
+  }
   if (correct){
     answered = true;
     if (window.Badges) Badges.addCorrect();
