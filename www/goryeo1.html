@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=195"></script>
-<script src="assets/chapterlock.js?v=195"></script>
-<script src="assets/energy.js?v=195"></script>
+<script src="assets/tablet.js?v=196"></script>
+<script src="assets/chapterlock.js?v=196"></script>
+<script src="assets/energy.js?v=196"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=195"></script>
+<script src="assets/resume.js?v=196"></script>
 <title>한국사 게임 - 고려 1화 왕건의 나라</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -517,13 +517,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=195"></script>
-<script src="assets/zoomwarn.js?v=195"></script>
-<script src="assets/map/map_component.js?v=195"></script>
-<script src="assets/chart.js?v=195"></script>
-<script src="assets/companions.js?v=195"></script>
-<script src="assets/inner.js?v=195"></script>
-<script src="assets/audio.js?v=195"></script>
+<script src="assets/errlog.js?v=196"></script>
+<script src="assets/zoomwarn.js?v=196"></script>
+<script src="assets/map/map_component.js?v=196"></script>
+<script src="assets/chart.js?v=196"></script>
+<script src="assets/companions.js?v=196"></script>
+<script src="assets/inner.js?v=196"></script>
+<script src="assets/audio.js?v=196"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -535,7 +535,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=195';   // 존댓말 전환
+const ART_V = '?v=196';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -1282,9 +1282,9 @@ const NPC_DATA = {
     name: '태조 왕건', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l3.5 3H8.5z"/><path d="M6 6.5h12l1.5 3H4.5z"/><path d="M7 9.5v4h10v-4"/><path d="M4.5 13.5h15l1.5 3H3z"/><path d="M6.5 16.5v4.5h11v-4.5"/><path d="M10.5 21v-3h3v3"/></svg>', img: 'assets/portraits/wanggeon.png',
     beats: [
       { who:'npc', t:'게 섰거라. …낯선 얼굴이군.' },
-      { who:'me', t:'(고개를 숙인다) 소인은… 주인 없이 떠도는 종입니다.' },
-      { who:'npc', t:'주인이 없다… (한숨) 내 나라엔 아직 그런 이가 많네.' },
-      Party.say('bau', 'oops', '(속삭인다) 우리도 종이오? …나, 진골인데.'),
+      { who:'me', t:'(고개를 숙인다) 멀리서 왔습니다. 적(籍)에 이름이 없습니다.' },
+      { who:'npc', t:'적에 없는 사람이라… 내 나라엔 아직 그런 이가 많네.' },
+      Party.say('bau', 'oops', '(속삭인다) 우리도 없는 사람이오? …나, 진골인데.'),
       { who:'npc', t:'궁예를 몰아내고 나라를 세웠네. 918년, 고려라 하였지.' },
       { who:'me', t:'(고개를 든다) 도읍은 예서 멉니까?' },
       { who:'npc', t:'이듬해 이곳 송악으로 옮겼지.',
@@ -1366,16 +1366,17 @@ const NPC_DATA = {
     name: '광종', icon: '<svg viewBox="0 0 24 24" width="1em" height="1em" style="vertical-align:-0.125em" fill="currentColor" stroke="none"><path d="M4 18l-1.6-9L7 12l5-6 5 6 4.6-3L20 18H4z"/><rect x="4" y="19" width="16" height="2" rx="0.6"/></svg>', img: 'assets/portraits/gwangjong.png',
     beats: [
       { who:'npc', t:'게 섰거라. …네 문서를 가져오너라.' },
-      { who:'me', t:'(문서를 가져온다) …소인의 것입니다.' },
-      { who:'npc', t:'(문서를 넘기며) 본래 양인인지를 가려낸다.',
+      { who:'me', t:'(빈손을 내민다) …가진 문서가 없습니다.' },
+      { who:'npc', t:'(적을 펼치며) 본래 양인인지를 가려내는 일일세.',
         chart:{ type:'steps', title:'노비안검법의 절차', steps:[ { t:'문서를 살핀다' }, { t:'본래 신분을 따진다' }, { t:'양인이었으면 풀어준다', s:'노비안검법, 956년' } ] } },
-      { who:'me', t:'(숨을 죽인다) …소인도 그리 될 수 있습니까?' },
-      { who:'npc', t:'(문서를 훑는다) …네 집안은 대대로 종이었구나.' },
-      { who:'me', t:'(고개를 떨군다) ……' },
-      Party.say('chadol', 'cry', '(말없이 형아 손을 꼭 잡는다)'),
-      { who:'npc', t:'(문서를 덮는다) 옆집 그 사람은 다르네.',
+      { who:'me', t:'(숨을 죽인다) 문서가 없으면 어찌 됩니까?' },
+      { who:'npc', t:'(적을 넘긴다) …어느 집에도 매인 적이 없구나.' },
+      { who:'me', t:'(고개를 든다) 그럼 저는…' },
+      { who:'npc', t:'본래 양인을 함부로 부린 것이지. 그런 이를 풀어 주는 법일세.' },
+      Party.say('chadol', 'smile', '(형아 손을 꼭 잡는다) 형아, 풀려나?'),
+      { who:'npc', t:'(적을 덮는다) 허나 옆집 그 사람은 다르네.',
         chart:{ type:'vs', title:'노비안검법, 갈리는 처지', left:{ n:'대대로 노비', s:'그대로 남는다' }, right:{ n:'본래 양인', s:'풀려난다' }, mid:'문서 한 장' } },
-      { who:'npc', t:'본래 양인이면, 이 법으로 풀려나네.' },
+      { who:'npc', t:'그 사람은 대대로 매인 집안이라 그대로 남네.' },
       { who:'npc', t:'호족이 제멋대로 부리던 이들을 바로잡는다.',
         chart:{ type:'compare', title:'노비안검법, 그 전과 후', cols:[ { h:'그 전', items:[ '호족이 종으로 부린다' ] }, { h:'그 후', hi:true, items:[ '본래 양인이면 풀려난다', '호족의 힘이 줄어든다' ] } ] } },
       { who:'me', t:'…호족들이 가만있었겠습니까?' },
@@ -1398,7 +1399,7 @@ const NPC_DATA = {
       { who:'me', t:'옷만 보아도 누가 높은지 알겠군요.' },
       { who:'npc', t:'가난한 이도 잊지 않았네. 제위보를 두었지.',
         chart:{ type:'steps', title:'제위보가 하는 일', steps:[ { t:'기금을 마련한다' }, { t:'그 이자로 꾸어준다' }, { t:'가난한 백성을 돕는다', s:'제위보' } ] } },
-      { who:'me', t:'(작게) …소인 같은 이도 도움을 받습니까?' },
+      { who:'me', t:'(작게) 적에 없는 사람도 도움을 받습니까?' },
       { who:'npc', t:'(짧게) 그리 만들려 하네만, 갈 길이 머네.' },
     ],
     quizSeq: [
@@ -1542,15 +1543,15 @@ const NPC_DATA = {
       { who:'me', t:'호장이 되려면 어찌합니까?' },
       { who:'npc', t:'아홉 단계를 거치오. 후단사에서 시작해 호장까지.',
         chart:{ type:'steps', title:'향리가 오르는 아홉 단계', steps:[ { t:'후단사부터 시작' }, { t:'병사·창사를 거친다' }, { t:'호장에 이른다', s:'맨 윗자리' } ] } },
-      { who:'me', t:'…소인 같은 자도 오를 수 있습니까?' },
-      { who:'npc', t:'(장부를 덮으며) 향리는 종이 아니오.' },
+      { who:'me', t:'…떠돌이도 그 자리에 오를 수 있습니까?' },
+      { who:'npc', t:'(장부를 덮으며) 향리는 아무나 되는 자리가 아니오.' },
       { who:'npc', t:'대대로 이 고을에 뿌리내린 사람들이지.' },
       { who:'npc', t:'허나 향·부곡·소라 불리는 곳은 사정이 다르오.' },
       { who:'me', t:'무엇이 다릅니까?' },
       { who:'npc', t:'소는 도자기·종이를 만들어 바치는데, 차별을 더 받소.',
         chart:{ type:'compare', title:'군현과 향·부곡·소', cols:[ { h:'일반 군현', items:[ '그나마 나은 대우' ] }, { h:'향·부곡·소', hi:true, items:[ '군현민보다 차별받는다' ] } ] } },
-      { who:'me', t:'(장부를 내려놓는다) ……어디에도 소인 자리는 없군요.' },
-      { who:'npc', t:'(잠시 말이 없다) …그런 세상일세.' },
+      { who:'me', t:'(장부를 내려놓는다) ……어디에도 제 이름은 없군요.' },
+      { who:'npc', t:'(잠시 말이 없다) …적에 없는 사람도 있는 법이지.' },
       Party.say('chadol', 'cry', '형아 자리, 여기. (옆을 톡톡 친다)'),
       Party.say('bau', 'smile', '우리 옆자리는 늘 비워 두겠소.'),
     ],
@@ -1583,7 +1584,7 @@ const NPC_DATA = {
       { who:'npc', t:'개경 동쪽과 서쪽엔 대비원을 두어 앓는 이를 돌보네.' },
       { who:'npc', t:'역병이 돌면 구제도감·구급도감을 따로 세우지.',
         chart:{ type:'steps', title:'예종이 편 백성 구제', steps:[ { t:'구제도감을 둔다', s:'전염병 때 병자를 돌본다' }, { t:'혜민국을 둔다', s:'약을 나눠준다' } ] } },
-      { who:'me', t:'(작게) …소인 같은 이도 약을 받을 수 있습니까?' },
+      { who:'me', t:'(작게) 적에 없는 사람도 약을 받습니까?' },
       { who:'npc', t:'(끄덕이며) 그리 되라고 만든 것일세.',
         chart:{ type:'compare', title:'예종이 편 것', cols:[ { h:'배움', items:[ '양현고', '7재' ] }, { h:'구제', hi:true, items:[ '구제도감', '혜민국' ] } ] } },
       { who:'npc', t:'…그대, 낯선 옷을 입었구나.' },
@@ -2112,38 +2113,38 @@ if (window.Resume){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=195"></script>
-<script src="assets/streak.js?v=195"></script>
+<script src="assets/badges.js?v=196"></script>
+<script src="assets/streak.js?v=196"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=195"></script>
-  <script src="assets/fx.js?v=195"></script>
-  <script src="assets/deed.js?v=195"></script>
-  <script src="assets/inkwipe.js?v=195"></script>
-  <script src="assets/dash.js?v=195"></script>
-<script src="assets/juice.js?v=195"></script>
-<script src="assets/growth.js?v=195"></script>
-  <script src="assets/difficulty.js?v=195"></script>
-  <script src="assets/nextauto.js?v=195"></script>
-<script src="assets/heroes_data.js?v=195"></script>
-<script src="assets/heroes.js?v=195"></script>
-<script src="assets/icons.js?v=195"></script>
-<script src="assets/srs.js?v=195"></script>
-<script src="assets/newsflash.js?v=195"></script>
-<script src="assets/timeline.js?v=195"></script>
-<script src="assets/journey.js?v=195"></script>
-<script src="assets/season.js?v=195"></script>
-<script src="assets/items.js?v=195"></script>
-  <script src="assets/gold.js?v=195"></script>
-  <script src="assets/ask.js?v=195"></script>
-  <script src="assets/ads.js?v=195"></script>
-  <script src="assets/daily.js?v=195"></script>
-  <script src="assets/unlock.js?v=195"></script>
-  <script src="assets/guide.js?v=195"></script>
-  <script src="assets/minigames.js?v=195"></script>
-  <script src="assets/quests.js?v=195"></script>
-  <script src="assets/offline.js?v=195"></script>
-  <script src="assets/telemetry.js?v=195"></script>
-<script src="assets/autowalk.js?v=195"></script>
+<script src="assets/rank.js?v=196"></script>
+  <script src="assets/fx.js?v=196"></script>
+  <script src="assets/deed.js?v=196"></script>
+  <script src="assets/inkwipe.js?v=196"></script>
+  <script src="assets/dash.js?v=196"></script>
+<script src="assets/juice.js?v=196"></script>
+<script src="assets/growth.js?v=196"></script>
+  <script src="assets/difficulty.js?v=196"></script>
+  <script src="assets/nextauto.js?v=196"></script>
+<script src="assets/heroes_data.js?v=196"></script>
+<script src="assets/heroes.js?v=196"></script>
+<script src="assets/icons.js?v=196"></script>
+<script src="assets/srs.js?v=196"></script>
+<script src="assets/newsflash.js?v=196"></script>
+<script src="assets/timeline.js?v=196"></script>
+<script src="assets/journey.js?v=196"></script>
+<script src="assets/season.js?v=196"></script>
+<script src="assets/items.js?v=196"></script>
+  <script src="assets/gold.js?v=196"></script>
+  <script src="assets/ask.js?v=196"></script>
+  <script src="assets/ads.js?v=196"></script>
+  <script src="assets/daily.js?v=196"></script>
+  <script src="assets/unlock.js?v=196"></script>
+  <script src="assets/guide.js?v=196"></script>
+  <script src="assets/minigames.js?v=196"></script>
+  <script src="assets/quests.js?v=196"></script>
+  <script src="assets/offline.js?v=196"></script>
+  <script src="assets/telemetry.js?v=196"></script>
+<script src="assets/autowalk.js?v=196"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2197,6 +2198,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=195"></script>
+<script src="assets/uiskin.js?v=196"></script>
 </body>
 </html>
