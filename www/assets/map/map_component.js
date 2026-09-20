@@ -13,9 +13,14 @@
        onPick: (id) => { ... }  // 정답을 고르면 호출
      });
 
-   지도 이미지는 assets/map/joseon8do.png (세로형 760x1212).
+   지도 이미지는 assets/map/joseon8do.png (세로형 760x1212). 본디 '조선 8도'
+   지도라 국경선·고을 이름은 조선 기준이지만, 땅 모양과 압록강·두만강
+   길목은 시대를 안 타므로 고려 챕터(강동 6주·동북 9성)도 이 지도를 빌려
+   쓴다 — 그래서 주변국 이름표만큼은 시대를 반드시 맞춰야 한다.
    조선 본토뿐 아니라 요동·만주·연해주·일본 북단까지 함께 그려져 있고,
-   주변국 이름은 era에 따라 갈린다(early=명·여진, late=청).
+   주변국 이름은 era에 따라 갈린다(early=명·여진, late=청, goryeo=거란·여진 —
+   고려 대 챕터는 반드시 이 값을 써야 한다. '명'은 1368년 건국이라 고려
+   장면에 쓰면 시대착오다. 2026-09-21 제보로 추가).
    한반도 전체를 한 화면에 욱여넣으면 지명·강 이름이 읽을 수 없을 만큼 작아지므로,
    가로 폭에 맞춰 '확대'해서 일부만 보여주고 위아래로 스크롤/드래그하게 한다.
    focus 옵션으로 처음 보여줄 위치를 지정한다(예: focus:'north' → 북방 국경). */
@@ -35,7 +40,7 @@ async function loadMapPoints(){
   if (PROVINCES.length) return;
   // 지도를 다시 그리면 좌표가 통째로 바뀐다. 캐시된 옛 JSON을 쓰면 라벨이
   // 엉뚱한 자리에 찍히므로 버전 쿼리를 붙여 확실히 새로 받는다.
-  const res = await fetch('assets/map/map_points.json?v=4');
+  const res = await fetch('assets/map/map_points.json?v=5');
   const d = await res.json();
   MAP_W = d.size[0]; MAP_H = d.size[1];
   PROVINCES = d.provinces.map(p => ({ id:p.id, x:p.x, y:p.y,
@@ -203,7 +208,7 @@ const GameMap = {
       ctx.fillText('지도 이미지 준비 중', this.canvas.width/2, this.canvas.height/2);
     }
 
-    const era = this.opts.era === 'late' ? 'late' : 'early';
+    const era = (this.opts.era === 'late' || this.opts.era === 'goryeo') ? this.opts.era : 'early';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
 
     /* 라벨이 캔버스 밖으로 잘리지 않게 x를 안쪽으로 당긴다. 지도 가장자리에

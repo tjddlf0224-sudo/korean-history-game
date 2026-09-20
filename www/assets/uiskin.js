@@ -275,7 +275,8 @@
   /* ---------- 2차: 목록이 안쪽에서 스크롤되는 창들 ----------
      판 자체는 넘치지 않고(최대 높이 유지) 안쪽 목록이 스크롤되므로, 틀은 ::before로 씌운다. */
   const P2 = ['#bd-ov .panel', '#srs-ov .panel', '#auth-ov .panel', '#cs-ov .panel',
-              '#ask-box', '#badges-panel', '#kings-panel', '#eng-ov .panel', '#gold-ov .panel', '#of-ov .panel'];
+              '#ask-box', '#badges-panel', '#kings-panel', '#eng-ov .panel', '#gold-ov .panel', '#of-ov .panel',
+              '#grw-ov .panel'];
   const e2 = suf => P2.map(p => p + suf).join(', ');
   /* 창 전체가 스크롤되는 창(인물·유물 도감) — 틀을 판의 테두리로 직접 그려야 스크롤해도 제자리다 */
   const P3 = ['#hero-ov .panel', '#bag-ov .panel'];
@@ -375,9 +376,19 @@
   #hero-ov .cell.locked .nm, #bag-ov .cell.locked .nm { color:#9d8a6c !important; }
   #hero-ov .cell .f, #bag-ov .cell .f { background:#efe0c0 !important; }
   #hero-ov .party, #bag-ov .party { background:rgba(181,141,92,.14) !important; border-color:#c9a878 !important; }
-  #hero-ov .party *, #hero-ov .detail *:not(button):not(img) { color:#3b2a17; }
   #hero-ov .detail, #bag-ov .detail { background:linear-gradient(180deg,#fffbf2,#f1e2c3) !important;
     border:2px solid #b58d5c !important; color:#3b2a17 !important; }
+  /* 배경을 밝은 종이색으로 바꿨는데, 인물·유물 도감이 각자 제 파일에서
+     .dn·.de·.dd에 옅은 크림색(#f5ecd8 등, 어두운 배경용)을 이미 정해 둬서
+     그게 그대로 이겨(자식 선택자가 부모의 !important 상속보다 셈) 종이색
+     배경 위에 종이색 글자가 겹쳐 설명 문단이 안 보였다("눈 안목"까지는
+     인라인 금색이라 보이는데 그 뒤 설명은 안 보임 — 성일님 스크린샷).
+     예전엔 #hero-ov만 어설프게 손대다 말아 #bag-ov(유물 도감)는 아예
+     손도 안 댄 상태였다 — 이번에 이름표 셋 다 두 곳 다 맞춘다. */
+  #hero-ov .detail .dn, #bag-ov .detail .dn,
+  #hero-ov .detail .de, #bag-ov .detail .de,
+  #hero-ov .detail .dd, #bag-ov .detail .dd,
+  #hero-ov .party *:not(button):not(img) { color:#3b2a17 !important; }
 
   /* 배지함 */
   #badges-panel .badge-item { background:linear-gradient(180deg,#fffbf2,#f4e6c9) !important;
@@ -667,11 +678,18 @@
   .sk-hold > .sk-x:active { transform:scale(.92); }
   #hero-ov .pnl-x, #bag-ov .pnl-x { display:none !important; }
 
-  /* 기력 · 금 */
-  #eng-ov h3, #gold-ov h3 { display:block; width:max-content; max-width:90%; margin:-52px auto 4px !important;
+  /* 기력 · 금 · 성장 기록 */
+  #eng-ov h3, #gold-ov h3, #grw-ov h3 { display:block; width:max-content; max-width:90%; margin:-52px auto 4px !important;
     padding:8px 40px 10px !important; background:url(${U}plaque.webp) center/100% 100% no-repeat;
     color:#fff1cf !important; font-family:"Gugi","Gowun Batang",serif !important; font-size:18px !important;
     letter-spacing:.06em; text-shadow:0 2px 0 #3d220c; }
+  #grw-ov .chip { background:linear-gradient(180deg,#fffbf2,#f4e6c9) !important; border:2px solid #c9a878 !important;
+    box-shadow:0 2px 0 #b08a5a !important; color:#3b2a17 !important; }
+  #grw-ov .chip b { color:#8a5a12 !important; }
+  #grw-ov .card, #grw-ov .ch { background:linear-gradient(180deg,#fffbf2,#f4e6c9) !important;
+    border:2px solid #c9a878 !important; box-shadow:0 2px 0 #b08a5a !important; }
+  #grw-ov .ch .nm { color:#3b2a17 !important; }
+  #grw-ov .cap { color:#7d6243 !important; }
   #eng-ov .dots { gap:10px !important; margin:4px 0 2px !important; }
   #eng-ov .dot { width:46px !important; height:46px !important; border-radius:12px !important;
     background:url(${U}stamina.webp) center/78% no-repeat, linear-gradient(180deg,#fffbf2,#f1e2c3) !important;
@@ -680,7 +698,7 @@
   #eng-ov .dot.on { filter:none; border-color:#3f8a4f !important; box-shadow:0 3px 0 #2d6b3a, 0 0 10px rgba(80,170,100,.35) !important; }
   #eng-ov .sub, #gold-ov .bal { color:#6d5536 !important; }
   #eng-ov .msg, #gold-ov .msg { color:#9a5b1e !important; font-weight:700; }
-  #eng-ov #eng-x, #gold-ov #gold-close {
+  #eng-ov #eng-x, #gold-ov #gold-close, #grw-ov #grw-x {
     position:absolute !important; top:-10px !important; right:-10px !important; width:42px !important; height:42px !important;
     padding:0 !important; border:0 !important; border-radius:50% !important; font-size:0 !important; color:transparent !important;
     background:url(${U}xbtn.webp) center/contain no-repeat !important; box-shadow:none !important;
