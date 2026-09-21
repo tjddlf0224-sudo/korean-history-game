@@ -50,6 +50,10 @@ window.BGM = (function(){
         master = ctx.createGain();
         master.gain.value = targetVol();
         master.connect(ctx.destination);
+        // 사용자가 화면을 보고 있는데 컨텍스트가 스스로 멈추면(전화·시리 등 끼어듦) 다시 깨운다
+        ctx.onstatechange = () => {
+          if (ctx && ctx.state !== 'running' && !away && unlocked && document.visibilityState === 'visible') wake();
+        };
       } catch (e) { ctx = null; }
     }
     return ctx;
@@ -253,13 +257,42 @@ window.BGM = (function(){
     if (away) return; away = true;
     if (ctx && ctx.state === 'running'){ try { const p = ctx.suspend(); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
   }
-  function resume(){
-    if (!away) return; away = false;
+
+  /* ■ 앱을 나갔다 들어오면 BGM이 안 나오던 문제 (2026-09-21 성일님 제보)
+     예전 resume()은 `if (!away) return`으로 **딱 한 번**만 ctx.resume()을 걸고 끝냈다.
+     복귀할 때 JS의 visibilitychange가 네이티브(SceneDelegate)가 AVAudioSession을 다시
+     켜기 **전에** 먼저 오는데, 그때 건 resume()은 세션이 꺼져 있어 헛돌고, 뒤이어 오는
+     네이티브 호출은 이미 away=false라 그냥 무시됐다 → iOS가 컨텍스트를 'interrupted'로
+     둔 채 끝나 무음. 게다가 이미 한 번 소리가 켜졌으면 터치 리스너도 떼어 놓은 뒤라 다시
+     깨울 길이 없었다.
+     그래서 '한 번 걸었다'가 아니라 **컨텍스트가 실제로 running인지**를 기준으로 삼는다:
+       · 복귀 신호(visible·pageshow·appStateChange·네이티브)가 올 때마다 running이 될
+         때까지 몇 번 나눠 다시 건다(세션이 켜지는 시간차를 견디게).
+       · 그래도 안 켜지면 터치 리스너를 다시 걸어 다음 터치가 깨우게 한다.
+       · 컨텍스트 상태가 스스로 running에서 벗어나도(iOS 전화·시리 등 끼어듦) 같은 길로. */
+  const RETRY_MS = [0, 250, 700, 1500, 3000];
+  let retryGen = 0;
+  function wake(){
     if (!ctx) return;
-    const p = ctx.resume();
-    // 자동재생이 막히면 다음 터치 한 번에 다시 깨운다
-    if (p && p.catch) p.catch(() => {});
-    setTimeout(() => { if (ctx && ctx.state !== 'running') arm(); }, 300);
+    const gen = ++retryGen;
+    RETRY_MS.forEach(ms => setTimeout(() => {
+      if (gen !== retryGen || !ctx || away) return;
+      if (ctx.state === 'running'){ ensureSound(); return; }
+      try { const p = ctx.resume(); if (p && p.then) p.then(ensureSound, () => {}); } catch (e) {}
+    }, ms));
+    // 끝까지 안 켜지면 다음 터치가 깨운다
+    setTimeout(() => { if (gen === retryGen && ctx && ctx.state !== 'running') arm(); }, RETRY_MS[RETRY_MS.length - 1] + 200);
+  }
+  /* 켜졌는데 울리던 곡이 사라졌으면(iOS가 끼어들며 소스를 정리한 경우) 처음부터 다시 튼다 */
+  function ensureSound(){
+    if (!ctx || ctx.state !== 'running' || !unlocked || !current) return;
+    if (active.src && active.id === current) return;
+    const id = current; current = null; play(id);
+  }
+  function resume(){
+    away = false;
+    if (!ctx) return;
+    wake();
   }
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') release(); else resume();
