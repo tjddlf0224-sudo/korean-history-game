@@ -66,6 +66,32 @@ window.Daily = (function(){
     return (st.day === today() - 1) ? (st.step + 1) % 7 : 0;
   }
 
+  /* ---- 출석 복구 ----
+     하루를 거르면 트랙이 1일로 돌아간다. 사흘 이내로 거른 사람이 3일째까지 쌓은 것을
+     통째로 잃는 건 억울하니, 금으로 **거른 날만큼** 값을 치르고 이어 받게 한다.
+     (스트릭은 이것과 별개다 — 그건 streak.js의 프리즈가 지킨다.)
+     - 하루 100금 × 거른 일수, 최대 3일까지. 그 이상은 너무 오래돼 처음부터.
+     - 6일째(칸 index 5)까지 받은 뒤엔 다음이 7일째라 이어 받을 가치가 있지만,
+       7일째를 받은 뒤(index 6)는 어차피 1일로 돌아가므로 잃는 게 없어 열지 않는다. */
+  const RESTORE_PER_DAY = 100;
+  const RESTORE_MAX_GAP = 3;
+  function missedDays(){
+    if (!st.day || claimedToday()) return 0;
+    return Math.max(0, today() - st.day - 1);
+  }
+  function restorable(){
+    const g = missedDays();
+    return g >= 1 && g <= RESTORE_MAX_GAP && st.step < 6;
+  }
+  function restoreCost(){ return RESTORE_PER_DAY * missedDays(); }
+  /* 값을 치르면 '어제 받은 것'으로 쳐서 트랙을 잇는다 */
+  function restore(){
+    if (!restorable()) return false;
+    if (!window.Gold || !Gold.spend(restoreCost())) return false;
+    st.day = today() - 1; save(st);
+    return true;
+  }
+
   function claim(double){
     if (claimedToday()) return null;
     const i = stepToday();
@@ -288,6 +314,12 @@ window.Daily = (function(){
         `<span class="p">${SVG_ENG}<img alt="" src="assets/ui/stamina.webp"> 기력 <b>${now.eng}</b></span>` +
         (now.box ? '<span class="p">' + SVG_CHEST + '<img alt="" src="assets/ui/chest_closed.webp"> 상자 <b>+1</b></span>' : '') +
         '</div>' +
+        (restorable()
+          ? `<div class="sub" style="margin:2px 0 4px">${missedDays()}일을 거르셔서 1일부터 다시 시작합니다. ` +
+            `금 ${restoreCost()}으로 이어서 받을 수 있습니다.</div>` +
+            `<div class="row2"><button id="dy-r"${(window.Gold && Gold.get() >= restoreCost()) ? '' : ' disabled'}>` +
+            `금 ${restoreCost()}으로 ${st.step + 2}일째부터 이어가기</button></div>`
+          : '') +
         '<div class="row2"><button class="hi" id="dy-c">받기</button>' +
         '<button id="dy-c2">광고 보고 두 배</button></div>') +
       `<div class="msg" id="dy-m">${note || ''}</div>` +
@@ -298,6 +330,11 @@ window.Daily = (function(){
     if (popAt != null) sparks(d.querySelectorAll('.dy-day')[popAt]);
     d.querySelector('#dy-x').onclick = () => d.classList.remove('show');
     const msg = t => { const m = d.querySelector('#dy-m'); if (m) m.textContent = t; };
+    const b0 = d.querySelector('#dy-r');
+    if (b0) b0.onclick = () => {
+      if (!restore()){ msg('금이 모자랍니다.'); return; }
+      openAttendance(null, `${stepToday() + 1}일째부터 이어서 받을 수 있습니다.`);
+    };
     const b1 = d.querySelector('#dy-c'), b2 = d.querySelector('#dy-c2');
     if (b1) b1.onclick = () => {
       const at = stepToday();
@@ -390,5 +427,6 @@ window.Daily = (function(){
   function pending(){ return (!claimedToday()) || boxLeft() > 0; }
 
   return { openAttendance, openBox, claim, claimedToday, stepToday,
-           boxLeft, adBoxLeft, openFree, openByAd, openByGold, pending, TRACK };
+           boxLeft, adBoxLeft, openFree, openByAd, openByGold, pending, TRACK,
+           restorable, restore, restoreCost, missedDays };
 })();

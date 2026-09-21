@@ -82,13 +82,29 @@ window.Streak = {
   clear(){ try { localStorage.removeItem(Streak.STORAGE_KEY); } catch(e){} },
 };
 
+/* 스트릭 프리즈를 얻는 두 길 — 보상형 광고, 또는 금.
+   예전엔 광고 SDK 연결 전 임시 코드라 "광고 보고 받기" 단추가 **광고 없이 바로 지급**했다
+   (광고 수익이 새고, 문구도 거짓이었다). 이제 광고는 Ads.rewarded()를 끝까지 봐야 준다.
+   금값은 한 화 수입(약 140)보다 조금 높게 잡았다 — 쌓이기만 하던 금의 쓸 곳이다.
+   프리즈는 최대 MAX_FREEZE개까지만 쟁여 둔다(무한히 사 두면 스트릭이 의미를 잃는다). */
 window.StreakAds = {
-  /* 스트릭 프리즈 지급 지점. 지금은 광고 SDK가 없어 즉시 지급하는
-     목업이다 — Capacitor+AdMob 붙일 때 이 함수 몸통만 실제 보상형
-     광고 호출(광고 성공 콜백에서 addFreeze)로 바꾸면 나머지(스트릭
-     로직·UI)는 손댈 필요 없다. */
-  offerFreeze(onDone){
-    const n = Streak.addFreeze(1);
-    if (onDone) onDone(n);
+  MAX_FREEZE: 3,
+  GOLD_COST: 200,
+
+  canHold(){ return (Streak.load().freezes || 0) < StreakAds.MAX_FREEZE; },
+
+  /* 광고를 끝까지 보면 프리즈 1개. 준 개수 또는 null(못 받음) */
+  async byAd(){
+    if (!StreakAds.canHold()) return null;
+    const ok = window.Ads ? await Ads.rewarded() : false;
+    if (!ok) return null;
+    return Streak.addFreeze(1);
+  },
+
+  /* 금으로 프리즈 1개. 준 개수 또는 null(금 부족·가득) */
+  byGold(){
+    if (!StreakAds.canHold()) return null;
+    if (!window.Gold || !Gold.spend(StreakAds.GOLD_COST)) return null;
+    return Streak.addFreeze(1);
   },
 };
