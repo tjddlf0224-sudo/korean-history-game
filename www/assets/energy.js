@@ -217,7 +217,7 @@ window.Energy = (function(){
     b.innerHTML = ICON + '<span>' + get() + '</span>';
     b.onclick = open;
     if (dock){ b.style.position = 'static'; dock.appendChild(b); }
-    else { b.style.right = '10px'; b.style.top = '54px'; layer().appendChild(b); }
+    else { b.style.right = 'calc(10px + env(safe-area-inset-right))'; b.style.top = 'calc(54px + env(safe-area-inset-top))'; layer().appendChild(b); }
     render();
   }
 

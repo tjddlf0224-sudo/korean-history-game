@@ -5,7 +5,7 @@
      열게 해줘. 잠겨 있는 챕터 열고 싶으면 광고 보면 어디든 열 수 있게 해줘."
 
    규칙
-   - 선사·초기국가(선사 1화)는 처음부터 열려 있다.
+   - 선사·초기국가(선사 1화)와 시대 통합(열두 달 세시풍속)은 처음부터 열려 있다.
    - 나머지는 **챕터 목록 순서(ORDER)대로** 바로 앞 화를 끝까지 마치면 열린다.
      '마쳤다'는 챕터가 끝날 때 이미 남기는 배지 ch_complete_<파일>로 판단한다
      (따로 기록을 만들면 두 곳이 어긋난다).
@@ -36,7 +36,9 @@ window.ChapterLock = (function(){
     'hyeondae1.html', 'hyeondae2.html', 'hyeondae3.html',
     'sesi.html',
   ];
-  const ALWAYS = new Set(['seonsa1.html']);
+  /* 처음부터 늘 열려 있는 화. 선사 1화는 시작점이라, 세시풍속은 앞 화를 마쳐야
+     열리는 줄거리 순서가 아니라 해마다 도는 시대 통합이라 열어 둔다(2026-09-21 성일님). */
+  const ALWAYS = new Set(['seonsa1.html', 'sesi.html']);
 
   function badges(){
     try { return JSON.parse(localStorage.getItem('khg_badges') || '{}') || {}; } catch(e){ return {}; }

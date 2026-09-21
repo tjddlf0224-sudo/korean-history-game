@@ -159,7 +159,7 @@ window.Gold = (function(){
     b.innerHTML = COIN_ICON + '<span>' + st.gold + '</span>';
     b.onclick = open;
     if (dock){ b.style.position = 'static'; dock.appendChild(b); }
-    else { b.style.right = '10px'; b.style.top = '10px'; layer().appendChild(b); }
+    else { b.style.right = 'calc(10px + env(safe-area-inset-right))'; b.style.top = 'calc(10px + env(safe-area-inset-top))'; layer().appendChild(b); }
     render();
   }
 
@@ -184,7 +184,7 @@ window.Gold = (function(){
            (hasMap ? ' 대동여지도를 지녀 값이 쌉니다.' : '') });
     out.push(
       { id:'shield', nm:'콤보 지키기', price:PRICE.shield,
-        ds:'다음에 한 번 틀려도 콤보가 끊기지 않습니다.' +
+        ds:'연속 2회 이상 맞힌 상태에서 한 번 틀려도 콤보가 끊기지 않습니다.' +
            (st.shield ? ` (지금 ${st.shield}개)` : '') });
     // 군자금 후원은 상점에서 뺐다 — 선사시대에서도 임시정부에 후원할 수
     // 있었기 때문이다. 이제 금붙이를 지니고 임시정부 청사에 서 있을 때만

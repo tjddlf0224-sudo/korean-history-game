@@ -569,13 +569,6 @@
   #intro-panel, #intro-text { color:#3b2a17 !important; }
   #map-panel * { color:inherit; }
 
-  /* 오른쪽 세로 단추들 — 둥근 나무 */
-  #gold-btn, #eng-btn { background:linear-gradient(180deg,#7a4e2a,#5a3519) !important; border:2px solid #3a220e !important;
-    color:#ffe08a !important; box-shadow:0 2px 0 #2f1a09, inset 0 1px 0 rgba(255,220,170,.3) !important; }
-  #gold-btn svg, #eng-btn svg { display:none !important; }
-  #gold-btn::before, #eng-btn::before { content:''; width:20px; height:20px; flex:none;
-    background:url(${U}coin.webp) center/contain no-repeat; }
-  #eng-btn::before { background-image:url(${U}stamina.webp); }
   #bag-btn, #hero-btn, #auto-btn { background:radial-gradient(circle at 35% 30%,#a8733f,#6b4424) !important;
     border:2px solid #3a220e !important; color:#fff1cf !important;
     box-shadow:0 2px 0 #2f1a09, inset 0 1px 0 rgba(255,220,170,.35) !important; }
@@ -607,6 +600,15 @@
      두 값 중 큰 쪽을 양옆에 똑같이 비운다. 닫기 단추가 틀 밖으로 12px 튀어나오므로 그만큼 더. */
   const SAFE = 'max(env(safe-area-inset-left), env(safe-area-inset-right), 8px)';
   const css5 = `
+  /* 금·기력 단추 — 챕터뿐 아니라 기출변형 화면에도 뜬다. 예전엔 챕터에서만
+     붙는 구간(css4)에 있어 기출변형 화면만 옛 아이콘이었다(성일님 제보). */
+  /* 오른쪽 세로 단추들 — 둥근 나무 */
+  #gold-btn, #eng-btn { background:linear-gradient(180deg,#7a4e2a,#5a3519) !important; border:2px solid #3a220e !important;
+    color:#ffe08a !important; box-shadow:0 2px 0 #2f1a09, inset 0 1px 0 rgba(255,220,170,.3) !important; }
+  #gold-btn svg, #eng-btn svg { display:none !important; }
+  #gold-btn::before, #eng-btn::before { content:''; width:20px; height:20px; flex:none;
+    background:url(${U}coin.webp) center/contain no-repeat; }
+  #eng-btn::before { background-image:url(${U}stamina.webp); }
   ${P}, ${P2.join(', ')}, ${P3.join(', ')} {
     max-width:calc(100% - 2 * ${SAFE} - 28px) !important; box-sizing:border-box; }
   #dlg-stack { max-width:min(640px, calc(100% - 2 * ${SAFE} - 28px)) !important; }

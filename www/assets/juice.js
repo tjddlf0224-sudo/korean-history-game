@@ -264,12 +264,19 @@ window.Juice = (function(){
     mount();
     // 학식(동료 능력)이 먼저, 그다음이 금으로 산 콤보 지키기.
     // 공짜인 쪽을 먼저 쓰게 하는 것이 순서로도 맞다.
-    if (combo >= 2 && ((window.Heroes && Heroes.trySik()) ||
-                       (window.Gold && Gold.useShield()))){
-      sfxWrong();
-      flash('bad');
-      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
-      return;                       // 콤보·피버를 그대로 둔다
+    // 콤보가 2보다 작으면 지킬 것이 없어 아무것도 쓰지 않는다. 쓰였을 때는
+    // 반드시 화면에 알린다 — 알림이 없으면 방패가 줄었는지도 모르고, 안 줄었을
+    // 때(콤보 0~1)는 '안 되는 것'으로 보인다(성일님 제보).
+    if (combo >= 2){
+      const sik = window.Heroes && Heroes.trySik();
+      const shield = !sik && window.Gold && Gold.useShield();
+      if (sik || shield){
+        sfxWrong();
+        flash('bad');
+        showPraise(sik ? '학식 · 콤보 유지' : '콤보 지키기 · 남은 ' + Gold.shields + '개');
+        if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+        return;                       // 콤보·피버를 그대로 둔다
+      }
     }
     const had = combo;
     combo = 0;
