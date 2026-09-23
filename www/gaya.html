@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=207"></script>
-<script src="assets/chapterlock.js?v=207"></script>
-<script src="assets/energy.js?v=207"></script>
+<script src="assets/tablet.js?v=208"></script>
+<script src="assets/chapterlock.js?v=208"></script>
+<script src="assets/energy.js?v=208"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=207"></script>
+<script src="assets/resume.js?v=208"></script>
 <title>한국사 게임 - 고대 2화 낙동강의 철</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -517,13 +517,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=207"></script>
-<script src="assets/zoomwarn.js?v=207"></script>
-<script src="assets/map/map_component.js?v=207"></script>
-<script src="assets/chart.js?v=207"></script>
-<script src="assets/companions.js?v=207"></script>
-<script src="assets/inner.js?v=207"></script>
-<script src="assets/audio.js?v=207"></script>
+<script src="assets/errlog.js?v=208"></script>
+<script src="assets/zoomwarn.js?v=208"></script>
+<script src="assets/map/map_component.js?v=208"></script>
+<script src="assets/chart.js?v=208"></script>
+<script src="assets/companions.js?v=208"></script>
+<script src="assets/inner.js?v=208"></script>
+<script src="assets/audio.js?v=208"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -535,7 +535,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=207';   // 존댓말 전환
+const ART_V = '?v=208';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -659,54 +659,25 @@ const ZONES = {
     img: 'assets/scenes/gaya_gimhae.png', label: '김해 철 시장',
     spawn: { x: 688, y: 470 },
     barriers: [
-    { x0: 1032, y0: 8, x1: 1112, y1: 248 },
-    { x0: 408, y0: 24, x1: 1000, y1: 136 },
-    { x0: 8, y0: 104, x1: 312, y1: 296 },
-    { x0: 1112, y0: 104, x1: 1368, y1: 248 },
-    { x0: 632, y0: 136, x1: 792, y1: 216 },
-    { x0: 344, y0: 168, x1: 632, y1: 216 },
-    { x0: 792, y0: 168, x1: 1032, y1: 216 },
-    { x0: 344, y0: 216, x1: 488, y1: 264 },
-    { x0: 312, y0: 264, x1: 328, y1: 328 },
-    { x0: 1000, y0: 264, x1: 1368, y1: 456 },
-    { x0: 184, y0: 296, x1: 312, y1: 328 },
-    { x0: 8, y0: 312, x1: 184, y1: 456 },
-    { x0: 184, y0: 328, x1: 296, y1: 456 },
-    { x0: 296, y0: 392, x1: 408, y1: 520 },
-    { x0: 8, y0: 456, x1: 120, y1: 520 },
+    { x0: 0, y0: 0, x1: 1376, y1: 216 },
+    { x0: 0, y0: 216, x1: 488, y1: 264 },
+    { x0: 1032, y0: 216, x1: 1376, y1: 456 },
+    { x0: 0, y0: 264, x1: 328, y1: 328 },
+    { x0: 1000, y0: 264, x1: 1032, y1: 456 },
+    { x0: 0, y0: 328, x1: 296, y1: 768 },
+    { x0: 296, y0: 392, x1: 344, y1: 408 },
+    { x0: 296, y0: 408, x1: 328, y1: 424 },
+    { x0: 296, y0: 424, x1: 312, y1: 456 },
     { x0: 1112, y0: 456, x1: 1320, y1: 552 },
-    { x0: 408, y0: 504, x1: 536, y1: 536 },
-    { x0: 760, y0: 504, x1: 1016, y1: 632 },
-    { x0: 440, y0: 536, x1: 616, y1: 568 },
-    { x0: 488, y0: 568, x1: 616, y1: 760 },
-    { x0: 8, y0: 616, x1: 456, y1: 760 },
-    { x0: 1016, y0: 616, x1: 1368, y1: 760 },
-    { x0: 760, y0: 632, x1: 840, y1: 760 },
-    { x0: 856, y0: 632, x1: 1016, y1: 760 },
-    // 걸어서 못 가는 곳 — 배리어 도구에서 헷갈리지 않게 막아 둠(2026-09-23)
-    { x0: 0, y0: 0, x1: 1376, y1: 8 },
-    { x0: 0, y0: 8, x1: 1032, y1: 24 },
-    { x0: 1112, y0: 8, x1: 1376, y1: 104 },
-    { x0: 0, y0: 24, x1: 408, y1: 104 },
-    { x0: 1000, y0: 24, x1: 1032, y1: 168 },
-    { x0: 0, y0: 104, x1: 8, y1: 768 },
-    { x0: 312, y0: 104, x1: 408, y1: 168 },
-    { x0: 1368, y0: 104, x1: 1376, y1: 768 },
-    { x0: 408, y0: 136, x1: 632, y1: 168 },
-    { x0: 792, y0: 136, x1: 1000, y1: 168 },
-    { x0: 312, y0: 168, x1: 344, y1: 264 },
-    { x0: 1032, y0: 248, x1: 1368, y1: 264 },
-    { x0: 8, y0: 296, x1: 184, y1: 312 },
-    { x0: 120, y0: 456, x1: 296, y1: 616 },
-    { x0: 8, y0: 520, x1: 120, y1: 616 },
-    { x0: 296, y0: 520, x1: 408, y1: 616 },
-    { x0: 408, y0: 536, x1: 440, y1: 616 },
-    { x0: 440, y0: 568, x1: 488, y1: 616 },
-    { x0: 456, y0: 616, x1: 488, y1: 768 },
-    { x0: 840, y0: 632, x1: 856, y1: 768 },
-    { x0: 8, y0: 760, x1: 456, y1: 768 },
-    { x0: 488, y0: 760, x1: 840, y1: 768 },
-    { x0: 856, y0: 760, x1: 1368, y1: 768 },
+    { x0: 1368, y0: 456, x1: 1376, y1: 768 },
+    { x0: 472, y0: 504, x1: 536, y1: 768 },
+    { x0: 760, y0: 504, x1: 1016, y1: 768 },
+    { x0: 536, y0: 536, x1: 616, y1: 768 },
+    { x0: 360, y0: 552, x1: 408, y1: 768 },
+    { x0: 296, y0: 568, x1: 360, y1: 768 },
+    { x0: 408, y0: 568, x1: 472, y1: 768 },
+    { x0: 1016, y0: 616, x1: 1368, y1: 768 },
+    { x0: 616, y0: 760, x1: 760, y1: 768 },
   ], // 배리어 편집 아티팩트로 손본 벽(2026-09-23)
     npcs: [
       { id:'suro', name:'금관가야 왕', x:420, y:330, img:'assets/portraits/suro.png', look:{ role:'king', body:'#4a5a6b', accent:'#c9a24a' } },
@@ -2001,37 +1972,39 @@ if (window.Resume){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=207"></script>
-<script src="assets/streak.js?v=207"></script>
+<script src="assets/badges.js?v=208"></script>
+<script src="assets/streak.js?v=208"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=207"></script>
-  <script src="assets/fx.js?v=207"></script>
-  <script src="assets/deed.js?v=207"></script>
-  <script src="assets/inkwipe.js?v=207"></script>
-  <script src="assets/dash.js?v=207"></script>
-<script src="assets/juice.js?v=207"></script>
-<script src="assets/growth.js?v=207"></script>
-  <script src="assets/difficulty.js?v=207"></script>
-<script src="assets/heroes_data.js?v=207"></script>
-<script src="assets/heroes.js?v=207"></script>
-<script src="assets/icons.js?v=207"></script>
-<script src="assets/srs.js?v=207"></script>
-<script src="assets/newsflash.js?v=207"></script>
-<script src="assets/timeline.js?v=207"></script>
-<script src="assets/journey.js?v=207"></script>
-<script src="assets/season.js?v=207"></script>
-<script src="assets/items.js?v=207"></script>
-  <script src="assets/gold.js?v=207"></script>
-  <script src="assets/ask.js?v=207"></script>
-  <script src="assets/ads.js?v=207"></script>
-  <script src="assets/daily.js?v=207"></script>
-  <script src="assets/unlock.js?v=207"></script>
-  <script src="assets/guide.js?v=207"></script>
-  <script src="assets/minigames.js?v=207"></script>
-  <script src="assets/quests.js?v=207"></script>
-  <script src="assets/offline.js?v=207"></script>
-  <script src="assets/telemetry.js?v=207"></script>
-<script src="assets/autowalk.js?v=207"></script>
+<script src="assets/rank.js?v=208"></script>
+  <script src="assets/fx.js?v=208"></script>
+  <script src="assets/deed.js?v=208"></script>
+  <script src="assets/inkwipe.js?v=208"></script>
+  <script src="assets/dash.js?v=208"></script>
+<script src="assets/juice.js?v=208"></script>
+<script src="assets/growth.js?v=208"></script>
+  <script src="assets/difficulty.js?v=208"></script>
+<script src="assets/heroes_data.js?v=208"></script>
+<script src="assets/heroes.js?v=208"></script>
+<script src="assets/icons.js?v=208"></script>
+<script src="assets/srs.js?v=208"></script>
+<script src="assets/newsflash.js?v=208"></script>
+<script src="assets/timeline.js?v=208"></script>
+<script src="assets/journey.js?v=208"></script>
+<script src="assets/season.js?v=208"></script>
+<script src="assets/items.js?v=208"></script>
+  <script src="assets/gold.js?v=208"></script>
+  <script src="assets/canopy/data.js?v=208"></script>
+  <script src="assets/canopy.js?v=208"></script>
+  <script src="assets/ask.js?v=208"></script>
+  <script src="assets/ads.js?v=208"></script>
+  <script src="assets/daily.js?v=208"></script>
+  <script src="assets/unlock.js?v=208"></script>
+  <script src="assets/guide.js?v=208"></script>
+  <script src="assets/minigames.js?v=208"></script>
+  <script src="assets/quests.js?v=208"></script>
+  <script src="assets/offline.js?v=208"></script>
+  <script src="assets/telemetry.js?v=208"></script>
+<script src="assets/autowalk.js?v=208"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2084,6 +2057,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=207"></script>
+<script src="assets/uiskin.js?v=208"></script>
 </body>
 </html>
