@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=206"></script>
-<script src="assets/chapterlock.js?v=206"></script>
-<script src="assets/energy.js?v=206"></script>
+<script src="assets/tablet.js?v=207"></script>
+<script src="assets/chapterlock.js?v=207"></script>
+<script src="assets/energy.js?v=207"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=206"></script>
+<script src="assets/resume.js?v=207"></script>
 <title>타임슬립 한국사 - 6화 사림과 피바람</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -449,12 +449,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=206"></script>
-<script src="assets/zoomwarn.js?v=206"></script>
-<script src="assets/chart.js?v=206"></script>
-<script src="assets/companions.js?v=206"></script>
-<script src="assets/inner.js?v=206"></script>
-<script src="assets/audio.js?v=206"></script>
+<script src="assets/errlog.js?v=207"></script>
+<script src="assets/zoomwarn.js?v=207"></script>
+<script src="assets/chart.js?v=207"></script>
+<script src="assets/companions.js?v=207"></script>
+<script src="assets/inner.js?v=207"></script>
+<script src="assets/audio.js?v=207"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -466,7 +466,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=206';   // 존댓말 전환
+const ART_V = '?v=207';   // 존댓말 전환
 
 /* 가로모드 고정: 세로 뷰포트면 body에 .rot을 붙여 #wrap을 90도 회전시키고,
    #wrap/canvas 크기는 가로세로를 서로 바꾼 값으로 맞춘다. vh 대신 항상 px로 계산. */
@@ -648,6 +648,38 @@ const ZONES = {
     { x0: 24, y0: 744, x1: 488, y1: 768 },
     { x0: 520, y0: 744, x1: 856, y1: 768 },
     { x0: 872, y0: 744, x1: 1352, y1: 768 },
+    // 걸어서 못 가는 곳 — 배리어 도구에서 헷갈리지 않게 막아 둠(2026-09-23)
+    { x0: 24, y0: 24, x1: 984, y1: 56 },
+    { x0: 24, y0: 56, x1: 648, y1: 72 },
+    { x0: 24, y0: 72, x1: 200, y1: 88 },
+    { x0: 488, y0: 72, x1: 536, y1: 88 },
+    { x0: 24, y0: 88, x1: 168, y1: 104 },
+    { x0: 24, y0: 104, x1: 136, y1: 120 },
+    { x0: 24, y0: 120, x1: 104, y1: 184 },
+    { x0: 24, y0: 184, x1: 88, y1: 232 },
+    { x0: 24, y0: 232, x1: 72, y1: 264 },
+    { x0: 24, y0: 536, x1: 88, y1: 744 },
+    { x0: 88, y0: 552, x1: 104, y1: 744 },
+    { x0: 1144, y0: 552, x1: 1352, y1: 744 },
+    { x0: 104, y0: 568, x1: 120, y1: 744 },
+    { x0: 1112, y0: 568, x1: 1144, y1: 744 },
+    { x0: 120, y0: 584, x1: 168, y1: 744 },
+    { x0: 1080, y0: 584, x1: 1112, y1: 744 },
+    { x0: 168, y0: 600, x1: 248, y1: 744 },
+    { x0: 1064, y0: 600, x1: 1080, y1: 744 },
+    { x0: 248, y0: 616, x1: 264, y1: 744 },
+    { x0: 264, y0: 632, x1: 296, y1: 744 },
+    { x0: 296, y0: 648, x1: 328, y1: 744 },
+    { x0: 328, y0: 664, x1: 360, y1: 744 },
+    { x0: 1048, y0: 664, x1: 1064, y1: 744 },
+    { x0: 360, y0: 680, x1: 376, y1: 744 },
+    { x0: 952, y0: 680, x1: 1048, y1: 744 },
+    { x0: 376, y0: 696, x1: 408, y1: 744 },
+    { x0: 904, y0: 696, x1: 952, y1: 744 },
+    { x0: 408, y0: 712, x1: 440, y1: 744 },
+    { x0: 888, y0: 712, x1: 904, y1: 744 },
+    { x0: 440, y0: 728, x1: 488, y1: 744 },
+    { x0: 872, y0: 728, x1: 888, y1: 744 },
   ],
     npcs: [
       // 원래 '떠도는 백성'이었는데, 여기는 궁궐 안이라 저잣거리 백성이 있을 자리가
@@ -678,6 +710,9 @@ const ZONES = {
     { x0: 824, y0: 424, x1: 936, y1: 648 },
     { x0: 1032, y0: 424, x1: 1128, y1: 648 },
     { x0: 1176, y0: 424, x1: 1320, y1: 648 },
+    // 걸어서 못 가는 곳 — 배리어 도구에서 헷갈리지 않게 막아 둠(2026-09-23)
+    { x0: 1368, y0: 0, x1: 1376, y1: 768 },
+    { x0: 0, y0: 760, x1: 1368, y1: 768 },
   ],
     npcs: [
       { id: 'kimilson', name: '김일손', x: 688, y: 380, img: 'assets/portraits/kimilson.png', look: { role: 'scholar', body: '#4a3050', accent: '#8a6d3b' } },
@@ -700,6 +735,9 @@ const ZONES = {
     { x0: 1124, y0: 82, x1: 1178, y1: 698 },
     { x0: 222, y0: 622, x1: 612, y1: 698 },
     { x0: 762, y0: 622, x1: 1153, y1: 698 },
+    // 걸어서 못 가는 곳 — 배리어 도구에서 헷갈리지 않게 막아 둠(2026-09-23)
+    { x0: 1368, y0: 0, x1: 1376, y1: 768 },
+    { x0: 0, y0: 760, x1: 1368, y1: 768 },
   ], // 초가집
     npcs: [
       { id: 'jogwangjo', name: '조광조', x: 900, y: 600, img: 'assets/portraits/jogwangjo.png', look: { role: 'scholar', body: '#3a5040', accent: '#c9a24a' } },
@@ -1991,37 +2029,37 @@ function loop(t){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=206"></script>
-<script src="assets/streak.js?v=206"></script>
+<script src="assets/badges.js?v=207"></script>
+<script src="assets/streak.js?v=207"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=206"></script>
-  <script src="assets/fx.js?v=206"></script>
-  <script src="assets/deed.js?v=206"></script>
-  <script src="assets/inkwipe.js?v=206"></script>
-  <script src="assets/dash.js?v=206"></script>
-<script src="assets/juice.js?v=206"></script>
-<script src="assets/growth.js?v=206"></script>
-  <script src="assets/difficulty.js?v=206"></script>
-<script src="assets/heroes_data.js?v=206"></script>
-<script src="assets/heroes.js?v=206"></script>
-<script src="assets/icons.js?v=206"></script>
-<script src="assets/srs.js?v=206"></script>
-<script src="assets/newsflash.js?v=206"></script>
-<script src="assets/timeline.js?v=206"></script>
-<script src="assets/journey.js?v=206"></script>
-<script src="assets/season.js?v=206"></script>
-<script src="assets/items.js?v=206"></script>
-  <script src="assets/gold.js?v=206"></script>
-  <script src="assets/ask.js?v=206"></script>
-  <script src="assets/ads.js?v=206"></script>
-  <script src="assets/daily.js?v=206"></script>
-  <script src="assets/unlock.js?v=206"></script>
-  <script src="assets/guide.js?v=206"></script>
-  <script src="assets/minigames.js?v=206"></script>
-  <script src="assets/quests.js?v=206"></script>
-  <script src="assets/offline.js?v=206"></script>
-  <script src="assets/telemetry.js?v=206"></script>
-<script src="assets/autowalk.js?v=206"></script>
+<script src="assets/rank.js?v=207"></script>
+  <script src="assets/fx.js?v=207"></script>
+  <script src="assets/deed.js?v=207"></script>
+  <script src="assets/inkwipe.js?v=207"></script>
+  <script src="assets/dash.js?v=207"></script>
+<script src="assets/juice.js?v=207"></script>
+<script src="assets/growth.js?v=207"></script>
+  <script src="assets/difficulty.js?v=207"></script>
+<script src="assets/heroes_data.js?v=207"></script>
+<script src="assets/heroes.js?v=207"></script>
+<script src="assets/icons.js?v=207"></script>
+<script src="assets/srs.js?v=207"></script>
+<script src="assets/newsflash.js?v=207"></script>
+<script src="assets/timeline.js?v=207"></script>
+<script src="assets/journey.js?v=207"></script>
+<script src="assets/season.js?v=207"></script>
+<script src="assets/items.js?v=207"></script>
+  <script src="assets/gold.js?v=207"></script>
+  <script src="assets/ask.js?v=207"></script>
+  <script src="assets/ads.js?v=207"></script>
+  <script src="assets/daily.js?v=207"></script>
+  <script src="assets/unlock.js?v=207"></script>
+  <script src="assets/guide.js?v=207"></script>
+  <script src="assets/minigames.js?v=207"></script>
+  <script src="assets/quests.js?v=207"></script>
+  <script src="assets/offline.js?v=207"></script>
+  <script src="assets/telemetry.js?v=207"></script>
+<script src="assets/autowalk.js?v=207"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2075,6 +2113,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=206"></script>
+<script src="assets/uiskin.js?v=207"></script>
 </body>
 </html>

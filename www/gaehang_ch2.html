@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=206"></script>
-<script src="assets/chapterlock.js?v=206"></script>
-<script src="assets/energy.js?v=206"></script>
+<script src="assets/tablet.js?v=207"></script>
+<script src="assets/chapterlock.js?v=207"></script>
+<script src="assets/energy.js?v=207"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=206"></script>
+<script src="assets/resume.js?v=207"></script>
 <title>타임슬립 한국사 - 근대개항기 2화 군인들의 함성</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -429,12 +429,12 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=206"></script>
-<script src="assets/zoomwarn.js?v=206"></script>
-<script src="assets/chart.js?v=206"></script>
-<script src="assets/companions.js?v=206"></script>
-<script src="assets/inner.js?v=206"></script>
-<script src="assets/audio.js?v=206"></script>
+<script src="assets/errlog.js?v=207"></script>
+<script src="assets/zoomwarn.js?v=207"></script>
+<script src="assets/chart.js?v=207"></script>
+<script src="assets/companions.js?v=207"></script>
+<script src="assets/inner.js?v=207"></script>
+<script src="assets/audio.js?v=207"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -445,7 +445,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=206';   // 존댓말 전환
+const ART_V = '?v=207';   // 존댓말 전환
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
    한 박자 늦게 바뀌는 경우가 있다(특히 iOS Safari). visualViewport가 있으면
@@ -583,6 +583,17 @@ const ZONES = {
     { x0: 24, y0: 584, x1: 40, y1: 648 },
     { x0: 8, y0: 632, x1: 24, y1: 696 },
     { x0: 0, y0: 680, x1: 8, y1: 744 },
+    // 걸어서 못 가는 곳 — 배리어 도구에서 헷갈리지 않게 막아 둠(2026-09-23)
+    { x0: 392, y0: 0, x1: 1160, y1: 8 },
+    { x0: 1272, y0: 0, x1: 1376, y1: 24 },
+    { x0: 392, y0: 8, x1: 408, y1: 24 },
+    { x0: 424, y0: 24, x1: 456, y1: 40 },
+    { x0: 1352, y0: 24, x1: 1376, y1: 152 },
+    { x0: 1368, y0: 152, x1: 1376, y1: 768 },
+    { x0: 0, y0: 584, x1: 24, y1: 632 },
+    { x0: 0, y0: 632, x1: 8, y1: 680 },
+    { x0: 0, y0: 744, x1: 8, y1: 768 },
+    { x0: 8, y0: 760, x1: 1368, y1: 768 },
   ], // 낡은 병영 건물
     npcs: [
       { id: 'daewongun', name: '흥선대원군', x: 700, y: 460, img: 'assets/portraits/daewongun.png', look: { role: 'king', body: '#3a2a1e', accent: '#e0954a' } },
@@ -1629,37 +1640,37 @@ if (window.Resume){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=206"></script>
-<script src="assets/streak.js?v=206"></script>
+<script src="assets/badges.js?v=207"></script>
+<script src="assets/streak.js?v=207"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=206"></script>
-  <script src="assets/fx.js?v=206"></script>
-  <script src="assets/deed.js?v=206"></script>
-  <script src="assets/inkwipe.js?v=206"></script>
-  <script src="assets/dash.js?v=206"></script>
-<script src="assets/juice.js?v=206"></script>
-<script src="assets/growth.js?v=206"></script>
-  <script src="assets/difficulty.js?v=206"></script>
-<script src="assets/heroes_data.js?v=206"></script>
-<script src="assets/heroes.js?v=206"></script>
-<script src="assets/icons.js?v=206"></script>
-<script src="assets/srs.js?v=206"></script>
-<script src="assets/newsflash.js?v=206"></script>
-<script src="assets/timeline.js?v=206"></script>
-<script src="assets/journey.js?v=206"></script>
-<script src="assets/season.js?v=206"></script>
-<script src="assets/items.js?v=206"></script>
-  <script src="assets/gold.js?v=206"></script>
-  <script src="assets/ask.js?v=206"></script>
-  <script src="assets/ads.js?v=206"></script>
-  <script src="assets/daily.js?v=206"></script>
-  <script src="assets/unlock.js?v=206"></script>
-  <script src="assets/guide.js?v=206"></script>
-  <script src="assets/minigames.js?v=206"></script>
-  <script src="assets/quests.js?v=206"></script>
-  <script src="assets/offline.js?v=206"></script>
-  <script src="assets/telemetry.js?v=206"></script>
-<script src="assets/autowalk.js?v=206"></script>
+<script src="assets/rank.js?v=207"></script>
+  <script src="assets/fx.js?v=207"></script>
+  <script src="assets/deed.js?v=207"></script>
+  <script src="assets/inkwipe.js?v=207"></script>
+  <script src="assets/dash.js?v=207"></script>
+<script src="assets/juice.js?v=207"></script>
+<script src="assets/growth.js?v=207"></script>
+  <script src="assets/difficulty.js?v=207"></script>
+<script src="assets/heroes_data.js?v=207"></script>
+<script src="assets/heroes.js?v=207"></script>
+<script src="assets/icons.js?v=207"></script>
+<script src="assets/srs.js?v=207"></script>
+<script src="assets/newsflash.js?v=207"></script>
+<script src="assets/timeline.js?v=207"></script>
+<script src="assets/journey.js?v=207"></script>
+<script src="assets/season.js?v=207"></script>
+<script src="assets/items.js?v=207"></script>
+  <script src="assets/gold.js?v=207"></script>
+  <script src="assets/ask.js?v=207"></script>
+  <script src="assets/ads.js?v=207"></script>
+  <script src="assets/daily.js?v=207"></script>
+  <script src="assets/unlock.js?v=207"></script>
+  <script src="assets/guide.js?v=207"></script>
+  <script src="assets/minigames.js?v=207"></script>
+  <script src="assets/quests.js?v=207"></script>
+  <script src="assets/offline.js?v=207"></script>
+  <script src="assets/telemetry.js?v=207"></script>
+<script src="assets/autowalk.js?v=207"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -1710,6 +1721,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=206"></script>
+<script src="assets/uiskin.js?v=207"></script>
 </body>
 </html>
