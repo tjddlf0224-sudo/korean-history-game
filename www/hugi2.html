@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=208"></script>
-<script src="assets/chapterlock.js?v=208"></script>
-<script src="assets/energy.js?v=208"></script>
+<script src="assets/tablet.js?v=209"></script>
+<script src="assets/chapterlock.js?v=209"></script>
+<script src="assets/energy.js?v=209"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=208"></script>
+<script src="assets/resume.js?v=209"></script>
 <title>한국사 게임 - 조선후기 4화 실학과 저잣거리</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -526,13 +526,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=208"></script>
-<script src="assets/zoomwarn.js?v=208"></script>
-<script src="assets/map/map_component.js?v=208"></script>
-<script src="assets/chart.js?v=208"></script>
-<script src="assets/companions.js?v=208"></script>
-<script src="assets/inner.js?v=208"></script>
-<script src="assets/audio.js?v=208"></script>
+<script src="assets/errlog.js?v=209"></script>
+<script src="assets/zoomwarn.js?v=209"></script>
+<script src="assets/map/map_component.js?v=209"></script>
+<script src="assets/chart.js?v=209"></script>
+<script src="assets/companions.js?v=209"></script>
+<script src="assets/inner.js?v=209"></script>
+<script src="assets/audio.js?v=209"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -544,7 +544,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=208';   // 존댓말 전환
+const ART_V = '?v=209';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -737,27 +737,29 @@ const ZONES = {
     img: 'assets/scenes/hugi2_jeojat.png', label: '한양 저잣거리',
     spawn: { x: 688, y: 470 },
     barriers: [
-    { x0: 12, y0: 12, x1: 388, y1: 223 },
-    { x0: 147, y0: 202, x1: 193, y1: 278 },
-    { x0: 207, y0: 227, x1: 338, y1: 353 },
-    { x0: 412, y0: 12, x1: 1364, y1: 123 },
-    { x0: 422, y0: 132, x1: 1364, y1: 283 },
-    { x0: 106, y0: 242, x1: 128, y1: 593 },
-    { x0: 362, y0: 297, x1: 423, y1: 343 },
-    { x0: 212, y0: 457, x1: 343, y1: 523 },
-    { x0: 137, y0: 517, x1: 193, y1: 563 },
-    { x0: 172, y0: 562, x1: 268, y1: 618 },
-    { x0: 292, y0: 572, x1: 353, y1: 633 },
-    { x0: 12, y0: 607, x1: 113, y1: 756 },
-    { x0: 407, y0: 552, x1: 653, y1: 756 },
-    { x0: 1237, y0: 617, x1: 1364, y1: 756 },
-    { x0: 12, y0: 667, x1: 588, y1: 723 },
-    { x0: 802, y0: 667, x1: 1364, y1: 723 },
-    { x0: 752, y0: 577, x1: 933, y1: 653 },
-    { x0: 962, y0: 537, x1: 1048, y1: 613 },
-    { x0: 992, y0: 612, x1: 1193, y1: 648 },
-    { x0: 1087, y0: 497, x1: 1364, y1: 603 },
-    { x0: 1252, y0: 202, x1: 1338, y1: 268 },
+    { x0: 8, y0: 8, x1: 392, y1: 216 },
+    { x0: 408, y0: 8, x1: 1368, y1: 120 },
+    { x0: 424, y0: 136, x1: 1368, y1: 280 },
+    { x0: 8, y0: 216, x1: 136, y1: 600 },
+    { x0: 152, y0: 216, x1: 200, y1: 280 },
+    { x0: 200, y0: 232, x1: 344, y1: 360 },
+    { x0: 360, y0: 296, x1: 424, y1: 344 },
+    { x0: 232, y0: 456, x1: 328, y1: 520 },
+    { x0: 1080, y0: 504, x1: 1368, y1: 600 },
+    { x0: 136, y0: 520, x1: 184, y1: 568 },
+    { x0: 968, y0: 536, x1: 1048, y1: 616 },
+    { x0: 168, y0: 568, x1: 184, y1: 616 },
+    { x0: 296, y0: 568, x1: 360, y1: 632 },
+    { x0: 184, y0: 584, x1: 248, y1: 616 },
+    { x0: 744, y0: 584, x1: 936, y1: 648 },
+    { x0: 8, y0: 600, x1: 120, y1: 760 },
+    { x0: 984, y0: 616, x1: 1192, y1: 648 },
+    { x0: 1240, y0: 616, x1: 1368, y1: 760 },
+    { x0: 120, y0: 664, x1: 392, y1: 728 },
+    { x0: 808, y0: 664, x1: 1240, y1: 728 },
+    { x0: 392, y0: 680, x1: 632, y1: 728 },
+    { x0: 408, y0: 728, x1: 632, y1: 760 },
+    { x0: 632, y0: 744, x1: 648, y1: 760 },
   ],
     npcs: [
       { id:'jeongyagyong', name:'정약용', x:330, y:390, img:'assets/portraits/jeongyagyong.png', look:{ role:'scholar', body:'#3d5a6b', accent:'#c9a24a' } },
@@ -2285,39 +2287,39 @@ if (window.Resume){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=208"></script>
-<script src="assets/streak.js?v=208"></script>
+<script src="assets/badges.js?v=209"></script>
+<script src="assets/streak.js?v=209"></script>
 <script>const RANK_ERA = 'class';</script>
-<script src="assets/rank.js?v=208"></script>
-  <script src="assets/fx.js?v=208"></script>
-  <script src="assets/deed.js?v=208"></script>
-  <script src="assets/inkwipe.js?v=208"></script>
-  <script src="assets/dash.js?v=208"></script>
-<script src="assets/juice.js?v=208"></script>
-<script src="assets/growth.js?v=208"></script>
-  <script src="assets/difficulty.js?v=208"></script>
-<script src="assets/heroes_data.js?v=208"></script>
-<script src="assets/heroes.js?v=208"></script>
-<script src="assets/icons.js?v=208"></script>
-<script src="assets/srs.js?v=208"></script>
-<script src="assets/newsflash.js?v=208"></script>
-<script src="assets/timeline.js?v=208"></script>
-<script src="assets/journey.js?v=208"></script>
-<script src="assets/season.js?v=208"></script>
-<script src="assets/items.js?v=208"></script>
-  <script src="assets/gold.js?v=208"></script>
-  <script src="assets/canopy/data.js?v=208"></script>
-  <script src="assets/canopy.js?v=208"></script>
-  <script src="assets/ask.js?v=208"></script>
-  <script src="assets/ads.js?v=208"></script>
-  <script src="assets/daily.js?v=208"></script>
-  <script src="assets/unlock.js?v=208"></script>
-  <script src="assets/guide.js?v=208"></script>
-  <script src="assets/minigames.js?v=208"></script>
-  <script src="assets/quests.js?v=208"></script>
-  <script src="assets/offline.js?v=208"></script>
-  <script src="assets/telemetry.js?v=208"></script>
-<script src="assets/autowalk.js?v=208"></script>
+<script src="assets/rank.js?v=209"></script>
+  <script src="assets/fx.js?v=209"></script>
+  <script src="assets/deed.js?v=209"></script>
+  <script src="assets/inkwipe.js?v=209"></script>
+  <script src="assets/dash.js?v=209"></script>
+<script src="assets/juice.js?v=209"></script>
+<script src="assets/growth.js?v=209"></script>
+  <script src="assets/difficulty.js?v=209"></script>
+<script src="assets/heroes_data.js?v=209"></script>
+<script src="assets/heroes.js?v=209"></script>
+<script src="assets/icons.js?v=209"></script>
+<script src="assets/srs.js?v=209"></script>
+<script src="assets/newsflash.js?v=209"></script>
+<script src="assets/timeline.js?v=209"></script>
+<script src="assets/journey.js?v=209"></script>
+<script src="assets/season.js?v=209"></script>
+<script src="assets/items.js?v=209"></script>
+  <script src="assets/gold.js?v=209"></script>
+  <script src="assets/canopy/data.js?v=209"></script>
+  <script src="assets/canopy.js?v=209"></script>
+  <script src="assets/ask.js?v=209"></script>
+  <script src="assets/ads.js?v=209"></script>
+  <script src="assets/daily.js?v=209"></script>
+  <script src="assets/unlock.js?v=209"></script>
+  <script src="assets/guide.js?v=209"></script>
+  <script src="assets/minigames.js?v=209"></script>
+  <script src="assets/quests.js?v=209"></script>
+  <script src="assets/offline.js?v=209"></script>
+  <script src="assets/telemetry.js?v=209"></script>
+<script src="assets/autowalk.js?v=209"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2374,6 +2376,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=208"></script>
+<script src="assets/uiskin.js?v=209"></script>
 </body>
 </html>
