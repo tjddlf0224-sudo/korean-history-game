@@ -203,11 +203,21 @@ window.Ads = (function () {
   // 챕터 목록(index.html)이 자리 잡은 뒤 한 번 부른다. 표가 없으면 조용히
   // 넘어간다. 다른 창(로그인·메뉴 등)이 열려 있으면 그 위로 덮이니 미룬다 —
   // 다음에 목록으로 돌아올 때 다시 시도된다(표를 그대로 남겨 둠).
+  /* 화면을 덮는 창이 떠 있나. 예전엔 `.show`가 하나라도 있으면 미뤘는데, 목록 위쪽의
+     스트릭 표시(#streak-pill)가 늘 .show를 달고 있어서 **스트릭이 생긴 뒤로는 전면 광고가
+     한 번도 안 떴다**(2026-09-19~, 안드로이드 점검 2026-09-27에 발견). 창(-ov/-overlay/-modal,
+     확인창, 안내 말풍선)만 본다. */
+  function overlayOpen() {
+    var els = document.querySelectorAll('.ov.show, [id$="-ov"].show, [id$="-overlay"].show, [id$="-modal"].show, #end-screen.show, #gd-bub');
+    for (var i = 0; i < els.length; i++) if (els[i].getClientRects().length) return true;
+    return false;
+  }
+
   function maybeShowInterstitial() {
     if (!isNative()) return;
     try {
       if (localStorage.getItem(DUE_KEY) !== '1') return;
-      if (document.querySelector('.show')) return;   // 뭔가 이미 열려 있다 — 나중에
+      if (overlayOpen()) return;   // 뭔가 이미 열려 있다 — 나중에
       localStorage.removeItem(DUE_KEY);
     } catch (e) { return; }
     var leaving = false;
@@ -218,7 +228,7 @@ window.Ads = (function () {
     }, true);
     setTimeout(function () {
       interstitial(function () {
-        return !leaving && document.visibilityState === 'visible' && !document.querySelector('.show');
+        return !leaving && document.visibilityState === 'visible' && !overlayOpen();
       }).then(function (shown) {
         // 못 띄웠으면 표를 되돌린다 — 다음에 목록으로 올 때 다시
         if (!shown) try { localStorage.setItem(DUE_KEY, '1'); } catch (e) {}
