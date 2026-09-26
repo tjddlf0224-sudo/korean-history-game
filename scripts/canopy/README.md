@@ -17,3 +17,9 @@
    (`all_zones.json`, `canopy_data_old.json`=기존 canopy_data.json 복사본 필요).
 2. `segall.py`: 칠한 칸 덩어리마다 isnet 분리(comps.pkl) → `mkpieces.py`: isnet∩칸이 칸의 50% 이상이면 그것, 아니면 GrabCut(칸 안쪽 확정·바깥 배경)로 webp 조각 + data.js.
 3. base = 칠한 칸 덩어리의 아래 끝. 성일님 배리어는 건드리지 않는다(밑동은 성일님이 직접 칠함).
+
+## 5차(9/26) 작업 순서 요약 — 내보내기 받았을 때
+1. paste를 `paste5.json`으로 저장 → `all_zones.json` 새로 뽑기(`extract_zones.js`) → 배리어만 뽑아 `apply_rects.py`.
+2. `lib.py`가 읽는 paste 이름을 바꾸고 `canopy_data_old.json`은 **www/assets/canopy/data.js에서** 다시 뽑는다(저장소의 canopy_data.json은 옛것).
+3. `/usr/bin/python3 segall.py` → `/usr/bin/python3 mkpieces.py`(www/assets/canopy와 data.js를 직접 고침).
+4. 아티팩트: **항상 라이브 최신본을 read해서 그 위에 패치**(다른 세션이 고쳤을 수 있음) — `patch_art5.py`. 게시할 때 저장 키를 올리고(SAVE_KEY/CSAVE_KEY) SENT/SENTC에 방금 받은 것을 합친다.
