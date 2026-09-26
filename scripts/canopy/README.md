@@ -23,3 +23,8 @@
 2. `lib.py`가 읽는 paste 이름을 바꾸고 `canopy_data_old.json`은 **www/assets/canopy/data.js에서** 다시 뽑는다(저장소의 canopy_data.json은 옛것).
 3. `/usr/bin/python3 segall.py` → `/usr/bin/python3 mkpieces.py`(www/assets/canopy와 data.js를 직접 고침).
 4. 아티팩트: **항상 라이브 최신본을 read해서 그 위에 패치**(다른 세션이 고쳤을 수 있음) — `patch_art5.py`. 게시할 때 저장 키를 올리고(SAVE_KEY/CSAVE_KEY) SENT/SENTC에 방금 받은 것을 합친다.
+
+## 전깃줄 자동 덮개 (9/26, 경성 종로)
+`wires.py '{"file":..,"zone":..,"img":..,"y0":띠 위,"y1":띠 아래,"ex":[[뺄 사각형]]}'` — 검은 가는 선만(black-hat) 뽑고,
+완전 수평으로 화면을 가로지르는 선로 줄·세로 획(기둥)·성일님이 칠한 조각(전봇대·가로등) 자리는 뺀다.
+base=9999(늘 인물 위 — 전깃줄은 머리 위라서). data.js 항목에 `"auto":"wires"` 표시 → mkpieces.py가 칠하기 반영할 때 지우지 않는다.

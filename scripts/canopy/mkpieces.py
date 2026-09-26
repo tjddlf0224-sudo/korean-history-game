@@ -15,7 +15,9 @@ data=json.load(open('canopy_data_old.json'))
 tot=0
 for k,cl in comps.items():
     f,z=k.split('#')
+    keep=[o for o in data.get(f,{}).get(z,[]) if o.get('auto')]   # 자동 덮개(전깃줄 등)는 성일님 칠하기와 따로 — 남긴다
     for old in data.get(f,{}).get(z,[]):
+        if old.get('auto'): continue
         p=WWW+old['src']
         if os.path.exists(p): os.remove(p)
     lst=[]; bg=background(f,z)
@@ -32,7 +34,7 @@ for k,cl in comps.items():
         Image.fromarray(rgba,'RGBA').save(OUT+name,quality=90,method=6)
         tot+=os.path.getsize(OUT+name)
         lst.append({'src':'assets/canopy/'+name,'x':int(x0),'y':int(y0),'w':int(x1-x0),'h':int(y1-y0),'base':int(y1)})
-    data.setdefault(f,{})[z]=lst
+    data.setdefault(f,{})[z]=lst+keep
     print(k,len(lst))
 json.dump(data,open('canopy_data_new.json','w'),ensure_ascii=False)
 with open(OUT+'data.js','w',encoding='utf-8') as fp:
