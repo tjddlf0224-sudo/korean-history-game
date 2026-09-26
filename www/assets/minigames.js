@@ -21,7 +21,7 @@
 window.Mini = (function(){
   const KEY = 'khg_mini';
   const FREE_PER_DAY = 3;
-  const today = () => Math.floor(Date.now() / 86400000);
+  const today = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);   // 기기 시각 자정에 넘어간다(출석 daily.js와 같게 — 예전엔 UTC라 한국은 아침 9시에 바뀌었다)
 
   function load(){
     try { const v = JSON.parse(localStorage.getItem(KEY)); if (v) return v; } catch(e){}
@@ -51,11 +51,15 @@ window.Mini = (function(){
     const owned = (Items.owned && Items.owned()) || [];
     // 주운 것 위주로 낸다 — 본 적 없는 것만 나오면 찍기가 된다
     const ids = (owned.length >= 4 ? owned : Object.keys(Items.DB));
-    const pick = shuffle(ids).slice(0, 4).map(id => ({
-      id, name: Items.DB[id].name, era: Items.DB[id].era }));
+    // 시대가 겹치면 답이 둘이 되어 버린다 — 시대가 다른 넷을 고른다. 예전엔 한 번 뽑아 겹치면
+    // 그냥 포기해서, 많이 모은 사람에게도 '아직 못 모았다'가 떴다(2026-09-27 점검).
+    const pick = [], eras = new Set();
+    for (const id of shuffle(ids)){
+      const it = Items.DB[id]; if (!it || eras.has(it.era)) continue;
+      eras.add(it.era); pick.push({ id, name: it.name, era: it.era });
+      if (pick.length === 4) break;
+    }
     if (pick.length < 4) return null;
-    // 시대가 겹치면 답이 둘이 되어 버린다 — 겹치면 다시 뽑는다
-    if (new Set(pick.map(p => p.era)).size < 4) return null;
     return { kind: 'match', left: pick, right: shuffle(pick) };
   }
 
@@ -66,7 +70,10 @@ window.Mini = (function(){
     if (!H) return null;
     const all = Object.keys(H).filter(k => H[k].p);
     if (all.length < 4) return null;
-    const four = shuffle(all).slice(0, 4);
+    // 이름이 같은 사람(고려 현종·조선 현종 등)이 한 판에 둘 나오면 틀린 얼굴을 골라도 맞았다 — 이름이 다른 넷만
+    const four = [], names = new Set();
+    for (const k of shuffle(all)){ if (names.has(H[k].n)) continue; names.add(H[k].n); four.push(k); if (four.length === 4) break; }
+    if (four.length < 4) return null;
     const ans = four[0];
     return { kind: 'face', img: 'assets/portraits/' + H[ans].p,
              answer: H[ans].n, opts: shuffle(four.map(k => H[k].n)) };

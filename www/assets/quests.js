@@ -20,7 +20,7 @@
 */
 window.Quests = (function(){
   const KEY = 'khg_quest';
-  const today = () => Math.floor(Date.now() / 86400000);
+  const today = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);   // 기기 시각 자정에 넘어간다(출석 daily.js와 같게 — 예전엔 UTC라 한국은 아침 9시에 바뀌었다)
 
   function load(){
     try { const v = JSON.parse(localStorage.getItem(KEY)); if (v) return v; } catch(e){}

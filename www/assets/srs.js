@@ -27,7 +27,7 @@ window.Srs = (function(){
   const GAP = [0, 1, 3, 7, 16];      // 상자 1~4의 간격(일). 5는 졸업.
   const MAX_BOX = 5;
 
-  const today = () => Math.floor(Date.now() / 86400000);   // 날짜 단위
+  const today = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);   // 기기 시각 자정에 넘어간다(출석 daily.js와 같게 — 예전엔 UTC라 한국은 아침 9시에 바뀌었다)
 
   function load(){
     try {

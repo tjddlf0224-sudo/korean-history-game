@@ -101,6 +101,14 @@ window.Ads = (function () {
                                 : '광고를 끝까지 보지 않으셨습니다.';
   }
 
+  /* 영영 안 끝나는 약속 막기 — 불러오기가 네트워크에서 멈추면 '광고 준비 중…'이 끝없이 남았고,
+     띄우려는 순간 다른 창(iOS 첫 실행의 '추적 허용' 시스템 창 등)이 떠 있으면 광고가 뜨지도,
+     닫힘 알림이 오지도 않아 '보여 주는 중'에 갇혔다(iOS 시뮬레이터 점검 2026-09-27). */
+  function within(p, ms) {
+    return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout ' + ms)); }, ms); })]);
+  }
+  var LOAD_MS = 20000, SHOW_MS = 8000;
+
   function rewarded() {
     var A = admob();
     // 광고를 불러오는 중에 다른 보상 단추를 누르면, 예전엔 같은 광고에 올라타서 **광고 하나로
@@ -108,7 +116,7 @@ window.Ads = (function () {
     if (_rewardBusy) { _lastFail = 'busy'; return Promise.resolve(false); }
     _lastFail = '';
     if (!A || !isNative()) return _webFallback();
-    var earned = false, handles = [], done = false;
+    var earned = false, showed = false, handles = [], done = false;
     _rewardBusy = new Promise(function (resolve) {
       function fin() {
         if (done) return; done = true;
@@ -122,15 +130,18 @@ window.Ads = (function () {
         .then(function () {
           return Promise.all([
             A.addListener('onRewardedVideoAdReward', function () { earned = true; }),
+            A.addListener('onRewardedVideoAdShowed', function () { showed = true; }),
             A.addListener('onRewardedVideoAdDismissed', function () { fin(); }),
             A.addListener('onRewardedVideoAdFailedToShow', function () { _lastFail = 'load'; fin(); }),
           ]);
         })
-        .then(function (hs) { handles = hs; return A.prepareRewardVideoAd({ adId: unit('rewarded'), isTesting: isTestUnit('rewarded') }); })
+        .then(function (hs) { handles = hs; return within(A.prepareRewardVideoAd({ adId: unit('rewarded'), isTesting: isTestUnit('rewarded') }), LOAD_MS); })
         .then(function () {
+          if (done) return;
           // 보상을 받으면 끝나는 약속 — 기다리지 않는다(닫힘 알림이 끝을 맡는다)
           muteGame();
           A.showRewardVideoAd().then(function () { earned = true; }, function (e) { console.warn('[Ads] show 실패', e); _lastFail = 'load'; fin(); });
+          setTimeout(function () { if (!showed && !done) { console.warn('[Ads] 보상형이 화면에 안 뜸'); _lastFail = 'load'; fin(); } }, SHOW_MS);
         })
         .catch(function (e) { console.warn('[Ads] rewarded 실패', e); _lastFail = 'load'; fin(); });
     });
@@ -150,7 +161,7 @@ window.Ads = (function () {
     var A = admob();
     if (!A || !isNative() || _showingInterstitial) return Promise.resolve(false);
     _showingInterstitial = true;
-    var handles = [], done = false;
+    var handles = [], done = false, showed = false;
     return new Promise(function (resolve) {
       function fin(ok) {
         if (done) return; done = true;
@@ -163,13 +174,14 @@ window.Ads = (function () {
         .then(function () {
           return Promise.all([
             A.addListener('interstitialAdDismissed', function () { fin(true); }),
+            A.addListener('interstitialAdShowed', function () { showed = true; }),
             A.addListener('interstitialAdFailedToShow', function () { fin(false); }),
           ]);
         })
         .then(function (hs) {
           handles = hs;
           if (preloadedFresh()) return null;          // 챕터 끝에서 미리 불러 둔 것을 쓴다
-          return A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') })
+          return within(A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') }), LOAD_MS)
             .then(function () { try { localStorage.setItem(READY_KEY, String(Date.now())); } catch (e) {} });
             // ↑ 불러 둔 뒤 못 띄우고 물러나도(아래 stillOk) 광고는 네이티브에 남는다 — 다음에 바로 쓴다
         })
@@ -178,6 +190,7 @@ window.Ads = (function () {
           if (stillOk && !stillOk()) { fin(false); return; }
           muteGame();
           try { localStorage.removeItem(READY_KEY); } catch (e) {}   // 한 번 띄우면 소진
+          setTimeout(function () { if (!showed && !done) { console.warn('[Ads] 전면이 화면에 안 뜸'); fin(false); } }, SHOW_MS);
           return A.showInterstitial();
         })
         .catch(function (e) {
