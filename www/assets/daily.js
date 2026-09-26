@@ -25,7 +25,9 @@
 window.Daily = (function(){
   const KEY = 'khg_daily';
 
-  const today = () => Math.floor(Date.now() / 86400000);
+  /* 하루는 '그 기기의 자정'에 바뀐다(2026-09-27). 예전엔 UTC로 나눠서 한국에선 아침 9시에
+     날이 바뀌었다 — 연속 기록(streak.js)·기력 입장료(energy.js)는 자정에 바뀌니 서로 어긋났다. */
+  const today = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);
 
   /* 7일 트랙 보상 — 7일째가 눈에 띄게 커야 일주일을 채운다 */
   const TRACK = [

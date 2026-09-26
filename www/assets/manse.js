@@ -170,6 +170,15 @@ window.Manse = (function(){
       b.classList.add('on');
       return;
     }
+    /* 만세는 불렀는데 아직 형무소를 나오지 않은 채 챕터를 다시 열면(앱을 껐다 켜거나
+       목록에 나갔다 오면) 탑골공원에서 시작한다. 탑골과 형무소 사이엔 출구가 없어서
+       예전엔 여기서 영영 갇혔다(2026-09-27 점검). 돌아갈 단추를 띄운다. */
+    if (zone === opt.squareZone && done('shouted') && !done('released')){
+      b.textContent = '서대문형무소로 돌아가기';
+      b.onclick = () => { b.classList.remove('on'); opt.onJail && opt.onJail(); };
+      b.classList.add('on');
+      return;
+    }
     if (zone === opt.jailZone && !done('released')){
       const n = heard();
       if (n >= PRISONERS.length){

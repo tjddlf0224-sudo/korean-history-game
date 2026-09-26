@@ -79,6 +79,13 @@ window.Auth = (function(){
     return /popup-blocked|operation-not-supported|web-storage-unsupported/i.test(c);
   }
   async function webSignIn(provider){
+    /* 앱 안에서는 웹 팝업을 쓰면 안 된다. 안드로이드에서 네이티브 로그인이 안 붙은 채
+       눌렀더니 크롬이 따로 열려 앱을 떠났고, 로그인해도 앱으로 돌아오지 않았다
+       (2026-09-27 에뮬레이터). 그럴 땐 그냥 안내만 한다. */
+    const C = window.Capacitor;
+    if (C && C.isNativePlatform && C.isNativePlatform()){
+      const e = new Error('native-unavailable'); e.code = 'native-unavailable'; throw e;
+    }
     try {
       await auth.signInWithPopup(provider);
     } catch(e){
@@ -305,6 +312,7 @@ window.Auth = (function(){
   /* 오류 문구는 그대로 보여 주면 무슨 소린지 모른다 — 흔한 것만 우리말로 */
   function msgOf(e){
     const c = (e && (e.code || e.message)) || '';
+    if (c === 'native-unavailable') return '이 기기에서는 아직 로그인을 쓸 수 없습니다. 기록은 이 기기에 그대로 저장됩니다.';
     if (/popup-closed|canceled|cancelled|1001/i.test(c)) return '로그인을 취소했습니다.';
     if (/network/i.test(c)) return '인터넷 연결을 확인해 주세요.';
     if (/operation-not-allowed/i.test(c)) return '이 로그인 방식이 아직 켜져 있지 않습니다(콘솔에서 켜야 합니다).';

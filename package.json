@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "sync": "npx cap sync ios && python3 scripts/prune_bundle.py",
-    "check": "cd www && python3 assets/tools/check_all.py && node assets/tools/check_reachability.js && python3 assets/tools/check_npc_reach.py",
+    "check": "cd www && python3 assets/tools/check_all.py && node assets/tools/check_reachability.js && python3 assets/tools/check_npc_reach.py && python3 assets/tools/check_zone_graph.py",
     "ship": "npm run check && npm run sync"
   },
   "dependencies": {
