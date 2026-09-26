@@ -137,7 +137,12 @@ window.Offline = (function(){
       '<div class="sm" id="of-msg"></div></div>';
     d.classList.add('show');
     const close = () => { clear(); d.classList.remove('show'); };
+    /* 받는 건 한 번 — 광고를 불러오는 사이 '받기'를 누르고, 그 뒤 광고까지 끝나면
+       1배 + 2배로 세 배를 받았다(2026-09-27 점검). 먼저 받은 쪽만 준다. */
+    let claimed = false;
     d.querySelector('#of-take').onclick = () => {
+      if (claimed) return; claimed = true;
+      d.querySelector('#of-ad').disabled = true;
       const amt = window.Gold ? Gold.earn(p.gold, '없는 사이') : p.gold;
       celebrate(d, amt, close);
     };
@@ -145,11 +150,13 @@ window.Offline = (function(){
       const b = d.querySelector('#of-ad');
       b.disabled = true; b.textContent = '광고 준비 중…';
       const ok = window.Ads ? await Ads.rewarded() : false;
+      if (claimed) return;
       if (!ok){
         b.disabled = false; b.textContent = '광고 보고 두 배로';
         d.querySelector('#of-msg').textContent = (window.Ads && Ads.failText ? Ads.failText() : '광고를 끝까지 보지 않으셨습니다.');
         return;
       }
+      claimed = true;
       const amt = window.Gold ? Gold.earn(p.gold * 2, '없는 사이 · 두 배') : p.gold * 2;
       celebrate(d, amt, close);
     };

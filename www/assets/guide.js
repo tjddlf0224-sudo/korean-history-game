@@ -137,7 +137,7 @@ window.Guide = (function(){
      말풍선이 떴다(안드로이드 점검 2026-09-27). 보스를 이겨 계급이 오르면 해금 안내가 승리 화면을
      덮을 수 있었다. 이름이 -ov/-overlay로 끝나는 창을 모두 본다. 챕터 목록의 메뉴(menu-modal)는
      해금 안내가 그 안의 단추를 가리키므로 넣지 않는다. */
-  const BUSY = '.ov.show, [id$="-ov"].show, [id$="-overlay"].show, #end-screen.show, #kings-modal.show, #badges-modal.show';
+  const BUSY = '.ov.show, .dy-ov.show, [id$="-ov"].show, [id$="-overlay"].show, #end-screen.show, #kings-modal.show, #badges-modal.show';
 
   async function step(opt){
     css();

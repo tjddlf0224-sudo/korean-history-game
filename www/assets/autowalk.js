@@ -233,7 +233,9 @@ window.Auto = (function(){
     // World·ZONES는 챕터가 const로 선언한다 — window.World로는 안 잡힌다.
     if (!on || typeof World === 'undefined') return;
     // 대화·퀴즈·보스전이 떠 있으면 손을 뗀다(World.update도 어차피 멈춘다)
-    if (World.paused || World.transitioning || document.querySelector('.ov.show')) return;
+    // 가방·금 같은 모듈 창(-ov)도 본다 — 챕터의 overlayOpen()이 그 목록을 갖고 있다
+    if (World.paused || World.transitioning ||
+        (typeof overlayOpen === 'function' ? overlayOpen() : document.querySelector('.ov.show'))) return;
 
     if (World.zone !== lastZone){
       lastZone = World.zone; path = []; goal = null;

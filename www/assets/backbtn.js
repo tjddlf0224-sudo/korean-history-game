@@ -45,6 +45,11 @@
       if (b) b.click();
       return;
     }
+    // 1-2) 계급이 오른 축하 화면(rank.js) — 닫기 단추 없이 '아무 데나 누르면' 닫힌다
+    if (document.querySelector('.rk-cer')){
+      try { document.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })); } catch (e) {}
+      return;
+    }
     // 2) 닫기 단추가 보이는 창 — 가장 위에 뜬 것
     var list = Array.prototype.filter.call(document.querySelectorAll(CLOSERS), visible);
     if (list.length){

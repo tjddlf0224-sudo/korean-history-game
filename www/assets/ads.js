@@ -96,13 +96,16 @@ window.Ads = (function () {
      하면 억울하다(2026-09-27 점검). 부르는 쪽은 failText()로 알맞은 말을 띄운다. */
   var _lastFail = '';
   function failText() {
+    if (_lastFail === 'busy') return '다른 광고를 준비하고 있습니다. 끝난 뒤 다시 눌러 주세요.';
     return _lastFail === 'load' ? '광고를 불러오지 못했습니다. 잠시 뒤 다시 시도해 주세요.'
                                 : '광고를 끝까지 보지 않으셨습니다.';
   }
 
   function rewarded() {
     var A = admob();
-    if (_rewardBusy) return _rewardBusy;
+    // 광고를 불러오는 중에 다른 보상 단추를 누르면, 예전엔 같은 광고에 올라타서 **광고 하나로
+    // 보상 두 개**(예: 프리즈 + 챕터 열기)를 받았다(2026-09-27 점검). 두 번째 요청은 받지 않는다.
+    if (_rewardBusy) { _lastFail = 'busy'; return Promise.resolve(false); }
     _lastFail = '';
     if (!A || !isNative()) return _webFallback();
     var earned = false, handles = [], done = false;
@@ -163,13 +166,25 @@ window.Ads = (function () {
             A.addListener('interstitialAdFailedToShow', function () { fin(false); }),
           ]);
         })
-        .then(function (hs) { handles = hs; return A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') }); })
+        .then(function (hs) {
+          handles = hs;
+          if (preloadedFresh()) return null;          // 챕터 끝에서 미리 불러 둔 것을 쓴다
+          return A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') })
+            .then(function () { try { localStorage.setItem(READY_KEY, String(Date.now())); } catch (e) {} });
+            // ↑ 불러 둔 뒤 못 띄우고 물러나도(아래 stillOk) 광고는 네이티브에 남는다 — 다음에 바로 쓴다
+        })
         .then(function () {
           // 불러오는 몇 초 사이에 사용자가 창을 열었거나 챕터로 들어가는 중이면 띄우지 않는다
           if (stillOk && !stillOk()) { fin(false); return; }
-          muteGame(); return A.showInterstitial();
+          muteGame();
+          try { localStorage.removeItem(READY_KEY); } catch (e) {}   // 한 번 띄우면 소진
+          return A.showInterstitial();
         })
-        .catch(function (e) { console.warn('[Ads] interstitial 실패', e); fin(false); });
+        .catch(function (e) {
+          console.warn('[Ads] interstitial 실패', e);
+          try { localStorage.removeItem(READY_KEY); } catch (e2) {}
+          fin(false);
+        });
     });
   }
 
@@ -198,6 +213,26 @@ window.Ads = (function () {
       localStorage.setItem(LEARN_KEY, String(c));
       if (c % LEARN_EVERY === 0) localStorage.setItem(DUE_KEY, '1');
     } catch (e) {}
+    preloadInterstitial();
+  }
+
+  /* 미리 불러 두기 — 목록에 와서야 불러오면 2~4초 뒤에 광고가 튀어나와, 그 사이 챕터를
+     누르려던 손가락이 광고의 '설치'를 눌렀다(안드로이드 점검 2026-09-27, 실제로 설치 화면이 열림).
+     챕터 끝 화면을 보는 동안 불러 두면, 목록에 오자마자 바로 뜬다(눌러 볼 틈이 생기기 전).
+     불러 둔 광고는 플러그인(네이티브)이 들고 있어서 페이지를 옮겨도 남는다. 한 시간이 지나면
+     광고가 만료되므로 50분이 넘은 표는 믿지 않는다. */
+  var READY_KEY = 'khg_ad_ready', READY_MS = 50 * 60 * 1000;
+  function preloadedFresh() {
+    try { var t = +localStorage.getItem(READY_KEY); return !!t && Date.now() - t < READY_MS; } catch (e) { return false; }
+  }
+  function preloadInterstitial() {
+    var A = admob();
+    if (!A || !isNative() || _showingInterstitial || preloadedFresh()) return;
+    try { if (localStorage.getItem(DUE_KEY) !== '1') return; } catch (e) { return; }
+    init()
+      .then(function () { return A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') }); })
+      .then(function () { try { localStorage.setItem(READY_KEY, String(Date.now())); } catch (e) {} })
+      .catch(function (e) { console.warn('[Ads] 전면 미리 불러오기 실패', e); });
   }
 
   // 챕터 목록(index.html)이 자리 잡은 뒤 한 번 부른다. 표가 없으면 조용히
@@ -208,7 +243,7 @@ window.Ads = (function () {
      한 번도 안 떴다**(2026-09-19~, 안드로이드 점검 2026-09-27에 발견). 창(-ov/-overlay/-modal,
      확인창, 안내 말풍선)만 본다. */
   function overlayOpen() {
-    var els = document.querySelectorAll('.ov.show, [id$="-ov"].show, [id$="-overlay"].show, [id$="-modal"].show, #end-screen.show, #gd-bub');
+    var els = document.querySelectorAll('.ov.show, .dy-ov.show, [id$="-ov"].show, [id$="-overlay"].show, [id$="-modal"].show, #end-screen.show, #gd-bub');
     for (var i = 0; i < els.length; i++) if (els[i].getClientRects().length) return true;
     return false;
   }
@@ -220,20 +255,23 @@ window.Ads = (function () {
       if (overlayOpen()) return;   // 뭔가 이미 열려 있다 — 나중에
       localStorage.removeItem(DUE_KEY);
     } catch (e) { return; }
-    var leaving = false;
+    var leaving = false, touched = false, ready = preloadedFresh();
     window.addEventListener('pagehide', function () { leaving = true; });
     document.addEventListener('click', function (e) {
       var a = e.target && e.target.closest && e.target.closest('a[href]');
       if (a) leaving = true;
     }, true);
+    // 미리 못 불러 여기서 불러오는 경우: 그 몇 초 사이에 화면을 만지기 시작했으면(목록을 넘기거나
+    // 챕터를 고르는 중) 띄우지 않는다 — 누르려던 자리에 광고가 덮쳐 실수로 눌리게 된다.
+    document.addEventListener('pointerdown', function () { touched = true; }, true);
     setTimeout(function () {
       interstitial(function () {
-        return !leaving && document.visibilityState === 'visible' && !overlayOpen();
+        return !leaving && (ready || !touched) && document.visibilityState === 'visible' && !overlayOpen();
       }).then(function (shown) {
-        // 못 띄웠으면 표를 되돌린다 — 다음에 목록으로 올 때 다시
-        if (!shown) try { localStorage.setItem(DUE_KEY, '1'); } catch (e) {}
+        // 못 띄웠으면 표를 되돌린다 — 다음에 목록으로 올 때 다시(그때를 위해 미리 불러 둔다)
+        if (!shown){ try { localStorage.setItem(DUE_KEY, '1'); } catch (e) {} preloadInterstitial(); }
       });
-    }, 1200);
+    }, ready ? 500 : 1200);
   }
 
   // 웹에는 광고가 붙지 않는다(앱에서만 재생된다). 그래도 보상 흐름은
