@@ -284,6 +284,20 @@ window.Auto = (function(){
         World.checkNpc();
         if (World.nearNpc){ path = []; goal = null; Stage.interact(); return; }
       }
+      // 출구: 마지막 점을 14px 안이면 '지났다'고 치다 보니, 출구 칸 경계 바로 앞(예: 세종 집현전 아래
+      // 출구, 경계 735인데 723에서 멈춤)에서 끝나 그 출구를 막힌 곳으로 적고 자동이동이 꺼졌다
+      // (2026-09-27 안드로이드 자동 플레이). 출구 칸 안쪽 가까운 점으로 조금 더 민다(1초까지).
+      if (goalKind === 'exit'){
+        const ex = (ZONES[World.zone].exits || [])[goal.idx];
+        if (ex && (goal.nudge = (goal.nudge || 0) + 1) < 60){
+          const r = ex.rect, m = 4;
+          const ix = Math.max(r.x0 + m, Math.min(r.x1 - m, World.px));
+          const iy = Math.max(r.y0 + m, Math.min(r.y1 - m, World.py));
+          const ddx = ix - World.px, ddy = iy - World.py, dd = Math.hypot(ddx, ddy) || 1;
+          World.stick.dx = ddx / dd; World.stick.dy = ddy / dd;
+          return;
+        }
+      }
       // 길 끝까지 갔는데도 말이 안 닿는다 — 배리어에 갇힌 목표다.
       // 접고 다음 목표로 간다(예전에는 여기서 같은 목표를 다시 골라
       //  영원히 제자리였다 — "auto를 켜도 못 지나가네").
