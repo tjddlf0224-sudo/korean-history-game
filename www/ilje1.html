@@ -705,7 +705,7 @@ const ZONES = {
     img: 'assets/scenes/ilje_seodaemun.png', label: '서대문형무소',
     // 첫 수감자가 (331,423)에 서 있다. 같은 자리에 떨어지면 인물에 밀려
     // 시작부터 끼인다 — 한 칸 앞(복도 서쪽 끝)에 내려놓는다.
-    spawn: { x: 253, y: 442 },
+    spawn: { x: 690, y: 350 },   // 왼쪽 끝 막다른 자리(253,442)에서 가운데 복도로 — 성일님 2026-09-26
     barriers: [
     { x0: 2, y0: 2, x1: 212, y1: 766 },
     { x0: 1152, y0: 2, x1: 1374, y1: 766 },
@@ -2178,7 +2178,7 @@ function frame(t){
   // 만세를 부를 자리인지, 나갈 때가 되었는지 살핀다
   if (window.Manse) Manse.tick(World.zone, {
     squareZone: 'tapgol', jailZone: 'seodaemun',
-    onJail: () => warpTo('seodaemun', 253, 442),
+    onJail: () => warpTo('seodaemun', 690, 350),
     onOut:  () => warpTo('tapgol', 688, 470),
   });
 }
