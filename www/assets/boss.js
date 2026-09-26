@@ -519,7 +519,9 @@ window.Boss = (function(){
     S.guardUsed = false;
 
     bars();
-    msg(`<b>${S.name}</b>이(가) 앞을 막아섰다. 아는 것으로 답하라.`);
+    { const c = (S.name || '').trim().slice(-1).charCodeAt(0);
+      const ga = (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28) ? '이' : '가';   // 연개소문이 · 최만리가
+      msg(`<b>${S.name}</b>${ga} 앞을 막아섰다. 아는 것으로 답하라.`); }
     ask();
     ov.classList.add('show');
   }

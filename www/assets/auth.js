@@ -302,7 +302,7 @@ window.Auth = (function(){
     };
     document.getElementById('auth-nick-ok').onclick = async () => {
       err('');
-      try { const n = await setNickname(document.getElementById('auth-nick').value); err('닉네임을 "' + n + '"(으)로 바꿨습니다.'); }
+      try { const n = await setNickname(document.getElementById('auth-nick').value); err('닉네임을 바꿨습니다: ' + n); }
       catch(e){ err(e && e.message ? e.message : String(e)); }
     };
     document.getElementById('auth-x').onclick = close;

@@ -748,9 +748,16 @@
   input, textarea, [contenteditable="true"] { -webkit-user-select:text !important; user-select:text !important; }
   `;
 
+  /* 챕터 끝 화면의 '다음 화로'·'챕터 목록' — 36개 챕터가 모두 <a>를 빈칸 없이 붙여 써서
+     두 단추가 틈 없이 맞붙고 폭도 글자 수대로 제각각이었다(2026-09-27 점검). 같은 폭, 사이 12px. */
+  const css9 = `
+  #end-screen a { min-width:8.5em; text-align:center; box-sizing:border-box; }
+  #end-screen a + a { margin-left:12px; }
+  `;
+
   const st = document.createElement('style');
   st.id = 'uiskin';
-  st.textContent = css + css2 + css3 + css4 + css5 + css6 + css7 + css8;
+  st.textContent = css + css2 + css3 + css4 + css5 + css6 + css7 + css8 + css9;
   function last(){
     const h = document.head;
     if (h && h.lastElementChild !== st) h.appendChild(st);

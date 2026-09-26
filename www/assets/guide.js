@@ -132,6 +132,13 @@ window.Guide = (function(){
   /* 한 단계 보여 주기.
      wait: () => boolean 이면 그 조건이 참이 될 때까지 기다린다.
      wait 가 없으면 "알겠다" 단추를 누를 때까지. */
+  /* 안내를 띄우면 안 되는 때 — 무언가 화면을 덮는 창이 떠 있다.
+     예전엔 대사·퀴즈(.ov)만 봐서, 연표 맞추기(tl-ov)·보스전(boss-ov)·챕터 끝 화면 위로
+     말풍선이 떴다(안드로이드 점검 2026-09-27). 보스를 이겨 계급이 오르면 해금 안내가 승리 화면을
+     덮을 수 있었다. 이름이 -ov/-overlay로 끝나는 창을 모두 본다. 챕터 목록의 메뉴(menu-modal)는
+     해금 안내가 그 안의 단추를 가리키므로 넣지 않는다. */
+  const BUSY = '.ov.show, [id$="-ov"].show, [id$="-overlay"].show, #end-screen.show, #kings-modal.show, #badges-modal.show';
+
   async function step(opt){
     css();
     clear();
@@ -212,7 +219,7 @@ window.Guide = (function(){
             if (opt.wait()) return finish(false);
             // 기다리는 사이 대화·퀴즈가 먼저 열리면 말풍선이 그 위를 덮어 보기를 가렸다
             // (안드로이드 점검, 2026-09-27). 창이 떠 있는 동안은 숨긴다.
-            const busy = !!document.querySelector('#dlg-overlay.show, #quiz-overlay.show, .ov.show');
+            const busy = !!document.querySelector(BUSY);
             bub.style.visibility = hole.style.visibility = busy ? 'hidden' : '';
           } catch(e){}
         }, 250);
@@ -294,7 +301,7 @@ window.Guide = (function(){
       // 자동 이동은 처음부터 열려 있다(해금 안내가 아니라 첫 안내에 넣은 이유).
       // 걷는 법을 먼저 익힌 **뒤에** 알려 준다 — 순서만은 지킨다.
       { tag:'자 동 이 동', target: () => el('auto-btn'),
-        after: () => !document.querySelector('.ov.show, #dlg-overlay.show, #quiz-overlay.show'),
+        after: () => !document.querySelector(BUSY),
         text:'걷는 게 번거로우면 이걸 켜 보세요. 알아서 다음 사람에게 갑니다.<br>' +
              '<b>대사와 문제는 직접 넘기셔야 합니다</b> — 거기서 배우기 때문입니다.',
       },
@@ -366,7 +373,7 @@ window.Guide = (function(){
     if (!(b.w > 100 && b.h > 100)) return false;
     // 대사·퀴즈 같은 것이 떠 있으면 그 위에 겹쳐 놓지 않는다.
     // 이 게임은 인트로도 대사창으로 나오므로 이걸 안 보면 인트로를 덮는다.
-    if (document.querySelector('.ov.show, #dlg-overlay.show, #quiz-overlay.show')) return false;
+    if (document.querySelector(BUSY)) return false;
     return true;
   }
 
