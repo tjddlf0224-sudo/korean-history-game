@@ -699,14 +699,14 @@ const ZONES = {
     // 유물은 대화 사이에 끼워 리듬을 깬다. 표식은 두지 않는다 —
     // 가까이 가면 행동 버튼이 돋보기로 바뀌는 것이 유일한 단서다.
     spots: [
-      { id:'sp_manpasikje', x:688, y:704, item:'manpasikjeok', label:'남쪽 끝' },
+      { id:'sp_manpasikje', x:420, y:700, item:'manpasikjeok', label:'서남쪽 끝' },   // (688,704)에서 — 그 자리는 출구가 됨
       { id:'sp_sesogogye', x:896, y:704, item:'sesogogye', label:'남쪽 끝' },
     ],
     // 남쪽 바닷가로 나가면 감은사 앞바다다. 만파식적을 주운 곳에서
     // 그 피리를 쓸 자리로 이어진다.
-    // 유물 자리가 x688·x896(y704)에 있어 그 위에 출구를 겹치면
-    // 유물을 주우러 갔다가 구역이 넘어가 버린다. 왼쪽으로 비켰다.
-    exits: [ { rect:{x0:248,y0:706,x1:520,y1:750}, to:'gameunsa',
+    // 출구는 남쪽 가운데(성일님 2026-09-26). 원래 거기 있던 만파식적 유물은
+    // 옛 출구 자리(서남쪽 끝)로 옮겨, 유물을 주우러 갔다가 구역이 넘어가지 않게 했다.
+    exits: [ { rect:{x0:628,y0:690,x1:748,y1:748}, to:'gameunsa',
                spawn:{x:760,y:620}, label:'감은사 앞바다로' } ],
   },
 
@@ -732,7 +732,7 @@ const ZONES = {
     npcs: [],
     spots: [],
     exits: [ { rect:{x0:664,y0:648,x1:912,y1:690}, to:'hwangsan',
-               spawn:{x:384,y:700}, label:'황산벌로' } ],
+               spawn:{x:688,y:640}, label:'황산벌로' } ],
   },
 };
 const ZONE_BGM = { hwangsan: 'bgm_ancient_war', default: 'bgm_ancient_war' };
