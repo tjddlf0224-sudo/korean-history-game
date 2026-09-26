@@ -51,6 +51,14 @@ if 'android:windowBackground' not in s:
                   '<item name="windowActionBar">false</item>\n        <item name="android:windowBackground">@android:color/black</item>', 1)
     open(STY, 'w', encoding='utf-8').write(s)
     changed.append('창 배경 검정')
+# 안드로이드 12+ 시작 화면(SplashScreen API)은 아이콘 + 배경색만 쓴다. 배경을 시작 그림과 같은 먹색으로.
+# (그림·아이콘 자체는 scripts/make_launch_assets.py 가 만든다)
+s = open(STY, encoding='utf-8').read()
+if 'windowSplashScreenBackground' not in s:
+    s = s.replace('<item name="android:background">@drawable/splash</item>',
+                  '<item name="android:background">@drawable/splash</item>\n        <item name="windowSplashScreenBackground">#0A0806</item>', 1)
+    open(STY, 'w', encoding='utf-8').write(s)
+    changed.append('시작 화면 배경색')
 
 ACT = os.path.join(ROOT, 'android/app/src/main/java/com/yunsis/koreanhistorygame/MainActivity.java')
 act = open(ACT, encoding='utf-8').read()
@@ -89,3 +97,7 @@ public class MainActivity extends BridgeActivity {
     open(ACT, 'w', encoding='utf-8').write(act)
     changed.append('전체 화면(MainActivity)')
 print('바꾼 것:', ', '.join(changed) if changed else '없음(이미 적용됨)')
+
+# 아이콘·시작 그림(기본값이면 Capacitor 로고가 나온다)
+import subprocess
+subprocess.run([sys.executable, os.path.join(ROOT, 'scripts/make_launch_assets.py')], check=True)
