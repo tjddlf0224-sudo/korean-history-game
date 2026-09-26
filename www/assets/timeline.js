@@ -109,6 +109,7 @@ window.Timeline = (function(){
 
   /* onDone(cleared) — 다 맞히면 true. 문제를 만들 수 없으면 곧장 true. */
   function play(onDone){
+    if (document.querySelector('#tl-ov.show')) return false;   // 이미 떠 있으면 겹쳐 열지 않는다
     const seq = pick();
     if (!seq){ onDone && onDone(true); return false; }
     mount();

@@ -76,14 +76,18 @@ window.Ads = (function () {
     return A.requestTrackingAuthorization().catch(function (e) { console.warn('[Ads] 추적 권한 요청 실패', e); });
   }
 
-  var _inited = false;
+  var _inited = null;   // 진행 중이거나 끝난 초기화 약속
   function init() {
     var A = admob();
-    if (!A || !isNative() || _inited) return Promise.resolve();
-    _inited = true;
-    return requestTracking()
+    if (!A || !isNative()) return Promise.resolve();
+    // 진행 중이면 **같은 약속을 기다린다.** 예전엔 두 번째 호출이 곧바로 통과해서, iOS 첫 실행에
+    // '추적 허용' 창이 답을 기다리는 동안 광고를 불러와 띄우려 했고(창에 가려 뜨지도 못한 채
+    // '보여 주는 중'에 갇힘), 초기화 전에 광고를 불러 실패하기도 했다(2026-09-27 시뮬레이터 점검).
+    if (_inited) return _inited;
+    _inited = requestTracking()
       .then(function () { return A.initialize({ initializeForTesting: useTest() }); })
-      .catch(function (e) { console.warn('[Ads] init 실패', e); _inited = false; });
+      .catch(function (e) { console.warn('[Ads] init 실패', e); _inited = null; });
+    return _inited;
   }
 
   // 리워드 광고: 끝까지 시청 시 true. 웹/미지원/실패 시 폴백 or false.

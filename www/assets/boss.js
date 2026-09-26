@@ -449,6 +449,8 @@ window.Boss = (function(){
 
   /* ---------------- 시작 ---------------- */
   function start(opt){
+    // 이미 싸우는 중이면 새로 시작하지 않는다 — 전투 상태(S)가 하나라 덮어쓰면 체력·문항·승패 콜백이 엉킨다
+    if (document.querySelector('#boss-ov.show')) return;
     css(); mount();
     if (window.Fx) Fx.danger(false);      // 지난 전투의 흔적을 지우고 시작한다
     const qs = (opt.questions || []).filter(q => q && q.opts && q.opts.length >= 2);

@@ -26,31 +26,42 @@
 */
 window.Moment = (function(){
 
-  /* 파일 → 대화키 → 대사 순번(0부터) → 무엇을 할지
-     kind: shake(흔들림) / boom(한 방) / swell(밀려옴) / dread(불안) */
+  /* 파일 → 대화키 → [대사에 들어 있는 글귀, 무엇을 할지]
+     kind: shake(흔들림) / boom(한 방) / swell(밀려옴) / dread(불안)
+     2026-09-27: 예전엔 '몇 번째 대사'(순번)로 짚었는데, 그 뒤 대사를 보태고 고치면서 순번이
+     밀려 엉뚱한 줄(예: "…육지 사람들은 어찌 되었습니까?")에서 화면이 흔들리고 정작 그 대목은
+     조용히 지나갔다. 이제는 **대사 글귀**로 짚는다 — 대사가 늘어도 자리가 안 밀린다. */
   const M = {
     'goryeo2.html': {
       // 삼별초의 항쟁이 끝나는 줄. 1273년 여몽연합군에게 진압된다.
-      sambyeolcho_0: { 3: { kind:'fall' } },
+      sambyeolcho_0: [['여몽연합군이 몰려왔소', { kind:'fall' }]],
     },
     'imjin.html': {
       // 동래성이 반나절을 못 버티고 무너지는 줄
-      dongnae_0: { 3: { kind:'fall' } },
+      dongnae_0: [['반나절을 못 버텼소', { kind:'fall' }]],
       // 탄금대 — 조총이 먼저 오고, 그다음 강에 몸을 던진다
-      sinrip_0:  { 4: { kind:'shot', big:true }, 5: { kind:'fall' } },
+      sinrip_0:  [['총탄이 먼저 왔지', { kind:'shot', big:true }], ['강에 몸을 던졌네', { kind:'fall' }]],
     },
     'ilje1.html': {
       // 만세는 때리는 것이 아니라 **밀려오는** 것이다. 그래서 흔들지 않고 당긴다.
-      siwon1_0:    { 1: { kind:'swell' } },
+      siwon1_0:    [['늙은이도 다 나왔지요', { kind:'swell' }]],
       // 독립선언서를 외는 줄에서 크게, 제암리 학살을 말하는 줄에서 붉어진다
-      yugwansun_0: { 2: { kind:'swell', big:true }, 6: { kind:'dread' } },
+      yugwansun_0: [['첫 줄을 아직도 외웁니다', { kind:'swell', big:true }], ['제암리에서는', { kind:'dread' }]],
     },
     'hyeondae1.html': {
       // 6·25 — **흔들지 않는다.** 흔들면 전쟁이 액션이 된다.
       // 새벽의 남침에서 한 번 낮게 울리고, 흥남 철수에서 가장자리가 붉어진다.
-      yukio_0: { 0: { kind:'rumble' }, 2: { kind:'dread' } },
+      yukio_0: [['6월 25일 새벽', { kind:'rumble' }], ['흥남에서도', { kind:'dread' }]],
     },
   };
+
+  /* 지금 대사의 글 — 챕터의 NPC_DATA(전역 const)에서 읽는다 */
+  function lineNow(){
+    try {
+      const b = NPC_DATA[Dialog.key].beats[Dialog.idx];
+      return (b && b.t) || '';
+    } catch(e){ return ''; }
+  }
 
   const seen = new Set();          // 파일|키|순번 — 한 번만
   let dangerOn = false;
@@ -91,7 +102,10 @@ window.Moment = (function(){
       const file = location.pathname.split('/').pop();
       const byKey = M[file];
       if (!byKey) return;
-      const spot = byKey[Dialog.key] && byKey[Dialog.key][Dialog.idx];
+      const list = byKey[Dialog.key];
+      const line = list ? lineNow() : '';
+      const hit = list && line && list.find(([at]) => line.indexOf(at) >= 0);
+      const spot = hit && hit[1];
       if (!spot){ clearDanger(); return; }
       const id = file + '|' + Dialog.key + '|' + Dialog.idx;
       if (seen.has(id)){ return; }     // 다시 읽어도 한 번만

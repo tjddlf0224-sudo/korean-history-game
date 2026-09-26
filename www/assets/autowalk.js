@@ -258,7 +258,7 @@ window.Auto = (function(){
       goalKind = goal.kind;
       path = findPath(World.px, World.py, goal.x, goal.y);
       // 길이 아예 안 나오면 그 목표는 접고 다음 목표로 — 멈추지 않는다
-      if (!path.length){ markUnreachable(); goal = null; return; }
+      if (!path.length){ markUnreachable(); goal = null; World.stick.dx = 0; World.stick.dy = 0; return; }
     }
 
     // 도착 판정
@@ -270,7 +270,7 @@ window.Auto = (function(){
       // (World.paused가 풀리면) 다음 목표를 스스로 찾아 다시 걷는다.
       // 끄고 싶으면 사람이 단추를 눌러야 한다("내가 끄지 않는 한 계속").
       if (World.nearNpc){ path = []; goal = null; Stage.interact(); }
-      else { path = []; goal = null; }
+      else { markUnreachable(); path = []; goal = null; }   // 안 접으면 다음 틀에 같은 목표를 또 골라 제자리를 맴돈다
       return;
     }
 
@@ -288,6 +288,7 @@ window.Auto = (function(){
       // 접고 다음 목표로 간다(예전에는 여기서 같은 목표를 다시 골라
       //  영원히 제자리였다 — "auto를 켜도 못 지나가네").
       markUnreachable();
+      World.stick.dx = 0; World.stick.dy = 0;
       goal = null; return;
     }
 
