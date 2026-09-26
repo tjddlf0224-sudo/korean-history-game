@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<script src="assets/tablet.js?v=209"></script>
-<script src="assets/chapterlock.js?v=209"></script>
-<script src="assets/energy.js?v=209"></script>
+<script src="assets/tablet.js?v=210"></script>
+<script src="assets/chapterlock.js?v=210"></script>
+<script src="assets/energy.js?v=210"></script>
 <script>ChapterLock.guard();</script>
-<script src="assets/resume.js?v=209"></script>
+<script src="assets/resume.js?v=210"></script>
 <title>한국사 게임 - 현대 3화 두 정부와 판문점</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -517,13 +517,13 @@
   </div>
 </div>
 
-<script src="assets/errlog.js?v=209"></script>
-<script src="assets/zoomwarn.js?v=209"></script>
-<script src="assets/map/map_component.js?v=209"></script>
-<script src="assets/chart.js?v=209"></script>
-<script src="assets/companions.js?v=209"></script>
-<script src="assets/inner.js?v=209"></script>
-<script src="assets/audio.js?v=209"></script>
+<script src="assets/errlog.js?v=210"></script>
+<script src="assets/zoomwarn.js?v=210"></script>
+<script src="assets/map/map_component.js?v=210"></script>
+<script src="assets/chart.js?v=210"></script>
+<script src="assets/companions.js?v=210"></script>
+<script src="assets/inner.js?v=210"></script>
+<script src="assets/audio.js?v=210"></script>
 <script>
 /* 최근 학습한 챕터를 기억해 뒀다가 챕터 목록에서 밝게 표시해 준다. */
 try { localStorage.setItem('khg_lastChapter', location.pathname.split('/').pop()); } catch(e){}
@@ -535,7 +535,7 @@ let VIEW_W = 0, VIEW_H = 0;   // 논리 픽셀 기준 화면 크기(DPR 스케�
 /* 그림 파일을 다시 뽑아도 이름이 같으면 브라우저가 옛 캐시를 계속 쓴다.
    초상·스프라이트를 갱신할 때 이 값을 올리면 확실히 새로 받는다.
    (주인공 스프라이트 로더보다 반드시 앞에 있어야 한다 — 뒤에 두면 TDZ 오류) */
-const ART_V = '?v=209';   // 존댓말 전환
+const ART_V = '?v=210';   // 존댓말 전환
 
 const wrapEl = document.getElementById('wrap');
 /* 모바일 브라우저는 주소창이 늦게 접히거나 펼쳐지면서 innerWidth/innerHeight가
@@ -659,14 +659,44 @@ const ZONES = {
     img: 'assets/scenes/hyeondae3_panmunjeom.png', label: '광화문에서 판문점까지',
     spawn: { x: 610, y: 440 },
     barriers: [
-    { x0: 12, y0: 12, x1: 278, y1: 756 },
-    { x0: 427, y0: 12, x1: 1093, y1: 323 },
-    { x0: 1112, y0: 12, x1: 1364, y1: 173 },
-    { x0: 1117, y0: 182, x1: 1303, y1: 553 },
-    { x0: 1322, y0: 192, x1: 1364, y1: 548 },
-    { x0: 1297, y0: 567, x1: 1364, y1: 756 },
-    { x0: 427, y0: 472, x1: 1093, y1: 756 },
-    { x0: 12, y0: 477, x1: 418, y1: 756 },
+    { x0: 328, y0: 0, x1: 440, y1: 280 },
+    { x0: 8, y0: 8, x1: 136, y1: 248 },
+    { x0: 440, y0: 8, x1: 552, y1: 40 },
+    { x0: 632, y0: 8, x1: 1064, y1: 120 },
+    { x0: 456, y0: 40, x1: 552, y1: 88 },
+    { x0: 440, y0: 56, x1: 456, y1: 296 },
+    { x0: 456, y0: 88, x1: 488, y1: 120 },
+    { x0: 712, y0: 120, x1: 1064, y1: 280 },
+    { x0: 184, y0: 152, x1: 200, y1: 264 },
+    { x0: 456, y0: 168, x1: 504, y1: 296 },
+    { x0: 1128, y0: 184, x1: 1288, y1: 280 },
+    { x0: 504, y0: 200, x1: 552, y1: 296 },
+    { x0: 632, y0: 200, x1: 712, y1: 280 },
+    { x0: 8, y0: 248, x1: 120, y1: 760 },
+    { x0: 424, y0: 280, x1: 440, y1: 296 },
+    { x0: 1128, y0: 344, x1: 1288, y1: 424 },
+    { x0: 312, y0: 472, x1: 552, y1: 488 },
+    { x0: 680, y0: 472, x1: 1096, y1: 488 },
+    { x0: 312, y0: 488, x1: 536, y1: 536 },
+    { x0: 712, y0: 488, x1: 808, y1: 504 },
+    { x0: 936, y0: 488, x1: 1096, y1: 520 },
+    { x0: 1128, y0: 504, x1: 1288, y1: 552 },
+    { x0: 968, y0: 520, x1: 1096, y1: 600 },
+    { x0: 312, y0: 536, x1: 520, y1: 600 },
+    { x0: 600, y0: 536, x1: 904, y1: 760 },
+    { x0: 120, y0: 552, x1: 136, y1: 760 },
+    { x0: 568, y0: 552, x1: 600, y1: 760 },
+    { x0: 904, y0: 552, x1: 920, y1: 760 },
+    { x0: 920, y0: 568, x1: 936, y1: 760 },
+    { x0: 312, y0: 600, x1: 488, y1: 760 },
+    { x0: 520, y0: 600, x1: 568, y1: 760 },
+    { x0: 984, y0: 600, x1: 1096, y1: 760 },
+    { x0: 136, y0: 728, x1: 312, y1: 760 },
+    { x0: 936, y0: 728, x1: 984, y1: 760 },
+    { x0: 1304, y0: 728, x1: 1320, y1: 760 },
+    { x0: 1352, y0: 728, x1: 1368, y1: 760 },
+    { x0: 488, y0: 744, x1: 520, y1: 760 },
+    { x0: 1320, y0: 744, x1: 1352, y1: 760 },
   ],
     npcs: [
       { id:'hanil', name:'한일 회담 반대 학생', x:340, y:395, img:'assets/portraits/hanil.png', look:{ role:'commoner', body:'#2f2f38', accent:'#d8c48a' } },
@@ -2034,39 +2064,39 @@ if (window.Resume){
 requestAnimationFrame(loop);
 
 </script>
-<script src="assets/badges.js?v=209"></script>
-<script src="assets/streak.js?v=209"></script>
+<script src="assets/badges.js?v=210"></script>
+<script src="assets/streak.js?v=210"></script>
 <script>const RANK_ERA = 'modern';</script>
-<script src="assets/rank.js?v=209"></script>
-  <script src="assets/fx.js?v=209"></script>
-  <script src="assets/deed.js?v=209"></script>
-  <script src="assets/inkwipe.js?v=209"></script>
-  <script src="assets/dash.js?v=209"></script>
-<script src="assets/juice.js?v=209"></script>
-<script src="assets/growth.js?v=209"></script>
-  <script src="assets/difficulty.js?v=209"></script>
-<script src="assets/heroes_data.js?v=209"></script>
-<script src="assets/heroes.js?v=209"></script>
-<script src="assets/icons.js?v=209"></script>
-<script src="assets/srs.js?v=209"></script>
-<script src="assets/newsflash.js?v=209"></script>
-<script src="assets/timeline.js?v=209"></script>
-<script src="assets/journey.js?v=209"></script>
-<script src="assets/season.js?v=209"></script>
-<script src="assets/items.js?v=209"></script>
-  <script src="assets/gold.js?v=209"></script>
-  <script src="assets/canopy/data.js?v=209"></script>
-  <script src="assets/canopy.js?v=209"></script>
-  <script src="assets/ask.js?v=209"></script>
-  <script src="assets/ads.js?v=209"></script>
-  <script src="assets/daily.js?v=209"></script>
-  <script src="assets/unlock.js?v=209"></script>
-  <script src="assets/guide.js?v=209"></script>
-  <script src="assets/minigames.js?v=209"></script>
-  <script src="assets/quests.js?v=209"></script>
-  <script src="assets/offline.js?v=209"></script>
-  <script src="assets/telemetry.js?v=209"></script>
-<script src="assets/autowalk.js?v=209"></script>
+<script src="assets/rank.js?v=210"></script>
+  <script src="assets/fx.js?v=210"></script>
+  <script src="assets/deed.js?v=210"></script>
+  <script src="assets/inkwipe.js?v=210"></script>
+  <script src="assets/dash.js?v=210"></script>
+<script src="assets/juice.js?v=210"></script>
+<script src="assets/growth.js?v=210"></script>
+  <script src="assets/difficulty.js?v=210"></script>
+<script src="assets/heroes_data.js?v=210"></script>
+<script src="assets/heroes.js?v=210"></script>
+<script src="assets/icons.js?v=210"></script>
+<script src="assets/srs.js?v=210"></script>
+<script src="assets/newsflash.js?v=210"></script>
+<script src="assets/timeline.js?v=210"></script>
+<script src="assets/journey.js?v=210"></script>
+<script src="assets/season.js?v=210"></script>
+<script src="assets/items.js?v=210"></script>
+  <script src="assets/gold.js?v=210"></script>
+  <script src="assets/canopy/data.js?v=210"></script>
+  <script src="assets/canopy.js?v=210"></script>
+  <script src="assets/ask.js?v=210"></script>
+  <script src="assets/ads.js?v=210"></script>
+  <script src="assets/daily.js?v=210"></script>
+  <script src="assets/unlock.js?v=210"></script>
+  <script src="assets/guide.js?v=210"></script>
+  <script src="assets/minigames.js?v=210"></script>
+  <script src="assets/quests.js?v=210"></script>
+  <script src="assets/offline.js?v=210"></script>
+  <script src="assets/telemetry.js?v=210"></script>
+<script src="assets/autowalk.js?v=210"></script>
 <script>
 if (window.Rank) Rank.renderHud();
 if (window.Juice) Juice.mount();
@@ -2120,6 +2150,6 @@ if (window.Deed) Deed.add({
 });
 
 </script>
-<script src="assets/uiskin.js?v=209"></script>
+<script src="assets/uiskin.js?v=210"></script>
 </body>
 </html>
