@@ -117,7 +117,7 @@ window.Ads = (function () {
     var A = admob();
     // 광고를 불러오는 중에 다른 보상 단추를 누르면, 예전엔 같은 광고에 올라타서 **광고 하나로
     // 보상 두 개**(예: 프리즈 + 챕터 열기)를 받았다(2026-09-27 점검). 두 번째 요청은 받지 않는다.
-    if (_rewardBusy) { _lastFail = 'busy'; return Promise.resolve(false); }
+    if (_rewardBusy || _showingInterstitial) { _lastFail = 'busy'; return Promise.resolve(false); }   // 전면이 도는 중에도(음소거 짝이 엇갈린다)
     _lastFail = '';
     if (!A || !isNative()) return _webFallback();
     var earned = false, showed = false, handles = [], done = false;
@@ -163,7 +163,7 @@ window.Ads = (function () {
   var _showingInterstitial = false;
   function interstitial(stillOk) {
     var A = admob();
-    if (!A || !isNative() || _showingInterstitial) return Promise.resolve(false);
+    if (!A || !isNative() || _showingInterstitial || _rewardBusy) return Promise.resolve(false);
     _showingInterstitial = true;
     var handles = [], done = false, showed = false;
     return new Promise(function (resolve) {
@@ -185,6 +185,7 @@ window.Ads = (function () {
         .then(function (hs) {
           handles = hs;
           if (preloadedFresh()) return null;          // 챕터 끝에서 미리 불러 둔 것을 쓴다
+          if (_preparing) throw new Error('preload in flight');   // 미리 불러오기가 곧 끝난다 — 다음 기회에
           return within(A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') }), LOAD_MS)
             .then(function () { try { localStorage.setItem(READY_KEY, String(Date.now())); } catch (e) {} });
             // ↑ 불러 둔 뒤 못 띄우고 물러나도(아래 stillOk) 광고는 네이티브에 남는다 — 다음에 바로 쓴다
@@ -239,17 +240,19 @@ window.Ads = (function () {
      불러 둔 광고는 플러그인(네이티브)이 들고 있어서 페이지를 옮겨도 남는다. 한 시간이 지나면
      광고가 만료되므로 50분이 넘은 표는 믿지 않는다. */
   var READY_KEY = 'khg_ad_ready', READY_MS = 50 * 60 * 1000;
+  var _preparing = false;   // 미리 불러오기가 도는 중 — 두 곳에서 겹쳐 부르지 않게
   function preloadedFresh() {
     try { var t = +localStorage.getItem(READY_KEY); return !!t && Date.now() - t < READY_MS; } catch (e) { return false; }
   }
   function preloadInterstitial() {
     var A = admob();
-    if (!A || !isNative() || _showingInterstitial || preloadedFresh()) return;
+    if (!A || !isNative() || _showingInterstitial || _preparing || preloadedFresh()) return;
     try { if (localStorage.getItem(DUE_KEY) !== '1') return; } catch (e) { return; }
+    _preparing = true;
     init()
-      .then(function () { return A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') }); })
-      .then(function () { try { localStorage.setItem(READY_KEY, String(Date.now())); } catch (e) {} })
-      .catch(function (e) { console.warn('[Ads] 전면 미리 불러오기 실패', e); });
+      .then(function () { return within(A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') }), LOAD_MS); })
+      .then(function () { _preparing = false; try { localStorage.setItem(READY_KEY, String(Date.now())); } catch (e) {} })
+      .catch(function (e) { _preparing = false; console.warn('[Ads] 전면 미리 불러오기 실패', e); });
   }
 
   // 챕터 목록(index.html)이 자리 잡은 뒤 한 번 부른다. 표가 없으면 조용히
