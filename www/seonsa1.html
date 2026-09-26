@@ -723,17 +723,21 @@ const ZONES = {
     { x0: 1142, y0: 442, x1: 1364, y1: 548 },
     { x0: 1162, y0: 632, x1: 1364, y1: 728 },
   ],
-    // 지도에 숨긴 유물. 좌표는 배경 그림의 실제 물체(막집·움집·고인돌 등) 위에
-    // 두고, 도달 가능한지는 check_reachability와 같은 BFS로 미리 확인했다.
+    // 지도에 숨긴 유물. 처음엔 배경 그림의 실제 물체(막집·움집·고인돌) 위에 두었으나,
+    // 성일님이 그 물체를 배리어로 막으면서 걸을 수 없는 자리가 됐다(2026-09-26) — 물체 바로
+    // 앞 땅으로 내리고, 줍는 반경(128)이 겹치지 않게 유물끼리 200px 넘게 떨어뜨렸다
+    // (예전엔 비파형 동검과 반달 돌칼이 90px 거리라 한 자리에서 둘이 같이 잡혔다).
+    // 고인돌 유물은 아래 고인돌 바로 곁을 지킨다. 시작점(688,470)에서는 모두 220px 넘게.
+    // 반달 돌칼은 밭 옆 통로가 막혀 있어 울타리 어귀로(밭은 울타리 너머라 못 들어간다).
     spots: [
-      { id:'sp_jumeok', x:350, y:408, item:'jumeokdokki',
-        label:'막집 앞 자갈' },
-      { id:'sp_bitsal', x:546, y:262, item:'bitsalmunui',
-        label:'움집 옆 항아리' },
-      { id:'sp_bipa',   x:1124, y:577, item:'bipahyeong',
+      { id:'sp_jumeok', x:232, y:440, item:'jumeokdokki',
+        label:'막집 옆 자갈' },
+      { id:'sp_bitsal', x:500, y:340, item:'bitsalmunui',
+        label:'움집 앞 항아리' },
+      { id:'sp_bipa',   x:980, y:680, item:'bipahyeong',
         label:'고인돌 덮개돌 곁' },
-      { id:'sp_bandal', x:1150, y:490, item:'bandal',
-        label:'밭 가장자리' },
+      { id:'sp_bandal', x:1120, y:512, item:'bandal',
+        label:'울타리 어귀' },
     ],
     npcs: [
       { id:'chadol', name:'꼬마', x:540, y:560, img:'assets/portraits/chadol_sly.png', h:74, look:{ role:'commoner', body:'#8a5a32', accent:'#d9c3a0' } },
