@@ -82,7 +82,9 @@ window.Heroes = (function(){
       if (grade > before){ s.have[k] = grade; got = { key:k, grade, isNew: before === 0 }; }
     }
     save(s);
-    if (got) celebrate(got.key, got.grade);
+    // 인물 도감이 아직 안 열린 계급(양인 전)이면 조용히 모아 둔다 — 볼 곳도 없는 카드 축하가
+    // 전면으로 뜨면 고장 난 것처럼 보인다(2026-09-27 점검). 열리면 그동안 모은 카드가 다 들어 있다.
+    if (got && (!window.Unlock || Unlock.has('heroes'))) celebrate(got.key, got.grade);
     return got;
   }
 

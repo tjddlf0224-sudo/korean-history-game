@@ -175,6 +175,16 @@ window.Auth = (function(){
   async function deleteAccount(){
     if (!auth || !user) throw new Error('로그인 상태가 아닙니다');
     const uid = user.uid;
+    /* 파이어베이스는 로그인한 지 오래되면(약 5분) 계정 삭제를 거부한다. 예전엔 그걸 모른 채
+       랭킹·클라우드 기록부터 지워서, 계정은 남고 기록만 사라졌다(2026-09-27 점검).
+       먼저 '최근 로그인'인지 보고, 아니면 아무것도 지우지 않고 다시 로그인하라고 한다. */
+    try {
+      const tok = await user.getIdTokenResult();
+      const at = Date.parse(tok.authTime);
+      if (at && Date.now() - at > 4 * 60 * 1000){
+        const e = new Error('requires-recent-login'); e.code = 'auth/requires-recent-login'; throw e;
+      }
+    } catch(e){ if (e && e.code === 'auth/requires-recent-login') throw e; }
     // 랭킹 문서부터 지운다 — 계정을 먼저 지우면 권한이 사라져 못 지운다
     try { if (db) await db.collection('khg_rank').doc(uid).delete(); }
     catch(e){ /* 규칙이 삭제를 막고 있으면 계정만 지운다. 문서는 콘솔에서 지울 수 있다. */ }
@@ -331,12 +341,13 @@ window.Auth = (function(){
   }
   function close(){ const d = document.getElementById('auth-ov'); if (d) d.classList.remove('show'); }
 
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
   function render(){
     const b = document.getElementById('auth-btn');
     if (b){
       b.innerHTML = user
-        ? (user.photoURL ? `<img src="${user.photoURL}" alt="">` : '') +
-          (nameOf(user))
+        ? (user.photoURL ? `<img src="${esc(user.photoURL)}" alt="">` : '') +
+          esc(nameOf(user))   // 닉네임은 사용자가 정한 글이다 — HTML로 끼우지 않는다
         : '로그인';
     }
     const me = document.getElementById('auth-me');

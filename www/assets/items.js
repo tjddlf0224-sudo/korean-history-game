@@ -729,6 +729,57 @@ window.Items = (function(){
     if (b) b.onclick = () => useItem(id);
   }
 
+  /* 이야기에서만 나오는 유물 — 지도 어디에도 줍는 자리가 없고 대사 속 유물 카드(chart type 'relic')로만
+     나온다. 예전엔 이 14개를 영영 못 모아 도감이 66/80에서 멈췄다(2026-09-27 점검). 이야기에서
+     그 카드를 보면 도감에 싣는다. 지도에서 줍는 유물은 여기 넣지 말 것(줍는 재미가 사라진다). */
+  const STORY_ONLY = new Set(['houmyeong','yeonga7','imsinseogi','jeokseongbi','sangwonsajong',
+    'balhae_seokdeung','balhae_saja','yeonggwangtap','suncheongja','gonyeo','chochungdo',
+    'sokdaejeon','daejeontongpyeon','hwangseong']);
+  const STORY_TEXT = { imsinseogi: '임신서기석', yeonggwangtap: '영광탑' };
+  function noteStory(){
+    try {
+      const b = NPC_DATA[Dialog.key].beats[Dialog.idx];
+      if (!b) return;
+      const c = b.chart, got = [];
+      if (c && c.type === 'relic' && c.items){
+        for (const it of c.items){
+          const id = it && it.img;
+          if (id && STORY_ONLY.has(id) && DB[id] && give(id)) got.push(DB[id].name);
+        }
+      }
+      // 카드가 아니라 사진·글로만 나오는 둘은 대사 글귀로 짚는다
+      for (const id in STORY_TEXT){
+        if ((b.t || '').indexOf(STORY_TEXT[id]) >= 0 && DB[id] && give(id)) got.push(DB[id].name);
+      }
+      if (got.length){
+        renderBag();
+        let d = document.getElementById('it-story');
+        if (!d){
+          d = document.createElement('div'); d.id = 'it-story';
+          d.style.cssText = 'position:absolute;left:50%;top:calc(10px + env(safe-area-inset-top));transform:translateX(-50%);' +
+            'z-index:60;padding:7px 14px;border-radius:999px;background:rgba(26,20,12,.92);border:1px solid #c9a24a;' +
+            'color:#f0c96b;font:600 13px "Gowun Batang",serif;pointer-events:none;transition:opacity .4s';
+          (document.getElementById('wrap') || document.body).appendChild(d);
+        }
+        d.textContent = '유물 도감에 실렸습니다 · ' + got.join(', ');
+        d.style.opacity = '1';
+        clearTimeout(noteStory._t);
+        noteStory._t = setTimeout(() => { d.style.opacity = '0'; }, 2600);
+      }
+    } catch(e){}
+  }
+  function wireStory(){
+    try {
+      if (typeof Dialog === 'undefined' || !Dialog || Dialog._itWired || typeof Dialog.render !== 'function') return false;
+      const r = Dialog.render;
+      Dialog.render = function(){ const out = r.apply(this, arguments); noteStory(); return out; };
+      Dialog._itWired = true;
+      return true;
+    } catch(e){ return false; }
+  }
+  // 챕터 스크립트가 Dialog를 만든 뒤에 붙는다
+  (function tryWire(n){ if (!wireStory() && n < 40) setTimeout(() => tryWire(n + 1), 250); })(0);
+
   return { DB, has, owned, give, checkSpot, trySearch, canUse, useItem,
            mount, openBag, renderBag,
            get nearSpot(){ return nearSpot; } };

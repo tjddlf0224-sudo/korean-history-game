@@ -540,6 +540,10 @@
      넘치는 만큼은 도해가 줄고 도해 안에서 스크롤된다(flex-shrink). */
   #dlg-stack { max-height:calc(100% - 24px - env(safe-area-inset-bottom) - env(safe-area-inset-top)) !important; }
   #dlg-stack .dlg-chart { min-height:0 !important; flex:0 1 auto !important; }
+  /* 위 규칙의 뜻은 '넘치면 도해만 줄고 대화창은 다 보인다'인데, 대화창 틀도 기본값(flex-shrink:1)이라
+     둘이 같이 줄어 대사 끝과 '계속'이 잘렸다(폰 가로 412px, 2026-09-27 점검: 도해 대사 다수 70~160px 넘침).
+     대화창 틀은 줄지 않게 한다 — 줄어드는 건 도해뿐. */
+  #dlg-stack #dlg-frame { flex-shrink:0 !important; }
   /* 오른쪽 단추 속 그림에 붙은 그림자가 네모로 보였다 */
   #bag-btn svg, #hero-btn svg, #auto-btn svg { box-shadow:none !important; filter:none !important; }
   /* 퀴즈·풀이·지도 창은 안쪽이 스크롤돼 밖으로 내민 단추가 잘린다 — 안쪽 모서리에 둔다 */
@@ -754,6 +758,32 @@
   #end-screen a { min-width:8.5em; text-align:center; box-sizing:border-box; }
   #end-screen a + a { margin-left:12px; }
   `;
+
+  /* 문화유산 사진 대사(dlg-doc) — 사진이 대화창 안에서 가로 폭에 맞춰 높이가 정해져서, 낮은 화면에선
+     아래 설명과 '계속'을 창 밖(스크롤 안쪽)으로 밀었다. 넘치는 만큼 사진 칸을 줄인다(사진은 contain이라
+     작아질 뿐 잘리지 않는다). */
+  function fitDoc(){
+    try {
+      const doc = document.getElementById('dlg-doc'), p = document.getElementById('dlg-panel');
+      if (!doc || !p) return;
+      doc.style.height = '';
+      if (getComputedStyle(doc).display === 'none') return;
+      const over = p.scrollHeight - p.clientHeight;
+      if (over > 2) doc.style.height = Math.max(90, doc.getBoundingClientRect().height - over - 2) + 'px';
+    } catch(e){}
+  }
+  (function wireFit(n){
+    try {
+      if (typeof Dialog !== 'undefined' && Dialog && typeof Dialog.render === 'function' && !Dialog._fitWired){
+        const r = Dialog.render;
+        Dialog.render = function(){ const out = r.apply(this, arguments); fitDoc(); requestAnimationFrame(fitDoc); return out; };
+        Dialog._fitWired = true;
+        window.addEventListener('resize', fitDoc);
+        return;
+      }
+    } catch(e){}
+    if (n < 40) setTimeout(() => wireFit(n + 1), 250);
+  })(0);
 
   const st = document.createElement('style');
   st.id = 'uiskin';
