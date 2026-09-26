@@ -13,7 +13,7 @@ android/ 폴더는 .gitignore라 저장소에 안 남는다. 그래서 손으로
  2. iOS는 가로 전용이다. 안드로이드도 가로(양방향)로 고정한다 — 세로로 들면 화면이 무너진다.
  3. 상태 표시줄·내비게이션 바가 늘 떠 있어서(흰 띠) 게임 화면이 위아래로 약 20%씩 줄었다.
     iOS처럼 전체 화면으로 쓴다 — 가장자리에서 쓸어내리면 잠깐 나타난다. 카메라 구멍 쪽
-    빈 띠는 게임 배경과 어울리게 검게.
+    빈 띠는 게임 배경과 어울리게 검게(테마 windowBackground — decor만 칠하면 SystemBars가 흰색으로 되돌린다).
 """
 import os, re, sys
 
@@ -41,6 +41,16 @@ if 'android:screenOrientation' not in t:
     changed.append('가로 고정')
 
 open(MAN, 'w', encoding='utf-8').write(t)
+
+# 카메라 구멍 쪽 빈 띠: Capacitor SystemBars가 창 배경을 테마의 windowBackground(흰색)로 되돌린다
+# (setStyle). decor에 검정을 칠해도 덮어써져 흰 띠가 남았다 → 테마 자체를 검정으로.
+STY = os.path.join(ROOT, 'android/app/src/main/res/values/styles.xml')
+s = open(STY, encoding='utf-8').read()
+if 'android:windowBackground' not in s:
+    s = s.replace('<item name="windowActionBar">false</item>',
+                  '<item name="windowActionBar">false</item>\n        <item name="android:windowBackground">@android:color/black</item>', 1)
+    open(STY, 'w', encoding='utf-8').write(s)
+    changed.append('창 배경 검정')
 
 ACT = os.path.join(ROOT, 'android/app/src/main/java/com/yunsis/koreanhistorygame/MainActivity.java')
 act = open(ACT, encoding='utf-8').read()

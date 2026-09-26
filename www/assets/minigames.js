@@ -186,7 +186,7 @@ window.Mini = (function(){
       ad.disabled = true; ad.textContent = '광고 준비 중…';
       const ok = window.Ads ? await Ads.rewarded() : false;
       if (!ok){ ad.disabled = false; ad.textContent = '광고 보고 한 번 더';
-                d.querySelector('#mg-m').textContent = '광고를 끝까지 보지 않으셨습니다.'; return; }
+                d.querySelector('#mg-m').textContent = (window.Ads && Ads.failText ? Ads.failText() : '광고를 끝까지 보지 않으셨습니다.'); return; }
       st.adUsed++; st.used = Math.max(0, st.used - 1); save(st);
       open();
     };

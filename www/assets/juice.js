@@ -308,7 +308,7 @@ window.Juice = (function(){
     const L = layer();
     const d = document.createElement('div');
     d.className = 'jc-revive';
-    d.innerHTML = `<b>연속 ${had}이 끊겼습니다</b>` +
+    d.innerHTML = `<b>${had}연속이 끊겼습니다</b>` +
       '<button data-k="ad">광고 보고 되살리기</button>' +
       '<button data-k="eng">기력 1로 되살리기</button>' +
       '<button data-k="no" class="no">그냥 갈래요</button>';

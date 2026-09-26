@@ -336,7 +336,7 @@ window.Gold = (function(){
     const ok = window.Ads ? await Ads.rewarded() : false;
     if (!ok){
       if (btn){ btn.disabled = false; btn.textContent = old; }
-      say('광고를 끝까지 보지 않으셨습니다.');
+      say((window.Ads && Ads.failText ? Ads.failText() : '광고를 끝까지 보지 않으셨습니다.'));
       return;
     }
     revealMap();

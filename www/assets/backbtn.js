@@ -19,7 +19,9 @@
   var App = C.Plugins && C.Plugins.App;
   if (!App || !App.addListener) return;
 
-  var CLOSERS = '#ask-no, [id$="-x"], .close, .dlg-close, .gloss-close, .quiz-close, [aria-label="닫기"]';
+  // 2026-09-27: '-close'로 끝나는 닫기(급제자 명단 bd-close 등)가 빠져 있어, 명단에서 뒤로를 누르면
+  // 밑의 메뉴가 먼저 닫히고 명단은 남은 채 앱이 내려갔다.
+  var CLOSERS = '#ask-no, [id$="-x"], [id$="-close"], [id$="-close-btn"], .close, .dlg-close, .gloss-close, .quiz-close, [aria-label="닫기"]';
   function visible(el){
     if (!el || !el.getClientRects().length) return false;
     var s = getComputedStyle(el);

@@ -92,10 +92,19 @@ window.Ads = (function () {
   // 버튼을 누른 화면이 그대로 멈췄다. 이제는 '광고가 닫혔다/못 띄웠다' 알림에서 끝낸다.
   // 같은 광고를 두 번 연달아 부르면(버튼 두 번 누르기) 첫 번째 결과를 같이 돌려준다.
   var _rewardBusy = null;
+  /* 못 받은 까닭 — 광고가 아예 안 떴는데(인터넷·광고 재고 없음) "끝까지 보지 않으셨습니다"라고
+     하면 억울하다(2026-09-27 점검). 부르는 쪽은 failText()로 알맞은 말을 띄운다. */
+  var _lastFail = '';
+  function failText() {
+    return _lastFail === 'load' ? '광고를 불러오지 못했습니다. 잠시 뒤 다시 시도해 주세요.'
+                                : '광고를 끝까지 보지 않으셨습니다.';
+  }
+
   function rewarded() {
     var A = admob();
-    if (!A || !isNative()) return _webFallback();
     if (_rewardBusy) return _rewardBusy;
+    _lastFail = '';
+    if (!A || !isNative()) return _webFallback();
     var earned = false, handles = [], done = false;
     _rewardBusy = new Promise(function (resolve) {
       function fin() {
@@ -103,6 +112,7 @@ window.Ads = (function () {
         handles.forEach(function (h) { try { h && h.remove && h.remove(); } catch (e) {} });
         _rewardBusy = null;
         unmuteGame();
+        if (!earned && !_lastFail) _lastFail = 'skip';
         resolve(earned);
       }
       init()
@@ -110,16 +120,16 @@ window.Ads = (function () {
           return Promise.all([
             A.addListener('onRewardedVideoAdReward', function () { earned = true; }),
             A.addListener('onRewardedVideoAdDismissed', function () { fin(); }),
-            A.addListener('onRewardedVideoAdFailedToShow', function () { fin(); }),
+            A.addListener('onRewardedVideoAdFailedToShow', function () { _lastFail = 'load'; fin(); }),
           ]);
         })
         .then(function (hs) { handles = hs; return A.prepareRewardVideoAd({ adId: unit('rewarded'), isTesting: isTestUnit('rewarded') }); })
         .then(function () {
           // 보상을 받으면 끝나는 약속 — 기다리지 않는다(닫힘 알림이 끝을 맡는다)
           muteGame();
-          A.showRewardVideoAd().then(function () { earned = true; }, function (e) { console.warn('[Ads] show 실패', e); fin(); });
+          A.showRewardVideoAd().then(function () { earned = true; }, function (e) { console.warn('[Ads] show 실패', e); _lastFail = 'load'; fin(); });
         })
-        .catch(function (e) { console.warn('[Ads] rewarded 실패', e); fin(); });
+        .catch(function (e) { console.warn('[Ads] rewarded 실패', e); _lastFail = 'load'; fin(); });
     });
     return _rewardBusy;
   }
@@ -133,7 +143,7 @@ window.Ads = (function () {
   // 2026-09-27: showInterstitial()은 광고를 '띄울 때' 끝난다. 닫힐 때까지 '보여 주는 중'으로
   // 두어야 겹쳐 뜨지 않는다 — 닫힘/못 띄움 알림에서 푼다.
   var _showingInterstitial = false;
-  function interstitial() {
+  function interstitial(stillOk) {
     var A = admob();
     if (!A || !isNative() || _showingInterstitial) return Promise.resolve(false);
     _showingInterstitial = true;
@@ -154,7 +164,11 @@ window.Ads = (function () {
           ]);
         })
         .then(function (hs) { handles = hs; return A.prepareInterstitial({ adId: unit('interstitial'), isTesting: isTestUnit('interstitial') }); })
-        .then(function () { muteGame(); return A.showInterstitial(); })
+        .then(function () {
+          // 불러오는 몇 초 사이에 사용자가 창을 열었거나 챕터로 들어가는 중이면 띄우지 않는다
+          if (stillOk && !stillOk()) { fin(false); return; }
+          muteGame(); return A.showInterstitial();
+        })
         .catch(function (e) { console.warn('[Ads] interstitial 실패', e); fin(false); });
     });
   }
@@ -196,7 +210,20 @@ window.Ads = (function () {
       if (document.querySelector('.show')) return;   // 뭔가 이미 열려 있다 — 나중에
       localStorage.removeItem(DUE_KEY);
     } catch (e) { return; }
-    setTimeout(function () { interstitial(); }, 1200);
+    var leaving = false;
+    window.addEventListener('pagehide', function () { leaving = true; });
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest && e.target.closest('a[href]');
+      if (a) leaving = true;
+    }, true);
+    setTimeout(function () {
+      interstitial(function () {
+        return !leaving && document.visibilityState === 'visible' && !document.querySelector('.show');
+      }).then(function (shown) {
+        // 못 띄웠으면 표를 되돌린다 — 다음에 목록으로 올 때 다시
+        if (!shown) try { localStorage.setItem(DUE_KEY, '1'); } catch (e) {}
+      });
+    }, 1200);
   }
 
   // 웹에는 광고가 붙지 않는다(앱에서만 재생된다). 그래도 보상 흐름은
@@ -213,5 +240,6 @@ window.Ads = (function () {
   if (isNative()) init();
 
   return { init: init, rewarded: rewarded, interstitial: interstitial, interstitialEvery: interstitialEvery,
-           noteLearned: noteLearned, maybeShowInterstitial: maybeShowInterstitial, isNative: isNative };
+           noteLearned: noteLearned, maybeShowInterstitial: maybeShowInterstitial, isNative: isNative,
+           failText: failText };
 })();

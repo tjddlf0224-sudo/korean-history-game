@@ -78,10 +78,19 @@ window.ChapterLock = (function(){
   /* 무엇을 마치면 열리나 — 안내 문구용 */
   function prevOf(href){ const i = ORDER.indexOf(href); return i > 0 ? ORDER[i - 1] : null; }
 
+  /* 은/는·을/를 — 이름 끝 글자에 받침이 있는지로 고른다(「세 나라의 겨룸」는 → 은).
+     괄호·따옴표는 건너뛰고 마지막 한글 글자를 본다. */
+  function josa(s, a, b){
+    const m = String(s).replace(/<[^>]+>/g, '').match(/[가-힣](?=[^가-힣]*$)/);
+    if (!m) return b;
+    return (m[0].charCodeAt(0) - 0xAC00) % 28 ? a : b;
+  }
+
   /* 광고를 보고 연다. 열었으면 true */
   async function askUnlock(href, label, prevLabel){
-    const msg = '<b>' + (label || '이 챕터') + '</b>는 아직 잠겨 있습니다.<br>' +
-      (prevLabel ? '앞 화 <b>' + prevLabel + '</b>를 마치면 열립니다.<br>' : '') +
+    const nm = label || '이 챕터';
+    const msg = '<b>' + nm + '</b>' + josa(nm, '은', '는') + ' 아직 잠겨 있습니다.<br>' +
+      (prevLabel ? '앞 화 <b>' + prevLabel + '</b>' + josa(prevLabel, '을', '를') + ' 마치면 열립니다.<br>' : '') +
       '<br>광고를 끝까지 보면 지금 바로 열 수 있습니다.';
     const yes = (window.Ask && Ask.confirm)
       ? await Ask.confirm(msg, { ok: '광고 보고 열기', cancel: '나중에' })
@@ -91,7 +100,7 @@ window.ChapterLock = (function(){
     // 웹에는 광고가 없다 — 위의 확인으로 대신한다(Ads.rewarded의 웹 대체 창까지 두 번 묻지 않게)
     try { ok = (window.Ads && Ads.isNative && Ads.isNative()) ? await Ads.rewarded() : true; } catch(e){ ok = false; }
     if (!ok){
-      if (window.Ask && Ask.confirm) await Ask.confirm('광고를 끝까지 보지 않아 열리지 않았습니다.<br>다시 시도해 주세요.', { ok: '확인', cancel: false });
+      if (window.Ask && Ask.confirm) await Ask.confirm((window.Ads && Ads.failText ? Ads.failText() : '광고를 끝까지 보지 않으셨습니다.') + '<br>챕터는 아직 잠겨 있습니다.', { ok: '확인', cancel: false });
       return false;
     }
     unlock(href);

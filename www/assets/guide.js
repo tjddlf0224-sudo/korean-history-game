@@ -135,10 +135,18 @@ window.Guide = (function(){
   async function step(opt){
     css();
     clear();
-    const r = await whenSettled(opt.target);
+    // 앞 창(대화·퀴즈)이 닫히기를 기다렸다가 보여 줄 단계
+    if (opt.after){
+      const t0 = Date.now();
+      while (!opt.after() && Date.now() - t0 < 10 * 60 * 1000) await new Promise(r => setTimeout(r, 300));
+    }
+    const r = await whenSettled(opt.target, opt.tries);
     // 대상이 화면에 없다 = 아직 볼 수 없다(예: 메뉴 안에 있는데 메뉴가 닫혀 있다).
     // 이때 '했다'고 적어 버리면 그 안내를 **영영 못 보게** 된다. 미뤄 둔다.
-    if (opt.target && !settled(r)) return 'defer';
+    // 단, 그때그때만 뜻이 있는 단계(퀴즈를 가리키는 안내)는 미루지 않고 건너뛴다 —
+    // 미루면 다시 시도할 때마다 퀴즈가 안 떠 있어 또 미뤄져, 첫 안내가 영영 안 끝나고
+    // 그 뒤의 해금 안내까지 전부 막혔다(안드로이드 첫 실행 점검, 2026-09-27).
+    if (opt.target && !settled(r)) return opt.optional ? true : 'defer';
     // 가리킬 것이 없는 단계('머리 위 !가 뜬 사람에게 다가가 보세요')는
     // **구멍을 뚫지 않는다.** 예전에는 화면 한가운데에 1픽셀짜리 구멍이 나서
     // 아무것도 아닌 자리에 동그라미가 떠 있었다.
@@ -199,7 +207,15 @@ window.Guide = (function(){
       if (go) go.onclick = () => finish(false);
 
       if (opt.wait){
-        poll = setInterval(() => { try { if (opt.wait()) finish(false); } catch(e){} }, 250);
+        poll = setInterval(() => {
+          try {
+            if (opt.wait()) return finish(false);
+            // 기다리는 사이 대화·퀴즈가 먼저 열리면 말풍선이 그 위를 덮어 보기를 가렸다
+            // (안드로이드 점검, 2026-09-27). 창이 떠 있는 동안은 숨긴다.
+            const busy = !!document.querySelector('#dlg-overlay.show, #quiz-overlay.show, .ov.show');
+            bub.style.visibility = hole.style.visibility = busy ? 'hidden' : '';
+          } catch(e){}
+        }, 250);
         // 영영 안 오는 조건에 갇히지 않게 — 오래 걸리면 스스로 물러난다
         timer = setTimeout(() => finish(false), opt.timeout || 30000);
       }
@@ -271,12 +287,14 @@ window.Guide = (function(){
         text:'이 단추를 누르면 말을 겁니다.',
         wait: () => !!document.querySelector('#dlg-overlay.show, .ov.show'),
         timeout: 25000 },
-      { tag:'문 제', target: () => el('quiz-panel') || el('quiz-overlay'),
+      // 대사가 길어 퀴즈가 뜨기까지 1분 넘게 걸릴 수 있다 — 넉넉히 기다린다(3분)
+      { tag:'문 제', target: () => el('quiz-panel') || el('quiz-overlay'), tries: 1500, optional: true,
         text:'대사 끝에 문제가 나옵니다. <b>틀려도 괜찮습니다</b> — 바로 해설이 나오고, 틀린 문제는 며칠 뒤에 다시 만납니다.',
       },
       // 자동 이동은 처음부터 열려 있다(해금 안내가 아니라 첫 안내에 넣은 이유).
       // 걷는 법을 먼저 익힌 **뒤에** 알려 준다 — 순서만은 지킨다.
       { tag:'자 동 이 동', target: () => el('auto-btn'),
+        after: () => !document.querySelector('.ov.show, #dlg-overlay.show, #quiz-overlay.show'),
         text:'걷는 게 번거로우면 이걸 켜 보세요. 알아서 다음 사람에게 갑니다.<br>' +
              '<b>대사와 문제는 직접 넘기셔야 합니다</b> — 거기서 배우기 때문입니다.',
       },

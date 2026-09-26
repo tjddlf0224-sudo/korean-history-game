@@ -240,7 +240,7 @@ window.Energy = (function(){
       btn.disabled = true; btn.textContent = '광고 준비 중…';
       const ok = await refillByAd();
       btn.disabled = false; btn.textContent = '광고 보고 기력 2 받기';
-      say(ok ? '기력 2를 받았습니다.' : '광고를 끝까지 보지 않아 받지 못했습니다.');
+      say(ok ? '기력 2를 받았습니다.' : (window.Ads && Ads.failText ? Ads.failText() : '광고를 끝까지 보지 않으셨습니다.'));
       paint();
       if (ok) resumeEntry();
     };

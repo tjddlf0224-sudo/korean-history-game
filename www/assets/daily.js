@@ -349,7 +349,7 @@ window.Daily = (function(){
       b2.disabled = true; b2.textContent = '광고 준비 중…';
       const ok = window.Ads ? await Ads.rewarded() : false;
       if (!ok){ b2.disabled = false; b2.textContent = '광고 보고 두 배';
-                msg('광고를 끝까지 보지 않으셨습니다.'); return; }
+                msg((window.Ads && Ads.failText ? Ads.failText() : '광고를 끝까지 보지 않으셨습니다.')); return; }
       const at = stepToday();
       const r = claim(true);
       const t = r ? `두 배! 금 ${r.gold} · 기력 ${r.eng} 받았습니다` : '';
@@ -420,7 +420,7 @@ window.Daily = (function(){
       b.disabled = true; b.textContent = '광고 준비 중…';
       const x = await openByAd();
       if (!x){ b.disabled = false; b.textContent = '광고 보고 한 번 더';
-               msg('광고를 끝까지 보지 않으셨습니다.'); return; }
+               msg((window.Ads && Ads.failText ? Ads.failText() : '광고를 끝까지 보지 않으셨습니다.')); return; }
       show(x);
     };
   }

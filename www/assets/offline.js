@@ -147,7 +147,7 @@ window.Offline = (function(){
       const ok = window.Ads ? await Ads.rewarded() : false;
       if (!ok){
         b.disabled = false; b.textContent = '광고 보고 두 배로';
-        d.querySelector('#of-msg').textContent = '광고를 끝까지 보지 않으셨습니다.';
+        d.querySelector('#of-msg').textContent = (window.Ads && Ads.failText ? Ads.failText() : '광고를 끝까지 보지 않으셨습니다.');
         return;
       }
       const amt = window.Gold ? Gold.earn(p.gold * 2, '없는 사이 · 두 배') : p.gold * 2;
